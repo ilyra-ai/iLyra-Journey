@@ -1,8 +1,24 @@
 'use client';
 
-import { CSSProperties, SubmitEvent, useEffect, useState } from 'react';
+import {
+  type CSSProperties,
+  type MouseEvent,
+  type ReactNode,
+  SubmitEvent,
+  useEffect,
+  useState,
+} from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowRight, Check, Eye, EyeOff, Sparkles } from 'lucide-react';
+import {
+  ArrowRight,
+  Check,
+  Eye,
+  EyeOff,
+  Menu,
+  RotateCw,
+  Sparkles,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useAuth } from '@/context/AuthContext';
@@ -15,17 +31,25 @@ import {
 } from '@/components/ui/accordion';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { Skeleton } from '@/components/ui/skeleton';
 import type {
   LandingSectionKey,
@@ -34,18 +58,30 @@ import type {
 } from '@/lib/site-page-config/schema';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { getBuilderIcon } from '@/lib/site-page-config/ui';
+import { moedaPtBr } from '@/lib/formato/numero';
 import { cn } from '@/lib/utils';
 import { ThemeToggleButton } from '@/components/theme/ThemeControls';
 import { PuckClientRenderer } from '@/components/puck/PuckClientRenderer';
-import Link from 'next/link';
 import {
   ROTA_POLITICA_DE_PRIVACIDADE,
   ROTA_TERMOS_DE_USO,
 } from '@/lib/lgpd/documentos';
 
-// Visual "Lyra Clean": fundo suave chapado para o ícone de cada item. O
-// coral fica reservado ao tom astral/IA ("cosmic"); os demais usam o teal
-// da marca, o dourado ou o neutro.
+/*
+  Landing redesenhada por completo (tarefa 63): uma coluna de leitura calma,
+  celular primeiro, com menos molduras e mais espaço. Referências de 2026:
+  topo com uma promessa e uma ação principal, prova logo abaixo, preços
+  transparentes, poucas cores (teal da marca para ação, coral só para o
+  conteúdo astral e de IA) e paridade entre os temas claro e escuro.
+
+  Todo o texto vem do construtor de UI (`landing`) e os planos vêm do
+  catálogo público (`/api/public/plans`); nada é inventado aqui. Os botões
+  de navegação viraram links de verdade (abrem em nova aba, aparecem no
+  menu de contexto e funcionam sem JavaScript).
+*/
+
+// Fundo suave chapado do ícone de cada item; o coral ("cosmic") fica
+// reservado ao conteúdo astral e de IA.
 function corDoIconeTonal(tone: ToneKey): string {
   switch (tone) {
     case 'cosmic':
@@ -60,7 +96,7 @@ function corDoIconeTonal(tone: ToneKey): string {
   }
 }
 
-// Cor do número de métrica, seguindo a mesma regra de tons.
+// Cor do número de cada indicador, na mesma regra de tons.
 function corDoNumero(tone: ToneKey): string {
   switch (tone) {
     case 'cosmic':
@@ -75,8 +111,16 @@ function corDoNumero(tone: ToneKey): string {
   }
 }
 
-// Rótulo curto acima do título de cada seção (sem caixa alta espaçada).
-const rotuloDeSecaoClass = 'text-sm font-medium text-primary';
+// Plano recomendado no catálogo (decisão comercial já existente na landing
+// anterior): recebe o contorno e o botão principal.
+const PLANO_EM_DESTAQUE = 'meta';
+
+// Quantos recursos de cada plano aparecem antes do "e mais N".
+const RECURSOS_POR_PLANO = 5;
+
+const CONTEINER = 'mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8';
+const ESPACO_DA_SECAO = 'scroll-mt-20 py-16 sm:py-24';
+const ROTULO_DA_SECAO = 'text-sm font-medium text-primary';
 
 type PublicPlansPayload = {
   plans: PlanMatrixPlan[];
@@ -88,20 +132,115 @@ type LandingPageProps = {
   previewMode?: boolean;
 };
 
-function formatCurrency(value: number, currencyCode: string) {
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: currencyCode || 'BRL',
-  }).format(value);
+// Faixa de telas em que o texto cresce do mínimo ao máximo.
+const TELA_MINIMA_PX = 360;
+const TELA_MAXIMA_PX = 1280;
+
+/**
+ * Tamanho fluido de verdade: cresce em linha reta do mínimo (360 px) ao
+ * máximo (1280 px). O valor do meio do `clamp` antes era fixo em rem, então
+ * o título ficava sempre no mesmo tamanho e enorme no celular.
+ */
+function buildFluidFontSize(minRem: number, maxRem: number, scale: number) {
+  const minimoPx = minRem * scale * 16;
+  const maximoPx = maxRem * scale * 16;
+  const inclinacao = (maximoPx - minimoPx) / (TELA_MAXIMA_PX - TELA_MINIMA_PX);
+  const baseRem = (minimoPx - inclinacao * TELA_MINIMA_PX) / 16;
+  const vw = inclinacao * 100;
+  // Valores de CSS exigem ponto decimal (por isso `toFixed`).
+  return `clamp(${(minimoPx / 16).toFixed(3)}rem, calc(${baseRem.toFixed(3)}rem + ${vw.toFixed(3)}vw), ${(maximoPx / 16).toFixed(3)}rem)`;
 }
 
-function buildFluidFontSize(
-  minRem: number,
-  preferredRem: number,
-  maxRem: number,
-  scale: number
-) {
-  return `clamp(${(minRem * scale).toFixed(3)}rem, ${(preferredRem * scale).toFixed(3)}rem, ${(maxRem * scale).toFixed(3)}rem)`;
+/**
+ * Destino configurável no construtor: rota interna (`/login`), âncora da
+ * própria página (`#planos`) ou endereço externo (`https://`). Na
+ * pré-visualização do construtor os links não navegam.
+ */
+function LinkDaLanding({
+  href,
+  previewMode,
+  className,
+  comoBotao = false,
+  aoNavegar,
+  children,
+}: {
+  href: string;
+  previewMode: boolean;
+  className?: string;
+  /** Links com aparência de botão recebem a escala de botões do construtor. */
+  comoBotao?: boolean;
+  /** Chamado ao seguir o link (fecha o menu móvel, por exemplo). */
+  aoNavegar?: () => void;
+  children: ReactNode;
+}) {
+  const aoClicar = (evento: MouseEvent<HTMLAnchorElement>) => {
+    if (previewMode) {
+      evento.preventDefault();
+      return;
+    }
+    aoNavegar?.();
+  };
+  const atributos = {
+    className,
+    onClick: aoClicar,
+    ...(comoBotao ? { 'data-slot': 'button' } : {}),
+  };
+
+  if (href.startsWith('/')) {
+    return (
+      <Link href={href} {...atributos}>
+        {children}
+      </Link>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      rel={href.startsWith('https://') ? 'noopener noreferrer' : undefined}
+      {...atributos}
+    >
+      {children}
+    </a>
+  );
+}
+
+/** Abertura padrão das seções: rótulo, título e texto de apoio. */
+function AberturaDaSecao({
+  id,
+  rotulo,
+  titulo,
+  descricao,
+  estiloDoTitulo,
+  estiloDoTexto,
+  centralizada = false,
+}: {
+  id: string;
+  rotulo: string;
+  titulo: string;
+  descricao: string;
+  estiloDoTitulo: CSSProperties;
+  estiloDoTexto: CSSProperties;
+  centralizada?: boolean;
+}) {
+  return (
+    <div className={cn('max-w-2xl', centralizada && 'mx-auto text-center')}>
+      <p className={ROTULO_DA_SECAO}>{rotulo}</p>
+      <h2
+        id={id}
+        className="mt-3 text-balance font-display font-semibold leading-tight tracking-[-0.02em] text-foreground"
+        style={estiloDoTitulo}
+      >
+        {titulo}
+      </h2>
+      <p
+        className="mt-4 text-pretty leading-relaxed text-muted-foreground"
+        style={estiloDoTexto}
+      >
+        {descricao}
+      </p>
+    </div>
+  );
 }
 
 export function LandingPage({
@@ -110,8 +249,8 @@ export function LandingPage({
 }: LandingPageProps) {
   const router = useRouter();
   const { db } = useAuth();
-  // Configuração publicada (carregada pelo hook compartilhado) ou o rascunho
-  // em edição no Site Experience Builder (pré-visualização).
+  // Configuração publicada (hook compartilhado) ou o rascunho em edição no
+  // construtor de UI (pré-visualização).
   const { config: publicConfig } = usePublicSitePageConfig('landing');
   const config: LandingPageConfig = overrideConfig ?? publicConfig;
   const [plans, setPlans] = useState<PlanMatrixPlan[]>([]);
@@ -119,57 +258,34 @@ export function LandingPage({
     'loading'
   );
   const [plansError, setPlansError] = useState('');
+  const [tentativaDosPlanos, setTentativaDosPlanos] = useState(0);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [menuAberto, setMenuAberto] = useState(false);
 
   const textStyles = {
     heroTitle: {
-      fontSize: buildFluidFontSize(2.25, 3.25, 4, config.typography.heroTitle),
+      fontSize: buildFluidFontSize(2, 4.25, config.typography.heroTitle),
     } satisfies CSSProperties,
     heroBody: {
-      fontSize: buildFluidFontSize(1.0, 1.08, 1.18, config.typography.heroBody),
+      fontSize: buildFluidFontSize(1.0, 1.2, config.typography.heroBody),
     } satisfies CSSProperties,
     sectionTitle: {
-      fontSize: buildFluidFontSize(
-        1.5,
-        1.875,
-        2.25,
-        config.typography.sectionTitle
-      ),
+      fontSize: buildFluidFontSize(1.5, 2.4, config.typography.sectionTitle),
     } satisfies CSSProperties,
     sectionBody: {
-      fontSize: buildFluidFontSize(
-        1,
-        1.04,
-        1.12,
-        config.typography.sectionBody
-      ),
+      fontSize: buildFluidFontSize(1, 1.12, config.typography.sectionBody),
     } satisfies CSSProperties,
     cardTitle: {
-      fontSize: buildFluidFontSize(
-        1.0,
-        1.125,
-        1.25,
-        config.typography.cardTitle
-      ),
+      fontSize: buildFluidFontSize(1.0, 1.2, config.typography.cardTitle),
     } satisfies CSSProperties,
     cardBody: {
-      fontSize: buildFluidFontSize(
-        0.92,
-        0.98,
-        1.05,
-        config.typography.cardBody
-      ),
+      fontSize: buildFluidFontSize(0.92, 1.05, config.typography.cardBody),
     } satisfies CSSProperties,
     buttonLabel: {
-      fontSize: buildFluidFontSize(
-        0.92,
-        0.98,
-        1.04,
-        config.typography.buttonLabel
-      ),
+      fontSize: buildFluidFontSize(0.92, 1.04, config.typography.buttonLabel),
     } satisfies CSSProperties,
   };
 
@@ -210,7 +326,13 @@ export function LandingPage({
 
     void loadPlans();
     return () => controller.abort();
-  }, []);
+  }, [tentativaDosPlanos]);
+
+  function tentarCarregarPlanosDeNovo() {
+    setPlansStatus('loading');
+    setPlansError('');
+    setTentativaDosPlanos((atual) => atual + 1);
+  }
 
   const enabledCapabilities = plans.reduce(
     (total, plan) =>
@@ -236,29 +358,6 @@ export function LandingPage({
     return customValue;
   }
 
-  function navigateTo(href: string) {
-    if (previewMode) {
-      return;
-    }
-
-    if (href.startsWith('#')) {
-      const target = document.querySelector(href);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      return;
-    }
-
-    // Destino externo (o schema só aceita https://): navegação completa do
-    // navegador, sem passar pelo roteador interno do Next.
-    if (href.startsWith('https://')) {
-      window.location.assign(href);
-      return;
-    }
-
-    router.push(href);
-  }
-
   async function handleQuickLogin(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (previewMode) {
@@ -281,6 +380,24 @@ export function LandingPage({
     router.push('/');
   }
 
+  // Itens do menu: só as seções visíveis (antes o menu apontava também
+  // para seções ocultas no construtor).
+  const itensDoMenu = [
+    { href: '#recursos', rotulo: 'Recursos', visivel: config.features.visible },
+    { href: '#fluxo', rotulo: 'Como funciona', visivel: config.flow.visible },
+    { href: '#planos', rotulo: 'Planos', visivel: config.plans.visible },
+    { href: '#faq', rotulo: 'Dúvidas', visivel: config.faq.visible },
+  ].filter((item) => item.visivel);
+
+  const botaoPrincipal = cn(
+    buttonVariants({ size: 'xl' }),
+    'h-auto min-h-12 whitespace-normal py-3 text-center'
+  );
+  const botaoSecundario = cn(
+    buttonVariants({ size: 'xl', variant: 'secondary' }),
+    'h-auto min-h-12 whitespace-normal py-3 text-center'
+  );
+
   function renderSection(sectionKey: LandingSectionKey) {
     switch (sectionKey) {
       case 'features':
@@ -291,58 +408,56 @@ export function LandingPage({
         return (
           <section
             id="recursos"
-            className="px-4 py-20 sm:px-6 lg:px-8 lg:py-24"
+            aria-labelledby="titulo-recursos"
+            className={ESPACO_DA_SECAO}
           >
-            <div className="mx-auto max-w-7xl">
-              <div className="max-w-3xl">
-                <p className={rotuloDeSecaoClass}>
-                  {config.features.badgeText}
-                </p>
-                <h2
-                  className="mt-3 font-display font-semibold tracking-[-0.02em] text-foreground"
-                  style={textStyles.sectionTitle}
-                >
-                  {config.features.title}
-                </h2>
-                <p
-                  className="mt-4 leading-relaxed text-muted-foreground"
-                  style={textStyles.sectionBody}
-                >
-                  {config.features.description}
-                </p>
-              </div>
+            <div className={CONTEINER}>
+              <AberturaDaSecao
+                id="titulo-recursos"
+                rotulo={config.features.badgeText}
+                titulo={config.features.title}
+                descricao={config.features.description}
+                estiloDoTitulo={textStyles.sectionTitle}
+                estiloDoTexto={textStyles.sectionBody}
+              />
 
-              <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+              {/* Grade sem caixas: um fio separa os itens (ritmo calmo, sem
+                  cartões repetidos). */}
+              <ul className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
                 {config.features.items.map((feature) => {
                   const FeatureIcon = getBuilderIcon(feature.icon);
 
                   return (
-                    <Card
+                    <li
                       key={feature.id}
-                      className="min-w-0"
                       data-escala="recurso"
+                      className="min-w-0 border-t border-border pt-6"
                     >
-                      <CardHeader>
-                        <div
-                          data-escala="icone"
-                          className={cn(
-                            'mb-2 flex h-11 w-11 items-center justify-center rounded-md',
-                            corDoIconeTonal(feature.tone)
-                          )}
-                        >
-                          <FeatureIcon className="h-5 w-5" aria-hidden />
-                        </div>
-                        <CardTitle style={textStyles.cardTitle}>
-                          {feature.title}
-                        </CardTitle>
-                        <CardDescription style={textStyles.cardBody}>
-                          {feature.description}
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
+                      <span
+                        data-escala="icone"
+                        className={cn(
+                          'flex size-10 items-center justify-center rounded-md',
+                          corDoIconeTonal(feature.tone)
+                        )}
+                      >
+                        <FeatureIcon className="size-5" aria-hidden="true" />
+                      </span>
+                      <h3
+                        className="mt-5 font-display font-semibold text-foreground"
+                        style={textStyles.cardTitle}
+                      >
+                        {feature.title}
+                      </h3>
+                      <p
+                        className="mt-2 text-pretty leading-relaxed text-muted-foreground"
+                        style={textStyles.cardBody}
+                      >
+                        {feature.description}
+                      </p>
+                    </li>
                   );
                 })}
-              </div>
+              </ul>
             </div>
           </section>
         );
@@ -352,59 +467,58 @@ export function LandingPage({
         }
 
         return (
-          <section className="border-y border-border bg-card px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
-            <div className="mx-auto max-w-7xl">
-              <div className="mb-10 max-w-3xl">
-                <p className={rotuloDeSecaoClass}>{config.metrics.badgeText}</p>
-                <h2
-                  className="mt-3 font-display font-semibold tracking-[-0.02em] text-foreground"
-                  style={textStyles.sectionTitle}
-                >
-                  {config.metrics.title}
-                </h2>
-                <p
-                  className="mt-4 leading-relaxed text-muted-foreground"
-                  style={textStyles.sectionBody}
-                >
-                  {config.metrics.description}
-                </p>
-              </div>
+          <section
+            aria-labelledby="titulo-indicadores"
+            className="border-y border-border bg-card py-16 sm:py-20"
+          >
+            <div className={CONTEINER}>
+              <AberturaDaSecao
+                id="titulo-indicadores"
+                rotulo={config.metrics.badgeText}
+                titulo={config.metrics.title}
+                descricao={config.metrics.description}
+                estiloDoTitulo={textStyles.sectionTitle}
+                estiloDoTexto={textStyles.sectionBody}
+              />
 
-              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4 lg:gap-6">
-                {plansStatus === 'loading'
-                  ? Array.from({ length: 4 }).map((_, index) => (
-                      <Card
-                        key={`metric-skeleton-${index}`}
-                        className="bg-background"
-                      >
-                        <CardContent className="space-y-4 p-6">
-                          <Skeleton className="h-4 w-24" />
-                          <Skeleton className="h-10 w-20" />
-                          <Skeleton className="h-4 w-full" />
-                        </CardContent>
-                      </Card>
-                    ))
-                  : config.metrics.items.map((item) => (
-                      <Card key={item.id} className="min-w-0 bg-background">
-                        <CardHeader>
-                          <p className="text-sm font-medium text-muted-foreground">
-                            {item.label}
-                          </p>
-                          <CardTitle
-                            className={cn(
-                              'font-display text-4xl font-semibold',
-                              corDoNumero(item.tone)
-                            )}
-                          >
-                            {resolveMetricValue(item.source, item.customValue)}
-                          </CardTitle>
-                          <CardDescription style={textStyles.cardBody}>
-                            {item.note}
-                          </CardDescription>
-                        </CardHeader>
-                      </Card>
-                    ))}
-              </div>
+              {/* Faixa de números em lista de definição: rótulo, valor e
+                  nota de cada indicador. */}
+              <dl
+                aria-busy={plansStatus === 'loading'}
+                className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 xl:grid-cols-4"
+              >
+                {config.metrics.items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex min-w-0 flex-col gap-2 bg-background p-6"
+                  >
+                    <dt className="text-sm font-medium text-muted-foreground">
+                      {item.label}
+                    </dt>
+                    <dd
+                      className={cn(
+                        'font-display text-4xl font-semibold tracking-tight tabular-nums',
+                        corDoNumero(item.tone)
+                      )}
+                    >
+                      {plansStatus === 'loading' && item.source !== 'custom' ? (
+                        <>
+                          <Skeleton className="h-10 w-16" />
+                          <span className="sr-only">Carregando</span>
+                        </>
+                      ) : (
+                        resolveMetricValue(item.source, item.customValue)
+                      )}
+                    </dd>
+                    <dd
+                      className="leading-relaxed text-muted-foreground"
+                      style={textStyles.cardBody}
+                    >
+                      {item.note}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
           </section>
         );
@@ -414,57 +528,64 @@ export function LandingPage({
         }
 
         return (
-          <section id="fluxo" className="px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
-            <div className="mx-auto max-w-7xl">
-              <div className="max-w-3xl">
-                <p className={rotuloDeSecaoClass}>{config.flow.badgeText}</p>
-                <h2
-                  className="mt-3 font-display font-semibold tracking-[-0.02em] text-foreground"
-                  style={textStyles.sectionTitle}
-                >
-                  {config.flow.title}
-                </h2>
-                <p
-                  className="mt-4 leading-relaxed text-muted-foreground"
-                  style={textStyles.sectionBody}
-                >
-                  {config.flow.description}
-                </p>
-              </div>
+          <section
+            id="fluxo"
+            aria-labelledby="titulo-fluxo"
+            className={ESPACO_DA_SECAO}
+          >
+            <div className={CONTEINER}>
+              <AberturaDaSecao
+                id="titulo-fluxo"
+                rotulo={config.flow.badgeText}
+                titulo={config.flow.title}
+                descricao={config.flow.description}
+                estiloDoTitulo={textStyles.sectionTitle}
+                estiloDoTexto={textStyles.sectionBody}
+              />
 
-              <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+              {/* Etapas em lista ordenada; no desktop, uma linha liga os
+                  marcadores. */}
+              <ol className="mt-12 grid gap-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
                 {config.flow.items.map((step) => {
                   const StepIcon = getBuilderIcon(step.icon);
 
                   return (
-                    <Card
+                    <li
                       key={step.id}
-                      className="min-w-0"
                       data-escala="recurso"
+                      className="relative min-w-0"
                     >
-                      <CardHeader>
-                        <div className="mb-2 flex items-center justify-between">
-                          <span className="font-display text-sm font-semibold text-primary">
-                            {step.step}
-                          </span>
-                          <span
-                            data-escala="icone"
-                            className="flex h-11 w-11 items-center justify-center rounded-md bg-muted text-foreground"
-                          >
-                            <StepIcon className="h-5 w-5" aria-hidden />
-                          </span>
-                        </div>
-                        <CardTitle style={textStyles.cardTitle}>
-                          {step.title}
-                        </CardTitle>
-                        <CardDescription style={textStyles.cardBody}>
-                          {step.description}
-                        </CardDescription>
-                      </CardHeader>
-                    </Card>
+                      <div className="flex items-center gap-3">
+                        <span
+                          data-escala="icone"
+                          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary"
+                        >
+                          <StepIcon className="size-5" aria-hidden="true" />
+                        </span>
+                        <span className="font-display text-sm font-semibold text-primary">
+                          {step.step}
+                        </span>
+                        <span
+                          aria-hidden="true"
+                          className="hidden h-px flex-1 bg-border lg:block"
+                        />
+                      </div>
+                      <h3
+                        className="mt-5 font-display font-semibold text-foreground"
+                        style={textStyles.cardTitle}
+                      >
+                        {step.title}
+                      </h3>
+                      <p
+                        className="mt-2 text-pretty leading-relaxed text-muted-foreground"
+                        style={textStyles.cardBody}
+                      >
+                        {step.description}
+                      </p>
+                    </li>
                   );
                 })}
-              </div>
+              </ol>
             </div>
           </section>
         );
@@ -476,153 +597,208 @@ export function LandingPage({
         return (
           <section
             id="planos"
-            className="border-y border-border bg-card px-4 py-20 sm:px-6 lg:px-8 lg:py-24"
+            aria-labelledby="titulo-planos"
+            className={cn(ESPACO_DA_SECAO, 'border-y border-border bg-card')}
           >
-            <div className="mx-auto max-w-7xl">
-              <div className="max-w-3xl">
-                <p className={rotuloDeSecaoClass}>{config.plans.badgeText}</p>
-                <h2
-                  className="mt-3 font-display font-semibold tracking-[-0.02em] text-foreground"
-                  style={textStyles.sectionTitle}
-                >
-                  {config.plans.title}
-                </h2>
-                <p
-                  className="mt-4 leading-relaxed text-muted-foreground"
-                  style={textStyles.sectionBody}
-                >
-                  {config.plans.description}
-                </p>
-              </div>
+            <div className={CONTEINER}>
+              <AberturaDaSecao
+                id="titulo-planos"
+                rotulo={config.plans.badgeText}
+                titulo={config.plans.title}
+                descricao={config.plans.description}
+                estiloDoTitulo={textStyles.sectionTitle}
+                estiloDoTexto={textStyles.sectionBody}
+                centralizada
+              />
 
-              <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-                {plansStatus === 'loading'
-                  ? Array.from({ length: 3 }).map((_, index) => (
-                      <Card
-                        key={`plan-skeleton-${index}`}
-                        className="bg-background"
-                      >
-                        <CardHeader className="space-y-4">
-                          <Skeleton className="h-2 w-full rounded-full" />
-                          <Skeleton className="h-4 w-32" />
-                          <Skeleton className="h-10 w-24" />
-                          <Skeleton className="h-4 w-full" />
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                          <Skeleton className="h-16 w-full" />
-                          <Skeleton className="h-4 w-full" />
-                          <Skeleton className="h-4 w-4/5" />
-                        </CardContent>
-                      </Card>
-                    ))
-                  : plans.map((plan) => (
-                      <Card
+              {plansStatus === 'loading' ? (
+                <div
+                  className="mt-12 grid gap-6 lg:grid-cols-3"
+                  aria-busy="true"
+                >
+                  <p className="sr-only">Carregando os planos</p>
+                  {Array.from({ length: 3 }).map((_, index) => (
+                    <div
+                      key={`plano-esqueleto-${index}`}
+                      className="space-y-4 rounded-xl border border-border bg-background p-6"
+                    >
+                      <Skeleton className="h-5 w-24" />
+                      <Skeleton className="h-10 w-32" />
+                      <Skeleton className="h-4 w-full" />
+                      <Skeleton className="h-4 w-4/5" />
+                      <Skeleton className="h-11 w-full" />
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+
+              {plansStatus === 'ready' && plans.length === 0 ? (
+                <p className="mx-auto mt-12 max-w-md text-center text-muted-foreground">
+                  Nenhum plano está aberto para assinatura no momento.
+                </p>
+              ) : null}
+
+              {plansStatus === 'ready' && plans.length > 0 ? (
+                <ul className="mt-12 grid items-stretch gap-6 lg:grid-cols-3">
+                  {plans.map((plan, indice) => {
+                    const destaque = plan.key === PLANO_EM_DESTAQUE;
+                    const todosOsRecursos = plan.features.filter(
+                      (feature) => feature.enabled
+                    );
+                    // A partir do segundo plano, a lista mostra o que ele
+                    // acrescenta ao anterior ("Tudo do Free, mais:"); antes
+                    // os três cartões repetiam os mesmos cinco recursos.
+                    const anterior = indice > 0 ? plans[indice - 1] : null;
+                    const chavesDoAnterior = new Set(
+                      anterior?.features
+                        .filter((feature) => feature.enabled)
+                        .map((feature) => feature.key) ?? []
+                    );
+                    const novos = todosOsRecursos.filter(
+                      (feature) => !chavesDoAnterior.has(feature.key)
+                    );
+                    const herdaDoAnterior =
+                      anterior !== null &&
+                      novos.length > 0 &&
+                      novos.length < todosOsRecursos.length;
+                    const recursos = herdaDoAnterior ? novos : todosOsRecursos;
+                    const restantes = recursos.length - RECURSOS_POR_PLANO;
+
+                    return (
+                      <li
                         key={plan.key}
                         data-escala="plano"
+                        aria-labelledby={`plano-${plan.key}`}
                         className={cn(
-                          'flex min-w-0 flex-col overflow-hidden bg-background',
-                          plan.key === 'meta' &&
-                            'border-primary ring-1 ring-primary'
+                          'flex min-w-0 flex-col rounded-xl border bg-background p-6 sm:p-8',
+                          destaque
+                            ? 'border-primary shadow-md ring-1 ring-primary'
+                            : 'border-border'
                         )}
                       >
-                        {/* Faixa com a cor de destaque cadastrada no plano
-                            (cor chapada, sem gradiente). */}
-                        <div
-                          aria-hidden="true"
-                          className="h-1 w-full"
-                          style={{ backgroundColor: plan.accentFrom }}
-                        />
-                        <CardHeader>
+                        <div className="flex flex-wrap items-center justify-between gap-3">
+                          <h3
+                            id={`plano-${plan.key}`}
+                            className="flex items-center gap-2.5 font-display font-semibold text-foreground"
+                            style={textStyles.cardTitle}
+                          >
+                            {/* Cor cadastrada no plano, com contorno para
+                                não sumir no tema escuro. */}
+                            <span
+                              aria-hidden="true"
+                              className="size-3 shrink-0 rounded-full ring-1 ring-border"
+                              style={{ backgroundColor: plan.accentFrom }}
+                            />
+                            {plan.name}
+                          </h3>
                           {plan.highlightText ? (
-                            <Badge className="w-fit">
+                            <Badge variant={destaque ? 'default' : 'secondary'}>
                               {plan.highlightText}
                             </Badge>
                           ) : null}
-                          <CardTitle style={textStyles.cardTitle}>
-                            {plan.name}
-                          </CardTitle>
-                          <CardDescription className="text-sm font-medium text-foreground">
-                            {plan.tagline}
-                          </CardDescription>
-                          <p
-                            className="leading-7 text-muted-foreground"
-                            style={textStyles.cardBody}
-                          >
-                            {plan.description}
-                          </p>
-                        </CardHeader>
-                        <CardContent className="flex-1 space-y-5">
-                          <div className="rounded-md border border-border bg-card p-5">
-                            <p className="font-display text-4xl font-semibold tracking-tight text-foreground">
-                              {formatCurrency(
-                                plan.monthlyPrice,
-                                plan.currencyCode
-                              )}
-                              <span className="ml-2 text-sm font-normal text-muted-foreground">
-                                /mes
-                              </span>
-                            </p>
-                            <p className="mt-2 text-sm text-muted-foreground">
-                              anual:{' '}
-                              {formatCurrency(
-                                plan.annualPrice,
-                                plan.currencyCode
-                              )}
-                            </p>
-                          </div>
-                          <ul className="space-y-3">
-                            {plan.features
-                              .filter((feature) => feature.enabled)
-                              .slice(0, 4)
-                              .map((feature) => (
-                                <li
-                                  key={`${plan.key}-${feature.key}`}
-                                  className="flex items-start gap-3 text-sm text-foreground"
-                                >
-                                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sidebar-accent text-primary">
-                                    <Check
-                                      className="h-3.5 w-3.5"
-                                      aria-hidden
-                                    />
-                                  </span>
-                                  <span className="leading-6">
-                                    {feature.name}
-                                  </span>
-                                </li>
-                              ))}
-                          </ul>
-                        </CardContent>
-                        <CardFooter>
-                          <Button
-                            className="w-full"
-                            style={textStyles.buttonLabel}
-                            variant={
-                              plan.key === 'meta' ? 'default' : 'secondary'
-                            }
-                            onClick={() =>
-                              navigateTo(config.hero.primaryCtaHref)
-                            }
-                            disabled={previewMode}
-                          >
+                        </div>
+                        <p className="mt-2 text-sm font-medium text-foreground">
+                          {plan.tagline}
+                        </p>
+
+                        <p className="mt-6 flex flex-wrap items-baseline gap-x-1.5">
+                          <span className="font-display text-4xl font-semibold tracking-tight text-foreground tabular-nums">
+                            {moedaPtBr(plan.monthlyPrice, plan.currencyCode)}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            por mês
+                          </span>
+                        </p>
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          ou {moedaPtBr(plan.annualPrice, plan.currencyCode)}{' '}
+                          por ano
+                        </p>
+
+                        <p
+                          className="mt-5 text-pretty leading-relaxed text-muted-foreground"
+                          style={textStyles.cardBody}
+                        >
+                          {plan.description}
+                        </p>
+
+                        <p
+                          id={`recursos-do-plano-${plan.key}`}
+                          className="mt-6 border-t border-border pt-6 text-sm font-medium text-foreground"
+                        >
+                          {herdaDoAnterior && anterior
+                            ? `Tudo do ${anterior.name}, mais:`
+                            : 'Inclui:'}
+                        </p>
+                        <ul
+                          aria-labelledby={`plano-${plan.key} recursos-do-plano-${plan.key}`}
+                          className="mt-4 flex-1 space-y-3"
+                        >
+                          {recursos
+                            .slice(0, RECURSOS_POR_PLANO)
+                            .map((feature) => (
+                              <li
+                                key={`${plan.key}-${feature.key}`}
+                                className="flex items-start gap-3 text-sm text-foreground"
+                              >
+                                <Check
+                                  className="mt-0.5 size-4 shrink-0 text-primary"
+                                  aria-hidden="true"
+                                />
+                                <span className="leading-6">
+                                  {feature.name}
+                                </span>
+                              </li>
+                            ))}
+                          {restantes > 0 ? (
+                            <li className="pl-7 text-sm text-muted-foreground">
+                              e mais {restantes}{' '}
+                              {restantes === 1 ? 'recurso' : 'recursos'}
+                            </li>
+                          ) : null}
+                        </ul>
+
+                        <LinkDaLanding
+                          href={config.hero.primaryCtaHref}
+                          previewMode={previewMode}
+                          comoBotao
+                          className={cn(
+                            buttonVariants({
+                              variant: destaque ? 'default' : 'secondary',
+                              size: 'lg',
+                            }),
+                            'mt-8 w-full'
+                          )}
+                        >
+                          <span style={textStyles.buttonLabel}>
                             {config.plans.ctaLabel}
-                            <ArrowRight className="h-4 w-4" aria-hidden />
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    ))}
-              </div>
+                          </span>
+                          <span className="sr-only"> no plano {plan.name}</span>
+                          <ArrowRight aria-hidden="true" />
+                        </LinkDaLanding>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : null}
 
               {plansStatus === 'error' ? (
-                <Card className="mt-6 border-destructive/20 bg-destructive-light">
-                  <CardContent className="px-6 py-5">
-                    <p className="text-sm font-medium text-destructive">
-                      Falha ao sincronizar o catálogo público agora.
-                    </p>
-                    <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                      {plansError}
-                    </p>
-                  </CardContent>
-                </Card>
+                <div
+                  role="alert"
+                  className="mx-auto mt-12 flex max-w-xl flex-col items-center gap-3 rounded-xl border border-destructive/30 bg-destructive-light px-6 py-6 text-center"
+                >
+                  <p className="text-sm font-medium text-destructive">
+                    Não conseguimos carregar os planos agora.
+                  </p>
+                  <p className="text-sm leading-6 text-muted-foreground">
+                    {plansError}
+                  </p>
+                  <Button
+                    variant="secondary"
+                    onClick={tentarCarregarPlanosDeNovo}
+                  >
+                    <RotateCw aria-hidden="true" /> Tentar de novo
+                  </Button>
+                </div>
               ) : null}
             </div>
           </section>
@@ -633,29 +809,27 @@ export function LandingPage({
         }
 
         return (
-          <section id="faq" className="px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
-            <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.92fr_1.08fr]">
-              <div className="min-w-0">
-                <p className={rotuloDeSecaoClass}>{config.faq.badgeText}</p>
-                <h2
-                  className="mt-3 font-display font-semibold tracking-[-0.02em] text-foreground"
-                  style={textStyles.sectionTitle}
-                >
-                  {config.faq.title}
-                </h2>
-                <p
-                  className="mt-4 leading-relaxed text-muted-foreground"
-                  style={textStyles.sectionBody}
-                >
-                  {config.faq.description}
-                </p>
-              </div>
+          <section
+            id="faq"
+            aria-labelledby="titulo-faq"
+            className={ESPACO_DA_SECAO}
+          >
+            <div
+              className={cn(
+                CONTEINER,
+                'grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16'
+              )}
+            >
+              <AberturaDaSecao
+                id="titulo-faq"
+                rotulo={config.faq.badgeText}
+                titulo={config.faq.title}
+                descricao={config.faq.description}
+                estiloDoTitulo={textStyles.sectionTitle}
+                estiloDoTexto={textStyles.sectionBody}
+              />
 
-              <Accordion
-                type="single"
-                collapsible
-                className="min-w-0 space-y-3"
-              >
+              <Accordion type="single" collapsible className="min-w-0">
                 {config.faq.items.map((item) => (
                   <AccordionItem key={item.id} value={item.id}>
                     <AccordionTrigger>{item.question}</AccordionTrigger>
@@ -672,43 +846,40 @@ export function LandingPage({
         }
 
         return (
-          <section className="px-4 pb-24 sm:px-6 lg:px-8">
-            <div className="mx-auto max-w-7xl rounded-xl border border-border bg-card p-6 sm:p-10 lg:p-12">
-              <div className="max-w-3xl">
-                <p className={rotuloDeSecaoClass}>
-                  {config.finalCta.badgeText}
-                </p>
-                <h2
-                  className="mt-3 font-display font-semibold tracking-[-0.02em] text-foreground"
-                  style={textStyles.sectionTitle}
-                >
-                  {config.finalCta.title}
-                </h2>
-                <p
-                  className="mt-4 leading-relaxed text-foreground/80"
-                  style={textStyles.sectionBody}
-                >
-                  {config.finalCta.description}
-                </p>
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                  <Button
-                    size="xl"
-                    className="h-auto min-h-12 whitespace-normal py-3 text-center"
-                    style={textStyles.buttonLabel}
-                    onClick={() => navigateTo(config.finalCta.primaryHref)}
+          <section aria-labelledby="titulo-chamada-final" className="pb-20">
+            <div className={CONTEINER}>
+              <div className="rounded-2xl border border-border bg-sidebar-accent px-6 py-14 text-center sm:px-12 sm:py-20">
+                <AberturaDaSecao
+                  id="titulo-chamada-final"
+                  rotulo={config.finalCta.badgeText}
+                  titulo={config.finalCta.title}
+                  descricao={config.finalCta.description}
+                  estiloDoTitulo={textStyles.sectionTitle}
+                  estiloDoTexto={textStyles.sectionBody}
+                  centralizada
+                />
+                <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+                  <LinkDaLanding
+                    href={config.finalCta.primaryHref}
+                    previewMode={previewMode}
+                    comoBotao
+                    className={botaoPrincipal}
                   >
-                    {config.finalCta.primaryLabel}
-                    <ArrowRight className="h-4 w-4" aria-hidden />
-                  </Button>
-                  <Button
-                    size="xl"
-                    variant="secondary"
-                    className="h-auto min-h-12 whitespace-normal py-3 text-center"
-                    style={textStyles.buttonLabel}
-                    onClick={() => navigateTo(config.finalCta.secondaryHref)}
+                    <span style={textStyles.buttonLabel}>
+                      {config.finalCta.primaryLabel}
+                    </span>
+                    <ArrowRight aria-hidden="true" />
+                  </LinkDaLanding>
+                  <LinkDaLanding
+                    href={config.finalCta.secondaryHref}
+                    previewMode={previewMode}
+                    comoBotao
+                    className={botaoSecundario}
                   >
-                    {config.finalCta.secondaryLabel}
-                  </Button>
+                    <span style={textStyles.buttonLabel}>
+                      {config.finalCta.secondaryLabel}
+                    </span>
+                  </LinkDaLanding>
                 </div>
               </div>
             </div>
@@ -731,9 +902,9 @@ export function LandingPage({
     ])
   );
 
-  // Escalas do construtor de UI (landing.sizing): cards do topo, cards de
-  // recursos e do fluxo, cards de planos, ícones e botões (regras em
-  // globals.css, pelos atributos `data-escala` e `data-slot`).
+  // Escalas do construtor de UI (landing.sizing): cards do topo, itens de
+  // recursos e do fluxo, planos, ícones e botões (regras em globals.css,
+  // pelos atributos `data-escala` e `data-slot`).
   const escalasDaLanding = {
     '--landing-escala-hero': String(config.sizing.heroCard),
     '--landing-escala-recurso': String(config.sizing.featureCard),
@@ -742,320 +913,425 @@ export function LandingPage({
     '--landing-escala-botao': String(config.sizing.buttonScale),
   } as CSSProperties;
 
+  // Na pré-visualização a landing fica dentro do <main> do painel: sem um
+  // segundo <main>.
+  const Principal = previewMode ? 'div' : 'main';
+
   return (
     <div
       className="lyra-landing min-h-screen bg-background text-foreground"
       style={escalasDaLanding}
     >
-      <header className="sticky top-0 z-50 border-b border-border bg-card">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:px-8">
-          <button
-            type="button"
-            onClick={() => {
-              if (previewMode) {
-                return;
-              }
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className="flex min-w-0 items-center gap-2.5 rounded px-1 py-1 text-left focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+      <header
+        className={cn(
+          'top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75',
+          previewMode ? 'relative' : 'sticky'
+        )}
+      >
+        <div
+          className={cn(
+            CONTEINER,
+            'flex h-16 items-center justify-between gap-3'
+          )}
+        >
+          <LinkDaLanding
+            href="#topo"
+            previewMode={previewMode}
+            className="flex min-w-0 items-center gap-2.5 rounded-md py-1 pr-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
           >
-            <MarcaLyra tamanho="40px" prioridade />
-            <span className="min-w-0">
-              <span className="block font-display text-xl font-semibold lowercase leading-tight tracking-tight text-foreground">
-                lyra{' '}
-              </span>
-              <span className="hidden text-xs font-medium text-muted-foreground sm:block">
-                astrologia + IA
-              </span>
-              <span className="sr-only">: voltar ao topo</span>
+            <MarcaLyra tamanho="36px" prioridade />
+            <span className="whitespace-nowrap font-display text-lg font-semibold lowercase leading-tight tracking-tight text-foreground">
+              {config.footer.brandLine}
             </span>
-          </button>
+            <span className="sr-only">, voltar ao topo</span>
+          </LinkDaLanding>
 
-          <nav className="hidden items-center gap-1 md:flex">
-            <Button
-              variant="ghost"
-              style={textStyles.buttonLabel}
-              onClick={() => navigateTo('#recursos')}
-            >
-              Recursos
-            </Button>
-            <Button
-              variant="ghost"
-              style={textStyles.buttonLabel}
-              onClick={() => navigateTo('#fluxo')}
-            >
-              Fluxo
-            </Button>
-            <Button
-              variant="ghost"
-              style={textStyles.buttonLabel}
-              onClick={() => navigateTo('#planos')}
-            >
-              Planos
-            </Button>
-            <Button
-              variant="ghost"
-              style={textStyles.buttonLabel}
-              onClick={() => navigateTo('#faq')}
-            >
-              FAQ
-            </Button>
-          </nav>
+          {itensDoMenu.length > 0 ? (
+            <nav aria-label="Seções da página" className="hidden md:block">
+              <ul className="flex items-center gap-1">
+                {itensDoMenu.map((item) => (
+                  <li key={item.href}>
+                    <LinkDaLanding
+                      href={item.href}
+                      previewMode={previewMode}
+                      className="inline-flex min-h-10 items-center rounded-md px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      {item.rotulo}
+                    </LinkDaLanding>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ) : null}
 
           <div className="flex shrink-0 items-center gap-1 sm:gap-2">
             {/* Na pré-visualização do construtor o botão mudaria o tema do
                 próprio painel administrativo. */}
             {previewMode ? null : <ThemeToggleButton />}
-            <Button
-              variant="ghost"
-              style={textStyles.buttonLabel}
-              onClick={() => navigateTo(config.hero.primaryCtaHref)}
+            <LinkDaLanding
+              href={config.hero.primaryCtaHref}
+              previewMode={previewMode}
+              comoBotao
+              className={cn(
+                buttonVariants({ variant: 'ghost' }),
+                'hidden sm:inline-flex'
+              )}
             >
-              {config.header.loginLabel}
-            </Button>
-            <Button
-              style={textStyles.buttonLabel}
-              onClick={() => navigateTo(config.hero.primaryCtaHref)}
+              <span style={textStyles.buttonLabel}>
+                {config.header.loginLabel}
+              </span>
+            </LinkDaLanding>
+            <LinkDaLanding
+              href={config.hero.primaryCtaHref}
+              previewMode={previewMode}
+              comoBotao
+              // No celular a mesma ação fica no topo da página e no menu.
+              className={cn(buttonVariants(), 'hidden sm:inline-flex')}
             >
-              {config.header.fullLoginLabel}
-            </Button>
+              <span style={textStyles.buttonLabel}>
+                {config.header.fullLoginLabel}
+              </span>
+            </LinkDaLanding>
+
+            {itensDoMenu.length > 0 ? (
+              <Sheet open={menuAberto} onOpenChange={setMenuAberto}>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden"
+                    aria-label="Abrir o menu da página"
+                    disabled={previewMode}
+                  >
+                    <Menu aria-hidden="true" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right" className="gap-6">
+                  <SheetHeader className="space-y-1 pr-10 text-left">
+                    <SheetTitle className="font-display">Menu</SheetTitle>
+                    <SheetDescription>
+                      Vá direto para uma parte da página.
+                    </SheetDescription>
+                  </SheetHeader>
+                  <nav aria-label="Seções da página (menu)">
+                    <ul className="flex flex-col gap-1">
+                      {itensDoMenu.map((item) => (
+                        <li key={item.href}>
+                          <SheetClose asChild>
+                            <a
+                              href={item.href}
+                              className="flex min-h-12 items-center rounded-md px-3 text-base font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+                            >
+                              {item.rotulo}
+                            </a>
+                          </SheetClose>
+                        </li>
+                      ))}
+                    </ul>
+                  </nav>
+                  <div className="mt-auto flex flex-col gap-3 border-t border-border pt-6">
+                    <LinkDaLanding
+                      href={config.hero.primaryCtaHref}
+                      previewMode={previewMode}
+                      comoBotao
+                      aoNavegar={() => setMenuAberto(false)}
+                      className={cn(buttonVariants({ size: 'lg' }), 'w-full')}
+                    >
+                      {config.header.fullLoginLabel}
+                    </LinkDaLanding>
+                    <LinkDaLanding
+                      href={config.hero.primaryCtaHref}
+                      previewMode={previewMode}
+                      comoBotao
+                      aoNavegar={() => setMenuAberto(false)}
+                      className={cn(
+                        buttonVariants({ size: 'lg', variant: 'secondary' }),
+                        'w-full'
+                      )}
+                    >
+                      {config.header.loginLabel}
+                    </LinkDaLanding>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            ) : null}
           </div>
         </div>
       </header>
 
-      <main id={previewMode ? undefined : 'conteudo-principal'}>
-        <section className="px-4 pb-16 pt-10 sm:px-6 lg:px-8 lg:pb-24 lg:pt-16">
-          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1.06fr)_minmax(0,0.94fr)] lg:items-start lg:gap-12">
+      <Principal id={previewMode ? undefined : 'conteudo-principal'}>
+        {/* Topo: a promessa e a ação principal à esquerda; a entrada
+            rápida à direita (abaixo, no celular). */}
+        <section
+          id="topo"
+          aria-labelledby="titulo-da-landing"
+          className="scroll-mt-20 pb-16 pt-12 sm:pb-24 sm:pt-20"
+        >
+          <div
+            className={cn(
+              CONTEINER,
+              'grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center lg:gap-16'
+            )}
+          >
             <div className="min-w-0">
-              <Badge className="max-w-full px-3 py-1 text-sm">
-                <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              <p className="inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-foreground">
+                <Sparkles
+                  className="size-3.5 shrink-0 text-cosmic-strong"
+                  aria-hidden="true"
+                />
                 <span className="min-w-0">{config.hero.badgeText}</span>
-              </Badge>
+              </p>
 
               <h1
-                className="mt-6 max-w-4xl break-words font-display font-semibold leading-[1.08] tracking-[-0.03em] text-foreground"
+                id="titulo-da-landing"
+                className="mt-6 max-w-3xl text-balance break-words font-display font-semibold leading-[1.05] tracking-[-0.035em] text-foreground"
                 style={textStyles.heroTitle}
               >
-                {config.hero.title}
-                <span className="block text-primary">
-                  {config.hero.accentTitle}
-                </span>
+                {config.hero.title}{' '}
+                <span className="text-primary">{config.hero.accentTitle}</span>
               </h1>
 
               <p
-                className="mt-6 max-w-2xl leading-relaxed text-muted-foreground"
+                className="mt-6 max-w-xl text-pretty leading-relaxed text-muted-foreground"
                 style={textStyles.heroBody}
               >
                 {config.hero.description}
               </p>
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button
-                  size="xl"
-                  className="h-auto min-h-12 whitespace-normal py-3 text-center"
-                  style={textStyles.buttonLabel}
-                  onClick={() => navigateTo(config.hero.primaryCtaHref)}
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+                <LinkDaLanding
+                  href={config.hero.primaryCtaHref}
+                  previewMode={previewMode}
+                  comoBotao
+                  className={botaoPrincipal}
                 >
-                  {config.hero.primaryCtaLabel}
-                  <ArrowRight className="h-4 w-4" aria-hidden />
-                </Button>
-                <Button
-                  size="xl"
-                  variant="secondary"
-                  className="h-auto min-h-12 whitespace-normal py-3 text-center"
-                  style={textStyles.buttonLabel}
-                  onClick={() => navigateTo(config.hero.secondaryCtaHref)}
+                  <span style={textStyles.buttonLabel}>
+                    {config.hero.primaryCtaLabel}
+                  </span>
+                  <ArrowRight aria-hidden="true" />
+                </LinkDaLanding>
+                <LinkDaLanding
+                  href={config.hero.secondaryCtaHref}
+                  previewMode={previewMode}
+                  comoBotao
+                  className={botaoSecundario}
                 >
-                  {config.hero.secondaryCtaLabel}
-                </Button>
+                  <span style={textStyles.buttonLabel}>
+                    {config.hero.secondaryCtaLabel}
+                  </span>
+                </LinkDaLanding>
               </div>
             </div>
 
-            <div className="grid min-w-0 gap-4">
-              <Card data-escala="hero">
-                <CardHeader>
-                  <Badge variant="cosmic" className="w-fit">
-                    {config.hero.quickAuthBadge}
-                  </Badge>
-                  <CardTitle style={textStyles.cardTitle}>
-                    {config.hero.quickAuthTitle}
-                  </CardTitle>
-                  <CardDescription style={textStyles.cardBody}>
-                    {config.hero.quickAuthDescription}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <form className="space-y-4" onSubmit={handleQuickLogin}>
-                    <div className="space-y-2">
-                      <Label htmlFor="landing-email">Email</Label>
+            <Card data-escala="hero" className="min-w-0 shadow-lg">
+              <CardHeader>
+                <Badge variant="cosmic" className="w-fit">
+                  {config.hero.quickAuthBadge}
+                </Badge>
+                <CardTitle as="h2" style={textStyles.cardTitle}>
+                  {config.hero.quickAuthTitle}
+                </CardTitle>
+                <CardDescription style={textStyles.cardBody}>
+                  {config.hero.quickAuthDescription}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form className="space-y-4" onSubmit={handleQuickLogin}>
+                  <div className="space-y-2">
+                    <Label htmlFor="landing-email">E-mail</Label>
+                    <Input
+                      id="landing-email"
+                      type="email"
+                      autoComplete="email"
+                      inputMode="email"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      disabled={previewMode}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="landing-password">Senha</Label>
+                    <div className="relative">
                       <Input
-                        id="landing-email"
-                        type="email"
-                        autoComplete="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        id="landing-password"
+                        type={showPassword ? 'text' : 'password'}
+                        autoComplete="current-password"
+                        value={password}
+                        onChange={(event) => setPassword(event.target.value)}
+                        className="pr-11"
                         disabled={previewMode}
                       />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="landing-password">Senha</Label>
-                      <div className="relative">
-                        <Input
-                          id="landing-password"
-                          type={showPassword ? 'text' : 'password'}
-                          autoComplete="current-password"
-                          value={password}
-                          onChange={(event) => setPassword(event.target.value)}
-                          className="pr-11"
-                          disabled={previewMode}
-                        />
-                        <button
-                          type="button"
-                          aria-label={
-                            showPassword ? 'Ocultar senha' : 'Mostrar senha'
-                          }
-                          onClick={() => setShowPassword((current) => !current)}
-                          disabled={previewMode}
-                          className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-[10px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                        >
-                          {showPassword ? (
-                            <EyeOff className="h-[18px] w-[18px]" aria-hidden />
-                          ) : (
-                            <Eye className="h-[18px] w-[18px]" aria-hidden />
-                          )}
-                        </button>
-                      </div>
-                    </div>
-                    {/* `flex-1` só na linha (sm+): na coluna do celular ele
-                        zerava a base de altura e os botões caíam para 22px. */}
-                    <div className="flex flex-col gap-3 sm:flex-row">
-                      <Button
-                        type="submit"
-                        className="h-11 sm:h-10 sm:flex-1"
-                        style={textStyles.buttonLabel}
-                        disabled={
-                          previewMode ||
-                          submitting ||
-                          email.trim().length === 0 ||
-                          password.trim().length === 0
-                        }
-                      >
-                        {submitting
-                          ? 'Entrando...'
-                          : config.hero.quickAuthSubmitLabel}
-                        <ArrowRight className="h-4 w-4" aria-hidden />
-                      </Button>
-                      <Button
+                      <button
                         type="button"
-                        variant="secondary"
-                        className="h-11 sm:h-10 sm:flex-1"
-                        style={textStyles.buttonLabel}
-                        onClick={() => navigateTo(config.hero.primaryCtaHref)}
+                        aria-label={
+                          showPassword ? 'Ocultar senha' : 'Mostrar senha'
+                        }
+                        aria-pressed={showPassword}
+                        onClick={() => setShowPassword((current) => !current)}
                         disabled={previewMode}
+                        className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-md text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
                       >
-                        {config.hero.quickAuthSecondaryLabel}
-                      </Button>
+                        {showPassword ? (
+                          <EyeOff className="size-[18px]" aria-hidden="true" />
+                        ) : (
+                          <Eye className="size-[18px]" aria-hidden="true" />
+                        )}
+                      </button>
                     </div>
-                  </form>
-                </CardContent>
-              </Card>
-
-              <Card data-escala="hero">
-                <CardHeader>
-                  <Badge variant="outline" className="w-fit">
-                    {config.hero.previewBadge}
-                  </Badge>
-                  <CardTitle style={textStyles.cardTitle}>
-                    {config.hero.previewTitle}
-                  </CardTitle>
-                  <CardDescription style={textStyles.cardBody}>
-                    {config.hero.previewDescription}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-4 px-6 pb-6 sm:grid-cols-3">
-                  {config.hero.previewItems.map((item) => {
-                    const ItemIcon = getBuilderIcon(item.icon);
-
-                    return (
-                      <div
-                        key={item.id}
-                        className="min-w-0 rounded-md border border-border bg-background p-4"
-                      >
-                        <div
-                          data-escala="icone"
-                          className={cn(
-                            'flex h-10 w-10 items-center justify-center rounded-md',
-                            corDoIconeTonal(item.tone)
-                          )}
-                        >
-                          <ItemIcon className="h-[18px] w-[18px]" aria-hidden />
-                        </div>
-                        <p
-                          className="mt-4 font-display font-semibold text-foreground"
-                          style={textStyles.cardTitle}
-                        >
-                          {item.title}
-                        </p>
-                        <p
-                          className="mt-2 leading-6 text-muted-foreground"
-                          style={textStyles.cardBody}
-                        >
-                          {item.description}
-                        </p>
-                      </div>
-                    );
-                  })}
-                </CardContent>
-              </Card>
-            </div>
+                  </div>
+                  <div className="flex flex-col gap-3 pt-1 sm:flex-row">
+                    <Button
+                      type="submit"
+                      className="h-11 sm:flex-1"
+                      style={textStyles.buttonLabel}
+                      disabled={
+                        previewMode ||
+                        submitting ||
+                        email.trim().length === 0 ||
+                        password.trim().length === 0
+                      }
+                    >
+                      {submitting
+                        ? 'Entrando...'
+                        : config.hero.quickAuthSubmitLabel}
+                      <ArrowRight aria-hidden="true" />
+                    </Button>
+                    <LinkDaLanding
+                      href={config.hero.primaryCtaHref}
+                      previewMode={previewMode}
+                      comoBotao
+                      className={cn(
+                        buttonVariants({ variant: 'secondary' }),
+                        'h-11 sm:flex-1'
+                      )}
+                    >
+                      <span style={textStyles.buttonLabel}>
+                        {config.hero.quickAuthSecondaryLabel}
+                      </span>
+                    </LinkDaLanding>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
           </div>
         </section>
 
-        {/* Blocos publicados no editor Puck (documento "landing-home"),
-            logo após o topo. Sem blocos publicados, nada é exibido. */}
+        {/* Prévia do produto: os três sinais que a pessoa encontra no app,
+            em uma faixa única (antes um cartão dentro de outro). */}
+        <section
+          aria-labelledby="titulo-previa"
+          className="border-y border-border bg-card py-14 sm:py-16"
+        >
+          <div
+            className={cn(
+              CONTEINER,
+              'grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,2.2fr)] lg:gap-16'
+            )}
+          >
+            <div className="min-w-0">
+              <p className={ROTULO_DA_SECAO}>{config.hero.previewBadge}</p>
+              <h2
+                id="titulo-previa"
+                className="mt-3 text-balance font-display font-semibold tracking-[-0.02em] text-foreground"
+                style={textStyles.cardTitle}
+              >
+                {config.hero.previewTitle}
+              </h2>
+              <p
+                className="mt-3 text-pretty leading-relaxed text-muted-foreground"
+                style={textStyles.cardBody}
+              >
+                {config.hero.previewDescription}
+              </p>
+            </div>
+            <ul className="grid gap-8 sm:grid-cols-3 sm:gap-6">
+              {config.hero.previewItems.map((item) => {
+                const ItemIcon = getBuilderIcon(item.icon);
+
+                return (
+                  <li key={item.id} data-escala="hero" className="min-w-0">
+                    <span
+                      data-escala="icone"
+                      className={cn(
+                        'flex size-10 items-center justify-center rounded-md',
+                        corDoIconeTonal(item.tone)
+                      )}
+                    >
+                      <ItemIcon className="size-[18px]" aria-hidden="true" />
+                    </span>
+                    <h3
+                      className="mt-4 font-display font-semibold text-foreground"
+                      style={textStyles.cardTitle}
+                    >
+                      {item.title}
+                    </h3>
+                    <p
+                      className="mt-2 text-pretty leading-relaxed text-muted-foreground"
+                      style={textStyles.cardBody}
+                    >
+                      {item.description}
+                    </p>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </section>
+
+        {/* Blocos publicados no editor Puck (documento "landing-home"), logo
+            após o topo. Sem blocos publicados, nada é exibido. */}
         <PuckClientRenderer documentKey="landing-home" className="w-full" />
 
         {orderedSections.map((sectionKey) => (
           <div key={sectionKey}>{renderSection(sectionKey)}</div>
         ))}
-      </main>
+      </Principal>
 
-      <footer className="border-t border-border bg-card px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 md:flex-row md:items-center md:justify-between">
+      <footer className="border-t border-border py-10">
+        <div
+          className={cn(
+            CONTEINER,
+            'flex flex-col gap-6 md:flex-row md:items-start md:justify-between'
+          )}
+        >
           <div className="flex min-w-0 items-center gap-2.5">
-            <MarcaLyra tamanho="40px" />
-            <div className="min-w-0">
-              <p className="font-display text-lg font-semibold lowercase tracking-tight text-foreground">
-                {config.footer.brandLine}
-              </p>
-              <p className="text-xs font-medium text-muted-foreground">
-                astrologia + IA
-              </p>
-            </div>
+            <MarcaLyra tamanho="32px" />
+            <p className="font-display text-base font-semibold lowercase tracking-tight text-foreground">
+              {config.footer.brandLine}
+            </p>
           </div>
           <p
-            className="min-w-0 leading-relaxed text-muted-foreground md:max-w-xl"
+            className="min-w-0 text-pretty leading-relaxed text-muted-foreground md:max-w-xl"
             style={textStyles.cardBody}
           >
             {config.footer.note}
           </p>
         </div>
-        <nav
-          aria-label="Documentos legais"
-          className="mx-auto mt-6 flex max-w-7xl flex-wrap gap-x-5 border-t border-border pt-4 text-sm text-muted-foreground"
-        >
-          <Link
-            href={ROTA_POLITICA_DE_PRIVACIDADE}
-            className="inline-flex min-h-11 items-center underline-offset-4 hover:text-foreground hover:underline"
-          >
-            Política de privacidade
-          </Link>
-          <Link
-            href={ROTA_TERMOS_DE_USO}
-            className="inline-flex min-h-11 items-center underline-offset-4 hover:text-foreground hover:underline"
-          >
-            Termos de uso
-          </Link>
+        <nav aria-label="Documentos legais" className={cn(CONTEINER, 'mt-6')}>
+          <ul className="flex flex-wrap gap-x-6 border-t border-border pt-4 text-sm text-muted-foreground">
+            <li>
+              <Link
+                href={ROTA_POLITICA_DE_PRIVACIDADE}
+                onClick={
+                  previewMode ? (evento) => evento.preventDefault() : undefined
+                }
+                className="inline-flex min-h-11 items-center underline-offset-4 hover:text-foreground hover:underline"
+              >
+                Política de privacidade
+              </Link>
+            </li>
+            <li>
+              <Link
+                href={ROTA_TERMOS_DE_USO}
+                onClick={
+                  previewMode ? (evento) => evento.preventDefault() : undefined
+                }
+                className="inline-flex min-h-11 items-center underline-offset-4 hover:text-foreground hover:underline"
+              >
+                Termos de uso
+              </Link>
+            </li>
+          </ul>
         </nav>
       </footer>
     </div>
