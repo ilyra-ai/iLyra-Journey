@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `███████████████████░` **96,8%** |
+| Progresso          | `████████████████████` **98,4%** |
 | Tarefas totais     | 63                               |
-| 🟢 Finalizadas     | 61                               |
+| 🟢 Finalizadas     | 62                               |
 | 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 1                                |
+| ⚪ A iniciar       | 0                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-17                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (61 ÷ 63 = 96,8%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (62 ÷ 63 = 98,4%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -43,7 +43,7 @@
 
 ### ANDAMENTO
 
-- **62 · Tags e Elementos HTML premium** 🔵 · HTML semântico (landmarks, títulos em ordem, listas, tabelas com legenda e escopo, formulários com rótulo, botões e links corretos, imagens com texto alternativo, `lang`, metadados) e conformidade WCAG 2.2 AA.
+- **63 · Landing page redesenhada por completo** 🔵 · redesenho integral da página inicial pública: mais simples, harmônica, organizada e na tendência de 2026, com conteúdo real (catálogo de planos e textos do construtor), celular primeiro, temas claro e escuro e acessibilidade.
 
 ### BLOQUEADAS
 
@@ -53,7 +53,7 @@ Nenhuma tarefa bloqueada.
 
 ## Tópico 3 · Tarefas a Iniciar
 
-- **63 · Landing page redesenhada por completo** ⚪ · redesenho integral da página inicial pública: mais simples, harmônica, organizada e na tendência de 2026, com conteúdo real (catálogo de planos e textos do construtor), celular primeiro, temas claro e escuro e acessibilidade.
+Nenhuma tarefa a iniciar.
 
 ---
 
@@ -1076,6 +1076,22 @@ Nenhuma tarefa bloqueada.
   - Integração: primeiro plano automático sem cota; login antes do onboarding não gera; login depois do onboarding deixa o plano salvo.
   - Navegador (build de produção, login real pela tela): o plano já estava salvo no MySQL antes de abrir `/plan`, origem automática, cota intacta, tela com o plano pronto ("Regenerar plano"), axe sem violações e zero erros de console, em 1440 px claro e 390 px escuro.
   - `test` 412/412, `test:integration` 156/156, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+
+### 62 · Tags e Elementos HTML premium
+
+- **Status:** 🟢 finalizada · **Commit:** `7d31294` · **Push:** `41a95e8..7d31294 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** todas as tags e elementos HTML no melhor padrão premium.
+- **Implementado:**
+  - **Títulos das abas:** as 22 páginas do app são de cliente e todas mostravam só "Lyra MetaCare". Cada segmento ganhou um `layout.tsx` de servidor com o nome do próprio menu (`src/lib/metadados/pagina.ts`, que falha no build se a rota sair da navegação); login, onboarding e retorno do pagamento com nomes próprios. Termos e privacidade repetiam "Lyra MetaCare" no título.
+  - **404 em português** (`not-found.tsx`; antes a página padrão em inglês) e `<title>` na tela de erro global.
+  - **Chat:** dois `h1` na mesma página (o do cabeçalho e o da conversa), agora `h2`. A região ao vivo anunciava a resposta em pedaços durante a revelação; virou `role="log"` e a resposta entra inteira, uma vez, ao terminar.
+  - **Navegação:** menus lateral e móvel em `ul`/`li` nomeados pela seção; `aside` do menu com nome e a prévia da respiração deixou de ser `aside`. O bloco do Puck do app ficava fora de qualquer região e passou para dentro do `<main>`.
+  - **Títulos em ordem:** usuários, planos, conteúdo e agendamentos pulavam do `h1` para o `h3`; o login ficava sem `h1` quando a introdução era ocultada no construtor.
+  - **Tabelas:** `Table` aceita `caption` (legenda oculta como primeiro filho); 7 tabelas legendadas e datas da lista de usuários e da respiração em `<time dateTime>`. Regiões roláveis da semana com nomes distintos.
+  - **Números em pt-BR:** `decimalPtBr` e `moedaPtBr` (`src/lib/formato/numero.ts`, com testes) nos indicadores do painel, idade biológica, preços dos planos ("BRL 79.90" virou "R$ 79,90") e escalas do construtor.
+  - **Formulários:** erro de validação anunciado ao aparecer (`role="alert"`), ícone decorativo oculto, grupo "Seus objetivos" nomeado e consentimento marcado como obrigatório.
+- **Evidências:** `test` 497/497 (4 novos), `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e 390 px escuro): títulos de 8 rotas conferidos, 404 com `h1` e link de volta funcionando, um `h1` por página, legenda e `<time>` na tabela de usuários, preços com vírgula, menus em listas; varredura de 23 páginas com as regras de ordem de títulos, regiões, listas e nomes únicos sem falhas nas duas larguras; varredura WCAG de 20 páginas sem violações e zero erros de console.
+- **Não feito, com motivo:** as barras de pontuação seguem como `progressbar` do Radix com `aria-valuenow`, lidas corretamente pelos leitores; o `<meter>` tem suporte desigual entre NVDA, JAWS e VoiceOver. Datas embutidas em frases de avisos continuam como texto.
 
 ### 61 · Widgets e Controles premium
 
