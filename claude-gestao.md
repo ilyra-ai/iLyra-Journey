@@ -22,15 +22,15 @@
 | Indicador          | Valor                           |
 | ------------------ | ------------------------------- |
 | Progresso          | `████████████████████` **100%** |
-| Tarefas totais     | 67                              |
-| 🟢 Finalizadas     | 67                              |
+| Tarefas totais     | 68                              |
+| 🟢 Finalizadas     | 68                              |
 | 🔵 Em andamento    | 0                               |
 | 🔴 Bloqueadas      | 0                               |
 | ⚪ A iniciar       | 0                               |
 | Branch de trabalho | `main` (única permitida)        |
 | Última atualização | 2026-10-17                      |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (67 ÷ 67 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (68 ÷ 68 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -1076,6 +1076,20 @@ Nenhuma tarefa a iniciar.
   - Integração: primeiro plano automático sem cota; login antes do onboarding não gera; login depois do onboarding deixa o plano salvo.
   - Navegador (build de produção, login real pela tela): o plano já estava salvo no MySQL antes de abrir `/plan`, origem automática, cota intacta, tela com o plano pronto ("Regenerar plano"), axe sem violações e zero erros de console, em 1440 px claro e 390 px escuro.
   - `test` 412/412, `test:integration` 156/156, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+
+### 68 · Onboarding, plano Free no cadastro e recursos de cada plano
+
+- **Status:** 🟢 finalizada · **Commits:** `81142dc` (Free na transação do cadastro) e `a607c6a` (recursos fora do plano não aparecem) · **Push:** `951328e..81142dc` e `81142dc..a607c6a main -> main` (confirmados)
+- **Pedido do usuário (2026-10-17):** verificar (1) se o onboarding aparece no primeiro login e depois não aparece mais; (2) se o perfil e o plano Free são concedidos ao novo usuário; (3) se cada plano funciona com os recursos habilitados e se os não habilitados não aparecem.
+- **Resultado da verificação:**
+  - (1) e (2) já funcionavam. Ajuste de robustez: a assinatura Free era criada depois do COMMIT da conta; agora conta, perfil, aceites e Free são atômicos.
+  - (3) as APIs já recusavam o que o plano não inclui, mas a interface mostrava tudo: o menu do Free listava Monitoramento e Dispositivos, o painel exibia "Bloqueado", o monitoramento do Meta mostrava "voz bloqueada", a agenda não exigia o recurso e a meta de sono gerava 403 no console com metas desligadas.
+- **Implementado:** `RECURSOS_DA_ROTA` e `useRotaLiberada` aplicados ao menu lateral, menu do celular, busca Ctrl K, atalhos, botão do chat, ações rápidas, cartões do painel, ações da Lyra, sino, Respiração, Sua semana e Plano de IA; agenda exigindo `appointments_active` e `professionals_total` na página e na API; `/api/semana` sem metas fora do plano; campo morto do Construtor removido; `docs/api.md` atualizado.
+- **Evidências:**
+  - Navegador (build de produção), cadastro novo pela tela: onboarding obrigatório em `/`, `/chat`, `/profile`, `/goals` e `/login`; concluído pela interface, nunca mais volta (rotas, recarga, novo login e login em outro aparelho pela landing); banco com perfil `patient`, `onboarding_completed` 0 → 1, aceites LGPD e uma única assinatura `free/active/auth_register`; 19 verificações OK.
+  - Free, Meta e Care (atribuídos pela API do admin): 86 verificações OK e 0 falhas; menus, busca, ações rápidas, páginas, voz e API da pulseira conforme a matriz do banco; 0 erros de console e de rede.
+  - Cada recurso do Free desligado um por vez (9 recursos, 9 páginas cada): o item some do menu e nenhuma página faz chamada recusada; matriz restaurada ao fim.
+  - `check:format`, `check:lint`, `check:types`, `test` 510/510, `test:integration` 166/166 e `build` com exit 0.
 
 ### 67 · Arte da Jornada e landing harmônica e organizada
 
