@@ -22,15 +22,15 @@
 | Indicador          | Valor                           |
 | ------------------ | ------------------------------- |
 | Progresso          | `████████████████████` **100%** |
-| Tarefas totais     | 64                              |
-| 🟢 Finalizadas     | 64                              |
+| Tarefas totais     | 65                              |
+| 🟢 Finalizadas     | 65                              |
 | 🔵 Em andamento    | 0                               |
 | 🔴 Bloqueadas      | 0                               |
 | ⚪ A iniciar       | 0                               |
 | Branch de trabalho | `main` (única permitida)        |
 | Última atualização | 2026-10-17                      |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (64 ÷ 64 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (65 ÷ 65 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -1076,6 +1076,17 @@ Nenhuma tarefa a iniciar.
   - Integração: primeiro plano automático sem cota; login antes do onboarding não gera; login depois do onboarding deixa o plano salvo.
   - Navegador (build de produção, login real pela tela): o plano já estava salvo no MySQL antes de abrir `/plan`, origem automática, cota intacta, tela com o plano pronto ("Regenerar plano"), axe sem violações e zero erros de console, em 1440 px claro e 390 px escuro.
   - `test` 412/412, `test:integration` 156/156, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+
+### 65 · Painel TUI-WEBNOVA como orquestrador do app no WSL2
+
+- **Status:** 🟢 finalizada · **Commit:** `4e8c565` · **Push:** `9bc51a9..4e8c565 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** adaptar o template TUI-WEBNOVA (`ilyra-ai/tui-webnova`) como orquestrador do app em `tui-webnova.sh` na raiz, com a saída de todos os comandos ao vivo, terminal interativo, visual de 2026, 11 opções definidas mais 5 extras, sem gravar logs, só para o WSL2 e sem chamar `run.py`, `run.sh` ou qualquer outro script do projeto.
+- **Implementado (`tui-webnova.sh`, independente: Bash + Python 3.10+ só com a biblioteca padrão):**
+  - Painel web local em 127.0.0.1 com token, checagem de Host (DNS rebinding), terminal real (PTY + xterm.js 6) por ação, envio de texto e teclas (`s`, `y`, `n`, Ctrl+C), cancelamento, abas, paleta Ctrl+K, tema claro e escuro, bento de estado (Node, pnpm, Docker, MySQL, migrations, Git, build, app).
+  - 18 ações: check-up; requisitos (apt, nvm, Node do `.nvmrc`, pnpm por Corepack, `pnpm install --frozen-lockfile`, cada um só quando falta); banco (Docker Engine pelo repositório oficial quando ausente, `.env.local`, porta livre, MySQL saudável); infraestrutura; migrations próprias com o mesmo checksum e tabela do runner oficial, mais o administrador inicial; iniciar dev e produção; parar; backup do banco, do app e completo (SHA-256 e manifesto); restaurar (dump de segurança antes); atualização segura (árvore limpa, backup obrigatório, `merge --ff-only`, migrations, build preservando o anterior e rollback automático); saúde ponta a ponta; segurança e supply chain; quality gates; limpeza segura; terminal do projeto.
+  - Sem logs: a saída fica só na memória do painel; `WEBNOVA_SEM_LOGS=1` desliga, pelo `next.config.ts`, o servidor MCP de dev do Next.js 16, que gravaria `.next/dev/logs/next-development.log`.
+  - `.gitignore` com `/backups/` inteiro e README com uso, ações e garantias.
+- **Evidências:** `--self-test` OK (18 ações, 18 scripts Bash válidos, nenhuma chamada a outros scripts, nenhuma escrita de log); pelo navegador: xterm carregado, 18 cards, 403 sem token e com Host estranho, digitação no terminal, pergunta interativa respondida pelo botão, app dev e produção no ar com `/api/health` 200, segunda partida recusada (409), saúde (`/`, `/login` e login do admin), três backups verificados, restauração do pacote completo pelo modal com o app religado, atualização real `10a6f24 → 9bc51a9` em clone com backup e rebuild, rollback com build quebrado, parar; segurança com 0 vulnerabilidades; quality gates com 502 unitários e 164 de integração; nenhum arquivo novo fora de `backups/` e dos artefatos de build depois de iniciar o app pelo painel; `check:format`, `check:lint` e `check:types` com exit 0.
 
 ### 64 · Erros relatados pelo usuário rodando em modo dev
 
