@@ -109,6 +109,10 @@ export default function RootLayout({
     <html
       lang="pt-BR"
       suppressHydrationWarning
+      // A rolagem suave (globals.css) vale para âncoras da página; com este
+      // atributo o Next a desliga durante a troca de rota (o modo dev avisava
+      // em todas as páginas).
+      data-scroll-behavior="smooth"
       className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-screen font-sans antialiased">

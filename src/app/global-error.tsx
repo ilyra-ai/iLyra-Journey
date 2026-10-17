@@ -26,7 +26,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" data-scroll-behavior="smooth">
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         {/* Esta tela substitui o layout raiz e não herda o título da aba; o
             React 19 move o <title> para o <head>. */}

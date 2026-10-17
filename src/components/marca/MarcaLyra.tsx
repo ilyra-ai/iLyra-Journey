@@ -44,7 +44,12 @@ export function MarcaLyra({
         src={logoDaLyra}
         alt={rotulo ?? ''}
         sizes={tamanho}
-        priority={prioridade}
+        // `priority` está obsoleto no Next 16 e gerava dois avisos no modo
+        // dev: "LCP sem loading=eager" e "preload não usado" (o link de
+        // preload era emitido mesmo quando a marca trocava de tamanho ou
+        // ficava oculta). Carga imediata com alta prioridade, sem preload.
+        loading={prioridade ? 'eager' : 'lazy'}
+        fetchPriority={prioridade ? 'high' : undefined}
         className="h-full w-full object-contain dark:scale-[0.86]"
       />
     </span>
