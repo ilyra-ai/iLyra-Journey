@@ -19,18 +19,18 @@
 
 ## Tópico 1 · Andamento Geral
 
-| Indicador          | Valor                            |
-| ------------------ | -------------------------------- |
-| Progresso          | `████████████████████` **98,4%** |
-| Tarefas totais     | 63                               |
-| 🟢 Finalizadas     | 62                               |
-| 🔵 Em andamento    | 1                                |
-| 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 0                                |
-| Branch de trabalho | `main` (única permitida)         |
-| Última atualização | 2026-10-17                       |
+| Indicador          | Valor                           |
+| ------------------ | ------------------------------- |
+| Progresso          | `████████████████████` **100%** |
+| Tarefas totais     | 63                              |
+| 🟢 Finalizadas     | 63                              |
+| 🔵 Em andamento    | 0                               |
+| 🔴 Bloqueadas      | 0                               |
+| ⚪ A iniciar       | 0                               |
+| Branch de trabalho | `main` (única permitida)        |
+| Última atualização | 2026-10-17                      |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (62 ÷ 63 = 98,4%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (63 ÷ 63 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -43,7 +43,7 @@
 
 ### ANDAMENTO
 
-- **63 · Landing page redesenhada por completo** 🔵 · redesenho integral da página inicial pública: mais simples, harmônica, organizada e na tendência de 2026, com conteúdo real (catálogo de planos e textos do construtor), celular primeiro, temas claro e escuro e acessibilidade.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -1076,6 +1076,21 @@ Nenhuma tarefa a iniciar.
   - Integração: primeiro plano automático sem cota; login antes do onboarding não gera; login depois do onboarding deixa o plano salvo.
   - Navegador (build de produção, login real pela tela): o plano já estava salvo no MySQL antes de abrir `/plan`, origem automática, cota intacta, tela com o plano pronto ("Regenerar plano"), axe sem violações e zero erros de console, em 1440 px claro e 390 px escuro.
   - `test` 412/412, `test:integration` 156/156, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+
+### 63 · Landing page redesenhada por completo
+
+- **Status:** 🟢 finalizada · **Commit:** `29d2559` · **Push:** `aa147b8..29d2559 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** redesenhar a landing por completo, mais simples, harmônica, organizada e na tendência de 2026.
+- **Base:** referências de 2026 para landings de produto (topo com uma promessa e uma ação, prova logo abaixo, preço transparente, menos cartões repetidos, paridade claro e escuro). Todo o texto continua vindo do construtor de UI e os planos do catálogo público.
+- **Implementado (`src/components/landing/LandingPage.tsx`, reescrito por inteiro):**
+  - Uma coluna de leitura calma, contêiner de 72 rem, espaçamento uniforme entre seções e faixas alternadas de fundo; sem cartão dentro de cartão.
+  - **Topo:** selo, título com destaque, texto e duas ações; a entrada rápida (e-mail e senha reais) ao lado no desktop e abaixo no celular. A prévia do produto virou uma faixa própria.
+  - **Navegação:** os 14 botões que navegavam por JavaScript viraram links (`/login`, âncoras e `https://`), com abertura em nova aba e funcionamento sem JavaScript; menu móvel em painel lateral nomeado; o menu mostra só as seções visíveis (antes apontava para seções ocultas).
+  - **Seções:** recursos em `ul`, passos em `ol` com linha de ligação, indicadores em `dl` e títulos `h3` em todos os itens.
+  - **Planos:** do segundo plano em diante, "Tudo do Free, mais:" com os recursos que ele acrescenta (antes os três cartões repetiam os mesmos cinco); "por mês" (era "/mes"), anual em pt-BR, estado vazio e "Tentar de novo" quando o catálogo falha.
+  - **Tipografia fluida de verdade:** o valor do meio do `clamp` era fixo em rem e o título ficava enorme no celular; agora cresce em linha reta de 360 px a 1280 px, respeitando as escalas do construtor.
+  - **Pré-visualização do construtor:** sem um segundo `<main>` e com os links sem navegar.
+- **Evidências:** `test` 497/497, `test:integration` 164/164, `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e escuro, 768 px, 390 px e 320 px): um `h1`, sem rolagem horizontal, 3 planos do catálogo com preços em reais, âncoras levando o título para baixo do cabeçalho, menu móvel abrindo e fechando ao escolher, pergunta frequente abrindo, mostrar senha, axe (WCAG e boas práticas) sem violações, entrada rápida real abrindo o painel e zero erros de console; prévia no construtor conferida. Varredura WCAG de 20 páginas no claro sem violações (o aviso de contraste da landing da tarefa 61 não se repete).
 
 ### 62 · Tags e Elementos HTML premium
 
