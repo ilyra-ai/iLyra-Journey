@@ -3021,30 +3021,20 @@ export function SiteExperienceBuilder() {
                   />
                 </FieldBlock>
 
-                <div className="grid gap-4 xl:grid-cols-2">
-                  <FieldBlock label="Texto da IA liberada">
-                    <Input
-                      value={appDraft.dashboard.aiUnlockedYes}
-                      onChange={(event) =>
-                        updateDraft(
-                          ['dashboard', 'aiUnlockedYes'],
-                          event.target.value
-                        )
-                      }
-                    />
-                  </FieldBlock>
-                  <FieldBlock label="Texto da IA bloqueada">
-                    <Input
-                      value={appDraft.dashboard.aiUnlockedNo}
-                      onChange={(event) =>
-                        updateDraft(
-                          ['dashboard', 'aiUnlockedNo'],
-                          event.target.value
-                        )
-                      }
-                    />
-                  </FieldBlock>
-                </div>
+                {/* O selo só aparece quando o plano inclui os scores de IA
+                    (recurso fora do plano não é exibido), por isso não há
+                    texto de "IA bloqueada" para editar. */}
+                <FieldBlock label="Texto da IA liberada">
+                  <Input
+                    value={appDraft.dashboard.aiUnlockedYes}
+                    onChange={(event) =>
+                      updateDraft(
+                        ['dashboard', 'aiUnlockedYes'],
+                        event.target.value
+                      )
+                    }
+                  />
+                </FieldBlock>
 
                 <div className="grid gap-4 xl:grid-cols-3">
                   <FieldBlock label="Label da prontidão">

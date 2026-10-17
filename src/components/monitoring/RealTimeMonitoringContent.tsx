@@ -171,14 +171,8 @@ export function RealTimeMonitoringContent({
     };
   }, []);
 
+  // Só é chamado pelo botão de voz, que só existe quando o plano a libera.
   const handleVoiceUpdate = () => {
-    if (!voiceUpdatesEnabled) {
-      toast.info('Atualizações por voz indisponíveis', {
-        description: `O plano ${currentPlanKey.toUpperCase()} não libera a síntese de voz em tempo real.`,
-      });
-      return;
-    }
-
     if ('speechSynthesis' in window) {
       setIsSpeaking(true);
       const utterance = new SpeechSynthesisUtterance(
@@ -324,29 +318,24 @@ export function RealTimeMonitoringContent({
         </CardHeader>
         <CardContent className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-wrap gap-3">
-            <Badge variant={voiceUpdatesEnabled ? 'success' : 'warning'}>
-              {voiceUpdatesEnabled
-                ? 'voz liberada no plano'
-                : 'voz bloqueada no plano'}
-            </Badge>
+            {/* Recurso fora do plano não aparece (nem como "bloqueado"). */}
+            {voiceUpdatesEnabled ? (
+              <Badge variant="success">voz liberada no plano</Badge>
+            ) : null}
             <Badge variant={hasLiveData ? 'info' : 'secondary'}>
               {hasLiveData ? 'dados ativos na sessão' : 'sem amostra recente'}
             </Badge>
           </div>
 
           <div className="flex flex-col gap-3 sm:flex-row">
-            {monitoringConfig.showVoiceButton ? (
+            {monitoringConfig.showVoiceButton && voiceUpdatesEnabled ? (
               <Button
                 onClick={handleVoiceUpdate}
                 disabled={isSpeaking}
                 style={buttonStyle}
               >
                 <Mic data-icon="inline-start" aria-hidden="true" />
-                {isSpeaking
-                  ? 'Falando agora'
-                  : voiceUpdatesEnabled
-                    ? 'Ouvir atualização por voz'
-                    : 'Voz indisponível no plano'}
+                {isSpeaking ? 'Falando agora' : 'Ouvir atualização por voz'}
               </Button>
             ) : null}
             {monitoringConfig.showAlertsButton ? (

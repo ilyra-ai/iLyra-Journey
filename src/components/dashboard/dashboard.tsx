@@ -282,18 +282,16 @@ export function Dashboard() {
   const readinessScore =
     scores?.readinessScore ?? todayMetrics?.readiness_score ?? null;
   const longevityScore = scores?.longevityScore ?? null;
-  // "Bloqueado" só quando o plano não inclui os scores; sem dados, "—".
-  const rotuloDaLongevidade = !aiScoresEnabled
-    ? 'Bloqueado'
-    : longevityScore !== null
+  // Sem dados, "—". Sem os scores no plano, a longevidade nem aparece.
+  const rotuloDaLongevidade =
+    longevityScore !== null
       ? longevityScore.toLocaleString('pt-BR', {
           minimumFractionDigits: 1,
           maximumFractionDigits: 1,
         })
       : '—';
-  const detalheDaLongevidade = !aiScoresEnabled
-    ? 'Disponível em planos com scores de IA.'
-    : scores && longevityScore !== null
+  const detalheDaLongevidade =
+    scores && longevityScore !== null
       ? `Escala de 0 a 10, com ${scores.cobertura} de ${scores.totalDeMetricas} métricas medidas hoje.`
       : `Precisa de pelo menos 3 métricas medidas hoje${
           scores ? ` (agora: ${scores.cobertura})` : ''
@@ -578,10 +576,12 @@ export function Dashboard() {
                       : 'Sem leitura'}
                 </span>
               </div>
-              <div className="rounded-full border border-border bg-background px-3 py-1.5 text-caption text-foreground">
-                Longevidade:{' '}
-                <span className="font-semibold">{rotuloDaLongevidade}</span>
-              </div>
+              {aiScoresEnabled ? (
+                <div className="rounded-full border border-border bg-background px-3 py-1.5 text-caption text-foreground">
+                  Longevidade:{' '}
+                  <span className="font-semibold">{rotuloDaLongevidade}</span>
+                </div>
+              ) : null}
             </div>
 
             <div className="flex flex-col gap-2 rounded-md border border-border bg-background p-4">
@@ -802,13 +802,15 @@ export function Dashboard() {
           </CardContent>
         </Card>
 
-        <div className="md:col-span-2 xl:col-span-4">
-          <AITipsCard
-            className="h-full"
-            featureEnabled={aiTipsEnabled}
-            currentPlanKey={subscription.plan.key}
-          />
-        </div>
+        {aiTipsEnabled ? (
+          <div className="md:col-span-2 xl:col-span-4">
+            <AITipsCard
+              className="h-full"
+              featureEnabled={aiTipsEnabled}
+              currentPlanKey={subscription.plan.key}
+            />
+          </div>
+        ) : null}
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -831,15 +833,16 @@ export function Dashboard() {
                 {appConfig.dashboard.weeklyDescription}
               </CardDescription>
             </div>
-            <div className="flex flex-wrap items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-caption text-muted-foreground">
-              <Bot aria-hidden="true" className="size-4 text-accent" />
-              {appConfig.dashboard.aiUnlockedLabel}:{' '}
-              <span className="font-semibold text-foreground">
-                {aiScoresEnabled
-                  ? appConfig.dashboard.aiUnlockedYes
-                  : appConfig.dashboard.aiUnlockedNo}
-              </span>
-            </div>
+            {/* Só aparece quando o plano inclui os scores de IA. */}
+            {aiScoresEnabled ? (
+              <div className="flex flex-wrap items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-caption text-muted-foreground">
+                <Bot aria-hidden="true" className="size-4 text-accent" />
+                {appConfig.dashboard.aiUnlockedLabel}:{' '}
+                <span className="font-semibold text-foreground">
+                  {appConfig.dashboard.aiUnlockedYes}
+                </span>
+              </div>
+            ) : null}
           </div>
         </CardHeader>
 
@@ -930,17 +933,19 @@ export function Dashboard() {
                 />
               ) : null}
             </div>
-            <div className="flex flex-col gap-2 rounded-md border border-border p-4">
-              <p className="text-sm font-medium text-muted-foreground">
-                {appConfig.dashboard.longevityLabel}
-              </p>
-              <p className="font-display text-4xl font-semibold tracking-[-0.03em] text-foreground">
-                {rotuloDaLongevidade}
-              </p>
-              <p className="text-caption text-muted-foreground">
-                {detalheDaLongevidade}
-              </p>
-            </div>
+            {aiScoresEnabled ? (
+              <div className="flex flex-col gap-2 rounded-md border border-border p-4">
+                <p className="text-sm font-medium text-muted-foreground">
+                  {appConfig.dashboard.longevityLabel}
+                </p>
+                <p className="font-display text-4xl font-semibold tracking-[-0.03em] text-foreground">
+                  {rotuloDaLongevidade}
+                </p>
+                <p className="text-caption text-muted-foreground">
+                  {detalheDaLongevidade}
+                </p>
+              </div>
+            ) : null}
             <div className="flex flex-col gap-2 rounded-md border border-border p-4">
               <p className="text-sm font-medium text-muted-foreground">
                 {appConfig.dashboard.liveContextLabel}

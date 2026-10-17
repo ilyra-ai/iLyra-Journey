@@ -18,6 +18,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuth } from '@/context/AuthContext';
 import { useKeyedResource } from '@/hooks/use-keyed-resource';
+import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { ouvirMetricasAtualizadas } from '@/lib/metricas/evento-de-atualizacao';
 import { cn } from '@/lib/utils';
 import { PlanKey } from '@/types/subscription';
@@ -65,6 +66,7 @@ export function AITipsCard({
   currentPlanKey = 'free',
 }: AITipsCardProps) {
   const router = useRouter();
+  const rotaLiberada = useRotaLiberada();
   const { session } = useAuth();
   const [versao, setVersao] = React.useState(0);
   React.useEffect(
@@ -155,16 +157,19 @@ export function AITipsCard({
         </div>
       </CardContent>
 
-      <CardFooter className="flex-wrap justify-end">
-        <Button
-          variant="secondary"
-          onClick={() => router.push('/plan')}
-          className="min-w-44"
-        >
-          Ver plano completo
-          <ChevronRight />
-        </Button>
-      </CardFooter>
+      {/* O plano de IA só é oferecido quando o plano da conta o inclui. */}
+      {rotaLiberada('/plan') ? (
+        <CardFooter className="flex-wrap justify-end">
+          <Button
+            variant="secondary"
+            onClick={() => router.push('/plan')}
+            className="min-w-44"
+          >
+            Ver plano completo
+            <ChevronRight />
+          </Button>
+        </CardFooter>
+      ) : null}
     </Card>
   );
 }

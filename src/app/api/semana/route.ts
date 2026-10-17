@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { respostaDeErro } from '@/lib/http/api';
 import { requireServerSession } from '@/lib/mysql/server-auth';
+import { recursoHabilitado } from '@/lib/plans/service';
 import { lerSemana } from '@/lib/semana/servico';
 
 export const runtime = 'nodejs';
@@ -10,7 +11,13 @@ export const runtime = 'nodejs';
 export async function GET() {
   try {
     const session = await requireServerSession();
-    const semana = await lerSemana(session.user.id);
+    // Metas só entram na semana quando o plano inclui o acompanhamento.
+    const comMetas = await recursoHabilitado(
+      session.user.id,
+      session.user.role,
+      'goal_progress_tracking'
+    );
+    const semana = await lerSemana(session.user.id, new Date(), comMetas);
     return NextResponse.json(semana, {
       headers: { 'Cache-Control': 'private, no-store' },
     });

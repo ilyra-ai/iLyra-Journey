@@ -39,6 +39,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
+import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { scaleRem } from '@/lib/site-page-config/runtime';
 import { cn } from '@/lib/utils';
 
@@ -389,6 +390,7 @@ export function AIPlanContent() {
   const { astrology, isSyncing, syncError } = useHealthOrchestrator();
   const { config: appConfig } = usePublicSitePageConfig('app');
   const planConfig = appConfig.aiPlan;
+  const metasLiberadas = useRotaLiberada()('/goals');
   const [plan, setPlan] = useState<PlanData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -758,7 +760,10 @@ export function AIPlanContent() {
         </Tabs>
       )}
 
-      {plan?.metasSugeridas && plan.metasSugeridas.length > 0 ? (
+      {/* Transformar sugestões em metas exige o acompanhamento de metas. */}
+      {metasLiberadas &&
+      plan?.metasSugeridas &&
+      plan.metasSugeridas.length > 0 ? (
         <MetasSugeridas metas={plan.metasSugeridas} />
       ) : null}
     </div>

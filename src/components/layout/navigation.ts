@@ -326,12 +326,21 @@ function buildConfiguredNavigation(appConfig?: AppPageConfig) {
   return result;
 }
 
+/**
+ * Itens do menu que a pessoa pode ver. `rotaLiberada` (de
+ * `useRotaLiberada`) tira as páginas cujos recursos o plano vigente não
+ * habilita; sem ela, só a visibilidade do Construtor e o papel contam.
+ */
 export function getVisibleNavigation(
   isAdmin: boolean,
-  appConfig?: AppPageConfig
+  appConfig?: AppPageConfig,
+  rotaLiberada?: (href: string) => boolean
 ) {
   return buildConfiguredNavigation(appConfig).filter(
-    (item) => item.visible !== false && (!item.adminOnly || isAdmin)
+    (item) =>
+      item.visible !== false &&
+      (!item.adminOnly || isAdmin) &&
+      (rotaLiberada ? rotaLiberada(item.href) : true)
   );
 }
 

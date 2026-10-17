@@ -17,6 +17,7 @@ import { SidebarLink } from './SidebarLink';
 import { getVisibleNavigation, groupNavigation } from './navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useIsAdmin } from '@/hooks/use-is-admin';
+import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { scalePx, scaleRem } from '@/lib/site-page-config/runtime';
 
@@ -30,8 +31,11 @@ export function MobileSidebar() {
   const isAdmin = useIsAdmin();
   const { config: appConfig } = usePublicSitePageConfig('app');
   const [open, setOpen] = React.useState(false);
+  const rotaLiberada = useRotaLiberada();
 
-  const sections = groupNavigation(getVisibleNavigation(isAdmin, appConfig));
+  const sections = groupNavigation(
+    getVisibleNavigation(isAdmin, appConfig, rotaLiberada)
+  );
   const firstName =
     session?.user?.email?.split('@')[0]?.replace(/\./g, ' ') || 'Paciente';
   const iconScale = appConfig.sizing.iconScale;

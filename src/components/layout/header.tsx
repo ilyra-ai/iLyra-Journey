@@ -43,6 +43,7 @@ import {
   groupNavigation,
 } from './navigation';
 import { useIsAdmin } from '@/hooks/use-is-admin';
+import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { usePerfilDoCabecalho } from '@/hooks/use-perfil-do-cabecalho';
 import { toast } from 'sonner';
 
@@ -56,21 +57,26 @@ export function Header() {
   const profile = usePerfilDoCabecalho();
   const [commandOpen, setCommandOpen] = React.useState(false);
 
-  const pageMeta = getPageMeta(pathname, appConfig);
-  const navigation = groupNavigation(getVisibleNavigation(isAdmin, appConfig));
+  const rotaLiberada = useRotaLiberada();
 
-  // Atalhos "G + letra" exibidos na paleta de comandos (ex.: G D, G H).
+  const pageMeta = getPageMeta(pathname, appConfig);
+  const navigation = groupNavigation(
+    getVisibleNavigation(isAdmin, appConfig, rotaLiberada)
+  );
+
+  // Atalhos "G + letra" exibidos na paleta de comandos (ex.: G D, G H): só
+  // das páginas que o plano libera.
   const atalhos = React.useMemo(
     () =>
       new Map(
-        getVisibleNavigation(isAdmin, appConfig)
+        getVisibleNavigation(isAdmin, appConfig, rotaLiberada)
           .filter((item) => item.shortcut?.startsWith('G '))
           .map((item) => [
             (item.shortcut as string).slice(2).toLowerCase(),
             item.href,
           ])
       ),
-    [appConfig, isAdmin]
+    [appConfig, isAdmin, rotaLiberada]
   );
 
   React.useEffect(() => {
@@ -201,26 +207,28 @@ export function Header() {
 
             <NotificationsMenu iconScale={appConfig.sizing.iconScale} />
 
-            <Button
-              type="button"
-              variant="secondary"
-              className="hidden md:inline-flex"
-              onClick={() => router.push('/chat')}
-              style={{
-                fontSize: scaleRem(0.875, appConfig.typography.buttonLabel),
-              }}
-            >
-              <MessageCircleHeart
-                aria-hidden="true"
-                className="text-cosmic"
-                strokeWidth={1.9}
+            {rotaLiberada('/chat') ? (
+              <Button
+                type="button"
+                variant="secondary"
+                className="hidden md:inline-flex"
+                onClick={() => router.push('/chat')}
                 style={{
-                  height: scalePx(16, appConfig.sizing.iconScale),
-                  width: scalePx(16, appConfig.sizing.iconScale),
+                  fontSize: scaleRem(0.875, appConfig.typography.buttonLabel),
                 }}
-              />
-              {appConfig.header.assistantLabel}
-            </Button>
+              >
+                <MessageCircleHeart
+                  aria-hidden="true"
+                  className="text-cosmic"
+                  strokeWidth={1.9}
+                  style={{
+                    height: scalePx(16, appConfig.sizing.iconScale),
+                    width: scalePx(16, appConfig.sizing.iconScale),
+                  }}
+                />
+                {appConfig.header.assistantLabel}
+              </Button>
+            ) : null}
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
 import { useKeyedResource } from '@/hooks/use-keyed-resource';
+import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { METRICAS_DAS_METAS } from '@/lib/metas/catalogo';
 
 /**
@@ -33,6 +34,9 @@ function avisar(erro: unknown) {
 export function useMetaDeSono(): { meta: MetaDeSono; loading: boolean } {
   const { db, session } = useAuth();
   const userId = session?.user?.id ?? null;
+  // Sem o acompanhamento de metas no plano, nem se consulta a tabela (a API
+  // recusaria com 403): vale a sugestão do catálogo.
+  const metasLiberadas = useRotaLiberada()('/goals');
 
   const ler = useCallback(async (): Promise<MetaDeSono> => {
     if (!userId) return SUGESTAO;
@@ -51,7 +55,7 @@ export function useMetaDeSono(): { meta: MetaDeSono; loading: boolean } {
   }, [db, userId]);
 
   const { data, loading } = useKeyedResource(
-    userId ? `meta-de-sono:${userId}` : null,
+    userId && metasLiberadas ? `meta-de-sono:${userId}` : null,
     ler,
     avisar,
     SUGESTAO

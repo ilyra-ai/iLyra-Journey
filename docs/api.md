@@ -13,6 +13,8 @@ Todas as rotas ficam em `src/app/api/**/route.ts` e rodam no runtime Node.js. A 
 - **Limite de tentativas:** login e cadastro respondem **429** com `Retry-After` quando a janela estoura.
 - **Sessão:** o JWT fica só no cookie `httpOnly`; nenhuma rota o devolve no corpo. Papel e e-mail da sessão são lidos do banco a cada requisição.
 - **Formato:** `{ "error": "mensagem" }`. As rotas do cliente de dados (`/api/data/[table]`, `/api/storage/upload`, `/api/rpc/*`) usam `{ "data": null, "error": { "message": "..." } }`.
+- **Recursos do plano:** o que o plano vigente não habilita (`plan_entitlements`) responde **403** com "O plano X não inclui Y". Em `/api/data/[table]`, leitura e escrita de `goals`, `ai_plans`, `appointments` (`appointments_active`) e `professionals` (`professionals_total`) e leitura de `ai_tips` exigem o recurso; `/api/semana` omite as metas sem `goal_progress_tracking`. Administradores não dependem do plano. No app, a mesma regra esconde as páginas e os atalhos: `src/lib/plans/rotas.ts` (`RECURSOS_DA_ROTA`) e o hook `useRotaLiberada`.
+- **Cadastro:** a conta, o perfil (`onboarding_completed = false`), os aceites LGPD e a assinatura Free (`source = auth_register`) nascem na mesma transação.
 
 ## Mapa das rotas
 
@@ -85,3 +87,4 @@ As rotas `/api/admin/ui-config` e `/api/public/ui-config` foram removidas na tar
 - **`src/app/api/seguranca.integration.test.ts`:** limites de tentativa de login e cadastro, contagem concorrente, sessão sem JWT e papel lido do banco.
 - **`src/app/api/conta-email.integration.test.ts`:** troca do e-mail de login (senha, duplicidade, sessão reemitida).
 - **`src/app/api/lgpd.integration.test.ts`:** consentimento, segregação dos dados do titular, registros fiscais, exportação e exclusão da conta.
+- **`src/app/api/plano-recursos.integration.test.ts`:** agenda e profissionais recusados (403) com o recurso desligado no plano, administrador liberado e "Sua semana" sem metas sem o acompanhamento de metas.

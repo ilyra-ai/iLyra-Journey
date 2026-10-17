@@ -19,6 +19,7 @@ import {
 import { useAuth } from '@/context/AuthContext';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { useKeyedResource } from '@/hooks/use-keyed-resource';
+import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { ouvirCoachAtualizado } from '@/lib/coach/evento-do-coach';
 import { scalePx } from '@/lib/site-page-config/runtime';
 import { cn } from '@/lib/utils';
@@ -118,6 +119,10 @@ function data(valor: string) {
 export function NotificationsMenu({ iconScale }: { iconScale: number }) {
   const { db, session } = useAuth();
   const { data: assinatura } = useAccountSubscription();
+  const rotaLiberada = useRotaLiberada();
+  // Sem a agenda no plano, nem se consulta (antes a leitura voltava 403 e
+  // aparecia como erro no console do navegador).
+  const agendaLiberada = rotaLiberada('/appointments');
   const [consultas, setConsultas] = React.useState<ConsultaProxima[]>([]);
   const userId = session?.user.id ?? null;
   const [versao, setVersao] = React.useState(0);
@@ -151,7 +156,7 @@ export function NotificationsMenu({ iconScale }: { iconScale: number }) {
   };
 
   React.useEffect(() => {
-    if (!userId) return;
+    if (!userId || !agendaLiberada) return;
     let ativo = true;
     const agora = new Date();
     const limite = new Date(
@@ -165,8 +170,7 @@ export function NotificationsMenu({ iconScale }: { iconScale: number }) {
       .order('appointment_time', { ascending: true })
       .then(({ data: linhas, error }) => {
         if (!ativo) return;
-        // Sem a agenda no plano (403) ou em falha, o sino só mostra os demais
-        // avisos.
+        // Em falha, o sino só mostra os demais avisos.
         if (error) {
           setConsultas([]);
           return;
@@ -176,17 +180,21 @@ export function NotificationsMenu({ iconScale }: { iconScale: number }) {
     return () => {
       ativo = false;
     };
-  }, [db, userId]);
+  }, [db, userId, agendaLiberada]);
+
+  // Um aviso nunca leva a uma página que o plano não libera: nesse caso o
+  // clique abre o painel.
+  const destinoLiberado = (href: string) => (rotaLiberada(href) ? href : '/');
 
   const notificacoes: Notificacao[] = doServidor.notificacoes.map((item) => ({
     id: item.id,
     tipo: item.tipo,
     titulo: item.titulo,
     detalhe: `${quando(item.criadaEm)} · ${item.corpo}`,
-    href: item.link ?? '/dia',
+    href: destinoLiberado(item.link ?? '/dia'),
     nova: !item.lida,
   }));
-  for (const consulta of consultas) {
+  for (const consulta of agendaLiberada ? consultas : []) {
     notificacoes.push({
       id: `consulta-${consulta.id}`,
       tipo: 'consulta',

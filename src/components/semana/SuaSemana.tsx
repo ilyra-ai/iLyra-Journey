@@ -18,6 +18,7 @@ import { PageIntro } from '@/components/layout/PageIntro';
 import { BotaoRegistroDoDia } from '@/components/metricas/RegistroDoDia';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { useSemana } from '@/hooks/use-semana';
 import {
   formatarSono,
@@ -437,7 +438,14 @@ function Metas({ semana }: { semana: SemanaDaPessoa }) {
   );
 }
 
-function Reflexoes({ semana }: { semana: SemanaDaPessoa }) {
+function Reflexoes({
+  semana,
+  diaLiberado,
+}: {
+  semana: SemanaDaPessoa;
+  /** A reflexão é feita em "Meu dia": o atalho só aparece se o plano o libera. */
+  diaLiberado: boolean;
+}) {
   const { mediasDaReflexao } = semana.resumo;
   const frases = semana.dias.filter((d) => d.reflexao?.frase);
   return (
@@ -498,12 +506,14 @@ function Reflexoes({ semana }: { semana: SemanaDaPessoa }) {
         <div className="mt-4">
           <SemDados
             acao={
-              <Button asChild size="sm" variant="outline">
-                <Link href="/dia#reflexao">
-                  Fazer a reflexão de hoje
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              </Button>
+              diaLiberado ? (
+                <Button asChild size="sm" variant="outline">
+                  <Link href="/dia#reflexao">
+                    Fazer a reflexão de hoje
+                    <ArrowRight aria-hidden="true" />
+                  </Link>
+                </Button>
+              ) : undefined
             }
           >
             Nenhuma reflexão nesta semana. Em um minuto, no fim do dia, você dá
@@ -659,6 +669,9 @@ function TabelaDaSemana({ semana }: { semana: SemanaDaPessoa }) {
 
 export function SuaSemana() {
   const { semana, carregando, erro } = useSemana();
+  const rotaLiberada = useRotaLiberada();
+  const metasLiberadas = rotaLiberada('/goals');
+  const diaLiberado = rotaLiberada('/dia');
   const semProntidao =
     semana !== null && semana.dias.every((d) => d.prontidao === null);
 
@@ -785,12 +798,13 @@ export function SuaSemana() {
             <GraficoDaSemana dias={semana.dias} />
           </section>
 
-          <div className="grid gap-6 lg:grid-cols-2">
+          {/* Metas só com o acompanhamento de metas no plano. */}
+          <div className={cn('grid gap-6', metasLiberadas && 'lg:grid-cols-2')}>
             <Percepcoes semana={semana} />
-            <Metas semana={semana} />
+            {metasLiberadas ? <Metas semana={semana} /> : null}
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
-            <Reflexoes semana={semana} />
+            <Reflexoes semana={semana} diaLiberado={diaLiberado} />
             <CeuDaSemana semana={semana} />
           </div>
           <TabelaDaSemana semana={semana} />

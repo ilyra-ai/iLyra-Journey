@@ -110,9 +110,14 @@ async function metasDiarias(userId: string): Promise<MetaDaSemana[]> {
   return metas;
 }
 
+/**
+ * `comMetas`: falso quando o plano vigente não habilita o acompanhamento de
+ * metas; aí a semana não traz metas (nem as colunas delas).
+ */
 export async function lerSemana(
   userId: string,
-  agora = new Date()
+  agora = new Date(),
+  comMetas = true
 ): Promise<SemanaDaPessoa> {
   const perfil = await lerPerfilAstrologico(userId);
   const lugar = perfil.localDoDia;
@@ -124,7 +129,7 @@ export async function lerSemana(
     diasAntes(hoje, 13 - i)
   );
 
-  const metas = await metasDiarias(userId);
+  const metas = comMetas ? await metasDiarias(userId) : [];
   const colunas = [
     ...new Set<string>([...COLUNAS_FIXAS, ...metas.map((m) => m.coluna)]),
   ];

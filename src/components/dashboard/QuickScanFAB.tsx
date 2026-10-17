@@ -14,6 +14,7 @@ import { toast } from 'sonner';
 
 import { RegistroDoDiaDialog } from '@/components/metricas/RegistroDoDia';
 import { useHealthOrchestrator } from '@/context/HealthOrchestratorContext';
+import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -27,6 +28,8 @@ import {
 
 export function QuickScanFAB() {
   const router = useRouter();
+  // Atalhos só para as páginas que o plano vigente libera.
+  const rotaLiberada = useRotaLiberada();
   const { triggerManualSync, isSyncing } = useHealthOrchestrator();
   const [registroAberto, setRegistroAberto] = React.useState(false);
 
@@ -98,43 +101,52 @@ export function QuickScanFAB() {
                 {isSyncing ? 'Ao vivo' : 'Agora'}
               </span>
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => router.push('/chat')}>
-              <Bot className="text-cosmic" />
-              <div className="flex flex-1 flex-col gap-0.5">
-                <span className="font-medium text-foreground">
-                  Abrir chat de IA
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  Continue sua conversa com o copiloto de bem-estar.
-                </span>
-              </div>
-            </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => router.push('/plan')}>
-              <Sparkles className="text-cosmic" />
-              <div className="flex flex-1 flex-col gap-0.5">
-                <span className="font-medium text-foreground">
-                  Ver plano do dia
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  Acesse recomendações, prioridades e rituais orientados por IA.
-                </span>
-              </div>
-            </DropdownMenuItem>
+            {rotaLiberada('/chat') ? (
+              <DropdownMenuItem onSelect={() => router.push('/chat')}>
+                <Bot className="text-cosmic" />
+                <div className="flex flex-1 flex-col gap-0.5">
+                  <span className="font-medium text-foreground">
+                    Abrir chat de IA
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    Continue sua conversa com o copiloto de bem-estar.
+                  </span>
+                </div>
+              </DropdownMenuItem>
+            ) : null}
+            {rotaLiberada('/plan') ? (
+              <DropdownMenuItem onSelect={() => router.push('/plan')}>
+                <Sparkles className="text-cosmic" />
+                <div className="flex flex-1 flex-col gap-0.5">
+                  <span className="font-medium text-foreground">
+                    Ver plano do dia
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    Acesse recomendações, prioridades e rituais orientados por
+                    IA.
+                  </span>
+                </div>
+              </DropdownMenuItem>
+            ) : null}
           </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <DropdownMenuGroup>
-            <DropdownMenuItem onSelect={() => router.push('/connect')}>
-              <Watch className="text-info" />
-              <div className="flex flex-1 flex-col gap-0.5">
-                <span className="font-medium text-foreground">
-                  Conectar wearables
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  Abra a central de conexão com sensores e dispositivos.
-                </span>
-              </div>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
+          {rotaLiberada('/connect') ? (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuItem onSelect={() => router.push('/connect')}>
+                  <Watch className="text-info" />
+                  <div className="flex flex-1 flex-col gap-0.5">
+                    <span className="font-medium text-foreground">
+                      Conectar wearables
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      Abra a central de conexão com sensores e dispositivos.
+                    </span>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
+            </>
+          ) : null}
         </DropdownMenuContent>
       </DropdownMenu>
       <RegistroDoDiaDialog

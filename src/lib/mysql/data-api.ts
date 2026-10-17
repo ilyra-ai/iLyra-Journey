@@ -119,6 +119,16 @@ const TABLE_FEATURE_ACCESS: Partial<
     read: 'ai_plan_generations',
     write: 'ai_plan_generations',
   },
+  // A agenda (consultas e profissionais) só existe para planos que a
+  // habilitam; as cotas de quantidade continuam em assertActiveRowsQuota.
+  appointments: {
+    read: 'appointments_active',
+    write: 'appointments_active',
+  },
+  professionals: {
+    read: 'professionals_total',
+    write: 'professionals_total',
+  },
 };
 
 function pad(value: number) {

@@ -26,6 +26,7 @@ import {
   useVozDisponivel,
 } from '@/hooks/use-recursos-do-navegador';
 import { useResumoDaRespiracao } from '@/hooks/use-resumo-da-respiracao';
+import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import type { ResumoDaRespiracao } from '@/lib/respiracao/servico';
 import {
   ciclosParaMinutos,
@@ -819,6 +820,8 @@ function Final({
   onTentarDeNovo: () => void;
 }) {
   const total = execucao.resumo?.minutosDeMeditacaoNoDia ?? null;
+  // "Ver metas" só quando o plano inclui o acompanhamento de metas.
+  const metasLiberadas = useRotaLiberada()('/goals');
   return (
     <section
       aria-labelledby="titulo-final"
@@ -857,7 +860,7 @@ function Final({
           <RotateCcw aria-hidden="true" />
           Nova sessão
         </Button>
-        {execucao.minutos !== null ? (
+        {execucao.minutos !== null && metasLiberadas ? (
           <Button asChild variant="ghost">
             <Link href="/goals">
               Ver metas

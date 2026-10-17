@@ -23,6 +23,7 @@ import { BotaoRegistroDoDia } from '@/components/metricas/RegistroDoDia';
 import type { DailyMetric } from '@/hooks/use-daily-metrics';
 import type { ProfileSummary } from '@/hooks/use-profile';
 import { usePrivacyMode } from '@/hooks/use-privacy-mode';
+import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import {
   calculateBiologicalAge,
   type BiologicalAgeResult,
@@ -140,6 +141,9 @@ function toEarlyWarningMetric(metric: DailyMetric | null): EarlyWarningMetric {
 
 /* ============================ Cartão: Ações proativas (M1) =================== */
 function ProactiveActionsCard({ actions }: { actions: AgentAction[] }) {
+  // A ação continua visível (é um conselho dos sinais), mas o botão só leva
+  // a páginas que o plano vigente libera.
+  const rotaLiberada = useRotaLiberada();
   return (
     <Card className="flex h-full min-w-0 flex-col lg:col-span-2">
       <CardHeader className="gap-2">
@@ -195,7 +199,7 @@ function ProactiveActionsCard({ actions }: { actions: AgentAction[] }) {
                 <p className="text-sm leading-6 text-muted-foreground">
                   {action.detail}
                 </p>
-                {action.cta ? (
+                {action.cta && rotaLiberada(action.cta.href) ? (
                   <Button
                     asChild
                     variant="ghost"

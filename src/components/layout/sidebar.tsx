@@ -7,6 +7,7 @@ import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { useAuth } from '@/context/AuthContext';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
+import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { scalePx, scaleRem } from '@/lib/site-page-config/runtime';
 import type { AppPageConfig } from '@/lib/site-page-config/schema';
@@ -42,7 +43,15 @@ export function Sidebar({
   const firstName =
     profile?.first_name?.trim() || userEmail.split('@')[0] || 'Você';
   const initial = firstName.charAt(0).toUpperCase();
-  const sections = groupNavigation(getVisibleNavigation(isAdmin, appConfig));
+  const rotaLiberadaPeloPlano = useRotaLiberada();
+  // Na prévia do Construtor a sidebar é vista como administrador (tudo).
+  const sections = groupNavigation(
+    getVisibleNavigation(
+      isAdmin,
+      appConfig,
+      previa ? undefined : rotaLiberadaPeloPlano
+    )
+  );
   const navLabelScale = appConfig.typography.navLabel;
   const iconScale = appConfig.sizing.iconScale;
 
