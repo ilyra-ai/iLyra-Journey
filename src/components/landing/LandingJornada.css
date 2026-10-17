@@ -1,0 +1,1298 @@
+/*
+ * LYRA METACARE — Jornada de consciência
+ * Escopo isolado em .lyra-jornada, sem alteração dos tokens globais do app.
+ * A linguagem visual etérea é restrita à página pública e deriva da arte
+ * aprovada pelo proprietário, sem conter retratos ou rostos de pessoas.
+ */
+.lyra-jornada {
+  --j-turquesa: #087878;
+  --j-turquesa-profundo: #07565b;
+  --j-turquesa-suave: #e6f5f5;
+  --j-coral: #f8764f;
+  --j-coral-texto: #a3381a;
+  --j-escuro: #133238;
+  --j-secundario: #4b6163;
+  --j-borda: #dbe7e4;
+  --j-fundo: #fcfaf7;
+  --j-branco: #fffefa;
+  --j-cobre: #b36b50;
+  --j-container: 1260px;
+  color: var(--j-escuro);
+  background: var(--j-fundo);
+  font-family: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow: clip;
+  isolation: isolate;
+  /* A landing também é renderizada na prévia do Construtor UI, numa coluna
+   * estreita dentro de uma tela larga. Por isso as quebras de layout são
+   * consultas de contêiner (@container jornada) e as medidas fluidas usam
+   * cqi (largura da landing), não a largura da janela (vw/@media). Na página
+   * pública a landing ocupa a janela inteira e o resultado é o mesmo. */
+  container: jornada / inline-size;
+}
+.lyra-jornada *,
+.lyra-jornada *::before,
+.lyra-jornada *::after {
+  box-sizing: border-box;
+}
+.lyra-jornada a {
+  color: inherit;
+  text-decoration: none;
+}
+.lyra-jornada button,
+.lyra-jornada input {
+  font: inherit;
+}
+.lyra-jornada button {
+  cursor: pointer;
+}
+.lyra-jornada h1,
+.lyra-jornada h2,
+.lyra-jornada h3,
+.lyra-jornada p {
+  margin: 0;
+}
+.lyra-jornada ul,
+.lyra-jornada ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lyra-jornada a:focus-visible,
+.lyra-jornada button:focus-visible,
+.lyra-jornada summary:focus-visible,
+.lyra-jornada input:focus-visible {
+  outline: 3px solid var(--j-turquesa);
+  outline-offset: 4px;
+}
+.lyra-jornada svg {
+  width: 19px;
+  height: 19px;
+  flex: none;
+}
+.lyra-jornada em {
+  font-style: normal;
+  color: var(--j-coral-texto);
+}
+.lyra-jornada .jornada-container {
+  width: min(100% - 52px, var(--j-container));
+  margin-inline: auto;
+}
+.lyra-jornada h1,
+.lyra-jornada h2,
+.lyra-jornada h3,
+.lyra-jornada .jornada-marca span,
+.lyra-jornada .jornada-rodape-marca strong {
+  font-family: Georgia, 'Times New Roman', ui-serif, serif;
+  font-weight: 400;
+}
+
+/* Cabecalho */
+.lyra-jornada .jornada-cabecalho {
+  position: sticky;
+  z-index: 60;
+  top: 0;
+  background: rgb(253 250 247 / 91%);
+  border-bottom: 1px solid rgb(21 112 112 / 11%);
+  backdrop-filter: blur(18px);
+}
+.lyra-jornada .jornada-cabecalho-conteudo {
+  min-height: 82px;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+.lyra-jornada .jornada-marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  flex: none;
+  min-width: 0;
+}
+.lyra-jornada .jornada-marca span:last-child {
+  font-size: clamp(22px, 2.2cqi, 30px);
+  white-space: nowrap;
+  letter-spacing: -0.05em;
+}
+.lyra-jornada .jornada-menu {
+  display: flex;
+  gap: clamp(12px, 1.5cqi, 25px);
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+.lyra-jornada .jornada-menu a {
+  padding: 10px 1px;
+  white-space: nowrap;
+  color: #254b50;
+  font-size: 13px;
+  font-weight: 600;
+  transition: color 0.18s ease;
+}
+.lyra-jornada .jornada-menu a:hover,
+.lyra-jornada .jornada-menu a:focus-visible {
+  color: var(--j-coral-texto);
+}
+.lyra-jornada .jornada-cabecalho-acoes {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: none;
+}
+.lyra-jornada .jornada-entrar {
+  font-size: 13px;
+  font-weight: 600;
+}
+.lyra-jornada .jornada-abrir-menu {
+  display: none;
+  border: 1px solid var(--j-borda);
+  background: white;
+  height: 44px;
+  width: 44px;
+  border-radius: 12px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Botoes */
+.lyra-jornada .jornada-botao {
+  display: inline-flex;
+  min-height: 48px;
+  min-width: 0;
+  justify-content: center;
+  align-items: center;
+  padding: 13px 23px;
+  gap: 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: calc(14px * var(--j-botao, 1) * var(--j-botao-texto, 1));
+  font-weight: 700;
+  line-height: 1.3;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+  text-align: center;
+}
+.lyra-jornada .jornada-botao svg {
+  width: 17px;
+  height: 17px;
+}
+.lyra-jornada .jornada-botao:hover {
+  transform: translateY(-2px);
+}
+.lyra-jornada .jornada-botao:active {
+  transform: translateY(0);
+}
+.lyra-jornada .jornada-botao-principal {
+  background: linear-gradient(115deg, #ca4d2b 0%, #bd4328 54%, #a63318 100%);
+  color: white;
+  box-shadow: 0 8px 22px rgb(159 61 39 / 15%);
+}
+.lyra-jornada .jornada-botao-principal:hover {
+  box-shadow: 0 11px 24px rgb(159 61 39 / 24%);
+}
+.lyra-jornada .jornada-botao-contorno {
+  background: #fff;
+  border-color: var(--j-turquesa);
+  color: var(--j-turquesa-profundo);
+}
+.lyra-jornada .jornada-botao-texto {
+  display: inline-flex;
+  gap: 10px;
+  min-height: 45px;
+  padding: 10px 0;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--j-turquesa-profundo);
+  border-bottom: 1px solid var(--j-coral);
+}
+.lyra-jornada .jornada-botao-texto svg {
+  width: 16px;
+  height: 16px;
+  color: var(--j-coral-texto);
+}
+.lyra-jornada .jornada-botoes {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.lyra-jornada .jornada-botoes-centro {
+  justify-content: center;
+}
+
+/* Hero cinematografico */
+.lyra-jornada .jornada-hero {
+  position: relative;
+  min-height: clamp(525px, 44cqi, 650px);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #e3ebe9;
+}
+.lyra-jornada .jornada-hero-ambiente {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 65% 70% at 78% 48%,
+      rgb(181 232 223 / 30%),
+      transparent 72%
+    ),
+    radial-gradient(ellipse 68% 55% at 31% 29%, #fffaf2, transparent 70%),
+    linear-gradient(180deg, #fffdfa, #f5f9f7 75%, #ecf3f1);
+}
+.lyra-jornada .jornada-hero-conteudo {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 46%) minmax(0, 54%);
+  align-items: center;
+  gap: 0;
+  min-height: 540px;
+}
+.lyra-jornada .jornada-hero-texto {
+  position: relative;
+  z-index: 2;
+  padding-block: 72px 85px;
+  max-width: 600px;
+}
+.lyra-jornada .jornada-etiqueta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--j-coral-texto);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.6;
+}
+.lyra-jornada .jornada-etiqueta svg {
+  width: 16px;
+  height: 16px;
+}
+.lyra-jornada .jornada-hero h1 {
+  margin-top: 25px;
+  font-size: clamp(47px, calc(5.1cqi * var(--j-hero, 1)), 82px);
+  line-height: 1.025;
+  letter-spacing: -0.063em;
+  text-wrap: balance;
+}
+.lyra-jornada .jornada-hero h1 em {
+  display: block;
+  margin-top: 4px;
+}
+.lyra-jornada .jornada-hero-descricao {
+  max-width: 470px;
+  margin-block: 24px 26px;
+  font-size: clamp(14px, calc(16px * var(--j-corpo, 1)), 18px);
+  line-height: 1.85;
+  color: var(--j-secundario);
+  text-wrap: pretty;
+}
+.lyra-jornada .jornada-assinatura {
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+  color: #5b7677;
+}
+.lyra-jornada .jornada-assinatura span {
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: var(--j-coral);
+  flex: none;
+}
+.lyra-jornada .jornada-hero-arte {
+  align-self: stretch;
+  min-height: 530px;
+  position: relative;
+  margin-left: -45px;
+  margin-right: min(-5cqi, -22px);
+  background: center / cover no-repeat;
+  mask-image: linear-gradient(to right, transparent 0%, black 17%, black 100%);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 17%,
+    black 100%
+  );
+}
+.lyra-jornada .jornada-hero-arte::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgb(249 248 243 / 11%), transparent 48%),
+    linear-gradient(0deg, rgb(246 250 248 / 17%), transparent 32%);
+}
+
+/* Arte da jornada (public/landing-jornada/*.webp). O next.config.ts confere
+ * se os quatro arquivos existem e só então o componente recebe a classe
+ * jornada-com-arte: sem eles a página não pede imagens inexistentes (sem 404)
+ * e o topo e o manifesto ocupam a largura toda, só com texto. */
+.lyra-jornada.jornada-com-arte .jornada-hero-arte {
+  background-image: url('/landing-jornada/hero-lotus.webp');
+}
+.lyra-jornada.jornada-com-arte .jornada-vale {
+  background-image: url('/landing-jornada/vale-etereo.webp');
+}
+.lyra-jornada.jornada-com-arte .jornada-onda-esquerda {
+  background-image: url('/landing-jornada/onda-esquerda.webp');
+}
+.lyra-jornada.jornada-com-arte .jornada-onda-direita {
+  background-image: url('/landing-jornada/onda-direita.webp');
+}
+.lyra-jornada:not(.jornada-com-arte) .jornada-hero-arte,
+.lyra-jornada:not(.jornada-com-arte) .jornada-vale,
+.lyra-jornada:not(.jornada-com-arte) .jornada-onda-esquerda,
+.lyra-jornada:not(.jornada-com-arte) .jornada-onda-direita {
+  display: none;
+}
+.lyra-jornada:not(.jornada-com-arte) .jornada-hero-conteudo,
+.lyra-jornada:not(.jornada-com-arte) .jornada-manifesto-grid {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+}
+.lyra-jornada:not(.jornada-com-arte) .jornada-hero {
+  min-height: 0;
+}
+.lyra-jornada:not(.jornada-com-arte) .jornada-hero-texto {
+  max-width: 760px;
+}
+.lyra-jornada:not(.jornada-com-arte) .jornada-manifesto-texto {
+  padding-inline: 0;
+  padding-block: clamp(48px, 6cqi, 72px);
+}
+
+/* Quatro pilares, sem blocos de dashboard */
+.lyra-jornada .jornada-pilares {
+  background: #fffefa;
+  border-bottom: 1px solid var(--j-borda);
+}
+.lyra-jornada .jornada-grid-pilares {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding-block: 45px 42px;
+}
+.lyra-jornada .jornada-pilar {
+  position: relative;
+  text-align: center;
+  padding: 0 28px;
+}
+.lyra-jornada .jornada-pilar + .jornada-pilar {
+  border-left: 1px solid var(--j-borda);
+}
+.lyra-jornada .jornada-icone {
+  width: calc(58px * var(--j-icone, 1));
+  height: calc(58px * var(--j-icone, 1));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(248 118 79 / 50%);
+  border-radius: 50%;
+  background: linear-gradient(145deg, #fffefa, #f4f8f5);
+  color: var(--j-turquesa);
+}
+.lyra-jornada .jornada-icone svg {
+  width: 29px;
+  height: 29px;
+  stroke-width: 1.35;
+}
+.lyra-jornada .jornada-pilar h2 {
+  font-size: 22px;
+  letter-spacing: -0.035em;
+  margin-block: 14px 5px;
+}
+.lyra-jornada .jornada-pilar p {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--j-secundario);
+}
+
+/* Manifesto da marca */
+.lyra-jornada .jornada-manifesto {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(110deg, #edf4f0, #fff9ef 62%, #faf7f1);
+  border-bottom: 1px solid var(--j-borda);
+}
+.lyra-jornada .jornada-manifesto-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 50%) minmax(0, 50%);
+  min-height: 362px;
+  align-items: stretch;
+}
+.lyra-jornada .jornada-vale {
+  background: 41% 50% / cover no-repeat;
+  margin-left: min(-5cqi, -22px);
+  min-height: 370px;
+  mask-image: linear-gradient(90deg, black 82%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, black 82%, transparent);
+}
+.lyra-jornada .jornada-manifesto-texto {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px min(4cqi, 52px);
+}
+.lyra-jornada .jornada-manifesto-texto h2 {
+  max-width: 520px;
+  margin-top: 12px;
+  font-size: clamp(31px, 3.5cqi, 49px);
+  line-height: 1.11;
+  letter-spacing: -0.044em;
+}
+.lyra-jornada .jornada-manifesto-texto > p:not(.jornada-etiqueta) {
+  max-width: 520px;
+  color: var(--j-secundario);
+  font-size: 15px;
+  line-height: 1.8;
+  margin-top: 18px;
+}
+.lyra-jornada .jornada-compromisso {
+  margin-top: 22px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: var(--j-turquesa-profundo);
+}
+.lyra-jornada .jornada-compromisso svg {
+  width: 18px;
+  height: 18px;
+}
+.lyra-jornada .jornada-compromisso span {
+  color: var(--j-coral-texto);
+}
+
+/* Sistema de secoes legivel e acessivel */
+.lyra-jornada .jornada-secao {
+  padding: clamp(67px, 7cqi, 104px) 0;
+  scroll-margin-top: 92px;
+}
+.lyra-jornada .jornada-secao-intro {
+  margin-bottom: 34px;
+  max-width: 735px;
+}
+.lyra-jornada .jornada-secao-intro .jornada-etiqueta {
+  margin-bottom: 10px;
+}
+.lyra-jornada .jornada-secao-intro h2 {
+  font-size: clamp(30px, calc(37px * var(--j-titulo-secao, 1)), 48px);
+  letter-spacing: -0.045em;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+.lyra-jornada .jornada-secao-intro > p:not(.jornada-etiqueta) {
+  font-size: calc(15px * var(--j-texto-secao, 1));
+  margin-top: 12px;
+  max-width: 690px;
+  color: var(--j-secundario);
+}
+.lyra-jornada .jornada-guia {
+  background: #fffefa;
+}
+.lyra-jornada .jornada-grid-guia,
+.lyra-jornada .jornada-grid-recursos,
+.lyra-jornada .jornada-grid-passos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+}
+.lyra-jornada .jornada-guia-item,
+.lyra-jornada .jornada-recurso,
+.lyra-jornada .jornada-grid-passos li {
+  border-top: 1px solid var(--j-borda);
+  padding-top: calc(24px * var(--j-cartao, 1));
+}
+.lyra-jornada .jornada-guia-item h3,
+.lyra-jornada .jornada-recurso h3,
+.lyra-jornada .jornada-grid-passos h3 {
+  font-size: clamp(20px, calc(23px * var(--j-titulo-cartao, 1)), 28px);
+  margin-block: 20px 7px;
+  line-height: 1.22;
+}
+.lyra-jornada .jornada-guia-item p,
+.lyra-jornada .jornada-recurso p,
+.lyra-jornada .jornada-grid-passos p {
+  color: var(--j-secundario);
+  font-size: calc(14px * var(--j-texto-cartao, 1));
+  line-height: 1.8;
+}
+.lyra-jornada .jornada-beneficios-reais {
+  background: linear-gradient(180deg, #f7faf8, #fffefa);
+}
+.lyra-jornada .jornada-fluxo {
+  background: #fffefa;
+}
+.lyra-jornada .jornada-passo-topo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.lyra-jornada .jornada-passo-topo > span:last-child {
+  color: var(--j-coral-texto);
+  font-size: 17px;
+  font-weight: 700;
+}
+.lyra-jornada .jornada-indicadores {
+  background: #f4f8f6;
+  border-block: 1px solid var(--j-borda);
+}
+.lyra-jornada .jornada-grid-indicadores {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  border: 1px solid var(--j-borda);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--j-borda);
+}
+.lyra-jornada .jornada-grid-indicadores > div {
+  background: #fffefa;
+  padding: 27px;
+}
+.lyra-jornada .jornada-grid-indicadores dt {
+  font-size: 13px;
+  color: var(--j-secundario);
+  font-weight: 600;
+}
+.lyra-jornada .jornada-grid-indicadores .jornada-indicador-valor {
+  font-family: Georgia, ui-serif, serif;
+  font-size: 43px;
+  color: var(--j-turquesa);
+  line-height: 1.25;
+  padding-block: 5px;
+}
+.lyra-jornada .jornada-grid-indicadores .jornada-indicador-nota {
+  font-size: 12px;
+  color: var(--j-secundario);
+}
+
+/* Valores: somente os dados reais da API /api/public/plans */
+.lyra-jornada .jornada-planos {
+  background: #fffefa;
+}
+.lyra-jornada .jornada-grid-planos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  align-items: stretch;
+}
+.lyra-jornada .jornada-plano {
+  display: flex;
+  flex-direction: column;
+  padding: calc(28px * var(--j-plano, 1));
+  border: 1px solid var(--j-borda);
+  border-radius: 18px;
+  background: #fffefa;
+}
+.lyra-jornada .jornada-plano-destaque {
+  border: 2px solid var(--j-turquesa);
+  background: #f6fbf9;
+}
+.lyra-jornada .jornada-plano-topo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: space-between;
+}
+.lyra-jornada .jornada-plano-topo h3 {
+  font-size: 29px;
+}
+.lyra-jornada .jornada-plano-topo > span {
+  border: 1px solid #f0a48f;
+  border-radius: 999px;
+  padding: 3px 9px;
+  font-size: 12px;
+  color: var(--j-coral-texto);
+}
+.lyra-jornada .jornada-plano > p:not(.jornada-preco) {
+  font-size: 13px;
+  color: var(--j-secundario);
+}
+.lyra-jornada .jornada-plano .jornada-preco {
+  font-family: Georgia, serif;
+  font-size: clamp(29px, 3.2cqi, 44px);
+  margin-top: 23px;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+}
+.lyra-jornada .jornada-plano .jornada-preco span {
+  font:
+    13px var(--font-inter),
+    sans-serif;
+  color: var(--j-secundario);
+}
+.lyra-jornada .jornada-plano .jornada-anual {
+  margin-top: 5px;
+}
+.lyra-jornada .jornada-plano .jornada-descricao-plano {
+  margin-top: 18px;
+  line-height: 1.8;
+}
+.lyra-jornada .jornada-plano .jornada-inclui {
+  font-size: 13px;
+  border-top: 1px solid var(--j-borda);
+  padding-top: 16px;
+  margin-top: 18px;
+  font-weight: 700;
+  color: var(--j-escuro);
+}
+.lyra-jornada .jornada-plano ul {
+  margin-block: 15px 22px;
+  display: grid;
+  gap: 11px;
+  flex: 1;
+  /* Sem isto a grade estica as linhas para preencher a altura do cartão e
+   * planos com poucos itens ficam com vãos grandes entre eles. */
+  align-content: start;
+}
+.lyra-jornada .jornada-plano li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--j-secundario);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.lyra-jornada .jornada-plano li svg {
+  width: 17px;
+  height: 17px;
+  color: var(--j-turquesa);
+}
+.lyra-jornada .jornada-botao-plano {
+  border-color: var(--j-turquesa);
+  color: var(--j-turquesa-profundo);
+}
+.lyra-jornada .jornada-plano-destaque .jornada-botao-plano {
+  background: var(--j-turquesa);
+  color: #fff;
+}
+.lyra-jornada .jornada-status {
+  border: 1px solid var(--j-borda);
+  border-radius: 13px;
+  padding: 28px;
+  text-align: center;
+  color: var(--j-secundario);
+}
+.lyra-jornada .jornada-erro {
+  border: 1px solid #d98075;
+  border-radius: 13px;
+  padding: 22px;
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+  color: #9b2f28;
+}
+
+/* Perguntas */
+.lyra-jornada .jornada-faq {
+  border-top: 1px solid var(--j-borda);
+  background: #f7f9f6;
+}
+.lyra-jornada .jornada-faq-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 40%) minmax(0, 60%);
+  gap: 35px;
+}
+.lyra-jornada .jornada-faq-perguntas {
+  min-width: 0;
+}
+.lyra-jornada .jornada-faq-perguntas details {
+  border-bottom: 1px solid var(--j-borda);
+  padding: 16px 0;
+}
+.lyra-jornada .jornada-faq-perguntas summary {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  font-weight: 650;
+  list-style: none;
+}
+.lyra-jornada .jornada-faq-perguntas summary::-webkit-details-marker {
+  display: none;
+}
+.lyra-jornada .jornada-faq-perguntas summary svg {
+  color: var(--j-turquesa);
+  transition: transform 0.2s ease;
+}
+.lyra-jornada .jornada-faq-perguntas details[open] summary svg {
+  transform: rotate(180deg);
+}
+.lyra-jornada .jornada-faq-perguntas details > p {
+  color: var(--j-secundario);
+  margin-top: 13px;
+  font-size: 14px;
+  line-height: 1.8;
+  padding-right: 36px;
+}
+
+/* Encerramento; recortes locais da imagem aprovada, sem texto embutido */
+.lyra-jornada .jornada-encerramento {
+  position: relative;
+  text-align: center;
+  min-height: 355px;
+  background: radial-gradient(ellipse at 50% 20%, #fff, #f5faf7 85%);
+  overflow: hidden;
+  border-block: 1px solid var(--j-borda);
+}
+.lyra-jornada .jornada-onda-esquerda,
+.lyra-jornada .jornada-onda-direita {
+  position: absolute;
+  width: clamp(190px, 33cqi, 465px);
+  height: 100%;
+  bottom: 0;
+  background-size: cover;
+  background-position: center bottom;
+  opacity: 0.92;
+  pointer-events: none;
+}
+.lyra-jornada .jornada-onda-esquerda {
+  left: 0;
+  mask-image: linear-gradient(90deg, #000 40%, transparent 98%);
+  -webkit-mask-image: linear-gradient(90deg, #000 40%, transparent 98%);
+}
+.lyra-jornada .jornada-onda-direita {
+  right: 0;
+  mask-image: linear-gradient(270deg, #000 40%, transparent 98%);
+  -webkit-mask-image: linear-gradient(270deg, #000 40%, transparent 98%);
+}
+.lyra-jornada .jornada-encerramento-conteudo {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  padding-block: 47px 62px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.lyra-jornada .jornada-encerramento .jornada-etiqueta {
+  justify-content: center;
+  margin-top: 14px;
+}
+.lyra-jornada .jornada-encerramento h2 {
+  font-size: clamp(35px, 4.1cqi, 60px);
+  margin-top: 11px;
+  letter-spacing: -0.055em;
+  line-height: 1.15;
+}
+.lyra-jornada .jornada-encerramento-conteudo > p:not(.jornada-etiqueta) {
+  margin-top: 12px;
+  color: var(--j-secundario);
+  max-width: 480px;
+}
+.lyra-jornada .jornada-encerramento .jornada-botoes {
+  margin-top: 24px;
+}
+
+/* Entrar direto mantém o fluxo real de autenticação sem screenshot no hero */
+.lyra-jornada .jornada-login-direto {
+  padding-block: 37px;
+  background: #fffefa;
+}
+.lyra-jornada .jornada-login-resumo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 40px;
+}
+.lyra-jornada .jornada-login-resumo h2 {
+  margin-top: 5px;
+  font-size: 27px;
+}
+.lyra-jornada .jornada-login-resumo > div:first-child > p:last-child {
+  max-width: 450px;
+  margin-top: 5px;
+  color: var(--j-secundario);
+  font-size: 13px;
+}
+.lyra-jornada .jornada-login-expansivel {
+  width: 100%;
+  max-width: 480px;
+  justify-self: end;
+  border: 1px solid var(--j-borda);
+  border-radius: 15px;
+  padding: calc(12px * var(--j-hero-card, 1)) 18px;
+  background: white;
+}
+.lyra-jornada .jornada-login-expansivel summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  min-height: 40px;
+  list-style: none;
+}
+.lyra-jornada .jornada-login-expansivel summary::-webkit-details-marker {
+  display: none;
+}
+.lyra-jornada .jornada-login-expansivel[open] summary svg {
+  transform: rotate(180deg);
+}
+.lyra-jornada .jornada-login-expansivel form {
+  border-top: 1px solid var(--j-borda);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.lyra-jornada .jornada-login-expansivel label {
+  font-weight: 600;
+  font-size: 13px;
+}
+.lyra-jornada .jornada-login-expansivel input {
+  width: 100%;
+  height: 45px;
+  border: 1px solid #879597;
+  border-radius: 9px;
+  color: var(--j-escuro);
+  padding: 0 12px;
+  background: white;
+}
+.lyra-jornada .jornada-campo-senha {
+  position: relative;
+}
+.lyra-jornada .jornada-campo-senha input {
+  padding-right: 50px;
+}
+.lyra-jornada .jornada-campo-senha button {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+  height: 41px;
+  width: 43px;
+  border: 0;
+  background: transparent;
+  display: grid;
+  place-items: center;
+  color: var(--j-turquesa-profundo);
+}
+.lyra-jornada .jornada-login-expansivel form > .jornada-botao {
+  margin-top: 9px;
+}
+.lyra-jornada .jornada-login-expansivel button:disabled,
+.lyra-jornada .jornada-login-expansivel input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.lyra-jornada .jornada-link-criar {
+  color: var(--j-turquesa-profundo);
+  font-weight: 700;
+  margin-top: 6px;
+  text-align: center;
+  text-decoration: underline;
+}
+
+/* Legal/LGPD */
+.lyra-jornada .jornada-rodape {
+  background: #f4f8f6;
+  padding-block: 35px 18px;
+  border-top: 1px solid var(--j-borda);
+}
+.lyra-jornada .jornada-rodape-conteudo {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 1fr;
+  gap: 30px;
+  align-items: center;
+}
+.lyra-jornada .jornada-rodape-marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.lyra-jornada .jornada-rodape-marca strong {
+  font-size: 21px;
+}
+.lyra-jornada .jornada-rodape-conteudo > p {
+  color: var(--j-secundario);
+  font-size: 12px;
+  line-height: 1.65;
+}
+.lyra-jornada .jornada-rodape nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: flex-end;
+  font-size: 12px;
+  font-weight: 700;
+}
+.lyra-jornada .jornada-rodape nav a:hover {
+  color: var(--j-coral-texto);
+  text-decoration: underline;
+}
+.lyra-jornada .jornada-rodape-fim {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  border-top: 1px solid var(--j-borda);
+  padding-top: 16px;
+  margin-top: 21px;
+  color: var(--j-secundario);
+  font-size: 11px;
+}
+.lyra-jornada .jornada-rodape-fim svg {
+  color: var(--j-turquesa);
+  width: 15px;
+  height: 15px;
+}
+.lyra-jornada .jornada-rodape-fim span {
+  color: var(--j-coral-texto);
+}
+
+/* Telas intermediarias e dispositivos moveis: layout primeiro o conteudo */
+@container jornada (max-width: 1100px) {
+  .lyra-jornada .jornada-cabecalho-conteudo {
+    gap: 20px;
+  }
+  .lyra-jornada .jornada-menu {
+    gap: 14px;
+  }
+  .lyra-jornada .jornada-marca span:last-child {
+    font-size: 23px;
+  }
+  .lyra-jornada .jornada-hero h1 {
+    font-size: clamp(42px, 5.5cqi, 63px);
+  }
+  .lyra-jornada .jornada-hero-arte {
+    min-height: 490px;
+  }
+}
+@container jornada (max-width: 900px) {
+  .lyra-jornada .jornada-cabecalho-conteudo {
+    min-height: 75px;
+  }
+  .lyra-jornada .jornada-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    padding: 14px 26px 20px;
+    background: #fffefa;
+    box-shadow: 0 12px 22px rgb(16 60 65 / 10%);
+    border-top: 1px solid var(--j-borda);
+    margin: 0;
+  }
+  .lyra-jornada .jornada-menu-aberto {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .lyra-jornada .jornada-menu a {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+  }
+  .lyra-jornada .jornada-abrir-menu {
+    display: inline-flex;
+  }
+  .lyra-jornada .jornada-cabecalho-acoes {
+    margin-left: auto;
+  }
+  .lyra-jornada .jornada-grid-pilares {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 30px;
+  }
+  .lyra-jornada .jornada-pilar:nth-child(3) {
+    border-left: 0;
+  }
+  .lyra-jornada .jornada-grid-indicadores {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .lyra-jornada .jornada-grid-planos {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .lyra-jornada .jornada-rodape-conteudo {
+    grid-template-columns: 1fr 1.3fr;
+  }
+  .lyra-jornada .jornada-rodape nav {
+    grid-column: span 2;
+    justify-content: flex-start;
+  }
+}
+@container jornada (max-width: 690px) {
+  .lyra-jornada .jornada-container {
+    width: min(100% - 36px, var(--j-container));
+  }
+  .lyra-jornada .jornada-marca span:last-child {
+    font-size: 20px;
+  }
+  .lyra-jornada .jornada-marca > span:first-child {
+    width: 38px !important;
+    height: 38px !important;
+  }
+  .lyra-jornada .jornada-header-cta {
+    display: none;
+  }
+  .lyra-jornada .jornada-cabecalho-acoes {
+    gap: 12px;
+  }
+  .lyra-jornada .jornada-cabecalho-conteudo {
+    gap: 10px;
+    min-height: 70px;
+  }
+  .lyra-jornada .jornada-entrar {
+    font-size: 13px;
+  }
+  .lyra-jornada .jornada-hero {
+    min-height: 0;
+  }
+  .lyra-jornada .jornada-hero-conteudo {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+  .lyra-jornada .jornada-hero-texto {
+    padding-block: 48px 12px;
+    width: 100%;
+  }
+  .lyra-jornada .jornada-hero h1 {
+    margin-top: 18px;
+    font-size: clamp(43px, calc(12cqi * var(--j-hero, 1)), 61px);
+    max-width: 570px;
+  }
+  .lyra-jornada .jornada-hero h1 em {
+    display: inline;
+  }
+  .lyra-jornada .jornada-hero-descricao {
+    font-size: clamp(14px, calc(15px * var(--j-corpo, 1)), 17px);
+    margin-block: 20px 22px;
+  }
+  .lyra-jornada .jornada-assinatura {
+    margin-top: 24px;
+  }
+  .lyra-jornada .jornada-hero-arte {
+    width: calc(100% + 50px);
+    align-self: center;
+    min-height: 310px;
+    height: 44vh;
+    max-height: 470px;
+    margin: 0;
+    background-position: center 52%;
+    mask-image: linear-gradient(180deg, transparent 0%, black 17%);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, black 17%);
+  }
+  .lyra-jornada .jornada-grid-pilares {
+    padding-block: 32px;
+    gap: 24px 0;
+  }
+  .lyra-jornada .jornada-pilar {
+    padding: 0 12px;
+  }
+  .lyra-jornada .jornada-pilar h2 {
+    font-size: 20px;
+  }
+  .lyra-jornada .jornada-pilar p {
+    font-size: 12px;
+  }
+  .lyra-jornada .jornada-manifesto-grid {
+    display: flex;
+    flex-direction: column;
+  }
+  .lyra-jornada .jornada-vale {
+    min-height: 240px;
+    margin: 0 -18px;
+    mask-image: linear-gradient(180deg, black 75%, transparent);
+    -webkit-mask-image: linear-gradient(180deg, black 75%, transparent);
+  }
+  .lyra-jornada .jornada-manifesto-texto {
+    padding: 6px 0 42px;
+  }
+  .lyra-jornada .jornada-manifesto-texto h2 {
+    font-size: clamp(31px, 8cqi, 45px);
+  }
+  .lyra-jornada .jornada-secao {
+    padding-block: 55px;
+  }
+  .lyra-jornada .jornada-grid-guia,
+  .lyra-jornada .jornada-grid-recursos,
+  .lyra-jornada .jornada-grid-passos {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+  .lyra-jornada .jornada-faq-layout {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+  .lyra-jornada .jornada-login-resumo {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+  .lyra-jornada .jornada-login-expansivel {
+    justify-self: stretch;
+    max-width: none;
+  }
+  .lyra-jornada .jornada-encerramento-conteudo {
+    padding-block: 56px;
+  }
+  .lyra-jornada .jornada-onda-esquerda,
+  .lyra-jornada .jornada-onda-direita {
+    width: 33%;
+    opacity: 0.45;
+  }
+  .lyra-jornada .jornada-rodape-conteudo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
+@container jornada (max-width: 420px) {
+  .lyra-jornada .jornada-marca span:last-child {
+    font-size: 18px;
+  }
+  .lyra-jornada .jornada-botoes {
+    gap: 12px;
+  }
+  .lyra-jornada .jornada-botao-principal {
+    min-height: 47px;
+    padding-inline: 20px;
+  }
+  .lyra-jornada .jornada-hero h1 {
+    font-size: 42px;
+  }
+  .lyra-jornada .jornada-hero-arte {
+    min-height: 250px;
+    height: 300px;
+  }
+  .lyra-jornada .jornada-grid-indicadores {
+    grid-template-columns: 1fr;
+  }
+  .lyra-jornada .jornada-pilar .jornada-icone {
+    width: 48px;
+    height: 48px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lyra-jornada *,
+  .lyra-jornada *::before,
+  .lyra-jornada *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Paridade do seletor de tema existente: o modo claro é o conceito aprovado,
+ * mas o controle real do projeto também pode alternar para modo escuro. */
+.dark .lyra-jornada {
+  --j-escuro: #eaf5f3;
+  --j-secundario: #b1c8c7;
+  --j-turquesa: #58c9c1;
+  --j-turquesa-profundo: #a0ece0;
+  --j-coral-texto: #ffab91;
+  --j-borda: #345256;
+  --j-fundo: #101f23;
+  --j-branco: #182b30;
+  background: #101f23;
+}
+.dark .lyra-jornada .jornada-cabecalho {
+  background: rgb(17 32 36 / 94%);
+  border-color: #345256;
+}
+.dark .lyra-jornada .jornada-menu a,
+.dark .lyra-jornada .jornada-entrar {
+  color: #d9eeee;
+}
+.dark .lyra-jornada .jornada-menu a:hover {
+  color: var(--j-coral-texto);
+}
+.dark .lyra-jornada .jornada-abrir-menu {
+  background: #22363a;
+  color: #e9f5f3;
+  border-color: #45666a;
+}
+.dark .lyra-jornada .jornada-hero-ambiente {
+  background: radial-gradient(
+    ellipse at 76% 40%,
+    #22484b,
+    #102329 70%,
+    #13252a
+  );
+}
+.dark .lyra-jornada .jornada-hero-arte {
+  opacity: 0.86;
+}
+.dark .lyra-jornada .jornada-pilares,
+.dark .lyra-jornada .jornada-guia,
+.dark .lyra-jornada .jornada-fluxo,
+.dark .lyra-jornada .jornada-planos,
+.dark .lyra-jornada .jornada-login-direto {
+  background: #15272b;
+}
+.dark .lyra-jornada .jornada-beneficios-reais,
+.dark .lyra-jornada .jornada-indicadores,
+.dark .lyra-jornada .jornada-faq {
+  background: #1a3034;
+}
+.dark .lyra-jornada .jornada-manifesto {
+  background: linear-gradient(100deg, #1d3638, #182a2e 80%);
+}
+.dark .lyra-jornada .jornada-icone {
+  background: #253d41;
+  border-color: #ad6756;
+}
+.dark .lyra-jornada .jornada-grid-indicadores,
+.dark .lyra-jornada .jornada-grid-indicadores > div,
+.dark .lyra-jornada .jornada-plano,
+.dark .lyra-jornada .jornada-login-expansivel,
+.dark .lyra-jornada .jornada-faq-perguntas details {
+  background: #20373b;
+}
+.dark .lyra-jornada .jornada-grid-indicadores {
+  border-color: #345256;
+}
+.dark .lyra-jornada .jornada-plano-destaque {
+  border-color: #63c7bd;
+  background: #1b383a;
+}
+/* No escuro o turquesa do botão fica claro: texto branco teria contraste
+ * 2,1:1; o texto escuro garante mais de 7:1 (WCAG AA). */
+.dark .lyra-jornada .jornada-plano-destaque .jornada-botao-plano {
+  color: #0b2326;
+}
+.dark .lyra-jornada .jornada-botao-contorno {
+  background: #20373b;
+}
+.dark .lyra-jornada .jornada-login-expansivel input {
+  color: #eaf5f3;
+  background: #14282b;
+  border-color: #879597;
+}
+.dark .lyra-jornada .jornada-encerramento {
+  background: radial-gradient(ellipse at 50% 40%, #22383a, #132326);
+}
+.dark .lyra-jornada .jornada-onda-esquerda,
+.dark .lyra-jornada .jornada-onda-direita {
+  opacity: 0.38;
+}
+.dark .lyra-jornada .jornada-rodape {
+  background: #14272b;
+}
+.dark .lyra-jornada .jornada-menu-aberto {
+  background: #182d31;
+}

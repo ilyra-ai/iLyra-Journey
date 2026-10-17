@@ -2,10 +2,11 @@
 
 import {
   type CSSProperties,
+  type FormEvent,
   type MouseEvent,
   type ReactNode,
-  SubmitEvent,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 import Link from 'next/link';
@@ -13,234 +14,135 @@ import { useRouter } from 'next/navigation';
 import {
   ArrowRight,
   Check,
+  ChevronDown,
+  Compass,
   Eye,
   EyeOff,
+  Heart,
+  Leaf,
+  LockKeyhole,
   Menu,
+  Moon,
   RotateCw,
+  ShieldCheck,
   Sparkles,
+  Sun,
+  Waves,
+  X,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { useAuth } from '@/context/AuthContext';
-import { PlanMatrixPlan } from '@/types/subscription';
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
-import { Badge } from '@/components/ui/badge';
-import { Button, buttonVariants } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from '@/components/ui/sheet';
-import { Skeleton } from '@/components/ui/skeleton';
-import type {
-  LandingSectionKey,
-  LandingPageConfig,
-  ToneKey,
-} from '@/lib/site-page-config/schema';
+import { PuckClientRenderer } from '@/components/puck/PuckClientRenderer';
+import { ThemeToggleButton } from '@/components/theme/ThemeControls';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { getBuilderIcon } from '@/lib/site-page-config/ui';
-import { moedaPtBr } from '@/lib/formato/numero';
-import { cn } from '@/lib/utils';
-import { ThemeToggleButton } from '@/components/theme/ThemeControls';
-import { PuckClientRenderer } from '@/components/puck/PuckClientRenderer';
 import {
   ROTA_POLITICA_DE_PRIVACIDADE,
   ROTA_TERMOS_DE_USO,
 } from '@/lib/lgpd/documentos';
+import { moedaPtBr } from '@/lib/formato/numero';
+import type {
+  LandingPageConfig,
+  LandingSectionKey,
+} from '@/lib/site-page-config/schema';
+import type { PlanMatrixPlan } from '@/types/subscription';
+import './LandingJornada.css';
 
-/*
-  Landing redesenhada por completo (tarefa 63): uma coluna de leitura calma,
-  celular primeiro, com menos molduras e mais espaço. Referências de 2026:
-  topo com uma promessa e uma ação principal, prova logo abaixo, preços
-  transparentes, poucas cores (teal da marca para ação, coral só para o
-  conteúdo astral e de IA) e paridade entre os temas claro e escuro.
-
-  Todo o texto vem do construtor de UI (`landing`) e os planos vêm do
-  catálogo público (`/api/public/plans`); nada é inventado aqui. Os botões
-  de navegação viraram links de verdade (abrem em nova aba, aparecem no
-  menu de contexto e funcionam sem JavaScript).
-*/
-
-// Fundo suave chapado do ícone de cada item; o coral ("cosmic") fica
-// reservado ao conteúdo astral e de IA.
-function corDoIconeTonal(tone: ToneKey): string {
-  switch (tone) {
-    case 'cosmic':
-      return 'bg-cosmic-light text-cosmic-strong';
-    case 'golden':
-      return 'bg-golden-light text-golden';
-    case 'soft':
-      return 'bg-muted text-foreground';
-    case 'primary':
-    case 'accent':
-      return 'bg-sidebar-accent text-sidebar-accent-foreground';
-  }
-}
-
-// Cor do número de cada indicador, na mesma regra de tons.
-function corDoNumero(tone: ToneKey): string {
-  switch (tone) {
-    case 'cosmic':
-      return 'text-cosmic-strong';
-    case 'golden':
-      return 'text-golden';
-    case 'soft':
-      return 'text-foreground';
-    case 'primary':
-    case 'accent':
-      return 'text-primary';
-  }
-}
-
-// Plano recomendado no catálogo (decisão comercial já existente na landing
-// anterior): recebe o contorno e o botão principal.
-const PLANO_EM_DESTAQUE = 'meta';
-
-// Quantos recursos de cada plano aparecem antes do "e mais N".
-const RECURSOS_POR_PLANO = 5;
-
-const CONTEINER = 'mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8';
-const ESPACO_DA_SECAO = 'scroll-mt-20 py-16 sm:py-24';
-const ROTULO_DA_SECAO = 'text-sm font-medium text-primary';
-
-type PublicPlansPayload = {
-  plans: PlanMatrixPlan[];
-  error?: string;
-};
+/**
+ * Landing de evolução consciente da Lyra MetaCare.
+ *
+ * Este componente substitui SOMENTE a landing pública. Ele mantém o contrato
+ * original com o Construtor (overrideConfig e previewMode), os links
+ * configuráveis, o login real, os planos obtidos da API, os recursos,
+ * indicadores, FAQ, termos/LGPD e blocos Puck publicados.
+ *
+ * Ilustrações locais: /public/landing-jornada (extraídas exclusivamente da
+ * arte aprovada pelo proprietário, sem imagens de pessoas). Só são usadas
+ * quando os quatro arquivos existem (conferido no next.config.ts).
+ */
+const COM_ARTE = process.env.LYRA_LANDING_COM_ARTE === '1';
 
 type LandingPageProps = {
   overrideConfig?: LandingPageConfig;
   previewMode?: boolean;
 };
 
-// Faixa de telas em que o texto cresce do mínimo ao máximo.
-const TELA_MINIMA_PX = 360;
-const TELA_MAXIMA_PX = 1280;
+type PublicPlansPayload = { plans?: PlanMatrixPlan[]; error?: string };
 
-/**
- * Tamanho fluido de verdade: cresce em linha reta do mínimo (360 px) ao
- * máximo (1280 px). O valor do meio do `clamp` antes era fixo em rem, então
- * o título ficava sempre no mesmo tamanho e enorme no celular.
- */
-function buildFluidFontSize(minRem: number, maxRem: number, scale: number) {
-  const minimoPx = minRem * scale * 16;
-  const maximoPx = maxRem * scale * 16;
-  const inclinacao = (maximoPx - minimoPx) / (TELA_MAXIMA_PX - TELA_MINIMA_PX);
-  const baseRem = (minimoPx - inclinacao * TELA_MINIMA_PX) / 16;
-  const vw = inclinacao * 100;
-  // Valores de CSS exigem ponto decimal (por isso `toFixed`).
-  return `clamp(${(minimoPx / 16).toFixed(3)}rem, calc(${baseRem.toFixed(3)}rem + ${vw.toFixed(3)}vw), ${(maximoPx / 16).toFixed(3)}rem)`;
-}
-
-/**
- * Destino configurável no construtor: rota interna (`/login`), âncora da
- * própria página (`#planos`) ou endereço externo (`https://`). Na
- * pré-visualização do construtor os links não navegam.
- */
-function LinkDaLanding({
-  href,
-  previewMode,
-  className,
-  comoBotao = false,
-  aoNavegar,
-  children,
-}: {
+type LigacaoProps = {
   href: string;
   previewMode: boolean;
   className?: string;
-  /** Links com aparência de botão recebem a escala de botões do construtor. */
-  comoBotao?: boolean;
-  /** Chamado ao seguir o link (fecha o menu móvel, por exemplo). */
-  aoNavegar?: () => void;
   children: ReactNode;
-}) {
-  const aoClicar = (evento: MouseEvent<HTMLAnchorElement>) => {
+  onNavigate?: () => void;
+};
+
+function Ligacao({
+  href,
+  previewMode,
+  className,
+  children,
+  onNavigate,
+}: LigacaoProps) {
+  const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     if (previewMode) {
-      evento.preventDefault();
+      event.preventDefault();
       return;
     }
-    aoNavegar?.();
+    onNavigate?.();
   };
-  const atributos = {
-    className,
-    onClick: aoClicar,
-    ...(comoBotao ? { 'data-slot': 'button' } : {}),
-  };
-
   if (href.startsWith('/')) {
     return (
-      <Link href={href} {...atributos}>
+      <Link href={href} className={className} onClick={onClick}>
         {children}
       </Link>
     );
   }
-
   return (
     <a
       href={href}
+      className={className}
+      onClick={onClick}
       rel={href.startsWith('https://') ? 'noopener noreferrer' : undefined}
-      {...atributos}
     >
       {children}
     </a>
   );
 }
 
-/** Abertura padrão das seções: rótulo, título e texto de apoio. */
-function AberturaDaSecao({
-  id,
+// A cópia editorial substitui apenas os valores padrão de fábrica. Textos
+// publicados pelo administrador continuam prevalecendo sem mudança de schema.
+const COPIA_INICIAL = {
+  titulo: 'Seu corpo, sua rotina e o seu céu',
+  destaque: 'em um só lugar, com orientação clara para cada dia.',
+  descricao:
+    'A Lyra MetaCare reúne sono, energia e ritmo com a astrologia védica do seu mapa para sugerir o que fazer hoje, em linguagem simples. Não substitui avaliação profissional de saúde.',
+};
+
+function TituloSecao({
   rotulo,
   titulo,
   descricao,
-  estiloDoTitulo,
-  estiloDoTexto,
-  centralizada = false,
+  id,
 }: {
-  id: string;
   rotulo: string;
   titulo: string;
   descricao: string;
-  estiloDoTitulo: CSSProperties;
-  estiloDoTexto: CSSProperties;
-  centralizada?: boolean;
+  id: string;
 }) {
   return (
-    <div className={cn('max-w-2xl', centralizada && 'mx-auto text-center')}>
-      <p className={ROTULO_DA_SECAO}>{rotulo}</p>
-      <h2
-        id={id}
-        className="mt-3 text-balance font-display font-semibold leading-tight tracking-[-0.02em] text-foreground"
-        style={estiloDoTitulo}
-      >
-        {titulo}
-      </h2>
-      <p
-        className="mt-4 text-pretty leading-relaxed text-muted-foreground"
-        style={estiloDoTexto}
-      >
-        {descricao}
-      </p>
+    <div className="jornada-secao-intro">
+      <p className="jornada-etiqueta">{rotulo}</p>
+      <h2 id={id}>{titulo}</h2>
+      <p>{descricao}</p>
     </div>
   );
+}
+
+function SimboloMarca({ prioridade = false }: { prioridade?: boolean }) {
+  return <MarcaLyra tamanho="48px" prioridade={prioridade} />;
 }
 
 export function LandingPage({
@@ -249,339 +151,240 @@ export function LandingPage({
 }: LandingPageProps) {
   const router = useRouter();
   const { db } = useAuth();
-  // Configuração publicada (hook compartilhado) ou o rascunho em edição no
-  // construtor de UI (pré-visualização).
-  const { config: publicConfig } = usePublicSitePageConfig('landing');
-  const config: LandingPageConfig = overrideConfig ?? publicConfig;
-  const [plans, setPlans] = useState<PlanMatrixPlan[]>([]);
-  const [plansStatus, setPlansStatus] = useState<'loading' | 'ready' | 'error'>(
-    'loading'
-  );
-  const [plansError, setPlansError] = useState('');
-  const [tentativaDosPlanos, setTentativaDosPlanos] = useState(0);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
-  const [menuAberto, setMenuAberto] = useState(false);
+  const { config: publicada } = usePublicSitePageConfig('landing');
+  const config = overrideConfig ?? publicada;
 
-  const textStyles = {
-    heroTitle: {
-      fontSize: buildFluidFontSize(2, 4.25, config.typography.heroTitle),
-    } satisfies CSSProperties,
-    heroBody: {
-      fontSize: buildFluidFontSize(1.0, 1.2, config.typography.heroBody),
-    } satisfies CSSProperties,
-    sectionTitle: {
-      fontSize: buildFluidFontSize(1.5, 2.4, config.typography.sectionTitle),
-    } satisfies CSSProperties,
-    sectionBody: {
-      fontSize: buildFluidFontSize(1, 1.12, config.typography.sectionBody),
-    } satisfies CSSProperties,
-    cardTitle: {
-      fontSize: buildFluidFontSize(1.0, 1.2, config.typography.cardTitle),
-    } satisfies CSSProperties,
-    cardBody: {
-      fontSize: buildFluidFontSize(0.92, 1.05, config.typography.cardBody),
-    } satisfies CSSProperties,
-    buttonLabel: {
-      fontSize: buildFluidFontSize(0.92, 1.04, config.typography.buttonLabel),
-    } satisfies CSSProperties,
-  };
+  const [menuAberto, setMenuAberto] = useState(false);
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [verSenha, setVerSenha] = useState(false);
+  const [autenticando, setAutenticando] = useState(false);
+  const [planos, setPlanos] = useState<PlanMatrixPlan[]>([]);
+  const [estadoPlanos, setEstadoPlanos] = useState<
+    'loading' | 'ready' | 'error'
+  >('loading');
+  const [erroPlanos, setErroPlanos] = useState('');
+  const [tentativaPlanos, setTentativaPlanos] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
-
-    async function loadPlans() {
+    async function consultarPlanos() {
       try {
-        const response = await fetch('/api/public/plans', {
+        const resposta = await fetch('/api/public/plans', {
           cache: 'no-store',
           signal: controller.signal,
         });
-        const payload = (await response.json()) as PublicPlansPayload;
-
-        if (!response.ok || !Array.isArray(payload.plans)) {
+        const payload = (await resposta.json()) as PublicPlansPayload;
+        if (!resposta.ok || !Array.isArray(payload.plans)) {
           throw new Error(
-            payload.error || 'Falha ao carregar o catálogo público.'
+            payload.error ?? 'Não foi possível carregar os planos.'
           );
         }
-
-        setPlans(
-          payload.plans.sort(
-            (left, right) => left.displayOrder - right.displayOrder
-          )
-        );
-        setPlansStatus('ready');
-      } catch (error) {
         if (controller.signal.aborted) return;
-        setPlans([]);
-        setPlansStatus('error');
-        setPlansError(
-          error instanceof Error
-            ? error.message
-            : 'Falha ao carregar os planos.'
+        setPlanos(
+          [...payload.plans].sort((a, b) => a.displayOrder - b.displayOrder)
         );
+        setEstadoPlanos('ready');
+      } catch (erro) {
+        if (controller.signal.aborted) return;
+        setErroPlanos(
+          erro instanceof Error ? erro.message : 'Falha ao consultar os planos.'
+        );
+        setPlanos([]);
+        setEstadoPlanos('error');
       }
     }
-
-    void loadPlans();
+    void consultarPlanos();
     return () => controller.abort();
-  }, [tentativaDosPlanos]);
+  }, [tentativaPlanos]);
 
-  function tentarCarregarPlanosDeNovo() {
-    setPlansStatus('loading');
-    setPlansError('');
-    setTentativaDosPlanos((atual) => atual + 1);
-  }
+  const estatisticas = useMemo(() => {
+    const habilitados = planos.flatMap((plano) =>
+      plano.features.filter((recurso) => recurso.enabled)
+    );
+    const categorias = new Set(habilitados.map((recurso) => recurso.category));
+    const comAssinatura = planos.filter(
+      (plano) => plano.externalMonthlyPriceId || plano.externalAnnualPriceId
+    );
+    return {
+      planCount: planos.length,
+      featureCount: habilitados.length,
+      categoryCount: categorias.size,
+      checkoutCount: comAssinatura.length,
+    };
+  }, [planos]);
 
-  const enabledCapabilities = plans.reduce(
-    (total, plan) =>
-      total + plan.features.filter((feature) => feature.enabled).length,
-    0
-  );
-  const checkoutReady = plans.filter(
-    (plan) => plan.externalMonthlyPriceId || plan.externalAnnualPriceId
-  ).length;
-  const categories = new Set(
-    plans.flatMap((plan) =>
-      plan.features
-        .filter((feature) => feature.enabled)
-        .map((feature) => feature.category)
-    )
-  ).size;
-
-  function resolveMetricValue(source: string, customValue: string) {
-    if (source === 'planCount') return String(plans.length);
-    if (source === 'featureCount') return String(enabledCapabilities);
-    if (source === 'categoryCount') return String(categories);
-    if (source === 'checkoutCount') return String(checkoutReady);
-    return customValue;
-  }
-
-  async function handleQuickLogin(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (previewMode) {
-      return;
+  const valorIndicador = (origem: string, personalizado: string) => {
+    if (origem === 'custom') return personalizado;
+    if (origem in estatisticas) {
+      return String(estatisticas[origem as keyof typeof estatisticas]);
     }
-    setSubmitting(true);
+    return personalizado;
+  };
 
-    const { error } = await db.auth.signInWithPassword({ email, password });
-
-    setSubmitting(false);
-
-    if (error) {
-      toast.error('Não foi possível entrar agora.', {
-        description: error.message,
+  async function entrar(evento: FormEvent<HTMLFormElement>) {
+    evento.preventDefault();
+    if (previewMode || autenticando) return;
+    setAutenticando(true);
+    try {
+      const { error } = await db.auth.signInWithPassword({
+        email,
+        password: senha,
       });
-      return;
+      if (error) {
+        toast.error('Não foi possível entrar agora.', {
+          description: error.message,
+        });
+        return;
+      }
+      toast.success('Boas-vindas. Sua órbita foi aberta com sucesso.');
+      router.push('/');
+    } catch (erro) {
+      toast.error('Falha na autenticação.', {
+        description:
+          erro instanceof Error
+            ? erro.message
+            : 'Tente novamente em instantes.',
+      });
+    } finally {
+      setAutenticando(false);
     }
-
-    toast.success('Boas-vindas. Sua órbita foi aberta com sucesso.');
-    router.push('/');
   }
 
-  // Itens do menu: só as seções visíveis (antes o menu apontava também
-  // para seções ocultas no construtor).
-  const itensDoMenu = [
-    { href: '#recursos', rotulo: 'Recursos', visivel: config.features.visible },
-    { href: '#fluxo', rotulo: 'Como funciona', visivel: config.flow.visible },
-    { href: '#planos', rotulo: 'Planos', visivel: config.plans.visible },
-    { href: '#faq', rotulo: 'Dúvidas', visivel: config.faq.visible },
-  ].filter((item) => item.visivel);
+  const menu = [
+    { label: 'Início', href: '#topo', visible: true },
+    { label: 'Jornada', href: '#fluxo', visible: config.flow.visible },
+    {
+      label: 'Benefícios',
+      href: '#recursos',
+      visible: config.features.visible,
+    },
+    { label: 'Planos', href: '#planos', visible: config.plans.visible },
+    { label: 'Dúvidas', href: '#faq', visible: config.faq.visible },
+    { label: 'Sobre', href: '#sobre', visible: true },
+  ].filter((item) => item.visible);
 
-  const botaoPrincipal = cn(
-    buttonVariants({ size: 'xl' }),
-    'h-auto min-h-12 whitespace-normal py-3 text-center'
-  );
-  const botaoSecundario = cn(
-    buttonVariants({ size: 'xl', variant: 'secondary' }),
-    'h-auto min-h-12 whitespace-normal py-3 text-center'
-  );
+  const heroTitulo =
+    config.hero.title === COPIA_INICIAL.titulo
+      ? 'Evolua em direção à sua'
+      : config.hero.title;
+  const heroDestaque =
+    config.hero.accentTitle === COPIA_INICIAL.destaque
+      ? 'essência.'
+      : config.hero.accentTitle;
+  const heroDescricao =
+    config.hero.description === COPIA_INICIAL.descricao
+      ? 'Mais presença, equilíbrio, clareza e expansão interior para uma vida com mais significado. A Lyra MetaCare une dados de bem-estar, inteligência artificial e sabedoria integrativa para apoiar a sua jornada.'
+      : config.hero.description;
 
-  function renderSection(sectionKey: LandingSectionKey) {
-    switch (sectionKey) {
+  const fatoresDeEscala = {
+    '--j-hero': String(config.typography.heroTitle),
+    '--j-corpo': String(config.typography.heroBody),
+    '--j-titulo-secao': String(config.typography.sectionTitle),
+    '--j-titulo-cartao': String(config.typography.cardTitle),
+    '--j-texto-cartao': String(config.typography.cardBody),
+    '--j-botao': String(config.sizing.buttonScale),
+    '--j-botao-texto': String(config.typography.buttonLabel),
+    '--j-texto-secao': String(config.typography.sectionBody),
+    '--j-cartao': String(config.sizing.featureCard),
+    '--j-plano': String(config.sizing.planCard),
+    '--j-icone': String(config.sizing.iconScale),
+    '--j-hero-card': String(config.sizing.heroCard),
+  } as CSSProperties;
+
+  // Estes quatro conceitos são editoriais. Recursos técnicos reais seguem
+  // sendo gerados logo abaixo a partir de config.features.items.
+  const pilares = [
+    {
+      titulo: 'Autoconhecimento',
+      descricao: 'Descubra seus padrões, seus ritmos e seu potencial.',
+      icon: <Leaf aria-hidden="true" />,
+    },
+    {
+      titulo: 'Equilíbrio integral',
+      descricao: 'Cultive harmonia entre corpo, emoções e energia.',
+      icon: <Waves aria-hidden="true" />,
+    },
+    {
+      titulo: 'Clareza interior',
+      descricao: 'Encontre presença e escolhas com mais consciência.',
+      icon: <Sun aria-hidden="true" />,
+    },
+    {
+      titulo: 'Inteligência compassiva',
+      descricao: 'Tecnologia para apoiar uma jornada mais gentil.',
+      icon: <Heart aria-hidden="true" />,
+    },
+  ];
+
+  function renderizarSecao(chave: LandingSectionKey) {
+    switch (chave) {
       case 'features':
-        if (!config.features.visible) {
-          return null;
-        }
-
+        if (!config.features.visible) return null;
         return (
           <section
+            key={chave}
+            className="jornada-secao jornada-beneficios-reais"
             id="recursos"
-            aria-labelledby="titulo-recursos"
-            className={ESPACO_DA_SECAO}
           >
-            <div className={CONTEINER}>
-              <AberturaDaSecao
+            <div className="jornada-container">
+              <TituloSecao
                 id="titulo-recursos"
                 rotulo={config.features.badgeText}
                 titulo={config.features.title}
                 descricao={config.features.description}
-                estiloDoTitulo={textStyles.sectionTitle}
-                estiloDoTexto={textStyles.sectionBody}
               />
-
-              {/* Grade sem caixas: um fio separa os itens (ritmo calmo, sem
-                  cartões repetidos). */}
-              <ul className="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-                {config.features.items.map((feature) => {
-                  const FeatureIcon = getBuilderIcon(feature.icon);
-
+              <div
+                className="jornada-grid-recursos"
+                aria-labelledby="titulo-recursos"
+              >
+                {config.features.items.map((item) => {
+                  const Icone = getBuilderIcon(item.icon);
                   return (
-                    <li
-                      key={feature.id}
-                      data-escala="recurso"
-                      className="min-w-0 border-t border-border pt-6"
-                    >
-                      <span
-                        data-escala="icone"
-                        className={cn(
-                          'flex size-10 items-center justify-center rounded-md',
-                          corDoIconeTonal(feature.tone)
-                        )}
-                      >
-                        <FeatureIcon className="size-5" aria-hidden="true" />
+                    <article className="jornada-recurso" key={item.id}>
+                      <span className="jornada-icone">
+                        <Icone aria-hidden="true" />
                       </span>
-                      <h3
-                        className="mt-5 font-display font-semibold text-foreground"
-                        style={textStyles.cardTitle}
-                      >
-                        {feature.title}
-                      </h3>
-                      <p
-                        className="mt-2 text-pretty leading-relaxed text-muted-foreground"
-                        style={textStyles.cardBody}
-                      >
-                        {feature.description}
-                      </p>
-                    </li>
+                      <h3>{item.title}</h3>
+                      <p>{item.description}</p>
+                    </article>
                   );
                 })}
-              </ul>
-            </div>
-          </section>
-        );
-      case 'metrics':
-        if (!config.metrics.visible) {
-          return null;
-        }
-
-        return (
-          <section
-            aria-labelledby="titulo-indicadores"
-            className="border-y border-border bg-card py-16 sm:py-20"
-          >
-            <div className={CONTEINER}>
-              <AberturaDaSecao
-                id="titulo-indicadores"
-                rotulo={config.metrics.badgeText}
-                titulo={config.metrics.title}
-                descricao={config.metrics.description}
-                estiloDoTitulo={textStyles.sectionTitle}
-                estiloDoTexto={textStyles.sectionBody}
-              />
-
-              {/* Faixa de números em lista de definição: rótulo, valor e
-                  nota de cada indicador. */}
-              <dl
-                aria-busy={plansStatus === 'loading'}
-                className="mt-12 grid gap-px overflow-hidden rounded-xl border border-border bg-border sm:grid-cols-2 xl:grid-cols-4"
-              >
-                {config.metrics.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex min-w-0 flex-col gap-2 bg-background p-6"
-                  >
-                    <dt className="text-sm font-medium text-muted-foreground">
-                      {item.label}
-                    </dt>
-                    <dd
-                      className={cn(
-                        'font-display text-4xl font-semibold tracking-tight tabular-nums',
-                        corDoNumero(item.tone)
-                      )}
-                    >
-                      {plansStatus === 'loading' && item.source !== 'custom' ? (
-                        <>
-                          <Skeleton className="h-10 w-16" />
-                          <span className="sr-only">Carregando</span>
-                        </>
-                      ) : (
-                        resolveMetricValue(item.source, item.customValue)
-                      )}
-                    </dd>
-                    <dd
-                      className="leading-relaxed text-muted-foreground"
-                      style={textStyles.cardBody}
-                    >
-                      {item.note}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+              </div>
             </div>
           </section>
         );
       case 'flow':
-        if (!config.flow.visible) {
-          return null;
-        }
-
+        if (!config.flow.visible) return null;
         return (
           <section
+            key={chave}
+            className="jornada-secao jornada-fluxo"
             id="fluxo"
-            aria-labelledby="titulo-fluxo"
-            className={ESPACO_DA_SECAO}
           >
-            <div className={CONTEINER}>
-              <AberturaDaSecao
+            <div className="jornada-container">
+              <TituloSecao
                 id="titulo-fluxo"
                 rotulo={config.flow.badgeText}
                 titulo={config.flow.title}
                 descricao={config.flow.description}
-                estiloDoTitulo={textStyles.sectionTitle}
-                estiloDoTexto={textStyles.sectionBody}
               />
-
-              {/* Etapas em lista ordenada; no desktop, uma linha liga os
-                  marcadores. */}
-              <ol className="mt-12 grid gap-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-8">
-                {config.flow.items.map((step) => {
-                  const StepIcon = getBuilderIcon(step.icon);
-
+              <ol
+                className="jornada-grid-passos"
+                aria-labelledby="titulo-fluxo"
+              >
+                {config.flow.items.map((item) => {
+                  const Icone = getBuilderIcon(item.icon);
                   return (
-                    <li
-                      key={step.id}
-                      data-escala="recurso"
-                      className="relative min-w-0"
-                    >
-                      <div className="flex items-center gap-3">
-                        <span
-                          data-escala="icone"
-                          className="flex size-10 shrink-0 items-center justify-center rounded-full border border-border bg-card text-primary"
-                        >
-                          <StepIcon className="size-5" aria-hidden="true" />
+                    <li key={item.id}>
+                      <div className="jornada-passo-topo">
+                        <span className="jornada-icone">
+                          <Icone aria-hidden="true" />
                         </span>
-                        <span className="font-display text-sm font-semibold text-primary">
-                          {step.step}
-                        </span>
-                        <span
-                          aria-hidden="true"
-                          className="hidden h-px flex-1 bg-border lg:block"
-                        />
+                        <span>{item.step}</span>
                       </div>
-                      <h3
-                        className="mt-5 font-display font-semibold text-foreground"
-                        style={textStyles.cardTitle}
-                      >
-                        {step.title}
-                      </h3>
-                      <p
-                        className="mt-2 text-pretty leading-relaxed text-muted-foreground"
-                        style={textStyles.cardBody}
-                      >
-                        {step.description}
-                      </p>
+                      <h3>{item.title}</h3>
+                      <p>{item.description}</p>
                     </li>
                   );
                 })}
@@ -589,308 +392,238 @@ export function LandingPage({
             </div>
           </section>
         );
+      case 'metrics':
+        if (!config.metrics.visible) return null;
+        return (
+          <section key={chave} className="jornada-secao jornada-indicadores">
+            <div className="jornada-container">
+              <TituloSecao
+                id="titulo-indicadores"
+                rotulo={config.metrics.badgeText}
+                titulo={config.metrics.title}
+                descricao={config.metrics.description}
+              />
+              <dl
+                className="jornada-grid-indicadores"
+                aria-labelledby="titulo-indicadores"
+                aria-busy={estadoPlanos === 'loading'}
+              >
+                {config.metrics.items.map((item) => (
+                  <div key={item.id}>
+                    <dt>{item.label}</dt>
+                    <dd className="jornada-indicador-valor">
+                      {estadoPlanos === 'loading' && item.source !== 'custom'
+                        ? '…'
+                        : estadoPlanos === 'error' && item.source !== 'custom'
+                          ? '—'
+                          : valorIndicador(item.source, item.customValue)}
+                    </dd>
+                    <dd className="jornada-indicador-nota">{item.note}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          </section>
+        );
       case 'plans':
-        if (!config.plans.visible) {
-          return null;
-        }
-
+        if (!config.plans.visible) return null;
         return (
           <section
+            key={chave}
+            className="jornada-secao jornada-planos"
             id="planos"
-            aria-labelledby="titulo-planos"
-            className={cn(ESPACO_DA_SECAO, 'border-y border-border bg-card')}
           >
-            <div className={CONTEINER}>
-              <AberturaDaSecao
+            <div className="jornada-container">
+              <TituloSecao
                 id="titulo-planos"
                 rotulo={config.plans.badgeText}
                 titulo={config.plans.title}
                 descricao={config.plans.description}
-                estiloDoTitulo={textStyles.sectionTitle}
-                estiloDoTexto={textStyles.sectionBody}
-                centralizada
               />
-
-              {plansStatus === 'loading' ? (
-                <div
-                  className="mt-12 grid gap-6 lg:grid-cols-3"
-                  aria-busy="true"
-                >
-                  <p className="sr-only">Carregando os planos</p>
-                  {Array.from({ length: 3 }).map((_, index) => (
-                    <div
-                      key={`plano-esqueleto-${index}`}
-                      className="space-y-4 rounded-xl border border-border bg-background p-6"
-                    >
-                      <Skeleton className="h-5 w-24" />
-                      <Skeleton className="h-10 w-32" />
-                      <Skeleton className="h-4 w-full" />
-                      <Skeleton className="h-4 w-4/5" />
-                      <Skeleton className="h-11 w-full" />
-                    </div>
-                  ))}
+              {estadoPlanos === 'loading' ? (
+                <p className="jornada-status" role="status">
+                  Consultando planos disponíveis…
+                </p>
+              ) : null}
+              {estadoPlanos === 'error' ? (
+                <div className="jornada-erro" role="alert">
+                  <p>{erroPlanos}</p>
+                  <button
+                    type="button"
+                    className="jornada-botao jornada-botao-contorno"
+                    onClick={() => {
+                      setEstadoPlanos('loading');
+                      setErroPlanos('');
+                      setTentativaPlanos((n) => n + 1);
+                    }}
+                  >
+                    <RotateCw aria-hidden="true" /> Tentar novamente
+                  </button>
                 </div>
               ) : null}
-
-              {plansStatus === 'ready' && plans.length === 0 ? (
-                <p className="mx-auto mt-12 max-w-md text-center text-muted-foreground">
+              {estadoPlanos === 'ready' && planos.length === 0 ? (
+                <p className="jornada-status">
                   Nenhum plano está aberto para assinatura no momento.
                 </p>
               ) : null}
-
-              {plansStatus === 'ready' && plans.length > 0 ? (
-                <ul className="mt-12 grid items-stretch gap-6 lg:grid-cols-3">
-                  {plans.map((plan, indice) => {
-                    const destaque = plan.key === PLANO_EM_DESTAQUE;
-                    const todosOsRecursos = plan.features.filter(
-                      (feature) => feature.enabled
+              {estadoPlanos === 'ready' && planos.length > 0 ? (
+                <div className="jornada-grid-planos">
+                  {planos.map((plano, indice) => {
+                    const anterior = indice > 0 ? planos[indice - 1] : null;
+                    const funcionalidades = plano.features.filter(
+                      (r) => r.enabled
                     );
-                    // A partir do segundo plano, a lista mostra o que ele
-                    // acrescenta ao anterior ("Tudo do Free, mais:"); antes
-                    // os três cartões repetiam os mesmos cinco recursos.
-                    const anterior = indice > 0 ? plans[indice - 1] : null;
-                    const chavesDoAnterior = new Set(
+                    const anteriores = new Set(
                       anterior?.features
-                        .filter((feature) => feature.enabled)
-                        .map((feature) => feature.key) ?? []
+                        .filter((r) => r.enabled)
+                        .map((r) => r.key) ?? []
                     );
-                    const novos = todosOsRecursos.filter(
-                      (feature) => !chavesDoAnterior.has(feature.key)
+                    const novidades = funcionalidades.filter(
+                      (r) => !anteriores.has(r.key)
                     );
-                    const herdaDoAnterior =
+                    const herda =
                       anterior !== null &&
-                      novos.length > 0 &&
-                      novos.length < todosOsRecursos.length;
-                    const recursos = herdaDoAnterior ? novos : todosOsRecursos;
-                    const restantes = recursos.length - RECURSOS_POR_PLANO;
-
+                      novidades.length > 0 &&
+                      novidades.length < funcionalidades.length;
+                    const exibidas = herda ? novidades : funcionalidades;
                     return (
-                      <li
-                        key={plan.key}
-                        data-escala="plano"
-                        aria-labelledby={`plano-${plan.key}`}
-                        className={cn(
-                          'flex min-w-0 flex-col rounded-xl border bg-background p-6 sm:p-8',
-                          destaque
-                            ? 'border-primary shadow-md ring-1 ring-primary'
-                            : 'border-border'
-                        )}
+                      <article
+                        className={`jornada-plano ${plano.key === 'meta' ? 'jornada-plano-destaque' : ''}`}
+                        key={plano.key}
                       >
-                        <div className="flex flex-wrap items-center justify-between gap-3">
-                          <h3
-                            id={`plano-${plan.key}`}
-                            className="flex items-center gap-2.5 font-display font-semibold text-foreground"
-                            style={textStyles.cardTitle}
-                          >
-                            {/* Cor cadastrada no plano, com contorno para
-                                não sumir no tema escuro. */}
-                            <span
-                              aria-hidden="true"
-                              className="size-3 shrink-0 rounded-full ring-1 ring-border"
-                              style={{ backgroundColor: plan.accentFrom }}
-                            />
-                            {plan.name}
-                          </h3>
-                          {plan.highlightText ? (
-                            <Badge variant={destaque ? 'default' : 'secondary'}>
-                              {plan.highlightText}
-                            </Badge>
+                        <div className="jornada-plano-topo">
+                          <h3>{plano.name}</h3>
+                          {plano.highlightText ? (
+                            <span>{plano.highlightText}</span>
                           ) : null}
                         </div>
-                        <p className="mt-2 text-sm font-medium text-foreground">
-                          {plan.tagline}
+                        <p>{plano.tagline}</p>
+                        <p className="jornada-preco">
+                          {moedaPtBr(plano.monthlyPrice, plano.currencyCode)}
+                          <span> /mês</span>
                         </p>
-
-                        <p className="mt-6 flex flex-wrap items-baseline gap-x-1.5">
-                          <span className="font-display text-4xl font-semibold tracking-tight text-foreground tabular-nums">
-                            {moedaPtBr(plan.monthlyPrice, plan.currencyCode)}
-                          </span>
-                          <span className="text-sm text-muted-foreground">
-                            por mês
-                          </span>
-                        </p>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          ou {moedaPtBr(plan.annualPrice, plan.currencyCode)}{' '}
+                        <p className="jornada-anual">
+                          ou {moedaPtBr(plano.annualPrice, plano.currencyCode)}{' '}
                           por ano
                         </p>
-
-                        <p
-                          className="mt-5 text-pretty leading-relaxed text-muted-foreground"
-                          style={textStyles.cardBody}
-                        >
-                          {plan.description}
+                        <p className="jornada-descricao-plano">
+                          {plano.description}
                         </p>
-
-                        <p
-                          id={`recursos-do-plano-${plan.key}`}
-                          className="mt-6 border-t border-border pt-6 text-sm font-medium text-foreground"
-                        >
-                          {herdaDoAnterior && anterior
+                        <p className="jornada-inclui">
+                          {herda
                             ? `Tudo do ${anterior.name}, mais:`
                             : 'Inclui:'}
                         </p>
-                        <ul
-                          aria-labelledby={`plano-${plan.key} recursos-do-plano-${plan.key}`}
-                          className="mt-4 flex-1 space-y-3"
-                        >
-                          {recursos
-                            .slice(0, RECURSOS_POR_PLANO)
-                            .map((feature) => (
-                              <li
-                                key={`${plan.key}-${feature.key}`}
-                                className="flex items-start gap-3 text-sm text-foreground"
-                              >
-                                <Check
-                                  className="mt-0.5 size-4 shrink-0 text-primary"
-                                  aria-hidden="true"
-                                />
-                                <span className="leading-6">
-                                  {feature.name}
-                                </span>
-                              </li>
-                            ))}
-                          {restantes > 0 ? (
-                            <li className="pl-7 text-sm text-muted-foreground">
-                              e mais {restantes}{' '}
-                              {restantes === 1 ? 'recurso' : 'recursos'}
+                        <ul>
+                          {exibidas.slice(0, 5).map((recurso) => (
+                            <li key={recurso.key}>
+                              <Check aria-hidden="true" />
+                              {recurso.name}
+                            </li>
+                          ))}
+                          {exibidas.length > 5 ? (
+                            <li>
+                              <Check aria-hidden="true" />E mais{' '}
+                              {exibidas.length - 5} recursos
                             </li>
                           ) : null}
                         </ul>
-
-                        <LinkDaLanding
+                        <Ligacao
                           href={config.hero.primaryCtaHref}
                           previewMode={previewMode}
-                          comoBotao
-                          className={cn(
-                            buttonVariants({
-                              variant: destaque ? 'default' : 'secondary',
-                              size: 'lg',
-                            }),
-                            'mt-8 w-full'
-                          )}
+                          className="jornada-botao jornada-botao-plano"
                         >
-                          <span style={textStyles.buttonLabel}>
-                            {config.plans.ctaLabel}
-                          </span>
-                          <span className="sr-only"> no plano {plan.name}</span>
+                          {config.plans.ctaLabel}{' '}
                           <ArrowRight aria-hidden="true" />
-                        </LinkDaLanding>
-                      </li>
+                        </Ligacao>
+                      </article>
                     );
                   })}
-                </ul>
-              ) : null}
-
-              {plansStatus === 'error' ? (
-                <div
-                  role="alert"
-                  className="mx-auto mt-12 flex max-w-xl flex-col items-center gap-3 rounded-xl border border-destructive/30 bg-destructive-light px-6 py-6 text-center"
-                >
-                  <p className="text-sm font-medium text-destructive">
-                    Não conseguimos carregar os planos agora.
-                  </p>
-                  <p className="text-sm leading-6 text-muted-foreground">
-                    {plansError}
-                  </p>
-                  <Button
-                    variant="secondary"
-                    onClick={tentarCarregarPlanosDeNovo}
-                  >
-                    <RotateCw aria-hidden="true" /> Tentar de novo
-                  </Button>
                 </div>
               ) : null}
             </div>
           </section>
         );
       case 'faq':
-        if (!config.faq.visible) {
-          return null;
-        }
-
+        if (!config.faq.visible) return null;
         return (
-          <section
-            id="faq"
-            aria-labelledby="titulo-faq"
-            className={ESPACO_DA_SECAO}
-          >
-            <div
-              className={cn(
-                CONTEINER,
-                'grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16'
-              )}
-            >
-              <AberturaDaSecao
+          <section key={chave} className="jornada-secao jornada-faq" id="faq">
+            <div className="jornada-container jornada-faq-layout">
+              <TituloSecao
                 id="titulo-faq"
                 rotulo={config.faq.badgeText}
                 titulo={config.faq.title}
                 descricao={config.faq.description}
-                estiloDoTitulo={textStyles.sectionTitle}
-                estiloDoTexto={textStyles.sectionBody}
               />
-
-              <Accordion type="single" collapsible className="min-w-0">
+              <div
+                className="jornada-faq-perguntas"
+                aria-labelledby="titulo-faq"
+              >
                 {config.faq.items.map((item) => (
-                  <AccordionItem key={item.id} value={item.id}>
-                    <AccordionTrigger>{item.question}</AccordionTrigger>
-                    <AccordionContent>{item.answer}</AccordionContent>
-                  </AccordionItem>
+                  <details key={item.id}>
+                    <summary>
+                      {item.question}
+                      <ChevronDown aria-hidden="true" />
+                    </summary>
+                    <p>{item.answer}</p>
+                  </details>
                 ))}
-              </Accordion>
-            </div>
-          </section>
-        );
-      case 'finalCta':
-        if (!config.finalCta.visible) {
-          return null;
-        }
-
-        return (
-          <section aria-labelledby="titulo-chamada-final" className="pb-20">
-            <div className={CONTEINER}>
-              <div className="rounded-2xl border border-border bg-sidebar-accent px-6 py-14 text-center sm:px-12 sm:py-20">
-                <AberturaDaSecao
-                  id="titulo-chamada-final"
-                  rotulo={config.finalCta.badgeText}
-                  titulo={config.finalCta.title}
-                  descricao={config.finalCta.description}
-                  estiloDoTitulo={textStyles.sectionTitle}
-                  estiloDoTexto={textStyles.sectionBody}
-                  centralizada
-                />
-                <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-                  <LinkDaLanding
-                    href={config.finalCta.primaryHref}
-                    previewMode={previewMode}
-                    comoBotao
-                    className={botaoPrincipal}
-                  >
-                    <span style={textStyles.buttonLabel}>
-                      {config.finalCta.primaryLabel}
-                    </span>
-                    <ArrowRight aria-hidden="true" />
-                  </LinkDaLanding>
-                  <LinkDaLanding
-                    href={config.finalCta.secondaryHref}
-                    previewMode={previewMode}
-                    comoBotao
-                    className={botaoSecundario}
-                  >
-                    <span style={textStyles.buttonLabel}>
-                      {config.finalCta.secondaryLabel}
-                    </span>
-                  </LinkDaLanding>
-                </div>
               </div>
             </div>
           </section>
         );
-      default:
-        return null;
+      case 'finalCta':
+        if (!config.finalCta.visible) return null;
+        return (
+          <section
+            key={chave}
+            className="jornada-encerramento"
+            aria-labelledby="titulo-encerramento"
+          >
+            <div className="jornada-onda-esquerda" aria-hidden="true" />
+            <div className="jornada-onda-direita" aria-hidden="true" />
+            <div className="jornada-encerramento-conteudo jornada-container">
+              <SimboloMarca />
+              <p className="jornada-etiqueta">{config.finalCta.badgeText}</p>
+              <h2 id="titulo-encerramento">
+                {config.finalCta.title ===
+                'O seu próximo dia pode começar mais claro.'
+                  ? 'Comece a sua jornada hoje.'
+                  : config.finalCta.title}
+              </h2>
+              <p>
+                {config.finalCta.description ===
+                'Crie sua conta e receba a primeira leitura do seu dia em poucos minutos.'
+                  ? 'Dê o primeiro passo para uma vida mais consciente, plena e em sintonia com o que realmente importa.'
+                  : config.finalCta.description}
+              </p>
+              <div className="jornada-botoes jornada-botoes-centro">
+                <Ligacao
+                  href={config.finalCta.primaryHref}
+                  previewMode={previewMode}
+                  className="jornada-botao jornada-botao-principal"
+                >
+                  {config.finalCta.primaryLabel === 'Criar minha conta'
+                    ? 'Comece agora'
+                    : config.finalCta.primaryLabel}{' '}
+                  <ArrowRight aria-hidden="true" />
+                </Ligacao>
+                <Ligacao
+                  href={config.finalCta.secondaryHref}
+                  previewMode={previewMode}
+                  className="jornada-botao-texto"
+                >
+                  {config.finalCta.secondaryLabel}{' '}
+                  <ArrowRight aria-hidden="true" />
+                </Ligacao>
+              </div>
+            </div>
+          </section>
+        );
     }
   }
 
-  const orderedSections = Array.from(
+  const ordem = Array.from(
     new Set<LandingSectionKey>([
       ...config.sectionOrder,
       'features',
@@ -901,438 +634,301 @@ export function LandingPage({
       'finalCta',
     ])
   );
-
-  // Escalas do construtor de UI (landing.sizing): cards do topo, itens de
-  // recursos e do fluxo, planos, ícones e botões (regras em globals.css,
-  // pelos atributos `data-escala` e `data-slot`).
-  const escalasDaLanding = {
-    '--landing-escala-hero': String(config.sizing.heroCard),
-    '--landing-escala-recurso': String(config.sizing.featureCard),
-    '--landing-escala-plano': String(config.sizing.planCard),
-    '--landing-escala-icone': String(config.sizing.iconScale),
-    '--landing-escala-botao': String(config.sizing.buttonScale),
-  } as CSSProperties;
-
-  // Na pré-visualização a landing fica dentro do <main> do painel: sem um
-  // segundo <main>.
   const Principal = previewMode ? 'div' : 'main';
 
   return (
     <div
-      className="lyra-landing min-h-screen bg-background text-foreground"
-      style={escalasDaLanding}
+      className={`lyra-jornada${COM_ARTE ? ' jornada-com-arte' : ''}`}
+      style={fatoresDeEscala}
     >
-      <header
-        className={cn(
-          'top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75',
-          previewMode ? 'relative' : 'sticky'
-        )}
-      >
-        <div
-          className={cn(
-            CONTEINER,
-            'flex h-16 items-center justify-between gap-3'
-          )}
-        >
-          <LinkDaLanding
+      {/* O "Pular para o conteúdo" vem do layout raiz (src/app/layout.tsx),
+          que aponta para o #conteudo-principal abaixo. */}
+      <header className="jornada-cabecalho">
+        <div className="jornada-container jornada-cabecalho-conteudo">
+          <Ligacao
             href="#topo"
             previewMode={previewMode}
-            className="flex min-w-0 items-center gap-2.5 rounded-md py-1 pr-1 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+            className="jornada-marca"
           >
-            <MarcaLyra tamanho="36px" prioridade />
-            <span className="whitespace-nowrap font-display text-lg font-semibold lowercase leading-tight tracking-tight text-foreground">
-              {config.footer.brandLine}
-            </span>
-            <span className="sr-only">, voltar ao topo</span>
-          </LinkDaLanding>
-
-          {itensDoMenu.length > 0 ? (
-            <nav aria-label="Seções da página" className="hidden md:block">
-              <ul className="flex items-center gap-1">
-                {itensDoMenu.map((item) => (
-                  <li key={item.href}>
-                    <LinkDaLanding
-                      href={item.href}
-                      previewMode={previewMode}
-                      className="inline-flex min-h-10 items-center rounded-md px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
-                    >
-                      {item.rotulo}
-                    </LinkDaLanding>
-                  </li>
-                ))}
-              </ul>
-            </nav>
-          ) : null}
-
-          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
-            {/* Na pré-visualização do construtor o botão mudaria o tema do
-                próprio painel administrativo. */}
-            {previewMode ? null : <ThemeToggleButton />}
-            <LinkDaLanding
+            <SimboloMarca prioridade />
+            <span>{config.footer.brandLine}</span>
+          </Ligacao>
+          <nav
+            className={`jornada-menu ${menuAberto ? 'jornada-menu-aberto' : ''}`}
+            aria-label="Navegação principal"
+            id="navegacao-landing"
+          >
+            {menu.map((item) => (
+              <Ligacao
+                href={item.href}
+                previewMode={previewMode}
+                key={item.href}
+                onNavigate={() => setMenuAberto(false)}
+              >
+                {item.label}
+              </Ligacao>
+            ))}
+          </nav>
+          <div className="jornada-cabecalho-acoes">
+            {!previewMode ? <ThemeToggleButton /> : null}
+            <Ligacao
               href={config.hero.primaryCtaHref}
               previewMode={previewMode}
-              comoBotao
-              className={cn(
-                buttonVariants({ variant: 'ghost' }),
-                'hidden sm:inline-flex'
+              className="jornada-entrar"
+            >
+              {config.header.loginLabel}
+            </Ligacao>
+            <Ligacao
+              href={config.hero.primaryCtaHref}
+              previewMode={previewMode}
+              className="jornada-botao jornada-botao-principal jornada-header-cta"
+            >
+              {config.header.fullLoginLabel} <ArrowRight aria-hidden="true" />
+            </Ligacao>
+            <button
+              type="button"
+              className="jornada-abrir-menu"
+              aria-expanded={menuAberto}
+              aria-controls="navegacao-landing"
+              aria-label={menuAberto ? 'Fechar menu' : 'Abrir menu'}
+              onClick={() => setMenuAberto((aberto) => !aberto)}
+            >
+              {menuAberto ? (
+                <X aria-hidden="true" />
+              ) : (
+                <Menu aria-hidden="true" />
               )}
-            >
-              <span style={textStyles.buttonLabel}>
-                {config.header.loginLabel}
-              </span>
-            </LinkDaLanding>
-            <LinkDaLanding
-              href={config.hero.primaryCtaHref}
-              previewMode={previewMode}
-              comoBotao
-              // No celular a mesma ação fica no topo da página e no menu.
-              className={cn(buttonVariants(), 'hidden sm:inline-flex')}
-            >
-              <span style={textStyles.buttonLabel}>
-                {config.header.fullLoginLabel}
-              </span>
-            </LinkDaLanding>
-
-            {itensDoMenu.length > 0 ? (
-              <Sheet open={menuAberto} onOpenChange={setMenuAberto}>
-                <SheetTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="md:hidden"
-                    aria-label="Abrir o menu da página"
-                    disabled={previewMode}
-                  >
-                    <Menu aria-hidden="true" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="right" className="gap-6">
-                  <SheetHeader className="space-y-1 pr-10 text-left">
-                    <SheetTitle className="font-display">Menu</SheetTitle>
-                    <SheetDescription>
-                      Vá direto para uma parte da página.
-                    </SheetDescription>
-                  </SheetHeader>
-                  <nav aria-label="Seções da página (menu)">
-                    <ul className="flex flex-col gap-1">
-                      {itensDoMenu.map((item) => (
-                        <li key={item.href}>
-                          <SheetClose asChild>
-                            <a
-                              href={item.href}
-                              className="flex min-h-12 items-center rounded-md px-3 text-base font-medium text-foreground transition-colors hover:bg-muted focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
-                            >
-                              {item.rotulo}
-                            </a>
-                          </SheetClose>
-                        </li>
-                      ))}
-                    </ul>
-                  </nav>
-                  <div className="mt-auto flex flex-col gap-3 border-t border-border pt-6">
-                    <LinkDaLanding
-                      href={config.hero.primaryCtaHref}
-                      previewMode={previewMode}
-                      comoBotao
-                      aoNavegar={() => setMenuAberto(false)}
-                      className={cn(buttonVariants({ size: 'lg' }), 'w-full')}
-                    >
-                      {config.header.fullLoginLabel}
-                    </LinkDaLanding>
-                    <LinkDaLanding
-                      href={config.hero.primaryCtaHref}
-                      previewMode={previewMode}
-                      comoBotao
-                      aoNavegar={() => setMenuAberto(false)}
-                      className={cn(
-                        buttonVariants({ size: 'lg', variant: 'secondary' }),
-                        'w-full'
-                      )}
-                    >
-                      {config.header.loginLabel}
-                    </LinkDaLanding>
-                  </div>
-                </SheetContent>
-              </Sheet>
-            ) : null}
+            </button>
           </div>
         </div>
       </header>
 
+      {/* Na prévia do Construtor a página do admin já tem o seu
+          #conteudo-principal: o id só existe na landing pública. */}
       <Principal id={previewMode ? undefined : 'conteudo-principal'}>
-        {/* Topo: a promessa e a ação principal à esquerda; a entrada
-            rápida à direita (abaixo, no celular). */}
         <section
+          className="jornada-hero"
           id="topo"
-          aria-labelledby="titulo-da-landing"
-          className="scroll-mt-20 pb-16 pt-12 sm:pb-24 sm:pt-20"
+          aria-labelledby="titulo-hero"
         >
-          <div
-            className={cn(
-              CONTEINER,
-              'grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:items-center lg:gap-16'
-            )}
-          >
-            <div className="min-w-0">
-              <p className="inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-sm font-medium text-foreground">
-                <Sparkles
-                  className="size-3.5 shrink-0 text-cosmic-strong"
-                  aria-hidden="true"
-                />
-                <span className="min-w-0">{config.hero.badgeText}</span>
+          <div className="jornada-hero-ambiente" aria-hidden="true" />
+          <div className="jornada-container jornada-hero-conteudo">
+            <div className="jornada-hero-texto">
+              <p className="jornada-etiqueta">
+                <Sparkles aria-hidden="true" /> {config.hero.badgeText}
               </p>
-
-              <h1
-                id="titulo-da-landing"
-                className="mt-6 max-w-3xl text-balance break-words font-display font-semibold leading-[1.05] tracking-[-0.035em] text-foreground"
-                style={textStyles.heroTitle}
-              >
-                {config.hero.title}{' '}
-                <span className="text-primary">{config.hero.accentTitle}</span>
+              <h1 id="titulo-hero">
+                {heroTitulo} <em>{heroDestaque}</em>
               </h1>
-
-              <p
-                className="mt-6 max-w-xl text-pretty leading-relaxed text-muted-foreground"
-                style={textStyles.heroBody}
-              >
-                {config.hero.description}
-              </p>
-
-              <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-                <LinkDaLanding
+              <p className="jornada-hero-descricao">{heroDescricao}</p>
+              <div className="jornada-botoes">
+                <Ligacao
                   href={config.hero.primaryCtaHref}
                   previewMode={previewMode}
-                  comoBotao
-                  className={botaoPrincipal}
+                  className="jornada-botao jornada-botao-principal"
                 >
-                  <span style={textStyles.buttonLabel}>
-                    {config.hero.primaryCtaLabel}
-                  </span>
+                  {config.hero.primaryCtaLabel === 'Começar agora'
+                    ? 'Comece agora'
+                    : config.hero.primaryCtaLabel}{' '}
                   <ArrowRight aria-hidden="true" />
-                </LinkDaLanding>
-                <LinkDaLanding
+                </Ligacao>
+                <Ligacao
                   href={config.hero.secondaryCtaHref}
                   previewMode={previewMode}
-                  comoBotao
-                  className={botaoSecundario}
+                  className="jornada-botao-texto"
                 >
-                  <span style={textStyles.buttonLabel}>
-                    {config.hero.secondaryCtaLabel}
-                  </span>
-                </LinkDaLanding>
+                  {config.hero.secondaryCtaLabel}{' '}
+                  <ArrowRight aria-hidden="true" />
+                </Ligacao>
+              </div>
+              <div className="jornada-assinatura">
+                <span /> Uma vida mais consciente começa aqui
               </div>
             </div>
-
-            <Card data-escala="hero" className="min-w-0 shadow-lg">
-              <CardHeader>
-                <Badge variant="cosmic" className="w-fit">
-                  {config.hero.quickAuthBadge}
-                </Badge>
-                <CardTitle as="h2" style={textStyles.cardTitle}>
-                  {config.hero.quickAuthTitle}
-                </CardTitle>
-                <CardDescription style={textStyles.cardBody}>
-                  {config.hero.quickAuthDescription}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form className="space-y-4" onSubmit={handleQuickLogin}>
-                  <div className="space-y-2">
-                    <Label htmlFor="landing-email">E-mail</Label>
-                    <Input
-                      id="landing-email"
-                      type="email"
-                      autoComplete="email"
-                      inputMode="email"
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
-                      disabled={previewMode}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="landing-password">Senha</Label>
-                    <div className="relative">
-                      <Input
-                        id="landing-password"
-                        type={showPassword ? 'text' : 'password'}
-                        autoComplete="current-password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        className="pr-11"
-                        disabled={previewMode}
-                      />
-                      <button
-                        type="button"
-                        aria-label={
-                          showPassword ? 'Ocultar senha' : 'Mostrar senha'
-                        }
-                        aria-pressed={showPassword}
-                        onClick={() => setShowPassword((current) => !current)}
-                        disabled={previewMode}
-                        className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-md text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-                      >
-                        {showPassword ? (
-                          <EyeOff className="size-[18px]" aria-hidden="true" />
-                        ) : (
-                          <Eye className="size-[18px]" aria-hidden="true" />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-3 pt-1 sm:flex-row">
-                    <Button
-                      type="submit"
-                      className="h-11 sm:flex-1"
-                      style={textStyles.buttonLabel}
-                      disabled={
-                        previewMode ||
-                        submitting ||
-                        email.trim().length === 0 ||
-                        password.trim().length === 0
-                      }
-                    >
-                      {submitting
-                        ? 'Entrando...'
-                        : config.hero.quickAuthSubmitLabel}
-                      <ArrowRight aria-hidden="true" />
-                    </Button>
-                    <LinkDaLanding
-                      href={config.hero.primaryCtaHref}
-                      previewMode={previewMode}
-                      comoBotao
-                      className={cn(
-                        buttonVariants({ variant: 'secondary' }),
-                        'h-11 sm:flex-1'
-                      )}
-                    >
-                      <span style={textStyles.buttonLabel}>
-                        {config.hero.quickAuthSecondaryLabel}
-                      </span>
-                    </LinkDaLanding>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
+            <div
+              className="jornada-hero-arte"
+              role="img"
+              aria-label="Flor de lótus luminosa sobre água e montanhas, evocando consciência e evolução"
+            />
           </div>
         </section>
 
-        {/* Prévia do produto: os três sinais que a pessoa encontra no app,
-            em uma faixa única (antes um cartão dentro de outro). */}
         <section
-          aria-labelledby="titulo-previa"
-          className="border-y border-border bg-card py-14 sm:py-16"
+          className="jornada-pilares"
+          aria-label="Pilares de bem-estar consciente"
         >
-          <div
-            className={cn(
-              CONTEINER,
-              'grid gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,2.2fr)] lg:gap-16'
-            )}
-          >
-            <div className="min-w-0">
-              <p className={ROTULO_DA_SECAO}>{config.hero.previewBadge}</p>
-              <h2
-                id="titulo-previa"
-                className="mt-3 text-balance font-display font-semibold tracking-[-0.02em] text-foreground"
-                style={textStyles.cardTitle}
-              >
-                {config.hero.previewTitle}
-              </h2>
-              <p
-                className="mt-3 text-pretty leading-relaxed text-muted-foreground"
-                style={textStyles.cardBody}
-              >
-                {config.hero.previewDescription}
-              </p>
-            </div>
-            <ul className="grid gap-8 sm:grid-cols-3 sm:gap-6">
-              {config.hero.previewItems.map((item) => {
-                const ItemIcon = getBuilderIcon(item.icon);
+          <div className="jornada-container jornada-grid-pilares">
+            {pilares.map((pilar) => (
+              <div key={pilar.titulo} className="jornada-pilar">
+                <span className="jornada-icone">{pilar.icon}</span>
+                <h2>{pilar.titulo}</h2>
+                <p>{pilar.descricao}</p>
+              </div>
+            ))}
+          </div>
+        </section>
 
+        <section
+          className="jornada-manifesto"
+          id="sobre"
+          aria-labelledby="titulo-manifesto"
+        >
+          <div className="jornada-container jornada-manifesto-grid">
+            <div
+              className="jornada-vale"
+              role="img"
+              aria-label="Portal de luz sobre um vale com água e montanhas"
+            />
+            <div className="jornada-manifesto-texto">
+              <p className="jornada-etiqueta">Presença e transformação</p>
+              <h2 id="titulo-manifesto">
+                Viva com mais <em>presença e significado.</em>
+              </h2>
+              <p>
+                A vida ganha novas possibilidades quando você se reconecta com o
+                que realmente importa. A Lyra MetaCare acompanha a sua jornada
+                combinando tecnologia, cuidado e autoconhecimento.
+              </p>
+              <div className="jornada-compromisso">
+                <Compass aria-hidden="true" /> Mais vida <span>•</span> Mais
+                clareza <span>•</span> Mais você
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          className="jornada-secao jornada-guia"
+          aria-labelledby="titulo-guia"
+        >
+          <div className="jornada-container">
+            <TituloSecao
+              id="titulo-guia"
+              rotulo={config.hero.previewBadge}
+              titulo={config.hero.previewTitle}
+              descricao={config.hero.previewDescription}
+            />
+            <div className="jornada-grid-guia">
+              {config.hero.previewItems.map((item) => {
+                const Icone = getBuilderIcon(item.icon);
                 return (
-                  <li key={item.id} data-escala="hero" className="min-w-0">
-                    <span
-                      data-escala="icone"
-                      className={cn(
-                        'flex size-10 items-center justify-center rounded-md',
-                        corDoIconeTonal(item.tone)
-                      )}
-                    >
-                      <ItemIcon className="size-[18px]" aria-hidden="true" />
+                  <article key={item.id} className="jornada-guia-item">
+                    <span className="jornada-icone">
+                      <Icone aria-hidden="true" />
                     </span>
-                    <h3
-                      className="mt-4 font-display font-semibold text-foreground"
-                      style={textStyles.cardTitle}
-                    >
-                      {item.title}
-                    </h3>
-                    <p
-                      className="mt-2 text-pretty leading-relaxed text-muted-foreground"
-                      style={textStyles.cardBody}
-                    >
-                      {item.description}
-                    </p>
-                  </li>
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                  </article>
                 );
               })}
-            </ul>
+            </div>
           </div>
         </section>
 
-        {/* Blocos publicados no editor Puck (documento "landing-home"), logo
-            após o topo. Sem blocos publicados, nada é exibido. */}
         <PuckClientRenderer documentKey="landing-home" className="w-full" />
 
-        {orderedSections.map((sectionKey) => (
-          <div key={sectionKey}>{renderSection(sectionKey)}</div>
-        ))}
+        {ordem.map((chave) => renderizarSecao(chave))}
+
+        <section
+          className="jornada-secao jornada-login-direto"
+          aria-labelledby="titulo-login-direto"
+        >
+          <div className="jornada-container jornada-login-resumo">
+            <div>
+              <p className="jornada-etiqueta">
+                <LockKeyhole aria-hidden="true" /> {config.hero.quickAuthBadge}
+              </p>
+              <h2 id="titulo-login-direto">{config.hero.quickAuthTitle}</h2>
+              <p>{config.hero.quickAuthDescription}</p>
+            </div>
+            <details className="jornada-login-expansivel">
+              <summary>
+                {config.hero.quickAuthSubmitLabel} com e-mail e senha{' '}
+                <ChevronDown aria-hidden="true" />
+              </summary>
+              <form onSubmit={entrar}>
+                <label htmlFor="jornada-email">E-mail</label>
+                <input
+                  id="jornada-email"
+                  type="email"
+                  autoComplete="email"
+                  inputMode="email"
+                  required
+                  value={email}
+                  disabled={previewMode || autenticando}
+                  onChange={(evento) => setEmail(evento.target.value)}
+                />
+                <label htmlFor="jornada-senha">Senha</label>
+                <div className="jornada-campo-senha">
+                  <input
+                    id="jornada-senha"
+                    type={verSenha ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    required
+                    value={senha}
+                    disabled={previewMode || autenticando}
+                    onChange={(evento) => setSenha(evento.target.value)}
+                  />
+                  <button
+                    type="button"
+                    aria-label={verSenha ? 'Ocultar senha' : 'Mostrar senha'}
+                    aria-pressed={verSenha}
+                    onClick={() => setVerSenha((atual) => !atual)}
+                  >
+                    {verSenha ? (
+                      <EyeOff aria-hidden="true" />
+                    ) : (
+                      <Eye aria-hidden="true" />
+                    )}
+                  </button>
+                </div>
+                <button
+                  type="submit"
+                  className="jornada-botao jornada-botao-principal"
+                  disabled={previewMode || autenticando}
+                >
+                  {autenticando
+                    ? 'Entrando…'
+                    : config.hero.quickAuthSubmitLabel}{' '}
+                  <ArrowRight aria-hidden="true" />
+                </button>
+                <Ligacao
+                  href={config.hero.primaryCtaHref}
+                  previewMode={previewMode}
+                  className="jornada-link-criar"
+                >
+                  {config.hero.quickAuthSecondaryLabel}
+                </Ligacao>
+              </form>
+            </details>
+          </div>
+        </section>
       </Principal>
 
-      <footer className="border-t border-border py-10">
-        <div
-          className={cn(
-            CONTEINER,
-            'flex flex-col gap-6 md:flex-row md:items-start md:justify-between'
-          )}
-        >
-          <div className="flex min-w-0 items-center gap-2.5">
-            <MarcaLyra tamanho="32px" />
-            <p className="font-display text-base font-semibold lowercase tracking-tight text-foreground">
-              {config.footer.brandLine}
-            </p>
+      <footer className="jornada-rodape">
+        <div className="jornada-container jornada-rodape-conteudo">
+          <div className="jornada-rodape-marca">
+            <SimboloMarca />
+            <strong>{config.footer.brandLine}</strong>
           </div>
-          <p
-            className="min-w-0 text-pretty leading-relaxed text-muted-foreground md:max-w-xl"
-            style={textStyles.cardBody}
-          >
-            {config.footer.note}
-          </p>
+          <p>{config.footer.note}</p>
+          <nav aria-label="Documentos legais">
+            <Ligacao
+              href={ROTA_POLITICA_DE_PRIVACIDADE}
+              previewMode={previewMode}
+            >
+              Política de privacidade
+            </Ligacao>
+            <Ligacao href={ROTA_TERMOS_DE_USO} previewMode={previewMode}>
+              Termos de uso
+            </Ligacao>
+          </nav>
         </div>
-        <nav aria-label="Documentos legais" className={cn(CONTEINER, 'mt-6')}>
-          <ul className="flex flex-wrap gap-x-6 border-t border-border pt-4 text-sm text-muted-foreground">
-            <li>
-              <Link
-                href={ROTA_POLITICA_DE_PRIVACIDADE}
-                onClick={
-                  previewMode ? (evento) => evento.preventDefault() : undefined
-                }
-                className="inline-flex min-h-11 items-center underline-offset-4 hover:text-foreground hover:underline"
-              >
-                Política de privacidade
-              </Link>
-            </li>
-            <li>
-              <Link
-                href={ROTA_TERMOS_DE_USO}
-                onClick={
-                  previewMode ? (evento) => evento.preventDefault() : undefined
-                }
-                className="inline-flex min-h-11 items-center underline-offset-4 hover:text-foreground hover:underline"
-              >
-                Termos de uso
-              </Link>
-            </li>
-          </ul>
-        </nav>
+        <div className="jornada-container jornada-rodape-fim">
+          <ShieldCheck aria-hidden="true" /> Privacidade e respeito em cada
+          etapa <span>•</span> <Moon aria-hidden="true" /> Bem-estar e
+          autoconhecimento
+        </div>
       </footer>
     </div>
   );

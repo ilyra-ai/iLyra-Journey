@@ -1,5 +1,20 @@
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import type { NextConfig } from 'next';
 import { withSentryConfig } from '@sentry/nextjs/config';
+
+// Arte da landing pública (public/landing-jornada). A landing só pede as
+// imagens quando os quatro arquivos existem; sem eles mostra a versão só com
+// texto, sem requisições 404. Conferido ao iniciar `next dev` e no build.
+const ARTES_DA_LANDING = [
+  'hero-lotus.webp',
+  'vale-etereo.webp',
+  'onda-esquerda.webp',
+  'onda-direita.webp',
+];
+const landingComArte = ARTES_DA_LANDING.every((arquivo) =>
+  existsSync(path.join(process.cwd(), 'public', 'landing-jornada', arquivo))
+);
 
 // Loader opcional do Dyad: adiciona data-dyad-id/data-dyad-name aos
 // componentes JSX em desenvolvimento. Ele depende da API de loaders do
@@ -59,6 +74,7 @@ const semLogsEmArquivo = process.env.WEBNOVA_SEM_LOGS === '1';
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  env: { LYRA_LANDING_COM_ARTE: landingComArte ? '1' : '0' },
   ...(semLogsEmArquivo ? { experimental: { mcpServer: false } } : {}),
   async headers() {
     return [
