@@ -197,7 +197,7 @@ export function AdminContentManagement() {
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Gestão de Conteúdo Dinâmico</CardTitle>
+          <CardTitle as="h2">Gestão de Conteúdo Dinâmico</CardTitle>
           <CardDescription>
             Gerencie os hábitos sugeridos e os insights de IA que são exibidos
             aos usuários e personalize a experiência pública da landing e do
@@ -238,7 +238,7 @@ export function AdminContentManagement() {
               {loading.habits ? (
                 <Skeleton className="h-64 w-full" />
               ) : (
-                <Table>
+                <Table caption="Hábitos cadastrados">
                   <TableHeader>
                     <TableRow>
                       <TableHead>Nome</TableHead>
@@ -316,7 +316,7 @@ export function AdminContentManagement() {
               {loading.tips ? (
                 <Skeleton className="h-64 w-full" />
               ) : (
-                <Table>
+                <Table caption="Dicas cadastradas">
                   <TableHeader>
                     <TableRow>
                       <TableHead>Título</TableHead>

@@ -211,7 +211,11 @@ export function LoginExperience({
             </h1>
           </div>
         </div>
-      ) : null}
+      ) : (
+        // Introdução oculta no construtor de UI: a página continua com um
+        // título principal para leitores de tela (tarefa 62).
+        <h1 className="sr-only">Entrar na Lyra MetaCare</h1>
+      )}
 
       {/* Formulário: logo após o título no celular; coluna direita no desktop */}
       <section className="flex min-w-0 items-start justify-center border-y border-border bg-card px-6 py-8 sm:px-10 sm:py-10 lg:col-start-2 lg:row-span-4 lg:row-start-1 lg:items-center lg:border-y-0 lg:border-l lg:px-12 lg:py-14">

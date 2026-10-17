@@ -221,7 +221,10 @@ export function DataHealthContent() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Table scrollLabel="Análise de métricas (rolável)">
+            <Table
+              scrollLabel="Análise de métricas (rolável)"
+              caption="Preenchimento de cada métrica nos registros diários"
+            >
               <TableHeader>
                 <TableRow>
                   <TableHead>Métrica</TableHead>

@@ -53,6 +53,7 @@ import {
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Switch } from '@/components/ui/switch';
+import { decimalPtBr } from '@/lib/formato/numero';
 
 /**
  * Mínimo de marcadores medidos para a idade biológica: com menos, a
@@ -265,7 +266,7 @@ function BiologicalAgeCard({
         </div>
         <div className="flex items-end gap-1">
           <span className="font-display text-4xl font-semibold tracking-[-0.03em] text-foreground">
-            {result.biologicalAge.toFixed(0)}
+            {decimalPtBr(result.biologicalAge, 0)}
           </span>
           <span className="pb-1 text-base text-muted-foreground">anos</span>
         </div>
@@ -277,8 +278,8 @@ function BiologicalAgeCard({
         >
           <DeltaIcon aria-hidden="true" className="h-4 w-4" />
           {younger
-            ? `${Math.abs(result.ageDelta).toFixed(1)} ano(s) mais jovem`
-            : `${result.ageDelta.toFixed(1)} ano(s) acima`}{' '}
+            ? `${decimalPtBr(Math.abs(result.ageDelta), 1)} ano(s) mais jovem`
+            : `${decimalPtBr(result.ageDelta, 1)} ano(s) acima`}{' '}
           <span className="text-muted-foreground">
             (real: {result.chronologicalAge})
           </span>
@@ -300,33 +301,42 @@ function BiologicalAgeCard({
           <div className="flex items-center justify-between text-caption text-muted-foreground">
             <span>Ritmo de envelhecimento</span>
             <span className="font-display font-semibold text-foreground">
-              {result.paceOfAging.toFixed(2)}×
+              {decimalPtBr(result.paceOfAging, 2)}×
             </span>
           </div>
         </div>
 
         {result.drivers.length > 0 ? (
           <div className="space-y-2">
-            <p className="text-sm font-medium text-muted-foreground">
+            <p
+              id="idade-biologica-fatores"
+              className="text-sm font-medium text-muted-foreground"
+            >
               Principais fatores
             </p>
-            {result.drivers.slice(0, 3).map((driver) => (
-              <div
-                key={driver.key}
-                className="flex items-center justify-between gap-2 text-sm"
-              >
-                <span className="truncate text-foreground">{driver.label}</span>
-                <span
-                  className={cn(
-                    'shrink-0 font-display text-caption font-semibold',
-                    driver.impactYears < 0 ? 'text-success' : 'text-warning'
-                  )}
+            <ul aria-labelledby="idade-biologica-fatores" className="space-y-2">
+              {result.drivers.slice(0, 3).map((driver) => (
+                <li
+                  key={driver.key}
+                  className="flex items-center justify-between gap-2 text-sm"
                 >
-                  {driver.impactYears > 0 ? '+' : ''}
-                  {driver.impactYears.toFixed(1)}a
-                </span>
-              </div>
-            ))}
+                  <span className="truncate text-foreground">
+                    {driver.label}
+                  </span>
+                  <span
+                    className={cn(
+                      'shrink-0 font-display text-caption font-semibold',
+                      driver.impactYears < 0 ? 'text-success' : 'text-warning'
+                    )}
+                  >
+                    {driver.impactYears > 0 ? '+' : ''}
+                    {decimalPtBr(driver.impactYears, 1)}
+                    <span aria-hidden="true">a</span>
+                    <span className="sr-only"> anos</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         ) : null}
 

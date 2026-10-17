@@ -738,7 +738,13 @@ export function OnboardingForm() {
                     control={form.control}
                     name="goals"
                     render={() => (
-                      <FormItem className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      // Grupo nomeado (tarefa 62): as caixas são lidas como
+                      // "Seus objetivos, grupo" em vez de soltas na página.
+                      <FormItem
+                        role="group"
+                        aria-label="Seus objetivos"
+                        className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                      >
                         {METAS_DO_PERFIL.map((item) => {
                           const GoalIcon = item.icon;
                           return (
@@ -829,6 +835,7 @@ export function OnboardingForm() {
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
+                          aria-required="true"
                         />
                       </FormControl>
                       <div className="space-y-1.5">

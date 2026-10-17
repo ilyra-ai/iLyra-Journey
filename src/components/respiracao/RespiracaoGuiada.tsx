@@ -584,9 +584,11 @@ function Escolha({
           </Button>
         </div>
       </section>
-      <aside className="hidden lg:block">
+      {/* Prévia visual da técnica, não conteúdo complementar: sem <aside>
+          (tarefa 62), que criava uma região a mais sem nome. */}
+      <div className="hidden lg:block">
         <OrboEstatico tecnica={tecnica} />
-      </aside>
+      </div>
     </div>
   );
 }
@@ -929,10 +931,12 @@ function ResumoDeHoje({
                 {sessao.ciclos === 1 ? 'ciclo' : 'ciclos'}
               </span>
               <span className="tabular-nums text-muted-foreground">
-                {new Intl.DateTimeFormat('pt-BR', {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                }).format(new Date(sessao.registradaEm))}{' '}
+                <time dateTime={sessao.registradaEm}>
+                  {new Intl.DateTimeFormat('pt-BR', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }).format(new Date(sessao.registradaEm))}
+                </time>{' '}
                 · {sessao.minutos} min
               </span>
             </li>

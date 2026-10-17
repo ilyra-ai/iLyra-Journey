@@ -359,7 +359,8 @@ export function ChatAssistantContent() {
             />
           </span>
           <div className="min-w-0">
-            <h1
+            {/* h2: o h1 da página é o título do cabeçalho do app. */}
+            <h2
               id="titulo-do-chat"
               className="truncate font-display font-semibold tracking-tight text-foreground"
               style={{
@@ -367,7 +368,7 @@ export function ChatAssistantContent() {
               }}
             >
               {chatConfig.assistantTitle}
-            </h1>
+            </h2>
             <p className="truncate text-xs text-muted-foreground">
               {chatConfig.assistantStatusLabel} ·{' '}
               {chatConfig.assistantStatusNote}
@@ -461,7 +462,13 @@ export function ChatAssistantContent() {
             ) : null}
           </div>
         ) : (
-          <div className="flex flex-col gap-6 px-1" aria-live="polite">
+          <div
+            className="flex flex-col gap-6 px-1"
+            role="log"
+            aria-live="polite"
+            aria-relevant="additions"
+            aria-labelledby="titulo-do-chat"
+          >
             {messages.map((msg, index) => (
               <div
                 key={msg.id}

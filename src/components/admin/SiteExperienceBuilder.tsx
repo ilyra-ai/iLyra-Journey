@@ -81,6 +81,7 @@ import {
   lyraCustomazeEditableSurfaces,
 } from '@/lib/site-page-config/registry';
 import { builderIconOptions, toneOptions } from '@/lib/site-page-config/ui';
+import { decimalPtBr } from '@/lib/formato/numero';
 
 type EditableDraft = LandingPageConfig | LoginPageConfig | AppPageConfig;
 
@@ -248,7 +249,7 @@ function TypographySliderField({
             {description}
           </p>
         </div>
-        <Badge variant="secondary">{value.toFixed(2)}x</Badge>
+        <Badge variant="secondary">{decimalPtBr(value, 2)}x</Badge>
       </div>
       <div className="mt-4 flex flex-col gap-3">
         <Slider

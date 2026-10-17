@@ -20,6 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { decimalPtBr } from '@/lib/formato/numero';
 import { cn } from '@/lib/utils';
 
 // Tons de estado do Lyra Clean. O coral (cosmic) fica reservado a
@@ -115,17 +116,17 @@ const formatDecimal = (
 ) =>
   formatNumber(value, (input) => {
     const space = suffix ? ' ' : '';
-    return `${input.toFixed(digits)}${space}${suffix}`.trim();
+    return `${decimalPtBr(input, digits)}${space}${suffix}`.trim();
   });
 
 const formatPercent = (value: number | null | undefined, digits = 1) =>
-  formatNumber(value, (input) => `${input.toFixed(digits)}%`);
+  formatNumber(value, (input) => `${decimalPtBr(input, digits)}%`);
 
 const formatScore = (
   value: number | null | undefined,
   total: number,
   digits = 0
-) => formatNumber(value, (input) => `${input.toFixed(digits)}/${total}`);
+) => formatNumber(value, (input) => `${decimalPtBr(input, digits)}/${total}`);
 
 function MetricTile({ metric }: { metric: PillarMetric }) {
   return (
@@ -459,13 +460,15 @@ export function MetricGrid({ metrics }: MetricGridProps) {
       metrics: [
         {
           title: 'WHtR',
-          value: formatNumber(metrics.whtr_ratio, (input) => input.toFixed(2)),
+          value: formatNumber(metrics.whtr_ratio, (input) =>
+            decimalPtBr(input, 2)
+          ),
           description: `Adiposidade central: ${whtrStatus}.`,
         },
         {
           title: 'Proteína (g/kg)',
           value: formatNumber(metrics.protein_g_per_kg, (input) =>
-            input.toFixed(2)
+            decimalPtBr(input, 2)
           ),
           description: `Consumo proteico: ${proteinStatus}.`,
         },
@@ -482,7 +485,7 @@ export function MetricGrid({ metrics }: MetricGridProps) {
         {
           title: 'Na:K',
           value: formatNumber(metrics.sodium_potassium_ratio, (input) =>
-            input.toFixed(2)
+            decimalPtBr(input, 2)
           ),
           description: `Equilíbrio mineral: ${naKStatus}.`,
         },
@@ -513,14 +516,14 @@ export function MetricGrid({ metrics }: MetricGridProps) {
         {
           title: 'Pontuação cognitiva',
           value: formatNumber(metrics.cognitive_test_score, (input) =>
-            input.toFixed(2)
+            decimalPtBr(input, 2)
           ),
           description: `Performance atual: ${cognitiveStatus}.`,
         },
         {
           title: 'Estresse (HRV)',
           value: formatNumber(metrics.hrv_stress_index, (input) =>
-            input.toFixed(1)
+            decimalPtBr(input, 1)
           ),
           description: `Carga de estresse: ${hrvStressStatus}.`,
         },

@@ -52,16 +52,19 @@ export function AppShell({
       <Sidebar />
       <div className="flex min-w-0 flex-1 flex-col">
         <Header />
-        {puckDocumentKey ? (
-          <PuckClientRenderer
-            documentKey={puckDocumentKey}
-            className="w-full shrink-0"
-          />
-        ) : null}
         <main
           id="conteudo-principal"
           className={cn('min-w-0 flex-1', className)}
         >
+          {/* O bloco editável no Puck fica dentro do <main> (tarefa 62):
+              antes ficava entre o cabeçalho e o conteúdo, fora de qualquer
+              região, e o link "Pular para o conteúdo" passava por cima dele. */}
+          {puckDocumentKey ? (
+            <PuckClientRenderer
+              documentKey={puckDocumentKey}
+              className="w-full shrink-0"
+            />
+          ) : null}
           <div
             className={cn(
               'section-shell flex flex-col gap-6 py-6 md:py-8',

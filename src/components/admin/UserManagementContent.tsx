@@ -245,7 +245,7 @@ export function UserManagementContent() {
     <>
       <Card>
         <CardHeader>
-          <CardTitle>Gerenciamento de Usuários</CardTitle>
+          <CardTitle as="h2">Gerenciamento de Usuários</CardTitle>
           <CardDescription>
             Total de {totalUsers} usuários. Visualizando página {page + 1} de{' '}
             {totalPages}.
@@ -270,7 +270,10 @@ export function UserManagementContent() {
             />
           </div>
           <div className="min-w-0">
-            <Table scrollLabel="Tabela de usuários">
+            <Table
+              scrollLabel="Tabela de usuários"
+              caption="Usuários cadastrados; os cabeçalhos com botão ordenam a lista"
+            >
               <TableHeader>
                 <TableRow>
                   <TableHead aria-sort={ordenacaoDe('first_name')}>
@@ -371,9 +374,11 @@ export function UserManagementContent() {
                         </div>
                       </TableCell>
                       <TableCell className="text-right">
-                        {format(new Date(user.createdAt), 'dd/MM/yyyy', {
-                          locale: ptBR,
-                        })}
+                        <time dateTime={user.createdAt}>
+                          {format(new Date(user.createdAt), 'dd/MM/yyyy', {
+                            locale: ptBR,
+                          })}
+                        </time>
                       </TableCell>
                       <TableCell className="text-right">
                         <DropdownMenu>

@@ -579,7 +579,9 @@ function TabelaDaSemana({ semana }: { semana: SemanaDaPessoa }) {
       <div
         className="mt-4 overflow-x-auto rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
         role="region"
-        aria-labelledby="titulo-tabela-da-semana"
+        // Nome diferente da seção (tarefa 62): as duas regiões se chamavam
+        // "Dia a dia".
+        aria-label="Tabela do dia a dia (rolável)"
         tabIndex={0}
       >
         <table className="w-full min-w-[44rem] text-left text-sm">

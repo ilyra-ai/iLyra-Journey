@@ -1,5 +1,8 @@
 import { OnboardingForm } from '@/components/onboarding/onboarding-form';
 import { PuckClientRenderer } from '@/components/puck/PuckClientRenderer';
+import { METADADOS_FORA_DO_MENU } from '@/lib/metadados/pagina';
+
+export const metadata = METADADOS_FORA_DO_MENU.onboarding;
 
 export default function OnboardingPage() {
   // Coluna única: o bloco editável (Puck) acima e o formulário abaixo, os

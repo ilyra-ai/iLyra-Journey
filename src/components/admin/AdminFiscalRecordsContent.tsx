@@ -295,7 +295,10 @@ export function AdminFiscalRecordsContent() {
               Nenhuma fatura paga no período.
             </p>
           ) : (
-            <Table scrollLabel="Tabela de registros fiscais">
+            <Table
+              scrollLabel="Tabela de registros fiscais"
+              caption="Registros fiscais das assinaturas"
+            >
               <TableHeader>
                 <TableRow>
                   <TableHead>Pago em</TableHead>

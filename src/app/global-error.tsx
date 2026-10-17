@@ -28,6 +28,9 @@ export default function GlobalError({
   return (
     <html lang="pt-BR">
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
+        {/* Esta tela substitui o layout raiz e não herda o título da aba; o
+            React 19 move o <title> para o <head>. */}
+        <title>Erro inesperado | Lyra MetaCare</title>
         <main
           id="conteudo-principal"
           className="flex min-h-screen items-center justify-center px-4 py-10"

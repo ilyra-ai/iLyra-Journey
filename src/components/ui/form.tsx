@@ -163,13 +163,16 @@ const FormMessage = React.forwardRef<
     <p
       ref={ref}
       id={formMessageId}
+      // O erro de validação é anunciado assim que aparece (tarefa 62); antes
+      // só era lido ao voltar o foco para o campo.
+      role={error ? 'alert' : undefined}
       className={cn(
         'flex items-center gap-2 text-xs font-medium text-destructive animate-fade-in-up',
         className
       )}
       {...props}
     >
-      <CircleAlert className="h-3.5 w-3.5 shrink-0" />
+      <CircleAlert aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
       <span>{body}</span>
     </p>
   );

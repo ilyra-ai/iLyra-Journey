@@ -12,7 +12,8 @@ import {
 } from '@/lib/lgpd/documentos';
 
 export const metadata: Metadata = {
-  title: 'Política de privacidade · Lyra MetaCare',
+  // O modelo do layout raiz acrescenta "| Lyra MetaCare".
+  title: 'Política de privacidade',
   description:
     'Como a Lyra MetaCare trata dados pessoais e dados de saúde, com base na LGPD.',
 };

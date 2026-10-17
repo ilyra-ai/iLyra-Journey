@@ -91,24 +91,34 @@ export function MobileSidebar() {
           aria-label="Navegação móvel"
           className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto"
         >
-          {Object.entries(sections).map(([section, items]) => (
-            <section key={section} className="flex flex-col gap-0.5">
-              <p className="px-2.5 pb-1.5 text-xs font-medium text-muted-foreground">
+          {/* Mesma estrutura do menu lateral: lista nomeada por seção. */}
+          {Object.entries(sections).map(([section, items], indice) => (
+            <div key={section} className="flex flex-col">
+              <p
+                id={`menu-movel-secao-${indice}`}
+                className="px-2.5 pb-1.5 text-xs font-medium text-muted-foreground"
+              >
                 {section}
               </p>
-              {items.map((item) => (
-                <SidebarLink
-                  key={item.href}
-                  href={item.href}
-                  icon={item.icon}
-                  onClick={() => setOpen(false)}
-                  iconScale={iconScale}
-                  labelScale={navLabelScale}
-                >
-                  {item.label}
-                </SidebarLink>
-              ))}
-            </section>
+              <ul
+                aria-labelledby={`menu-movel-secao-${indice}`}
+                className="flex flex-col gap-0.5"
+              >
+                {items.map((item) => (
+                  <li key={item.href}>
+                    <SidebarLink
+                      href={item.href}
+                      icon={item.icon}
+                      onClick={() => setOpen(false)}
+                      iconScale={iconScale}
+                      labelScale={navLabelScale}
+                    >
+                      {item.label}
+                    </SidebarLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </nav>
       </SheetContent>

@@ -48,6 +48,9 @@ export function Sidebar({
 
   return (
     <aside
+      // Nome próprio (tarefa 62): páginas com outro <aside> tinham duas
+      // regiões complementares sem nome, indistinguíveis para o leitor.
+      aria-label="Menu lateral"
       className={
         previa
           ? 'flex h-[640px] shrink-0 flex-col overflow-hidden rounded-xl border border-sidebar-border bg-sidebar'
@@ -84,23 +87,34 @@ export function Sidebar({
           aria-label="Navegação principal"
           className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto"
         >
-          {Object.entries(sections).map(([section, items]) => (
-            <section key={section} className="flex flex-col gap-0.5">
-              <p className="px-2.5 pb-1.5 text-xs font-medium text-muted-foreground">
+          {/* Cada seção é uma lista nomeada pelo próprio rótulo (tarefa 62):
+              o leitor de tela anuncia "lista, Saúde, 4 itens". */}
+          {Object.entries(sections).map(([section, items], indice) => (
+            <div key={section} className="flex flex-col">
+              <p
+                id={`menu-lateral-secao-${indice}`}
+                className="px-2.5 pb-1.5 text-xs font-medium text-muted-foreground"
+              >
                 {section}
               </p>
-              {items.map((item) => (
-                <SidebarLink
-                  key={item.href}
-                  href={item.href}
-                  icon={item.icon}
-                  iconScale={iconScale}
-                  labelScale={navLabelScale}
-                >
-                  {item.label}
-                </SidebarLink>
-              ))}
-            </section>
+              <ul
+                aria-labelledby={`menu-lateral-secao-${indice}`}
+                className="flex flex-col gap-0.5"
+              >
+                {items.map((item) => (
+                  <li key={item.href}>
+                    <SidebarLink
+                      href={item.href}
+                      icon={item.icon}
+                      iconScale={iconScale}
+                      labelScale={navLabelScale}
+                    >
+                      {item.label}
+                    </SidebarLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </nav>
 

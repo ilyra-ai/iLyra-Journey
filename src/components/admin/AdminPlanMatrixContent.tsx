@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/table';
 import { Textarea } from '@/components/ui/textarea';
 import { PlanBadge } from '@/components/subscription/PlanBadge';
+import { moedaPtBr } from '@/lib/formato/numero';
 import {
   PlanFeatureAccess,
   PlanKey,
@@ -293,7 +294,7 @@ export function AdminPlanMatrixContent() {
                 <ShieldCheck className="h-3.5 w-3.5" aria-hidden="true" />
                 Administração premium de planos
               </Badge>
-              <CardTitle className="text-xl">
+              <CardTitle as="h2" className="text-xl">
                 Matriz real de capacidades
               </CardTitle>
               <CardDescription className="max-w-3xl">
@@ -331,9 +332,10 @@ export function AdminPlanMatrixContent() {
                     <p className="text-sm font-medium text-muted-foreground">
                       Preview comercial
                     </p>
-                    <h2 className="break-words font-display text-2xl font-semibold tracking-tight text-foreground">
+                    {/* h3: cada plano fica sob "Matriz real de capacidades". */}
+                    <h3 className="break-words font-display text-2xl font-semibold tracking-tight text-foreground">
                       {plan.name}
-                    </h2>
+                    </h3>
                     <p className="max-w-sm text-sm leading-6 text-foreground/80">
                       {plan.tagline}
                     </p>
@@ -361,13 +363,13 @@ export function AdminPlanMatrixContent() {
                   <div>
                     <p className="text-sm text-muted-foreground">Mensal</p>
                     <p className="font-display text-3xl font-semibold tracking-tight text-foreground">
-                      {plan.currencyCode} {plan.monthlyPrice.toFixed(2)}
+                      {moedaPtBr(plan.monthlyPrice, plan.currencyCode)}
                     </p>
                   </div>
                   <div className="text-right">
                     <p className="text-sm text-muted-foreground">Anual</p>
                     <p className="font-display text-xl font-semibold tracking-tight text-foreground">
-                      {plan.currencyCode} {plan.annualPrice.toFixed(2)}
+                      {moedaPtBr(plan.annualPrice, plan.currencyCode)}
                     </p>
                   </div>
                 </div>
@@ -550,7 +552,7 @@ export function AdminPlanMatrixContent() {
 
       <Card className="min-w-0 overflow-hidden">
         <CardHeader>
-          <CardTitle>Matriz editável de entitlements</CardTitle>
+          <CardTitle as="h2">Matriz editável de entitlements</CardTitle>
           <CardDescription>
             Cada linha abaixo representa uma capacidade real do produto e cada
             coluna reflete o comportamento liberado para `Free`, `Meta` e
@@ -558,7 +560,10 @@ export function AdminPlanMatrixContent() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Table scrollLabel="Matriz de entitlements por plano">
+          <Table
+            scrollLabel="Matriz de entitlements por plano"
+            caption="Recursos liberados em cada plano"
+          >
             <TableHeader>
               <TableRow>
                 <TableHead className="min-w-[320px]">Capacidade</TableHead>

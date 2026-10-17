@@ -267,7 +267,10 @@ export function MapaVedicoCard() {
               </p>
             ) : null}
 
-            <Table scrollLabel="Posição dos grahas no mapa natal (rolável)">
+            <Table
+              scrollLabel="Posição dos grahas no mapa natal (rolável)"
+              caption="Signo, casa e nakshatra de cada graha no mapa natal"
+            >
               <TableHeader>
                 <TableRow>
                   <TableHead>Graha</TableHead>

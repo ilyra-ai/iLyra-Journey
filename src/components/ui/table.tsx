@@ -8,10 +8,16 @@ type TableProps = React.HTMLAttributes<HTMLTableElement> & {
    * (WCAG 2.1.1).
    */
   scrollLabel?: string;
+  /**
+   * Legenda da tabela para leitores de tela (tarefa 62): vira um
+   * `<caption>` oculto, primeiro filho da tabela, como exige o HTML. Para uma
+   * legenda visível, use `TableCaption`.
+   */
+  caption?: string;
 };
 
 const Table = React.forwardRef<HTMLTableElement, TableProps>(
-  ({ className, scrollLabel, ...props }, ref) => (
+  ({ className, scrollLabel, caption, children, ...props }, ref) => (
     <div className="overflow-hidden rounded-xl border border-border bg-card">
       <div
         className="relative w-full overflow-auto focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
@@ -23,7 +29,10 @@ const Table = React.forwardRef<HTMLTableElement, TableProps>(
           ref={ref}
           className={cn('w-full caption-bottom text-sm', className)}
           {...props}
-        />
+        >
+          {caption ? <caption className="sr-only">{caption}</caption> : null}
+          {children}
+        </table>
       </div>
     </div>
   )

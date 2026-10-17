@@ -11,7 +11,8 @@ import {
 } from '@/lib/lgpd/documentos';
 
 export const metadata: Metadata = {
-  title: 'Termos de uso · Lyra MetaCare',
+  // O modelo do layout raiz acrescenta "| Lyra MetaCare".
+  title: 'Termos de uso',
   description: 'Regras de uso da plataforma Lyra MetaCare.',
 };
 

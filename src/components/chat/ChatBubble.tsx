@@ -131,8 +131,15 @@ export function ChatBubble({ message, isUser, onRegenerate }: ChatBubbleProps) {
     <div className="group flex items-start gap-3">
       <MarcaLyra tamanho="1.75rem" className="mt-0.5" />
       <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <p className="sr-only">A Lyra disse:</p>
-        <p className="whitespace-pre-wrap break-words text-[0.9375rem] leading-7 text-foreground">
+        {/* Leitor de tela (tarefa 62): a revelação aos poucos ficava dentro
+            da região ao vivo e era anunciada em pedaços. O texto animado fica
+            oculto para a tecnologia assistiva e a resposta inteira entra uma
+            vez só, ao terminar, como acréscimo do registro da conversa. */}
+        {isTyping ? null : <p className="sr-only">A Lyra disse: {message}</p>}
+        <p
+          aria-hidden="true"
+          className="whitespace-pre-wrap break-words text-[0.9375rem] leading-7 text-foreground"
+        >
           {displayedText}
           {isTyping ? (
             <span

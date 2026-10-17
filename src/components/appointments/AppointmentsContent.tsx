@@ -352,6 +352,7 @@ export function AppointmentsContent() {
                     {appointmentsConfig.heroBadge}
                   </Badge>
                   <CardTitle
+                    as="h2"
                     className="mt-4 tracking-[-0.02em]"
                     style={titleStyle}
                   >
