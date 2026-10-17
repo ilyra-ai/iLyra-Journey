@@ -16,7 +16,9 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      'flex h-11 w-full items-center justify-between rounded border border-input bg-card px-3.5 py-2 text-sm text-foreground transition-colors duration-150 data-placeholder:text-muted-foreground focus:border-primary focus:outline-hidden focus:ring-3 focus:ring-primary/15 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+      // `focus-visible` (antes `focus`, que marcava também no clique) e erro
+      // com `aria-invalid` (tarefa 61).
+      'flex h-11 w-full items-center justify-between rounded border border-input bg-card px-3.5 py-2 text-sm text-foreground transition-colors duration-(--duracao-rapida) data-placeholder:text-muted-foreground hover:border-foreground/40 focus-visible:border-primary focus-visible:outline-hidden focus-visible:ring-3 focus-visible:ring-primary/15 data-[state=open]:border-primary disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive [&>span]:line-clamp-1',
       className
     )}
     {...props}

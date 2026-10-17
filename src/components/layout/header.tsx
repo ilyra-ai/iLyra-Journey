@@ -299,7 +299,9 @@ export function Header() {
       </header>
 
       <CommandDialog open={commandOpen} onOpenChange={setCommandOpen}>
+        {/* Nome acessível próprio (tarefa 61): antes só o placeholder. */}
         <CommandInput
+          aria-label="Buscar páginas do app"
           placeholder={`${appConfig.header.commandPlaceholder}...`}
         />
         <CommandList>

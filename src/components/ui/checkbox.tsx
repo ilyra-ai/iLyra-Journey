@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { Check } from 'lucide-react';
+import { Check, Minus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const Checkbox = React.forwardRef<
@@ -12,13 +12,24 @@ const Checkbox = React.forwardRef<
   <CheckboxPrimitive.Root
     ref={ref}
     className={cn(
-      'peer flex h-5 w-5 shrink-0 items-center justify-center rounded-xs border border-control bg-card transition-colors duration-150 focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
+      // Caixa de 20 px com alvo de 36 px (pseudo-elemento; WCAG 2.5.8 pede
+      // 24 px), indeterminado visível e erro marcado (tarefa 61).
+      "peer relative flex h-5 w-5 shrink-0 items-center justify-center rounded-xs border border-control bg-card transition-colors duration-(--duracao-rapida) after:absolute after:-inset-2 after:content-[''] focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=indeterminate]:border-primary data-[state=indeterminate]:bg-primary data-[state=indeterminate]:text-primary-foreground",
       className
     )}
     {...props}
   >
-    <CheckboxPrimitive.Indicator className="text-current">
-      <Check className="h-3.5 w-3.5" strokeWidth={2.4} />
+    <CheckboxPrimitive.Indicator className="group text-current">
+      <Check
+        aria-hidden="true"
+        className="size-3.5 group-data-[state=indeterminate]:hidden"
+        strokeWidth={2.4}
+      />
+      <Minus
+        aria-hidden="true"
+        className="hidden size-3.5 group-data-[state=indeterminate]:block"
+        strokeWidth={2.4}
+      />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 ));

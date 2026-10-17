@@ -70,7 +70,8 @@ export function ChatBubble({ message, isUser, onRegenerate }: ChatBubbleProps) {
   };
 
   const actionClassName =
-    'inline-flex min-h-8 items-center gap-1.5 rounded-full px-2.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring';
+    // 40 px de altura no toque (antes 32 px) e foco no padrão dos controles.
+    'inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring md:min-h-8 md:px-2.5';
 
   const acoes = !isTyping ? (
     <div className="flex items-center gap-0.5 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
@@ -87,7 +88,13 @@ export function ChatBubble({ message, isUser, onRegenerate }: ChatBubbleProps) {
         ) : (
           <>
             <Copy className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>Copiar</span>
+            <span>
+              Copiar
+              {/* Nome único por mensagem para o leitor de tela. */}
+              <span className="sr-only">
+                {isUser ? ' a sua mensagem' : ' a resposta da Lyra'}
+              </span>
+            </span>
           </>
         )}
       </button>
@@ -98,7 +105,9 @@ export function ChatBubble({ message, isUser, onRegenerate }: ChatBubbleProps) {
           className={actionClassName}
         >
           <RotateCw className="h-3.5 w-3.5" aria-hidden="true" />
-          <span>Refazer</span>
+          <span>
+            Refazer<span className="sr-only"> a resposta da Lyra</span>
+          </span>
         </button>
       ) : null}
     </div>

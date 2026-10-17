@@ -29,6 +29,8 @@ import {
   Search,
   User,
   MoreHorizontal,
+  ArrowDown,
+  ArrowUp,
   ArrowUpDown,
   Trash2,
   CheckCircle,
@@ -57,6 +59,22 @@ import { PlanBadge } from '@/components/subscription/PlanBadge';
 import { AdminUserListItem, AdminUserListResponse } from '@/types/subscription';
 
 type SortColumn = 'created_at' | 'first_name' | 'email';
+type EstadoDaOrdenacao = 'ascending' | 'descending' | 'none';
+
+function IconeDaOrdenacao({ estado }: { estado: EstadoDaOrdenacao }) {
+  const Icone =
+    estado === 'ascending'
+      ? ArrowUp
+      : estado === 'descending'
+        ? ArrowDown
+        : ArrowUpDown;
+  return (
+    <Icone
+      aria-hidden="true"
+      className={estado === 'none' ? 'text-muted-foreground' : 'text-primary'}
+    />
+  );
+}
 
 const PAGE_SIZE = 10;
 
@@ -161,6 +179,15 @@ export function UserManagementContent() {
     }));
   };
 
+  // Estado da ordenação para o leitor de tela (`aria-sort`) e para o ícone
+  // (tarefa 61): antes o mesmo ícone neutro aparecia em qualquer estado.
+  const ordenacaoDe = (column: SortColumn): EstadoDaOrdenacao =>
+    sort.column !== column
+      ? 'none'
+      : sort.ascending
+        ? 'ascending'
+        : 'descending';
+
   const handleToggleOnboarding = async (user: AdminUserListItem) => {
     const newStatus = !user.onboardingCompleted;
     const { error } = await db
@@ -246,30 +273,27 @@ export function UserManagementContent() {
             <Table scrollLabel="Tabela de usuários">
               <TableHeader>
                 <TableRow>
-                  <TableHead>
+                  <TableHead aria-sort={ordenacaoDe('first_name')}>
                     <Button
                       variant="ghost"
                       onClick={() => handleSort('first_name')}
                     >
-                      Usuário{' '}
-                      <ArrowUpDown
-                        className="ml-2 h-4 w-4"
-                        aria-hidden="true"
-                      />
+                      Usuário
+                      <IconeDaOrdenacao estado={ordenacaoDe('first_name')} />
                     </Button>
                   </TableHead>
                   <TableHead>Plano</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead className="text-right">
+                  <TableHead
+                    className="text-right"
+                    aria-sort={ordenacaoDe('created_at')}
+                  >
                     <Button
                       variant="ghost"
                       onClick={() => handleSort('created_at')}
                     >
-                      Data de Cadastro{' '}
-                      <ArrowUpDown
-                        className="ml-2 h-4 w-4"
-                        aria-hidden="true"
-                      />
+                      Data de cadastro
+                      <IconeDaOrdenacao estado={ordenacaoDe('created_at')} />
                     </Button>
                   </TableHead>
                   <TableHead className="text-right">Ações</TableHead>

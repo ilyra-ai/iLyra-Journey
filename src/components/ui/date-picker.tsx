@@ -14,12 +14,18 @@ import {
 } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 
-interface DatePickerProps {
+/**
+ * Os atributos de acessibilidade e de preenchimento (`aria-*`,
+ * `autoComplete`, `name`, `onBlur`) chegam ao campo de texto (tarefa 61):
+ * antes eram descartados, e dentro do `FormControl` o rótulo e a mensagem de
+ * erro não ficavam ligados ao campo.
+ */
+interface DatePickerProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'value' | 'onChange' | 'defaultValue' | 'type'
+> {
   value?: Date;
   onChange: (date: Date | undefined) => void;
-  placeholder?: string;
-  id?: string;
-  disabled?: boolean;
 }
 
 const normalizeDateInput = (value: string) => {
@@ -52,6 +58,8 @@ export function DatePicker({
   placeholder = 'DD/MM/AAAA',
   id,
   disabled,
+  className,
+  ...rest
 }: DatePickerProps) {
   const [inputValue, setInputValue] = React.useState(
     value ? format(value, 'dd/MM/yyyy') : ''
@@ -91,13 +99,15 @@ export function DatePicker({
     <Popover open={open} onOpenChange={setOpen}>
       <div className="relative flex items-center">
         <Input
+          inputMode="numeric"
+          {...rest}
           id={id}
           value={inputValue}
           onChange={handleInputChange}
           placeholder={placeholder}
           maxLength={10}
           disabled={disabled}
-          className="pr-14"
+          className={cn('pr-14', className)}
         />
         <PopoverTrigger asChild>
           <Button

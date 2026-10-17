@@ -37,7 +37,9 @@ const Slider = React.forwardRef<
       <SliderPrimitive.Thumb
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledby}
-        className="block h-5 w-5 rounded-full border-2 border-primary bg-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50"
+        // Alvo de toque de 40 px (pseudo-elemento) com o botão de 20 px, e
+        // fundo do tema em vez de branco fixo (tarefa 61).
+        className="relative block h-5 w-5 rounded-full border-2 border-primary bg-card transition-colors after:absolute after:-inset-2.5 after:content-[''] hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50"
       />
     </SliderPrimitive.Root>
   )

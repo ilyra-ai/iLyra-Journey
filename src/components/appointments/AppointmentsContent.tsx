@@ -513,7 +513,7 @@ export function AppointmentsContent() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              aria-label="Abrir ações da consulta"
+                              aria-label={`Abrir ações da consulta de ${format(parseISO(appointment.appointment_time), "dd/MM 'às' HH:mm")}`}
                             >
                               <MoreVertical />
                             </Button>
@@ -640,7 +640,7 @@ export function AppointmentsContent() {
                             <Button
                               variant="ghost"
                               size="icon"
-                              aria-label="Abrir ações do profissional"
+                              aria-label={`Abrir ações de ${professional.name}`}
                             >
                               <MoreVertical />
                             </Button>

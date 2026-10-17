@@ -100,12 +100,17 @@ export function AvatarUploader({
         disabled={uploading}
       />
 
-      <div
-        className="relative group cursor-pointer"
+      {/* Botão de verdade (tarefa 61): antes uma `div` clicável, fora do
+          alcance do teclado. A foto é decorativa; o nome do botão explica. */}
+      <button
+        type="button"
+        className="group relative cursor-pointer rounded-full focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-progress"
         onClick={() => fileInputRef.current?.click()}
+        disabled={uploading}
+        aria-label={`Trocar a foto de ${firstName || 'perfil'}`}
       >
         <Avatar className="size-28 border border-border sm:size-32">
-          <AvatarImage src={currentAvatarUrl || undefined} alt={firstName} />
+          <AvatarImage src={currentAvatarUrl || undefined} alt="" />
           <AvatarFallback className="bg-sidebar-accent font-display text-5xl font-semibold text-primary">
             {uploading ? (
               <Loader2 className="h-8 w-8 animate-spin" aria-hidden="true" />
@@ -118,17 +123,18 @@ export function AvatarUploader({
         <div
           className={cn(
             'absolute inset-0 flex items-center justify-center rounded-full bg-overlay/60 opacity-0 transition-opacity duration-200',
-            !uploading && 'group-hover:opacity-100'
+            !uploading &&
+              'group-hover:opacity-100 group-focus-visible:opacity-100'
           )}
           aria-hidden="true"
         >
           {uploading ? (
-            <Loader2 className="h-6 w-6 text-white animate-spin" />
+            <Loader2 className="size-6 animate-spin text-white" />
           ) : (
-            <Camera className="h-6 w-6 text-white" />
+            <Camera className="size-6 text-white" />
           )}
         </div>
-      </div>
+      </button>
 
       <Button
         variant="secondary"

@@ -510,7 +510,11 @@ export function ProfileForm() {
                     <FormItem>
                       <FormLabel>Nome</FormLabel>
                       <FormControl>
-                        <Input placeholder="Seu nome" {...field} />
+                        <Input
+                          placeholder="Seu nome"
+                          autoComplete="given-name"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -523,7 +527,11 @@ export function ProfileForm() {
                     <FormItem>
                       <FormLabel>Sobrenome</FormLabel>
                       <FormControl>
-                        <Input placeholder="Seu sobrenome" {...field} />
+                        <Input
+                          placeholder="Seu sobrenome"
+                          autoComplete="family-name"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -542,11 +550,15 @@ export function ProfileForm() {
                         Data de Nascimento
                       </FormLabel>
                       <FormControl>
+                        {/* Sem `id` próprio: o FormControl injeta o id do
+                            rótulo e o `aria-describedby` (tarefa 61). */}
                         <DatePicker
                           value={field.value || undefined}
                           onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          name={field.name}
                           placeholder="DD/MM/AAAA"
-                          id={field.name}
+                          autoComplete="bday"
                         />
                       </FormControl>
                       <FormMessage />

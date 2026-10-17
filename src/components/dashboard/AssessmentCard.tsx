@@ -24,8 +24,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 
 type AssessmentType = 'mood' | 'who5' | 'nps';
@@ -167,57 +167,52 @@ export function AssessmentCard() {
 
   return (
     <Card className="min-w-0 overflow-hidden">
-      <CardHeader className="border-b border-border pb-4">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="min-w-0">
-            <CardTitle className="flex items-center gap-2">
-              <Sparkles aria-hidden="true" className="size-5 text-cosmic" />{' '}
-              Avaliação Integrativa
-            </CardTitle>
-            <CardDescription className="mt-1">
-              Refinamento diário de bem-estar quântico
-            </CardDescription>
+      {/* Abas de verdade (tarefa 61): antes três botões em que só a cor
+          indicava a aba ativa, sem estado para o leitor de tela. */}
+      <Tabs
+        value={activeTab}
+        onValueChange={(valor) => setActiveTab(valor as AssessmentType)}
+        className="flex flex-col"
+      >
+        <CardHeader className="border-b border-border pb-4">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="min-w-0">
+              <CardTitle className="flex items-center gap-2">
+                <Sparkles aria-hidden="true" className="size-5 text-cosmic" />{' '}
+                Avaliação Integrativa
+              </CardTitle>
+              <CardDescription className="mt-1">
+                Refinamento diário de bem-estar quântico
+              </CardDescription>
+            </div>
+            <TabsList aria-label="Avaliações do dia" className="flex-wrap">
+              <TabsTrigger value="mood" disabled={completed.mood}>
+                <Heart aria-hidden="true" className="mr-1.5 size-3.5" /> Humor
+              </TabsTrigger>
+              <TabsTrigger value="who5" disabled={completed.who5}>
+                <Brain aria-hidden="true" className="mr-1.5 size-3.5" /> WHO-5
+              </TabsTrigger>
+              <TabsTrigger value="nps" disabled={completed.nps}>
+                <Star aria-hidden="true" className="mr-1.5 size-3.5" /> NPS
+              </TabsTrigger>
+            </TabsList>
           </div>
-          <div className="flex flex-wrap gap-1 rounded border border-border bg-background p-1">
-            <Button
-              variant={activeTab === 'mood' ? 'secondary' : 'ghost'}
-              size="sm"
-              className="h-7 text-xs"
-              onClick={() => setActiveTab('mood')}
-              disabled={completed.mood}
-            >
-              <Heart className="mr-1.5 size-3" /> Humor
-            </Button>
-            <Button
-              variant={activeTab === 'who5' ? 'secondary' : 'ghost'}
-              size="sm"
-              className="h-7 text-xs"
-              onClick={() => setActiveTab('who5')}
-              disabled={completed.who5}
-            >
-              <Brain className="mr-1.5 size-3" /> WHO-5
-            </Button>
-            <Button
-              variant={activeTab === 'nps' ? 'secondary' : 'ghost'}
-              size="sm"
-              className="h-7 text-xs"
-              onClick={() => setActiveTab('nps')}
-              disabled={completed.nps}
-            >
-              <Star className="mr-1.5 size-3" /> NPS
-            </Button>
-          </div>
-        </div>
-      </CardHeader>
+        </CardHeader>
 
-      <CardContent className="pt-6">
-        {/* MOOD TAB */}
-        {activeTab === 'mood' && (
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <h3 className="mb-4 text-sm font-semibold text-foreground">
+        <CardContent className="pt-6">
+          {/* Humor */}
+          <TabsContent
+            value="mood"
+            className="mt-0 animate-in fade-in slide-in-from-bottom-2 duration-(--duracao-lenta)"
+          >
+            <h4
+              id="avaliacao-humor"
+              className="mb-4 text-sm font-semibold text-foreground"
+            >
               Como está a sua energia e o seu humor hoje?
-            </h3>
+            </h4>
             <RadioGroup
+              aria-labelledby="avaliacao-humor"
               value={moodValue}
               onValueChange={setMoodValue}
               className="grid grid-cols-5 gap-2 sm:gap-3"
@@ -249,15 +244,16 @@ export function AssessmentCard() {
                 </div>
               ))}
             </RadioGroup>
-          </div>
-        )}
+          </TabsContent>
 
-        {/* WHO-5 TAB */}
-        {activeTab === 'who5' && (
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 flex flex-col gap-5">
-            <div className="text-sm text-muted-foreground">
+          {/* WHO-5 */}
+          <TabsContent
+            value="who5"
+            className="mt-0 flex flex-col gap-5 animate-in fade-in slide-in-from-bottom-2 duration-(--duracao-lenta)"
+          >
+            <p className="text-sm text-muted-foreground">
               Nas últimas 2 semanas, com que frequência você...
-            </div>
+            </p>
             {[
               { id: 1, text: 'Me senti alegre e de bom humor?' },
               { id: 2, text: 'Me senti calmo e relaxado?' },
@@ -269,8 +265,15 @@ export function AssessmentCard() {
               },
             ].map((q) => (
               <div key={q.id} className="flex flex-col gap-2">
-                <Label className="text-sm font-medium">{q.text}</Label>
+                {/* A pergunta nomeia o grupo (antes um rótulo solto). */}
+                <p
+                  id={`who5-pergunta-${q.id}`}
+                  className="text-sm font-medium text-foreground"
+                >
+                  {q.text}
+                </p>
                 <RadioGroup
+                  aria-labelledby={`who5-pergunta-${q.id}`}
                   value={who5Answers[q.id]}
                   onValueChange={(val) =>
                     setWho5Answers((prev) => ({ ...prev, [q.id]: val }))
@@ -302,37 +305,46 @@ export function AssessmentCard() {
                 </RadioGroup>
               </div>
             ))}
-          </div>
-        )}
+          </TabsContent>
 
-        {/* NPS TAB */}
-        {activeTab === 'nps' && (
-          <div className="animate-in fade-in slide-in-from-bottom-2 duration-300 flex flex-col gap-5">
+          {/* NPS */}
+          <TabsContent
+            value="nps"
+            className="mt-0 flex flex-col gap-5 animate-in fade-in slide-in-from-bottom-2 duration-(--duracao-lenta)"
+          >
             <div className="flex flex-col gap-2">
-              <Label className="text-sm font-semibold">
+              <p
+                id="nps-pergunta"
+                className="text-sm font-semibold text-foreground"
+              >
                 Qual a probabilidade de você recomendar a nossa jornada
                 Quântica-Védica a um amigo?
-              </Label>
-              {/* 6 colunas no celular (2 linhas) e 11 a partir de sm: as 11
-                  notas não cabem em uma linha em 390px. */}
-              <div className="mt-2 grid w-full grid-cols-6 gap-1.5 sm:grid-cols-11">
+              </p>
+              {/* Grupo de rádio (tarefa 61): uma nota só, setas do teclado
+                  entre as notas; antes 11 botões de alternância soltos.
+                  6 colunas no celular (2 linhas) e 11 a partir de sm. */}
+              <RadioGroup
+                aria-labelledby="nps-pergunta"
+                value={npsScore === null ? '' : String(npsScore)}
+                onValueChange={(valor) => setNpsScore(Number(valor))}
+                className="mt-2 grid w-full grid-cols-6 gap-1.5 sm:grid-cols-11"
+              >
                 {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                  <button
-                    key={num}
-                    type="button"
-                    aria-pressed={npsScore === num}
-                    onClick={() => setNpsScore(num)}
-                    className={cn(
-                      'flex h-9 w-full items-center justify-center rounded border font-display text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring',
-                      npsScore === num
-                        ? 'border-primary bg-primary text-primary-foreground'
-                        : 'border-border bg-background text-foreground hover:border-primary hover:bg-sidebar-accent'
-                    )}
-                  >
-                    {num}
-                  </button>
+                  <div key={num}>
+                    <RadioGroupItem
+                      value={String(num)}
+                      id={`nps-${num}`}
+                      className="peer sr-only"
+                    />
+                    <Label
+                      htmlFor={`nps-${num}`}
+                      className="flex h-11 w-full cursor-pointer items-center justify-center rounded border border-border bg-background font-display text-sm font-medium text-foreground transition-colors hover:border-primary hover:bg-sidebar-accent peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-data-[state=checked]:border-primary peer-data-[state=checked]:bg-primary peer-data-[state=checked]:text-primary-foreground"
+                    >
+                      {num}
+                    </Label>
+                  </div>
                 ))}
-              </div>
+              </RadioGroup>
               <div className="mt-1 flex flex-wrap justify-between gap-2 px-1">
                 <span className="text-xs font-medium text-muted-foreground">
                   0 - Nada provável
@@ -355,27 +367,27 @@ export function AssessmentCard() {
                 onChange={(e) => setNpsNotes(e.target.value)}
               />
             </div>
-          </div>
-        )}
-      </CardContent>
+          </TabsContent>
+        </CardContent>
 
-      <CardFooter className="flex justify-end border-t border-border pt-4">
-        {activeTab === 'mood' && (
-          <Button onClick={handleMoodSubmit} disabled={isSubmitting}>
-            {isSubmitting ? 'Registrando...' : 'Registrar Vibração'}
-          </Button>
-        )}
-        {activeTab === 'who5' && (
-          <Button onClick={handleWho5Submit} disabled={isSubmitting}>
-            {isSubmitting ? 'Calculando...' : 'Calcular WHO-5'}
-          </Button>
-        )}
-        {activeTab === 'nps' && (
-          <Button onClick={handleNpsSubmit} disabled={isSubmitting}>
-            {isSubmitting ? 'Enviando...' : 'Enviar Avaliação Final'}
-          </Button>
-        )}
-      </CardFooter>
+        <CardFooter className="flex justify-end border-t border-border pt-4">
+          {activeTab === 'mood' && (
+            <Button onClick={handleMoodSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Registrando...' : 'Registrar Vibração'}
+            </Button>
+          )}
+          {activeTab === 'who5' && (
+            <Button onClick={handleWho5Submit} disabled={isSubmitting}>
+              {isSubmitting ? 'Calculando...' : 'Calcular WHO-5'}
+            </Button>
+          )}
+          {activeTab === 'nps' && (
+            <Button onClick={handleNpsSubmit} disabled={isSubmitting}>
+              {isSubmitting ? 'Enviando...' : 'Enviar Avaliação Final'}
+            </Button>
+          )}
+        </CardFooter>
+      </Tabs>
     </Card>
   );
 }

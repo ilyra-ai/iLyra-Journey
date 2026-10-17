@@ -424,11 +424,10 @@ export function AIKnowledgeManager() {
                             void handleToggle(doc, checked)
                           }
                           disabled={togglingId === doc.id}
-                          aria-label={
-                            doc.is_active
-                              ? 'Desativar documento'
-                              : 'Ativar documento'
-                          }
+                          // Nome fixo com o documento; o estado vem do próprio
+                          // switch (antes o nome mudava com o estado, e todos
+                          // os switches tinham o mesmo nome) (tarefa 61).
+                          aria-label={`Documento ativo: ${doc.title}`}
                         />
                       </div>
                       <Button
@@ -437,7 +436,7 @@ export function AIKnowledgeManager() {
                         size="icon"
                         className="text-destructive hover:bg-destructive-light hover:text-destructive"
                         onClick={() => setDocumentToDelete(doc)}
-                        aria-label="Remover documento"
+                        aria-label={`Remover o documento ${doc.title}`}
                       >
                         <Trash2 className="h-4 w-4" aria-hidden="true" />
                       </Button>
