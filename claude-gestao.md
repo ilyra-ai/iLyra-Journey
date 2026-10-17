@@ -22,15 +22,15 @@
 | Indicador          | Valor                           |
 | ------------------ | ------------------------------- |
 | Progresso          | `████████████████████` **100%** |
-| Tarefas totais     | 65                              |
-| 🟢 Finalizadas     | 65                              |
+| Tarefas totais     | 66                              |
+| 🟢 Finalizadas     | 66                              |
 | 🔵 Em andamento    | 0                               |
 | 🔴 Bloqueadas      | 0                               |
 | ⚪ A iniciar       | 0                               |
 | Branch de trabalho | `main` (única permitida)        |
 | Última atualização | 2026-10-17                      |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (65 ÷ 65 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (66 ÷ 66 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -1076,6 +1076,21 @@ Nenhuma tarefa a iniciar.
   - Integração: primeiro plano automático sem cota; login antes do onboarding não gera; login depois do onboarding deixa o plano salvo.
   - Navegador (build de produção, login real pela tela): o plano já estava salvo no MySQL antes de abrir `/plan`, origem automática, cota intacta, tela com o plano pronto ("Regenerar plano"), axe sem violações e zero erros de console, em 1440 px claro e 390 px escuro.
   - `test` 412/412, `test:integration` 156/156, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+
+### 66 · Landing "Jornada de consciência" aplicada e verificada
+
+- **Status:** 🟢 finalizada · **Commit:** `94a07c0` · **Push:** `7c3980d..94a07c0 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** aplicar a nova landing feita por outro modelo de IA (que não conseguiu publicá-la), enviada em anexo (`LandingPage.tsx` e `LandingJornada.css`), e verificar rotas e o funcionamento geral.
+- **Achado principal:** as quatro imagens que o CSS usa (`public/landing-jornada/hero-lotus.webp`, `vale-etereo.webp`, `onda-esquerda.webp`, `onda-direita.webp`) não vieram no anexo, não existem no repositório e não estavam acessíveis no computador do usuário (pedido de acesso à pasta sem resposta). Aplicada como estava, a página fazia 4 requisições 404 e deixava o topo e o manifesto com metade vazia.
+- **Implementado:**
+  - Os dois arquivos aplicados (com Prettier), mantendo o contrato com o Construtor (`overrideConfig`/`previewMode`), os planos do catálogo, o login real, FAQ, LGPD e blocos do Puck.
+  - `next.config.ts` confere se as quatro imagens existem e expõe `LYRA_LANDING_COM_ARTE`; só com elas a landing recebe a classe `jornada-com-arte` e pede as imagens. Sem elas, topo e manifesto ocupam a largura toda, só com texto, sem 404.
+  - Prévia do Construtor: quebras de layout por `@container jornada` e medidas em `cqi` (eram `@media` e `vw`, e a landing de desktop transbordava a coluna da prévia).
+  - Contraste do botão do plano em destaque no escuro (texto branco sobre turquesa claro, 2,1:1) corrigido para mais de 7:1.
+  - Lista de recursos dos planos sem vãos (`align-content: start`).
+  - Removido o segundo "Pular para o conteúdo" (o layout raiz já tem um) e restaurado o `#conteudo-principal` só fora da prévia (evita id duplicado no admin).
+  - README: onde colocar a arte.
+- **Evidências:** `check:format`, `check:lint`, `check:types`, `test` 502/502, `test:integration` 164/164 e `build` com exit 0. Navegador (build de produção; 1440 claro e escuro, 768, 390 claro e escuro, 320): 70 verificações OK e 0 falhas: um `h1` e um `main`, sem rolagem horizontal, tema aplicado, 3 planos com preços do catálogo, âncoras `#topo`, `#fluxo`, `#recursos`, `#planos`, `#faq` e `#sobre` com destino, rotas `/login`, `/privacidade` e `/termos` em 200, pergunta frequente, mostrar senha, menu móvel abrindo e fechando, cabeçalho fixo na rolagem, login real pela landing abrindo o painel, axe (WCAG 2.2 AA e boas práticas) sem violações, 0 erros de console e 0 respostas de erro. Prévia no Construtor: presente, responsiva, um só `main`, clique não navega, console limpo. Mecanismo da arte testado com quatro imagens de teste temporárias (classe aplicada, as 4 com 200, 0 erros) e as imagens de teste removidas em seguida.
 
 ### 65 · Painel TUI-WEBNOVA como orquestrador do app no WSL2
 
