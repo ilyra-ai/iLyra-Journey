@@ -5,6 +5,7 @@ import {
   type FormEvent,
   type MouseEvent,
   type ReactNode,
+  Fragment,
   useEffect,
   useMemo,
   useState,
@@ -377,11 +378,19 @@ export function LandingPage({
                   const Icone = getBuilderIcon(item.icon);
                   return (
                     <li key={item.id}>
+                      {/* Linha do tempo: número grande, traço até o
+                          próximo passo e o ícone escolhido no Construtor. */}
                       <div className="jornada-passo-topo">
-                        <span className="jornada-icone">
+                        <span className="jornada-passo-numero">
+                          {item.step}
+                        </span>
+                        <span
+                          className="jornada-passo-traco"
+                          aria-hidden="true"
+                        />
+                        <span className="jornada-icone jornada-icone-pequeno">
                           <Icone aria-hidden="true" />
                         </span>
-                        <span>{item.step}</span>
                       </div>
                       <h3>{item.title}</h3>
                       <p>{item.description}</p>
@@ -636,6 +645,81 @@ export function LandingPage({
   );
   const Principal = previewMode ? 'div' : 'main';
 
+  const secaoEntrada = (
+    <section
+      className="jornada-secao jornada-login-direto"
+      aria-labelledby="titulo-login-direto"
+    >
+      <div className="jornada-container jornada-login-resumo">
+        <div>
+          <p className="jornada-etiqueta">
+            <LockKeyhole aria-hidden="true" /> {config.hero.quickAuthBadge}
+          </p>
+          <h2 id="titulo-login-direto">{config.hero.quickAuthTitle}</h2>
+          <p>{config.hero.quickAuthDescription}</p>
+        </div>
+        <details className="jornada-login-expansivel">
+          <summary>
+            {config.hero.quickAuthSubmitLabel} com e-mail e senha{' '}
+            <ChevronDown aria-hidden="true" />
+          </summary>
+          <form onSubmit={entrar}>
+            <label htmlFor="jornada-email">E-mail</label>
+            <input
+              id="jornada-email"
+              type="email"
+              autoComplete="email"
+              inputMode="email"
+              required
+              value={email}
+              disabled={previewMode || autenticando}
+              onChange={(evento) => setEmail(evento.target.value)}
+            />
+            <label htmlFor="jornada-senha">Senha</label>
+            <div className="jornada-campo-senha">
+              <input
+                id="jornada-senha"
+                type={verSenha ? 'text' : 'password'}
+                autoComplete="current-password"
+                required
+                value={senha}
+                disabled={previewMode || autenticando}
+                onChange={(evento) => setSenha(evento.target.value)}
+              />
+              <button
+                type="button"
+                aria-label={verSenha ? 'Ocultar senha' : 'Mostrar senha'}
+                aria-pressed={verSenha}
+                onClick={() => setVerSenha((atual) => !atual)}
+              >
+                {verSenha ? (
+                  <EyeOff aria-hidden="true" />
+                ) : (
+                  <Eye aria-hidden="true" />
+                )}
+              </button>
+            </div>
+            <button
+              type="submit"
+              className="jornada-botao jornada-botao-principal"
+              disabled={previewMode || autenticando}
+            >
+              {autenticando ? 'Entrando…' : config.hero.quickAuthSubmitLabel}{' '}
+              <ArrowRight aria-hidden="true" />
+            </button>
+            <Ligacao
+              href={config.hero.primaryCtaHref}
+              previewMode={previewMode}
+              className="jornada-link-criar"
+            >
+              {config.hero.quickAuthSecondaryLabel}
+            </Ligacao>
+          </form>
+        </details>
+      </div>
+    </section>
+  );
+
   return (
     <div
       className={`lyra-jornada${COM_ARTE ? ' jornada-com-arte' : ''}`}
@@ -801,108 +885,50 @@ export function LandingPage({
           className="jornada-secao jornada-guia"
           aria-labelledby="titulo-guia"
         >
-          <div className="jornada-container">
+          {/* Layout editorial em duas colunas (título à esquerda, lista à
+              direita) para não repetir a grade de três cartões usada em
+              Recursos e em Como funciona. */}
+          <div className="jornada-container jornada-guia-layout">
             <TituloSecao
               id="titulo-guia"
               rotulo={config.hero.previewBadge}
               titulo={config.hero.previewTitle}
               descricao={config.hero.previewDescription}
             />
-            <div className="jornada-grid-guia">
+            <ul className="jornada-guia-lista">
               {config.hero.previewItems.map((item) => {
                 const Icone = getBuilderIcon(item.icon);
                 return (
-                  <article key={item.id} className="jornada-guia-item">
+                  <li key={item.id} className="jornada-guia-item">
                     <span className="jornada-icone">
                       <Icone aria-hidden="true" />
                     </span>
-                    <h3>{item.title}</h3>
-                    <p>{item.description}</p>
-                  </article>
+                    <div>
+                      <h3>{item.title}</h3>
+                      <p>{item.description}</p>
+                    </div>
+                  </li>
                 );
               })}
-            </div>
+            </ul>
           </div>
         </section>
 
         <PuckClientRenderer documentKey="landing-home" className="w-full" />
 
-        {ordem.map((chave) => renderizarSecao(chave))}
-
-        <section
-          className="jornada-secao jornada-login-direto"
-          aria-labelledby="titulo-login-direto"
-        >
-          <div className="jornada-container jornada-login-resumo">
-            <div>
-              <p className="jornada-etiqueta">
-                <LockKeyhole aria-hidden="true" /> {config.hero.quickAuthBadge}
-              </p>
-              <h2 id="titulo-login-direto">{config.hero.quickAuthTitle}</h2>
-              <p>{config.hero.quickAuthDescription}</p>
-            </div>
-            <details className="jornada-login-expansivel">
-              <summary>
-                {config.hero.quickAuthSubmitLabel} com e-mail e senha{' '}
-                <ChevronDown aria-hidden="true" />
-              </summary>
-              <form onSubmit={entrar}>
-                <label htmlFor="jornada-email">E-mail</label>
-                <input
-                  id="jornada-email"
-                  type="email"
-                  autoComplete="email"
-                  inputMode="email"
-                  required
-                  value={email}
-                  disabled={previewMode || autenticando}
-                  onChange={(evento) => setEmail(evento.target.value)}
-                />
-                <label htmlFor="jornada-senha">Senha</label>
-                <div className="jornada-campo-senha">
-                  <input
-                    id="jornada-senha"
-                    type={verSenha ? 'text' : 'password'}
-                    autoComplete="current-password"
-                    required
-                    value={senha}
-                    disabled={previewMode || autenticando}
-                    onChange={(evento) => setSenha(evento.target.value)}
-                  />
-                  <button
-                    type="button"
-                    aria-label={verSenha ? 'Ocultar senha' : 'Mostrar senha'}
-                    aria-pressed={verSenha}
-                    onClick={() => setVerSenha((atual) => !atual)}
-                  >
-                    {verSenha ? (
-                      <EyeOff aria-hidden="true" />
-                    ) : (
-                      <Eye aria-hidden="true" />
-                    )}
-                  </button>
-                </div>
-                <button
-                  type="submit"
-                  className="jornada-botao jornada-botao-principal"
-                  disabled={previewMode || autenticando}
-                >
-                  {autenticando
-                    ? 'Entrando…'
-                    : config.hero.quickAuthSubmitLabel}{' '}
-                  <ArrowRight aria-hidden="true" />
-                </button>
-                <Ligacao
-                  href={config.hero.primaryCtaHref}
-                  previewMode={previewMode}
-                  className="jornada-link-criar"
-                >
-                  {config.hero.quickAuthSecondaryLabel}
-                </Ligacao>
-              </form>
-            </details>
-          </div>
-        </section>
+        {/* A entrada rápida vem logo antes do convite final, para que o
+            convite feche a página (antes ficava depois dele, solta). A ordem
+            das demais seções continua a do Construtor. */}
+        {ordem.map((chave) =>
+          chave === 'finalCta' ? (
+            <Fragment key="entrada-e-convite">
+              {secaoEntrada}
+              {renderizarSecao(chave)}
+            </Fragment>
+          ) : (
+            renderizarSecao(chave)
+          )
+        )}
       </Principal>
 
       <footer className="jornada-rodape">

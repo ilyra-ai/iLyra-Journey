@@ -318,7 +318,9 @@
   min-height: 530px;
   position: relative;
   margin-left: -45px;
-  margin-right: min(-5cqi, -22px);
+  /* Sangra até a borda direita: metade da sobra entre a landing e o
+   * .jornada-container (antes ficava uma faixa de ~18 px em 1440 px). */
+  margin-right: calc((100cqi - min(100cqi - 52px, var(--j-container))) / -2);
   background: center / cover no-repeat;
   mask-image: linear-gradient(to right, transparent 0%, black 17%, black 100%);
   -webkit-mask-image: linear-gradient(
@@ -347,11 +349,15 @@
 .lyra-jornada.jornada-com-arte .jornada-vale {
   background-image: url('/landing-jornada/vale-etereo.webp');
 }
+/* As ondas são imagens com fundo transparente; ancoradas no canto externo para o
+ * ramo de folhas ficar visível e a cauda se dissolver no centro. */
 .lyra-jornada.jornada-com-arte .jornada-onda-esquerda {
   background-image: url('/landing-jornada/onda-esquerda.webp');
+  background-position: left bottom;
 }
 .lyra-jornada.jornada-com-arte .jornada-onda-direita {
   background-image: url('/landing-jornada/onda-direita.webp');
+  background-position: right bottom;
 }
 .lyra-jornada:not(.jornada-com-arte) .jornada-hero-arte,
 .lyra-jornada:not(.jornada-com-arte) .jornada-vale,
@@ -435,7 +441,8 @@
 }
 .lyra-jornada .jornada-vale {
   background: 41% 50% / cover no-repeat;
-  margin-left: min(-5cqi, -22px);
+  /* Sangra até a borda esquerda, como a arte do topo à direita. */
+  margin-left: calc((100cqi - min(100cqi - 52px, var(--j-container))) / -2);
   min-height: 370px;
   mask-image: linear-gradient(90deg, black 82%, transparent);
   -webkit-mask-image: linear-gradient(90deg, black 82%, transparent);
@@ -504,19 +511,61 @@
   max-width: 690px;
   color: var(--j-secundario);
 }
-.lyra-jornada .jornada-guia {
+/* Ritmo: as seções de conteúdo alternam só dois tons (marfim e névoa
+ * verde), sem linhas duras entre elas, e cada uma tem um arranjo próprio
+ * (lista editorial, grade, painel de números, linha do tempo, cartões). */
+.lyra-jornada .jornada-guia,
+.lyra-jornada .jornada-indicadores,
+.lyra-jornada .jornada-planos,
+.lyra-jornada .jornada-login-direto {
   background: #fffefa;
 }
-.lyra-jornada .jornada-grid-guia,
+.lyra-jornada .jornada-beneficios-reais,
+.lyra-jornada .jornada-fluxo,
+.lyra-jornada .jornada-faq {
+  background: #f5f9f7;
+}
+
+/* O que você recebe: título à esquerda, lista à direita */
+.lyra-jornada .jornada-guia-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  gap: clamp(32px, 6cqi, 96px);
+  align-items: start;
+}
+.lyra-jornada .jornada-guia-layout .jornada-secao-intro {
+  margin-bottom: 0;
+}
+.lyra-jornada .jornada-guia-lista {
+  display: grid;
+}
+.lyra-jornada .jornada-guia-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding-block: calc(22px * var(--j-cartao, 1));
+  border-top: 1px solid var(--j-borda);
+}
+.lyra-jornada .jornada-guia-item:last-child {
+  border-bottom: 1px solid var(--j-borda);
+}
+.lyra-jornada .jornada-guia-item .jornada-icone {
+  width: calc(48px * var(--j-icone, 1));
+  height: calc(48px * var(--j-icone, 1));
+}
+.lyra-jornada .jornada-guia-item .jornada-icone svg {
+  width: 23px;
+  height: 23px;
+}
+
+/* Recursos e Como funciona: três colunas */
 .lyra-jornada .jornada-grid-recursos,
 .lyra-jornada .jornada-grid-passos {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 32px;
+  gap: clamp(24px, 3cqi, 40px);
 }
-.lyra-jornada .jornada-guia-item,
-.lyra-jornada .jornada-recurso,
-.lyra-jornada .jornada-grid-passos li {
+.lyra-jornada .jornada-recurso {
   border-top: 1px solid var(--j-borda);
   padding-top: calc(24px * var(--j-cartao, 1));
 }
@@ -527,6 +576,9 @@
   margin-block: 20px 7px;
   line-height: 1.22;
 }
+.lyra-jornada .jornada-guia-item h3 {
+  margin-top: 2px;
+}
 .lyra-jornada .jornada-guia-item p,
 .lyra-jornada .jornada-recurso p,
 .lyra-jornada .jornada-grid-passos p {
@@ -534,25 +586,33 @@
   font-size: calc(14px * var(--j-texto-cartao, 1));
   line-height: 1.8;
 }
-.lyra-jornada .jornada-beneficios-reais {
-  background: linear-gradient(180deg, #f7faf8, #fffefa);
-}
-.lyra-jornada .jornada-fluxo {
-  background: #fffefa;
-}
+
+/* Como funciona: linha do tempo com numerais editoriais */
 .lyra-jornada .jornada-passo-topo {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 14px;
 }
-.lyra-jornada .jornada-passo-topo > span:last-child {
+.lyra-jornada .jornada-passo-numero {
+  font-family: Georgia, 'Times New Roman', ui-serif, serif;
+  font-size: clamp(38px, 4cqi, 52px);
+  line-height: 1;
+  letter-spacing: -0.04em;
   color: var(--j-coral-texto);
-  font-size: 17px;
-  font-weight: 700;
 }
-.lyra-jornada .jornada-indicadores {
-  background: #f4f8f6;
-  border-block: 1px solid var(--j-borda);
+.lyra-jornada .jornada-passo-traco {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--j-coral), var(--j-borda));
+  opacity: 0.7;
+}
+.lyra-jornada .jornada-icone.jornada-icone-pequeno {
+  width: calc(42px * var(--j-icone, 1));
+  height: calc(42px * var(--j-icone, 1));
+}
+.lyra-jornada .jornada-icone.jornada-icone-pequeno svg {
+  width: 20px;
+  height: 20px;
 }
 .lyra-jornada .jornada-grid-indicadores {
   display: grid;
@@ -585,9 +645,6 @@
 }
 
 /* Valores: somente os dados reais da API /api/public/plans */
-.lyra-jornada .jornada-planos {
-  background: #fffefa;
-}
 .lyra-jornada .jornada-grid-planos {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -703,10 +760,6 @@
 }
 
 /* Perguntas */
-.lyra-jornada .jornada-faq {
-  border-top: 1px solid var(--j-borda);
-  background: #f7f9f6;
-}
 .lyra-jornada .jornada-faq-layout {
   display: grid;
   grid-template-columns: minmax(0, 40%) minmax(0, 60%);
@@ -804,10 +857,10 @@
   margin-top: 24px;
 }
 
-/* Entrar direto mantém o fluxo real de autenticação sem screenshot no hero */
+/* Entrar direto mantém o fluxo real de autenticação sem screenshot no hero.
+ * Faixa compacta logo antes do convite final. */
 .lyra-jornada .jornada-login-direto {
-  padding-block: 37px;
-  background: #fffefa;
+  padding-block: clamp(36px, 4cqi, 52px);
 }
 .lyra-jornada .jornada-login-resumo {
   display: grid;
@@ -984,6 +1037,10 @@
   .lyra-jornada .jornada-cabecalho-conteudo {
     min-height: 75px;
   }
+  .lyra-jornada .jornada-guia-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
   .lyra-jornada .jornada-menu {
     display: none;
     position: absolute;
@@ -1128,7 +1185,6 @@
   .lyra-jornada .jornada-secao {
     padding-block: 55px;
   }
-  .lyra-jornada .jornada-grid-guia,
   .lyra-jornada .jornada-grid-recursos,
   .lyra-jornada .jornada-grid-passos {
     grid-template-columns: 1fr;
@@ -1149,10 +1205,13 @@
   .lyra-jornada .jornada-encerramento-conteudo {
     padding-block: 56px;
   }
+  /* No celular o texto ocupa a largura toda: as ondas ficam baixas e
+   * suaves, só emoldurando os cantos inferiores, sem disputar a leitura. */
   .lyra-jornada .jornada-onda-esquerda,
   .lyra-jornada .jornada-onda-direita {
-    width: 33%;
-    opacity: 0.45;
+    width: 46%;
+    height: 46%;
+    opacity: 0.3;
   }
   .lyra-jornada .jornada-rodape-conteudo {
     display: flex;
@@ -1239,13 +1298,13 @@
 }
 .dark .lyra-jornada .jornada-pilares,
 .dark .lyra-jornada .jornada-guia,
-.dark .lyra-jornada .jornada-fluxo,
+.dark .lyra-jornada .jornada-indicadores,
 .dark .lyra-jornada .jornada-planos,
 .dark .lyra-jornada .jornada-login-direto {
   background: #15272b;
 }
 .dark .lyra-jornada .jornada-beneficios-reais,
-.dark .lyra-jornada .jornada-indicadores,
+.dark .lyra-jornada .jornada-fluxo,
 .dark .lyra-jornada .jornada-faq {
   background: #1a3034;
 }
@@ -1277,6 +1336,12 @@
 }
 .dark .lyra-jornada .jornada-botao-contorno {
   background: #20373b;
+}
+/* Aviso de falha ao carregar os planos: o vermelho escuro do tema claro
+ * ficava com 2,4:1 sobre o fundo escuro. */
+.dark .lyra-jornada .jornada-erro {
+  color: #ffb4a6;
+  border-color: #b8584c;
 }
 .dark .lyra-jornada .jornada-login-expansivel input {
   color: #eaf5f3;
