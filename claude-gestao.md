@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `███████████████████░` **95,2%** |
+| Progresso          | `███████████████████░` **96,8%** |
 | Tarefas totais     | 63                               |
-| 🟢 Finalizadas     | 60                               |
+| 🟢 Finalizadas     | 61                               |
 | 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 2                                |
+| ⚪ A iniciar       | 1                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-17                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (60 ÷ 63 = 95,2%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (61 ÷ 63 = 96,8%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -43,7 +43,7 @@
 
 ### ANDAMENTO
 
-- **61 · Widgets e Controles premium** 🔵 · campos, seletores, caixas de seleção, rádios, switches, sliders, datas e horas, menus, dropdown do perfil, busca, paginação e filtros: comportamento por teclado, toque, validação, feedback e alvos de toque.
+- **62 · Tags e Elementos HTML premium** 🔵 · HTML semântico (landmarks, títulos em ordem, listas, tabelas com legenda e escopo, formulários com rótulo, botões e links corretos, imagens com texto alternativo, `lang`, metadados) e conformidade WCAG 2.2 AA.
 
 ### BLOQUEADAS
 
@@ -53,7 +53,6 @@ Nenhuma tarefa bloqueada.
 
 ## Tópico 3 · Tarefas a Iniciar
 
-- **62 · Tags e Elementos HTML premium** ⚪ · HTML semântico (landmarks, títulos em ordem, listas, tabelas com legenda e escopo, formulários com rótulo, botões e links corretos, imagens com texto alternativo, `lang`, metadados) e conformidade WCAG 2.2 AA.
 - **63 · Landing page redesenhada por completo** ⚪ · redesenho integral da página inicial pública: mais simples, harmônica, organizada e na tendência de 2026, com conteúdo real (catálogo de planos e textos do construtor), celular primeiro, temas claro e escuro e acessibilidade.
 
 ---
@@ -1077,6 +1076,19 @@ Nenhuma tarefa bloqueada.
   - Integração: primeiro plano automático sem cota; login antes do onboarding não gera; login depois do onboarding deixa o plano salvo.
   - Navegador (build de produção, login real pela tela): o plano já estava salvo no MySQL antes de abrir `/plan`, origem automática, cota intacta, tela com o plano pronto ("Regenerar plano"), axe sem violações e zero erros de console, em 1440 px claro e 390 px escuro.
   - `test` 412/412, `test:integration` 156/156, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+
+### 61 · Widgets e Controles premium
+
+- **Status:** 🟢 finalizada · **Commit:** `18d2f11` · **Push:** `6f9d9fd..18d2f11 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** todos os widgets e controles no melhor padrão premium.
+- **Implementado:**
+  - **Switch:** a bolinha usava `bg-background` e sumia sobre o trilho no tema escuro; agora `bg-card` e, ligado, a cor de contraste da primária. **Slider:** área de toque ampliada por pseudo-elemento. **Checkbox:** área de toque, estado inválido e indeterminado (ícone de traço). **Radio:** 20 px, contorno de controle (3:1) e anel de foco de 2 px.
+  - **Input, textarea e select:** `aria-invalid` com borda e anel de erro, hover e texto de 16 px no celular (o iOS deixava de dar zoom ao focar).
+  - **DatePicker:** aceita e repassa os atributos nativos; o `id` fixo impedia o rótulo do formulário de nomear o campo. Onboarding e perfil com `autoComplete` (`bday`, `given-name`, `family-name`) e teclado numérico.
+  - **Avaliação integrativa:** abas viraram `Tabs` do Radix (setas do teclado, `aria-selected`); WHO-5 e NPS viraram grupos de rádio com a pergunta como nome (o NPS eram 11 botões soltos).
+  - **Perfil:** a foto clicável era uma `div`; agora é um botão com nome. **Usuários (admin):** cabeçalhos com `aria-sort` e ícone por direção.
+  - **Nomes únicos:** busca do cabeçalho, ações de copiar e refazer do chat (40 px no toque), switch e remoção na base de conhecimento e ações das consultas passam a dizer de qual item se trata.
+- **Evidências:** `test` 493/493, `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e 390 px escuro, usuário temporário removido ao final): rótulo e autocompletar no onboarding, seta do teclado entre abas, nota do NPS marcada clicando no rótulo, foto como botão, axe no perfil sem violações e zero erros de console; varredura de 20 páginas sem violações no escuro e um aviso de contraste na landing no claro que não se repetiu na conferência (ocorre durante a animação de entrada; a landing é refeita na tarefa 63).
 
 ### 60 · Componentes de Design System premium
 
