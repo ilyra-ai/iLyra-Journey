@@ -22,15 +22,15 @@
 | Indicador          | Valor                           |
 | ------------------ | ------------------------------- |
 | Progresso          | `████████████████████` **100%** |
-| Tarefas totais     | 66                              |
-| 🟢 Finalizadas     | 66                              |
+| Tarefas totais     | 67                              |
+| 🟢 Finalizadas     | 67                              |
 | 🔵 Em andamento    | 0                               |
 | 🔴 Bloqueadas      | 0                               |
 | ⚪ A iniciar       | 0                               |
 | Branch de trabalho | `main` (única permitida)        |
 | Última atualização | 2026-10-17                      |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (66 ÷ 66 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (67 ÷ 67 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -1076,6 +1076,20 @@ Nenhuma tarefa a iniciar.
   - Integração: primeiro plano automático sem cota; login antes do onboarding não gera; login depois do onboarding deixa o plano salvo.
   - Navegador (build de produção, login real pela tela): o plano já estava salvo no MySQL antes de abrir `/plan`, origem automática, cota intacta, tela com o plano pronto ("Regenerar plano"), axe sem violações e zero erros de console, em 1440 px claro e 390 px escuro.
   - `test` 412/412, `test:integration` 156/156, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+
+### 67 · Arte da Jornada e landing harmônica e organizada
+
+- **Status:** 🟢 finalizada · **Commit:** `28bbbaf` · **Push:** `9af937d..28bbbaf main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** enviou as 4 imagens que faltavam e pediu a landing "harmoniosa, organizada, linda, moderna".
+- **Base:** referências de 2026 para landings editoriais de bem-estar (títulos serifados, respiro generoso, ritmo calmo entre seções, menos cartões repetidos e imagem real como protagonista).
+- **Implementado:**
+  - Arte em `public/landing-jornada/` em WebP (784 KB no total): lótus (1122×1402), vale com portal (1440×810) e as duas ondas recortadas ao conteúdo, com fundo transparente preservado (960 px, o dobro do tamanho exibido).
+  - Topo e vale sangrando até a borda da tela (antes sobrava uma faixa de ~18 px); ondas ancoradas nos cantos externos.
+  - Seções alternando só dois tons, sem linhas duras; "O que você recebe" em lista editorial de duas colunas e "Como funciona" em linha do tempo com numerais serifados (antes eram três grades iguais de três cartões em sequência).
+  - Entrada rápida antes do convite final, que passa a fechar a página.
+  - Celular: ondas mais baixas e suaves para não disputar a leitura.
+  - Tema escuro: contraste do aviso de falha dos planos corrigido (aparecia com o banco fora do ar).
+- **Evidências:** `check:format`, `check:lint`, `check:types`, `test` 502/502 e `build` com exit 0. Navegador (build de produção): as 4 imagens com 200 e classe `jornada-com-arte` em 1440 px e 390 px; 70 verificações OK e 0 falhas em 1440 claro e escuro, 768, 390 claro e escuro e 320 (rotas, âncoras, planos, login real, menu móvel, axe sem violações, 0 erros de console, 0 respostas de erro); cabeçalho fixo na rolagem; prévia do Construtor responsiva e sem navegação; aviso de falha dos planos sem violações de contraste com o MySQL parado.
 
 ### 66 · Landing "Jornada de consciência" aplicada e verificada
 
