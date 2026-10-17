@@ -23,7 +23,15 @@ async function buscarConfiguracaoPublica<TKey extends SitePageKey>(
   });
 
   if (!response.ok) {
-    throw new Error(`Falha ao carregar configuração pública de ${pageKey}.`);
+    // A mensagem do servidor diz a causa (ex.: banco indisponível, 503);
+    // sem corpo legível, vale a mensagem genérica.
+    const corpo = (await response
+      .json()
+      .catch(() => null)) as PublicPageConfigResponse<TKey> | null;
+    throw new Error(
+      corpo?.error ??
+        `Falha ao carregar configuração pública de ${pageKey} (HTTP ${response.status}).`
+    );
   }
 
   // A rota pública já devolve a configuração validada pelo schema no

@@ -190,6 +190,8 @@ pnpm db:start                # sobe o MySQL (docker compose --env-file .env.loca
 pnpm dev                     # inicia o servidor de desenvolvimento
 ```
 
+O `pnpm dev` confere o banco antes de iniciar (`scripts/verificar-banco.mjs`): sem o MySQL no ar, com credencial recusada ou com migrations pendentes, ele para e mostra o comando que resolve. Com o servidor já rodando, uma queda do banco faz as APIs responderem `503` ("banco de dados indisponível") e o terminal mostra a causa; o app volta sozinho quando o banco volta.
+
 > [!IMPORTANT]
 > **Banco criado com MySQL 8.0?** O MySQL 8.0 está em fim de vida desde 2026-04-30 e o projeto usa o **MySQL 9.7 LTS**. O MySQL não aceita o salto direto 8.0 → 9.7 (recusa o datadir com `MY-014060`, sem alterar os dados). Antes de subir o banco com o `compose.yaml` atual, rode uma vez:
 >

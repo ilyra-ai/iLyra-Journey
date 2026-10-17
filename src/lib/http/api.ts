@@ -2,6 +2,11 @@ import { NextResponse } from 'next/server';
 import { ZodError, type ZodType, prettifyError } from 'zod';
 
 import { HttpError } from '@/lib/http-error';
+import {
+  MENSAGEM_DE_BANCO_INDISPONIVEL,
+  avisarFalhaDoBanco,
+  classificarFalhaDoBanco,
+} from '@/lib/mysql/diagnostico';
 import { registrarErroInterno } from '@/lib/observability/log-seguro';
 
 /**
@@ -91,6 +96,11 @@ export function statusDeErro(error: unknown): number {
   ) {
     return 400;
   }
+  // Banco fora do ar, credencial recusada ou migrations pendentes: o serviço
+  // está indisponível (503), não houve falha no pedido de quem usa o app.
+  if (classificarFalhaDoBanco(error)) {
+    return 503;
+  }
   return 500;
 }
 
@@ -107,6 +117,13 @@ export function mensagemDeErro(error: unknown, padrao: string): string {
   }
   if (statusDeErro(error) === 400) {
     return 'Valores inválidos para os campos informados.';
+  }
+  const falhaDoBanco = classificarFalhaDoBanco(error);
+  if (falhaDoBanco) {
+    // O terminal recebe a causa e o comando que resolve (uma linha a cada
+    // 30 s); o cliente, uma mensagem clara em vez da genérica da rota.
+    avisarFalhaDoBanco(falhaDoBanco);
+    return MENSAGEM_DE_BANCO_INDISPONIVEL;
   }
   // Erro inesperado: detalhes só no log do servidor, sem SQL nem valores.
   registrarErroInterno(`api: ${padrao}`, error);

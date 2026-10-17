@@ -35,7 +35,13 @@ export function PuckClientRenderer({
       try {
         const res = await fetch(`/api/public/puck/documents/${documentKey}`);
         if (!res.ok) {
-          throw new Error('Falha ao obter documento do Puck');
+          // A causa vem do servidor (ex.: banco indisponível, HTTP 503).
+          const corpo = (await res.json().catch(() => null)) as {
+            error?: string;
+          } | null;
+          throw new Error(
+            `${corpo?.error ?? 'Falha ao obter o documento do Puck.'} (HTTP ${res.status})`
+          );
         }
 
         const json = (await res.json()) as { publishedData?: unknown };

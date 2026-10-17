@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/verificar-banco.mjs",
     "dev": "next dev",
     "dev:webpack": "next dev --webpack",
     "build": "next build",
