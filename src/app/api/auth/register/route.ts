@@ -104,6 +104,11 @@ export async function POST(request: Request) {
         userAgent: request.headers.get('user-agent'),
         connection,
       });
+      // O plano Free nasce na mesma transação da conta: se a assinatura
+      // falhar, nada é gravado (antes ela era criada depois do COMMIT e uma
+      // falha nesse ponto deixava a conta sem plano até o primeiro acesso,
+      // que a reparava como "auto_repair_plan").
+      await ensureUserSubscription(userId, 'free', 'auth_register', connection);
       return papel;
     });
 
@@ -113,8 +118,6 @@ export async function POST(request: Request) {
         { status: 409 }
       );
     }
-
-    await ensureUserSubscription(userId, 'free', 'auth_register');
 
     const token = await signSessionToken({
       sub: userId,

@@ -91,14 +91,22 @@ describe('POST /api/auth/register e /api/auth/login', () => {
     );
     expect(perfil).toEqual([{ role: 'patient', email }]);
     // O cadastro público nunca cria administrador nem plano pago.
-    const plano = await queryRows<{ plan_key: string }>(
-      `SELECT p.plan_key FROM user_subscriptions s
+    // O Free nasce ativo na própria transação do cadastro (origem
+    // auth_register), não por reparo posterior (auto_repair_plan).
+    const plano = await queryRows<{
+      plan_key: string;
+      status: string;
+      source: string;
+    }>(
+      `SELECT p.plan_key, s.status, s.source FROM user_subscriptions s
          JOIN subscription_plans p ON p.id = s.plan_id
          JOIN users u ON u.id = s.user_id
         WHERE u.email = ?`,
       [email]
     );
-    expect(plano).toEqual([{ plan_key: 'free' }]);
+    expect(plano).toEqual([
+      { plan_key: 'free', status: 'active', source: 'auth_register' },
+    ]);
     // O aceite fica registrado com a versão vigente de cada documento.
     const consentimentos = await queryRows<{
       consent_type: string;
