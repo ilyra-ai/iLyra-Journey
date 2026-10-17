@@ -22,15 +22,15 @@
 | Indicador          | Valor                           |
 | ------------------ | ------------------------------- |
 | Progresso          | `████████████████████` **100%** |
-| Tarefas totais     | 63                              |
-| 🟢 Finalizadas     | 63                              |
+| Tarefas totais     | 64                              |
+| 🟢 Finalizadas     | 64                              |
 | 🔵 Em andamento    | 0                               |
 | 🔴 Bloqueadas      | 0                               |
 | ⚪ A iniciar       | 0                               |
 | Branch de trabalho | `main` (única permitida)        |
 | Última atualização | 2026-10-17                      |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (63 ÷ 63 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (64 ÷ 64 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -1076,6 +1076,19 @@ Nenhuma tarefa a iniciar.
   - Integração: primeiro plano automático sem cota; login antes do onboarding não gera; login depois do onboarding deixa o plano salvo.
   - Navegador (build de produção, login real pela tela): o plano já estava salvo no MySQL antes de abrir `/plan`, origem automática, cota intacta, tela com o plano pronto ("Regenerar plano"), axe sem violações e zero erros de console, em 1440 px claro e 390 px escuro.
   - `test` 412/412, `test:integration` 156/156, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+
+### 64 · Erros relatados pelo usuário rodando em modo dev
+
+- **Status:** 🟢 finalizada · **Commits:** `634042b` (diagnóstico do banco) e `21e73f5` (avisos do modo dev) · **Push:** `10a6f24..634042b` e `634042b..21e73f5 main -> main` (confirmados por `git ls-remote`)
+- **Relato (2026-10-17):** no computador do usuário, `pnpm dev` com 500 em `/api/public/page-config/*`, `/api/public/plans`, `/api/public/puck/documents/*` e `/api/auth/register` (cadastro), além de avisos no console.
+- **Honestidade sobre a validação anterior:** as tarefas 57 a 63 foram validadas no ambiente de trabalho, no build de produção e com o banco ativo; o modo dev e a máquina do usuário não tinham sido validados nesta rodada.
+- **Causa raiz dos 500:** o app não alcançava o MySQL. Reproduzido com o banco parado: as mesmas rotas em 500, com `connect ECONNREFUSED 127.0.0.1:3307` só no terminal do servidor e mensagens genéricas no navegador. O código das rotas estava correto (com o banco ativo, todas respondem 200, inclusive em banco novo recém-migrado).
+- **Implementado:**
+  - `src/lib/mysql/diagnostico.ts` (com testes): falha de conexão, credencial recusada, banco inexistente e migrations pendentes viram `503` com "banco de dados indisponível"; o terminal mostra a causa, o destino (`host:porta/banco`) e o comando que resolve, uma linha a cada 30 s.
+  - `scripts/verificar-banco.mjs` como `predev`: o `pnpm dev` confere conexão e migrations antes de iniciar e para com a instrução certa (`LYRA_IGNORAR_VERIFICACAO_DO_BANCO=1` ignora).
+  - Configuração pública e blocos do Puck mostram a mensagem do servidor (antes "Falha ao obter documento do Puck").
+  - Avisos do modo dev removidos: `data-scroll-behavior="smooth"` no `<html>` e a marca sem `priority` (obsoleto no Next 16), com `loading="eager"` e `fetchPriority="high"`.
+- **Evidências:** `pnpm dev` com o banco parado encerra com a mensagem e o comando; banco caindo com o servidor no ar dá `503` e a linha `[banco]` no terminal, e o app volta sozinho quando o banco volta. Varredura em modo dev (visitante, pessoa recém-cadastrada e admin, 27 rotas, 1440 px e 390 px, banco novo e banco existente): 0 respostas de erro, 0 erros e 0 avisos de console. `test` 502/502, `test:integration` 164/164, lint, formatação, tipos e build sem erros. O aviso intermitente de contraste no painel é do botão "Ações rápidas" durante a animação de entrada de 300 ms; no estado final passa (4 medições).
 
 ### 63 · Landing page redesenhada por completo
 
