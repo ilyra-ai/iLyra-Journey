@@ -49,8 +49,17 @@ const cabecalhosDeSeguranca = [
     : []),
 ];
 
+// O Next.js 16 liga por padrão, em `next dev`, o servidor MCP de
+// desenvolvimento, que grava a saída do servidor em
+// `.next/dev/logs/next-development.log`. O orquestrador TUI-WEBNOVA
+// (tui-webnova.sh) exige que nenhum log seja gravado em disco (a saída fica
+// só no terminal do painel) e define WEBNOVA_SEM_LOGS=1 ao iniciar o app.
+// Fora dele o padrão do Next.js é mantido.
+const semLogsEmArquivo = process.env.WEBNOVA_SEM_LOGS === '1';
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  ...(semLogsEmArquivo ? { experimental: { mcpServer: false } } : {}),
   async headers() {
     return [
       { source: '/:path*', headers: cabecalhosDeSeguranca },

@@ -171,6 +171,36 @@ No PowerShell ou CMD, `py run_windows.py <comando>` localiza o Git Bash e execut
 
 Ao final, a aplicação responde em **http://localhost:3000** e o MySQL em **127.0.0.1:3307**. Se uma dessas portas estiver ocupada por outro programa, os launchers não o encerram: usam a próxima porta livre e informam qual. O `doctor` também avisa variáveis do `.env.local` que o app não usa mais (ex.: `GEMINI_API_KEY`), sem apagá-las.
 
+### Painel TUI-WEBNOVA (WSL2 Ubuntu)
+
+O `tui-webnova.sh` é um orquestrador **independente** com painel web local: não chama `run.py`, `run.sh` nem outros scripts do projeto, e depende só de Bash e Python 3.10+ (biblioteca padrão). Ele mostra a saída de cada comando **ao vivo** em um terminal real (PTY + xterm.js), onde você digita, responde perguntas (`s`/`y`/`n`, Ctrl+C) e abre um shell na raiz do projeto.
+
+```bash
+./tui-webnova.sh                       # abre o painel (o endereço com token aparece no terminal)
+./tui-webnova.sh --no-browser          # só imprime o endereço
+./tui-webnova.sh --list-actions-json   # lista as ações
+./tui-webnova.sh --run-action <id>     # executa uma ação direto no terminal
+./tui-webnova.sh --self-test           # autoverificação do próprio script
+```
+
+| Grupo          | Ações                                                                                                                                                                                                       |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Instalação     | Check-up do ambiente · Instalar requisitos (apt, nvm/Node, pnpm, dependências; nunca reinstala o que existe) · Instalar banco de dados (Docker, `.env.local`, MySQL) · Infraestrutura do app (tudo + build) |
+| Banco de dados | Migrations (só as pendentes, com checksum, mais o administrador inicial)                                                                                                                                    |
+| Aplicação      | Iniciar app (dev ou produção) · Parar app                                                                                                                                                                   |
+| Backups        | Backup full do banco · Backup full do app · Backup full do app e banco (com SHA-256)                                                                                                                        |
+| Manutenção     | Atualizar versão do app (backup obrigatório, `merge --ff-only`, build e rollback automático) · Restaurar backup do banco · Limpeza segura                                                                   |
+| Qualidade      | Verificação ponta a ponta · Segurança e supply chain (permissões, portas, `pnpm audit`) · Quality gates (Prettier, ESLint, tipos, testes)                                                                   |
+| Ferramentas    | Terminal do projeto (shell interativo na raiz)                                                                                                                                                              |
+
+Garantias:
+
+- **Nenhum log em disco**: a saída existe só na memória do painel; ao iniciar o app, define `WEBNOVA_SEM_LOGS=1`, que desliga o arquivo de log do servidor MCP de desenvolvimento do Next.js.
+- **Exclusivo do WSL2**: recusa WSL1 e Linux comum. Para testar em outro Linux, use `WEBNOVA_PERMITIR_LINUX=1`.
+- **Acesso protegido**: o painel escuta só em 127.0.0.1, exige token em toda chamada e recusa Host estranho (proteção contra DNS rebinding).
+- **Ações destrutivas confirmadas**: atualizar, restaurar e limpar pedem a palavra de confirmação. Em `--run-action` sem terminal interativo, informe-a em `WEBNOVA_CONFIRMACAO` (ex.: `WEBNOVA_CONFIRMACAO=ATUALIZAR`).
+- Os backups ficam em `backups/` (fora do Git, permissão 700).
+
 ### Modelo de IA local (opcional)
 
 Sem configuração, o "Seu dia" é escrito pelo motor védico da Lyra. Para usar um modelo local:
@@ -297,6 +327,7 @@ tests/                 # integração (MySQL real), launchers e servidor de IA c
 run.py                 # Launcher oficial do WSL2 Ubuntu / Linux
 run.sh                 # Launcher do Windows 11 com Git Bash (mesmos comandos do run.py)
 run_windows.py         # Atalho para PowerShell/CMD que executa o run.sh
+tui-webnova.sh         # Painel TUI-WEBNOVA (WSL2): orquestrador independente com terminal ao vivo
 ```
 
 **Princípio-chave:** os motores em `lib/` são puros e determinísticos. Isso os torna **testáveis** e permite que idade biológica, detecção precoce, ciclo e ações proativas rodem **no dispositivo do usuário**, sustentando o Modo Privacidade.

@@ -49,7 +49,9 @@ pnpm-debug.log*
 # Estado da versão anterior do run_windows.py (detectado e sinalizado por ele).
 .lyra-run-windows/
 .logs/
-/backups/mysql/
+# Backups locais (banco, app e pacotes completos) gerados pelo tui-webnova.sh
+# e pelos launchers: contêm dados do banco e nunca vão para o Git.
+/backups/
 
 # Arquivos de ambiente: todos contêm configuração local e segredos, exceto o
 # modelo documentado .env.example (sem valores secretos).
