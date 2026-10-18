@@ -19,18 +19,18 @@
 
 ## Tópico 1 · Andamento Geral
 
-| Indicador          | Valor                           |
-| ------------------ | ------------------------------- |
-| Progresso          | `████████████████████` **100%** |
-| Tarefas totais     | 68                              |
-| 🟢 Finalizadas     | 68                              |
-| 🔵 Em andamento    | 0                               |
-| 🔴 Bloqueadas      | 0                               |
-| ⚪ A iniciar       | 0                               |
-| Branch de trabalho | `main` (única permitida)        |
-| Última atualização | 2026-10-17                      |
+| Indicador          | Valor                          |
+| ------------------ | ------------------------------ |
+| Progresso          | `███████████████████░` **97%** |
+| Tarefas totais     | 70                             |
+| 🟢 Finalizadas     | 68                             |
+| 🔵 Em andamento    | 2                              |
+| 🔴 Bloqueadas      | 0                              |
+| ⚪ A iniciar       | 0                              |
+| Branch de trabalho | `main` (única permitida)       |
+| Última atualização | 2026-10-18                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (68 ÷ 68 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (68 ÷ 70 = 97%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -43,7 +43,8 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+- **69 · Chaves de API dos meios de pagamento no painel do administrador** 🔵 — pedido de 2026-10-18: em Admin → Pagamentos, cadastrar, testar e remover as chaves da Stripe, do Mercado Pago e do PayPal (segredos cifrados no banco). Etapas: migração 028 e serviço de credenciais (feito, a testar); Stripe passa a usar as chaves do painel antes das do `.env.local`; rotas administrativas; tela; testes; QA no navegador.
+- **70 · Teste real de cada plano com a Stripe em modo de teste** 🔵 — pedido de 2026-10-18 com uma chave restrita de teste (guardada só no `.env.local` e, depois, no painel; nunca versionada). Feito até aqui: chave validada na API (conta BR, moeda BRL, permissões de leitura e escrita), produtos e preços de teste criados para Meta e Care (mensal e anual, nos valores do catálogo), Stripe CLI 1.30.0 conectado para encaminhar os webhooks. Falta: price ids nos planos, checkout com cartão de teste para cada plano e ciclo, webhook liberando os recursos, troca e cancelamento pelo portal voltando ao Free.
 
 ### BLOQUEADAS
 
