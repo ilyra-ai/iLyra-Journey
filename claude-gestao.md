@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `███████████████████░` **97%** |
+| Progresso          | `████████████████████` **99%** |
 | Tarefas totais     | 71                             |
-| 🟢 Finalizadas     | 69                             |
-| 🔵 Em andamento    | 2                              |
+| 🟢 Finalizadas     | 70                             |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
 | ⚪ A iniciar       | 0                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-18                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (69 ÷ 71 = 97,2%, arredondado para 97%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (70 ÷ 71 = 98,6%, arredondado para 99%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -43,7 +43,6 @@
 
 ### ANDAMENTO
 
-- **70 · Teste real de cada plano com a Stripe em modo de teste** 🔵 — pedido de 2026-10-18 com uma chave restrita de teste (guardada só no painel, cifrada; nunca versionada). Feito até aqui: chave validada na API (conta BR, moeda BRL), produtos e preços de teste para Meta e Care (mensal e anual), price ids gravados nos planos, Stripe CLI encaminhando os webhooks, checkout com cartão de teste aprovado nos 4 planos e ciclos (webhook libera o plano com origem Stripe e ciclo certo, fatura nos registros fiscais, menu e voz conforme o plano), portal abrindo com a assinatura, encerramento voltando ao Free e cartão recusado sem mudar o plano. Falta: troca Meta → Care pela tela do portal e cancelamento no fim do período.
 - **71 · Escolha entre teste e produção nas chaves de pagamento** 🔵 — pedido de 2026-10-18: em Admin → Pagamentos, selecionar se cada provedor usa o ambiente de teste ou o de produção. Escopo: guardar um conjunto de chaves por ambiente (teste e produção) em cada provedor, seletor "Ambiente em uso" em destaque, troca bloqueada para um ambiente sem chaves, cobrança da Stripe seguindo o ambiente em uso, migração 029, testes, documentação e QA no navegador.
 
 ### BLOQUEADAS
@@ -59,6 +58,18 @@ Nenhuma tarefa a iniciar.
 ---
 
 ## Tópico 4 · Histórico das Tarefas Finalizadas
+
+### 70 · Teste real de cada plano com a Stripe em modo de teste
+
+- **Status:** 🟢 finalizada · **Commit:** este registro no painel (tarefa só de verificação, sem mudança de código; a cobrança usada é a da tarefa 69, `5e4f06b`)
+- **Pedido do usuário (2026-10-18):** testar se cada plano funciona com a chave de teste da Stripe enviada por ele.
+- **Preparado na conta de teste da Stripe:** produtos e preços Meta e Care, mensal e anual, nos valores do catálogo (R$ 79,90, R$ 790,00, R$ 249,90 e R$ 2.490,00); price ids gravados nos planos pela rota administrativa; configuração do portal com troca entre Meta e Care e cancelamento; chave e segredo do webhook salvos cifrados em Admin → Pagamentos (nunca no repositório); Stripe CLI encaminhando os eventos para `/api/webhooks/stripe`.
+- **Evidências reais (build de produção, navegador automatizado, cartões de teste da Stripe):**
+  - Meta mensal, Meta anual, Care mensal e Care anual: cadastro, "Assinar" no Perfil, Checkout hospedado da Stripe com o preço certo em BRL, cartão 4242 aprovado, volta para `/billing/success`, webhook libera o plano com origem `stripe` e o ciclo escolhido, assinatura ativa ligada ao `sub_…` no MySQL, fatura paga nos registros fiscais, Monitoramento e Dispositivos no menu e voz só no Care; 0 erros de console.
+  - Portal da Stripe aberto pelo Perfil: troca Meta → Care feita pela tela (Selecionar, Continuar, Confirmar), webhook muda o plano para Care e libera a voz; cancelamento no fim do período mantém o Care com `cancelAtPeriodEnd`; encerramento da assinatura volta ao Free, os recursos somem do menu e resta uma única assinatura ativa.
+  - Cartão recusado (4000 0000 0000 0002): a Stripe mostra a recusa, não volta ao app e o plano continua Free.
+  - 172 eventos de webhook encaminhados, todos respondidos com 200.
+- **Observações para o usuário:** o nome público da conta Stripe de teste ainda é "New business" (aparece no Checkout e no portal; ajuste em Configurações → Dados da empresa na Stripe); a conta tem Adaptive Pricing ligado, então o Checkout oferece USD além de BRL para quem está fora do Brasil.
 
 ### 69 · Chaves de API dos meios de pagamento no painel do administrador
 
