@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████████` **99%** |
-| Tarefas totais     | 70                             |
+| Progresso          | `███████████████████░` **97%** |
+| Tarefas totais     | 71                             |
 | 🟢 Finalizadas     | 69                             |
-| 🔵 Em andamento    | 1                              |
+| 🔵 Em andamento    | 2                              |
 | 🔴 Bloqueadas      | 0                              |
 | ⚪ A iniciar       | 0                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-18                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (69 ÷ 70 = 98,6%, arredondado para 99%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (69 ÷ 71 = 97,2%, arredondado para 97%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -43,7 +43,8 @@
 
 ### ANDAMENTO
 
-- **70 · Teste real de cada plano com a Stripe em modo de teste** 🔵 — pedido de 2026-10-18 com uma chave restrita de teste (guardada só no `.env.local` e, depois, no painel; nunca versionada). Feito até aqui: chave validada na API (conta BR, moeda BRL, permissões de leitura e escrita), produtos e preços de teste criados para Meta e Care (mensal e anual, nos valores do catálogo), Stripe CLI 1.30.0 conectado para encaminhar os webhooks. Falta: price ids nos planos, checkout com cartão de teste para cada plano e ciclo, webhook liberando os recursos, troca e cancelamento pelo portal voltando ao Free.
+- **70 · Teste real de cada plano com a Stripe em modo de teste** 🔵 — pedido de 2026-10-18 com uma chave restrita de teste (guardada só no painel, cifrada; nunca versionada). Feito até aqui: chave validada na API (conta BR, moeda BRL), produtos e preços de teste para Meta e Care (mensal e anual), price ids gravados nos planos, Stripe CLI encaminhando os webhooks, checkout com cartão de teste aprovado nos 4 planos e ciclos (webhook libera o plano com origem Stripe e ciclo certo, fatura nos registros fiscais, menu e voz conforme o plano), portal abrindo com a assinatura, encerramento voltando ao Free e cartão recusado sem mudar o plano. Falta: troca Meta → Care pela tela do portal e cancelamento no fim do período.
+- **71 · Escolha entre teste e produção nas chaves de pagamento** 🔵 — pedido de 2026-10-18: em Admin → Pagamentos, selecionar se cada provedor usa o ambiente de teste ou o de produção. Escopo: guardar um conjunto de chaves por ambiente (teste e produção) em cada provedor, seletor "Ambiente em uso" em destaque, troca bloqueada para um ambiente sem chaves, cobrança da Stripe seguindo o ambiente em uso, migração 029, testes, documentação e QA no navegador.
 
 ### BLOQUEADAS
 
