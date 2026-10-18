@@ -37,9 +37,6 @@ function buildPlan(
     displayOrder: 1,
     isActive: true,
     isPublic: true,
-    externalProductId: null,
-    externalMonthlyPriceId: null,
-    externalAnnualPriceId: null,
     ...overrides,
   };
 }
@@ -103,26 +100,40 @@ describe('billing config', () => {
     }
   });
 
-  it('prioriza price ids persistidos no plano antes de variaveis de ambiente', () => {
+  it('prioriza os preços do ambiente em uso antes das variaveis de ambiente', () => {
     process.env.STRIPE_PRICE_META_MONTHLY = 'price_env_monthly';
     process.env.STRIPE_PRICE_META_ANNUAL = 'price_env_annual';
 
-    const plan = buildPlan({
-      externalMonthlyPriceId: 'price_db_monthly',
-      externalAnnualPriceId: 'price_db_annual',
-    });
+    const plan = buildPlan();
+    const precos = { mensal: 'price_db_monthly', anual: 'price_db_annual' };
 
-    expect(resolveStripePriceId(plan, 'monthly')).toBe('price_db_monthly');
-    expect(resolveStripePriceId(plan, 'annual')).toBe('price_db_annual');
+    expect(resolveStripePriceId(plan.key, precos, 'monthly', true)).toBe(
+      'price_db_monthly'
+    );
+    expect(resolveStripePriceId(plan.key, precos, 'annual', true)).toBe(
+      'price_db_annual'
+    );
   });
 
-  it('usa variaveis de ambiente quando o plano ainda nao possui ids externos persistidos', () => {
+  it('usa STRIPE_PRICE_* só quando as chaves em uso vêm do .env.local', () => {
     process.env.STRIPE_PRICE_META_MONTHLY = 'price_env_monthly';
     process.env.STRIPE_PRICE_META_ANNUAL = 'price_env_annual';
 
     const plan = buildPlan();
 
-    expect(resolveStripePriceId(plan, 'monthly')).toBe('price_env_monthly');
-    expect(resolveStripePriceId(plan, 'annual')).toBe('price_env_annual');
+    expect(resolveStripePriceId(plan.key, null, 'monthly', true)).toBe(
+      'price_env_monthly'
+    );
+    expect(
+      resolveStripePriceId(
+        plan.key,
+        { mensal: null, anual: null },
+        'annual',
+        true
+      )
+    ).toBe('price_env_annual');
+    // Com as chaves do painel, um preço do .env.local pode ser de outro
+    // ambiente da Stripe: não vale.
+    expect(resolveStripePriceId(plan.key, null, 'monthly', false)).toBeNull();
   });
 });

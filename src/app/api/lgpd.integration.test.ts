@@ -141,8 +141,14 @@ async function faturaPaga(options: {
 beforeAll(async () => {
   process.env.STRIPE_SECRET_KEY = 'sk_test_somente_assinatura_local';
   process.env.STRIPE_WEBHOOK_SECRET = segredoWebhook;
+  // Preço do Care anual no ambiente de teste da Stripe (Admin → Pagamentos).
   await executeStatement(
-    `UPDATE subscription_plans SET external_annual_price_id = ? WHERE plan_key = 'care'`,
+    `INSERT INTO stripe_plan_prices (plan_id, environment, annual_price_id)
+       SELECT * FROM (
+         SELECT id, 'test' AS ambiente, ? AS preco
+           FROM subscription_plans WHERE plan_key = 'care'
+       ) AS novo
+     ON DUPLICATE KEY UPDATE annual_price_id = novo.preco`,
     [precoCareAnual]
   );
   admin = await criarUsuario('admin', 'AdminLgpd');

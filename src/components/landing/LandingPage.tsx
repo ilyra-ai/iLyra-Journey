@@ -204,9 +204,7 @@ export function LandingPage({
       plano.features.filter((recurso) => recurso.enabled)
     );
     const categorias = new Set(habilitados.map((recurso) => recurso.category));
-    const comAssinatura = planos.filter(
-      (plano) => plano.externalMonthlyPriceId || plano.externalAnnualPriceId
-    );
+    const comAssinatura = planos.filter((plano) => plano.assinaturaOnline);
     return {
       planCount: planos.length,
       featureCount: habilitados.length,

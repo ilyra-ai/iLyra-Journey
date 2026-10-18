@@ -285,7 +285,8 @@ export async function exportarDadosDoTitular(userId: string) {
   );
   const clientesDeCobranca = await queryRows<RowDataPacket>(
     `
-      SELECT provider, external_customer_id, email_snapshot, created_at
+      SELECT provider, environment, external_customer_id, email_snapshot,
+             created_at
       FROM billing_customers
       WHERE user_id = ?
     `,

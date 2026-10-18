@@ -38,17 +38,22 @@ function eventoDeAssinatura(options: {
   status: Stripe.Subscription.Status;
   assinaturaId: string;
   clienteId: string;
+  /** Ambiente da Stripe do evento (padrão: teste). */
+  livemode?: boolean;
 }) {
   const agora = Math.floor(Date.now() / 1000);
+  const livemode = options.livemode ?? false;
   return JSON.stringify({
     id: `evt_${randomUUID().replace(/-/g, '')}`,
     object: 'event',
     type: options.tipo,
     created: agora,
+    livemode,
     data: {
       object: {
         id: options.assinaturaId,
         object: 'subscription',
+        livemode,
         customer: options.clienteId,
         status: options.status,
         metadata: { lyra_user_id: options.usuario.id },
@@ -90,8 +95,14 @@ async function planoAtivo(usuario: UsuarioDeTeste) {
 beforeAll(async () => {
   process.env.STRIPE_SECRET_KEY = 'sk_test_somente_assinatura_local';
   process.env.STRIPE_WEBHOOK_SECRET = segredoWebhook;
+  // Preço do Meta mensal no ambiente de teste da Stripe (Admin → Pagamentos).
   await executeStatement(
-    `UPDATE subscription_plans SET external_monthly_price_id = ? WHERE plan_key = 'meta'`,
+    `INSERT INTO stripe_plan_prices (plan_id, environment, monthly_price_id)
+       SELECT * FROM (
+         SELECT id, 'test' AS ambiente, ? AS preco
+           FROM subscription_plans WHERE plan_key = 'meta'
+       ) AS novo
+     ON DUPLICATE KEY UPDATE monthly_price_id = novo.preco`,
     [precoMetaMensal]
   );
 });
@@ -174,11 +185,17 @@ describe('webhook Stripe', () => {
     expect(await planoAtivo(usuario)).toEqual([
       { plan_key: 'meta', source: 'stripe' },
     ]);
-    const mapeamento = await queryRows<{ external_customer_id: string }>(
-      'SELECT external_customer_id FROM billing_customers WHERE user_id = ?',
+    const mapeamento = await queryRows<{
+      external_customer_id: string;
+      environment: string;
+    }>(
+      'SELECT external_customer_id, environment FROM billing_customers WHERE user_id = ?',
       [usuario.id]
     );
-    expect(mapeamento[0]?.external_customer_id).toBe(clienteId);
+    // O cliente fica no ambiente do evento (teste), não no de produção.
+    expect(mapeamento).toEqual([
+      { external_customer_id: clienteId, environment: 'test' },
+    ]);
 
     const reentrega = await processStripeWebhook({
       payload,
@@ -254,5 +271,74 @@ describe('webhook Stripe', () => {
     );
     expect(evento[0]?.status).toBe('error');
     expect(evento[0]?.error_message).toContain('price_inexistente');
+  });
+
+  it('recusa evento de produção com o ambiente de teste em uso', async () => {
+    const eventosAntes = await contar(
+      "SELECT COUNT(*) AS total FROM billing_webhook_events WHERE provider = 'stripe'"
+    );
+    const usuario = await criarUsuario('patient', 'OutroAmbiente');
+    const payload = eventoDeAssinatura({
+      tipo: 'customer.subscription.created',
+      usuario,
+      status: 'active',
+      assinaturaId: `sub_${randomUUID().slice(0, 12)}`,
+      clienteId: `cus_${randomUUID().slice(0, 12)}`,
+      livemode: true,
+    });
+
+    const erro = await processStripeWebhook({
+      payload,
+      signature: assinar(payload),
+    }).catch((error: unknown) => error);
+    expect(erro).toBeInstanceOf(HttpError);
+    expect((erro as HttpError).statusCode).toBe(400);
+    expect((erro as HttpError).message).toMatch(/produção.*teste/);
+    expect(
+      (await planoAtivo(usuario)).filter((p) => p.source === 'stripe')
+    ).toEqual([]);
+    expect(
+      await contar(
+        "SELECT COUNT(*) AS total FROM billing_webhook_events WHERE provider = 'stripe'"
+      )
+    ).toBe(eventosAntes);
+  });
+
+  it('preço cadastrado só em produção não libera plano num evento de teste', async () => {
+    const precoCareProducao = `price_producao_${randomUUID().slice(0, 8)}`;
+    await executeStatement(
+      `INSERT INTO stripe_plan_prices (plan_id, environment, monthly_price_id)
+         SELECT * FROM (
+           SELECT id, 'live' AS ambiente, ? AS preco
+             FROM subscription_plans WHERE plan_key = 'care'
+         ) AS novo
+       ON DUPLICATE KEY UPDATE monthly_price_id = novo.preco`,
+      [precoCareProducao]
+    );
+    try {
+      const usuario = await criarUsuario('patient', 'PrecoDeProducao');
+      const payload = eventoDeAssinatura({
+        tipo: 'customer.subscription.created',
+        usuario,
+        status: 'active',
+        assinaturaId: `sub_${randomUUID().slice(0, 12)}`,
+        clienteId: `cus_${randomUUID().slice(0, 12)}`,
+      }).replaceAll(precoMetaMensal, precoCareProducao);
+
+      const erro = await processStripeWebhook({
+        payload,
+        signature: assinar(payload),
+      }).catch((error: unknown) => error);
+      expect(erro).toBeInstanceOf(HttpError);
+      expect((erro as HttpError).message).toMatch(/ambiente de teste/);
+      expect(
+        (await planoAtivo(usuario)).filter((p) => p.source === 'stripe')
+      ).toEqual([]);
+    } finally {
+      await executeStatement(
+        "DELETE FROM stripe_plan_prices WHERE environment = 'live' AND monthly_price_id = ?",
+        [precoCareProducao]
+      );
+    }
   });
 });

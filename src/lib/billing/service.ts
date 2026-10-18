@@ -9,6 +9,11 @@ import {
 } from '@/lib/billing/config';
 import { getStripeClient } from '@/lib/billing/stripe';
 import { credenciaisDoStripe } from '@/lib/pagamentos/credenciais';
+import {
+  type AmbienteDaStripe,
+  mapaDePrecosDaStripe,
+  type PrecosDoPlanoNaStripe,
+} from '@/lib/pagamentos/precos-stripe';
 import { HttpError } from '@/lib/http-error';
 import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
 import {
@@ -34,9 +39,6 @@ interface BillingPlanRow {
   display_order: number;
   is_active: number;
   is_public: number;
-  external_product_id: string | null;
-  external_monthly_price_id: string | null;
-  external_annual_price_id: string | null;
 }
 
 interface BillingCustomerRow {
@@ -115,33 +117,34 @@ function toPlanSummary(row: BillingPlanRow): SubscriptionPlanSummary {
     displayOrder: Number(row.display_order),
     isActive: row.is_active === 1,
     isPublic: row.is_public === 1,
-    externalProductId: row.external_product_id,
-    externalMonthlyPriceId: row.external_monthly_price_id,
-    externalAnnualPriceId: row.external_annual_price_id,
   };
 }
+
+const LISTA_DE_COLUNAS_DO_PLANO = [
+  'id',
+  'plan_key',
+  'name',
+  'tagline',
+  'description',
+  'monthly_price',
+  'annual_price',
+  'currency_code',
+  'highlight_text',
+  'accent_from',
+  'accent_to',
+  'display_order',
+  'is_active',
+  'is_public',
+] as const;
+const COLUNAS_DO_PLANO = LISTA_DE_COLUNAS_DO_PLANO.join(', ');
+const COLUNAS_DO_PLANO_COM_ALIAS = LISTA_DE_COLUNAS_DO_PLANO.map(
+  (coluna) => `p.${coluna}`
+).join(', ');
 
 async function getPlanCatalogRows() {
   return queryRows<BillingPlanRow>(
     `
-      SELECT
-        id,
-        plan_key,
-        name,
-        tagline,
-        description,
-        monthly_price,
-        annual_price,
-        currency_code,
-        highlight_text,
-        accent_from,
-        accent_to,
-        display_order,
-        is_active,
-        is_public,
-        external_product_id,
-        external_monthly_price_id,
-        external_annual_price_id
+      SELECT ${COLUNAS_DO_PLANO}
       FROM subscription_plans
       WHERE is_active = TRUE
       ORDER BY display_order ASC
@@ -159,24 +162,7 @@ export async function getPublicPlanCatalog() {
 async function getPlanByKey(planKey: PlanKey) {
   const rows = await queryRows<BillingPlanRow>(
     `
-      SELECT
-        id,
-        plan_key,
-        name,
-        tagline,
-        description,
-        monthly_price,
-        annual_price,
-        currency_code,
-        highlight_text,
-        accent_from,
-        accent_to,
-        display_order,
-        is_active,
-        is_public,
-        external_product_id,
-        external_monthly_price_id,
-        external_annual_price_id
+      SELECT ${COLUNAS_DO_PLANO}
       FROM subscription_plans
       WHERE plan_key = ?
       LIMIT 1
@@ -192,39 +178,30 @@ async function getPlanByKey(planKey: PlanKey) {
   return row;
 }
 
-async function getPlanByStripePriceId(priceId: string) {
+/**
+ * Plano do price id pago, entre os preços cadastrados para o ambiente do
+ * evento (Admin → Pagamentos). Um preço de outro ambiente não libera plano.
+ */
+async function getPlanByStripePriceId(
+  priceId: string,
+  ambiente: AmbienteDaStripe
+) {
   const rows = await queryRows<BillingPlanRow>(
     `
-      SELECT
-        id,
-        plan_key,
-        name,
-        tagline,
-        description,
-        monthly_price,
-        annual_price,
-        currency_code,
-        highlight_text,
-        accent_from,
-        accent_to,
-        display_order,
-        is_active,
-        is_public,
-        external_product_id,
-        external_monthly_price_id,
-        external_annual_price_id
-      FROM subscription_plans
-      WHERE external_monthly_price_id = ?
-         OR external_annual_price_id = ?
+      SELECT ${COLUNAS_DO_PLANO_COM_ALIAS}
+      FROM subscription_plans p
+      INNER JOIN stripe_plan_prices s ON s.plan_id = p.id
+      WHERE s.environment = ?
+        AND (s.monthly_price_id = ? OR s.annual_price_id = ?)
       LIMIT 1
     `,
-    [priceId, priceId]
+    [ambiente, priceId, priceId]
   );
 
   const row = rows[0];
   if (!row) {
     throw new HttpError(
-      `Nenhum plano MySQL foi vinculado ao price id externo ${priceId}.`,
+      `Nenhum plano tem o preço ${priceId} da Stripe cadastrado no ambiente de ${ambiente === 'live' ? 'produção' : 'teste'} (Admin → Pagamentos).`,
       400
     );
   }
@@ -232,16 +209,25 @@ async function getPlanByStripePriceId(priceId: string) {
   return row;
 }
 
-async function getBillingCustomerByUserId(userId: string) {
+/** Ambiente da Stripe de um objeto recebido dela (campo `livemode`). */
+function ambienteDoObjeto(objeto: { livemode?: boolean | null }) {
+  return objeto.livemode === true ? 'live' : 'test';
+}
+
+async function getBillingCustomerByUserId(
+  userId: string,
+  ambiente: AmbienteDaStripe
+) {
   const rows = await queryRows<BillingCustomerRow>(
     `
       SELECT id, user_id, external_customer_id, email_snapshot
       FROM billing_customers
       WHERE provider = ?
+        AND environment = ?
         AND user_id = ?
       LIMIT 1
     `,
-    [getStripeProviderName(), userId]
+    [getStripeProviderName(), ambiente, userId]
   );
 
   return rows[0] ?? null;
@@ -262,8 +248,13 @@ async function getUserIdByExternalCustomerId(externalCustomerId: string) {
   return rows[0]?.user_id ?? null;
 }
 
+/**
+ * Cliente da Stripe da pessoa num ambiente: o de teste e o de produção são
+ * contas diferentes na Stripe, cada um com o seu `cus_...`.
+ */
 async function upsertBillingCustomerMapping(options: {
   userId: string;
+  ambiente: AmbienteDaStripe;
   externalCustomerId: string;
   emailSnapshot: string | null;
   metadata?: Record<string, unknown> | null;
@@ -274,20 +265,22 @@ async function upsertBillingCustomerMapping(options: {
         id,
         user_id,
         provider,
+        environment,
         external_customer_id,
         email_snapshot,
         metadata
       )
-      VALUES (?, ?, ?, ?, ?, ?) AS novo
+      VALUES (?, ?, ?, ?, ?, ?, ?) AS novo
       ON DUPLICATE KEY UPDATE
         external_customer_id = novo.external_customer_id,
-        email_snapshot = novo.email_snapshot,
+        email_snapshot = COALESCE(novo.email_snapshot, billing_customers.email_snapshot),
         metadata = novo.metadata
     `,
     [
       crypto.randomUUID(),
       options.userId,
       getStripeProviderName(),
+      options.ambiente,
       options.externalCustomerId,
       options.emailSnapshot,
       options.metadata ? JSON.stringify(options.metadata) : null,
@@ -315,8 +308,12 @@ async function getFullName(userId: string) {
   return fullName || null;
 }
 
-async function ensureStripeCustomer(session: AppSession) {
-  const existing = await getBillingCustomerByUserId(session.user.id);
+/** Cliente da pessoa no ambiente em uso; cria na Stripe quando não existe. */
+async function ensureStripeCustomer(
+  session: AppSession,
+  ambiente: AmbienteDaStripe
+) {
+  const existing = await getBillingCustomerByUserId(session.user.id, ambiente);
   if (existing) {
     return existing.external_customer_id;
   }
@@ -334,6 +331,7 @@ async function ensureStripeCustomer(session: AppSession) {
 
   await upsertBillingCustomerMapping({
     userId: session.user.id,
+    ambiente,
     externalCustomerId: customer.id,
     emailSnapshot: session.user.email,
     metadata: {
@@ -564,16 +562,24 @@ function buildBillingCatalogPlans(options: {
   plans: SubscriptionPlanSummary[];
   currentPlanKey: PlanKey | null;
   billingConfigured: boolean;
+  precos: Map<string, PrecosDoPlanoNaStripe>;
+  aceitarPrecosDoEnv: boolean;
 }): BillingCatalogPlan[] {
   return options.plans.map((plan) => {
     const availableIntervals: Array<'monthly' | 'annual'> = [];
+    const precos = options.precos.get(plan.id);
 
-    if (resolveStripePriceId(plan, 'monthly')) {
-      availableIntervals.push('monthly');
-    }
-
-    if (resolveStripePriceId(plan, 'annual')) {
-      availableIntervals.push('annual');
+    for (const intervalo of ['monthly', 'annual'] as const) {
+      if (
+        resolveStripePriceId(
+          plan.key,
+          precos,
+          intervalo,
+          options.aceitarPrecosDoEnv
+        )
+      ) {
+        availableIntervals.push(intervalo);
+      }
     }
 
     return {
@@ -601,15 +607,19 @@ export async function getAccountBillingContext(options: {
   session: AppSession;
   origin?: string;
 }): Promise<AccountBillingContext> {
-  const [plans, activeSubscription, linkedCustomer] = await Promise.all([
-    getPublicPlanCatalog(),
-    getActiveSubscriptionRow(options.session.user.id),
-    getBillingCustomerByUserId(options.session.user.id),
-  ]);
+  const credenciais = await credenciaisDoStripe();
+  const [plans, activeSubscription, linkedCustomer, precos] = await Promise.all(
+    [
+      getPublicPlanCatalog(),
+      getActiveSubscriptionRow(options.session.user.id),
+      getBillingCustomerByUserId(options.session.user.id, credenciais.ambiente),
+      mapaDePrecosDaStripe(credenciais.ambiente),
+    ]
+  );
 
   const statusDoAmbiente = getStripeEnvironmentStatus(
     options.origin,
-    await credenciaisDoStripe()
+    credenciais
   );
   // Os nomes das variáveis de configuração que faltam são detalhe interno:
   // só o administrador os recebe (antes iam para qualquer usuário e
@@ -621,10 +631,9 @@ export async function getAccountBillingContext(options: {
 
   return {
     environment,
-    customerLinked: Boolean(
-      linkedCustomer?.external_customer_id ||
-      activeSubscription?.external_customer_id
-    ),
+    // Só conta o cliente do ambiente em uso: o de outro ambiente não abre o
+    // portal com as chaves atuais.
+    customerLinked: Boolean(linkedCustomer?.external_customer_id),
     subscriptionSource: activeSubscription?.source ?? null,
     plans: buildBillingCatalogPlans({
       plans,
@@ -632,6 +641,8 @@ export async function getAccountBillingContext(options: {
         (plans.find((plan) => plan.id === activeSubscription?.plan_id)
           ?.key as PlanKey | null) ?? null,
       billingConfigured: environment.configured,
+      precos,
+      aceitarPrecosDoEnv: credenciais.origem === 'ambiente',
     }),
   };
 }
@@ -639,15 +650,13 @@ export async function getAccountBillingContext(options: {
 /**
  * Recusa a operação de cobrança quando a Stripe não está configurada. O
  * administrador recebe a lista do que falta; os demais, uma mensagem sem
- * detalhes internos de configuração.
+ * detalhes internos de configuração. Devolve as credenciais em uso.
  */
 async function exigirCobrancaConfigurada(session: AppSession, origin?: string) {
-  const environment = getStripeEnvironmentStatus(
-    origin,
-    await credenciaisDoStripe()
-  );
+  const credenciais = await credenciaisDoStripe();
+  const environment = getStripeEnvironmentStatus(origin, credenciais);
   if (environment.configured) {
-    return;
+    return credenciais;
   }
   throw new HttpError(
     session.user.role === 'admin'
@@ -663,7 +672,10 @@ export async function createStripeCheckoutUrl(options: {
   billingInterval: 'monthly' | 'annual';
   origin?: string;
 }) {
-  await exigirCobrancaConfigurada(options.session, options.origin);
+  const credenciais = await exigirCobrancaConfigurada(
+    options.session,
+    options.origin
+  );
 
   if (options.planKey === 'free') {
     throw new HttpError(
@@ -673,11 +685,16 @@ export async function createStripeCheckoutUrl(options: {
   }
 
   const plan = toPlanSummary(await getPlanByKey(options.planKey));
-  const priceId = resolveStripePriceId(plan, options.billingInterval);
+  const priceId = resolveStripePriceId(
+    plan.key,
+    (await mapaDePrecosDaStripe(credenciais.ambiente)).get(plan.id),
+    options.billingInterval,
+    credenciais.origem === 'ambiente'
+  );
 
   if (!priceId) {
     throw new HttpError(
-      `O plano ${plan.name} ainda não possui price id Stripe configurado para o ciclo ${options.billingInterval}.`,
+      `O plano ${plan.name} ainda não tem preço da Stripe para o ciclo ${options.billingInterval === 'annual' ? 'anual' : 'mensal'} no ambiente de ${credenciais.ambiente === 'live' ? 'produção' : 'teste'} (Admin → Pagamentos).`,
       400
     );
   }
@@ -691,7 +708,10 @@ export async function createStripeCheckoutUrl(options: {
   }
 
   const stripe = await getStripeClient();
-  const customerId = await ensureStripeCustomer(options.session);
+  const customerId = await ensureStripeCustomer(
+    options.session,
+    credenciais.ambiente
+  );
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
     customer: customerId,
@@ -733,7 +753,10 @@ export async function createStripePortalUrl(options: {
   session: AppSession;
   origin?: string;
 }) {
-  await exigirCobrancaConfigurada(options.session, options.origin);
+  const credenciais = await exigirCobrancaConfigurada(
+    options.session,
+    options.origin
+  );
 
   const baseUrl = getBillingBaseUrl(options.origin);
   if (!baseUrl) {
@@ -743,12 +766,10 @@ export async function createStripePortalUrl(options: {
     );
   }
 
-  const linkedCustomer = await getBillingCustomerByUserId(
-    options.session.user.id
+  const customerId = await ensureStripeCustomer(
+    options.session,
+    credenciais.ambiente
   );
-  const customerId =
-    linkedCustomer?.external_customer_id ||
-    (await ensureStripeCustomer(options.session));
 
   const stripe = await getStripeClient();
   const portalSession = await stripe.billingPortal.sessions.create({
@@ -876,7 +897,8 @@ async function syncStripeSubscription(
     );
   }
 
-  const plan = await getPlanByStripePriceId(priceId);
+  const ambiente = ambienteDoObjeto(subscription);
+  const plan = await getPlanByStripePriceId(priceId, ambiente);
   const userId = await resolveUserForStripeSubscription(subscription);
   const customerId =
     typeof subscription.customer === 'string'
@@ -885,6 +907,7 @@ async function syncStripeSubscription(
 
   await upsertBillingCustomerMapping({
     userId,
+    ambiente,
     externalCustomerId: customerId,
     emailSnapshot: null,
     metadata: {
@@ -996,20 +1019,21 @@ async function registrarFaturaPaga(invoice: Stripe.Invoice) {
   if (priceId) {
     const planos = await queryRows<{
       plan_key: string;
-      external_annual_price_id: string | null;
+      annual_price_id: string | null;
     }>(
       `
-        SELECT plan_key, external_annual_price_id
-        FROM subscription_plans
-        WHERE external_monthly_price_id = ? OR external_annual_price_id = ?
+        SELECT p.plan_key, s.annual_price_id
+        FROM stripe_plan_prices s
+        INNER JOIN subscription_plans p ON p.id = s.plan_id
+        WHERE s.environment = ?
+          AND (s.monthly_price_id = ? OR s.annual_price_id = ?)
         LIMIT 1
       `,
-      [priceId, priceId]
+      [ambienteDoObjeto(invoice), priceId, priceId]
     );
     if (planos[0]) {
       planKey = planos[0].plan_key;
-      intervalo =
-        planos[0].external_annual_price_id === priceId ? 'annual' : 'monthly';
+      intervalo = planos[0].annual_price_id === priceId ? 'annual' : 'monthly';
     }
   }
 
@@ -1084,7 +1108,8 @@ export async function processStripeWebhook(options: {
   payload: string;
   signature: string | null;
 }) {
-  const webhookSecret = (await credenciaisDoStripe()).segredoDoWebhook;
+  const credenciais = await credenciaisDoStripe();
+  const webhookSecret = credenciais.segredoDoWebhook;
   if (!webhookSecret) {
     throw new HttpError(
       'Billing externo Stripe não está pronto: falta o segredo do webhook (Admin → Pagamentos ou STRIPE_WEBHOOK_SECRET).',
@@ -1102,6 +1127,17 @@ export async function processStripeWebhook(options: {
     options.signature,
     webhookSecret
   );
+
+  // O segredo do webhook já é do ambiente em uso; conferir o `livemode`
+  // impede que um evento de teste mude planos com a produção em uso (e o
+  // contrário), mesmo com um segredo configurado no lugar errado.
+  const ambienteDoEvento = ambienteDoObjeto(event);
+  if (ambienteDoEvento !== credenciais.ambiente) {
+    throw new HttpError(
+      `Evento ${event.id} é do ambiente de ${ambienteDoEvento === 'live' ? 'produção' : 'teste'} da Stripe, mas o ambiente em uso é ${credenciais.ambiente === 'live' ? 'produção' : 'teste'}.`,
+      400
+    );
+  }
 
   const record = await ensureWebhookEventRecord(event);
   if (record?.status === 'processed') {
@@ -1126,6 +1162,7 @@ export async function processStripeWebhook(options: {
         if (metadataUserId && typeof checkoutSession.customer === 'string') {
           await upsertBillingCustomerMapping({
             userId: metadataUserId,
+            ambiente: ambienteDoEvento,
             externalCustomerId: checkoutSession.customer,
             emailSnapshot: null,
             metadata: {

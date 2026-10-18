@@ -41,9 +41,6 @@ function assinaturaCom(
       displayOrder: 0,
       isActive: true,
       isPublic: true,
-      externalProductId: null,
-      externalMonthlyPriceId: null,
-      externalAnnualPriceId: null,
     },
     features: PLAN_FEATURE_KEYS.map((key, indice) => ({
       key,

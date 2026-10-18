@@ -1,7 +1,13 @@
 import type { PoolConnection, RowDataPacket } from 'mysql2/promise';
 
+import {
+  getStripeEnvironmentStatus,
+  resolveStripePriceId,
+} from '@/lib/billing/config';
 import { HttpError } from '@/lib/http-error';
 import { queryRows, withTransaction } from '@/lib/mysql/pool';
+import { credenciaisDoStripe } from '@/lib/pagamentos/credenciais';
+import { mapaDePrecosDaStripe } from '@/lib/pagamentos/precos-stripe';
 import {
   AdminUserListItem,
   AdminUserListResponse,
@@ -42,9 +48,6 @@ interface CurrentSubscriptionRow {
   display_order: number;
   is_active: number;
   is_public: number;
-  external_product_id: string | null;
-  external_monthly_price_id: string | null;
-  external_annual_price_id: string | null;
 }
 
 interface EntitlementRow {
@@ -76,9 +79,6 @@ interface PlanMatrixRow {
   display_order: number;
   is_active: number;
   is_public: number;
-  external_product_id: string | null;
-  external_monthly_price_id: string | null;
-  external_annual_price_id: string | null;
   feature_key: PlanFeatureKey;
   feature_name: string;
   feature_description: string;
@@ -155,9 +155,6 @@ function toPlanSummary(row: CurrentSubscriptionRow): SubscriptionPlanSummary {
     displayOrder: Number(row.display_order),
     isActive: row.is_active === 1,
     isPublic: row.is_public === 1,
-    externalProductId: row.external_product_id,
-    externalMonthlyPriceId: row.external_monthly_price_id,
-    externalAnnualPriceId: row.external_annual_price_id,
   };
 }
 
@@ -219,10 +216,7 @@ async function fetchCurrentSubscriptionRow(
       p.accent_to,
       p.display_order,
       p.is_active,
-      p.is_public,
-      p.external_product_id,
-      p.external_monthly_price_id,
-      p.external_annual_price_id
+      p.is_public
     FROM user_subscriptions us
     INNER JOIN subscription_plans p ON p.id = us.plan_id
     WHERE us.user_id = ?
@@ -599,9 +593,6 @@ export async function getPlanMatrix(): Promise<PlanMatrixResponse> {
       p.display_order,
       p.is_active,
       p.is_public,
-      p.external_product_id,
-      p.external_monthly_price_id,
-      p.external_annual_price_id,
       f.feature_key,
       f.name AS feature_name,
       f.description AS feature_description,
@@ -618,6 +609,28 @@ export async function getPlanMatrix(): Promise<PlanMatrixResponse> {
     INNER JOIN plan_features f ON f.id = pe.feature_id
     ORDER BY p.display_order ASC, f.sort_order ASC
   `);
+
+  // "Assinável online": a Stripe em uso está configurada e o plano tem preço
+  // no ambiente em uso (teste ou produção).
+  const credenciais = await credenciaisDoStripe();
+  const cobrancaPronta = getStripeEnvironmentStatus(
+    undefined,
+    credenciais
+  ).configured;
+  const precos = await mapaDePrecosDaStripe(credenciais.ambiente);
+  const assinavel = (planId: string, planKey: PlanKey) =>
+    cobrancaPronta &&
+    planKey !== 'free' &&
+    (['monthly', 'annual'] as const).some((intervalo) =>
+      Boolean(
+        resolveStripePriceId(
+          planKey,
+          precos.get(planId),
+          intervalo,
+          credenciais.origem === 'ambiente'
+        )
+      )
+    );
 
   const plansMap = new Map<PlanKey, PlanMatrixPlan>();
 
@@ -639,10 +652,8 @@ export async function getPlanMatrix(): Promise<PlanMatrixResponse> {
         displayOrder: Number(row.display_order),
         isActive: row.is_active === 1,
         isPublic: row.is_public === 1,
-        externalProductId: row.external_product_id,
-        externalMonthlyPriceId: row.external_monthly_price_id,
-        externalAnnualPriceId: row.external_annual_price_id,
         features: [],
+        assinaturaOnline: assinavel(row.plan_id, row.plan_key),
       });
     }
 
@@ -691,10 +702,7 @@ export async function updatePlanMatrixByKey(
           accent_from = ?,
           accent_to = ?,
           is_active = ?,
-          is_public = ?,
-          external_product_id = ?,
-          external_monthly_price_id = ?,
-          external_annual_price_id = ?
+          is_public = ?
         WHERE id = ?
       `,
       [
@@ -709,9 +717,6 @@ export async function updatePlanMatrixByKey(
         input.accentTo.trim(),
         input.isActive ? 1 : 0,
         input.isPublic ? 1 : 0,
-        input.externalProductId?.trim() || null,
-        input.externalMonthlyPriceId?.trim() || null,
-        input.externalAnnualPriceId?.trim() || null,
         planId,
       ]
     );

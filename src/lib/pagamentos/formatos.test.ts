@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { errosDeFormato } from './formatos';
+import {
+  ambienteDaChaveStripe,
+  errosDeFormato,
+  errosDosPrecosDaStripe,
+} from './formatos';
 
 describe('formatos das credenciais de pagamento', () => {
   it('aceita os formatos emitidos por cada provedor', () => {
@@ -37,5 +41,53 @@ describe('formatos das credenciais de pagamento', () => {
       })
     ).toHaveLength(2);
     expect(errosDeFormato('paypal', {})).toEqual([]);
+  });
+
+  it('na Stripe, recusa chave do outro ambiente', () => {
+    expect(ambienteDaChaveStripe('sk_live_51Abc')).toBe('live');
+    expect(ambienteDaChaveStripe(' rk_test_51Abc')).toBe('test');
+    expect(ambienteDaChaveStripe('whsec_abc')).toBeNull();
+    expect(
+      errosDeFormato('stripe', { segredo: 'sk_test_51AbCdEfGhIjKlMn' }, 'test')
+    ).toEqual([]);
+    const erros = errosDeFormato(
+      'stripe',
+      {
+        segredo: 'sk_test_51AbCdEfGhIjKlMn',
+        chavePublica: 'pk_test_51AbCdEfGhIjKlMn',
+      },
+      'live'
+    );
+    expect(erros).toHaveLength(2);
+    expect(erros[0]).toMatch(/é de teste, mas está nas chaves de produção/);
+    // Fora da Stripe o prefixo não diz o ambiente: nada a recusar.
+    expect(
+      errosDeFormato(
+        'mercado_pago',
+        { segredo: 'TEST-1234567890123456-101800-abcdef' },
+        'live'
+      )
+    ).toEqual([]);
+  });
+
+  it('confere os ids de produto e preço e preço repetido', () => {
+    expect(
+      errosDosPrecosDaStripe([
+        { plano: 'meta', produto: 'prod_AbC123', mensal: 'price_Mensal01' },
+        { plano: 'care', anual: 'price_Anual01', mensal: '' },
+      ])
+    ).toEqual([]);
+    const erros = errosDosPrecosDaStripe(
+      [
+        { plano: 'meta', produto: 'price_Errado', mensal: 'prod_Errado1' },
+        { plano: 'care', mensal: 'price_Repetido', anual: 'price_Repetido' },
+      ],
+      (plano) => (plano === 'meta' ? 'Meta' : 'Care')
+    );
+    expect(erros).toEqual([
+      'Meta: o produto da Stripe começa com prod_.',
+      'Meta (mensal): o preço da Stripe começa com price_.',
+      'Care (anual): o mesmo preço já está em Care (mensal); cada plano e ciclo precisa do seu.',
+    ]);
   });
 });

@@ -62,14 +62,44 @@ export const FORMATOS_DE_PAGAMENTO: Record<
   },
 };
 
-/** Mensagens dos campos preenchidos fora do formato (vazio não é erro). */
+export type AmbienteComFormato = 'test' | 'live';
+
+/**
+ * Concordância com o nome do provedor nas mensagens: "a Stripe" (a empresa
+ * usa o feminino em português), "o Mercado Pago", "o PayPal".
+ */
+export function concordancia(provedor: ProvedorComFormato) {
+  return provedor === 'stripe'
+    ? { o: 'a', do: 'da', pelo: 'pela', desativado: 'desativada' }
+    : { o: 'o', do: 'do', pelo: 'pelo', desativado: 'desativado' };
+}
+
+/** O ambiente que o próprio formato da chave da Stripe declara. */
+export function ambienteDaChaveStripe(
+  chave: string
+): AmbienteComFormato | null {
+  const encontrado = /^(?:sk|rk|pk)_(test|live)_/.exec(chave.trim());
+  if (!encontrado) return null;
+  return encontrado[1] === 'live' ? 'live' : 'test';
+}
+
+function nomeDoAmbiente(ambiente: AmbienteComFormato) {
+  return ambiente === 'live' ? 'produção' : 'teste';
+}
+
+/**
+ * Mensagens dos campos preenchidos fora do formato (vazio não é erro). Com o
+ * `ambiente` do conjunto, a Stripe também recusa chave do outro ambiente
+ * (o prefixo sk_test_/sk_live_ diz de qual conta ela é).
+ */
 export function errosDeFormato(
   provedor: ProvedorComFormato,
   campos: {
     chavePublica?: string | null;
     segredo?: string | null;
     segredoDoWebhook?: string | null;
-  }
+  },
+  ambiente?: AmbienteComFormato
 ): string[] {
   const formato = FORMATOS_DE_PAGAMENTO[provedor];
   const erros: string[] = [];
@@ -80,5 +110,65 @@ export function errosDeFormato(
   conferir(campos.chavePublica, formato.publico);
   conferir(campos.segredo, formato.segredo);
   conferir(campos.segredoDoWebhook, formato.webhook);
+  if (provedor === 'stripe' && ambiente) {
+    for (const chave of [campos.segredo, campos.chavePublica]) {
+      const declarado = chave ? ambienteDaChaveStripe(chave) : null;
+      if (declarado && declarado !== ambiente) {
+        erros.push(
+          `A chave ${chave?.trim().slice(0, 8)}… é de ${nomeDoAmbiente(declarado)}, mas está nas chaves de ${nomeDoAmbiente(ambiente)}.`
+        );
+      }
+    }
+  }
+  return erros;
+}
+
+export const FORMATO_DO_PRODUTO_STRIPE = /^prod_[A-Za-z0-9]{6,}$/;
+export const FORMATO_DO_PRECO_STRIPE = /^price_[A-Za-z0-9]{6,}$/;
+
+/** Produto e preços de um plano na Stripe, como digitados na tela. */
+export interface PrecosInformados {
+  plano: string;
+  produto?: string | null;
+  mensal?: string | null;
+  anual?: string | null;
+}
+
+/**
+ * Formato dos ids de produto (prod_) e de preço (price_) e preço repetido
+ * entre planos ou ciclos (o webhook descobre o plano pelo preço pago).
+ */
+export function errosDosPrecosDaStripe(
+  precos: PrecosInformados[],
+  nomeDoPlano: (plano: string) => string = (plano) => plano
+): string[] {
+  const erros: string[] = [];
+  const vistos = new Map<string, string>();
+  for (const preco of precos) {
+    const nome = nomeDoPlano(preco.plano);
+    const produto = preco.produto?.trim();
+    if (produto && !FORMATO_DO_PRODUTO_STRIPE.test(produto)) {
+      erros.push(`${nome}: o produto da Stripe começa com prod_.`);
+    }
+    for (const [ciclo, valor] of [
+      ['mensal', preco.mensal],
+      ['anual', preco.anual],
+    ] as const) {
+      const limpo = valor?.trim();
+      if (!limpo) continue;
+      if (!FORMATO_DO_PRECO_STRIPE.test(limpo)) {
+        erros.push(`${nome} (${ciclo}): o preço da Stripe começa com price_.`);
+        continue;
+      }
+      const anterior = vistos.get(limpo);
+      if (anterior) {
+        erros.push(
+          `${nome} (${ciclo}): o mesmo preço já está em ${anterior}; cada plano e ciclo precisa do seu.`
+        );
+      } else {
+        vistos.set(limpo, `${nome} (${ciclo})`);
+      }
+    }
+  }
   return erros;
 }

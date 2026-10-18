@@ -210,7 +210,7 @@ export const navigationItems: NavigationDefinition[] = [
     href: '/admin/payments',
     label: 'Pagamentos',
     description:
-      'Chaves de API da Stripe, do Mercado Pago e do PayPal, com teste de conexão.',
+      'Chaves de API da Stripe, do Mercado Pago e do PayPal, de teste e de produção, com o ambiente em uso.',
     icon: CreditCard,
     section: 'Administração',
     sectionKey: 'admin',

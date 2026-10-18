@@ -29,7 +29,7 @@ export default function PaymentsAdminPage() {
     <AppShell>
       <PageIntro
         title="Pagamentos"
-        description="Chaves de API da Stripe, do Mercado Pago e do PayPal: cadastre, teste a conexão com o provedor e escolha o ambiente de teste ou de produção."
+        description="Chaves de API da Stripe, do Mercado Pago e do PayPal: cadastre as de teste e as de produção, teste a conexão com o provedor e escolha qual ambiente está em uso."
       />
       <MeiosDePagamento />
     </AppShell>

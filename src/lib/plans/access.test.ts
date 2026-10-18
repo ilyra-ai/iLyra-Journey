@@ -53,9 +53,6 @@ function buildSubscription(
       displayOrder: 0,
       isActive: true,
       isPublic: true,
-      externalProductId: null,
-      externalMonthlyPriceId: null,
-      externalAnnualPriceId: null,
     },
     features,
   };

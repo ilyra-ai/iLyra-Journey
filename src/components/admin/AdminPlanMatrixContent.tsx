@@ -220,9 +220,6 @@ export function AdminPlanMatrixContent() {
           accentTo: plan.accentTo,
           isActive: plan.isActive,
           isPublic: plan.isPublic,
-          externalProductId: plan.externalProductId,
-          externalMonthlyPriceId: plan.externalMonthlyPriceId,
-          externalAnnualPriceId: plan.externalAnnualPriceId,
           features: plan.features.map((feature) => ({
             key: feature.key,
             enabled: feature.enabled,

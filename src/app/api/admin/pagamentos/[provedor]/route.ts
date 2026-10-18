@@ -3,62 +3,35 @@ import { NextResponse } from 'next/server';
 import { HttpError } from '@/lib/http-error';
 import { lerJson, respostaDeErro } from '@/lib/http/api';
 import { requireAdminSession } from '@/lib/mysql/server-auth';
-import {
-  removerCredenciais,
-  salvarCredenciais,
-} from '@/lib/pagamentos/credenciais';
-import {
-  credencialSchema,
-  entradaDaCredencial,
-  provedorSchema,
-} from '@/lib/pagamentos/esquema';
+import { salvarConfiguracao } from '@/lib/pagamentos/credenciais';
+import { configuracaoSchema, provedorSchema } from '@/lib/pagamentos/esquema';
 
 export const runtime = 'nodejs';
 
 const SEM_CACHE = { 'Cache-Control': 'private, no-store' };
 
-type Contexto = { params: Promise<{ provedor: string }> };
-
-async function provedorDa(contexto: Contexto) {
-  const resultado = provedorSchema.safeParse((await contexto.params).provedor);
-  if (!resultado.success) {
-    throw new HttpError('Meio de pagamento desconhecido.', 404);
-  }
-  return resultado.data;
-}
-
 /**
- * Grava as credenciais do provedor. Segredo em branco mantém o que já está
- * salvo; os segredos são cifrados antes de ir ao banco.
+ * Ambiente em uso (teste ou produção) e se o provedor está ativo. Ativar um
+ * ambiente cujas chaves não estão prontas responde 409 com o que falta.
  */
-export async function PUT(request: Request, contexto: Contexto) {
+export async function PUT(
+  request: Request,
+  contexto: { params: Promise<{ provedor: string }> }
+) {
   try {
     const sessao = await requireAdminSession();
-    const provedor = await provedorDa(contexto);
-    const informado = await lerJson(request, credencialSchema);
-    const { entrada, erros } = entradaDaCredencial(provedor, informado);
-    if (erros.length > 0) {
-      throw new HttpError(erros.join(' '), 400);
+    const provedor = provedorSchema.safeParse((await contexto.params).provedor);
+    if (!provedor.success) {
+      throw new HttpError('Meio de pagamento desconhecido.', 404);
     }
-    const credencial = await salvarCredenciais(
-      provedor,
+    const entrada = await lerJson(request, configuracaoSchema);
+    const credencial = await salvarConfiguracao(
+      provedor.data,
       entrada,
       sessao.user.id
     );
     return NextResponse.json({ credencial }, { headers: SEM_CACHE });
   } catch (error) {
-    return respostaDeErro(error, 'Falha ao salvar as credenciais.');
-  }
-}
-
-/** Apaga todas as credenciais do provedor. */
-export async function DELETE(_request: Request, contexto: Contexto) {
-  try {
-    await requireAdminSession();
-    const provedor = await provedorDa(contexto);
-    await removerCredenciais(provedor);
-    return NextResponse.json({ removido: provedor }, { headers: SEM_CACHE });
-  } catch (error) {
-    return respostaDeErro(error, 'Falha ao remover as credenciais.');
+    return respostaDeErro(error, 'Falha ao salvar o ambiente em uso.');
   }
 }

@@ -1,8 +1,6 @@
 import type Stripe from 'stripe';
 
-import { PlanKey, SubscriptionPlanSummary } from '@/types/subscription';
-
-import { BillingEnvironmentStatus } from '@/types/subscription';
+import { BillingEnvironmentStatus, PlanKey } from '@/types/subscription';
 
 const STRIPE_PROVIDER = 'stripe' as const;
 // Versão de API fixada pelo stripe-node 23 (ver CHANGELOG do pacote). O
@@ -91,26 +89,26 @@ function getStripeEnvPriceId(planKey: PlanKey, interval: 'monthly' | 'annual') {
   );
 }
 
+/**
+ * Price id da Stripe do plano no ciclo: o cadastrado em Admin → Pagamentos
+ * para o ambiente em uso (`precos`) e, só quando as chaves em uso vêm do
+ * .env.local (`aceitarPrecosDoEnv`), as variáveis STRIPE_PRICE_*. Os preços
+ * do .env.local nunca valem com as chaves do painel: podem ser de outro
+ * ambiente da Stripe.
+ */
 export function resolveStripePriceId(
-  plan: Pick<
-    SubscriptionPlanSummary,
-    'key' | 'externalMonthlyPriceId' | 'externalAnnualPriceId'
-  >,
-  billingInterval: 'monthly' | 'annual'
+  planKey: PlanKey,
+  precos: { mensal: string | null; anual: string | null } | null | undefined,
+  billingInterval: 'monthly' | 'annual',
+  aceitarPrecosDoEnv: boolean
 ) {
-  if (billingInterval === 'annual') {
-    return (
-      plan.externalAnnualPriceId ||
-      getStripeEnvPriceId(plan.key, 'annual') ||
-      null
-    );
+  const doBanco = billingInterval === 'annual' ? precos?.anual : precos?.mensal;
+  if (doBanco) {
+    return doBanco;
   }
-
-  return (
-    plan.externalMonthlyPriceId ||
-    getStripeEnvPriceId(plan.key, 'monthly') ||
-    null
-  );
+  return aceitarPrecosDoEnv
+    ? getStripeEnvPriceId(planKey, billingInterval)
+    : null;
 }
 
 export function getStripeProviderName() {

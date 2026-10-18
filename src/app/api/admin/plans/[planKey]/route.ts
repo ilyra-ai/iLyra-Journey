@@ -40,9 +40,8 @@ const planMatrixUpdateSchema = z.object({
   accentTo: corSchema,
   isActive: z.boolean(),
   isPublic: z.boolean(),
-  externalProductId: textoOpcional,
-  externalMonthlyPriceId: textoOpcional,
-  externalAnnualPriceId: textoOpcional,
+  // Produto e preços na Stripe ficam em Admin → Pagamentos, por ambiente
+  // (PUT /api/admin/pagamentos/stripe/[ambiente]).
   features: z
     .array(
       z.object({

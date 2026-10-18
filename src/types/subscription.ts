@@ -58,9 +58,6 @@ export interface SubscriptionPlanSummary {
   displayOrder: number;
   isActive: boolean;
   isPublic: boolean;
-  externalProductId: string | null;
-  externalMonthlyPriceId: string | null;
-  externalAnnualPriceId: string | null;
 }
 
 export interface AccountSubscriptionSummary {
@@ -78,6 +75,11 @@ export interface AccountSubscriptionSummary {
 
 export interface PlanMatrixPlan extends SubscriptionPlanSummary {
   features: PlanFeatureAccess[];
+  /**
+   * O plano pode ser assinado online agora: tem preço na Stripe no ambiente
+   * em uso (teste ou produção, escolhido em Admin → Pagamentos).
+   */
+  assinaturaOnline: boolean;
 }
 
 export interface PlanMatrixResponse {
@@ -96,9 +98,6 @@ export interface PlanMatrixUpdateInput {
   accentTo: string;
   isActive: boolean;
   isPublic: boolean;
-  externalProductId: string | null;
-  externalMonthlyPriceId: string | null;
-  externalAnnualPriceId: string | null;
   features: Array<{
     key: PlanFeatureKey;
     enabled: boolean;

@@ -394,9 +394,6 @@ describe('rotas administrativas', () => {
       accentTo: free?.accentTo,
       isActive: free?.isActive,
       isPublic: free?.isPublic,
-      externalProductId: free?.externalProductId,
-      externalMonthlyPriceId: free?.externalMonthlyPriceId,
-      externalAnnualPriceId: free?.externalAnnualPriceId,
       features: free?.features.map((recurso) => ({
         key: recurso.key,
         enabled: recurso.enabled,
