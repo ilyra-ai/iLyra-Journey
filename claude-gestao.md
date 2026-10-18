@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `███████████████████░` **97%** |
+| Progresso          | `████████████████████` **99%** |
 | Tarefas totais     | 70                             |
-| 🟢 Finalizadas     | 68                             |
-| 🔵 Em andamento    | 2                              |
+| 🟢 Finalizadas     | 69                             |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
 | ⚪ A iniciar       | 0                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-18                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (68 ÷ 70 = 97%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (69 ÷ 70 = 98,6%, arredondado para 99%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -43,7 +43,6 @@
 
 ### ANDAMENTO
 
-- **69 · Chaves de API dos meios de pagamento no painel do administrador** 🔵 — pedido de 2026-10-18: em Admin → Pagamentos, cadastrar, testar e remover as chaves da Stripe, do Mercado Pago e do PayPal (segredos cifrados no banco). Etapas: migração 028 e serviço de credenciais (feito, a testar); Stripe passa a usar as chaves do painel antes das do `.env.local`; rotas administrativas; tela; testes; QA no navegador.
 - **70 · Teste real de cada plano com a Stripe em modo de teste** 🔵 — pedido de 2026-10-18 com uma chave restrita de teste (guardada só no `.env.local` e, depois, no painel; nunca versionada). Feito até aqui: chave validada na API (conta BR, moeda BRL, permissões de leitura e escrita), produtos e preços de teste criados para Meta e Care (mensal e anual, nos valores do catálogo), Stripe CLI 1.30.0 conectado para encaminhar os webhooks. Falta: price ids nos planos, checkout com cartão de teste para cada plano e ciclo, webhook liberando os recursos, troca e cancelamento pelo portal voltando ao Free.
 
 ### BLOQUEADAS
@@ -59,6 +58,20 @@ Nenhuma tarefa a iniciar.
 ---
 
 ## Tópico 4 · Histórico das Tarefas Finalizadas
+
+### 69 · Chaves de API dos meios de pagamento no painel do administrador
+
+- **Status:** 🟢 finalizada · **Commit:** `5e4f06b` · **Push:** `70e760f..5e4f06b main -> main` (confirmado)
+- **Pedido do usuário (2026-10-18):** no painel do administrador, poder adicionar as chaves de API da Stripe, do Mercado Pago e do PayPal.
+- **Implementado:**
+  - Admin → Pagamentos (`/admin/payments`), um cartão por provedor: ambiente (teste ou produção; "Sandbox" no PayPal), ativar, chave pública, segredo, dado do webhook, "Testar conexão", último teste, "Onde encontrar as chaves" e remoção em duas etapas. Na Stripe, o endereço do webhook com botão de copiar e os 5 eventos necessários.
+  - Migração 028 (`payment_provider_credentials`): segredos cifrados (AES-256-GCM, chave derivada do `AUTH_SECRET`); a tela só recebe os 4 últimos caracteres.
+  - Rotas `GET /api/admin/pagamentos`, `PUT/DELETE /api/admin/pagamentos/[provedor]` e `POST /api/admin/pagamentos/[provedor]/testar`, só para administradores.
+  - Teste de conexão real: Stripe `/v1/account`, Mercado Pago `/users/me`, PayPal OAuth (sandbox ou produção).
+  - A cobrança pela Stripe passa a usar as chaves do painel antes das `STRIPE_*` do `.env.local`; o cliente é recriado quando a chave muda.
+  - Formatos conferidos na tela e na rota; chave da Stripe de outro ambiente recusada.
+  - Mercado Pago e PayPal: chaves guardadas e verificadas; o checkout por eles ainda não existe no app (a tela diz isso).
+- **Evidências:** navegador (build de produção, 1440 px e 390 px): 17 verificações OK; Stripe salva pela tela e "Conectado" com a conta de teste real (BR, BRL), Mercado Pago e PayPal com recusa real dos provedores para credenciais inexistentes, segredos ausentes do HTML, formato inválido apontado sem ida ao servidor, axe sem violações, sem rolagem horizontal, 0 erros de console. `test` 512/512, `test:integration` 172/172 (6 novos), lint, formatação, tipos e build com exit 0.
 
 ### 01 · Instrução mestra no `CLAUDE.md` e obrigatoriedade para agentes de IA
 
