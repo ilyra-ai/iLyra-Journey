@@ -5,10 +5,10 @@ import {
   getBillingBaseUrl,
   getStripeEnvironmentStatus,
   getStripeProviderName,
-  getStripeWebhookSecret,
   resolveStripePriceId,
 } from '@/lib/billing/config';
 import { getStripeClient } from '@/lib/billing/stripe';
+import { credenciaisDoStripe } from '@/lib/pagamentos/credenciais';
 import { HttpError } from '@/lib/http-error';
 import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
 import {
@@ -321,7 +321,7 @@ async function ensureStripeCustomer(session: AppSession) {
     return existing.external_customer_id;
   }
 
-  const stripe = getStripeClient();
+  const stripe = await getStripeClient();
   const fullName = await getFullName(session.user.id);
   const customer = await stripe.customers.create({
     email: session.user.email,
@@ -607,7 +607,10 @@ export async function getAccountBillingContext(options: {
     getBillingCustomerByUserId(options.session.user.id),
   ]);
 
-  const statusDoAmbiente = getStripeEnvironmentStatus(options.origin);
+  const statusDoAmbiente = getStripeEnvironmentStatus(
+    options.origin,
+    await credenciaisDoStripe()
+  );
   // Os nomes das variáveis de configuração que faltam são detalhe interno:
   // só o administrador os recebe (antes iam para qualquer usuário e
   // apareciam na tela de monitoramento do paciente).
@@ -638,14 +641,17 @@ export async function getAccountBillingContext(options: {
  * administrador recebe a lista do que falta; os demais, uma mensagem sem
  * detalhes internos de configuração.
  */
-function exigirCobrancaConfigurada(session: AppSession, origin?: string) {
-  const environment = getStripeEnvironmentStatus(origin);
+async function exigirCobrancaConfigurada(session: AppSession, origin?: string) {
+  const environment = getStripeEnvironmentStatus(
+    origin,
+    await credenciaisDoStripe()
+  );
   if (environment.configured) {
     return;
   }
   throw new HttpError(
     session.user.role === 'admin'
-      ? `Billing externo Stripe não está pronto neste ambiente. Faltando: ${environment.missingKeys.join(', ')}.`
+      ? `Billing externo Stripe não está pronto neste ambiente. Faltando: ${environment.missingKeys.join(', ')} (Admin → Pagamentos).`
       : 'Os pagamentos online ainda não estão disponíveis neste ambiente.',
     503
   );
@@ -657,7 +663,7 @@ export async function createStripeCheckoutUrl(options: {
   billingInterval: 'monthly' | 'annual';
   origin?: string;
 }) {
-  exigirCobrancaConfigurada(options.session, options.origin);
+  await exigirCobrancaConfigurada(options.session, options.origin);
 
   if (options.planKey === 'free') {
     throw new HttpError(
@@ -684,7 +690,7 @@ export async function createStripeCheckoutUrl(options: {
     );
   }
 
-  const stripe = getStripeClient();
+  const stripe = await getStripeClient();
   const customerId = await ensureStripeCustomer(options.session);
   const session = await stripe.checkout.sessions.create({
     mode: 'subscription',
@@ -727,7 +733,7 @@ export async function createStripePortalUrl(options: {
   session: AppSession;
   origin?: string;
 }) {
-  exigirCobrancaConfigurada(options.session, options.origin);
+  await exigirCobrancaConfigurada(options.session, options.origin);
 
   const baseUrl = getBillingBaseUrl(options.origin);
   if (!baseUrl) {
@@ -744,7 +750,7 @@ export async function createStripePortalUrl(options: {
     linkedCustomer?.external_customer_id ||
     (await ensureStripeCustomer(options.session));
 
-  const stripe = getStripeClient();
+  const stripe = await getStripeClient();
   const portalSession = await stripe.billingPortal.sessions.create({
     customer: customerId,
     return_url: `${baseUrl}/profile`,
@@ -1078,10 +1084,10 @@ export async function processStripeWebhook(options: {
   payload: string;
   signature: string | null;
 }) {
-  const webhookSecret = getStripeWebhookSecret();
+  const webhookSecret = (await credenciaisDoStripe()).segredoDoWebhook;
   if (!webhookSecret) {
     throw new HttpError(
-      'Billing externo Stripe não está pronto: STRIPE_WEBHOOK_SECRET ausente.',
+      'Billing externo Stripe não está pronto: falta o segredo do webhook (Admin → Pagamentos ou STRIPE_WEBHOOK_SECRET).',
       503
     );
   }
@@ -1090,7 +1096,7 @@ export async function processStripeWebhook(options: {
     throw new HttpError('Cabeçalho Stripe-Signature ausente.', 400);
   }
 
-  const stripe = getStripeClient();
+  const stripe = await getStripeClient();
   const event = stripe.webhooks.constructEvent(
     options.payload,
     options.signature,

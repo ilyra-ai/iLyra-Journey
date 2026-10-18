@@ -1,38 +1,41 @@
 import Stripe from 'stripe';
 
 import { HttpError } from '@/lib/http-error';
-import { getStripeApiVersion, getStripeSecretKey } from '@/lib/billing/config';
+import { getStripeApiVersion } from '@/lib/billing/config';
+import { credenciaisDoStripe } from '@/lib/pagamentos/credenciais';
 
 // Cache do cliente no escopo global (sobrevive ao hot reload em
-// desenvolvimento); o acesso é sempre feito pelo tipo abaixo.
+// desenvolvimento), associado à chave com que foi criado: trocar a chave em
+// Admin → Pagamentos passa a valer na próxima chamada, sem reiniciar o app.
 type GlobalStripeState = typeof globalThis & {
-  __lyraStripeClient?: Stripe;
+  __lyraStripeClient?: { chave: string; cliente: Stripe };
 };
 
-function createStripeClient() {
-  const secretKey = getStripeSecretKey();
+const globalStripeState = globalThis as GlobalStripeState;
 
-  if (!secretKey) {
+/**
+ * Cliente Stripe com as chaves em uso: as do painel do administrador ou, na
+ * falta delas, STRIPE_SECRET_KEY do .env.local.
+ */
+export async function getStripeClient(): Promise<Stripe> {
+  const { chaveSecreta } = await credenciaisDoStripe();
+
+  if (!chaveSecreta) {
     throw new HttpError(
-      'Billing externo não configurado: STRIPE_SECRET_KEY ausente.',
+      'Billing externo não configurado: informe a chave da Stripe em Admin → Pagamentos (ou STRIPE_SECRET_KEY no .env.local).',
       503
     );
   }
 
-  return new Stripe(secretKey, {
+  const atual = globalStripeState.__lyraStripeClient;
+  if (atual?.chave === chaveSecreta) {
+    return atual.cliente;
+  }
+
+  const cliente = new Stripe(chaveSecreta, {
     apiVersion: getStripeApiVersion(),
     typescript: true,
   });
-}
-
-const globalStripeState = globalThis as GlobalStripeState;
-
-// Um único cliente Stripe por processo, em qualquer ambiente (antes um novo
-// cliente, com seu próprio agente HTTP, era criado a cada uso em produção).
-export function getStripeClient() {
-  if (!globalStripeState.__lyraStripeClient) {
-    globalStripeState.__lyraStripeClient = createStripeClient();
-  }
-
-  return globalStripeState.__lyraStripeClient;
+  globalStripeState.__lyraStripeClient = { chave: chaveSecreta, cliente };
+  return cliente;
 }

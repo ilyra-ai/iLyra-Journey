@@ -45,16 +45,31 @@ export function getBillingBaseUrl(fallbackOrigin?: string) {
   );
 }
 
+/**
+ * `credenciais`: as chaves em uso (painel do administrador ou .env.local,
+ * resolvidas por `credenciaisDoStripe`). Sem elas, valem só as variáveis de
+ * ambiente.
+ */
 export function getStripeEnvironmentStatus(
-  fallbackOrigin?: string
+  fallbackOrigin?: string,
+  credenciais?: {
+    chaveSecreta: string | null;
+    segredoDoWebhook: string | null;
+  }
 ): BillingEnvironmentStatus {
   const missingKeys: string[] = [];
+  const chaveSecreta = credenciais
+    ? credenciais.chaveSecreta
+    : getStripeSecretKey();
+  const segredoDoWebhook = credenciais
+    ? credenciais.segredoDoWebhook
+    : getStripeWebhookSecret();
 
-  if (!getStripeSecretKey()) {
+  if (!chaveSecreta) {
     missingKeys.push('STRIPE_SECRET_KEY');
   }
 
-  if (!getStripeWebhookSecret()) {
+  if (!segredoDoWebhook) {
     missingKeys.push('STRIPE_WEBHOOK_SECRET');
   }
 
