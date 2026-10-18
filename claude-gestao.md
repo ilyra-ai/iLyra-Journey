@@ -19,23 +19,27 @@
 
 ## Tópico 1 · Andamento Geral
 
-| Indicador          | Valor                          |
-| ------------------ | ------------------------------ |
-| Progresso          | `████████████████████` **99%** |
-| Tarefas totais     | 71                             |
-| 🟢 Finalizadas     | 70                             |
-| 🔵 Em andamento    | 1                              |
-| 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 0                              |
-| Branch de trabalho | `main` (única permitida)       |
-| Última atualização | 2026-10-18                     |
+| Indicador          | Valor                           |
+| ------------------ | ------------------------------- |
+| Progresso          | `████████████████████` **100%** |
+| Tarefas totais     | 71                              |
+| 🟢 Finalizadas     | 71                              |
+| 🔵 Em andamento    | 0                               |
+| 🔴 Bloqueadas      | 0                               |
+| ⚪ A iniciar       | 0                               |
+| Branch de trabalho | `main` (única permitida)        |
+| Última atualização | 2026-10-18                      |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (70 ÷ 71 = 98,6%, arredondado para 99%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (71 ÷ 71 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
 - **Token temporário do GitHub:** mantido na configuração local do Git do ambiente de trabalho; o próprio usuário o remove ao publicar. Nunca é versionado, impresso ou salvo em memória.
 - **CI (integração contínua):** fora do escopo por enquanto, por decisão do usuário.
+
+**Decisão do usuário registrada em 2026-10-18 (sem tarefa associada):**
+
+- **Pix:** não acrescentar o Pix como meio de pagamento por enquanto. Os meios do painel continuam sendo Stripe, Mercado Pago e PayPal (o teste de integração confere que `pix` responde 404 como provedor desconhecido).
 
 ---
 
@@ -43,7 +47,7 @@
 
 ### ANDAMENTO
 
-- **71 · Escolha entre teste e produção nas chaves de pagamento** 🔵 — pedido de 2026-10-18: em Admin → Pagamentos, selecionar se cada provedor usa o ambiente de teste ou o de produção. Escopo: guardar um conjunto de chaves por ambiente (teste e produção) em cada provedor, seletor "Ambiente em uso" em destaque, troca bloqueada para um ambiente sem chaves, cobrança da Stripe seguindo o ambiente em uso, migração 029, testes, documentação e QA no navegador.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -58,6 +62,25 @@ Nenhuma tarefa a iniciar.
 ---
 
 ## Tópico 4 · Histórico das Tarefas Finalizadas
+
+### 71 · Escolha entre teste e produção nas chaves de pagamento
+
+- **Status:** 🟢 finalizada · **Commit:** `ec0accf` · **Push:** `8edda39..ec0accf main -> main` (confirmado)
+- **Pedido do usuário (2026-10-18):** no painel do administrador onde ficam as chaves de API de pagamento, poder selecionar se é teste ou produção.
+- **Implementado:**
+  - Migração 029: `payment_provider_settings` (ambiente em uso e ativo por provedor), chave primária `(provider, environment)` em `payment_provider_credentials` (um conjunto de chaves de teste e outro de produção), `stripe_plan_prices` (produto e preços mensal e anual de cada plano por ambiente, copiados de `subscription_plans`, que perde as 3 colunas antigas) e `environment` em `billing_customers` (o `cus_` de teste não existe em produção). DDL condicionado ao schema: reexecutar não duplica nem perde dados.
+  - Admin → Pagamentos: seletor "Ambiente em uso" (Teste ou Produção; "Sandbox (teste)" no PayPal) em cartões de rádio com o que falta para cada ambiente, aviso fixo do ambiente em uso (âmbar em teste, verde em produção), interruptor do provedor, abas "Chaves de teste" e "Chaves de produção" com campos próprios e, na Stripe, os preços dos planos e o webhook de cada ambiente.
+  - Segurança da troca: produção só entra em uso com segredo legível, segredo do webhook (Stripe), Client ID (PayPal) e um "Testar conexão" aprovado depois da última troca de chave; confirmação antes de usar produção; as chaves em uso não podem ser removidas; chave da Stripe com prefixo do outro ambiente recusada na tela e na rota.
+  - "Testar conexão" da Stripe confere também cada preço cadastrado (`/v1/prices/{id}`): existe no ambiente, está ativo, é mensal ou anual como o campo, moeda e valor iguais ao catálogo e produto certo. Salvar chaves ou preços novos já dispara o teste.
+  - Cobrança: checkout, portal e catálogo usam as chaves, os preços e o cliente do ambiente em uso; `STRIPE_PRICE_*` só valem com as chaves do `.env.local`; o webhook recusa evento de outro ambiente (`livemode`) e preço que não é do ambiente do evento; fatura paga encontra o plano pelo preço do ambiente.
+  - Rotas: `PUT /api/admin/pagamentos/[provedor]` (ambiente em uso e ativo), `PUT/DELETE /api/admin/pagamentos/[provedor]/[ambiente]` (chaves e preços) e `POST /api/admin/pagamentos/[provedor]/[ambiente]/testar`; a rota antiga `[provedor]/testar` saiu (prova de remoção com `git grep`).
+  - A matriz de planos deixa de gravar ids da Stripe (ficam em Pagamentos); a landing conta os planos assináveis no ambiente em uso; a exportação LGPD inclui o ambiente do cliente de cobrança; o webhook não apaga mais o e-mail guardado do cliente.
+- **Evidências reais:**
+  - Migração 029 aplicada no banco existente (backup verificado antes, `lyra-metacare_mysql_data_backup_20261018T134803`): chaves, ambiente e os 4 preços de teste preservados, 10 clientes classificados como teste; reexecução do arquivo inteiro com exit 0 e as mesmas contagens; banco vazio migrado pelos testes de integração.
+  - Navegador (build de produção, 1440 px e 390 px, 32 verificações em cada, 0 falhas): teste real na Stripe "4 preços de planos conferidos"; chave de teste na aba de produção recusada; chave de produção inexistente salva, testada sozinha e recusada pela Stripe; produção bloqueada com o motivo; confirmação antes de usar produção, "Continuar em teste" mantém o teste; em produção sem preços de produção, Meta e Care não oferecem compra; de volta ao teste, compra mensal e anual voltam; chaves em uso protegidas; remoção em duas etapas; nenhum segredo na página; um conjunto cifrado por ambiente no banco; axe sem violações; sem rolagem horizontal; 0 erros de console. Para exercitar a troca para produção, o resultado do teste da chave de produção (inexistente) foi marcado como aprovado direto no banco, porque não há chave de produção real neste ambiente.
+  - Jornada real da Stripe depois da migração: checkout Care anual e Meta mensal com cartão de teste, webhook liberando o plano, troca Meta → Care pelo portal, cancelamento no fim do período, encerramento voltando ao Free e cartão recusado: todos OK. Numa primeira repetição o agendamento do cancelamento feito pelo script de QA (chamada direta à API logo após a troca no portal) não gerou evento; repetido com o diagnóstico da resposta, passou, sem erro do app nos webhooks.
+  - `check:format`, `check:lint`, `check:types` e `build` com exit 0; `test` 514/514; `test:integration` 175/175 (testes novos: troca de ambiente, preços por ambiente, evento e preço de outro ambiente recusados).
+  - O GitHub barrou o primeiro push porque uma chave fictícia `rk_live_` do teste tinha o formato de chave de produção; a chave passou a ser montada em partes e o commit local foi corrigido antes do push (sem force push).
 
 ### 70 · Teste real de cada plano com a Stripe em modo de teste
 
