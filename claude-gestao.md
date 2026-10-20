@@ -19,18 +19,18 @@
 
 ## Tópico 1 · Andamento Geral
 
-| Indicador          | Valor                           |
-| ------------------ | ------------------------------- |
-| Progresso          | `████████████████████` **100%** |
-| Tarefas totais     | 71                              |
-| 🟢 Finalizadas     | 71                              |
-| 🔵 Em andamento    | 0                               |
-| 🔴 Bloqueadas      | 0                               |
-| ⚪ A iniciar       | 0                               |
-| Branch de trabalho | `main` (única permitida)        |
-| Última atualização | 2026-10-18                      |
+| Indicador          | Valor                          |
+| ------------------ | ------------------------------ |
+| Progresso          | `███████████████████░` **95%** |
+| Tarefas totais     | 76                             |
+| 🟢 Finalizadas     | 72                             |
+| 🔵 Em andamento    | 1                              |
+| 🔴 Bloqueadas      | 2                              |
+| ⚪ A iniciar       | 1                              |
+| Branch de trabalho | `main` (única permitida)       |
+| Última atualização | 2026-10-20                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (71 ÷ 71 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (72 ÷ 76 ≈ 95%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -41,72 +41,63 @@
 
 - **Pix:** não acrescentar o Pix como meio de pagamento por enquanto. Os meios do painel continuam sendo Stripe, Mercado Pago e PayPal (o teste de integração confere que `pix` responde 404 como provedor desconhecido).
 
+**Retomada autorizada em 2026-10-20:** finalizar todas as tarefas abertas deste painel seguindo o `CLAUDE.md`, incluindo registro de andamento, validação real e publicação por tarefa. Esta instrução mais recente substitui a suspensão anterior de commit e push; os registros anteriores abaixo descrevem o histórico da execução.
+
 ---
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 75 · Legibilidade, espaçamento e altura do login
+
+- **Status:** em conferência da implementação existente · **Início:** 2026-10-20.
+- **Nova orientação do usuário:** tema claro como padrão em todo o aplicativo, incluindo landing e login, preservando a alternância. Substitui o pedido anterior de padrão escuro público.
+- **Verificação antes de nova implementação (2026-10-20):** o código já contém a compactação do login e da landing, Imprima, descrição expansível dos planos e preferência pública de tema independente da interna. Esses ajustes serão validados, sem serem refeitos. No perfil, a ordem solicitada dos cartões ainda não está aplicada, e o cartão de hábitos ainda usa altura de 100% dentro de uma coluna com outros cartões.
+- **Pedido:** remover “Conhecer minhas leituras”, ampliar a legibilidade, reduzir espaços excessivos e centralizar os conjuntos do login para o formulário caber na altura da janela em zoom de 100%. O anexo mostra o estado atual com o problema, não um modelo de layout desejado.
+- **Escopo:** refinamento local da tarefa 74, mantendo Imprima, configurações do Construtor e todos os controles de autenticação. Sem commit nem push.
+- **Ajustes adicionais solicitados:** reduzir um pouco os textos e a largura da coluna esquerda do login, alinhando seus textos à esquerda; compactar os planos e demais cartões da landing para uso em 100% de zoom; modo escuro padrão somente na landing e login, com preferência independente da área interna. A solicitação específica de tema prevalece sobre a preferência geral por tema claro do AGENTS.md.
+- **Implementação em revisão:** introdução até 520 px; planos com descrição completa expansível, espaçamentos menores e três colunas acima de 900 px; mapas e indicadores compactos; proporção da grade de dúvidas corrigida para incluir o espaço entre colunas. Nenhum conteúdo de plano excluído.
+- **Evidência intermediária:** formulário de entrada completo na janela natural de 1463 × 690 px, cartão de aproximadamente 573 px e campos em 17 px; planos antes desta compactação com aproximadamente 654 px cada. Checagens de formatação e lint passaram na primeira execução; tipos pararam por corrupção em `.next/dev/types/routes.d.ts`. A repetição será feita com Dev parado e tipos regenerados oficialmente. `@current_problems` não disponível.
 
 ### BLOQUEADAS
 
-Nenhuma tarefa bloqueada.
+### 73 · Iniciar o ambiente localhost para teste do usuário
+
+- **Status:** 🔴 bloqueada por restrição do executor · **Início e tentativa:** 2026-10-20.
+- **Pedido:** subir frontend, backend e banco de dados para teste local; mantida a orientação de não realizar commit nem push.
+- **Arquitetura verificada:** frontend e APIs de backend compartilham o processo Next.js; MySQL é o serviço separado do Compose.
+- **Tentativas reais:** `wsl --list --verbose` terminou com exit 1 e `Wsl/E_ACCESSDENIED`; conexões TCP a `127.0.0.1` nas portas 3000, 3307 e 8808 retornaram código Windows 10013; HTTP `/api/health` foi bloqueado com `WinError 10013`. Isso não permite concluir se os serviços do usuário estão ativos ou parados.
+- **Launcher Windows:** `python run_windows.py up` terminou com exit 1; o Git Bash existente foi recusado porque `uname` falhou dentro do executor. Não se concluiu que o Git Bash esteja ausente no notebook.
+- **Resultado:** nenhum serviço foi iniciado pelo agente e nenhuma disponibilidade foi declarada. O executor continua sem acesso ao WSL e às conexões locais; não houve mudança de ACLs, firewall, serviços ou permissões para contornar essa restrição.
+- **Caminho já existente no ambiente do usuário:** no Ubuntu, na raiz do projeto, `bash ./tui-webnova.sh --run-action iniciar_dev` prepara MySQL e migrations e inicia o Next.js. O comando não foi executado pelo agente devido aos bloqueios documentados.
 
 ---
 
+### 74 · Leituras de mapas, tema do login e fonte Imprima
+
+- **Status:** implementação local concluída; validação integral bloqueada em 2026-10-20.
+- **Pedido:** apresentar os três mapas e seus limites, incluir “Leituras de Mapas”, alinhar a sequência do menu aos blocos, harmonizar login e landing, reduzir espaços da marca e usar Imprima Regular nas duas páginas.
+- **Implementação:** seção com Jyotish, Lyra DM Samadhi e Quantum — Lyra e Arkático; limites reais das leituras e acesso à conta. Menu e blocos compartilham a ordem, com atualização do padrão antigo e preservação de ordens personalizadas do Construtor. Sobre fica após Dúvidas. Login com marca e textos agrupados, formulário em cartão, paleta compartilhada, controles existentes preservados. Imprima 400 via next/font/google, display swap, somente nas duas superfícies públicas, sem importação CSS duplicada.
+- **Evidências no navegador:** as duas telas renderizadas no localhost; os sete links do menu clicados com seus hashes corretos; posições absolutas das seções em ordem crescente (83, 1026, 2432, 2934, 3946, 4892, 5265 px). Família computada dos títulos e textos da landing: Imprima, peso 400. Cartões e login conferidos visualmente no desktop, sem estouro horizontal na landing (conteúdo 1454 px, janela 1463 px).
+- **Quality gates executados no Ubuntu via terminal do painel:** `fix:format`, `fix:lint`, `check:lint` e `check:format` com código 0; registros em `.logs/qa-publico/`. `check:types` detectou conteúdo corrompido no artefato gerado `.next/dev/types/validator.ts`, com 10 erros de sintaxe. O artefato inválido foi removido (somente cache gerado); `node node_modules/typescript/bin/tsc --noEmit` foi repetido no Windows com código 0. A geração oficial do Next foi tentada e bloqueada por permissão em dependências no Windows; nenhum erro foi ocultado no tsconfig.
+- **Bloqueio posterior:** localhost:3000 e localhost:8809 passaram a recusar conexões durante a validação, interrompendo o terminal Ubuntu. WSL direto continua com E_ACCESSDENIED. No Windows, o pnpm não consegue obter a versão fixada por falha de DNS; Vitest não inicia por falta do binding nativo do Rolldown, e o Next encontra permission denied em @swc/helpers. Testes unitários, integração e build não foram declarados aprovados.
+- **Responsividade:** CSS ajustado para uma coluna e menu compacto nas larguras menores; a emulação do navegador não foi validada. A tentativa de CDP foi recusada pelo usuário no controle de aprovação; não houve tentativa de contornar a recusa. Nenhuma interface @current_problems disponível nesta sessão.
+- **Documentação:** `docs/design-system.md` atualizado. Revisão React aplicada: tipos explícitos, menu derivado sem efeitos extras, ligações nativas, cabeçalhos e rótulos acessíveis; sem nova dependência.
+- **Publicação:** nenhum commit nem push, por orientação expressa do usuário, que prevalece sobre a exigência de publicação da instrução mestra. Alterações anteriores do banco e do orquestrador preservadas.
+
 ## Tópico 3 · Tarefas a Iniciar
 
-Nenhuma tarefa a iniciar.
+### 76 · Organização e responsividade dos cartões do perfil
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Pedido do usuário:** na página `/profile`, colocar “Ações da Conta” acima do cartão “Care”; reorganizar “E-mail de login”, “Privacidade e dados” e “Hábitos de Longevidade”; corrigir o crescimento vertical sem fim relatado em “Hábitos de Longevidade”; reorganizar todos os cartões de forma harmoniosa, responsiva e alinhada às referências de UI/UX de 2026.
+- **Critérios de entrega:** investigar a causa do crescimento vertical; preservar campos, controles e funcionalidades; organizar a hierarquia e os espaçamentos de todos os cartões; pesquisar referências atuais antes da edição visual; validar desktop, tablet e celular, incluindo altura, rolagem e ausência de sobreposição ou estouro horizontal.
+- **Estado real:** solicitação acrescentada ao levantamento de pendências. Os componentes foram localizados no código; nenhuma alteração visual ou validação no navegador foi realizada nesta retomada.
 
 ---
 
 ## Tópico 4 · Histórico das Tarefas Finalizadas
-
-### 71 · Escolha entre teste e produção nas chaves de pagamento
-
-- **Status:** 🟢 finalizada · **Commit:** `ec0accf` · **Push:** `8edda39..ec0accf main -> main` (confirmado)
-- **Pedido do usuário (2026-10-18):** no painel do administrador onde ficam as chaves de API de pagamento, poder selecionar se é teste ou produção.
-- **Implementado:**
-  - Migração 029: `payment_provider_settings` (ambiente em uso e ativo por provedor), chave primária `(provider, environment)` em `payment_provider_credentials` (um conjunto de chaves de teste e outro de produção), `stripe_plan_prices` (produto e preços mensal e anual de cada plano por ambiente, copiados de `subscription_plans`, que perde as 3 colunas antigas) e `environment` em `billing_customers` (o `cus_` de teste não existe em produção). DDL condicionado ao schema: reexecutar não duplica nem perde dados.
-  - Admin → Pagamentos: seletor "Ambiente em uso" (Teste ou Produção; "Sandbox (teste)" no PayPal) em cartões de rádio com o que falta para cada ambiente, aviso fixo do ambiente em uso (âmbar em teste, verde em produção), interruptor do provedor, abas "Chaves de teste" e "Chaves de produção" com campos próprios e, na Stripe, os preços dos planos e o webhook de cada ambiente.
-  - Segurança da troca: produção só entra em uso com segredo legível, segredo do webhook (Stripe), Client ID (PayPal) e um "Testar conexão" aprovado depois da última troca de chave; confirmação antes de usar produção; as chaves em uso não podem ser removidas; chave da Stripe com prefixo do outro ambiente recusada na tela e na rota.
-  - "Testar conexão" da Stripe confere também cada preço cadastrado (`/v1/prices/{id}`): existe no ambiente, está ativo, é mensal ou anual como o campo, moeda e valor iguais ao catálogo e produto certo. Salvar chaves ou preços novos já dispara o teste.
-  - Cobrança: checkout, portal e catálogo usam as chaves, os preços e o cliente do ambiente em uso; `STRIPE_PRICE_*` só valem com as chaves do `.env.local`; o webhook recusa evento de outro ambiente (`livemode`) e preço que não é do ambiente do evento; fatura paga encontra o plano pelo preço do ambiente.
-  - Rotas: `PUT /api/admin/pagamentos/[provedor]` (ambiente em uso e ativo), `PUT/DELETE /api/admin/pagamentos/[provedor]/[ambiente]` (chaves e preços) e `POST /api/admin/pagamentos/[provedor]/[ambiente]/testar`; a rota antiga `[provedor]/testar` saiu (prova de remoção com `git grep`).
-  - A matriz de planos deixa de gravar ids da Stripe (ficam em Pagamentos); a landing conta os planos assináveis no ambiente em uso; a exportação LGPD inclui o ambiente do cliente de cobrança; o webhook não apaga mais o e-mail guardado do cliente.
-- **Evidências reais:**
-  - Migração 029 aplicada no banco existente (backup verificado antes, `lyra-metacare_mysql_data_backup_20261018T134803`): chaves, ambiente e os 4 preços de teste preservados, 10 clientes classificados como teste; reexecução do arquivo inteiro com exit 0 e as mesmas contagens; banco vazio migrado pelos testes de integração.
-  - Navegador (build de produção, 1440 px e 390 px, 32 verificações em cada, 0 falhas): teste real na Stripe "4 preços de planos conferidos"; chave de teste na aba de produção recusada; chave de produção inexistente salva, testada sozinha e recusada pela Stripe; produção bloqueada com o motivo; confirmação antes de usar produção, "Continuar em teste" mantém o teste; em produção sem preços de produção, Meta e Care não oferecem compra; de volta ao teste, compra mensal e anual voltam; chaves em uso protegidas; remoção em duas etapas; nenhum segredo na página; um conjunto cifrado por ambiente no banco; axe sem violações; sem rolagem horizontal; 0 erros de console. Para exercitar a troca para produção, o resultado do teste da chave de produção (inexistente) foi marcado como aprovado direto no banco, porque não há chave de produção real neste ambiente.
-  - Jornada real da Stripe depois da migração: checkout Care anual e Meta mensal com cartão de teste, webhook liberando o plano, troca Meta → Care pelo portal, cancelamento no fim do período, encerramento voltando ao Free e cartão recusado: todos OK. Numa primeira repetição o agendamento do cancelamento feito pelo script de QA (chamada direta à API logo após a troca no portal) não gerou evento; repetido com o diagnóstico da resposta, passou, sem erro do app nos webhooks.
-  - `check:format`, `check:lint`, `check:types` e `build` com exit 0; `test` 514/514; `test:integration` 175/175 (testes novos: troca de ambiente, preços por ambiente, evento e preço de outro ambiente recusados).
-  - O GitHub barrou o primeiro push porque uma chave fictícia `rk_live_` do teste tinha o formato de chave de produção; a chave passou a ser montada em partes e o commit local foi corrigido antes do push (sem force push).
-
-### 70 · Teste real de cada plano com a Stripe em modo de teste
-
-- **Status:** 🟢 finalizada · **Commit:** este registro no painel (tarefa só de verificação, sem mudança de código; a cobrança usada é a da tarefa 69, `5e4f06b`)
-- **Pedido do usuário (2026-10-18):** testar se cada plano funciona com a chave de teste da Stripe enviada por ele.
-- **Preparado na conta de teste da Stripe:** produtos e preços Meta e Care, mensal e anual, nos valores do catálogo (R$ 79,90, R$ 790,00, R$ 249,90 e R$ 2.490,00); price ids gravados nos planos pela rota administrativa; configuração do portal com troca entre Meta e Care e cancelamento; chave e segredo do webhook salvos cifrados em Admin → Pagamentos (nunca no repositório); Stripe CLI encaminhando os eventos para `/api/webhooks/stripe`.
-- **Evidências reais (build de produção, navegador automatizado, cartões de teste da Stripe):**
-  - Meta mensal, Meta anual, Care mensal e Care anual: cadastro, "Assinar" no Perfil, Checkout hospedado da Stripe com o preço certo em BRL, cartão 4242 aprovado, volta para `/billing/success`, webhook libera o plano com origem `stripe` e o ciclo escolhido, assinatura ativa ligada ao `sub_…` no MySQL, fatura paga nos registros fiscais, Monitoramento e Dispositivos no menu e voz só no Care; 0 erros de console.
-  - Portal da Stripe aberto pelo Perfil: troca Meta → Care feita pela tela (Selecionar, Continuar, Confirmar), webhook muda o plano para Care e libera a voz; cancelamento no fim do período mantém o Care com `cancelAtPeriodEnd`; encerramento da assinatura volta ao Free, os recursos somem do menu e resta uma única assinatura ativa.
-  - Cartão recusado (4000 0000 0000 0002): a Stripe mostra a recusa, não volta ao app e o plano continua Free.
-  - 172 eventos de webhook encaminhados, todos respondidos com 200.
-- **Observações para o usuário:** o nome público da conta Stripe de teste ainda é "New business" (aparece no Checkout e no portal; ajuste em Configurações → Dados da empresa na Stripe); a conta tem Adaptive Pricing ligado, então o Checkout oferece USD além de BRL para quem está fora do Brasil.
-
-### 69 · Chaves de API dos meios de pagamento no painel do administrador
-
-- **Status:** 🟢 finalizada · **Commit:** `5e4f06b` · **Push:** `70e760f..5e4f06b main -> main` (confirmado)
-- **Pedido do usuário (2026-10-18):** no painel do administrador, poder adicionar as chaves de API da Stripe, do Mercado Pago e do PayPal.
-- **Implementado:**
-  - Admin → Pagamentos (`/admin/payments`), um cartão por provedor: ambiente (teste ou produção; "Sandbox" no PayPal), ativar, chave pública, segredo, dado do webhook, "Testar conexão", último teste, "Onde encontrar as chaves" e remoção em duas etapas. Na Stripe, o endereço do webhook com botão de copiar e os 5 eventos necessários.
-  - Migração 028 (`payment_provider_credentials`): segredos cifrados (AES-256-GCM, chave derivada do `AUTH_SECRET`); a tela só recebe os 4 últimos caracteres.
-  - Rotas `GET /api/admin/pagamentos`, `PUT/DELETE /api/admin/pagamentos/[provedor]` e `POST /api/admin/pagamentos/[provedor]/testar`, só para administradores.
-  - Teste de conexão real: Stripe `/v1/account`, Mercado Pago `/users/me`, PayPal OAuth (sandbox ou produção).
-  - A cobrança pela Stripe passa a usar as chaves do painel antes das `STRIPE_*` do `.env.local`; o cliente é recriado quando a chave muda.
-  - Formatos conferidos na tela e na rota; chave da Stripe de outro ambiente recusada.
-  - Mercado Pago e PayPal: chaves guardadas e verificadas; o checkout por eles ainda não existe no app (a tela diz isso).
-- **Evidências:** navegador (build de produção, 1440 px e 390 px): 17 verificações OK; Stripe salva pela tela e "Conectado" com a conta de teste real (BR, BRL), Mercado Pago e PayPal com recusa real dos provedores para credenciais inexistentes, segredos ausentes do HTML, formato inválido apontado sem ida ao servidor, axe sem violações, sem rolagem horizontal, 0 erros de console. `test` 512/512, `test:integration` 172/172 (6 novos), lint, formatação, tipos e build com exit 0.
 
 ### 01 · Instrução mestra no `CLAUDE.md` e obrigatoriedade para agentes de IA
 
@@ -733,119 +724,6 @@ Nenhuma tarefa a iniciar.
   - `pnpm test` 241/241; `pnpm test:integration` 73/73; `check:format`, `check:lint` e `check:types` com exit 0; `build` com exit 0.
 - **Execução:** os lotes de telas foram divididos entre subagentes com um guia único de regras; as camadas compartilhadas (tokens, primitivos, layout, páginas, metas e backend) e a revisão final foram feitas diretamente.
 
-### 30 · Vulnerabilidade alta em `braces`
-
-- **Status:** 🟢 finalizada · **Commit:** `7c1f432` · **Push:** `c70e2f9..7c1f432 main -> main` (confirmado)
-- **Diagnóstico:** `braces` ≤ 3.0.3 (GHSA-vfj7-8cjw-p6xm, negação de serviço com padrões glob muito aninhados), sem versão corrigida publicada. Chegava por dois caminhos: a CLI `shadcn` e o `@next/eslint-plugin-next` (que fixa `fast-glob` 3.3.1, puxando `micromatch` e `braces`).
-- **Correção (tratada como se fosse para produção):**
-  - A CLI `shadcn` saiu das `devDependencies`. Ela só gerava componentes e nunca era importada; o `components.json` continua para uso com `pnpm dlx shadcn@<versão> add`.
-  - Override restrito ao plugin do Next: `fast-glob` resolvido para o `tinyglobby` (fdir + picomatch, sem `braces`), que exporta o mesmo `globSync` com `onlyDirectories`, a única função usada pelo plugin.
-  - `scripts/verificar-glob-eslint-next.mjs` chama a função real do plugin e confirma os mesmos diretórios do sistema de arquivos.
-- **Evidências:** `pnpm audit` e `pnpm audit --prod` com "No known vulnerabilities found"; `pnpm why braces` sem resultado; lint, format e types com exit 0; `test` 241/241; `test:integration` 73/73; `test:launchers` 17/17; `build` com exit 0.
-
-### 37 · Administrador `admin@admin.com`
-
-- **Status:** 🟢 finalizada · **Commit:** sem alteração de código versionado (o registro é este painel) · **Push:** do painel (confirmado)
-- **Implementado:** o usuário foi criado pelo bootstrap oficial de administradores (`ADMIN_BOOTSTRAP_ADDITIONAL_ADMINS` no `.env.local`, que é ignorado pelo Git). A senha definida pelo usuário não foi escrita em nenhum arquivo versionado, conforme a regra de segredos; o banco guarda só o hash bcrypt. O mecanismo é idempotente: cada `pnpm db:migrate` (e o `up` dos launchers) assegura o usuário, e a senha só é regravada quando o valor do `.env.local` muda.
-- **Evidências reais:**
-  - `pnpm db:migrate`: "Bootstrap admin assegurado: admin@admin.com".
-  - MySQL: `admin@admin.com` com `role = admin`, nome "Administrador Total", onboarding concluído, plano `care` ativo (todas as capacidades) e senha em hash bcrypt.
-  - `POST /api/auth/login` com o e-mail e a senha informados: 200; `/api/auth/session` retorna `role: "admin"`; `/api/admin/users`, `/api/admin/plans`, `/api/admin/page-config/app` e `/api/admin/puck/documents/landing-home`: 200.
-- **Recomendação:** a senha pedida segue um padrão comum; antes de publicar em produção, troque-a no `.env.local` (o próximo `pnpm db:migrate` regrava o hash).
-
-### 38 · Isolamento das funções de administrador
-
-- **Status:** 🟢 finalizada · **Commit:** `3a1fdca` · **Push:** `5e7d836..3a1fdca main -> main` (confirmado)
-- **Método:** verificação real com um paciente criado pelo cadastro público e com o `admin@admin.com`, por API (`curl` com sessão) e por navegador no build de produção. Mapeadas as 30 rotas de API e as 9 páginas `/admin/*`.
-- **Vazamentos encontrados e corrigidos (causa raiz):**
-  - **Configuração e base de conhecimento da IA legíveis por qualquer usuário:** a API de dados liberava a leitura de `ai_config` (missão, objetivos e pesos do motor) e `ai_knowledge_documents` (inclusive rascunhos inativos) para qualquer sessão. Agora `adminOnlyRead`; os recursos que dependem delas já as leem no servidor.
-  - **Primeiro cadastro virava administrador:** com o banco vazio (bootstrap desativado em produção), o primeiro visitante ganhava acesso total. O cadastro público agora sempre cria usuário comum no plano `free`.
-  - **Telas administrativas entregues a qualquer um:** o bloqueio era só no navegador. O `src/proxy.ts` passou a verificar o papel para `/admin/*`: visitante vai ao login e usuário comum volta ao próprio painel. A autorização definitiva continua nas APIs, que releem o papel no banco.
-- **Já corretos (confirmados):** as rotas `/api/admin/*`, `/api/rpc/*` e `test-ai-connection` exigem administrador; `profiles.role` só é gravado por administrador; sidebar, menu do celular e busca Ctrl K escondem os itens administrativos pelo papel definido no código.
-- **Evidências:**
-  - Paciente: 403 em todas as rotas e métodos administrativos (GET, PUT, POST, PATCH), sem alterar o próprio plano; 403 na leitura e escrita de `ai_config` e `ai_knowledge_documents`.
-  - Navegador: paciente com 8 itens no menu, nenhum administrativo, nada administrativo na busca, e as 9 rotas `/admin/*` devolvidas ao painel; `admin@admin.com` com 17 itens e as 9 telas abertas.
-  - Testes novos: `src/proxy.test.ts` (6) e matriz de integração em `dados-admin.integration.test.ts`; cadastro confirma `patient` e plano `free`.
-  - `test` 247/247; `test:integration` 75/75; lint, format e types com exit 0; `build` com exit 0.
-  - Usuário de QA removido do banco ao final.
-
-### 32 · Página `/instruments`
-
-- **Status:** 🟢 finalizada · **Commit:** `0741a4a` · **Push:** `3403a7c..0741a4a main -> main` (confirmado)
-- **Risco avaliado: nenhum.** A página era uma demonstração do template, sem link em sidebar, menu do celular, Ctrl K, landing ou documentos Puck publicados. Nenhum motor, tela ou API da Lyra lia a tabela. Ela era a única tabela lida sem sessão pela API de dados, então removê-la diminui a superfície exposta.
-- **Removido:**
-  - página `src/app/instruments/page.tsx`;
-  - tabela `instruments` e documento Puck `instruments` (migração `013_remove_instruments_demo.sql`, idempotente, sem dados de usuário);
-  - flag `publicRead` (agora toda leitura em `/api/data` exige sessão), tipos `InstrumentRow` e a chave Puck;
-  - `src/lib/mysql/query-utils.ts` e o teste dele: código morto, importado só pelo próprio teste.
-- **Evidências:**
-  - prova de morte: `grep -rn instruments` sem ocorrências no código; `publicRead` só aparece num campo homônimo e não relacionado do contrato do módulo `lyra-customaze-ui-ux`;
-  - migração aplicada; segunda execução com "Já aplicada" em todas; tabela inexistente e 0 documentos Puck `instruments`;
-  - produção: `/instruments` 404; `/api/data/instruments` 400 ("Tabela não suportada");
-  - `test` 226/226 (21 testes a menos, do arquivo morto removido); `test:integration` 75/75 (todas as tabelas exigem sessão: 401); lint, format e types com exit 0; `build` com exit 0.
-
-### 35 · Onboarding no primeiro acesso
-
-- **Status:** 🟢 finalizada · **Commit:** `fae09bd` · **Push:** `39e765f..fae09bd main -> main` (confirmado)
-- **Verificação inicial:** cadastro, login e rotas digitadas já levavam ao onboarding, mas com dois defeitos reproduzidos no navegador:
-  - **Fuga pelo "voltar":** a partir do onboarding, o botão "voltar" abria o painel completo (menu, métricas, chat) de uma conta recém-criada.
-  - **Desvio pelo painel:** o cadastro ia primeiro ao painel e só depois ao onboarding; páginas montavam e faziam consultas antes do redirecionamento.
-- **Causa raiz:** o `AuthProvider` só decidia o destino quando a sessão mudava (não a cada rota) e renderizava a página antes de conhecer o status do onboarding, que exigia uma consulta extra ao perfil.
-- **Correção:**
-  - a sessão (`/api/auth/session`, login e cadastro) traz `onboarding_completed` lido do banco;
-  - `src/lib/auth/destino-de-acesso.ts` decide o destino (visitante → login; conta sem onboarding → onboarding; conta pronta sai de login e onboarding), com testes;
-  - o `AuthProvider` reavalia a cada rota, usa `replace` e não monta a rota bloqueada;
-  - ao concluir, o onboarding relê a sessão (`db.auth.refreshSession`) e o app abre o painel; o login deixa a navegação para o `AuthProvider`;
-  - removida a recriação de perfil pelo cliente (código inalcançável: sem perfil não existe sessão). Prova de morte: `grep` sem ocorrências.
-- **Evidências (build de produção, 1440px):** 13/13 verificações e zero erros de console:
-  - cadastro → `/onboarding` direto (trilha `/login → /onboarding`, 776 ms);
-  - "voltar" e as rotas `/`, `/plan`, `/profile`, `/admin/users` e `/login` não abrem o painel;
-  - ao finalizar abre o painel; "voltar" e `/onboarding` não reabrem o onboarding; rotas liberadas; novo login (390px) abre o painel; visitante vai ao login.
-  - `test` 230/230; `test:integration` 75/75 (sessão com o status, inclusive após concluir sem novo login); lint, format e types com exit 0; `build` com exit 0. Usuários de QA removidos do banco.
-- **Achado repassado à tarefa 33:** em 390px o formulário do onboarding fica com 531px de largura (cartões cortados e rolagem lateral).
-
-### 33 · Experiência no celular
-
-- **Status:** 🟢 finalizada · **Commit:** `b2dddb8` · **Push:** `40bd98a..b2dddb8 main -> main` (confirmado)
-- **Método:** varredura real em 390×844 com toque, em todas as rotas, como visitante, paciente, administrador e conta nova: estouro horizontal, alvos de toque abaixo de 24px e captura da primeira dobra. Referências de 2026 consultadas: formulário acima da dobra no login, progresso de etapas com texto, alvos de 44px.
-- **Problemas encontrados e corrigidos (causa raiz):**
-  - **Onboarding cortado:** o formulário ficava numa linha flex centralizada e crescia até 672px; no celular estourava para os dois lados (página com 531px e o início dos cartões fora da tela, sem como rolar até ele). Agora é uma coluna na largura da tela, as etapas fora da tela ficam `inert` (o "próximo campo" do teclado não pula para etapas escondidas) e a página ganhou `<main>` e `<h1>`.
-  - **Pontos do onboarding:** eram um `role="tablist"` sem abas, que não dizia nada ao leitor de tela. Agora há o texto "Etapa X de N" e os pontos já concluídos ficam marcados.
-  - **Metas do onboarding:** só a caixinha de 20px e o texto marcavam a meta, apesar do cursor de clique na linha. Agora a linha inteira (44px) marca e a opção escolhida fica destacada.
-  - **Login com o formulário abaixo de um texto longo:** a ordem passou a ser marca → título → formulário → detalhes. No celular o formulário aparece na primeira dobra e o título acompanha a largura da tela; no desktop o desenho em duas colunas continua igual.
-  - **Botões do acesso rápido da landing com 22px:** `flex-1` na coluna zerava a base de altura. Agora só vale na linha (a partir de `sm`).
-  - **Alvos pequenos:** "Criar conta"/"Entrar", "Voltar para a landing", "Lembrar-me" e o selo "Feito com iLyra AI" passaram a 44px.
-  - **Perfil:** um cartão repetia o título e a descrição da página logo abaixo do cabeçalho; removido.
-  - **Chat:** cabeçalho compacto no celular (sem ícone e texto de apoio), para a conversa aparecer antes.
-- **Evidências:**
-  - nenhuma rota com estouro horizontal em 390px (antes: onboarding com 531px); alvos abaixo de 24px só o checkbox "Lembrar-me" (com rótulo de 44px ao lado) e o seletor interno do Puck;
-  - axe sem violações em `/`, `/login`, `/chat`, `/profile`, `/goals` e `/onboarding`, em 390 e 1440px;
-  - fluxo completo do onboarding (13 verificações) aprovado no celular e no desktop; dados gravados conferidos no MySQL;
-  - login e onboarding sem estouro em 820 e 1440px;
-  - `test` 230/230; `test:integration` 75/75; lint, format e types com exit 0; `build` com exit 0. Contas de QA e contadores de tentativa locais removidos do banco.
-- **Achado repassado à tarefa 29:** `/monitoring` mostra ao paciente nomes de variáveis internas de configuração no aviso de plano.
-
-### 36 · Edição dos dados do onboarding no perfil
-
-- **Status:** 🟢 finalizada · **Commit:** `e0a02a3` · **Push:** `38b998a..e0a02a3 main -> main` (confirmado)
-- **Mapeamento campo a campo:** nome, sobrenome, data, hora e local de nascimento, idade (calculada pela data) e gênero já estavam no perfil; **nível de atividade e metas só existiam no onboarding** e passaram a ser editáveis no perfil, com as mesmas opções (módulo compartilhado `opcoes-de-perfil.ts`, sem lista duplicada). O consentimento do onboarding não é gravado hoje; o registro de consentimento faz parte da tarefa 28.
-- **Defeito encontrado e corrigido (causa raiz):** o MySQL devolve a hora como `HH:MM:SS` e a validação do perfil exige `HH:MM`. Quem informou a hora no onboarding não conseguia salvar nada no perfil: a validação recusava a hora em silêncio. A hora agora é convertida ao carregar (`horaParaCampo`), e um aviso aparece quando algum campo bloqueia o envio.
-- **Sem duplicidade de e-mail de login:**
-  - `profiles.email` era uma cópia sem índice único. A migração `014` realinha a cópia com a conta e cria o índice único.
-  - Pela API de dados ninguém altera `profiles.email`, nem o administrador (só a cópia mudaria).
-  - Nova troca de e-mail no perfil (`PATCH /api/account/email`): exige a senha atual; as falhas contam no limite do login; `users` e `profiles` mudam na mesma transação; e-mail de outra conta (inclusive com maiúsculas e espaços) responde 409; o token é reemitido mantendo o tipo de sessão.
-  - Os demais dados sensíveis são linhas do próprio usuário (`profiles.id` = conta) e não se repetem entre contas.
-- **Evidências:**
-  - QA no build de produção em 1440 e 390px, 13/13 verificações:
-    - os dados do onboarding (atividade, metas e hora em `HH:MM`) aparecem no perfil;
-    - a edição gravada foi conferida no MySQL e persiste após recarregar;
-    - o e-mail de outra conta e a senha errada são recusados na tela;
-    - a troca de e-mail atualiza conta e perfil, mantém a sessão, e o login fica 401 com o e-mail antigo e 200 com o novo;
-    - o perfil no celular não tem estouro horizontal.
-  - `test` 235/235; `test:integration` 79/79 (novo `conta-email.integration.test.ts`, índice único e bloqueio de troca pelo administrador); lint, format e types com exit 0; `build` com exit 0.
-  - Migração `014` aplicada e reexecutada com "Já aplicada" em todas. Usuários de QA removidos do banco.
-- **Achado repassado à tarefa 28 (corrigido na tarefa 28):** o registro original dizia que a remoção pelo painel administrativo apagava só o perfil. Na análise da tarefa 28 isso se mostrou incorreto: pelo administrador, a API de dados já apagava a conta inteira, mas sem as verificações da exclusão (assinatura paga renovável, último administrador) e sem apagar as imagens. Quem deixava a conta órfã era o **próprio titular**: ele conseguia apagar o próprio perfil pela API de dados, ficava sem login e com o e-mail preso. Os dois casos foram resolvidos na tarefa 28.
-
 ### 28 · Direitos do titular (LGPD) e segregação de dados sensíveis e fiscais
 
 - **Status:** 🟢 finalizada · **Commit:** `5d068c1` · **Push:** `37b6bb1..5d068c1 main -> main` (confirmado)
@@ -890,23 +768,6 @@ Nenhuma tarefa a iniciar.
     - exclusão pela interface volta ao login, apaga tudo e mantém o registro fiscal desvinculado; login da conta excluída responde 401.
   - Telas novas sem estouro em 390px. Migração `015` aplicada. Dados de QA removidos.
 
-### 31 · Textos sem acento
-
-- **Status:** 🟢 finalizada · **Commit:** `961ccf4` · **Push:** `aeb8b4a..961ccf4 main -> main` (confirmado)
-- **Método:** varredura com dicionário de português (pyspellchecker, instalado fora do projeto). O critério foi palavra sem acento cuja forma acentuada é a usual. A varredura cobriu:
-  - textos visíveis: literais, JSX e rótulos de uma palavra;
-  - padrões configuráveis, mensagens de API, scripts, launchers e documentação;
-  - conteúdo gravado no banco: documentos Puck, planos, recursos, hábitos, dicas, configuração e base de conhecimento da IA.
-- **Corrigido:**
-  - padrões da landing e do login (`modules/lyra-customaze-ui-ux/.../defaults.ts`): hero, métricas, fluxo, FAQ, CTA final, rodapé, textos do login, "orquestração guiada", "conexão de sinais reais" e a mensagem de erro do Bluetooth;
-  - construtor da experiência (`SiteExperienceBuilder`): cerca de 90 rótulos, descrições e mensagens;
-  - landing, modal de metas, teste de conexão da IA, mensagem do bootstrap do administrador e `AGENTS.md`.
-- **Mantidos de propósito:**
-  - identificadores e chaves internas (ex.: status `atencao`, `estavel`) e ids de elementos;
-  - migrations já aplicadas: mudar o texto altera o checksum. A `005` grava só na tabela `ui_config`, que não é usada;
-  - o banco: os textos gravados já estavam acentuados, e não há configuração de página salva (a landing e o login usam os padrões corrigidos).
-- **Evidências:** varredura final sem texto visível sem acento; no navegador, landing e login sem nenhum termo sem acento; `test` 236/236; `test:integration` 90/90; `test:launchers` OK; lint, format e types com exit 0; `build` com exit 0.
-
 ### 29 · Rotas, menus, botões e links reais
 
 - **Status:** 🟢 finalizada · **Commit:** `124c7fe` · **Push:** `main -> main` (confirmado; `main...origin/main` sem divergência)
@@ -924,6 +785,69 @@ Nenhuma tarefa a iniciar.
   - Teste de integração novo "configuração interna da cobrança" (`seguranca.integration.test.ts`).
   - `test` 236/236; `test:integration` 91/91; lint, format e types com exit 0; `build` com exit 0. Provas de remoção: `/nova-rota` e `Preferências` só aparecem em comentários que explicam a correção; `"/dashboard"` sem ocorrência em `src` e `modules`; 0 documentos Puck com `/dashboard`. Usuários de QA removidos.
 
+### 30 · Vulnerabilidade alta em `braces`
+
+- **Status:** 🟢 finalizada · **Commit:** `7c1f432` · **Push:** `c70e2f9..7c1f432 main -> main` (confirmado)
+- **Diagnóstico:** `braces` ≤ 3.0.3 (GHSA-vfj7-8cjw-p6xm, negação de serviço com padrões glob muito aninhados), sem versão corrigida publicada. Chegava por dois caminhos: a CLI `shadcn` e o `@next/eslint-plugin-next` (que fixa `fast-glob` 3.3.1, puxando `micromatch` e `braces`).
+- **Correção (tratada como se fosse para produção):**
+  - A CLI `shadcn` saiu das `devDependencies`. Ela só gerava componentes e nunca era importada; o `components.json` continua para uso com `pnpm dlx shadcn@<versão> add`.
+  - Override restrito ao plugin do Next: `fast-glob` resolvido para o `tinyglobby` (fdir + picomatch, sem `braces`), que exporta o mesmo `globSync` com `onlyDirectories`, a única função usada pelo plugin.
+  - `scripts/verificar-glob-eslint-next.mjs` chama a função real do plugin e confirma os mesmos diretórios do sistema de arquivos.
+- **Evidências:** `pnpm audit` e `pnpm audit --prod` com "No known vulnerabilities found"; `pnpm why braces` sem resultado; lint, format e types com exit 0; `test` 241/241; `test:integration` 73/73; `test:launchers` 17/17; `build` com exit 0.
+
+### 31 · Textos sem acento
+
+- **Status:** 🟢 finalizada · **Commit:** `961ccf4` · **Push:** `aeb8b4a..961ccf4 main -> main` (confirmado)
+- **Método:** varredura com dicionário de português (pyspellchecker, instalado fora do projeto). O critério foi palavra sem acento cuja forma acentuada é a usual. A varredura cobriu:
+  - textos visíveis: literais, JSX e rótulos de uma palavra;
+  - padrões configuráveis, mensagens de API, scripts, launchers e documentação;
+  - conteúdo gravado no banco: documentos Puck, planos, recursos, hábitos, dicas, configuração e base de conhecimento da IA.
+- **Corrigido:**
+  - padrões da landing e do login (`modules/lyra-customaze-ui-ux/.../defaults.ts`): hero, métricas, fluxo, FAQ, CTA final, rodapé, textos do login, "orquestração guiada", "conexão de sinais reais" e a mensagem de erro do Bluetooth;
+  - construtor da experiência (`SiteExperienceBuilder`): cerca de 90 rótulos, descrições e mensagens;
+  - landing, modal de metas, teste de conexão da IA, mensagem do bootstrap do administrador e `AGENTS.md`.
+- **Mantidos de propósito:**
+  - identificadores e chaves internas (ex.: status `atencao`, `estavel`) e ids de elementos;
+  - migrations já aplicadas: mudar o texto altera o checksum. A `005` grava só na tabela `ui_config`, que não é usada;
+  - o banco: os textos gravados já estavam acentuados, e não há configuração de página salva (a landing e o login usam os padrões corrigidos).
+- **Evidências:** varredura final sem texto visível sem acento; no navegador, landing e login sem nenhum termo sem acento; `test` 236/236; `test:integration` 90/90; `test:launchers` OK; lint, format e types com exit 0; `build` com exit 0.
+
+### 32 · Página `/instruments`
+
+- **Status:** 🟢 finalizada · **Commit:** `0741a4a` · **Push:** `3403a7c..0741a4a main -> main` (confirmado)
+- **Risco avaliado: nenhum.** A página era uma demonstração do template, sem link em sidebar, menu do celular, Ctrl K, landing ou documentos Puck publicados. Nenhum motor, tela ou API da Lyra lia a tabela. Ela era a única tabela lida sem sessão pela API de dados, então removê-la diminui a superfície exposta.
+- **Removido:**
+  - página `src/app/instruments/page.tsx`;
+  - tabela `instruments` e documento Puck `instruments` (migração `013_remove_instruments_demo.sql`, idempotente, sem dados de usuário);
+  - flag `publicRead` (agora toda leitura em `/api/data` exige sessão), tipos `InstrumentRow` e a chave Puck;
+  - `src/lib/mysql/query-utils.ts` e o teste dele: código morto, importado só pelo próprio teste.
+- **Evidências:**
+  - prova de morte: `grep -rn instruments` sem ocorrências no código; `publicRead` só aparece num campo homônimo e não relacionado do contrato do módulo `lyra-customaze-ui-ux`;
+  - migração aplicada; segunda execução com "Já aplicada" em todas; tabela inexistente e 0 documentos Puck `instruments`;
+  - produção: `/instruments` 404; `/api/data/instruments` 400 ("Tabela não suportada");
+  - `test` 226/226 (21 testes a menos, do arquivo morto removido); `test:integration` 75/75 (todas as tabelas exigem sessão: 401); lint, format e types com exit 0; `build` com exit 0.
+
+### 33 · Experiência no celular
+
+- **Status:** 🟢 finalizada · **Commit:** `b2dddb8` · **Push:** `40bd98a..b2dddb8 main -> main` (confirmado)
+- **Método:** varredura real em 390×844 com toque, em todas as rotas, como visitante, paciente, administrador e conta nova: estouro horizontal, alvos de toque abaixo de 24px e captura da primeira dobra. Referências de 2026 consultadas: formulário acima da dobra no login, progresso de etapas com texto, alvos de 44px.
+- **Problemas encontrados e corrigidos (causa raiz):**
+  - **Onboarding cortado:** o formulário ficava numa linha flex centralizada e crescia até 672px; no celular estourava para os dois lados (página com 531px e o início dos cartões fora da tela, sem como rolar até ele). Agora é uma coluna na largura da tela, as etapas fora da tela ficam `inert` (o "próximo campo" do teclado não pula para etapas escondidas) e a página ganhou `<main>` e `<h1>`.
+  - **Pontos do onboarding:** eram um `role="tablist"` sem abas, que não dizia nada ao leitor de tela. Agora há o texto "Etapa X de N" e os pontos já concluídos ficam marcados.
+  - **Metas do onboarding:** só a caixinha de 20px e o texto marcavam a meta, apesar do cursor de clique na linha. Agora a linha inteira (44px) marca e a opção escolhida fica destacada.
+  - **Login com o formulário abaixo de um texto longo:** a ordem passou a ser marca → título → formulário → detalhes. No celular o formulário aparece na primeira dobra e o título acompanha a largura da tela; no desktop o desenho em duas colunas continua igual.
+  - **Botões do acesso rápido da landing com 22px:** `flex-1` na coluna zerava a base de altura. Agora só vale na linha (a partir de `sm`).
+  - **Alvos pequenos:** "Criar conta"/"Entrar", "Voltar para a landing", "Lembrar-me" e o selo "Feito com iLyra AI" passaram a 44px.
+  - **Perfil:** um cartão repetia o título e a descrição da página logo abaixo do cabeçalho; removido.
+  - **Chat:** cabeçalho compacto no celular (sem ícone e texto de apoio), para a conversa aparecer antes.
+- **Evidências:**
+  - nenhuma rota com estouro horizontal em 390px (antes: onboarding com 531px); alvos abaixo de 24px só o checkbox "Lembrar-me" (com rótulo de 44px ao lado) e o seletor interno do Puck;
+  - axe sem violações em `/`, `/login`, `/chat`, `/profile`, `/goals` e `/onboarding`, em 390 e 1440px;
+  - fluxo completo do onboarding (13 verificações) aprovado no celular e no desktop; dados gravados conferidos no MySQL;
+  - login e onboarding sem estouro em 820 e 1440px;
+  - `test` 230/230; `test:integration` 75/75; lint, format e types com exit 0; `build` com exit 0. Contas de QA e contadores de tentativa locais removidos do banco.
+- **Achado repassado à tarefa 29:** `/monitoring` mostra ao paciente nomes de variáveis internas de configuração no aviso de plano.
+
 ### 34 · Tema escuro
 
 - **Status:** 🟢 finalizada · **Commit:** `b3c438f` · **Push:** `main -> main` (confirmado; `main...origin/main` sem divergência)
@@ -939,6 +863,73 @@ Nenhuma tarefa a iniciar.
   - Navegador: botão do login alterna e persiste após recarregar e entre páginas; menu do perfil com Claro/Escuro/Do sistema, inclusive com o sistema em escuro e em claro; `theme-color` `#f6f6f8` ↔ `#0c0c13`; sem avisos de console nem erros de hidratação; landing a 390 px sem estouro.
   - Regressão das tarefas 29 e 36: sino, "Privacidade e dados", `/monitoring` e construtor sem mudança; varredura de botões e links sem achados.
   - `test` 241/241; `test:integration` 91/91; lint, format e types com exit 0; `build` com exit 0 e sem avisos. Usuários de QA removidos.
+
+### 35 · Onboarding no primeiro acesso
+
+- **Status:** 🟢 finalizada · **Commit:** `fae09bd` · **Push:** `39e765f..fae09bd main -> main` (confirmado)
+- **Verificação inicial:** cadastro, login e rotas digitadas já levavam ao onboarding, mas com dois defeitos reproduzidos no navegador:
+  - **Fuga pelo "voltar":** a partir do onboarding, o botão "voltar" abria o painel completo (menu, métricas, chat) de uma conta recém-criada.
+  - **Desvio pelo painel:** o cadastro ia primeiro ao painel e só depois ao onboarding; páginas montavam e faziam consultas antes do redirecionamento.
+- **Causa raiz:** o `AuthProvider` só decidia o destino quando a sessão mudava (não a cada rota) e renderizava a página antes de conhecer o status do onboarding, que exigia uma consulta extra ao perfil.
+- **Correção:**
+  - a sessão (`/api/auth/session`, login e cadastro) traz `onboarding_completed` lido do banco;
+  - `src/lib/auth/destino-de-acesso.ts` decide o destino (visitante → login; conta sem onboarding → onboarding; conta pronta sai de login e onboarding), com testes;
+  - o `AuthProvider` reavalia a cada rota, usa `replace` e não monta a rota bloqueada;
+  - ao concluir, o onboarding relê a sessão (`db.auth.refreshSession`) e o app abre o painel; o login deixa a navegação para o `AuthProvider`;
+  - removida a recriação de perfil pelo cliente (código inalcançável: sem perfil não existe sessão). Prova de morte: `grep` sem ocorrências.
+- **Evidências (build de produção, 1440px):** 13/13 verificações e zero erros de console:
+  - cadastro → `/onboarding` direto (trilha `/login → /onboarding`, 776 ms);
+  - "voltar" e as rotas `/`, `/plan`, `/profile`, `/admin/users` e `/login` não abrem o painel;
+  - ao finalizar abre o painel; "voltar" e `/onboarding` não reabrem o onboarding; rotas liberadas; novo login (390px) abre o painel; visitante vai ao login.
+  - `test` 230/230; `test:integration` 75/75 (sessão com o status, inclusive após concluir sem novo login); lint, format e types com exit 0; `build` com exit 0. Usuários de QA removidos do banco.
+- **Achado repassado à tarefa 33:** em 390px o formulário do onboarding fica com 531px de largura (cartões cortados e rolagem lateral).
+
+### 36 · Edição dos dados do onboarding no perfil
+
+- **Status:** 🟢 finalizada · **Commit:** `e0a02a3` · **Push:** `38b998a..e0a02a3 main -> main` (confirmado)
+- **Mapeamento campo a campo:** nome, sobrenome, data, hora e local de nascimento, idade (calculada pela data) e gênero já estavam no perfil; **nível de atividade e metas só existiam no onboarding** e passaram a ser editáveis no perfil, com as mesmas opções (módulo compartilhado `opcoes-de-perfil.ts`, sem lista duplicada). O consentimento do onboarding não é gravado hoje; o registro de consentimento faz parte da tarefa 28.
+- **Defeito encontrado e corrigido (causa raiz):** o MySQL devolve a hora como `HH:MM:SS` e a validação do perfil exige `HH:MM`. Quem informou a hora no onboarding não conseguia salvar nada no perfil: a validação recusava a hora em silêncio. A hora agora é convertida ao carregar (`horaParaCampo`), e um aviso aparece quando algum campo bloqueia o envio.
+- **Sem duplicidade de e-mail de login:**
+  - `profiles.email` era uma cópia sem índice único. A migração `014` realinha a cópia com a conta e cria o índice único.
+  - Pela API de dados ninguém altera `profiles.email`, nem o administrador (só a cópia mudaria).
+  - Nova troca de e-mail no perfil (`PATCH /api/account/email`): exige a senha atual; as falhas contam no limite do login; `users` e `profiles` mudam na mesma transação; e-mail de outra conta (inclusive com maiúsculas e espaços) responde 409; o token é reemitido mantendo o tipo de sessão.
+  - Os demais dados sensíveis são linhas do próprio usuário (`profiles.id` = conta) e não se repetem entre contas.
+- **Evidências:**
+  - QA no build de produção em 1440 e 390px, 13/13 verificações:
+    - os dados do onboarding (atividade, metas e hora em `HH:MM`) aparecem no perfil;
+    - a edição gravada foi conferida no MySQL e persiste após recarregar;
+    - o e-mail de outra conta e a senha errada são recusados na tela;
+    - a troca de e-mail atualiza conta e perfil, mantém a sessão, e o login fica 401 com o e-mail antigo e 200 com o novo;
+    - o perfil no celular não tem estouro horizontal.
+  - `test` 235/235; `test:integration` 79/79 (novo `conta-email.integration.test.ts`, índice único e bloqueio de troca pelo administrador); lint, format e types com exit 0; `build` com exit 0.
+  - Migração `014` aplicada e reexecutada com "Já aplicada" em todas. Usuários de QA removidos do banco.
+- **Achado repassado à tarefa 28 (corrigido na tarefa 28):** o registro original dizia que a remoção pelo painel administrativo apagava só o perfil. Na análise da tarefa 28 isso se mostrou incorreto: pelo administrador, a API de dados já apagava a conta inteira, mas sem as verificações da exclusão (assinatura paga renovável, último administrador) e sem apagar as imagens. Quem deixava a conta órfã era o **próprio titular**: ele conseguia apagar o próprio perfil pela API de dados, ficava sem login e com o e-mail preso. Os dois casos foram resolvidos na tarefa 28.
+
+### 37 · Administrador `admin@admin.com`
+
+- **Status:** 🟢 finalizada · **Commit:** sem alteração de código versionado (o registro é este painel) · **Push:** do painel (confirmado)
+- **Implementado:** o usuário foi criado pelo bootstrap oficial de administradores (`ADMIN_BOOTSTRAP_ADDITIONAL_ADMINS` no `.env.local`, que é ignorado pelo Git). A senha definida pelo usuário não foi escrita em nenhum arquivo versionado, conforme a regra de segredos; o banco guarda só o hash bcrypt. O mecanismo é idempotente: cada `pnpm db:migrate` (e o `up` dos launchers) assegura o usuário, e a senha só é regravada quando o valor do `.env.local` muda.
+- **Evidências reais:**
+  - `pnpm db:migrate`: "Bootstrap admin assegurado: admin@admin.com".
+  - MySQL: `admin@admin.com` com `role = admin`, nome "Administrador Total", onboarding concluído, plano `care` ativo (todas as capacidades) e senha em hash bcrypt.
+  - `POST /api/auth/login` com o e-mail e a senha informados: 200; `/api/auth/session` retorna `role: "admin"`; `/api/admin/users`, `/api/admin/plans`, `/api/admin/page-config/app` e `/api/admin/puck/documents/landing-home`: 200.
+- **Recomendação:** a senha pedida segue um padrão comum; antes de publicar em produção, troque-a no `.env.local` (o próximo `pnpm db:migrate` regrava o hash).
+
+### 38 · Isolamento das funções de administrador
+
+- **Status:** 🟢 finalizada · **Commit:** `3a1fdca` · **Push:** `5e7d836..3a1fdca main -> main` (confirmado)
+- **Método:** verificação real com um paciente criado pelo cadastro público e com o `admin@admin.com`, por API (`curl` com sessão) e por navegador no build de produção. Mapeadas as 30 rotas de API e as 9 páginas `/admin/*`.
+- **Vazamentos encontrados e corrigidos (causa raiz):**
+  - **Configuração e base de conhecimento da IA legíveis por qualquer usuário:** a API de dados liberava a leitura de `ai_config` (missão, objetivos e pesos do motor) e `ai_knowledge_documents` (inclusive rascunhos inativos) para qualquer sessão. Agora `adminOnlyRead`; os recursos que dependem delas já as leem no servidor.
+  - **Primeiro cadastro virava administrador:** com o banco vazio (bootstrap desativado em produção), o primeiro visitante ganhava acesso total. O cadastro público agora sempre cria usuário comum no plano `free`.
+  - **Telas administrativas entregues a qualquer um:** o bloqueio era só no navegador. O `src/proxy.ts` passou a verificar o papel para `/admin/*`: visitante vai ao login e usuário comum volta ao próprio painel. A autorização definitiva continua nas APIs, que releem o papel no banco.
+- **Já corretos (confirmados):** as rotas `/api/admin/*`, `/api/rpc/*` e `test-ai-connection` exigem administrador; `profiles.role` só é gravado por administrador; sidebar, menu do celular e busca Ctrl K escondem os itens administrativos pelo papel definido no código.
+- **Evidências:**
+  - Paciente: 403 em todas as rotas e métodos administrativos (GET, PUT, POST, PATCH), sem alterar o próprio plano; 403 na leitura e escrita de `ai_config` e `ai_knowledge_documents`.
+  - Navegador: paciente com 8 itens no menu, nenhum administrativo, nada administrativo na busca, e as 9 rotas `/admin/*` devolvidas ao painel; `admin@admin.com` com 17 itens e as 9 telas abertas.
+  - Testes novos: `src/proxy.test.ts` (6) e matriz de integração em `dados-admin.integration.test.ts`; cadastro confirma `patient` e plano `free`.
+  - `test` 247/247; `test:integration` 75/75; lint, format e types com exit 0; `build` com exit 0.
+  - Usuário de QA removido do banco ao final.
 
 ### 39 · Desativar Apple Saúde e Health Connect
 
@@ -1126,170 +1117,94 @@ Nenhuma tarefa a iniciar.
   - Navegador (build de produção, login real pela tela): o plano já estava salvo no MySQL antes de abrir `/plan`, origem automática, cota intacta, tela com o plano pronto ("Regenerar plano"), axe sem violações e zero erros de console, em 1440 px claro e 390 px escuro.
   - `test` 412/412, `test:integration` 156/156, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
 
-### 68 · Onboarding, plano Free no cadastro e recursos de cada plano
+### 52 · Chat redesenhado, simples e em uma coluna
 
-- **Status:** 🟢 finalizada · **Commits:** `81142dc` (Free na transação do cadastro) e `a607c6a` (recursos fora do plano não aparecem) · **Push:** `951328e..81142dc` e `81142dc..a607c6a main -> main` (confirmados)
-- **Pedido do usuário (2026-10-17):** verificar (1) se o onboarding aparece no primeiro login e depois não aparece mais; (2) se o perfil e o plano Free são concedidos ao novo usuário; (3) se cada plano funciona com os recursos habilitados e se os não habilitados não aparecem.
-- **Resultado da verificação:**
-  - (1) e (2) já funcionavam. Ajuste de robustez: a assinatura Free era criada depois do COMMIT da conta; agora conta, perfil, aceites e Free são atômicos.
-  - (3) as APIs já recusavam o que o plano não inclui, mas a interface mostrava tudo: o menu do Free listava Monitoramento e Dispositivos, o painel exibia "Bloqueado", o monitoramento do Meta mostrava "voz bloqueada", a agenda não exigia o recurso e a meta de sono gerava 403 no console com metas desligadas.
-- **Implementado:** `RECURSOS_DA_ROTA` e `useRotaLiberada` aplicados ao menu lateral, menu do celular, busca Ctrl K, atalhos, botão do chat, ações rápidas, cartões do painel, ações da Lyra, sino, Respiração, Sua semana e Plano de IA; agenda exigindo `appointments_active` e `professionals_total` na página e na API; `/api/semana` sem metas fora do plano; campo morto do Construtor removido; `docs/api.md` atualizado.
+- **Status:** 🟢 finalizada · **Commit:** `4cbf2e0` · **Push:** `80a891f..4cbf2e0 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-16):** reformular e redesenhar `/chat`, que estava confuso, deixando-o mais simples e na tendência de 2026.
+- **Pesquisa:** padrões de interfaces de conversa com IA de 2026 (coluna única centrada, começo da conversa com perguntas prontas em cartões, campo fixo embaixo, resposta sem caixa, ações discretas, aviso de limites).
+- **Antes:** cabeçalho grande, cartão de conversa, perguntas prontas repetidas embaixo e na lateral e uma lateral técnica ("API local Next.js", "Camadas que sustentam a conversa").
+- **Implementado:**
+  - Uma coluna centrada: barra mínima (marca, estado, "Nova conversa" e "Como a Lyra responde"), começo da conversa com a Lyra e as perguntas em cartões, campo fixo embaixo com o aviso de bem-estar.
+  - Resposta da Lyra em texto corrido com a marca; pergunta em balão; copiar e refazer no hover, no foco e sempre no toque.
+  - Informações e chave própria do Gemini (BYOK, que continua funcionando) no botão de informações.
+  - Causa raiz corrigida no caminho: o campo aceitava 4000 caracteres e o servidor recusa acima de 2000; agora o limite é o mesmo.
+  - Sem o aviso "Mensagem enviada" a cada envio; resposta revelada mais rápido e inteira com movimento reduzido.
+  - Textos padrão novos e rótulos do page builder coerentes; todos os campos da configuração do chat continuam em uso. `QuickReply` removido (sem uso; `grep` sem ocorrências).
 - **Evidências:**
-  - Navegador (build de produção), cadastro novo pela tela: onboarding obrigatório em `/`, `/chat`, `/profile`, `/goals` e `/login`; concluído pela interface, nunca mais volta (rotas, recarga, novo login e login em outro aparelho pela landing); banco com perfil `patient`, `onboarding_completed` 0 → 1, aceites LGPD e uma única assinatura `free/active/auth_register`; 19 verificações OK.
-  - Free, Meta e Care (atribuídos pela API do admin): 86 verificações OK e 0 falhas; menus, busca, ações rápidas, páginas, voz e API da pulseira conforme a matriz do banco; 0 erros de console e de rede.
-  - Cada recurso do Free desligado um por vez (9 recursos, 9 páginas cada): o item some do menu e nenhuma página faz chamada recusada; matriz restaurada ao fim.
-  - `check:format`, `check:lint`, `check:types`, `test` 510/510, `test:integration` 166/166 e `build` com exit 0.
+  - Navegador (build de produção), jornada completa em 1440 px claro e 390 px escuro: pergunta pronta respondida com o dia da pessoa, pergunta digitada com Enter, "Refazer" troca a resposta sem duplicar, painel de informações com a chave própria e "Nova conversa" volta ao começo. axe sem violações (início, conversa e painel), sem estouro horizontal e zero erros de console.
+  - `test` 412/412, `test:integration` 156/156, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
 
-### 67 · Arte da Jornada e landing harmônica e organizada
+### 53 · Construtor de UI e editor Puck funcionando de ponta a ponta
 
-- **Status:** 🟢 finalizada · **Commit:** `28bbbaf` · **Push:** `9af937d..28bbbaf main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-17):** enviou as 4 imagens que faltavam e pediu a landing "harmoniosa, organizada, linda, moderna".
-- **Base:** referências de 2026 para landings editoriais de bem-estar (títulos serifados, respiro generoso, ritmo calmo entre seções, menos cartões repetidos e imagem real como protagonista).
-- **Implementado:**
-  - Arte em `public/landing-jornada/` em WebP (784 KB no total): lótus (1122×1402), vale com portal (1440×810) e as duas ondas recortadas ao conteúdo, com fundo transparente preservado (960 px, o dobro do tamanho exibido).
-  - Topo e vale sangrando até a borda da tela (antes sobrava uma faixa de ~18 px); ondas ancoradas nos cantos externos.
-  - Seções alternando só dois tons, sem linhas duras; "O que você recebe" em lista editorial de duas colunas e "Como funciona" em linha do tempo com numerais serifados (antes eram três grades iguais de três cartões em sequência).
-  - Entrada rápida antes do convite final, que passa a fechar a página.
-  - Celular: ondas mais baixas e suaves para não disputar a leitura.
-  - Tema escuro: contraste do aviso de falha dos planos corrigido (aparecia com o banco fora do ar).
-- **Evidências:** `check:format`, `check:lint`, `check:types`, `test` 502/502 e `build` com exit 0. Navegador (build de produção): as 4 imagens com 200 e classe `jornada-com-arte` em 1440 px e 390 px; 70 verificações OK e 0 falhas em 1440 claro e escuro, 768, 390 claro e escuro e 320 (rotas, âncoras, planos, login real, menu móvel, axe sem violações, 0 erros de console, 0 respostas de erro); cabeçalho fixo na rolagem; prévia do Construtor responsiva e sem navegação; aviso de falha dos planos sem violações de contraste com o MySQL parado.
-
-### 66 · Landing "Jornada de consciência" aplicada e verificada
-
-- **Status:** 🟢 finalizada · **Commit:** `94a07c0` · **Push:** `7c3980d..94a07c0 main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-17):** aplicar a nova landing feita por outro modelo de IA (que não conseguiu publicá-la), enviada em anexo (`LandingPage.tsx` e `LandingJornada.css`), e verificar rotas e o funcionamento geral.
-- **Achado principal:** as quatro imagens que o CSS usa (`public/landing-jornada/hero-lotus.webp`, `vale-etereo.webp`, `onda-esquerda.webp`, `onda-direita.webp`) não vieram no anexo, não existem no repositório e não estavam acessíveis no computador do usuário (pedido de acesso à pasta sem resposta). Aplicada como estava, a página fazia 4 requisições 404 e deixava o topo e o manifesto com metade vazia.
-- **Implementado:**
-  - Os dois arquivos aplicados (com Prettier), mantendo o contrato com o Construtor (`overrideConfig`/`previewMode`), os planos do catálogo, o login real, FAQ, LGPD e blocos do Puck.
-  - `next.config.ts` confere se as quatro imagens existem e expõe `LYRA_LANDING_COM_ARTE`; só com elas a landing recebe a classe `jornada-com-arte` e pede as imagens. Sem elas, topo e manifesto ocupam a largura toda, só com texto, sem 404.
-  - Prévia do Construtor: quebras de layout por `@container jornada` e medidas em `cqi` (eram `@media` e `vw`, e a landing de desktop transbordava a coluna da prévia).
-  - Contraste do botão do plano em destaque no escuro (texto branco sobre turquesa claro, 2,1:1) corrigido para mais de 7:1.
-  - Lista de recursos dos planos sem vãos (`align-content: start`).
-  - Removido o segundo "Pular para o conteúdo" (o layout raiz já tem um) e restaurado o `#conteudo-principal` só fora da prévia (evita id duplicado no admin).
-  - README: onde colocar a arte.
-- **Evidências:** `check:format`, `check:lint`, `check:types`, `test` 502/502, `test:integration` 164/164 e `build` com exit 0. Navegador (build de produção; 1440 claro e escuro, 768, 390 claro e escuro, 320): 70 verificações OK e 0 falhas: um `h1` e um `main`, sem rolagem horizontal, tema aplicado, 3 planos com preços do catálogo, âncoras `#topo`, `#fluxo`, `#recursos`, `#planos`, `#faq` e `#sobre` com destino, rotas `/login`, `/privacidade` e `/termos` em 200, pergunta frequente, mostrar senha, menu móvel abrindo e fechando, cabeçalho fixo na rolagem, login real pela landing abrindo o painel, axe (WCAG 2.2 AA e boas práticas) sem violações, 0 erros de console e 0 respostas de erro. Prévia no Construtor: presente, responsiva, um só `main`, clique não navega, console limpo. Mecanismo da arte testado com quatro imagens de teste temporárias (classe aplicada, as 4 com 200, 0 erros) e as imagens de teste removidas em seguida.
-
-### 65 · Painel TUI-WEBNOVA como orquestrador do app no WSL2
-
-- **Status:** 🟢 finalizada · **Commit:** `4e8c565` · **Push:** `9bc51a9..4e8c565 main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-17):** adaptar o template TUI-WEBNOVA (`ilyra-ai/tui-webnova`) como orquestrador do app em `tui-webnova.sh` na raiz, com a saída de todos os comandos ao vivo, terminal interativo, visual de 2026, 11 opções definidas mais 5 extras, sem gravar logs, só para o WSL2 e sem chamar `run.py`, `run.sh` ou qualquer outro script do projeto.
-- **Implementado (`tui-webnova.sh`, independente: Bash + Python 3.10+ só com a biblioteca padrão):**
-  - Painel web local em 127.0.0.1 com token, checagem de Host (DNS rebinding), terminal real (PTY + xterm.js 6) por ação, envio de texto e teclas (`s`, `y`, `n`, Ctrl+C), cancelamento, abas, paleta Ctrl+K, tema claro e escuro, bento de estado (Node, pnpm, Docker, MySQL, migrations, Git, build, app).
-  - 18 ações: check-up; requisitos (apt, nvm, Node do `.nvmrc`, pnpm por Corepack, `pnpm install --frozen-lockfile`, cada um só quando falta); banco (Docker Engine pelo repositório oficial quando ausente, `.env.local`, porta livre, MySQL saudável); infraestrutura; migrations próprias com o mesmo checksum e tabela do runner oficial, mais o administrador inicial; iniciar dev e produção; parar; backup do banco, do app e completo (SHA-256 e manifesto); restaurar (dump de segurança antes); atualização segura (árvore limpa, backup obrigatório, `merge --ff-only`, migrations, build preservando o anterior e rollback automático); saúde ponta a ponta; segurança e supply chain; quality gates; limpeza segura; terminal do projeto.
-  - Sem logs: a saída fica só na memória do painel; `WEBNOVA_SEM_LOGS=1` desliga, pelo `next.config.ts`, o servidor MCP de dev do Next.js 16, que gravaria `.next/dev/logs/next-development.log`.
-  - `.gitignore` com `/backups/` inteiro e README com uso, ações e garantias.
-- **Evidências:** `--self-test` OK (18 ações, 18 scripts Bash válidos, nenhuma chamada a outros scripts, nenhuma escrita de log); pelo navegador: xterm carregado, 18 cards, 403 sem token e com Host estranho, digitação no terminal, pergunta interativa respondida pelo botão, app dev e produção no ar com `/api/health` 200, segunda partida recusada (409), saúde (`/`, `/login` e login do admin), três backups verificados, restauração do pacote completo pelo modal com o app religado, atualização real `10a6f24 → 9bc51a9` em clone com backup e rebuild, rollback com build quebrado, parar; segurança com 0 vulnerabilidades; quality gates com 502 unitários e 164 de integração; nenhum arquivo novo fora de `backups/` e dos artefatos de build depois de iniciar o app pelo painel; `check:format`, `check:lint` e `check:types` com exit 0.
-
-### 64 · Erros relatados pelo usuário rodando em modo dev
-
-- **Status:** 🟢 finalizada · **Commits:** `634042b` (diagnóstico do banco) e `21e73f5` (avisos do modo dev) · **Push:** `10a6f24..634042b` e `634042b..21e73f5 main -> main` (confirmados por `git ls-remote`)
-- **Relato (2026-10-17):** no computador do usuário, `pnpm dev` com 500 em `/api/public/page-config/*`, `/api/public/plans`, `/api/public/puck/documents/*` e `/api/auth/register` (cadastro), além de avisos no console.
-- **Honestidade sobre a validação anterior:** as tarefas 57 a 63 foram validadas no ambiente de trabalho, no build de produção e com o banco ativo; o modo dev e a máquina do usuário não tinham sido validados nesta rodada.
-- **Causa raiz dos 500:** o app não alcançava o MySQL. Reproduzido com o banco parado: as mesmas rotas em 500, com `connect ECONNREFUSED 127.0.0.1:3307` só no terminal do servidor e mensagens genéricas no navegador. O código das rotas estava correto (com o banco ativo, todas respondem 200, inclusive em banco novo recém-migrado).
-- **Implementado:**
-  - `src/lib/mysql/diagnostico.ts` (com testes): falha de conexão, credencial recusada, banco inexistente e migrations pendentes viram `503` com "banco de dados indisponível"; o terminal mostra a causa, o destino (`host:porta/banco`) e o comando que resolve, uma linha a cada 30 s.
-  - `scripts/verificar-banco.mjs` como `predev`: o `pnpm dev` confere conexão e migrations antes de iniciar e para com a instrução certa (`LYRA_IGNORAR_VERIFICACAO_DO_BANCO=1` ignora).
-  - Configuração pública e blocos do Puck mostram a mensagem do servidor (antes "Falha ao obter documento do Puck").
-  - Avisos do modo dev removidos: `data-scroll-behavior="smooth"` no `<html>` e a marca sem `priority` (obsoleto no Next 16), com `loading="eager"` e `fetchPriority="high"`.
-- **Evidências:** `pnpm dev` com o banco parado encerra com a mensagem e o comando; banco caindo com o servidor no ar dá `503` e a linha `[banco]` no terminal, e o app volta sozinho quando o banco volta. Varredura em modo dev (visitante, pessoa recém-cadastrada e admin, 27 rotas, 1440 px e 390 px, banco novo e banco existente): 0 respostas de erro, 0 erros e 0 avisos de console. `test` 502/502, `test:integration` 164/164, lint, formatação, tipos e build sem erros. O aviso intermitente de contraste no painel é do botão "Ações rápidas" durante a animação de entrada de 300 ms; no estado final passa (4 medições).
-
-### 63 · Landing page redesenhada por completo
-
-- **Status:** 🟢 finalizada · **Commit:** `29d2559` · **Push:** `aa147b8..29d2559 main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-17):** redesenhar a landing por completo, mais simples, harmônica, organizada e na tendência de 2026.
-- **Base:** referências de 2026 para landings de produto (topo com uma promessa e uma ação, prova logo abaixo, preço transparente, menos cartões repetidos, paridade claro e escuro). Todo o texto continua vindo do construtor de UI e os planos do catálogo público.
-- **Implementado (`src/components/landing/LandingPage.tsx`, reescrito por inteiro):**
-  - Uma coluna de leitura calma, contêiner de 72 rem, espaçamento uniforme entre seções e faixas alternadas de fundo; sem cartão dentro de cartão.
-  - **Topo:** selo, título com destaque, texto e duas ações; a entrada rápida (e-mail e senha reais) ao lado no desktop e abaixo no celular. A prévia do produto virou uma faixa própria.
-  - **Navegação:** os 14 botões que navegavam por JavaScript viraram links (`/login`, âncoras e `https://`), com abertura em nova aba e funcionamento sem JavaScript; menu móvel em painel lateral nomeado; o menu mostra só as seções visíveis (antes apontava para seções ocultas).
-  - **Seções:** recursos em `ul`, passos em `ol` com linha de ligação, indicadores em `dl` e títulos `h3` em todos os itens.
-  - **Planos:** do segundo plano em diante, "Tudo do Free, mais:" com os recursos que ele acrescenta (antes os três cartões repetiam os mesmos cinco); "por mês" (era "/mes"), anual em pt-BR, estado vazio e "Tentar de novo" quando o catálogo falha.
-  - **Tipografia fluida de verdade:** o valor do meio do `clamp` era fixo em rem e o título ficava enorme no celular; agora cresce em linha reta de 360 px a 1280 px, respeitando as escalas do construtor.
-  - **Pré-visualização do construtor:** sem um segundo `<main>` e com os links sem navegar.
-- **Evidências:** `test` 497/497, `test:integration` 164/164, `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e escuro, 768 px, 390 px e 320 px): um `h1`, sem rolagem horizontal, 3 planos do catálogo com preços em reais, âncoras levando o título para baixo do cabeçalho, menu móvel abrindo e fechando ao escolher, pergunta frequente abrindo, mostrar senha, axe (WCAG e boas práticas) sem violações, entrada rápida real abrindo o painel e zero erros de console; prévia no construtor conferida. Varredura WCAG de 20 páginas no claro sem violações (o aviso de contraste da landing da tarefa 61 não se repete).
-
-### 62 · Tags e Elementos HTML premium
-
-- **Status:** 🟢 finalizada · **Commit:** `7d31294` · **Push:** `41a95e8..7d31294 main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-17):** todas as tags e elementos HTML no melhor padrão premium.
-- **Implementado:**
-  - **Títulos das abas:** as 22 páginas do app são de cliente e todas mostravam só "Lyra MetaCare". Cada segmento ganhou um `layout.tsx` de servidor com o nome do próprio menu (`src/lib/metadados/pagina.ts`, que falha no build se a rota sair da navegação); login, onboarding e retorno do pagamento com nomes próprios. Termos e privacidade repetiam "Lyra MetaCare" no título.
-  - **404 em português** (`not-found.tsx`; antes a página padrão em inglês) e `<title>` na tela de erro global.
-  - **Chat:** dois `h1` na mesma página (o do cabeçalho e o da conversa), agora `h2`. A região ao vivo anunciava a resposta em pedaços durante a revelação; virou `role="log"` e a resposta entra inteira, uma vez, ao terminar.
-  - **Navegação:** menus lateral e móvel em `ul`/`li` nomeados pela seção; `aside` do menu com nome e a prévia da respiração deixou de ser `aside`. O bloco do Puck do app ficava fora de qualquer região e passou para dentro do `<main>`.
-  - **Títulos em ordem:** usuários, planos, conteúdo e agendamentos pulavam do `h1` para o `h3`; o login ficava sem `h1` quando a introdução era ocultada no construtor.
-  - **Tabelas:** `Table` aceita `caption` (legenda oculta como primeiro filho); 7 tabelas legendadas e datas da lista de usuários e da respiração em `<time dateTime>`. Regiões roláveis da semana com nomes distintos.
-  - **Números em pt-BR:** `decimalPtBr` e `moedaPtBr` (`src/lib/formato/numero.ts`, com testes) nos indicadores do painel, idade biológica, preços dos planos ("BRL 79.90" virou "R$ 79,90") e escalas do construtor.
-  - **Formulários:** erro de validação anunciado ao aparecer (`role="alert"`), ícone decorativo oculto, grupo "Seus objetivos" nomeado e consentimento marcado como obrigatório.
-- **Evidências:** `test` 497/497 (4 novos), `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e 390 px escuro): títulos de 8 rotas conferidos, 404 com `h1` e link de volta funcionando, um `h1` por página, legenda e `<time>` na tabela de usuários, preços com vírgula, menus em listas; varredura de 23 páginas com as regras de ordem de títulos, regiões, listas e nomes únicos sem falhas nas duas larguras; varredura WCAG de 20 páginas sem violações e zero erros de console.
-- **Não feito, com motivo:** as barras de pontuação seguem como `progressbar` do Radix com `aria-valuenow`, lidas corretamente pelos leitores; o `<meter>` tem suporte desigual entre NVDA, JAWS e VoiceOver. Datas embutidas em frases de avisos continuam como texto.
-
-### 61 · Widgets e Controles premium
-
-- **Status:** 🟢 finalizada · **Commit:** `18d2f11` · **Push:** `6f9d9fd..18d2f11 main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-17):** todos os widgets e controles no melhor padrão premium.
-- **Implementado:**
-  - **Switch:** a bolinha usava `bg-background` e sumia sobre o trilho no tema escuro; agora `bg-card` e, ligado, a cor de contraste da primária. **Slider:** área de toque ampliada por pseudo-elemento. **Checkbox:** área de toque, estado inválido e indeterminado (ícone de traço). **Radio:** 20 px, contorno de controle (3:1) e anel de foco de 2 px.
-  - **Input, textarea e select:** `aria-invalid` com borda e anel de erro, hover e texto de 16 px no celular (o iOS deixava de dar zoom ao focar).
-  - **DatePicker:** aceita e repassa os atributos nativos; o `id` fixo impedia o rótulo do formulário de nomear o campo. Onboarding e perfil com `autoComplete` (`bday`, `given-name`, `family-name`) e teclado numérico.
-  - **Avaliação integrativa:** abas viraram `Tabs` do Radix (setas do teclado, `aria-selected`); WHO-5 e NPS viraram grupos de rádio com a pergunta como nome (o NPS eram 11 botões soltos).
-  - **Perfil:** a foto clicável era uma `div`; agora é um botão com nome. **Usuários (admin):** cabeçalhos com `aria-sort` e ícone por direção.
-  - **Nomes únicos:** busca do cabeçalho, ações de copiar e refazer do chat (40 px no toque), switch e remoção na base de conhecimento e ações das consultas passam a dizer de qual item se trata.
-- **Evidências:** `test` 493/493, `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e 390 px escuro, usuário temporário removido ao final): rótulo e autocompletar no onboarding, seta do teclado entre abas, nota do NPS marcada clicando no rótulo, foto como botão, axe no perfil sem violações e zero erros de console; varredura de 20 páginas sem violações no escuro e um aviso de contraste na landing no claro que não se repetiu na conferência (ocorre durante a animação de entrada; a landing é refeita na tarefa 63).
-
-### 60 · Componentes de Design System premium
-
-- **Status:** 🟢 finalizada · **Commit:** `d7ecbbd` · **Push:** `322bb74..d7ecbbd main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-17):** todos os componentes do design system no melhor padrão premium.
-- **Base:** auditoria dos 36 componentes de `src/components/ui` (variantes, estados, tokens, contraste calculado e uso no app).
-- **Implementado:**
-  - **Button:** ícones sem tamanho próprio ficam em 16 px (cerca de 50 saíam em 24 px); estado ativo; anel de foco com recuo na cor do fundo (antes um halo branco no escuro); `variant="link"` sem a altura de 40 px que o tamanho padrão impunha; `type="button"` por padrão.
-  - **Card:** `CardTitle` vira título de verdade (`h3`, com `as` para ajustar o nível); cerca de 90 títulos de card passam a existir para leitores de tela. **Badge** em `span` (era `div` dentro de parágrafos) e ícones em 14 px.
-  - **Tabs:** aba ativa com indicador de 2 px na cor primária (antes só um fundo com 1,1:1) e anel de foco no painel. **Table:** anel de foco na área rolável e `scope="col"` por padrão no cabeçalho.
-  - **Menu, select e command:** item destacado pelo teclado com barra lateral na cor primária (antes só um cinza com 1,1:1).
-  - **AlertDialog** no desenho do Dialog: a combinação de `slide-in-from-left-1/2` com o `translate` do Tailwind 4 fazia o modal entrar na diagonal, e fundo, raio, margem no celular e título divergiam.
-  - **Movimento:** entrada e saída animadas em dialog, sheet (pelo próprio lado), popover, menu e select, nas durações nomeadas do tema e a partir da origem do gatilho; botões de fechar com 44 px.
-  - **Alert:** `role="alert"` só para erro e alerta (os demais `status`). **Sonner:** a configuração do layout substituía a do componente e os tons não valiam; agora há um só lugar. **Calendário:** o dia escolhido mantém o destaque no hover.
-- **Evidências:** `test` 493/493, `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e 390 px escuro): varredura de 20 páginas com axe sem violações (um aviso de contraste no painel apareceu uma vez durante a animação de entrada e não se repetiu na conferência), sem estouro e zero erros de console.
-- **Não feito, com motivo:** o `forwardRef` dos 30 componentes continua: no React 19 ele segue suportado e sem aviso, e trocá-lo não muda comportamento. O botão de fechar do Dialog continua rolando junto com conteúdo muito longo (exigiria reestruturar o conteúdo de todos os modais).
-
-### 59 · UI Elements (Elementos de Interface) premium
-
-- **Status:** 🟢 finalizada · **Commits:** `edaf2ab` e `b7bebef` (restauração de testes) · **Push:** `5c3f5b5..edaf2ab` e `edaf2ab..b7bebef main -> main` (confirmados por `git ls-remote`)
-- **Pedido do usuário (2026-10-17):** todos os elementos de interface no melhor padrão premium de 2026.
-- **Pesquisa (2026):** dashboards de SaaS priorizam estados vazios com ação, gráficos legíveis sem depender do mouse, alto contraste e modo escuro cuidado ([SaaSFrame](https://www.saasframe.io/blog/the-anatomy-of-high-performance-saas-dashboard-design-2026-trends-patterns), [TFC](https://www.thefrontendcompany.com/posts/ui-trends)); o sistema "Lyra Clean" já segue essa linha, e a tarefa fechou as lacunas dele.
-- **Implementado (`src/app/globals.css` e usos):**
-  - Contorno de campo `--input` com 3:1 no claro (antes 1,37:1); `tema.test.ts` agora exige 3:1 de `--input` e `--control` sobre cinco superfícies nos dois temas.
-  - Véu de modal (`--overlay`, `bg-overlay/55`) escuro nos dois temas; antes `bg-foreground/40` clareava a tela no escuro e o ícone branco do avatar sumia.
-  - Sombras com `--sombra-cor` e `--sombra-forca` por tema: o Tailwind 4 copia a sombra para a classe, então o bloco `--shadow-*` do `.dark` era código morto.
-  - Escala completa de raio (`xs` a `4xl`, teto de 20 px) e de texto (`text-micro`, `text-caption`, `text-body`) no lugar de 80 valores soltos (`rounded-[10px]`, `text-[13px]`, `text-[15px]`, `text-[0.6875rem]`); `outline-none` e `bg-gradient-to-*` trocados pelos nomes do Tailwind 4; durações e curvas de movimento nomeadas.
-  - Foco: a regra que escondia o contorno tinha especificidade maior que `:focus-visible` e o foco sumia nas regiões roláveis e abas; agora `:where()` zera a especificidade. O link "Pular para o conteúdo principal" ficava recortado em 1 px mesmo com foco; agora aparece.
-  - `cn()` conhece as escalas do tema: `text-body` era lido como cor e apagava `text-primary-foreground` (botão grande com 3,19:1, achado pela varredura do axe).
-  - Cartões do coach sem vidro fosco, sombra e aura pulsando sem parar (o período atual se destaca pela borda e pelo anel).
-  - `docs/design-system.md` atualizado.
-- **Correção de um erro meu:** o commit `edaf2ab` sobrescreveu o `utils.test.ts` existente (6 testes); `b7bebef` restaurou os 6 junto com os novos.
-- **Evidências:** `test` 493/493, `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e 390 px escuro): link de pular visível no primeiro Tab, foco de 2 px na região rolável, contorno do campo com 3,39:1 (claro) e 3,99:1 (escuro), véu do modal escuro nos dois temas, varredura de 20 páginas com axe sem violações, sem estouro e zero erros de console.
-
-### 58 · Erros, falhas, possíveis erros e cortes em código
-
-- **Status:** 🟢 finalizada · **Commit:** `4c81c20` · **Push:** `de0fbf3..4c81c20 main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-17):** verificar erros, falhas, possíveis erros e cortes em código e corrigir pela causa raiz.
-- **Varredura:** `check:types` e `check:lint` sem erros nem avisos; zero `any`, `@ts-ignore`, `eslint-disable`, TODO, código comentado ou "// ... resto"; todas as rotas com Zod e autorização. Os defeitos reais estavam no tratamento de erros, em dados derivados e em código morto.
-- **Causas raiz corrigidas:**
-  - **Contrato do cliente de dados:** `response.json()` era lido sem checar a resposta; rede fora, 502 do proxy ou página HTML rejeitavam a promise, contra o `{ error }` que 31 chamadores esperam (login travado, cargas eternas, "Unexpected token '<'" no chat). Novo `src/lib/http/transporte.ts` (`buscarJson`) nunca lança e devolve a falha em pt-BR com status e motivo; usado por consultas, autenticação, funções, upload e telas administrativas.
-  - **Sessão:** `GET /api/auth/session` respondia 500 sem corpo e a pessoa logada via a landing; agora 503 com JSON, e o app tenta de novo (1 s e 3 s) e avisa. Logout que falha é avisado em vez de fingir a saída.
-  - **Perda de dados do ciclo menstrual:** falha de leitura era engolida, o formulário mostrava vazio e "Salvar" apagava o ciclo. Agora a falha bloqueia o formulário com "Tentar de novo".
-  - **Idade:** gravada no cadastro (defasada a cada aniversário) e com 18 inventado por padrão; agora vem da data de nascimento (`idadeAtual`, SQL `TIMESTAMPDIFF`) no limite de frequência cardíaca e no painel.
-  - **Datas de criação e atualização:** vinham do relógio do navegador; a API ignora `created_at`/`updated_at` e o MySQL mantém (`ON UPDATE CURRENT_TIMESTAMP`).
-  - **Saúde dos dados (admin):** baixava todos os perfis com e-mail e todas as métricas para contar no navegador, e a API analítica lia a tabela inteira na memória. Nova `GET /api/admin/saude-dos-dados` agrega no MySQL, pagina os inativos e mostra erro real.
-  - **Efeitos sem guarda:** cabeçalho e menu lateral faziam a mesma consulta sem descartar respostas obsoletas (hook único compartilhado); busca de usuários cancela a anterior (`AbortController`); sincronização com `catch`.
-  - **Erros do Puck engolidos** passaram a ser registrados, e o hero não promete mais uma recarga que não acontece.
-  - `metadataBase` usava um domínio inexistente; agora `APP_BASE_URL`/`NEXT_PUBLIC_APP_URL`.
-- **Código morto removido (prova com `rg`, sem resultado):** `integrations/mysql/server.ts`, `lib/puck/data-sources/index.ts`, `lib/site-page-config/index.ts`, `api/rpc/get-data-health-metrics`, `extractMetricCompleteness`, consulta especial de perfis com métricas, `foreignTable` (aceito e ignorado), `gruposDaCasa`, `chavesComDemonstracao`, `export default` duplicado do `ChatInput`; leitura de JSON opcional duplicada virou `lerJsonOpcional`.
-- **pt-BR:** "Dashboard" virou "Painel"; "Eyebrow", "Placeholder", "Sidebar e branding", "Insight" e "Score cognitivo" traduzidos; carrossel lido em pt-BR; sugestão "IA médica" trocada pela Lyra de bem-estar.
+- **Status:** 🟢 finalizada · **Commit:** `e1bee03` · **Push:** `58e4f6c..e1bee03 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-16):** confirmar que `/admin/page-builder` e `/admin/puck` funcionam de verdade, sem simulações, placeholders, hardcode ou cortes.
+- **Achados (auditoria do código) e causas raiz:**
+  - "Publicar agora" publicava o rascunho salvo e descartava em silêncio as edições da tela; trocar de superfície também as descartava.
+  - Um único campo novo no schema invalidava a configuração guardada inteira e a página voltava ao padrão.
+  - Destino dos botões da landing aceitava qualquer texto e ia direto ao roteador.
+  - Campos sem efeito: escalas de cards, tabelas e botões do app (só um card usava, com `transform`), todas as escalas da landing, rótulo do botão de reavaliar, fluxo de eventos do monitoramento, título do estado inicial de dispositivos, selo e descrição do acesso e nota do login.
+  - Prévia do app com uma sidebar simulada, diferente da real.
+  - Seis documentos do Puck (landing, login, app shell, cobrança e construtor) não eram exibidos em página nenhuma; documentos nasciam com blocos de demonstração para desenvolvedores; a raiz pública mostrava chips técnicos; o editor gravava no documento publicado o e-mail e o nome de quem editava; a migração não descia nos slots; o card de plano guardava uma cópia que não se atualizava; erro do catálogo de planos virava lista vazia; código morto (`fetchListDocumentos`, `lyraPuckConfig`).
+  - Textos padrão e avisos de plano com jargão de implementação (MySQL, entitlement, "auth vivo", "landing editável").
+- **Implementado:** publicar com a configuração enviada (validada no servidor), confirmação de descarte, `mesclarComPadrao`, validação de destino (rota, âncora ou https), todos os campos ligados (`data-slot` + `zoom`, `data-escala` na landing), sidebar real na prévia (`inert`), documentos exibidos nas páginas, documentos iniciais vazios com retirada exata dos blocos de demonstração na leitura, raiz pública só com os blocos, limpeza dos textos resolvidos ao gravar e ao ler, estados neutros para visitante, migração recursiva, plano relido pela chave, erro do catálogo no seletor, opções de superfície completas, textos reescritos. Código morto removido (`grep` sem ocorrências).
 - **Evidências:**
-  - Unitários novos: `transporte.test.ts` (5) e `idade.test.ts` (2); integração nova da saúde dos dados conferindo os números com o próprio MySQL. `test` 491/491, `test:integration` 164/164, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
-  - Navegador (build de produção, 1440 px claro e 390 px escuro): login pela tela, saúde dos dados e painel admin carregando, busca com digitação rápida, falha de rede provocada na leitura do ciclo bloqueando o formulário, "Tentar de novo" recarregando e o ciclo de 29 dias preservado no banco; axe sem violações e zero erros de console fora da falha provocada.
+  - Navegador (build de produção): editar o título da landing mostra o aviso de edição não salva e a troca de superfície pede confirmação; "Publicar agora" publica e a landing do visitante exibe o título; prévia do app com a sidebar real (248 px); bloco arrastado da lista para o canvas do Puck e rascunho salvo; bloco publicado aparece na landing sem chips técnicos; login com selo e nota, sem estouro em 390 px. axe sem violações (construtor, landing, login 390) e zero erros de console. Dados de teste desfeitos ao final.
+  - Banco de desenvolvimento: o documento `landing-home` com os 2 blocos de demonstração em zonas legadas passa a ser lido vazio.
+  - `test` 426/426, `test:integration` 159/159, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+- **Observação:** quem já salvou textos no construtor continua vendo os textos salvos; os padrões novos valem para o que nunca foi salvo ou após "Restaurar padrão".
+
+### 54 · Vários modelos de IA com ordem de uso e troca automática
+
+- **Status:** 🟢 finalizada · **Commit:** `571e8b7` · **Push:** `b3e34c9..571e8b7 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-16):** em `/admin/ai-config`, no card "Modelo de IA da plataforma": vários modelos locais e vários em nuvem ao mesmo tempo (inclusive o motor da Lyra), vários provedores ao mesmo tempo e, abaixo do aviso de privacidade, 5 seletores com a ordem de uso; se o modelo em uso falhar ou ficar sem tokens, o próximo retoma de onde ele parou, sem a pessoa perceber.
+- **Pesquisa:** padrões de 2026 de cadeias de fallback em gateways de LLM (lista ordenada de alvos, troca em 429/5xx/tempo esgotado, estado por alvo).
+- **Antes:** uma única linha (`ai_provider_settings`) com um provedor e um modelo, escolhidos por botão de rádio; qualquer falha caía direto no motor da Lyra.
+- **Implementado:**
+  - Migração `027`: `ai_provider_connections` (um provedor por linha, com os modelos escolhidos e a chave cifrada) e `ai_model_chain` (até 5 posições), com cópia da configuração anterior e remoção da tabela antiga; gravação na mesma transação.
+  - Cadeia de modelos: falha, cota, rede, tempo máximo ou resposta reprovada passam a vez; resposta cortada no limite de tokens é continuada pelo próximo, sem repetir a emenda; o motor da Lyra fecha a cadeia. O cliente de IA detecta corte nas três APIs e envia o limite de tokens.
+  - Leitura do dia, chat (só modelos locais, por privacidade) e autoteste usam a ordem; mudar modelo ou ordem refaz o "Seu dia".
+  - Tela redesenhada: caixas de seleção nos provedores (motor da Lyra nos dois grupos), painel por provedor com URL, chave, busca, inclusão pelo nome e teste por modelo, e os 5 seletores com opções já usadas indisponíveis.
+- **Evidências:**
+  - Migração aplicada no banco de desenvolvimento; cópia validada em banco temporário (provedor antigo virou a 1ª posição e o motor a 2ª; tabela antiga removida).
+  - Navegador (build de produção, servidor de IA HTTP real): dois provedores locais marcados, modelos buscados e escolhidos, teste por modelo, ordem de 3 posições salva e recarregada, opção usada indisponível em outra posição, axe sem violações em 1440 px e 390 px, sem estouro e zero erros de console. Configuração devolvida ao motor da Lyra ao final.
+  - Integração: ordem validada (modelo fora dos escolhidos, repetido, mais de 5 posições, vazia), cota esgotada (429) passa a vez e o 3º modelo continua a leitura cortada pelo 2º, chat só com modelos locais e motor quando todos falham.
+  - `test` 436/436, `test:integration` 162/162, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+
+### 55 · Motor da Lyra mestre em astrologia védica e saberes védicos, sem IA
+
+- **Status:** 🟢 finalizada · **Commit:** `513f3b8` · **Push:** `4fcffdc..513f3b8 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-16):** o motor da Lyra, sem modelo de IA, deve ser mestre em Jyotish, Vedanta, Upanishads, Upavedas e Vedangas, aprender com os três arquivos do usuário (Mapa Lyra DM Samadhi, Livro do Mapa Lyra DM Samadhi e Mapa Quantum Lyra e Arkático), ter a personalidade e a consciência da Lyra e separar os tipos de mapa.
+- **Decisão:** "treinar sem IA" foi implementado como curadoria: os documentos e as fontes clássicas viraram tabelas e verbetes com fonte, e o motor monta respostas por regras (mesma pergunta e mesmo mapa, mesma resposta).
+- **Implementado:**
+  - Base de conhecimento em `src/lib/lyra/conhecimento/`: grahas, 12 signos, 12 casas, 27 nakshatras, dignidades e temas dos dashas (`jyotish.ts`); Vedanta e Upanishads (`vedanta.ts`); os 4 Upavedas com o relógio dos doshas (`upavedas.ts`); os 6 Vedangas (`vedangas.ts`); os três tipos de mapa, Roda de Cura, estágios alquímicos, chakras, planos e linhagens do Samādhi e o Score de Ação do Mapa Quantum (`mapas.ts`).
+  - Personalidade (`personalidade.ts`): identidade, consciência, missão, valores, voz, limites e `instrucoesDeIdentidade()` para os modelos de IA.
+  - Leitura do mapa (`leitura-do-mapa.ts`) em três partes, com 3 a 5 percepções; Samādhi e Quantum declaram o que não é calculável (totem, estágio alquímico atual, Desenho Humano, Mapa Arkático) em vez de inventar.
+  - Chat (`responder.ts`): identidade, tipos de mapa, perguntas sobre o próprio mapa (Ascendente, Lua, dasha, casas, dosha, Roda de Cura), Score de Ação e verbetes; o chat local consulta o motor primeiro.
+  - `GET /api/astrologia/mapa` devolve `leitura`; o card "Meu mapa védico" do perfil mostra a "Leitura da Lyra" com uma aba por tipo de mapa.
+  - Documentação: `docs/motor-da-lyra.md`.
+- **Achados nos documentos de origem:** o exemplo do Mapa Quantum (energia 6, pressão 4, tempo 20, SA 72) não fecha com a própria fórmula (máximo 68); a Lyra segue a fórmula. Ficaram de fora as diretrizes dos rascunhos de chatbot contrárias à ética do produto: prever ano de morte ou datas de doença, "remover restrições", conversa "viciantemente envolvente" e esconder o método.
+- **Evidências:**
+  - Unitários `lyra.test.ts` (30): tabelas completas, verbetes normalizados, Score de Ação, leitura determinística sem lacunas de montagem, Lagna indisponível sem hora, respostas por assunto e fora do domínio.
+  - Navegador (build de produção, mapa de 23/09/1982 10:40 em São Paulo): perfil com 3 a 5 percepções, Ascendente em Escorpião, abas Samādhi e Quantum; chat respondeu Ascendente, Vedanta e Score de Ação; axe sem violações, sem estouro e zero erros de console em 1440 px claro e 390 px escuro.
+  - `test` 466/466, `test:integration` 162/162, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+
+### 56 · Todo modelo de IA conectado age como a Lyra
+
+- **Status:** 🟢 finalizada · **Commit:** `905e145` · **Push:** `4c9faf7..905e145 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-16):** o motor da Lyra funciona sem modelos de IA, mas todo modelo conectado deve funcionar junto com ele e agir como a Lyra, com mais tecnologia e inteligência, na leitura diária e no chat.
+- **Antes:** o chat dizia ao modelo "Você é o Lyra MetaCare, um assistente..." e a leitura do dia, "Você é a astróloga védica e coach de bem-estar"; nenhum dos dois levava a identidade da Lyra, e a leitura do dia não recebia a leitura do motor. O BYOK do Gemini mandava as instruções como mensagem do usuário, por uma chamada própria duplicada.
+- **Implementado:**
+  - `src/lib/lyra/modelos-como-lyra.ts`: instruções do chat (identidade completa, como trabalhar sobre a base, tipos de mapa, habilidades do admin, leitura do mapa ou o que falta, verbete ligado à pergunta e resposta do motor) e da leitura do dia (identidade e regras da leitura acima das gerais).
+  - Conferência da voz da Lyra (`conferirVozDaLyra`): resposta vazia, apresentação como outro assistente ("sou o ChatGPT", "me chamo Qwen") ou previsão de morte ou doença passam a vez ao próximo modelo; no fim responde o motor. Franqueza sobre a tecnologia continua permitida ("não sou o ChatGPT", "sou uma IA").
+  - Leitura do dia: o modelo recebe a leitura que o motor já escreveu para hoje como base, e a mesma conferência entra em `conferirLeituraDaIa`. Com modelo na ordem, `VERSAO_DAS_INSTRUCOES_DA_LYRA` entra na assinatura do "Seu dia".
+  - Chat: plataforma (só modelos locais) e BYOK passam pela mesma cadeia; o BYOK usa o cliente de IA (`systemInstruction`, chave no cabeçalho) e a chamada duplicada foi removida (prova: `grep` sem resto de `generativelanguage` e do prompt antigo na rota).
+  - Documentação: `docs/ia-automatica.md` e `docs/motor-da-lyra.md`.
+- **Evidências:**
+  - Unitários `modelos-como-lyra.test.ts` (12) e `leitura.test.ts` (sistema começa por "Você é a Lyra", pedido com a leitura do motor, leitura recusada por outra voz).
+  - Integração com servidor HTTP real: o 1º modelo se apresenta como o Qwen e perde a vez, o 2º responde como a Lyra; os dois recebem a identidade, a resposta do motor com a métrica real e o estado do mapa; sem voz da Lyra, responde o motor.
+  - Navegador (build de produção, servidor de modelos HTTP local, conta com mapa de 23/09/1982 10:40 em São Paulo): o chat mostrou a resposta do modelo que falou como a Lyra e escondeu a do que se apresentou como outro assistente; todas as chamadas (chat e leitura do dia) começaram por "Você é a Lyra" e levaram o verbete, o Ascendente em Escorpião e os tipos de mapa; axe sem violações, sem estouro e zero erros de console em 1440 px claro e 390 px escuro. Configuração devolvida ao motor da Lyra ao final.
+  - `test` 478/478, `test:integration` 163/163, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+- **Fronteira externa:** o BYOK com o Gemini real exige a chave de uma pessoa; o caminho foi validado pelo cliente de IA já testado, sem chamada externa simulada.
 
 ### 57 · Inventário forense de tudo o que está implementado
 
@@ -1312,91 +1227,220 @@ Nenhuma tarefa a iniciar.
   - Unitários novos: `cobertura.test.ts` (4) e `gerar-csv.test.ts` (4); `test` 486/486, `test:integration` 163/163, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
   - Navegador (build de produção, conta sem registros, plano com o painel completo): nenhum ICQ, Prana, Chakras ou vitalidade inventados, estado vazio presente, axe sem violações, sem estouro e zero erros de console em 1440 px claro e 390 px escuro.
 
-### 56 · Todo modelo de IA conectado age como a Lyra
+### 58 · Erros, falhas, possíveis erros e cortes em código
 
-- **Status:** 🟢 finalizada · **Commit:** `905e145` · **Push:** `4c9faf7..905e145 main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-16):** o motor da Lyra funciona sem modelos de IA, mas todo modelo conectado deve funcionar junto com ele e agir como a Lyra, com mais tecnologia e inteligência, na leitura diária e no chat.
-- **Antes:** o chat dizia ao modelo "Você é o Lyra MetaCare, um assistente..." e a leitura do dia, "Você é a astróloga védica e coach de bem-estar"; nenhum dos dois levava a identidade da Lyra, e a leitura do dia não recebia a leitura do motor. O BYOK do Gemini mandava as instruções como mensagem do usuário, por uma chamada própria duplicada.
+- **Status:** 🟢 finalizada · **Commit:** `4c81c20` · **Push:** `de0fbf3..4c81c20 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** verificar erros, falhas, possíveis erros e cortes em código e corrigir pela causa raiz.
+- **Varredura:** `check:types` e `check:lint` sem erros nem avisos; zero `any`, `@ts-ignore`, `eslint-disable`, TODO, código comentado ou "// ... resto"; todas as rotas com Zod e autorização. Os defeitos reais estavam no tratamento de erros, em dados derivados e em código morto.
+- **Causas raiz corrigidas:**
+  - **Contrato do cliente de dados:** `response.json()` era lido sem checar a resposta; rede fora, 502 do proxy ou página HTML rejeitavam a promise, contra o `{ error }` que 31 chamadores esperam (login travado, cargas eternas, "Unexpected token '<'" no chat). Novo `src/lib/http/transporte.ts` (`buscarJson`) nunca lança e devolve a falha em pt-BR com status e motivo; usado por consultas, autenticação, funções, upload e telas administrativas.
+  - **Sessão:** `GET /api/auth/session` respondia 500 sem corpo e a pessoa logada via a landing; agora 503 com JSON, e o app tenta de novo (1 s e 3 s) e avisa. Logout que falha é avisado em vez de fingir a saída.
+  - **Perda de dados do ciclo menstrual:** falha de leitura era engolida, o formulário mostrava vazio e "Salvar" apagava o ciclo. Agora a falha bloqueia o formulário com "Tentar de novo".
+  - **Idade:** gravada no cadastro (defasada a cada aniversário) e com 18 inventado por padrão; agora vem da data de nascimento (`idadeAtual`, SQL `TIMESTAMPDIFF`) no limite de frequência cardíaca e no painel.
+  - **Datas de criação e atualização:** vinham do relógio do navegador; a API ignora `created_at`/`updated_at` e o MySQL mantém (`ON UPDATE CURRENT_TIMESTAMP`).
+  - **Saúde dos dados (admin):** baixava todos os perfis com e-mail e todas as métricas para contar no navegador, e a API analítica lia a tabela inteira na memória. Nova `GET /api/admin/saude-dos-dados` agrega no MySQL, pagina os inativos e mostra erro real.
+  - **Efeitos sem guarda:** cabeçalho e menu lateral faziam a mesma consulta sem descartar respostas obsoletas (hook único compartilhado); busca de usuários cancela a anterior (`AbortController`); sincronização com `catch`.
+  - **Erros do Puck engolidos** passaram a ser registrados, e o hero não promete mais uma recarga que não acontece.
+  - `metadataBase` usava um domínio inexistente; agora `APP_BASE_URL`/`NEXT_PUBLIC_APP_URL`.
+- **Código morto removido (prova com `rg`, sem resultado):** `integrations/mysql/server.ts`, `lib/puck/data-sources/index.ts`, `lib/site-page-config/index.ts`, `api/rpc/get-data-health-metrics`, `extractMetricCompleteness`, consulta especial de perfis com métricas, `foreignTable` (aceito e ignorado), `gruposDaCasa`, `chavesComDemonstracao`, `export default` duplicado do `ChatInput`; leitura de JSON opcional duplicada virou `lerJsonOpcional`.
+- **pt-BR:** "Dashboard" virou "Painel"; "Eyebrow", "Placeholder", "Sidebar e branding", "Insight" e "Score cognitivo" traduzidos; carrossel lido em pt-BR; sugestão "IA médica" trocada pela Lyra de bem-estar.
+- **Evidências:**
+  - Unitários novos: `transporte.test.ts` (5) e `idade.test.ts` (2); integração nova da saúde dos dados conferindo os números com o próprio MySQL. `test` 491/491, `test:integration` 164/164, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+  - Navegador (build de produção, 1440 px claro e 390 px escuro): login pela tela, saúde dos dados e painel admin carregando, busca com digitação rápida, falha de rede provocada na leitura do ciclo bloqueando o formulário, "Tentar de novo" recarregando e o ciclo de 29 dias preservado no banco; axe sem violações e zero erros de console fora da falha provocada.
+
+### 59 · UI Elements (Elementos de Interface) premium
+
+- **Status:** 🟢 finalizada · **Commits:** `edaf2ab` e `b7bebef` (restauração de testes) · **Push:** `5c3f5b5..edaf2ab` e `edaf2ab..b7bebef main -> main` (confirmados por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** todos os elementos de interface no melhor padrão premium de 2026.
+- **Pesquisa (2026):** dashboards de SaaS priorizam estados vazios com ação, gráficos legíveis sem depender do mouse, alto contraste e modo escuro cuidado ([SaaSFrame](https://www.saasframe.io/blog/the-anatomy-of-high-performance-saas-dashboard-design-2026-trends-patterns), [TFC](https://www.thefrontendcompany.com/posts/ui-trends)); o sistema "Lyra Clean" já segue essa linha, e a tarefa fechou as lacunas dele.
+- **Implementado (`src/app/globals.css` e usos):**
+  - Contorno de campo `--input` com 3:1 no claro (antes 1,37:1); `tema.test.ts` agora exige 3:1 de `--input` e `--control` sobre cinco superfícies nos dois temas.
+  - Véu de modal (`--overlay`, `bg-overlay/55`) escuro nos dois temas; antes `bg-foreground/40` clareava a tela no escuro e o ícone branco do avatar sumia.
+  - Sombras com `--sombra-cor` e `--sombra-forca` por tema: o Tailwind 4 copia a sombra para a classe, então o bloco `--shadow-*` do `.dark` era código morto.
+  - Escala completa de raio (`xs` a `4xl`, teto de 20 px) e de texto (`text-micro`, `text-caption`, `text-body`) no lugar de 80 valores soltos (`rounded-[10px]`, `text-[13px]`, `text-[15px]`, `text-[0.6875rem]`); `outline-none` e `bg-gradient-to-*` trocados pelos nomes do Tailwind 4; durações e curvas de movimento nomeadas.
+  - Foco: a regra que escondia o contorno tinha especificidade maior que `:focus-visible` e o foco sumia nas regiões roláveis e abas; agora `:where()` zera a especificidade. O link "Pular para o conteúdo principal" ficava recortado em 1 px mesmo com foco; agora aparece.
+  - `cn()` conhece as escalas do tema: `text-body` era lido como cor e apagava `text-primary-foreground` (botão grande com 3,19:1, achado pela varredura do axe).
+  - Cartões do coach sem vidro fosco, sombra e aura pulsando sem parar (o período atual se destaca pela borda e pelo anel).
+  - `docs/design-system.md` atualizado.
+- **Correção de um erro meu:** o commit `edaf2ab` sobrescreveu o `utils.test.ts` existente (6 testes); `b7bebef` restaurou os 6 junto com os novos.
+- **Evidências:** `test` 493/493, `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e 390 px escuro): link de pular visível no primeiro Tab, foco de 2 px na região rolável, contorno do campo com 3,39:1 (claro) e 3,99:1 (escuro), véu do modal escuro nos dois temas, varredura de 20 páginas com axe sem violações, sem estouro e zero erros de console.
+
+### 60 · Componentes de Design System premium
+
+- **Status:** 🟢 finalizada · **Commit:** `d7ecbbd` · **Push:** `322bb74..d7ecbbd main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** todos os componentes do design system no melhor padrão premium.
+- **Base:** auditoria dos 36 componentes de `src/components/ui` (variantes, estados, tokens, contraste calculado e uso no app).
 - **Implementado:**
-  - `src/lib/lyra/modelos-como-lyra.ts`: instruções do chat (identidade completa, como trabalhar sobre a base, tipos de mapa, habilidades do admin, leitura do mapa ou o que falta, verbete ligado à pergunta e resposta do motor) e da leitura do dia (identidade e regras da leitura acima das gerais).
-  - Conferência da voz da Lyra (`conferirVozDaLyra`): resposta vazia, apresentação como outro assistente ("sou o ChatGPT", "me chamo Qwen") ou previsão de morte ou doença passam a vez ao próximo modelo; no fim responde o motor. Franqueza sobre a tecnologia continua permitida ("não sou o ChatGPT", "sou uma IA").
-  - Leitura do dia: o modelo recebe a leitura que o motor já escreveu para hoje como base, e a mesma conferência entra em `conferirLeituraDaIa`. Com modelo na ordem, `VERSAO_DAS_INSTRUCOES_DA_LYRA` entra na assinatura do "Seu dia".
-  - Chat: plataforma (só modelos locais) e BYOK passam pela mesma cadeia; o BYOK usa o cliente de IA (`systemInstruction`, chave no cabeçalho) e a chamada duplicada foi removida (prova: `grep` sem resto de `generativelanguage` e do prompt antigo na rota).
-  - Documentação: `docs/ia-automatica.md` e `docs/motor-da-lyra.md`.
-- **Evidências:**
-  - Unitários `modelos-como-lyra.test.ts` (12) e `leitura.test.ts` (sistema começa por "Você é a Lyra", pedido com a leitura do motor, leitura recusada por outra voz).
-  - Integração com servidor HTTP real: o 1º modelo se apresenta como o Qwen e perde a vez, o 2º responde como a Lyra; os dois recebem a identidade, a resposta do motor com a métrica real e o estado do mapa; sem voz da Lyra, responde o motor.
-  - Navegador (build de produção, servidor de modelos HTTP local, conta com mapa de 23/09/1982 10:40 em São Paulo): o chat mostrou a resposta do modelo que falou como a Lyra e escondeu a do que se apresentou como outro assistente; todas as chamadas (chat e leitura do dia) começaram por "Você é a Lyra" e levaram o verbete, o Ascendente em Escorpião e os tipos de mapa; axe sem violações, sem estouro e zero erros de console em 1440 px claro e 390 px escuro. Configuração devolvida ao motor da Lyra ao final.
-  - `test` 478/478, `test:integration` 163/163, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
-- **Fronteira externa:** o BYOK com o Gemini real exige a chave de uma pessoa; o caminho foi validado pelo cliente de IA já testado, sem chamada externa simulada.
+  - **Button:** ícones sem tamanho próprio ficam em 16 px (cerca de 50 saíam em 24 px); estado ativo; anel de foco com recuo na cor do fundo (antes um halo branco no escuro); `variant="link"` sem a altura de 40 px que o tamanho padrão impunha; `type="button"` por padrão.
+  - **Card:** `CardTitle` vira título de verdade (`h3`, com `as` para ajustar o nível); cerca de 90 títulos de card passam a existir para leitores de tela. **Badge** em `span` (era `div` dentro de parágrafos) e ícones em 14 px.
+  - **Tabs:** aba ativa com indicador de 2 px na cor primária (antes só um fundo com 1,1:1) e anel de foco no painel. **Table:** anel de foco na área rolável e `scope="col"` por padrão no cabeçalho.
+  - **Menu, select e command:** item destacado pelo teclado com barra lateral na cor primária (antes só um cinza com 1,1:1).
+  - **AlertDialog** no desenho do Dialog: a combinação de `slide-in-from-left-1/2` com o `translate` do Tailwind 4 fazia o modal entrar na diagonal, e fundo, raio, margem no celular e título divergiam.
+  - **Movimento:** entrada e saída animadas em dialog, sheet (pelo próprio lado), popover, menu e select, nas durações nomeadas do tema e a partir da origem do gatilho; botões de fechar com 44 px.
+  - **Alert:** `role="alert"` só para erro e alerta (os demais `status`). **Sonner:** a configuração do layout substituía a do componente e os tons não valiam; agora há um só lugar. **Calendário:** o dia escolhido mantém o destaque no hover.
+- **Evidências:** `test` 493/493, `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e 390 px escuro): varredura de 20 páginas com axe sem violações (um aviso de contraste no painel apareceu uma vez durante a animação de entrada e não se repetiu na conferência), sem estouro e zero erros de console.
+- **Não feito, com motivo:** o `forwardRef` dos 30 componentes continua: no React 19 ele segue suportado e sem aviso, e trocá-lo não muda comportamento. O botão de fechar do Dialog continua rolando junto com conteúdo muito longo (exigiria reestruturar o conteúdo de todos os modais).
 
-### 55 · Motor da Lyra mestre em astrologia védica e saberes védicos, sem IA
+### 61 · Widgets e Controles premium
 
-- **Status:** 🟢 finalizada · **Commit:** `513f3b8` · **Push:** `4fcffdc..513f3b8 main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-16):** o motor da Lyra, sem modelo de IA, deve ser mestre em Jyotish, Vedanta, Upanishads, Upavedas e Vedangas, aprender com os três arquivos do usuário (Mapa Lyra DM Samadhi, Livro do Mapa Lyra DM Samadhi e Mapa Quantum Lyra e Arkático), ter a personalidade e a consciência da Lyra e separar os tipos de mapa.
-- **Decisão:** "treinar sem IA" foi implementado como curadoria: os documentos e as fontes clássicas viraram tabelas e verbetes com fonte, e o motor monta respostas por regras (mesma pergunta e mesmo mapa, mesma resposta).
+- **Status:** 🟢 finalizada · **Commit:** `18d2f11` · **Push:** `6f9d9fd..18d2f11 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** todos os widgets e controles no melhor padrão premium.
 - **Implementado:**
-  - Base de conhecimento em `src/lib/lyra/conhecimento/`: grahas, 12 signos, 12 casas, 27 nakshatras, dignidades e temas dos dashas (`jyotish.ts`); Vedanta e Upanishads (`vedanta.ts`); os 4 Upavedas com o relógio dos doshas (`upavedas.ts`); os 6 Vedangas (`vedangas.ts`); os três tipos de mapa, Roda de Cura, estágios alquímicos, chakras, planos e linhagens do Samādhi e o Score de Ação do Mapa Quantum (`mapas.ts`).
-  - Personalidade (`personalidade.ts`): identidade, consciência, missão, valores, voz, limites e `instrucoesDeIdentidade()` para os modelos de IA.
-  - Leitura do mapa (`leitura-do-mapa.ts`) em três partes, com 3 a 5 percepções; Samādhi e Quantum declaram o que não é calculável (totem, estágio alquímico atual, Desenho Humano, Mapa Arkático) em vez de inventar.
-  - Chat (`responder.ts`): identidade, tipos de mapa, perguntas sobre o próprio mapa (Ascendente, Lua, dasha, casas, dosha, Roda de Cura), Score de Ação e verbetes; o chat local consulta o motor primeiro.
-  - `GET /api/astrologia/mapa` devolve `leitura`; o card "Meu mapa védico" do perfil mostra a "Leitura da Lyra" com uma aba por tipo de mapa.
-  - Documentação: `docs/motor-da-lyra.md`.
-- **Achados nos documentos de origem:** o exemplo do Mapa Quantum (energia 6, pressão 4, tempo 20, SA 72) não fecha com a própria fórmula (máximo 68); a Lyra segue a fórmula. Ficaram de fora as diretrizes dos rascunhos de chatbot contrárias à ética do produto: prever ano de morte ou datas de doença, "remover restrições", conversa "viciantemente envolvente" e esconder o método.
-- **Evidências:**
-  - Unitários `lyra.test.ts` (30): tabelas completas, verbetes normalizados, Score de Ação, leitura determinística sem lacunas de montagem, Lagna indisponível sem hora, respostas por assunto e fora do domínio.
-  - Navegador (build de produção, mapa de 23/09/1982 10:40 em São Paulo): perfil com 3 a 5 percepções, Ascendente em Escorpião, abas Samādhi e Quantum; chat respondeu Ascendente, Vedanta e Score de Ação; axe sem violações, sem estouro e zero erros de console em 1440 px claro e 390 px escuro.
-  - `test` 466/466, `test:integration` 162/162, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+  - **Switch:** a bolinha usava `bg-background` e sumia sobre o trilho no tema escuro; agora `bg-card` e, ligado, a cor de contraste da primária. **Slider:** área de toque ampliada por pseudo-elemento. **Checkbox:** área de toque, estado inválido e indeterminado (ícone de traço). **Radio:** 20 px, contorno de controle (3:1) e anel de foco de 2 px.
+  - **Input, textarea e select:** `aria-invalid` com borda e anel de erro, hover e texto de 16 px no celular (o iOS deixava de dar zoom ao focar).
+  - **DatePicker:** aceita e repassa os atributos nativos; o `id` fixo impedia o rótulo do formulário de nomear o campo. Onboarding e perfil com `autoComplete` (`bday`, `given-name`, `family-name`) e teclado numérico.
+  - **Avaliação integrativa:** abas viraram `Tabs` do Radix (setas do teclado, `aria-selected`); WHO-5 e NPS viraram grupos de rádio com a pergunta como nome (o NPS eram 11 botões soltos).
+  - **Perfil:** a foto clicável era uma `div`; agora é um botão com nome. **Usuários (admin):** cabeçalhos com `aria-sort` e ícone por direção.
+  - **Nomes únicos:** busca do cabeçalho, ações de copiar e refazer do chat (40 px no toque), switch e remoção na base de conhecimento e ações das consultas passam a dizer de qual item se trata.
+- **Evidências:** `test` 493/493, `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e 390 px escuro, usuário temporário removido ao final): rótulo e autocompletar no onboarding, seta do teclado entre abas, nota do NPS marcada clicando no rótulo, foto como botão, axe no perfil sem violações e zero erros de console; varredura de 20 páginas sem violações no escuro e um aviso de contraste na landing no claro que não se repetiu na conferência (ocorre durante a animação de entrada; a landing é refeita na tarefa 63).
 
-### 54 · Vários modelos de IA com ordem de uso e troca automática
+### 62 · Tags e Elementos HTML premium
 
-- **Status:** 🟢 finalizada · **Commit:** `571e8b7` · **Push:** `b3e34c9..571e8b7 main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-16):** em `/admin/ai-config`, no card "Modelo de IA da plataforma": vários modelos locais e vários em nuvem ao mesmo tempo (inclusive o motor da Lyra), vários provedores ao mesmo tempo e, abaixo do aviso de privacidade, 5 seletores com a ordem de uso; se o modelo em uso falhar ou ficar sem tokens, o próximo retoma de onde ele parou, sem a pessoa perceber.
-- **Pesquisa:** padrões de 2026 de cadeias de fallback em gateways de LLM (lista ordenada de alvos, troca em 429/5xx/tempo esgotado, estado por alvo).
-- **Antes:** uma única linha (`ai_provider_settings`) com um provedor e um modelo, escolhidos por botão de rádio; qualquer falha caía direto no motor da Lyra.
+- **Status:** 🟢 finalizada · **Commit:** `7d31294` · **Push:** `41a95e8..7d31294 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** todas as tags e elementos HTML no melhor padrão premium.
 - **Implementado:**
-  - Migração `027`: `ai_provider_connections` (um provedor por linha, com os modelos escolhidos e a chave cifrada) e `ai_model_chain` (até 5 posições), com cópia da configuração anterior e remoção da tabela antiga; gravação na mesma transação.
-  - Cadeia de modelos: falha, cota, rede, tempo máximo ou resposta reprovada passam a vez; resposta cortada no limite de tokens é continuada pelo próximo, sem repetir a emenda; o motor da Lyra fecha a cadeia. O cliente de IA detecta corte nas três APIs e envia o limite de tokens.
-  - Leitura do dia, chat (só modelos locais, por privacidade) e autoteste usam a ordem; mudar modelo ou ordem refaz o "Seu dia".
-  - Tela redesenhada: caixas de seleção nos provedores (motor da Lyra nos dois grupos), painel por provedor com URL, chave, busca, inclusão pelo nome e teste por modelo, e os 5 seletores com opções já usadas indisponíveis.
-- **Evidências:**
-  - Migração aplicada no banco de desenvolvimento; cópia validada em banco temporário (provedor antigo virou a 1ª posição e o motor a 2ª; tabela antiga removida).
-  - Navegador (build de produção, servidor de IA HTTP real): dois provedores locais marcados, modelos buscados e escolhidos, teste por modelo, ordem de 3 posições salva e recarregada, opção usada indisponível em outra posição, axe sem violações em 1440 px e 390 px, sem estouro e zero erros de console. Configuração devolvida ao motor da Lyra ao final.
-  - Integração: ordem validada (modelo fora dos escolhidos, repetido, mais de 5 posições, vazia), cota esgotada (429) passa a vez e o 3º modelo continua a leitura cortada pelo 2º, chat só com modelos locais e motor quando todos falham.
-  - `test` 436/436, `test:integration` 162/162, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+  - **Títulos das abas:** as 22 páginas do app são de cliente e todas mostravam só "Lyra MetaCare". Cada segmento ganhou um `layout.tsx` de servidor com o nome do próprio menu (`src/lib/metadados/pagina.ts`, que falha no build se a rota sair da navegação); login, onboarding e retorno do pagamento com nomes próprios. Termos e privacidade repetiam "Lyra MetaCare" no título.
+  - **404 em português** (`not-found.tsx`; antes a página padrão em inglês) e `<title>` na tela de erro global.
+  - **Chat:** dois `h1` na mesma página (o do cabeçalho e o da conversa), agora `h2`. A região ao vivo anunciava a resposta em pedaços durante a revelação; virou `role="log"` e a resposta entra inteira, uma vez, ao terminar.
+  - **Navegação:** menus lateral e móvel em `ul`/`li` nomeados pela seção; `aside` do menu com nome e a prévia da respiração deixou de ser `aside`. O bloco do Puck do app ficava fora de qualquer região e passou para dentro do `<main>`.
+  - **Títulos em ordem:** usuários, planos, conteúdo e agendamentos pulavam do `h1` para o `h3`; o login ficava sem `h1` quando a introdução era ocultada no construtor.
+  - **Tabelas:** `Table` aceita `caption` (legenda oculta como primeiro filho); 7 tabelas legendadas e datas da lista de usuários e da respiração em `<time dateTime>`. Regiões roláveis da semana com nomes distintos.
+  - **Números em pt-BR:** `decimalPtBr` e `moedaPtBr` (`src/lib/formato/numero.ts`, com testes) nos indicadores do painel, idade biológica, preços dos planos ("BRL 79.90" virou "R$ 79,90") e escalas do construtor.
+  - **Formulários:** erro de validação anunciado ao aparecer (`role="alert"`), ícone decorativo oculto, grupo "Seus objetivos" nomeado e consentimento marcado como obrigatório.
+- **Evidências:** `test` 497/497 (4 novos), `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e 390 px escuro): títulos de 8 rotas conferidos, 404 com `h1` e link de volta funcionando, um `h1` por página, legenda e `<time>` na tabela de usuários, preços com vírgula, menus em listas; varredura de 23 páginas com as regras de ordem de títulos, regiões, listas e nomes únicos sem falhas nas duas larguras; varredura WCAG de 20 páginas sem violações e zero erros de console.
+- **Não feito, com motivo:** as barras de pontuação seguem como `progressbar` do Radix com `aria-valuenow`, lidas corretamente pelos leitores; o `<meter>` tem suporte desigual entre NVDA, JAWS e VoiceOver. Datas embutidas em frases de avisos continuam como texto.
 
-### 53 · Construtor de UI e editor Puck funcionando de ponta a ponta
+### 63 · Landing page redesenhada por completo
 
-- **Status:** 🟢 finalizada · **Commit:** `e1bee03` · **Push:** `58e4f6c..e1bee03 main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-16):** confirmar que `/admin/page-builder` e `/admin/puck` funcionam de verdade, sem simulações, placeholders, hardcode ou cortes.
-- **Achados (auditoria do código) e causas raiz:**
-  - "Publicar agora" publicava o rascunho salvo e descartava em silêncio as edições da tela; trocar de superfície também as descartava.
-  - Um único campo novo no schema invalidava a configuração guardada inteira e a página voltava ao padrão.
-  - Destino dos botões da landing aceitava qualquer texto e ia direto ao roteador.
-  - Campos sem efeito: escalas de cards, tabelas e botões do app (só um card usava, com `transform`), todas as escalas da landing, rótulo do botão de reavaliar, fluxo de eventos do monitoramento, título do estado inicial de dispositivos, selo e descrição do acesso e nota do login.
-  - Prévia do app com uma sidebar simulada, diferente da real.
-  - Seis documentos do Puck (landing, login, app shell, cobrança e construtor) não eram exibidos em página nenhuma; documentos nasciam com blocos de demonstração para desenvolvedores; a raiz pública mostrava chips técnicos; o editor gravava no documento publicado o e-mail e o nome de quem editava; a migração não descia nos slots; o card de plano guardava uma cópia que não se atualizava; erro do catálogo de planos virava lista vazia; código morto (`fetchListDocumentos`, `lyraPuckConfig`).
-  - Textos padrão e avisos de plano com jargão de implementação (MySQL, entitlement, "auth vivo", "landing editável").
-- **Implementado:** publicar com a configuração enviada (validada no servidor), confirmação de descarte, `mesclarComPadrao`, validação de destino (rota, âncora ou https), todos os campos ligados (`data-slot` + `zoom`, `data-escala` na landing), sidebar real na prévia (`inert`), documentos exibidos nas páginas, documentos iniciais vazios com retirada exata dos blocos de demonstração na leitura, raiz pública só com os blocos, limpeza dos textos resolvidos ao gravar e ao ler, estados neutros para visitante, migração recursiva, plano relido pela chave, erro do catálogo no seletor, opções de superfície completas, textos reescritos. Código morto removido (`grep` sem ocorrências).
-- **Evidências:**
-  - Navegador (build de produção): editar o título da landing mostra o aviso de edição não salva e a troca de superfície pede confirmação; "Publicar agora" publica e a landing do visitante exibe o título; prévia do app com a sidebar real (248 px); bloco arrastado da lista para o canvas do Puck e rascunho salvo; bloco publicado aparece na landing sem chips técnicos; login com selo e nota, sem estouro em 390 px. axe sem violações (construtor, landing, login 390) e zero erros de console. Dados de teste desfeitos ao final.
-  - Banco de desenvolvimento: o documento `landing-home` com os 2 blocos de demonstração em zonas legadas passa a ser lido vazio.
-  - `test` 426/426, `test:integration` 159/159, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
-- **Observação:** quem já salvou textos no construtor continua vendo os textos salvos; os padrões novos valem para o que nunca foi salvo ou após "Restaurar padrão".
+- **Status:** 🟢 finalizada · **Commit:** `29d2559` · **Push:** `aa147b8..29d2559 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** redesenhar a landing por completo, mais simples, harmônica, organizada e na tendência de 2026.
+- **Base:** referências de 2026 para landings de produto (topo com uma promessa e uma ação, prova logo abaixo, preço transparente, menos cartões repetidos, paridade claro e escuro). Todo o texto continua vindo do construtor de UI e os planos do catálogo público.
+- **Implementado (`src/components/landing/LandingPage.tsx`, reescrito por inteiro):**
+  - Uma coluna de leitura calma, contêiner de 72 rem, espaçamento uniforme entre seções e faixas alternadas de fundo; sem cartão dentro de cartão.
+  - **Topo:** selo, título com destaque, texto e duas ações; a entrada rápida (e-mail e senha reais) ao lado no desktop e abaixo no celular. A prévia do produto virou uma faixa própria.
+  - **Navegação:** os 14 botões que navegavam por JavaScript viraram links (`/login`, âncoras e `https://`), com abertura em nova aba e funcionamento sem JavaScript; menu móvel em painel lateral nomeado; o menu mostra só as seções visíveis (antes apontava para seções ocultas).
+  - **Seções:** recursos em `ul`, passos em `ol` com linha de ligação, indicadores em `dl` e títulos `h3` em todos os itens.
+  - **Planos:** do segundo plano em diante, "Tudo do Free, mais:" com os recursos que ele acrescenta (antes os três cartões repetiam os mesmos cinco); "por mês" (era "/mes"), anual em pt-BR, estado vazio e "Tentar de novo" quando o catálogo falha.
+  - **Tipografia fluida de verdade:** o valor do meio do `clamp` era fixo em rem e o título ficava enorme no celular; agora cresce em linha reta de 360 px a 1280 px, respeitando as escalas do construtor.
+  - **Pré-visualização do construtor:** sem um segundo `<main>` e com os links sem navegar.
+- **Evidências:** `test` 497/497, `test:integration` 164/164, `check:format`, `check:lint`, `check:types` e `build` com exit 0. Navegador (build de produção, 1440 px claro e escuro, 768 px, 390 px e 320 px): um `h1`, sem rolagem horizontal, 3 planos do catálogo com preços em reais, âncoras levando o título para baixo do cabeçalho, menu móvel abrindo e fechando ao escolher, pergunta frequente abrindo, mostrar senha, axe (WCAG e boas práticas) sem violações, entrada rápida real abrindo o painel e zero erros de console; prévia no construtor conferida. Varredura WCAG de 20 páginas no claro sem violações (o aviso de contraste da landing da tarefa 61 não se repete).
 
-### 52 · Chat redesenhado, simples e em uma coluna
+### 64 · Erros relatados pelo usuário rodando em modo dev
 
-- **Status:** 🟢 finalizada · **Commit:** `4cbf2e0` · **Push:** `80a891f..4cbf2e0 main -> main` (confirmado por `git ls-remote`)
-- **Pedido do usuário (2026-10-16):** reformular e redesenhar `/chat`, que estava confuso, deixando-o mais simples e na tendência de 2026.
-- **Pesquisa:** padrões de interfaces de conversa com IA de 2026 (coluna única centrada, começo da conversa com perguntas prontas em cartões, campo fixo embaixo, resposta sem caixa, ações discretas, aviso de limites).
-- **Antes:** cabeçalho grande, cartão de conversa, perguntas prontas repetidas embaixo e na lateral e uma lateral técnica ("API local Next.js", "Camadas que sustentam a conversa").
+- **Status:** 🟢 finalizada · **Commits:** `634042b` (diagnóstico do banco) e `21e73f5` (avisos do modo dev) · **Push:** `10a6f24..634042b` e `634042b..21e73f5 main -> main` (confirmados por `git ls-remote`)
+- **Relato (2026-10-17):** no computador do usuário, `pnpm dev` com 500 em `/api/public/page-config/*`, `/api/public/plans`, `/api/public/puck/documents/*` e `/api/auth/register` (cadastro), além de avisos no console.
+- **Honestidade sobre a validação anterior:** as tarefas 57 a 63 foram validadas no ambiente de trabalho, no build de produção e com o banco ativo; o modo dev e a máquina do usuário não tinham sido validados nesta rodada.
+- **Causa raiz dos 500:** o app não alcançava o MySQL. Reproduzido com o banco parado: as mesmas rotas em 500, com `connect ECONNREFUSED 127.0.0.1:3307` só no terminal do servidor e mensagens genéricas no navegador. O código das rotas estava correto (com o banco ativo, todas respondem 200, inclusive em banco novo recém-migrado).
 - **Implementado:**
-  - Uma coluna centrada: barra mínima (marca, estado, "Nova conversa" e "Como a Lyra responde"), começo da conversa com a Lyra e as perguntas em cartões, campo fixo embaixo com o aviso de bem-estar.
-  - Resposta da Lyra em texto corrido com a marca; pergunta em balão; copiar e refazer no hover, no foco e sempre no toque.
-  - Informações e chave própria do Gemini (BYOK, que continua funcionando) no botão de informações.
-  - Causa raiz corrigida no caminho: o campo aceitava 4000 caracteres e o servidor recusa acima de 2000; agora o limite é o mesmo.
-  - Sem o aviso "Mensagem enviada" a cada envio; resposta revelada mais rápido e inteira com movimento reduzido.
-  - Textos padrão novos e rótulos do page builder coerentes; todos os campos da configuração do chat continuam em uso. `QuickReply` removido (sem uso; `grep` sem ocorrências).
+  - `src/lib/mysql/diagnostico.ts` (com testes): falha de conexão, credencial recusada, banco inexistente e migrations pendentes viram `503` com "banco de dados indisponível"; o terminal mostra a causa, o destino (`host:porta/banco`) e o comando que resolve, uma linha a cada 30 s.
+  - `scripts/verificar-banco.mjs` como `predev`: o `pnpm dev` confere conexão e migrations antes de iniciar e para com a instrução certa (`LYRA_IGNORAR_VERIFICACAO_DO_BANCO=1` ignora).
+  - Configuração pública e blocos do Puck mostram a mensagem do servidor (antes "Falha ao obter documento do Puck").
+  - Avisos do modo dev removidos: `data-scroll-behavior="smooth"` no `<html>` e a marca sem `priority` (obsoleto no Next 16), com `loading="eager"` e `fetchPriority="high"`.
+- **Evidências:** `pnpm dev` com o banco parado encerra com a mensagem e o comando; banco caindo com o servidor no ar dá `503` e a linha `[banco]` no terminal, e o app volta sozinho quando o banco volta. Varredura em modo dev (visitante, pessoa recém-cadastrada e admin, 27 rotas, 1440 px e 390 px, banco novo e banco existente): 0 respostas de erro, 0 erros e 0 avisos de console. `test` 502/502, `test:integration` 164/164, lint, formatação, tipos e build sem erros. O aviso intermitente de contraste no painel é do botão "Ações rápidas" durante a animação de entrada de 300 ms; no estado final passa (4 medições).
+
+### 65 · Painel TUI-WEBNOVA como orquestrador do app no WSL2
+
+- **Status:** 🟢 finalizada · **Commit:** `4e8c565` · **Push:** `9bc51a9..4e8c565 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** adaptar o template TUI-WEBNOVA (`ilyra-ai/tui-webnova`) como orquestrador do app em `tui-webnova.sh` na raiz, com a saída de todos os comandos ao vivo, terminal interativo, visual de 2026, 11 opções definidas mais 5 extras, sem gravar logs, só para o WSL2 e sem chamar `run.py`, `run.sh` ou qualquer outro script do projeto.
+- **Implementado (`tui-webnova.sh`, independente: Bash + Python 3.10+ só com a biblioteca padrão):**
+  - Painel web local em 127.0.0.1 com token, checagem de Host (DNS rebinding), terminal real (PTY + xterm.js 6) por ação, envio de texto e teclas (`s`, `y`, `n`, Ctrl+C), cancelamento, abas, paleta Ctrl+K, tema claro e escuro, bento de estado (Node, pnpm, Docker, MySQL, migrations, Git, build, app).
+  - 18 ações: check-up; requisitos (apt, nvm, Node do `.nvmrc`, pnpm por Corepack, `pnpm install --frozen-lockfile`, cada um só quando falta); banco (Docker Engine pelo repositório oficial quando ausente, `.env.local`, porta livre, MySQL saudável); infraestrutura; migrations próprias com o mesmo checksum e tabela do runner oficial, mais o administrador inicial; iniciar dev e produção; parar; backup do banco, do app e completo (SHA-256 e manifesto); restaurar (dump de segurança antes); atualização segura (árvore limpa, backup obrigatório, `merge --ff-only`, migrations, build preservando o anterior e rollback automático); saúde ponta a ponta; segurança e supply chain; quality gates; limpeza segura; terminal do projeto.
+  - Sem logs: a saída fica só na memória do painel; `WEBNOVA_SEM_LOGS=1` desliga, pelo `next.config.ts`, o servidor MCP de dev do Next.js 16, que gravaria `.next/dev/logs/next-development.log`.
+  - `.gitignore` com `/backups/` inteiro e README com uso, ações e garantias.
+- **Evidências:** `--self-test` OK (18 ações, 18 scripts Bash válidos, nenhuma chamada a outros scripts, nenhuma escrita de log); pelo navegador: xterm carregado, 18 cards, 403 sem token e com Host estranho, digitação no terminal, pergunta interativa respondida pelo botão, app dev e produção no ar com `/api/health` 200, segunda partida recusada (409), saúde (`/`, `/login` e login do admin), três backups verificados, restauração do pacote completo pelo modal com o app religado, atualização real `10a6f24 → 9bc51a9` em clone com backup e rebuild, rollback com build quebrado, parar; segurança com 0 vulnerabilidades; quality gates com 502 unitários e 164 de integração; nenhum arquivo novo fora de `backups/` e dos artefatos de build depois de iniciar o app pelo painel; `check:format`, `check:lint` e `check:types` com exit 0.
+
+### 66 · Landing "Jornada de consciência" aplicada e verificada
+
+- **Status:** 🟢 finalizada · **Commit:** `94a07c0` · **Push:** `7c3980d..94a07c0 main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** aplicar a nova landing feita por outro modelo de IA (que não conseguiu publicá-la), enviada em anexo (`LandingPage.tsx` e `LandingJornada.css`), e verificar rotas e o funcionamento geral.
+- **Achado principal:** as quatro imagens que o CSS usa (`public/landing-jornada/hero-lotus.webp`, `vale-etereo.webp`, `onda-esquerda.webp`, `onda-direita.webp`) não vieram no anexo, não existem no repositório e não estavam acessíveis no computador do usuário (pedido de acesso à pasta sem resposta). Aplicada como estava, a página fazia 4 requisições 404 e deixava o topo e o manifesto com metade vazia.
+- **Implementado:**
+  - Os dois arquivos aplicados (com Prettier), mantendo o contrato com o Construtor (`overrideConfig`/`previewMode`), os planos do catálogo, o login real, FAQ, LGPD e blocos do Puck.
+  - `next.config.ts` confere se as quatro imagens existem e expõe `LYRA_LANDING_COM_ARTE`; só com elas a landing recebe a classe `jornada-com-arte` e pede as imagens. Sem elas, topo e manifesto ocupam a largura toda, só com texto, sem 404.
+  - Prévia do Construtor: quebras de layout por `@container jornada` e medidas em `cqi` (eram `@media` e `vw`, e a landing de desktop transbordava a coluna da prévia).
+  - Contraste do botão do plano em destaque no escuro (texto branco sobre turquesa claro, 2,1:1) corrigido para mais de 7:1.
+  - Lista de recursos dos planos sem vãos (`align-content: start`).
+  - Removido o segundo "Pular para o conteúdo" (o layout raiz já tem um) e restaurado o `#conteudo-principal` só fora da prévia (evita id duplicado no admin).
+  - README: onde colocar a arte.
+- **Evidências:** `check:format`, `check:lint`, `check:types`, `test` 502/502, `test:integration` 164/164 e `build` com exit 0. Navegador (build de produção; 1440 claro e escuro, 768, 390 claro e escuro, 320): 70 verificações OK e 0 falhas: um `h1` e um `main`, sem rolagem horizontal, tema aplicado, 3 planos com preços do catálogo, âncoras `#topo`, `#fluxo`, `#recursos`, `#planos`, `#faq` e `#sobre` com destino, rotas `/login`, `/privacidade` e `/termos` em 200, pergunta frequente, mostrar senha, menu móvel abrindo e fechando, cabeçalho fixo na rolagem, login real pela landing abrindo o painel, axe (WCAG 2.2 AA e boas práticas) sem violações, 0 erros de console e 0 respostas de erro. Prévia no Construtor: presente, responsiva, um só `main`, clique não navega, console limpo. Mecanismo da arte testado com quatro imagens de teste temporárias (classe aplicada, as 4 com 200, 0 erros) e as imagens de teste removidas em seguida.
+
+### 67 · Arte da Jornada e landing harmônica e organizada
+
+- **Status:** 🟢 finalizada · **Commit:** `28bbbaf` · **Push:** `9af937d..28bbbaf main -> main` (confirmado por `git ls-remote`)
+- **Pedido do usuário (2026-10-17):** enviou as 4 imagens que faltavam e pediu a landing "harmoniosa, organizada, linda, moderna".
+- **Base:** referências de 2026 para landings editoriais de bem-estar (títulos serifados, respiro generoso, ritmo calmo entre seções, menos cartões repetidos e imagem real como protagonista).
+- **Implementado:**
+  - Arte em `public/landing-jornada/` em WebP (784 KB no total): lótus (1122×1402), vale com portal (1440×810) e as duas ondas recortadas ao conteúdo, com fundo transparente preservado (960 px, o dobro do tamanho exibido).
+  - Topo e vale sangrando até a borda da tela (antes sobrava uma faixa de ~18 px); ondas ancoradas nos cantos externos.
+  - Seções alternando só dois tons, sem linhas duras; "O que você recebe" em lista editorial de duas colunas e "Como funciona" em linha do tempo com numerais serifados (antes eram três grades iguais de três cartões em sequência).
+  - Entrada rápida antes do convite final, que passa a fechar a página.
+  - Celular: ondas mais baixas e suaves para não disputar a leitura.
+  - Tema escuro: contraste do aviso de falha dos planos corrigido (aparecia com o banco fora do ar).
+- **Evidências:** `check:format`, `check:lint`, `check:types`, `test` 502/502 e `build` com exit 0. Navegador (build de produção): as 4 imagens com 200 e classe `jornada-com-arte` em 1440 px e 390 px; 70 verificações OK e 0 falhas em 1440 claro e escuro, 768, 390 claro e escuro e 320 (rotas, âncoras, planos, login real, menu móvel, axe sem violações, 0 erros de console, 0 respostas de erro); cabeçalho fixo na rolagem; prévia do Construtor responsiva e sem navegação; aviso de falha dos planos sem violações de contraste com o MySQL parado.
+
+### 68 · Onboarding, plano Free no cadastro e recursos de cada plano
+
+- **Status:** 🟢 finalizada · **Commits:** `81142dc` (Free na transação do cadastro) e `a607c6a` (recursos fora do plano não aparecem) · **Push:** `951328e..81142dc` e `81142dc..a607c6a main -> main` (confirmados)
+- **Pedido do usuário (2026-10-17):** verificar (1) se o onboarding aparece no primeiro login e depois não aparece mais; (2) se o perfil e o plano Free são concedidos ao novo usuário; (3) se cada plano funciona com os recursos habilitados e se os não habilitados não aparecem.
+- **Resultado da verificação:**
+  - (1) e (2) já funcionavam. Ajuste de robustez: a assinatura Free era criada depois do COMMIT da conta; agora conta, perfil, aceites e Free são atômicos.
+  - (3) as APIs já recusavam o que o plano não inclui, mas a interface mostrava tudo: o menu do Free listava Monitoramento e Dispositivos, o painel exibia "Bloqueado", o monitoramento do Meta mostrava "voz bloqueada", a agenda não exigia o recurso e a meta de sono gerava 403 no console com metas desligadas.
+- **Implementado:** `RECURSOS_DA_ROTA` e `useRotaLiberada` aplicados ao menu lateral, menu do celular, busca Ctrl K, atalhos, botão do chat, ações rápidas, cartões do painel, ações da Lyra, sino, Respiração, Sua semana e Plano de IA; agenda exigindo `appointments_active` e `professionals_total` na página e na API; `/api/semana` sem metas fora do plano; campo morto do Construtor removido; `docs/api.md` atualizado.
 - **Evidências:**
-  - Navegador (build de produção), jornada completa em 1440 px claro e 390 px escuro: pergunta pronta respondida com o dia da pessoa, pergunta digitada com Enter, "Refazer" troca a resposta sem duplicar, painel de informações com a chave própria e "Nova conversa" volta ao começo. axe sem violações (início, conversa e painel), sem estouro horizontal e zero erros de console.
-  - `test` 412/412, `test:integration` 156/156, `check:format`, `check:lint`, `check:types` e `build` com exit 0.
+  - Navegador (build de produção), cadastro novo pela tela: onboarding obrigatório em `/`, `/chat`, `/profile`, `/goals` e `/login`; concluído pela interface, nunca mais volta (rotas, recarga, novo login e login em outro aparelho pela landing); banco com perfil `patient`, `onboarding_completed` 0 → 1, aceites LGPD e uma única assinatura `free/active/auth_register`; 19 verificações OK.
+  - Free, Meta e Care (atribuídos pela API do admin): 86 verificações OK e 0 falhas; menus, busca, ações rápidas, páginas, voz e API da pulseira conforme a matriz do banco; 0 erros de console e de rede.
+  - Cada recurso do Free desligado um por vez (9 recursos, 9 páginas cada): o item some do menu e nenhuma página faz chamada recusada; matriz restaurada ao fim.
+  - `check:format`, `check:lint`, `check:types`, `test` 510/510, `test:integration` 166/166 e `build` com exit 0.
+
+### 69 · Chaves de API dos meios de pagamento no painel do administrador
+
+- **Status:** 🟢 finalizada · **Commit:** `5e4f06b` · **Push:** `70e760f..5e4f06b main -> main` (confirmado)
+- **Pedido do usuário (2026-10-18):** no painel do administrador, poder adicionar as chaves de API da Stripe, do Mercado Pago e do PayPal.
+- **Implementado:**
+  - Admin → Pagamentos (`/admin/payments`), um cartão por provedor: ambiente (teste ou produção; "Sandbox" no PayPal), ativar, chave pública, segredo, dado do webhook, "Testar conexão", último teste, "Onde encontrar as chaves" e remoção em duas etapas. Na Stripe, o endereço do webhook com botão de copiar e os 5 eventos necessários.
+  - Migração 028 (`payment_provider_credentials`): segredos cifrados (AES-256-GCM, chave derivada do `AUTH_SECRET`); a tela só recebe os 4 últimos caracteres.
+  - Rotas `GET /api/admin/pagamentos`, `PUT/DELETE /api/admin/pagamentos/[provedor]` e `POST /api/admin/pagamentos/[provedor]/testar`, só para administradores.
+  - Teste de conexão real: Stripe `/v1/account`, Mercado Pago `/users/me`, PayPal OAuth (sandbox ou produção).
+  - A cobrança pela Stripe passa a usar as chaves do painel antes das `STRIPE_*` do `.env.local`; o cliente é recriado quando a chave muda.
+  - Formatos conferidos na tela e na rota; chave da Stripe de outro ambiente recusada.
+  - Mercado Pago e PayPal: chaves guardadas e verificadas; o checkout por eles ainda não existe no app (a tela diz isso).
+- **Evidências:** navegador (build de produção, 1440 px e 390 px): 17 verificações OK; Stripe salva pela tela e "Conectado" com a conta de teste real (BR, BRL), Mercado Pago e PayPal com recusa real dos provedores para credenciais inexistentes, segredos ausentes do HTML, formato inválido apontado sem ida ao servidor, axe sem violações, sem rolagem horizontal, 0 erros de console. `test` 512/512, `test:integration` 172/172 (6 novos), lint, formatação, tipos e build com exit 0.
+
+### 70 · Teste real de cada plano com a Stripe em modo de teste
+
+- **Status:** 🟢 finalizada · **Commit:** este registro no painel (tarefa só de verificação, sem mudança de código; a cobrança usada é a da tarefa 69, `5e4f06b`)
+- **Pedido do usuário (2026-10-18):** testar se cada plano funciona com a chave de teste da Stripe enviada por ele.
+- **Preparado na conta de teste da Stripe:** produtos e preços Meta e Care, mensal e anual, nos valores do catálogo (R$ 79,90, R$ 790,00, R$ 249,90 e R$ 2.490,00); price ids gravados nos planos pela rota administrativa; configuração do portal com troca entre Meta e Care e cancelamento; chave e segredo do webhook salvos cifrados em Admin → Pagamentos (nunca no repositório); Stripe CLI encaminhando os eventos para `/api/webhooks/stripe`.
+- **Evidências reais (build de produção, navegador automatizado, cartões de teste da Stripe):**
+  - Meta mensal, Meta anual, Care mensal e Care anual: cadastro, "Assinar" no Perfil, Checkout hospedado da Stripe com o preço certo em BRL, cartão 4242 aprovado, volta para `/billing/success`, webhook libera o plano com origem `stripe` e o ciclo escolhido, assinatura ativa ligada ao `sub_…` no MySQL, fatura paga nos registros fiscais, Monitoramento e Dispositivos no menu e voz só no Care; 0 erros de console.
+  - Portal da Stripe aberto pelo Perfil: troca Meta → Care feita pela tela (Selecionar, Continuar, Confirmar), webhook muda o plano para Care e libera a voz; cancelamento no fim do período mantém o Care com `cancelAtPeriodEnd`; encerramento da assinatura volta ao Free, os recursos somem do menu e resta uma única assinatura ativa.
+  - Cartão recusado (4000 0000 0000 0002): a Stripe mostra a recusa, não volta ao app e o plano continua Free.
+  - 172 eventos de webhook encaminhados, todos respondidos com 200.
+- **Observações para o usuário:** o nome público da conta Stripe de teste ainda é "New business" (aparece no Checkout e no portal; ajuste em Configurações → Dados da empresa na Stripe); a conta tem Adaptive Pricing ligado, então o Checkout oferece USD além de BRL para quem está fora do Brasil.
+
+### 71 · Escolha entre teste e produção nas chaves de pagamento
+
+- **Status:** 🟢 finalizada · **Commit:** `ec0accf` · **Push:** `8edda39..ec0accf main -> main` (confirmado)
+- **Pedido do usuário (2026-10-18):** no painel do administrador onde ficam as chaves de API de pagamento, poder selecionar se é teste ou produção.
+- **Implementado:**
+  - Migração 029: `payment_provider_settings` (ambiente em uso e ativo por provedor), chave primária `(provider, environment)` em `payment_provider_credentials` (um conjunto de chaves de teste e outro de produção), `stripe_plan_prices` (produto e preços mensal e anual de cada plano por ambiente, copiados de `subscription_plans`, que perde as 3 colunas antigas) e `environment` em `billing_customers` (o `cus_` de teste não existe em produção). DDL condicionado ao schema: reexecutar não duplica nem perde dados.
+  - Admin → Pagamentos: seletor "Ambiente em uso" (Teste ou Produção; "Sandbox (teste)" no PayPal) em cartões de rádio com o que falta para cada ambiente, aviso fixo do ambiente em uso (âmbar em teste, verde em produção), interruptor do provedor, abas "Chaves de teste" e "Chaves de produção" com campos próprios e, na Stripe, os preços dos planos e o webhook de cada ambiente.
+  - Segurança da troca: produção só entra em uso com segredo legível, segredo do webhook (Stripe), Client ID (PayPal) e um "Testar conexão" aprovado depois da última troca de chave; confirmação antes de usar produção; as chaves em uso não podem ser removidas; chave da Stripe com prefixo do outro ambiente recusada na tela e na rota.
+  - "Testar conexão" da Stripe confere também cada preço cadastrado (`/v1/prices/{id}`): existe no ambiente, está ativo, é mensal ou anual como o campo, moeda e valor iguais ao catálogo e produto certo. Salvar chaves ou preços novos já dispara o teste.
+  - Cobrança: checkout, portal e catálogo usam as chaves, os preços e o cliente do ambiente em uso; `STRIPE_PRICE_*` só valem com as chaves do `.env.local`; o webhook recusa evento de outro ambiente (`livemode`) e preço que não é do ambiente do evento; fatura paga encontra o plano pelo preço do ambiente.
+  - Rotas: `PUT /api/admin/pagamentos/[provedor]` (ambiente em uso e ativo), `PUT/DELETE /api/admin/pagamentos/[provedor]/[ambiente]` (chaves e preços) e `POST /api/admin/pagamentos/[provedor]/[ambiente]/testar`; a rota antiga `[provedor]/testar` saiu (prova de remoção com `git grep`).
+  - A matriz de planos deixa de gravar ids da Stripe (ficam em Pagamentos); a landing conta os planos assináveis no ambiente em uso; a exportação LGPD inclui o ambiente do cliente de cobrança; o webhook não apaga mais o e-mail guardado do cliente.
+- **Evidências reais:**
+  - Migração 029 aplicada no banco existente (backup verificado antes, `lyra-metacare_mysql_data_backup_20261018T134803`): chaves, ambiente e os 4 preços de teste preservados, 10 clientes classificados como teste; reexecução do arquivo inteiro com exit 0 e as mesmas contagens; banco vazio migrado pelos testes de integração.
+  - Navegador (build de produção, 1440 px e 390 px, 32 verificações em cada, 0 falhas): teste real na Stripe "4 preços de planos conferidos"; chave de teste na aba de produção recusada; chave de produção inexistente salva, testada sozinha e recusada pela Stripe; produção bloqueada com o motivo; confirmação antes de usar produção, "Continuar em teste" mantém o teste; em produção sem preços de produção, Meta e Care não oferecem compra; de volta ao teste, compra mensal e anual voltam; chaves em uso protegidas; remoção em duas etapas; nenhum segredo na página; um conjunto cifrado por ambiente no banco; axe sem violações; sem rolagem horizontal; 0 erros de console. Para exercitar a troca para produção, o resultado do teste da chave de produção (inexistente) foi marcado como aprovado direto no banco, porque não há chave de produção real neste ambiente.
+  - Jornada real da Stripe depois da migração: checkout Care anual e Meta mensal com cartão de teste, webhook liberando o plano, troca Meta → Care pelo portal, cancelamento no fim do período, encerramento voltando ao Free e cartão recusado: todos OK. Numa primeira repetição o agendamento do cancelamento feito pelo script de QA (chamada direta à API logo após a troca no portal) não gerou evento; repetido com o diagnóstico da resposta, passou, sem erro do app nos webhooks.
+  - `check:format`, `check:lint`, `check:types` e `build` com exit 0; `test` 514/514; `test:integration` 175/175 (testes novos: troca de ambiente, preços por ambiente, evento e preço de outro ambiente recusados).
+  - O GitHub barrou o primeiro push porque uma chave fictícia `rk_live_` do teste tinha o formato de chave de produção; a chave passou a ser montada em partes e o commit local foi corrigido antes do push (sem force push).
+
+### 72 · Inicialização do MySQL pelo TUI-WEBNOVA
+
+- **Status:** 🟢 finalizada · **Commit:** `25b3ea0` · **Push:** `c49b18a..25b3ea0 main -> main`, confirmado por `git ls-remote`.
+- **Pedido:** corrigir a inicialização unhealthy nas opções Banco, Dev e Produção do TUI, preservando os dados.
+- **Implementação conferida:** espera por SQL TCP autenticado e Docker healthy compartilhada; cliente sem arquivos pessoais de opções; suporte à chave pública de caching_sha2_password; diagnóstico sem segredos e reconciliação das contas da aplicação somente após autenticar root, sem redefinir root ou apagar dados.
+- **Evidências atuais (2026-10-20):** MySQL 9.7.2 saudável; Compose validado; 31 migrations aplicadas em banco vazio; repetição do preparo e da opção Banco sem duplicação; TUI self-test com 18 ações e 18 scripts válidos; 30 testes de launchers aprovados; 514 unitários e 175 testes de integração aprovados; formatação, lint, tipos e build aprovados. `python3 run.py app --prod` terminou com exit 0, páginas e API de saúde responderam, e o login do administrador passou também pelo verificador interno do TUI.
+- **Histórico:** os bloqueios anteriores de WSL, Docker e dependências deixaram de ocorrer nesta sessão. O usuário já havia informado que o erro estava resolvido no seu ambiente; a retomada conferiu a implementação existente antes da publicação. A causa do container da sessão antiga não pode ser reconstruída sem aquela saída original do healthcheck; não é apresentada como causa comprovada.
