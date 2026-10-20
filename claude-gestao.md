@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `███████████████████░` **95%** |
+| Progresso          | `███████████████████░` **96%** |
 | Tarefas totais     | 76                             |
-| 🟢 Finalizadas     | 72                             |
+| 🟢 Finalizadas     | 73                             |
 | 🔵 Em andamento    | 1                              |
-| 🔴 Bloqueadas      | 2                              |
+| 🔴 Bloqueadas      | 1                              |
 | ⚪ A iniciar       | 1                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-20                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (72 ÷ 76 ≈ 95%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (73 ÷ 76 ≈ 96%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -61,16 +61,6 @@
 - **Evidência intermediária:** formulário de entrada completo na janela natural de 1463 × 690 px, cartão de aproximadamente 573 px e campos em 17 px; planos antes desta compactação com aproximadamente 654 px cada. Checagens de formatação e lint passaram na primeira execução; tipos pararam por corrupção em `.next/dev/types/routes.d.ts`. A repetição será feita com Dev parado e tipos regenerados oficialmente. `@current_problems` não disponível.
 
 ### BLOQUEADAS
-
-### 73 · Iniciar o ambiente localhost para teste do usuário
-
-- **Status:** 🔴 bloqueada por restrição do executor · **Início e tentativa:** 2026-10-20.
-- **Pedido:** subir frontend, backend e banco de dados para teste local; mantida a orientação de não realizar commit nem push.
-- **Arquitetura verificada:** frontend e APIs de backend compartilham o processo Next.js; MySQL é o serviço separado do Compose.
-- **Tentativas reais:** `wsl --list --verbose` terminou com exit 1 e `Wsl/E_ACCESSDENIED`; conexões TCP a `127.0.0.1` nas portas 3000, 3307 e 8808 retornaram código Windows 10013; HTTP `/api/health` foi bloqueado com `WinError 10013`. Isso não permite concluir se os serviços do usuário estão ativos ou parados.
-- **Launcher Windows:** `python run_windows.py up` terminou com exit 1; o Git Bash existente foi recusado porque `uname` falhou dentro do executor. Não se concluiu que o Git Bash esteja ausente no notebook.
-- **Resultado:** nenhum serviço foi iniciado pelo agente e nenhuma disponibilidade foi declarada. O executor continua sem acesso ao WSL e às conexões locais; não houve mudança de ACLs, firewall, serviços ou permissões para contornar essa restrição.
-- **Caminho já existente no ambiente do usuário:** no Ubuntu, na raiz do projeto, `bash ./tui-webnova.sh --run-action iniciar_dev` prepara MySQL e migrations e inicia o Next.js. O comando não foi executado pelo agente devido aos bloqueios documentados.
 
 ---
 
@@ -1444,3 +1434,10 @@
 - **Implementação conferida:** espera por SQL TCP autenticado e Docker healthy compartilhada; cliente sem arquivos pessoais de opções; suporte à chave pública de caching_sha2_password; diagnóstico sem segredos e reconciliação das contas da aplicação somente após autenticar root, sem redefinir root ou apagar dados.
 - **Evidências atuais (2026-10-20):** MySQL 9.7.2 saudável; Compose validado; 31 migrations aplicadas em banco vazio; repetição do preparo e da opção Banco sem duplicação; TUI self-test com 18 ações e 18 scripts válidos; 30 testes de launchers aprovados; 514 unitários e 175 testes de integração aprovados; formatação, lint, tipos e build aprovados. `python3 run.py app --prod` terminou com exit 0, páginas e API de saúde responderam, e o login do administrador passou também pelo verificador interno do TUI.
 - **Histórico:** os bloqueios anteriores de WSL, Docker e dependências deixaram de ocorrer nesta sessão. O usuário já havia informado que o erro estava resolvido no seu ambiente; a retomada conferiu a implementação existente antes da publicação. A causa do container da sessão antiga não pode ser reconstruída sem aquela saída original do healthcheck; não é apresentada como causa comprovada.
+
+### 73 · Iniciar o ambiente localhost para teste do usuário
+
+- **Status:** 🟢 finalizada · **Publicação:** registro documental desta validação; aplicação usa a implementação existente e a correção do banco `25b3ea0`.
+- **Pedido:** iniciar frontend, APIs e banco para teste local.
+- **Evidências (2026-10-20):** `python3 run.py app --prod` executou build e iniciou o Next na porta 3000, terminando com exit 0; MySQL saudável na porta 3307. Saúde com 31 migrations, landing, login e autenticação do administrador passaram no verificador do launcher e no verificador interno do TUI. Navegador acessou o login e autenticou pela interface; `/profile` carregou dados reais, assinatura Care e controles de conta. Nenhuma mudança de firewall ou ACL foi necessária.
+- **Operação:** o ambiente permanece local em `http://localhost:3000`. Reinicializações necessárias para as próximas validações serão feitas pelos launchers e registradas; nenhum dado de usuário foi apagado.
