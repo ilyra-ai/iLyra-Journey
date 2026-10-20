@@ -69,6 +69,9 @@ interface ProvedorEmEdicao {
   apagarChave: boolean;
   modelos: string[];
   encontrados: string[];
+  modelosConsultados: boolean;
+  erroModelos: string | null;
+  filtroModelos: string;
   novoModelo: string;
   temperatura: number;
   tempoMaximo: number;
@@ -118,6 +121,9 @@ function emEdicao(
     apagarChave: false,
     modelos: salvo?.modelos ?? [],
     encontrados: [],
+    modelosConsultados: false,
+    erroModelos: null,
+    filtroModelos: '',
     novoModelo: '',
     temperatura: salvo?.temperatura ?? 0.7,
     tempoMaximo: salvo?.tempoMaximoSegundos ?? 90,
@@ -203,7 +209,28 @@ export function ProvedorDeIa() {
 
   const atualizar = (id: string, mudanca: Partial<ProvedorEmEdicao>) =>
     setSelecionados((atual) =>
-      atual.map((p) => (p.preset === id ? { ...p, ...mudanca } : p))
+      atual.map((p) => {
+        if (p.preset !== id) return p;
+        const mudouConexao =
+          (mudanca.baseUrl !== undefined && mudanca.baseUrl !== p.baseUrl) ||
+          (mudanca.chave !== undefined && mudanca.chave !== p.chave) ||
+          (mudanca.apagarChave !== undefined &&
+            mudanca.apagarChave !== p.apagarChave);
+        const mudouTeste =
+          mudouConexao ||
+          (mudanca.temperatura !== undefined &&
+            mudanca.temperatura !== p.temperatura) ||
+          (mudanca.tempoMaximo !== undefined &&
+            mudanca.tempoMaximo !== p.tempoMaximo);
+        return {
+          ...p,
+          ...mudanca,
+          ...(mudouTeste ? { testes: {} } : {}),
+          ...(mudouConexao
+            ? { encontrados: [], modelosConsultados: false, erroModelos: null }
+            : {}),
+        };
+      })
     );
 
   const alternarProvedor = (preset: PresetDeProvedor, marcar: boolean) => {
@@ -258,6 +285,7 @@ export function ProvedorDeIa() {
 
   const buscarModelos = async (p: ProvedorEmEdicao) => {
     setOcupado(`modelos:${p.preset}`);
+    atualizar(p.preset, { erroModelos: null });
     try {
       const r = await json<{ modelos: string[] }>(
         await fetch('/api/admin/ia/modelos', {
@@ -267,13 +295,25 @@ export function ProvedorDeIa() {
           body: JSON.stringify(corpoDoProvedor(p)),
         })
       );
-      atualizar(p.preset, { encontrados: r.modelos });
+      atualizar(p.preset, {
+        encontrados: r.modelos,
+        modelosConsultados: true,
+        erroModelos: null,
+      });
       if (r.modelos.length === 0) {
         toast.info('O servidor respondeu, mas não há modelos carregados.');
       } else {
         toast.success(`${r.modelos.length} modelo(s) encontrado(s).`);
       }
     } catch (falha) {
+      atualizar(p.preset, {
+        encontrados: [],
+        modelosConsultados: false,
+        erroModelos:
+          falha instanceof Error
+            ? falha.message
+            : 'Falha ao consultar o servidor.',
+      });
       toast.error('Não foi possível listar os modelos.', {
         description: falha instanceof Error ? falha.message : undefined,
       });
@@ -473,6 +513,7 @@ export function ProvedorDeIa() {
                       <span className="flex items-center gap-2">
                         <Checkbox
                           checked={marcado}
+                          disabled={ocupado !== null}
                           onCheckedChange={(v) =>
                             alternarProvedor(p, v === true)
                           }
@@ -487,7 +528,8 @@ export function ProvedorDeIa() {
                         </span>
                         {!ehLyra && selecionado(p.id) ? (
                           <span className="ml-auto rounded-full bg-success-light px-2 py-px text-micro font-semibold text-foreground">
-                            {selecionado(p.id)?.modelos.length ?? 0} modelo(s)
+                            {selecionado(p.id)?.modelos.length ?? 0}{' '}
+                            selecionado(s)
                           </span>
                         ) : null}
                       </span>
@@ -518,7 +560,11 @@ export function ProvedorDeIa() {
           const idBase = `ia-${p.preset}`;
           const sugestoes = [
             ...new Set([...p.encontrados, ...p.modelos]),
-          ].slice(0, 40);
+          ].filter((modelo) =>
+            modelo
+              .toLocaleLowerCase()
+              .includes(p.filtroModelos.toLocaleLowerCase().trim())
+          );
           return (
             <section
               key={p.preset}
@@ -542,6 +588,7 @@ export function ProvedorDeIa() {
                   variant="ghost"
                   size="sm"
                   onClick={() => alternarProvedor(preset, false)}
+                  disabled={ocupado !== null}
                 >
                   <X aria-hidden="true" />
                   Remover provedor
@@ -558,6 +605,7 @@ export function ProvedorDeIa() {
                     spellCheck={false}
                     placeholder="http://localhost:11434/v1"
                     value={p.baseUrl}
+                    disabled={ocupado !== null}
                     onChange={(e) =>
                       atualizar(p.preset, { baseUrl: e.target.value })
                     }
@@ -567,8 +615,10 @@ export function ProvedorDeIa() {
                     id={`${idBase}-url-ajuda`}
                     className="text-xs leading-relaxed text-muted-foreground"
                   >
-                    Endereço visto pelo servidor da Lyra, terminando em /v1. Com
-                    a Lyra em contêiner, troque localhost por
+                    Use o endereço completo da API do provedor. O Jan usa
+                    http://127.0.0.1:1337/v1 por padrão. No WSL, a Lyra também
+                    acessa servidores restritos à própria máquina Windows. Em
+                    contêiner, use um endereço acessível pelo contêiner, como
                     host.docker.internal.
                     {ehLocal
                       ? ' Endereço local: os dados não saem da sua rede.'
@@ -600,6 +650,7 @@ export function ProvedorDeIa() {
                           : 'Só se o servidor exigir'
                     }
                     value={p.chave}
+                    disabled={ocupado !== null}
                     onChange={(e) =>
                       atualizar(p.preset, {
                         chave: e.target.value,
@@ -621,6 +672,7 @@ export function ProvedorDeIa() {
                   <label className="flex min-h-8 items-center gap-2 text-xs text-foreground">
                     <Checkbox
                       checked={p.apagarChave}
+                      disabled={ocupado !== null}
                       onCheckedChange={(v) =>
                         atualizar(p.preset, { apagarChave: v === true })
                       }
@@ -653,6 +705,30 @@ export function ProvedorDeIa() {
                     Buscar modelos
                   </Button>
                 </div>
+                {p.erroModelos ? (
+                  <p
+                    role="alert"
+                    className="break-words text-sm text-destructive"
+                  >
+                    Não foi possível consultar os modelos: {p.erroModelos}
+                  </p>
+                ) : (
+                  <p role="status" className="text-xs text-muted-foreground">
+                    {p.modelosConsultados
+                      ? `${p.encontrados.length} modelo(s) disponível(is) no servidor · ${p.modelos.length} selecionado(s).`
+                      : 'Lista ainda não consultada. Clique em Buscar modelos; o contador mostra somente os modelos selecionados.'}
+                  </p>
+                )}
+                {p.encontrados.length > 0 || p.modelos.length > 0 ? (
+                  <Input
+                    aria-label={`Filtrar modelos de ${preset.nome}`}
+                    placeholder="Filtrar modelos pelo nome"
+                    value={p.filtroModelos}
+                    onChange={(e) =>
+                      atualizar(p.preset, { filtroModelos: e.target.value })
+                    }
+                  />
+                ) : null}
                 {sugestoes.length > 0 ? (
                   <ul
                     className="flex flex-wrap gap-1.5"
@@ -661,13 +737,14 @@ export function ProvedorDeIa() {
                     {sugestoes.map((m) => {
                       const ativo = p.modelos.includes(m);
                       return (
-                        <li key={m}>
+                        <li key={m} className="max-w-full">
                           <button
                             type="button"
                             aria-pressed={ativo}
+                            disabled={ocupado !== null}
                             onClick={() => alternarModelo(p, m)}
                             className={cn(
-                              'min-h-8 rounded-full border px-3 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
+                              'min-h-8 max-w-full break-all rounded-full border px-3 py-1 text-left text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring',
                               ativo
                                 ? 'border-primary bg-primary text-primary-foreground'
                                 : 'border-border bg-background text-foreground hover:border-primary/60'
@@ -681,7 +758,9 @@ export function ProvedorDeIa() {
                   </ul>
                 ) : (
                   <p className="text-xs text-muted-foreground">
-                    Busque os modelos do servidor ou informe o nome abaixo.
+                    {p.filtroModelos.trim()
+                      ? 'Nenhum modelo corresponde ao filtro.'
+                      : 'Busque os modelos do servidor ou informe o identificador exato abaixo.'}
                   </p>
                 )}
                 <div className="flex flex-col gap-2 sm:flex-row">
@@ -691,6 +770,7 @@ export function ProvedorDeIa() {
                     spellCheck={false}
                     placeholder="ex.: qwen2.5:7b-instruct"
                     value={p.novoModelo}
+                    disabled={ocupado !== null}
                     onChange={(e) =>
                       atualizar(p.preset, { novoModelo: e.target.value })
                     }
@@ -706,7 +786,7 @@ export function ProvedorDeIa() {
                     type="button"
                     variant="outline"
                     onClick={() => adicionarModelo(p)}
-                    disabled={!p.novoModelo.trim()}
+                    disabled={ocupado !== null || !p.novoModelo.trim()}
                   >
                     <Plus aria-hidden="true" />
                     Adicionar
@@ -777,6 +857,7 @@ export function ProvedorDeIa() {
                               variant="ghost"
                               size="sm"
                               onClick={() => alternarModelo(p, m)}
+                              disabled={ocupado !== null}
                               aria-label={`Tirar ${m}`}
                             >
                               <X aria-hidden="true" />
@@ -807,6 +888,7 @@ export function ProvedorDeIa() {
                     max={2}
                     step={0.1}
                     value={[p.temperatura]}
+                    disabled={ocupado !== null}
                     onValueChange={([v]) =>
                       atualizar(p.preset, {
                         temperatura: Math.round(v * 10) / 10,
@@ -828,6 +910,7 @@ export function ProvedorDeIa() {
                     max={600}
                     step={5}
                     value={p.tempoMaximo}
+                    disabled={ocupado !== null}
                     onChange={(e) =>
                       atualizar(p.preset, {
                         tempoMaximo: Math.min(
@@ -902,6 +985,7 @@ export function ProvedorDeIa() {
                   <Label htmlFor={idDoSeletor}>{indice + 1}º modelo</Label>
                   <Select
                     value={valor}
+                    disabled={ocupado !== null}
                     onValueChange={(novo) =>
                       setOrdem((atual) =>
                         atual.map((v, i) => (i === indice ? novo : v))

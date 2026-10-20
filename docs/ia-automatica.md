@@ -57,6 +57,39 @@ O administrador escolhe o modelo em **Admin → Modelos de IA** (`src/components
 
 - **Buscar modelos** lista os modelos do servidor (`GET /v1/models`, ou a listagem do Gemini e da Anthropic) e **Testar**, ao lado de cada modelo escolhido, mede o tempo de uma resposta real, antes de salvar.
 
+### Servidores no Windows com a Lyra no WSL (tarefa 77)
+
+No modo NAT do WSL, `127.0.0.1` no Linux e no Windows são endereços de
+ambientes diferentes. Um Jan restrito ao loopback do Windows pode estar
+funcionando e, ainda assim, recusar a conexão feita pelo Node no WSL.
+
+- A Lyra tenta primeiro o cliente HTTP do Node. Somente se a conexão for
+  recusada antes do envio, em WSL e para um endereço de loopback, usa o
+  `curl.exe` do Windows para consultar o mesmo endereço, porta e caminho.
+  O transporte está em `src/lib/ai/transporte-local-wsl.ts`.
+- Não muda firewall, configurações do WSL nem o endereço de escuta do Jan;
+  não segue redirecionamentos nem desativa a verificação TLS. Chave e corpo
+  seguem por entrada padrão, fora dos argumentos do processo e de arquivos.
+  O tempo máximo e o status HTTP do provedor continuam valendo. Timeout e
+  erros HTTP não disparam essa segunda tentativa de transporte.
+- No Jan, use a URL efetiva do **Local API Server**, normalmente
+  `http://127.0.0.1:1337/v1`, e a chave caso o servidor a exija. Clique em
+  **Buscar modelos** e selecione o identificador retornado pela API, que
+  pode incluir a quantização no nome. O contador do provedor indica
+  **selecionados**; o resultado da consulta informa os **disponíveis**.
+- A lista pode ser filtrada pelo nome, sem truncar o catálogo em 40 itens.
+  Alterar endereço ou chave invalida a consulta e os testes anteriores;
+  erros de descoberta ficam visíveis junto ao provedor.
+- Serviços em nuvem usam o cliente HTTP do Node. Testar um provedor usa os
+  valores ainda em edição e, quando mantida, a chave salva desse provedor.
+  Falta de chave, recusa de autorização e cota esgotada continuam sendo
+  falhas reais, sem respostas de sucesso inventadas.
+
+Referências: [rede do WSL](https://learn.microsoft.com/en-us/windows/wsl/networking),
+[API local do Jan](https://docs.jan.ai/desktop/api-server),
+[listagem de modelos do Jan](https://docs.jan.ai/desktop/api-preference) e
+[configuração por entrada padrão do curl](https://curl.se/docs/manpage.html#-K).
+
 ### Vários provedores e modelos, com ordem de uso (tarefa 54)
 
 - **Seleção múltipla:** o administrador marca quantos provedores quiser, locais e em nuvem ao mesmo tempo, e quantos modelos quiser em cada um. O motor da Lyra aparece nos dois grupos.

@@ -541,6 +541,44 @@ describe('provedor de IA da plataforma (rotas administrativas)', () => {
     ).toBe(0);
   });
 
+  it('Jan, LocalAI e nuvem usam o endereço editado, inclusive antes de salvar', async () => {
+    const admin = await criarUsuario('admin', 'AdminEnderecoIa');
+    servidor.responder('Conexão de teste recebida.');
+    for (const preset of ['jan', 'localai', 'openai']) {
+      const informado = {
+        ...ollama(),
+        preset,
+        chave: 'chave-de-teste-da-rota',
+      };
+      const lista = await chamar(adminModelos.POST, {
+        method: 'POST',
+        body: informado,
+        usuario: admin,
+      });
+      expect(lista.status).toBe(200);
+      expect(lista.json).toMatchObject({
+        modelos: ['llama3.2:3b', 'qwen2.5:7b-instruct'],
+      });
+      expect(servidor.requisicoes.at(-1)?.caminho).toBe('/v1/models');
+      const teste = await chamar(adminTestar.POST, {
+        method: 'POST',
+        body: informado,
+        usuario: admin,
+      });
+      expect(teste.status).toBe(200);
+      expect(teste.json).toMatchObject({ ok: true });
+      expect(servidor.requisicoes.at(-1)?.corpo).toMatchObject({
+        model: informado.modelo,
+      });
+      expect(servidor.requisicoes.at(-1)?.cabecalhos.authorization).toBe(
+        'Bearer chave-de-teste-da-rota'
+      );
+    }
+    expect(
+      await contar('SELECT COUNT(*) AS total FROM ai_provider_connections')
+    ).toBe(0);
+  });
+
   it('lista os modelos e testa a conexão do servidor local, com o erro real quando falha', async () => {
     const admin = await criarUsuario('admin', 'AdminModelos');
     const modelos = await chamar(adminModelos.POST, {

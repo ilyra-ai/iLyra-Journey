@@ -1,4 +1,5 @@
 import type { TipoDeProvedor } from './provedores-catalogo';
+import { buscarComAcessoLocal } from './transporte-local-wsl';
 
 /**
  * Cliente HTTP dos provedores de IA (servidor). Fala as três APIs aceitas
@@ -66,11 +67,15 @@ async function requisitar(
 ): Promise<unknown> {
   let resposta: Response;
   try {
-    resposta = await buscar(url, {
-      ...init,
-      cache: 'no-store',
-      signal: AbortSignal.timeout(conexao.tempoMaximoSegundos * 1000),
-    });
+    resposta = await buscarComAcessoLocal(
+      url,
+      {
+        ...init,
+        cache: 'no-store',
+        signal: AbortSignal.timeout(conexao.tempoMaximoSegundos * 1000),
+      },
+      buscar
+    );
   } catch (erro) {
     const nome = erro instanceof Error ? erro.name : '';
     if (nome === 'TimeoutError' || nome === 'AbortError') {
