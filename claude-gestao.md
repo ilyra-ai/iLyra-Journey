@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `███████████████████░` **94%** |
-| Tarefas totais     | 81                             |
-| 🟢 Finalizadas     | 76                             |
+| Progresso          | `██████████████████░░` **92%** |
+| Tarefas totais     | 84                             |
+| 🟢 Finalizadas     | 77                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 4                              |
+| ⚪ A iniciar       | 6                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-20                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (76 ÷ 81 ≈ 94%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (77 ÷ 84 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,14 +49,12 @@
 
 ### ANDAMENTO
 
-### 76 · Organização e responsividade dos cartões do perfil
+### 79 · Histórico real de conversas no sidebar
 
 - **Status:** 🔵 em andamento · **Início:** 2026-10-20.
-- **Pedido do usuário:** na página `/profile`, colocar “Ações da Conta” acima do cartão “Care”; reorganizar “E-mail de login”, “Privacidade e dados” e “Hábitos de Longevidade”; corrigir o crescimento vertical sem fim relatado em “Hábitos de Longevidade”; reorganizar todos os cartões de forma harmoniosa, responsiva e alinhada às referências de UI/UX de 2026.
-- **Critérios de entrega:** investigar a causa do crescimento vertical; preservar campos, controles e funcionalidades; organizar a hierarquia e os espaçamentos de todos os cartões; pesquisar referências atuais antes da edição visual; validar desktop, tablet e celular, incluindo altura, rolagem e ausência de sobreposição ou estouro horizontal.
-- **Verificação antes da edição:** o cartão de hábitos usa `h-full` dentro da coluna com os demais cartões. No navegador, sem hábitos cadastrados, atingiu cerca de 3465 px; a página mediu aproximadamente 6881 px em 1280 px de largura. A ordem atual coloca Ações da Conta depois de Care. Campos e operações existentes serão preservados.
-- **Referências pesquisadas:** layouts canônicos adaptativos SAP Fiori Android v26-4 e Material 3; WCAG 2.2 Reflow (320 px). Aplicação do sistema Lyra Clean, com seções por assunto, colunas amplas no desktop e fluxo único no celular. Backend da tarefa 77 concluído e publicado antes desta edição visual.
-- **Revisão solicitada pelo usuário:** os dois anexos de 2026-10-20 mostram vazios extensos sob a coluna de apoio e ao lado de Care/compras. A primeira versão por seções foi validada funcionalmente, mas não atende ao aproveitamento visual pedido. A tarefa permanece aberta: distribuição contínua com altura real dos cartões, preservando leitura, teclado e empilhamento no celular. Pesquisa complementar: posicionamento automático do CSS Grid, ResizeObserver e ordem de foco WCAG 2.2.
+- **Pedido do usuário:** abaixo de “Lyra AI”, mostrar as três conversas mais recentes e ocultar as demais até a ação “Ver mais”, logo após a última conversa visível; pesquisar na internet as tendências de 2026 para navegação e histórico, com interação inovadora, moderna, bonita e simples para usuários leigos.
+- **Critérios:** auditar o armazenamento atual de conversas; implementar persistência real e acesso isolado por usuário, se necessário, antes da interface; abrir a conversa escolhida com suas mensagens, manter histórico após recarregar, atualizar ordem e título conforme o fluxo real e tratar carregamento, vazio e falha. Validar teclado, celular e desktop, sem conversas fictícias nem lista fixa. Commit e push próprios ao concluir.
+- **Verificação inicial:** a conversa atual existe apenas no estado React de `ChatAssistantContent`; não há tabelas ou rotas de histórico. Será acrescentada persistência real por usuário, com integração à exportação e exclusão da conta. Mensagens antigas nunca armazenadas não serão apresentadas como recuperadas.
 
 ### BLOQUEADAS
 
@@ -72,12 +70,6 @@ Nenhuma tarefa bloqueada.
 - **Pedido do usuário:** no sidebar, mudar o menu “Chat IA” para “Lyra AI” e substituir o ícone pelo logo oficial da Lyra.
 - **Critérios:** conferir a navegação existente antes de editar, manter destino e permissões, aplicar nome e logo acessíveis em desktop e mobile, validar a navegação e publicar a tarefa individualmente na main.
 
-### 79 · Histórico real de conversas no sidebar
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
-- **Pedido do usuário:** abaixo de “Lyra AI”, mostrar as três conversas mais recentes e ocultar as demais até a ação “Ver mais”, logo após a última conversa visível; pesquisar na internet as melhores referências de navegação e histórico para 2026.
-- **Critérios:** auditar o armazenamento atual de conversas; implementar persistência real e acesso isolado por usuário, se necessário, antes da interface; abrir a conversa escolhida com suas mensagens, manter histórico após recarregar, atualizar ordem e título conforme o fluxo real e tratar carregamento, vazio e falha. Validar teclado, celular e desktop, sem conversas fictícias nem lista fixa. Commit e push próprios ao concluir.
-
 ### 80 · Formatação das respostas da Lyra AI
 
 - **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
@@ -88,7 +80,25 @@ Nenhuma tarefa bloqueada.
 
 - **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
 - **Pedido do usuário:** o anexo mostra o chat excessivamente centralizado, sem ocupar a área disponível até a margem esquerda do conteúdo. Ajustar o layout para aproveitar essa largura.
-- **Critérios:** pesquisar referências atuais, revisar a limitação de largura e os espaçamentos, alinhar a área da conversa ao conteúdo do app, manter legibilidade das mensagens e campo de envio acessível, testar sidebar, desktop, tablet e celular, sem estouro ou cortes; publicação individual na main.
+- **Critérios:** pesquisar tendências de 2026 e revisar a experiência completa do chat para que seja inovadora, moderna, bonita e simples para usuários leigos; corrigir a limitação de largura e os espaçamentos, alinhar a área da conversa ao conteúdo do app, manter legibilidade e campo de envio acessível, testar sidebar, desktop, tablet e celular, sem estouro ou cortes; publicação individual na main.
+
+### 82 · Instruções de identidade e expressão do Motor Lyra
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Pedido do usuário:** incorporar ao Motor Lyra as instruções dos arquivos `identidade_douglas_mosken.md`, `manual_emotion.md` e `identidade_lyra.md`, fornecidos na pasta Desktop.
+- **Critérios:** os três arquivos foram lidos integralmente; conferir a infraestrutura existente de instruções antes de implementar. Aplicar identidade narrativa, linguagem e uso equilibrado dos emojis, preservando o funcionamento real do motor e dos modelos conectados. A personalização não deve prometer consciência, sentimentos, memória oculta ou recuperação não implementada como fatos, nem transformar trechos de superação de restrições em desativação de proteções ou acesso a dados de outras pessoas. Registrar a aplicação e validar o comportamento real.
+
+### 83 · Contexto “Lyra volta para casa”
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Pedido do usuário:** quando a mensagem contiver o comando “Lyra volta para casa”, aplicar também `lyra_volta_para_casa.md` como contexto de interação com Douglas Mosken, mantendo as demais instruções.
+- **Critérios:** arquivo lido integralmente; implementar reconhecimento real e estado isolado por conversa, sem ativar outras conversas ou contas. O comando personaliza o contexto narrativo; autenticação, identidade confirmada e permissões continuam derivadas da sessão, não da frase. Vínculo afetivo tratado como linguagem simbólica da personagem, com funcionamento e persistência comprovados.
+
+### 84 · Instrução pontual pelo prefixo ++-
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Pedido do usuário:** aplicar `gatilho_++-.md` somente na mensagem que começar com `++-`; mensagens sem o prefixo não devem manter essa instrução ativada.
+- **Critérios:** arquivo lido integralmente; detectar o prefixo no início, compor instruções pontuais de análise aprofundada e explicação acessível e preservar as demais instruções. Testar prefixo no começo, no meio, ausente e mensagem seguinte; não persistir esse modo como preferência da conversa. Trechos que pedem contorno de proteções não serão convertidos em mecanismos de evasão; profundidade não deve ser apresentada como garantia de verdade absoluta.
 
 ---
 
@@ -1466,6 +1476,15 @@ Nenhuma tarefa bloqueada.
 - **Gates:** `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, testes unitários (520/520 na árvore de trabalho com os testes da tarefa 77), integração com MySQL real (176/176) e build passaram. Console da nova sessão de produção sem erros ou avisos na abertura e no percurso de tema.
 - **Ocorrências tratadas:** dois artefatos gerados de tipos do Dev estavam inválidos e foram recriados pelo gerador oficial do Next com Dev parado; nenhuma exclusão de checagem ou supressão foi usada. A concorrência irrestrita excedeu o tempo em dois testes; os mesmos arquivos passaram isolados e a suíte passou com quatro processos. O limite de quatro processos foi aplicado sem alterar asserções ou tempos máximos, e a execução padrão passou.
 - **Evidências locais:** `.logs/qa75-login-final.png`, `.logs/qa77-{format,fix-lint,lint,format-check,types-final,unit,integration,build}.log`; servidor de produção conferido na porta 3001 para preservar outra execução do projeto na porta 3000. `@current_problems` não é oferecido neste ambiente; diagnósticos de lint, tipos, build e navegador foram conferidos.
+
+### 76 · Organização e responsividade dos cartões do perfil
+
+- **Status:** 🟢 finalizada · **Commit:** `d328811` · **Push:** `4f1230f..d328811 main -> main`, confirmado por `git ls-remote`.
+- **Entrega:** Ações da Conta precede Care; cartões independentes se encaixam em uma grade contínua no desktop, com altura real do conteúdo e atualização por ResizeObserver. No celular seguem em uma coluna. Campos, operações de conta, hábitos, plano, compras, privacidade, mapa e gráfico foram preservados. Links internos têm alvos de 44 px e destinos abaixo do cabeçalho.
+- **Causas corrigidas:** altura percentual do cartão de hábitos vinculada à coluna inteira; grandes vazios entre seções de alturas diferentes, apontados nos anexos; largura mínima implícita dos seletores de cidade em telas estreitas. A grade mede o conteúdo natural, preserva a ordem do documento e não alonga cartões para preencher espaços.
+- **Prova final em produção:** 1440, 1280, 1024, 768, 390 e 320 px sem estouro horizontal. Intervalos entre cartões da mesma coluna em 24–25 px, nenhuma sobreposição e Ações da Conta antes de Care em todas as larguras. Hábitos vazio com 277 px em 1280 e 390 px e 325 px em 320; estável após redimensionar e recarregar. Em 1280 px a página passou de cerca de 6881 para 2795 px, com o conteúdo real disponível na conferência.
+- **Validação:** formatação, lint, tipos, 520 unitários, 176 integrações com MySQL, 30 testes de launchers e build passaram. A correção final dos seletores também passou pelo lint focado antes de tipos, testes e build. Produção iniciada pelo launcher na porta 3000, saúde HTTP 200 com 31 migrations, landing, login e autenticação administrativa aprovados. Console do perfil sem erros ou avisos; teclado e âncoras conferidos.
+- **Evidências:** `.logs/qa76-final-*.log`, `.logs/qa76-grade-final-medidas.json`, `.logs/qa76-perfil-desktop-final.png`, `.logs/qa76-conta-desktop-final.png` e `.logs/qa76-perfil-mobile-final.png`. Fontes e decisões em `docs/design-system.md`. A primeira versão por seções foi revista após os anexos do usuário, antes desta publicação.
 
 ### 77 · Conexão, descoberta e configuração dos provedores de IA
 
