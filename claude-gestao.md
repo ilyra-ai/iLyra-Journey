@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `███████████████████░` **96%** |
+| Progresso          | `███████████████████░` **97%** |
 | Tarefas totais     | 76                             |
-| 🟢 Finalizadas     | 73                             |
+| 🟢 Finalizadas     | 74                             |
 | 🔵 Em andamento    | 1                              |
-| 🔴 Bloqueadas      | 1                              |
+| 🔴 Bloqueadas      | 0                              |
 | ⚪ A iniciar       | 1                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-20                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (73 ÷ 76 ≈ 96%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (74 ÷ 76 ≈ 97%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -62,19 +62,9 @@
 
 ### BLOQUEADAS
 
+Nenhuma tarefa bloqueada.
+
 ---
-
-### 74 · Leituras de mapas, tema do login e fonte Imprima
-
-- **Status:** implementação local concluída; validação integral bloqueada em 2026-10-20.
-- **Pedido:** apresentar os três mapas e seus limites, incluir “Leituras de Mapas”, alinhar a sequência do menu aos blocos, harmonizar login e landing, reduzir espaços da marca e usar Imprima Regular nas duas páginas.
-- **Implementação:** seção com Jyotish, Lyra DM Samadhi e Quantum — Lyra e Arkático; limites reais das leituras e acesso à conta. Menu e blocos compartilham a ordem, com atualização do padrão antigo e preservação de ordens personalizadas do Construtor. Sobre fica após Dúvidas. Login com marca e textos agrupados, formulário em cartão, paleta compartilhada, controles existentes preservados. Imprima 400 via next/font/google, display swap, somente nas duas superfícies públicas, sem importação CSS duplicada.
-- **Evidências no navegador:** as duas telas renderizadas no localhost; os sete links do menu clicados com seus hashes corretos; posições absolutas das seções em ordem crescente (83, 1026, 2432, 2934, 3946, 4892, 5265 px). Família computada dos títulos e textos da landing: Imprima, peso 400. Cartões e login conferidos visualmente no desktop, sem estouro horizontal na landing (conteúdo 1454 px, janela 1463 px).
-- **Quality gates executados no Ubuntu via terminal do painel:** `fix:format`, `fix:lint`, `check:lint` e `check:format` com código 0; registros em `.logs/qa-publico/`. `check:types` detectou conteúdo corrompido no artefato gerado `.next/dev/types/validator.ts`, com 10 erros de sintaxe. O artefato inválido foi removido (somente cache gerado); `node node_modules/typescript/bin/tsc --noEmit` foi repetido no Windows com código 0. A geração oficial do Next foi tentada e bloqueada por permissão em dependências no Windows; nenhum erro foi ocultado no tsconfig.
-- **Bloqueio posterior:** localhost:3000 e localhost:8809 passaram a recusar conexões durante a validação, interrompendo o terminal Ubuntu. WSL direto continua com E_ACCESSDENIED. No Windows, o pnpm não consegue obter a versão fixada por falha de DNS; Vitest não inicia por falta do binding nativo do Rolldown, e o Next encontra permission denied em @swc/helpers. Testes unitários, integração e build não foram declarados aprovados.
-- **Responsividade:** CSS ajustado para uma coluna e menu compacto nas larguras menores; a emulação do navegador não foi validada. A tentativa de CDP foi recusada pelo usuário no controle de aprovação; não houve tentativa de contornar a recusa. Nenhuma interface @current_problems disponível nesta sessão.
-- **Documentação:** `docs/design-system.md` atualizado. Revisão React aplicada: tipos explícitos, menu derivado sem efeitos extras, ligações nativas, cabeçalhos e rótulos acessíveis; sem nova dependência.
-- **Publicação:** nenhum commit nem push, por orientação expressa do usuário, que prevalece sobre a exigência de publicação da instrução mestra. Alterações anteriores do banco e do orquestrador preservadas.
 
 ## Tópico 3 · Tarefas a Iniciar
 
@@ -1437,7 +1427,15 @@
 
 ### 73 · Iniciar o ambiente localhost para teste do usuário
 
-- **Status:** 🟢 finalizada · **Publicação:** registro documental desta validação; aplicação usa a implementação existente e a correção do banco `25b3ea0`.
+- **Status:** 🟢 finalizada · **Commit:** `5a66b01` · **Push:** confirmado para `origin/main` · **Publicação:** registro documental desta validação; aplicação usa a implementação existente e a correção do banco `25b3ea0`.
 - **Pedido:** iniciar frontend, APIs e banco para teste local.
 - **Evidências (2026-10-20):** `python3 run.py app --prod` executou build e iniciou o Next na porta 3000, terminando com exit 0; MySQL saudável na porta 3307. Saúde com 31 migrations, landing, login e autenticação do administrador passaram no verificador do launcher e no verificador interno do TUI. Navegador acessou o login e autenticou pela interface; `/profile` carregou dados reais, assinatura Care e controles de conta. Nenhuma mudança de firewall ou ACL foi necessária.
 - **Operação:** o ambiente permanece local em `http://localhost:3000`. Reinicializações necessárias para as próximas validações serão feitas pelos launchers e registradas; nenhum dado de usuário foi apagado.
+
+### 74 · Leituras de mapas, tema do login e fonte Imprima
+
+- **Status:** 🟢 finalizada · **Commit:** `f127545` · **Push:** `5a66b01..f127545 main -> main`.
+- **Pedido:** apresentar as três leituras e seus limites, incluir Leituras de Mapas, sincronizar menu e seções, harmonizar login e landing e usar Imprima Regular.
+- **Conferência antes de implementar:** os ajustes já estavam no código local; foram preservados e validados em produção, sem refazer a entrega.
+- **Evidências atuais:** três mapas presentes; sete links clicados com hashes corretos e seções em ordem crescente; Imprima computada no navegador. Landing sem estouro horizontal em 1280, 768, 390 e 320 px; cartões se empilham nas telas menores. Login completo em 1280 × 720 (cartão de 573 px) e sem estouro em 390 px. Nenhum erro ou aviso de console na aba de validação. Formatação, lint, tipos, 514 unitários, 175 integrações e build passaram no runtime oficial.
+- **Documentação:** sistema visual e acessibilidade atualizados. A solicitação posterior de tema claro padrão está registrada na tarefa 75 e será aplicada preservando a alternância.
