@@ -50,6 +50,7 @@ import { cn } from '@/lib/utils';
 import { TimeInput } from '@/components/ui/time-input';
 import { AvatarUploader } from './AvatarUploader';
 import { HabitList } from './HabitList';
+import { GradeDeCartoesDoPerfil } from './GradeDeCartoesDoPerfil';
 import { DailyMetric } from '@/hooks/use-daily-metrics';
 import { db as databaseClient } from '@/integrations/mysql/client';
 import { AccountSubscriptionCard } from '@/components/subscription/AccountSubscriptionCard';
@@ -466,12 +467,12 @@ export function ProfileForm() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="space-y-6 lg:col-span-2">
+      <div className="grid items-start gap-6 xl:grid-cols-2">
+        <div className="min-w-0 space-y-6">
           <Skeleton className="h-48 w-full rounded-xl" />
           <Skeleton className="h-64 w-full rounded-xl" />
         </div>
-        <div className="space-y-6 lg:col-span-1">
+        <div className="min-w-0 space-y-6">
           <Skeleton className="h-32 w-full rounded-xl" />
           <Skeleton className="h-64 w-full rounded-xl" />
         </div>
@@ -482,306 +483,340 @@ export function ProfileForm() {
   const firstName = form.getValues('first_name') || 'Usuário';
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      {/* O título, o sobretítulo e a descrição da página ficam só no
-          PageIntro de /profile: este cartão os repetia logo abaixo, o que no
-          celular empurrava o formulário para fora da primeira dobra. */}
-      <div className="min-w-0 space-y-6 lg:col-span-2">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit, () =>
-              // Sem este aviso, um campo inválido fora da tela (no celular)
-              // fazia o botão "Salvar" parecer não funcionar.
-              toast.error('Revise os campos destacados antes de salvar.')
-            )}
-          >
-            <Card>
-              <CardHeader>
-                <CardTitle>Dados Pessoais e Cronobiologia</CardTitle>
-                <CardDescription>
-                  Informações essenciais para a análise de IA.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="grid grid-cols-1 gap-5 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="first_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Nome</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Seu nome"
-                          autoComplete="given-name"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="last_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Sobrenome</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="Seu sobrenome"
-                          autoComplete="family-name"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="birth_date"
-                  render={({ field }) => (
-                    <FormItem className="flex flex-col">
-                      <FormLabel className="mb-2">
-                        <Calendar
-                          className="mr-1 inline-block h-4 w-4 align-text-bottom text-muted-foreground"
-                          aria-hidden="true"
-                        />{' '}
-                        Data de Nascimento
-                      </FormLabel>
-                      <FormControl>
-                        {/* Sem `id` próprio: o FormControl injeta o id do
-                            rótulo e o `aria-describedby` (tarefa 61). */}
-                        <DatePicker
-                          value={field.value || undefined}
-                          onChange={field.onChange}
-                          onBlur={field.onBlur}
-                          name={field.name}
-                          placeholder="DD/MM/AAAA"
-                          autoComplete="bday"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="age"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Idade (Calculada)</FormLabel>
-                      <FormControl>
-                        <Input
-                          type="number"
-                          placeholder="Idade"
-                          {...field}
-                          disabled={!!birthDateWatch}
-                          className={cn(
-                            !!birthDateWatch &&
-                              'cursor-not-allowed border-border bg-muted'
-                          )}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="gender"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Gênero</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Selecione..." />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="male">Masculino</SelectItem>
-                          <SelectItem value="female">Feminino</SelectItem>
-                          <SelectItem value="other">Outro</SelectItem>
-                          <SelectItem value="prefer_not-to-say">
-                            Prefiro não dizer
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="birth_time"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>
-                        <Clock
-                          className="mr-1 inline-block h-4 w-4 align-text-bottom text-muted-foreground"
-                          aria-hidden="true"
-                        />{' '}
-                        Hora Exata (HH:MM)
-                      </FormLabel>
-                      <FormControl>
-                        <TimeInput placeholder="Ex.: 14:35" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Define o ascendente (Lagna) e as casas do mapa védico.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                {/* Remonta quando o perfil carrega para receber os valores. */}
-                <LocaisDoPerfil
-                  key={`${locais.nascimento?.id ?? 'sem'}-${locais.moradia?.id ?? 'sem'}`}
-                  nascimentoInicial={locais.nascimento}
-                  moradiaInicial={locais.moradia}
-                  localAntigo={locais.localAntigo}
-                />
-                <FormField
-                  control={form.control}
-                  name="activity_level"
-                  render={({ field }) => (
-                    <FormItem className="md:col-span-2">
-                      <FormLabel>
-                        Nível de atividade:{' '}
-                        <span className="text-primary">
-                          {field.value ?? NIVEL_DE_ATIVIDADE.padrao}
-                        </span>
-                      </FormLabel>
-                      <FormControl>
-                        <Slider
-                          aria-label={`Nível de atividade, de ${NIVEL_DE_ATIVIDADE.minimo} (sedentário) a ${NIVEL_DE_ATIVIDADE.maximo} (muito ativo)`}
-                          min={NIVEL_DE_ATIVIDADE.minimo}
-                          max={NIVEL_DE_ATIVIDADE.maximo}
-                          step={1}
-                          value={[field.value ?? NIVEL_DE_ATIVIDADE.padrao]}
-                          onValueChange={(valores) =>
-                            field.onChange(valores[0])
-                          }
-                          className="py-2"
-                        />
-                      </FormControl>
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>{NIVEL_DE_ATIVIDADE.rotuloMinimo}</span>
-                        <span>{NIVEL_DE_ATIVIDADE.rotuloMaximo}</span>
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="goals"
-                  render={() => (
-                    <FormItem className="md:col-span-2">
-                      <p
-                        id="perfil-objetivos-titulo"
-                        className="text-sm font-medium leading-none text-foreground"
-                      >
-                        Objetivos
-                      </p>
-                      <FormDescription>
-                        Os mesmos do onboarding; marque quantos quiser.
-                      </FormDescription>
-                      <div
-                        role="group"
-                        aria-labelledby="perfil-objetivos-titulo"
-                        className="grid grid-cols-1 gap-2 sm:grid-cols-2"
-                      >
-                        {METAS_DO_PERFIL.map((meta) => {
-                          const IconeDaMeta = meta.icon;
-                          return (
-                            <FormField
-                              key={meta.id}
-                              control={form.control}
-                              name="goals"
-                              render={({ field }) => (
-                                <FormItem className="flex min-w-0 flex-row items-center gap-3 space-y-0 rounded-md border border-border bg-card px-3 transition-colors hover:bg-muted has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={
-                                        field.value?.includes(meta.id) ?? false
-                                      }
-                                      onCheckedChange={(marcado) =>
-                                        field.onChange(
-                                          marcado
-                                            ? [...(field.value ?? []), meta.id]
-                                            : (field.value ?? []).filter(
-                                                (id) => id !== meta.id
-                                              )
-                                        )
-                                      }
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="flex min-h-11 min-w-0 flex-1 cursor-pointer items-center gap-2.5 py-2 text-sm font-medium">
-                                    <IconeDaMeta
-                                      className="h-4 w-4 shrink-0 text-primary"
-                                      aria-hidden
-                                    />
-                                    <span className="min-w-0">
-                                      {meta.label}
-                                    </span>
-                                  </FormLabel>
-                                </FormItem>
-                              )}
-                            />
-                          );
-                        })}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </CardContent>
-              <CardFooter>
-                <Button type="submit" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting
-                    ? 'Salvando...'
-                    : 'Salvar Alterações'}
-                </Button>
-              </CardFooter>
-            </Card>
-          </form>
-        </Form>
-        <MapaVedicoCard />
-        {session?.user && <ProgressChart userId={session.user.id} db={db} />}
-      </div>
-
-      <div className="min-w-0 space-y-6 lg:col-span-1">
-        <AccountSubscriptionCard />
-        <PurchaseHistoryCard />
-        <AccountEmailCard />
-        <PrivacyDataCard />
-        <Card>
-          <CardHeader>
-            <CardTitle>Ações da Conta</CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-4">
-            <AvatarUploader
-              currentAvatarUrl={avatarUrl}
-              firstName={firstName}
-              onUploadSuccess={setAvatarUrl}
-            />
-            <Button
-              variant="outline"
-              onClick={handleSignOut}
-              className="w-full"
+    <div className="flex min-w-0 flex-col gap-8">
+      <nav aria-label="Seções do perfil" className="flex flex-wrap gap-2">
+        <Button asChild variant="outline" className="min-h-11">
+          <a href="#perfil-pessoal">Dados e rotina</a>
+        </Button>
+        <Button asChild variant="outline" className="min-h-11">
+          <a href="#perfil-conta">Conta e privacidade</a>
+        </Button>
+        <Button asChild variant="outline" className="min-h-11">
+          <a href="#perfil-contexto">Mapa e evolução</a>
+        </Button>
+      </nav>
+      <GradeDeCartoesDoPerfil>
+        <section
+          id="perfil-pessoal"
+          aria-label="Dados e rotina"
+          className="min-w-0 scroll-mt-24"
+        >
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit, () =>
+                // Sem este aviso, um campo inválido fora da tela (no celular)
+                // fazia o botão "Salvar" parecer não funcionar.
+                toast.error('Revise os campos destacados antes de salvar.')
+              )}
             >
-              <LogOut className="mr-2 h-4 w-4" aria-hidden="true" />
-              Sair do App
-            </Button>
-          </CardContent>
-        </Card>
-        {genderWatch === 'female' ? <MenstrualCycleSettings /> : null}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Dados Pessoais e Cronobiologia</CardTitle>
+                  <CardDescription>
+                    Informações essenciais para a análise de IA.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="grid grid-cols-1 gap-5 md:grid-cols-2">
+                  <FormField
+                    control={form.control}
+                    name="first_name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Nome</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Seu nome"
+                            autoComplete="given-name"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="last_name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Sobrenome</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Seu sobrenome"
+                            autoComplete="family-name"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="birth_date"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel className="mb-2">
+                          <Calendar
+                            className="mr-1 inline-block h-4 w-4 align-text-bottom text-muted-foreground"
+                            aria-hidden="true"
+                          />{' '}
+                          Data de Nascimento
+                        </FormLabel>
+                        <FormControl>
+                          {/* Sem `id` próprio: o FormControl injeta o id do
+                            rótulo e o `aria-describedby` (tarefa 61). */}
+                          <DatePicker
+                            value={field.value || undefined}
+                            onChange={field.onChange}
+                            onBlur={field.onBlur}
+                            name={field.name}
+                            placeholder="DD/MM/AAAA"
+                            autoComplete="bday"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="age"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Idade (Calculada)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Idade"
+                            {...field}
+                            disabled={!!birthDateWatch}
+                            className={cn(
+                              !!birthDateWatch &&
+                                'cursor-not-allowed border-border bg-muted'
+                            )}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Gênero</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          value={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecione..." />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="male">Masculino</SelectItem>
+                            <SelectItem value="female">Feminino</SelectItem>
+                            <SelectItem value="other">Outro</SelectItem>
+                            <SelectItem value="prefer_not-to-say">
+                              Prefiro não dizer
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="birth_time"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          <Clock
+                            className="mr-1 inline-block h-4 w-4 align-text-bottom text-muted-foreground"
+                            aria-hidden="true"
+                          />{' '}
+                          Hora Exata (HH:MM)
+                        </FormLabel>
+                        <FormControl>
+                          <TimeInput placeholder="Ex.: 14:35" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          Define o ascendente (Lagna) e as casas do mapa védico.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  {/* Remonta quando o perfil carrega para receber os valores. */}
+                  <LocaisDoPerfil
+                    key={`${locais.nascimento?.id ?? 'sem'}-${locais.moradia?.id ?? 'sem'}`}
+                    nascimentoInicial={locais.nascimento}
+                    moradiaInicial={locais.moradia}
+                    localAntigo={locais.localAntigo}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="activity_level"
+                    render={({ field }) => (
+                      <FormItem className="md:col-span-2">
+                        <FormLabel>
+                          Nível de atividade:{' '}
+                          <span className="text-primary">
+                            {field.value ?? NIVEL_DE_ATIVIDADE.padrao}
+                          </span>
+                        </FormLabel>
+                        <FormControl>
+                          <Slider
+                            aria-label={`Nível de atividade, de ${NIVEL_DE_ATIVIDADE.minimo} (sedentário) a ${NIVEL_DE_ATIVIDADE.maximo} (muito ativo)`}
+                            min={NIVEL_DE_ATIVIDADE.minimo}
+                            max={NIVEL_DE_ATIVIDADE.maximo}
+                            step={1}
+                            value={[field.value ?? NIVEL_DE_ATIVIDADE.padrao]}
+                            onValueChange={(valores) =>
+                              field.onChange(valores[0])
+                            }
+                            className="py-2"
+                          />
+                        </FormControl>
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <span>{NIVEL_DE_ATIVIDADE.rotuloMinimo}</span>
+                          <span>{NIVEL_DE_ATIVIDADE.rotuloMaximo}</span>
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="goals"
+                    render={() => (
+                      <FormItem className="md:col-span-2">
+                        <p
+                          id="perfil-objetivos-titulo"
+                          className="text-sm font-medium leading-none text-foreground"
+                        >
+                          Objetivos
+                        </p>
+                        <FormDescription>
+                          Os mesmos do onboarding; marque quantos quiser.
+                        </FormDescription>
+                        <div
+                          role="group"
+                          aria-labelledby="perfil-objetivos-titulo"
+                          className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+                        >
+                          {METAS_DO_PERFIL.map((meta) => {
+                            const IconeDaMeta = meta.icon;
+                            return (
+                              <FormField
+                                key={meta.id}
+                                control={form.control}
+                                name="goals"
+                                render={({ field }) => (
+                                  <FormItem className="flex min-w-0 flex-row items-center gap-3 space-y-0 rounded-md border border-border bg-card px-3 transition-colors hover:bg-muted has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={
+                                          field.value?.includes(meta.id) ??
+                                          false
+                                        }
+                                        onCheckedChange={(marcado) =>
+                                          field.onChange(
+                                            marcado
+                                              ? [
+                                                  ...(field.value ?? []),
+                                                  meta.id,
+                                                ]
+                                              : (field.value ?? []).filter(
+                                                  (id) => id !== meta.id
+                                                )
+                                          )
+                                        }
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="flex min-h-11 min-w-0 flex-1 cursor-pointer items-center gap-2.5 py-2 text-sm font-medium">
+                                      <IconeDaMeta
+                                        className="h-4 w-4 shrink-0 text-primary"
+                                        aria-hidden
+                                      />
+                                      <span className="min-w-0">
+                                        {meta.label}
+                                      </span>
+                                    </FormLabel>
+                                  </FormItem>
+                                )}
+                              />
+                            );
+                          })}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </CardContent>
+                <CardFooter>
+                  <Button
+                    type="submit"
+                    disabled={form.formState.isSubmitting}
+                    className="min-h-11 w-full sm:w-auto"
+                  >
+                    {form.formState.isSubmitting
+                      ? 'Salvando...'
+                      : 'Salvar Alterações'}
+                  </Button>
+                </CardFooter>
+              </Card>
+            </form>
+          </Form>
+        </section>
+
+        <section aria-label="Ações da Conta" className="min-w-0 scroll-mt-24">
+          <Card>
+            <CardHeader>
+              <CardTitle>Ações da Conta</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-4">
+              <AvatarUploader
+                currentAvatarUrl={avatarUrl}
+                firstName={firstName}
+                onUploadSuccess={setAvatarUrl}
+              />
+              <Button
+                variant="outline"
+                onClick={handleSignOut}
+                className="min-h-11 w-full"
+              >
+                <LogOut className="mr-2 h-4 w-4" aria-hidden="true" />
+                Sair do App
+              </Button>
+            </CardContent>
+          </Card>
+        </section>
         <HabitList />
-      </div>
+        {genderWatch === 'female' ? <MenstrualCycleSettings /> : null}
+        <AccountSubscriptionCard />
+        <section
+          id="perfil-conta"
+          aria-label="E-mail de login"
+          className="min-w-0 scroll-mt-24"
+        >
+          <AccountEmailCard />
+        </section>
+        <PrivacyDataCard />
+        <PurchaseHistoryCard />
+        <section
+          id="perfil-contexto"
+          aria-label="Meu mapa védico"
+          className="min-w-0 scroll-mt-24"
+        >
+          <MapaVedicoCard />
+        </section>
+        {session?.user && <ProgressChart userId={session.user.id} db={db} />}
+      </GradeDeCartoesDoPerfil>
     </div>
   );
 }

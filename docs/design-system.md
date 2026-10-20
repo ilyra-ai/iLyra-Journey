@@ -136,6 +136,32 @@ frio (matiz 346) justamente para não se confundir com o coral de destaque.
   alternância permanece disponível e respeita escolhas já salvas; as
   preferências pública e interna continuam independentes.
 
+## Perfil: organização adaptativa (2026-10-20)
+
+- A navegação por âncoras reúne **Dados e rotina**, **Conta e privacidade** e
+  **Mapa e evolução**; os destinos têm margem para o cabeçalho fixo e os
+  controles mantêm pelo menos 44 px de altura.
+- Os cartões formam uma grade contínua com duas colunas de mesma largura
+  no desktop amplo. Cada cartão ocupa sua altura real, sem esperar uma
+  seção ou coluna mais alta terminar. Ações da Conta precede Care; hábitos,
+  e-mail, privacidade, plano, compras, mapa e evolução aproveitam os espaços
+  seguintes. No celular, a mesma ordem do documento segue em uma coluna.
+- `GradeDeCartoesDoPerfil` usa CSS Grid estável e `ResizeObserver`, medindo
+  o conteúdo de altura natural e o espaçamento efetivo. A grade se ajusta
+  ao carregamento de dados, fontes, seções condicionais e redimensionamento,
+  sem altura percentual nos cartões, cortes de conteúdo ou ordem de foco
+  imposta por `tabindex`. Sem o ajuste de medição, continua sendo uma grade
+  convencional legível.
+- Campos, operações e controles de privacidade independentes do plano
+  continuam disponíveis conforme as permissões existentes. O formulário
+  permanece inteiro, com sua validação e ação de salvar originais.
+- Referências: [layouts adaptativos do SAP Fiori Android v26-4](https://www.sap.com/design-system/fiori-design-android/v26-4/foundations/adaptive-layout/canonical-layouts),
+  [layouts canônicos do Material 3](https://m3.material.io/foundations/layout/canonical-examples/overview),
+  [Reflow do WCAG 2.2](https://www.w3.org/WAI/WCAG22/Understanding/reflow.html),
+  [ordem de foco](https://www.w3.org/WAI/WCAG22/Understanding/focus-order.html),
+  [posicionamento automático do Grid](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout/Auto-placement)
+  e [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver).
+
 ## Referências históricas
 
 - Proposta aprovada: sistema visual, login, dashboard e metas, publicados como

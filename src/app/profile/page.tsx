@@ -7,6 +7,7 @@ import { ProfileForm } from '@/components/profile/ProfileForm';
 import { AccountEmailCard } from '@/components/profile/AccountEmailCard';
 import { PrivacyDataCard } from '@/components/profile/PrivacyDataCard';
 import { PurchaseHistoryCard } from '@/components/profile/PurchaseHistoryCard';
+import { GradeDeCartoesDoPerfil } from '@/components/profile/GradeDeCartoesDoPerfil';
 import { AccountSubscriptionCard } from '@/components/subscription/AccountSubscriptionCard';
 import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
 import { useAuth } from '@/context/AuthContext';
@@ -41,7 +42,7 @@ export default function ProfilePage() {
       {profileEnabled ? (
         <ProfileForm />
       ) : (
-        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
+        <div className="space-y-6">
           <PlanUpgradeNotice
             currentPlanKey={subscription?.plan.key ?? 'free'}
             title="Gestão de perfil bloqueada"
@@ -50,12 +51,12 @@ export default function ProfilePage() {
             preferredPlanKey="meta"
           />
           {/* Os direitos do titular (LGPD) não dependem do plano. */}
-          <div className="min-w-0 space-y-6">
+          <GradeDeCartoesDoPerfil>
             <AccountSubscriptionCard />
-            <PurchaseHistoryCard />
             <AccountEmailCard />
             <PrivacyDataCard />
-          </div>
+            <PurchaseHistoryCard />
+          </GradeDeCartoesDoPerfil>
         </div>
       )}
     </AppShell>

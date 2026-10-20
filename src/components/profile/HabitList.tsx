@@ -146,7 +146,7 @@ export function HabitList() {
 
   if (loading) {
     return (
-      <Card className="h-full">
+      <Card className="min-w-0">
         <CardHeader>
           <CardTitle>Hábitos de Longevidade</CardTitle>
         </CardHeader>
@@ -160,10 +160,13 @@ export function HabitList() {
   }
 
   return (
-    <Card className="h-full">
+    <Card className="min-w-0">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <ListChecks className="h-5 w-5 text-primary" aria-hidden="true" />
+          <ListChecks
+            className="h-5 w-5 shrink-0 text-primary"
+            aria-hidden="true"
+          />
           Hábitos de Longevidade
         </CardTitle>
         <CardDescription>
@@ -177,16 +180,19 @@ export function HabitList() {
             <Button
               onClick={handleInitializeHabits}
               disabled={isInitializing}
-              className="w-full"
+              className="h-auto min-h-11 w-full whitespace-normal"
             >
               {isInitializing ? (
-                <Loader2
-                  className="mr-2 h-4 w-4 animate-spin"
-                  aria-hidden="true"
-                />
+                <>
+                  <Loader2
+                    className="mr-2 h-4 w-4 shrink-0 animate-spin"
+                    aria-hidden="true"
+                  />
+                  Adicionando hábitos...
+                </>
               ) : (
                 <>
-                  <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+                  <Plus className="mr-2 h-4 w-4 shrink-0" aria-hidden="true" />
                   Adicionar Hábitos Sugeridos
                 </>
               )}

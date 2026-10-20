@@ -69,8 +69,8 @@ export function LocaisDoPerfil({
   }
 
   return (
-    <div className="grid gap-5 md:col-span-2 md:grid-cols-2">
-      <div className="space-y-2.5">
+    <div className="grid min-w-0 grid-cols-1 gap-5 md:col-span-2 md:grid-cols-2">
+      <div className="min-w-0 space-y-2.5">
         <Label
           htmlFor="perfil-cidade-nascimento"
           className="flex items-center gap-1"
@@ -98,7 +98,7 @@ export function LocaisDoPerfil({
             : 'Salva na hora. Coordenadas e fuso calculam o seu mapa védico.'}
         </p>
       </div>
-      <div className="space-y-2.5">
+      <div className="min-w-0 space-y-2.5">
         <Label
           htmlFor="perfil-cidade-moradia"
           className="flex items-center gap-1"
