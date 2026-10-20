@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **91%** |
+| Progresso          | `██████████████████░░` **92%** |
 | Tarefas totais     | 85                             |
-| 🟢 Finalizadas     | 77                             |
+| 🟢 Finalizadas     | 78                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 7                              |
+| ⚪ A iniciar       | 6                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-20                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (77 ÷ 85 ≈ 91%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (78 ÷ 85 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,13 +49,14 @@
 
 ### ANDAMENTO
 
-### 79 · Histórico real de conversas no sidebar
+### 85 · Memória de longo prazo do app com Graphiti
 
 - **Status:** 🔵 em andamento · **Início:** 2026-10-20.
-- **Pedido do usuário:** abaixo de “Lyra AI”, mostrar as três conversas mais recentes e ocultar as demais até a ação “Ver mais”, logo após a última conversa visível; pesquisar na internet as tendências de 2026 para navegação e histórico, com interação inovadora, moderna, bonita e simples para usuários leigos.
-- **Critérios:** auditar o armazenamento atual de conversas; implementar persistência real e acesso isolado por usuário, se necessário, antes da interface; abrir a conversa escolhida com suas mensagens, manter histórico após recarregar, atualizar ordem e título conforme o fluxo real e tratar carregamento, vazio e falha. Validar teclado, celular e desktop, sem conversas fictícias nem lista fixa. Commit e push próprios ao concluir.
-- **Verificação inicial:** a conversa atual existe apenas no estado React de `ChatAssistantContent`; não há tabelas ou rotas de histórico. Será acrescentada persistência real por usuário, com integração à exportação e exclusão da conta. Mensagens antigas nunca armazenadas não serão apresentadas como recuperadas.
-- **Andamento comprovado:** migration 030 aplicada no banco existente, sem apagar dados; sete testes novos passaram no MySQL real, incluindo envio do contexto pela conexão HTTP, e a suíte completa passou com 183 integrações. Cobertura de sessão, gravação/reabertura, repetição sem nova cobrança, paginação, isolamento entre titulares, falha/retentativa e exportação/exclusão. Interface de histórico e ligação do chat em validação; tarefa ainda não concluída nem publicada.
+- **Pedido do usuário:** implementar Graphiti para lembrar detalhes e conversas e acompanhar o contexto da pessoa ao longo do tempo. A memória deve pertencer ao app e funcionar com qualquer provedor de IA configurado, sem ficar vinculada ao Jan.
+- **Critérios de implementação:** conferir a infraestrutura já existente; integrar `graphiti-core` em serviço próprio autenticado e banco de grafos suportado, com instalação e execução reproduzíveis. Preservar o MySQL e o histórico integral. Ingestão real de episódios, recuperação entre conversas da mesma conta, origem e data das lembranças, relações e atualização temporal de informações que mudaram. O contexto recuperado deve passar pelo fluxo comum do Motor Lyra e dos provedores; extração e embeddings podem usar configuração própria compatível, sem obrigar o provedor de resposta a executar a extração.
+- **Privacidade e qualidade:** isolamento entre titulares imposto no servidor, sem confiar em identificadores enviados pelo cliente; controles para consultar, corrigir e apagar memórias, integração à exportação e exclusão da conta e tratamento explícito de conteúdo sensível. Separar relato do usuário de inferência do modelo, sem apresentar hipóteses como fatos nem produzir diagnóstico psicológico automático. Respeitar as escolhas de privacidade e de envio a provedores externos.
+- **Validação e entrega:** testar persistência após reiniciar, lembrança entre conversas, troca de provedor, contradições ao longo do tempo, indisponibilidade do serviço, retentativas, exclusão e bloqueio de acesso entre contas. Comprovar com Graphiti e banco de grafos reais, além das rotas e da interface mobile/desktop, passando os gates e publicando commit e push próprios na main.
+- **Pesquisa inicial:** [Graphiti oficial](https://github.com/getzep/graphiti), licença Apache 2.0, biblioteca Python e bancos de grafos suportados; exemplos REST/MCP não oferecem autenticação nem isolamento de usuários e não serão expostos como serviço de produção. A integração será iniciada pela infraestrutura e pelo backend, antes dos controles visuais.
 
 ### BLOQUEADAS
 
@@ -100,17 +101,6 @@ Nenhuma tarefa bloqueada.
 - **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
 - **Pedido do usuário:** aplicar `gatilho_++-.md` somente na mensagem que começar com `++-`; mensagens sem o prefixo não devem manter essa instrução ativada.
 - **Critérios:** arquivo lido integralmente; detectar o prefixo no início, compor instruções pontuais de análise aprofundada e explicação acessível e preservar as demais instruções. Testar prefixo no começo, no meio, ausente e mensagem seguinte; não persistir esse modo como preferência da conversa. Trechos que pedem contorno de proteções não serão convertidos em mecanismos de evasão; profundidade não deve ser apresentada como garantia de verdade absoluta.
-
----
-
-### 85 · Memória de longo prazo do app com Graphiti
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
-- **Pedido do usuário:** implementar Graphiti para lembrar detalhes e conversas e acompanhar o contexto da pessoa ao longo do tempo. A memória deve pertencer ao app e funcionar com qualquer provedor de IA configurado, sem ficar vinculada ao Jan.
-- **Critérios de implementação:** conferir a infraestrutura já existente; integrar `graphiti-core` em serviço próprio autenticado e banco de grafos suportado, com instalação e execução reproduzíveis. Preservar o MySQL e o histórico integral. Ingestão real de episódios, recuperação entre conversas da mesma conta, origem e data das lembranças, relações e atualização temporal de informações que mudaram. O contexto recuperado deve passar pelo fluxo comum do Motor Lyra e dos provedores; extração e embeddings podem usar configuração própria compatível, sem obrigar o provedor de resposta a executar a extração.
-- **Privacidade e qualidade:** isolamento entre titulares imposto no servidor, sem confiar em identificadores enviados pelo cliente; controles para consultar, corrigir e apagar memórias, integração à exportação e exclusão da conta e tratamento explícito de conteúdo sensível. Separar relato do usuário de inferência do modelo, sem apresentar hipóteses como fatos nem produzir diagnóstico psicológico automático. Respeitar as escolhas de privacidade e de envio a provedores externos.
-- **Validação e entrega:** testar persistência após reiniciar, lembrança entre conversas, troca de provedor, contradições ao longo do tempo, indisponibilidade do serviço, retentativas, exclusão e bloqueio de acesso entre contas. Comprovar com Graphiti e banco de grafos reais, além das rotas e da interface mobile/desktop, passando os gates e publicando commit e push próprios na main.
-- **Pesquisa inicial:** [Graphiti oficial](https://github.com/getzep/graphiti), licença Apache 2.0, biblioteca Python e bancos de grafos suportados; exemplos REST/MCP não oferecem autenticação nem isolamento de usuários e não serão expostos como serviço de produção. A tarefa foi autorizada e registrada; nenhuma integração Graphiti foi implementada ou validada ainda.
 
 ---
 
@@ -1507,3 +1497,12 @@ Nenhuma tarefa bloqueada.
 - **Nuvem:** catálogo público real do OpenRouter retornou 468 modelos pela interface; filtro alcançou os modelos `z-ai/`, além do antigo limite de 40. Geração autenticada em nuvem não foi executada por ausência de chaves; testes de contrato das APIs cobrem endereço editado, autenticação, resposta e falhas, sem serem apresentados como geração externa real.
 - **Persistência:** salvo Jan em `http://127.0.0.1:1337/v1`, com o identificador exato acima, como primeiro modelo; Motor da Lyra em segundo. Recarregar confirmou endereço, seleção e ordem, e o novo teste de geração passou. Provedores temporários da validação não foram salvos.
 - **Validação:** formatação, lint, tipos, 520 testes unitários, 176 integrações com MySQL e build passaram. Tela sem estouro horizontal em 1280 e 320 px; console sem erros ou avisos. Evidências: `.logs/qa77-jan-desktop.png`, `.logs/qa77-jan-mobile.png` e `.logs/qa77-*.log`. Documentação em `docs/ia-automatica.md`.
+
+### 79 · Histórico real de conversas no sidebar
+
+- **Status:** 🟢 finalizada · **Commit:** `7b42737` · **Push:** `5d25c2e..7b42737 main -> main`, confirmado por `git ls-remote`.
+- **Entrega:** três conversas recentes abaixo do chat no desktop e no celular; “Ver mais” pagina as demais e “Ver menos” recolhe. Seleção abre a conversa, identifica o item ativo e fecha o painel móvel. Títulos e ordem vêm das conversas reais. Carregamento, vazio, falha e retentativa têm estados próprios. Nome e logo “Lyra AI” continuam na tarefa 78, sem misturar sua publicação com esta tarefa.
+- **Backend:** migration 030 acrescenta conversas e turnos vinculados ao titular; rotas privadas de lista e leitura, histórico integral paginado em quarenta turnos, repetição concluída sem nova cobrança, refazer no mesmo turno e proteção contra respostas de tentativas vencidas. Exportação e exclusão da conta incluem o chat. Nenhuma chave de provedor é gravada no histórico. A janela enviada ao modelo contém até oito turnos anteriores da mesma conversa, limitada a doze mil caracteres; memória entre conversas é a tarefa 85.
+- **Prova em produção:** quatro conversas de verificação criadas pela interface na conta administrativa; MySQL confirmou quatro conversas e cinco turnos concluídos. Após recarregar, a conversa A recuperou mensagens e o modelo local lembrou “Jardim Azul”; refazer mudou somente a resposta e manteve as duas perguntas. Trocar de conversa durante a geração preservou a separação das mensagens. Desktop e celular mostraram três itens, expandiram para quatro e recolheram para três; teclado, seleção ativa e fechamento do painel móvel aprovados. Larguras 1440, 390 e 320 px sem estouro horizontal; console sem erros ou avisos.
+- **Gates:** `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 520 unitários, 183 integrações com MySQL real e build passaram. Sete integrações novas cobrem sessão, validação, isolamento, contexto pela rede, paginação, repetição, refazer, falhas, exportação e exclusão. Produção iniciada pelo launcher na porta 3000, saúde HTTP 200 com 32 migrations e login administrativo aprovado.
+- **Evidências:** `.logs/qa79-*.log`, `.logs/qa79-historico-desktop-final.png` e `.logs/qa79-historico-mobile-expandido.png`; decisões e fontes em `docs/historico-de-conversas.md`. Conversas antigas nunca armazenadas não são recuperáveis; as quatro conversas de QA são interações reais de verificação, sem registros históricos fabricados.
