@@ -1,43 +1,76 @@
-# Configuração lida do `.env.local` (fonte única, gerado por `pnpm env:init`):
+# Lyra-MetaCare | MySQL 9.7.2 LTS
+#
+# Fonte única de configuração: .env.local, gerado por `pnpm env:init`.
+# Sempre executar com:
 #   docker compose --env-file .env.local <comando>
-# Os scripts `pnpm db:*` e os launchers já passam o --env-file.
+#
+# As variáveis MYSQL_DATABASE, MYSQL_USER, MYSQL_PASSWORD e
+# MYSQL_ROOT_PASSWORD precisam existir e não podem estar vazias.
+#
+# ATENÇÃO: as variáveis de inicialização da imagem MySQL só criam
+# banco, usuário e permissões quando o diretório de dados está vazio.
+# Se o volume já estiver inicializado, editar o .env.local NÃO
+# altera automaticamente as credenciais existentes.
+
 services:
   mysql:
-    # MySQL 9.7 LTS (tag `lts` oficial). Volumes criados em 8.0 precisam do
-    # upgrade em etapas 8.0 → 8.4 → 9.7: `pnpm db:upgrade`. A autenticação é a
-    # padrão caching_sha2_password (mysql_native_password foi removido no 9.x).
     image: mysql:9.7.2
     container_name: lyra-metacare-mysql
+    restart: unless-stopped
+
+    # Configuração compatível com a aplicação Lyra-MetaCare.
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
-      # NOW()/CURRENT_TIMESTAMP em UTC de forma explícita (não depende do fuso
-      # da imagem nem do host); a aplicação envia datas em UTC (mysql2
-      # `timezone: 'Z'`).
       - --default-time-zone=+00:00
+
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE:?defina MYSQL_DATABASE no .env.local (pnpm env:init) e use docker compose --env-file .env.local}
-      MYSQL_USER: ${MYSQL_USER:?defina MYSQL_USER no .env.local (pnpm env:init) e use docker compose --env-file .env.local}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?defina MYSQL_PASSWORD no .env.local (pnpm env:init) e use docker compose --env-file .env.local}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?defina MYSQL_ROOT_PASSWORD no .env.local (pnpm env:init) e use docker compose --env-file .env.local}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:?defina MYSQL_DATABASE no .env.local}
+      MYSQL_USER: ${MYSQL_USER:?defina MYSQL_USER no .env.local}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?defina MYSQL_PASSWORD no .env.local}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?defina MYSQL_ROOT_PASSWORD no .env.local}
+
+    # Acesso apenas pelo computador local (porta externa configurável).
     ports:
-      # Somente na interface local: o banco não fica exposto na rede.
       - '127.0.0.1:${MYSQL_HOST_PORT:-3307}:3306'
+
+    # Preserva os dados durante reinicializações e atualizações de contêiner.
     volumes:
       - mysql_data:/var/lib/mysql
+
+    # Permite desligamento ordenado do MySQL.
+    stop_grace_period: 60s
+
     healthcheck:
-      # Saudável somente quando o usuário da aplicação autentica via TCP no
-      # banco da aplicação (o `mysqladmin ping` retorna sucesso até com
-      # "Access denied"). As credenciais vêm do ambiente do próprio container
-      # (`$$` evita a interpolação do Compose), sem aparecer no comando.
+      # Consulta SQL real via TCP, usando as credenciais da aplicação.
+      # O servidor só estará saudável se o banco existir e o usuário
+      # conseguir se autenticar e executar SELECT 1.
+      # O duplo cifrão ($$) preserva as variáveis para o shell do contêiner.
+      # As mensagens de erro do cliente são mantidas para diagnóstico
+      # por `docker inspect ... .State.Health`.
       test:
         - CMD-SHELL
-        - MYSQL_PWD="$$MYSQL_PASSWORD" mysql --protocol=TCP -h 127.0.0.1 -u"$$MYSQL_USER" -D "$$MYSQL_DATABASE" --batch --skip-column-names -e 'SELECT 1' >/dev/null
+        - |
+          if [ -z "$$MYSQL_USER" ] || [ -z "$$MYSQL_PASSWORD" ] || [ -z "$$MYSQL_DATABASE" ]; then
+            echo 'Healthcheck MySQL: variáveis MYSQL_USER, MYSQL_PASSWORD ou MYSQL_DATABASE ausentes.' >&2
+            exit 1
+          fi
+          MYSQL_PWD="$$MYSQL_PASSWORD" mysql --no-defaults --no-login-paths \
+            --protocol=TCP \
+            --host=127.0.0.1 \
+            --port=3306 \
+            --connect-timeout=5 \
+            --get-server-public-key \
+            --user="$$MYSQL_USER" \
+            --database="$$MYSQL_DATABASE" \
+            --batch \
+            --skip-column-names \
+            --execute='SELECT 1' > /dev/null
       interval: 10s
-      timeout: 5s
-      retries: 30
-      start_period: 30s
-      start_interval: 2s
+      timeout: 10s
+      retries: 18
+      start_period: 120s
+      start_interval: 5s
 
 volumes:
   mysql_data:

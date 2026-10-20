@@ -362,13 +362,18 @@ porta_ocupada(){ (exec 3<>"/dev/tcp/127.0.0.1/$1") 2>/dev/null; }
 CONTAINER=lyra-metacare-mysql
 estado_mysql(){ dk inspect --format '{{.State.Status}}{{if .State.Health}}/{{.State.Health.Status}}{{end}}' "$CONTAINER" 2>/dev/null; }
 mysql_saudavel(){ [ "$(estado_mysql)" = "running/healthy" ]; }
+subir_mysql(){
+  # O --wait do Compose pode encerrar imediatamente ao reencontrar um
+  # container unhealthy. A espera e o reparo autenticado são feitos abaixo.
+  cmd compose up -d mysql || morrer "Não foi possível iniciar o container do MySQL (veja o erro do Compose acima)."
+  cmd webnova --interno preparar-banco || morrer "O MySQL não ficou pronto; veja o diagnóstico acima. Os dados foram preservados."
+}
 garantir_mysql(){
   docker_acessivel || morrer "Docker indisponível. Rode a opção “Instalar banco de dados” (ou abra o Docker Desktop)."
   env_completo || morrer ".env.local incompleto. Rode a opção “Instalar banco de dados”."
-  if mysql_saudavel; then return 0; fi
   if [ -z "$(estado_mysql)" ]; then morrer "O container do MySQL ainda não existe. Rode a opção “Instalar banco de dados”."; fi
   passo "Subindo o MySQL existente (dados preservados no volume)"
-  cmd compose up -d --wait mysql || morrer "O MySQL não ficou saudável."
+  subir_mysql
 }
 # O orquestrador chama só a si mesmo: env, migrations e verificações são
 # implementados dentro dele (nenhum outro arquivo do projeto é executado).
@@ -530,9 +535,7 @@ if env_completo; then ja ".env.local completo"; else
 fi
 
 titulo "3/3 MySQL (Docker Compose, volume persistente)"
-if mysql_saudavel; then
-  ja "MySQL saudável na porta $(ler_env MYSQL_HOST_PORT)"
-else
+if ! mysql_saudavel; then
   porta="$(ler_env MYSQL_HOST_PORT)"; porta="${porta:-3307}"
   if [ -z "$(estado_mysql)" ] || [ "$(estado_mysql | cut -d/ -f1)" != "running" ]; then
     if porta_ocupada "$porta"; then
@@ -542,10 +545,9 @@ else
     fi
   fi
   [ "$(ler_env MYSQL_PORT)" = "$(ler_env MYSQL_HOST_PORT)" ] || definir_env MYSQL_PORT "$(ler_env MYSQL_HOST_PORT)"
-  cmd compose up -d --wait mysql || { compose logs --tail 30 mysql; morrer "O MySQL não ficou saudável (últimas linhas acima)."; }
-  mysql_saudavel || morrer "MySQL em estado inesperado: $(estado_mysql)."
-  ok "MySQL saudável na porta $(ler_env MYSQL_HOST_PORT)."
 fi
+subir_mysql
+ok "MySQL saudável na porta $(ler_env MYSQL_HOST_PORT)."
 concluido "Banco pronto. Próximos passos: “Infraestrutura do app” e “Migrations”."
 '''
 
@@ -2125,13 +2127,19 @@ def _argv_docker(args: List[str]) -> List[str]:
     return ["docker", *args]
 
 
-def mysql_sql(sql: str, *, root: bool = False, com_banco: bool = True, timeout: float = 600) -> str:
+def mysql_sql(sql: str, *, root: bool = False, com_banco: bool = True,
+              tcp: bool = False, timeout: float = 600) -> str:
     """Executa SQL no MySQL do container (cliente oficial da imagem). Para no primeiro erro."""
     env = ler_env_local()
     usuario = "root" if root else env.get("MYSQL_USER", "")
     senha = env.get("MYSQL_ROOT_PASSWORD" if root else "MYSQL_PASSWORD", "")
-    args = ["exec", "-i", "-e", "MYSQL_PWD", CONTAINER_DB, "mysql", "--default-character-set=utf8mb4",
+    args = ["exec", "-i", "-e", "MYSQL_PWD", CONTAINER_DB, "mysql", "--no-defaults", "--no-login-paths",
+            "--default-character-set=utf8mb4", "--connect-timeout=5",
             "--batch", "--skip-column-names", f"-u{usuario}"]
+    if tcp:
+        args += ["--protocol=TCP", "--host=127.0.0.1", "--port=3306", "--get-server-public-key"]
+    else:
+        args += ["--protocol=SOCKET", "--host=localhost"]
     if com_banco:
         args.append(f"-D{env.get('MYSQL_DATABASE', '')}")
     proc = subprocess.run(_argv_docker(args), input=sql, text=True, capture_output=True, timeout=timeout,
@@ -2140,6 +2148,135 @@ def mysql_sql(sql: str, *, root: bool = False, com_banco: bool = True, timeout: 
     if proc.returncode != 0:
         raise FalhaInterna(erro or f"mysql terminou com código {proc.returncode}")
     return proc.stdout
+
+
+def ocultar_segredos(texto: str) -> str:
+    """Diagnóstico sem despejar Config.Env nem valores sensíveis do .env.local."""
+    valores = ler_env_local()
+    for chave, valor in sorted(valores.items(), key=lambda item: len(item[1]), reverse=True):
+        if valor and re.search(r"PASSWORD|SECRET|TOKEN|API_KEY", chave):
+            # Uma senha curta não pode apagar partes de códigos como ERROR
+            # 1045 ou de versões. Ocultar apenas ocorrências isoladas nesse caso.
+            if len(valor) < 4:
+                texto = re.sub(r"(?<!\w)" + re.escape(valor) + r"(?!\w)", "[segredo oculto]", texto)
+            else:
+                texto = texto.replace(valor, "[segredo oculto]")
+    return texto
+
+
+def inspecionar_saude_mysql() -> Dict[str, object]:
+    # Nunca consultar a inspeção inteira: Config.Env contém as senhas.
+    proc = subprocess.run(
+        _argv_docker(["inspect", "--format", "{{json .State}}", CONTAINER_DB]),
+        env=ambiente(), capture_output=True, text=True, timeout=15,
+    )
+    if proc.returncode:
+        raise FalhaInterna(ocultar_segredos(proc.stderr.strip()) or "Container do MySQL não encontrado.")
+    return json.loads(proc.stdout)
+
+
+def diagnosticar_mysql(estado: Dict[str, object], erro: str) -> None:
+    print(f"[banco] Estado: {estado.get('Status', 'desconhecido')} · erro da consulta: {ocultar_segredos(erro)}")
+    saude = estado.get("Health") or {}
+    print(f"[banco] Healthcheck: {saude.get('Status', 'ausente')}")
+    for tentativa in saude.get("Log", [])[-3:]:
+        print(f"[banco] Healthcheck em {tentativa.get('End', '?')} · código {tentativa.get('ExitCode', '?')}: "
+              f"{ocultar_segredos(str(tentativa.get('Output', '')).strip())}")
+    if estado.get("Error"):
+        print(f"[banco] Docker: {ocultar_segredos(str(estado['Error']))}")
+
+
+def reconciliar_acesso_mysql() -> None:
+    """Repara apenas o acesso da aplicação, usando root já autenticado, sem remover dados."""
+    env = ler_env_local()
+    banco, usuario = env.get("MYSQL_DATABASE", ""), env.get("MYSQL_USER", "")
+    if not re.fullmatch(r"[A-Za-z0-9_]{1,64}", banco):
+        raise FalhaInterna("MYSQL_DATABASE deve ter de 1 a 64 letras, números ou sublinhados para o reparo automático.")
+    if not re.fullmatch(r"[A-Za-z0-9_]{1,32}", usuario) or usuario.lower() == "root":
+        raise FalhaInterna("MYSQL_USER deve ser um usuário próprio da aplicação, com até 32 letras, números ou sublinhados.")
+    if not env.get("MYSQL_PASSWORD") or not env.get("MYSQL_ROOT_PASSWORD"):
+        raise FalhaInterna("MYSQL_PASSWORD e MYSQL_ROOT_PASSWORD precisam estar preenchidos no .env.local.")
+    # Confere root antes de qualquer DDL; nunca usa skip-grant-tables nem redefine root.
+    try:
+        mysql_sql("SELECT 1", root=True, com_banco=False, timeout=15)
+    except FalhaInterna as erro:
+        raise FalhaInterna(
+            "O acesso da aplicação falhou e o root do .env.local também não autenticou. "
+            "As variáveis MYSQL_* só inicializam volumes vazios; recriar o container não troca a senha gravada. "
+            "Restaure no .env.local a credencial root usada ao inicializar este volume e repita a ação. "
+            "Nenhuma senha ou dado foi alterado. Detalhe: " + ocultar_segredos(str(erro))
+        ) from erro
+    # localhost/127.0.0.1 existentes podem preceder a conta '%'; só essas
+    # contas locais da aplicação são reconciliadas. Outras contas ficam intactas.
+    hosts = mysql_sql(
+        f"SELECT Host FROM mysql.user WHERE User={sql_texto(usuario)} "
+        "AND Host IN ('%', 'localhost', '127.0.0.1')", root=True, com_banco=False, timeout=15,
+    ).splitlines()
+    hosts = sorted(set(hosts) | {"%"})
+    if any(host not in ("%", "localhost", "127.0.0.1") for host in hosts):
+        raise FalhaInterna("Resposta inesperada ao consultar as contas locais; reparo interrompido.")
+    # No GRANT, '_' é curinga mesmo entre crases. Escapá-lo evita conceder
+    # acesso a outros schemas com nomes semelhantes ao banco da aplicação.
+    banco_grant = banco.replace("_", "\\_")
+    comandos = ["SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION'",
+                f"CREATE DATABASE IF NOT EXISTS `{banco}` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci"]
+    senha = sql_texto(env["MYSQL_PASSWORD"])
+    for host in hosts:
+        conta = f"{sql_texto(usuario)}@{sql_texto(host)}"
+        comandos += [f"CREATE USER IF NOT EXISTS {conta} IDENTIFIED WITH caching_sha2_password BY {senha}",
+                     f"ALTER USER {conta} IDENTIFIED WITH caching_sha2_password BY {senha}",
+                     f"GRANT ALL PRIVILEGES ON `{banco_grant}`.* TO {conta}"]
+    mysql_sql(";\n".join(comandos) + ";", root=True, com_banco=False, timeout=30)
+    # Não afirmar sucesso pelo DDL: validar a mesma conexão TCP usada pelo healthcheck.
+    if mysql_sql("SELECT 1", tcp=True, timeout=15).strip() != "1":
+        raise FalhaInterna("O reparo terminou, mas SELECT 1 não retornou o resultado esperado.")
+    print("[banco] Acesso da aplicação reconciliado com o .env.local e validado por TCP; dados preservados.")
+
+
+def interno_preparar_banco() -> int:
+    """Aguarda SQL autenticado e healthcheck, inclusive após um estado unhealthy anterior."""
+    limite = time.monotonic() + 310  # 120 s iniciais + 18 tentativas de 10 s + margem.
+    estado: Dict[str, object] = {}
+    erro_consulta = "A consulta ainda não foi executada."
+    reparado = False
+    print("[banco] Aguardando SELECT 1 via TCP e healthcheck do Docker (até 310 s).", flush=True)
+    try:
+        while time.monotonic() < limite:
+            estado = inspecionar_saude_mysql()
+            status = estado.get("Status")
+            if status in ("exited", "dead", "removing"):
+                raise FalhaInterna(f"O container parou antes de ficar pronto (estado {status}).")
+            if status != "running":
+                time.sleep(2)
+                continue
+            try:
+                resultado = mysql_sql("SELECT 1", tcp=True, timeout=15).strip()
+                if resultado != "1":
+                    raise FalhaInterna("SELECT 1 não retornou 1.")
+                erro_consulta = "SELECT 1 aprovado."
+                saude = estado.get("Health") or {}
+                if not saude:
+                    raise FalhaInterna("Container sem healthcheck. Confira o serviço mysql no compose.yaml.")
+                if saude.get("Status") == "healthy":
+                    print("[banco] SELECT 1 autenticado via TCP e Docker healthy: banco pronto.")
+                    return 0
+            except FalhaInterna as erro:
+                erro_consulta = str(erro)
+                # Reparo somente para erros de acesso/schema comprovados. Nunca
+                # tentar DDL por falha de rede, TLS, timeout ou sintaxe do healthcheck.
+                if re.search(r"ERROR (1044|1045|1049|1130)\b", erro_consulta) and not reparado:
+                    print("[banco] Falha de acesso/schema confirmada; verificando root para reparar o acesso da aplicação.", flush=True)
+                    reparado = True
+                    reconciliar_acesso_mysql()
+                elif "sem healthcheck" in erro_consulta:
+                    raise
+            time.sleep(2)
+        raise FalhaInterna("Tempo limite de 310 s atingido sem SQL autenticado e Docker healthy.")
+    except (FalhaInterna, subprocess.TimeoutExpired, OSError, ValueError) as erro:
+        print(f"[banco] ERRO: {ocultar_segredos(str(erro))}")
+        diagnosticar_mysql(estado, erro_consulta)
+        print("[banco] Para consultar os logs do servidor: docker compose --env-file .env.local logs --tail 50 mysql")
+        return 1
 
 
 def sql_texto(valor: str) -> str:
@@ -2379,6 +2516,8 @@ def interno(argv: List[str]) -> int:
         return interno_env()
     if comando == "banco-status":
         return interno_banco_status()
+    if comando == "preparar-banco":
+        return interno_preparar_banco()
     if comando == "migrar":
         return interno_migrar()
     if comando == "saude":
