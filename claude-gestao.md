@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **92%** |
-| Tarefas totais     | 84                             |
+| Progresso          | `██████████████████░░` **91%** |
+| Tarefas totais     | 85                             |
 | 🟢 Finalizadas     | 77                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 6                              |
+| ⚪ A iniciar       | 7                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-20                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (77 ÷ 84 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (77 ÷ 85 ≈ 91%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -55,6 +55,7 @@
 - **Pedido do usuário:** abaixo de “Lyra AI”, mostrar as três conversas mais recentes e ocultar as demais até a ação “Ver mais”, logo após a última conversa visível; pesquisar na internet as tendências de 2026 para navegação e histórico, com interação inovadora, moderna, bonita e simples para usuários leigos.
 - **Critérios:** auditar o armazenamento atual de conversas; implementar persistência real e acesso isolado por usuário, se necessário, antes da interface; abrir a conversa escolhida com suas mensagens, manter histórico após recarregar, atualizar ordem e título conforme o fluxo real e tratar carregamento, vazio e falha. Validar teclado, celular e desktop, sem conversas fictícias nem lista fixa. Commit e push próprios ao concluir.
 - **Verificação inicial:** a conversa atual existe apenas no estado React de `ChatAssistantContent`; não há tabelas ou rotas de histórico. Será acrescentada persistência real por usuário, com integração à exportação e exclusão da conta. Mensagens antigas nunca armazenadas não serão apresentadas como recuperadas.
+- **Andamento comprovado:** migration 030 aplicada no banco existente, sem apagar dados; sete testes novos passaram no MySQL real, incluindo envio do contexto pela conexão HTTP, e a suíte completa passou com 183 integrações. Cobertura de sessão, gravação/reabertura, repetição sem nova cobrança, paginação, isolamento entre titulares, falha/retentativa e exportação/exclusão. Interface de histórico e ligação do chat em validação; tarefa ainda não concluída nem publicada.
 
 ### BLOQUEADAS
 
@@ -99,6 +100,17 @@ Nenhuma tarefa bloqueada.
 - **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
 - **Pedido do usuário:** aplicar `gatilho_++-.md` somente na mensagem que começar com `++-`; mensagens sem o prefixo não devem manter essa instrução ativada.
 - **Critérios:** arquivo lido integralmente; detectar o prefixo no início, compor instruções pontuais de análise aprofundada e explicação acessível e preservar as demais instruções. Testar prefixo no começo, no meio, ausente e mensagem seguinte; não persistir esse modo como preferência da conversa. Trechos que pedem contorno de proteções não serão convertidos em mecanismos de evasão; profundidade não deve ser apresentada como garantia de verdade absoluta.
+
+---
+
+### 85 · Memória de longo prazo do app com Graphiti
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Pedido do usuário:** implementar Graphiti para lembrar detalhes e conversas e acompanhar o contexto da pessoa ao longo do tempo. A memória deve pertencer ao app e funcionar com qualquer provedor de IA configurado, sem ficar vinculada ao Jan.
+- **Critérios de implementação:** conferir a infraestrutura já existente; integrar `graphiti-core` em serviço próprio autenticado e banco de grafos suportado, com instalação e execução reproduzíveis. Preservar o MySQL e o histórico integral. Ingestão real de episódios, recuperação entre conversas da mesma conta, origem e data das lembranças, relações e atualização temporal de informações que mudaram. O contexto recuperado deve passar pelo fluxo comum do Motor Lyra e dos provedores; extração e embeddings podem usar configuração própria compatível, sem obrigar o provedor de resposta a executar a extração.
+- **Privacidade e qualidade:** isolamento entre titulares imposto no servidor, sem confiar em identificadores enviados pelo cliente; controles para consultar, corrigir e apagar memórias, integração à exportação e exclusão da conta e tratamento explícito de conteúdo sensível. Separar relato do usuário de inferência do modelo, sem apresentar hipóteses como fatos nem produzir diagnóstico psicológico automático. Respeitar as escolhas de privacidade e de envio a provedores externos.
+- **Validação e entrega:** testar persistência após reiniciar, lembrança entre conversas, troca de provedor, contradições ao longo do tempo, indisponibilidade do serviço, retentativas, exclusão e bloqueio de acesso entre contas. Comprovar com Graphiti e banco de grafos reais, além das rotas e da interface mobile/desktop, passando os gates e publicando commit e push próprios na main.
+- **Pesquisa inicial:** [Graphiti oficial](https://github.com/getzep/graphiti), licença Apache 2.0, biblioteca Python e bancos de grafos suportados; exemplos REST/MCP não oferecem autenticação nem isolamento de usuários e não serão expostos como serviço de produção. A tarefa foi autorizada e registrada; nenhuma integração Graphiti foi implementada ou validada ainda.
 
 ---
 
