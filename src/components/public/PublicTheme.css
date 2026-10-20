@@ -1,0 +1,49 @@
+/* Identidade compartilhada das telas públicas. A fonte é carregada uma
+ * única vez pelo next/font no layout raiz, com peso regular e display swap. */
+.lyra-public-theme {
+  --public-fundo: #fcfaf7;
+  --public-superficie: #fffefa;
+  --public-texto: #133238;
+  --public-secundario: #4b6163;
+  --public-borda: #dbe7e4;
+  --public-teal: #087878;
+  --public-suave: #e6f5f5;
+  --public-coral: #a3381a;
+}
+
+.imprima-regular,
+.lyra-public-theme
+  :where(
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    a,
+    span,
+    strong,
+    em,
+    label,
+    input,
+    button,
+    summary,
+    li,
+    dt,
+    dd,
+    [role='tab']
+  ) {
+  font-family: var(--font-imprima), 'Imprima', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.dark .lyra-public-theme {
+  --public-fundo: #101f23;
+  --public-superficie: #182b30;
+  --public-texto: #eaf5f3;
+  --public-secundario: #b1c8c7;
+  --public-borda: #345256;
+  --public-teal: #58c9c1;
+  --public-suave: #253d41;
+  --public-coral: #ffab91;
+}

@@ -99,7 +99,44 @@ frio (matiz 346) justamente para não se confundir com o coral de destaque.
   ações), com as escalas de tipografia do construtor.
 - `AccessDenied`: tela única de acesso negado das áreas administrativas.
 
-## Referências
+## Telas públicas: landing e login
+
+- Desde 2026-10-20, por solicitação do usuário, **Imprima Regular (400)** é
+  a fonte padrão dessas duas telas, incluindo títulos, textos e controles.
+  O `next/font/google` carrega a fonte uma única vez e a serve no próprio
+  site, com `display: swap`; a variável `--font-imprima` só é aplicada nas
+  telas públicas. As demais telas mantêm suas fontes.
+- `src/components/public/PublicTheme.css` compartilha os fundos e superfícies
+  de cada tema, os tons teal e coral e a tipografia; o login usa borda
+  fina, marca e introdução agrupadas, formulário à direita no desktop e
+  logo após o título no celular. Não adiciona efeitos decorativos.
+- A sequência inicial é **Início → Leituras de Mapas → Jornada → Benefícios
+  → Planos → Dúvidas → Sobre**. O padrão antigo é reconhecido e atualizado
+  na renderização. Uma ordem personalizada no Construtor continua válida,
+  e o menu acompanha a ordem dos blocos visíveis. Sobre precede o acesso
+  rápido e o convite final.
+- As leituras apresentam os três métodos do motor e informam os limites
+  reais: sem cálculo de Desenho Humano nem dedução de conteúdos pessoais
+  simbólicos. O bloco é informativo, sem botão de acesso próprio.
+- Refinamento de 2026-10-20: textos de leitura da landing em 17 px como
+  base, seções com 32–48 px de respiro vertical e cartões mais compactos.
+  No login, campos em 17 px, rótulos em 16 px e coluna introdutória de até
+  520 px, com textos alinhados à esquerda e tipografia um pouco menor;
+  cabeçalho e aviso mantêm todos os textos em menos linhas. Em janelas de
+  notebook baixas, intervalos e preenchimentos diminuem sem reduzir fontes
+  nem recortar o conteúdo; o documento continua rolável quando necessário.
+- Os planos têm preenchimento de 18 px, preço até 36 px e descrição
+  completa expansível em “Sobre este plano”. Mapas e indicadores também
+  usam preenchimentos menores; seções com 32–48 px (planos com 18 px
+  no desktop e 32 px no celular).
+  A grade de planos mantém três colunas acima de 900 px e empilha abaixo.
+- **Padrão de tema solicitado em 2026-10-20:** escuro somente na landing
+  e no login, preservando ambos os temas e a identidade existente. A escolha
+  pública é guardada separadamente da área interna; não modifica sua
+  preferência nem o padrão claro das demais rotas. Essa solicitação
+  específica prevalece sobre a preferência geral anterior por tema claro.
+
+## Referências históricas
 
 - Proposta aprovada: sistema visual, login, dashboard e metas, publicados como
   artefato de design em 2026-10-09.

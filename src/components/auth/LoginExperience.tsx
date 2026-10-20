@@ -22,6 +22,8 @@ import {
   ROTA_POLITICA_DE_PRIVACIDADE,
   ROTA_TERMOS_DE_USO,
 } from '@/lib/lgpd/documentos';
+import '../public/PublicTheme.css';
+import './LoginExperience.css';
 
 type SubmitMode = 'login' | 'register' | null;
 
@@ -100,10 +102,10 @@ export function LoginExperience({
   };
   const buttonStyle: CSSProperties = {
     height: `${(3 * sizing.buttonScale).toFixed(3)}rem`,
-    ...escalaFluida(0.9375, typography.buttonLabel),
+    ...escalaFluida(1.0625, typography.buttonLabel),
   };
-  const fieldStyle = escalaFluida(0.9375, typography.fieldLabel);
-  const labelStyle = escalaFluida(0.875, typography.fieldLabel);
+  const fieldStyle = escalaFluida(1.0625, typography.fieldLabel);
+  const labelStyle = escalaFluida(1, typography.fieldLabel);
 
   async function handleLogin(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -162,9 +164,9 @@ export function LoginExperience({
     'text-muted-foreground transition-colors group-focus-within:text-primary';
 
   const larguraDaIntroducao = {
-    maxWidth: `${Math.round(560 * sizing.introCard)}px`,
+    maxWidth: `${Math.round(520 * sizing.introCard)}px`,
   };
-  const paddingDaColunaEsquerda = 'px-6 sm:px-10 lg:px-16';
+  const paddingDaColunaEsquerda = 'login-coluna-intro';
 
   // Ordem do conteúdo (DOM e leitura): marca → título → formulário →
   // detalhes da introdução → volta à landing. No celular é exatamente essa a
@@ -175,17 +177,22 @@ export function LoginExperience({
   return (
     <main
       id={previewMode ? undefined : 'conteudo-principal'}
-      className="grid min-h-dvh w-full grid-cols-1 content-start bg-background font-sans text-foreground lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:grid-rows-[auto_minmax(0,1fr)_minmax(0,1fr)_auto] lg:content-stretch"
+      className="lyra-public-theme imprima-regular lyra-login grid min-h-dvh w-full grid-cols-1 content-start lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:grid-rows-[auto_auto_auto_auto]"
+      style={
+        {
+          '--login-largura-intro': larguraDaIntroducao.maxWidth,
+        } as CSSProperties
+      }
     >
       <div
         className={cn(
-          'flex min-w-0 items-center gap-2.5 pt-6 sm:pt-10 lg:col-start-1 lg:row-start-1 lg:pt-14',
+          'login-marca flex min-w-0 items-center gap-1 lg:col-start-1 lg:row-start-1',
           paddingDaColunaEsquerda
         )}
       >
         <MarcaLyra tamanho="40px" prioridade />
-        <span className="font-display text-xl font-semibold lowercase tracking-tight text-foreground">
-          {auth.brandText}
+        <span className="login-nome-marca text-foreground">
+          {auth.brandText === 'lyra' ? 'Lyra MetaCare' : auth.brandText}
         </span>
         {/* Na pré-visualização do construtor o botão mudaria o tema do
             próprio painel administrativo. */}
@@ -195,17 +202,17 @@ export function LoginExperience({
       {intro.visible ? (
         <div
           className={cn(
-            'min-w-0 pb-6 pt-6 lg:col-start-1 lg:row-start-2 lg:self-end lg:pb-0 lg:pt-10',
+            'login-abertura min-w-0 lg:col-start-1 lg:row-start-2',
             paddingDaColunaEsquerda
           )}
         >
           <div style={larguraDaIntroducao}>
-            <p className="mb-3 text-sm font-medium text-primary lg:mb-4">
-              {intro.badgeText}
-            </p>
+            {intro.badgeText !== 'Lyra MetaCare' ? (
+              <p className="mb-2 text-sm text-primary">{intro.badgeText}</p>
+            ) : null}
             <h1
               className="font-display font-semibold leading-[1.08] tracking-[-0.03em] text-foreground break-words"
-              style={escalaResponsiva(3, typography.introTitle)}
+              style={escalaResponsiva(2.75, typography.introTitle)}
             >
               {intro.title}
             </h1>
@@ -218,17 +225,19 @@ export function LoginExperience({
       )}
 
       {/* Formulário: logo após o título no celular; coluna direita no desktop */}
-      <section className="flex min-w-0 items-start justify-center border-y border-border bg-card px-6 py-8 sm:px-10 sm:py-10 lg:col-start-2 lg:row-span-4 lg:row-start-1 lg:items-center lg:border-y-0 lg:border-l lg:px-12 lg:py-14">
+      <section
+        aria-labelledby="titulo-acesso"
+        className="login-acesso flex min-w-0 items-start justify-center lg:col-start-2 lg:row-span-4 lg:row-start-1"
+      >
         <div
           className="w-full"
           style={{ maxWidth: `${Math.round(400 * sizing.authCard)}px` }}
         >
           {/* Selo e descrição do bloco de acesso, editáveis no construtor de
               UI (login.auth.badgeText e login.auth.description). */}
-          <p className="mb-2 text-sm font-medium text-primary">
-            {auth.badgeText}
-          </p>
+          <p className="mb-1 text-base text-primary">{auth.badgeText}</p>
           <h2
+            id="titulo-acesso"
             className="font-display font-semibold tracking-tight text-foreground"
             style={escalaFluida(1.75, typography.authTitle)}
           >
@@ -236,21 +245,15 @@ export function LoginExperience({
           </h2>
           <p
             className="mt-2 leading-relaxed text-muted-foreground"
-            style={escalaFluida(0.9375, typography.authBody)}
+            style={escalaFluida(1.0625, typography.authBody)}
           >
-            {auth.title}
-          </p>
-          <p
-            className="mt-1 leading-relaxed text-muted-foreground"
-            style={escalaFluida(0.8125, typography.authBody)}
-          >
-            {auth.description}
+            {auth.title} <span>{auth.description}</span>
           </p>
 
           <Tabs
             value={isRegistering ? 'register' : 'login'}
             onValueChange={(value) => setIsRegistering(value === 'register')}
-            className="mt-6"
+            className="mt-4"
           >
             <TabsList className="grid w-full grid-cols-2">
               <TabsTrigger value="login">{auth.loginTabLabel}</TabsTrigger>
@@ -259,9 +262,9 @@ export function LoginExperience({
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="login" className="mt-6">
-              <form onSubmit={handleLogin} className="space-y-5">
-                <div className="space-y-2">
+            <TabsContent value="login" className="mt-4">
+              <form onSubmit={handleLogin} className="flex flex-col gap-3">
+                <div className="flex flex-col gap-1.5">
                   <Label
                     htmlFor="login-email"
                     className="font-medium text-foreground"
@@ -292,7 +295,7 @@ export function LoginExperience({
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="flex flex-col gap-1.5">
                   <Label
                     htmlFor="login-password"
                     className="font-medium text-foreground"
@@ -368,10 +371,10 @@ export function LoginExperience({
               </form>
             </TabsContent>
 
-            <TabsContent value="register" className="mt-6">
-              <form onSubmit={handleRegister} className="space-y-5">
+            <TabsContent value="register" className="mt-4">
+              <form onSubmit={handleRegister} className="flex flex-col gap-3">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className="min-w-0 space-y-2">
+                  <div className="min-w-0 flex flex-col gap-1.5">
                     <Label
                       htmlFor="reg-firstname"
                       className="font-medium text-foreground"
@@ -390,7 +393,7 @@ export function LoginExperience({
                       disabled={previewMode}
                     />
                   </div>
-                  <div className="min-w-0 space-y-2">
+                  <div className="min-w-0 flex flex-col gap-1.5">
                     <Label
                       htmlFor="reg-lastname"
                       className="font-medium text-foreground"
@@ -411,7 +414,7 @@ export function LoginExperience({
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="flex flex-col gap-1.5">
                   <Label
                     htmlFor="reg-email"
                     className="font-medium text-foreground"
@@ -442,7 +445,7 @@ export function LoginExperience({
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="flex flex-col gap-1.5">
                   <Label
                     htmlFor="reg-password"
                     className="font-medium text-foreground"
@@ -534,7 +537,7 @@ export function LoginExperience({
             </TabsContent>
           </Tabs>
 
-          <p className="mt-6 text-center text-sm text-muted-foreground">
+          <p className="login-troca-conta mt-2 text-center text-base text-muted-foreground">
             {isRegistering ? 'Já tem uma conta?' : 'Ainda não tem conta?'}
             <button
               type="button"
@@ -546,8 +549,8 @@ export function LoginExperience({
           </p>
 
           <p
-            className="mt-6 border-t border-border pt-5 text-center leading-5 text-muted-foreground"
-            style={escalaFluida(0.8125, typography.footerText)}
+            className="mt-2 border-t border-border pt-3 text-center leading-5 text-muted-foreground"
+            style={escalaFluida(0.875, typography.footerText)}
           >
             <span className="font-medium text-foreground">
               {auth.footerEyebrow}
@@ -560,33 +563,33 @@ export function LoginExperience({
       {intro.visible ? (
         <div
           className={cn(
-            'min-w-0 pt-8 lg:col-start-1 lg:row-start-3 lg:self-start lg:pt-4',
+            'login-detalhes min-w-0 lg:col-start-1 lg:row-start-3 lg:self-start',
             paddingDaColunaEsquerda
           )}
         >
           <div style={larguraDaIntroducao}>
             <p
               className="font-display font-medium tracking-tight text-foreground/80"
-              style={escalaFluida(1.375, typography.introTitle)}
+              style={escalaFluida(1.25, typography.introTitle)}
             >
               {intro.accentTitle}
             </p>
             <p
-              className="mt-5 leading-relaxed text-muted-foreground"
-              style={escalaFluida(1.125, typography.introBody)}
+              className="mt-3 leading-relaxed text-muted-foreground"
+              style={escalaFluida(1.0625, typography.introBody)}
             >
               {intro.description}
             </p>
 
             {intro.highlights.length > 0 ? (
-              <ul className="mt-8 flex flex-col gap-4">
+              <ul className="login-destaques mt-4 flex flex-col gap-3">
                 {intro.highlights.map((highlight) => {
                   const HighlightIcon = getBuilderIcon(highlight.icon);
                   return (
                     <li
                       key={highlight.id}
                       className="flex items-start gap-3 leading-6"
-                      style={escalaFluida(0.9375, typography.highlightBody)}
+                      style={escalaFluida(1, typography.highlightBody)}
                     >
                       <HighlightIcon
                         className={cn(
@@ -598,10 +601,7 @@ export function LoginExperience({
                       <span className="min-w-0">
                         <strong
                           className="font-semibold text-foreground"
-                          style={escalaFluida(
-                            0.9375,
-                            typography.highlightTitle
-                          )}
+                          style={escalaFluida(1, typography.highlightTitle)}
                         >
                           {highlight.title}
                         </strong>
@@ -618,8 +618,8 @@ export function LoginExperience({
 
             {/* Nota da introdução (login.intro.noteEyebrow e noteText). */}
             <p
-              className="mt-8 border-l-2 border-primary pl-4 leading-6 text-muted-foreground"
-              style={escalaFluida(0.875, typography.introBody)}
+              className="login-nota mt-4 leading-6 text-muted-foreground"
+              style={escalaFluida(0.9375, typography.introBody)}
             >
               <span className="block font-medium text-foreground">
                 {intro.noteEyebrow}
@@ -632,7 +632,7 @@ export function LoginExperience({
 
       <div
         className={cn(
-          'pb-8 pt-6 sm:pb-10 lg:col-start-1 lg:row-start-4 lg:pb-14 lg:pt-8',
+          'login-rodape pt-3 lg:col-start-1 lg:row-start-4',
           paddingDaColunaEsquerda
         )}
       >
@@ -645,7 +645,7 @@ export function LoginExperience({
         </Link>
         <nav
           aria-label="Documentos legais"
-          className="mt-2 flex flex-wrap gap-x-4 text-xs text-muted-foreground"
+          className="login-legais flex flex-wrap justify-center gap-x-4 text-sm text-muted-foreground"
         >
           <Link
             href={ROTA_POLITICA_DE_PRIVACIDADE}

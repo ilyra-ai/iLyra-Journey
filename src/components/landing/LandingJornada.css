@@ -5,22 +5,22 @@
  * aprovada pelo proprietário, sem conter retratos ou rostos de pessoas.
  */
 .lyra-jornada {
-  --j-turquesa: #087878;
+  --j-turquesa: var(--public-teal);
   --j-turquesa-profundo: #07565b;
   --j-turquesa-suave: #e6f5f5;
   --j-coral: #f8764f;
   --j-coral-texto: #a3381a;
-  --j-escuro: #133238;
-  --j-secundario: #4b6163;
-  --j-borda: #dbe7e4;
-  --j-fundo: #fcfaf7;
-  --j-branco: #fffefa;
+  --j-escuro: var(--public-texto);
+  --j-secundario: var(--public-secundario);
+  --j-borda: var(--public-borda);
+  --j-fundo: var(--public-fundo);
+  --j-branco: var(--public-superficie);
   --j-cobre: #b36b50;
   --j-container: 1260px;
   color: var(--j-escuro);
   background: var(--j-fundo);
-  font-family: var(--font-inter), Inter, ui-sans-serif, system-ui, sans-serif;
-  font-size: 15px;
+  font-family: var(--font-imprima), 'Imprima', sans-serif;
+  font-size: 17px;
   line-height: 1.6;
   min-height: 100vh;
   overflow: clip;
@@ -80,12 +80,15 @@
   width: min(100% - 52px, var(--j-container));
   margin-inline: auto;
 }
+.lyra-jornada section[id] {
+  scroll-margin-top: 100px;
+}
 .lyra-jornada h1,
 .lyra-jornada h2,
 .lyra-jornada h3,
 .lyra-jornada .jornada-marca span,
 .lyra-jornada .jornada-rodape-marca strong {
-  font-family: Georgia, 'Times New Roman', ui-serif, serif;
+  font-family: var(--font-imprima), 'Imprima', sans-serif;
   font-weight: 400;
 }
 
@@ -102,7 +105,7 @@
   min-height: 82px;
   display: flex;
   align-items: center;
-  gap: 36px;
+  gap: 20px;
 }
 .lyra-jornada .jornada-marca {
   display: inline-flex;
@@ -127,7 +130,7 @@
   padding: 10px 1px;
   white-space: nowrap;
   color: #254b50;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   transition: color 0.18s ease;
 }
@@ -142,7 +145,7 @@
   flex: none;
 }
 .lyra-jornada .jornada-entrar {
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
 }
 .lyra-jornada .jornada-abrir-menu {
@@ -167,7 +170,7 @@
   gap: 10px;
   border: 1px solid transparent;
   border-radius: 999px;
-  font-size: calc(14px * var(--j-botao, 1) * var(--j-botao-texto, 1));
+  font-size: calc(16px * var(--j-botao, 1) * var(--j-botao-texto, 1));
   font-weight: 700;
   line-height: 1.3;
   transition:
@@ -205,7 +208,7 @@
   min-height: 45px;
   padding: 10px 0;
   align-items: center;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   color: var(--j-turquesa-profundo);
   border-bottom: 1px solid var(--j-coral);
@@ -259,7 +262,7 @@
 .lyra-jornada .jornada-hero-texto {
   position: relative;
   z-index: 2;
-  padding-block: 72px 85px;
+  padding-block: 48px 56px;
   max-width: 600px;
 }
 .lyra-jornada .jornada-etiqueta {
@@ -267,7 +270,7 @@
   align-items: center;
   gap: 8px;
   color: var(--j-coral-texto);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   letter-spacing: 0.12em;
   line-height: 1.6;
@@ -290,8 +293,8 @@
 .lyra-jornada .jornada-hero-descricao {
   max-width: 470px;
   margin-block: 24px 26px;
-  font-size: clamp(14px, calc(16px * var(--j-corpo, 1)), 18px);
-  line-height: 1.85;
+  font-size: clamp(17px, calc(18px * var(--j-corpo, 1)), 20px);
+  line-height: 1.6;
   color: var(--j-secundario);
   text-wrap: pretty;
 }
@@ -300,7 +303,7 @@
   display: flex;
   align-items: center;
   gap: 13px;
-  font-size: 11px;
+  font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.15em;
   font-weight: 700;
@@ -389,7 +392,7 @@
 .lyra-jornada .jornada-grid-pilares {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  padding-block: 45px 42px;
+  padding-block: 28px;
 }
 .lyra-jornada .jornada-pilar {
   position: relative;
@@ -421,7 +424,7 @@
   margin-block: 14px 5px;
 }
 .lyra-jornada .jornada-pilar p {
-  font-size: 13px;
+  font-size: 15px;
   line-height: 1.7;
   color: var(--j-secundario);
 }
@@ -463,13 +466,13 @@
 .lyra-jornada .jornada-manifesto-texto > p:not(.jornada-etiqueta) {
   max-width: 520px;
   color: var(--j-secundario);
-  font-size: 15px;
-  line-height: 1.8;
+  font-size: 17px;
+  line-height: 1.6;
   margin-top: 18px;
 }
 .lyra-jornada .jornada-compromisso {
   margin-top: 22px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -489,25 +492,25 @@
 
 /* Sistema de secoes legivel e acessivel */
 .lyra-jornada .jornada-secao {
-  padding: clamp(67px, 7cqi, 104px) 0;
+  padding: clamp(32px, 3.5cqi, 48px) 0;
   scroll-margin-top: 92px;
 }
 .lyra-jornada .jornada-secao-intro {
-  margin-bottom: 34px;
+  margin-bottom: 20px;
   max-width: 735px;
 }
 .lyra-jornada .jornada-secao-intro .jornada-etiqueta {
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 }
 .lyra-jornada .jornada-secao-intro h2 {
-  font-size: clamp(30px, calc(37px * var(--j-titulo-secao, 1)), 48px);
+  font-size: clamp(28px, calc(36px * var(--j-titulo-secao, 1)), 44px);
   letter-spacing: -0.045em;
   line-height: 1.14;
   text-wrap: balance;
 }
 .lyra-jornada .jornada-secao-intro > p:not(.jornada-etiqueta) {
-  font-size: calc(15px * var(--j-texto-secao, 1));
-  margin-top: 12px;
+  font-size: calc(17px * var(--j-texto-secao, 1));
+  margin-top: 8px;
   max-width: 690px;
   color: var(--j-secundario);
 }
@@ -583,8 +586,8 @@
 .lyra-jornada .jornada-recurso p,
 .lyra-jornada .jornada-grid-passos p {
   color: var(--j-secundario);
-  font-size: calc(14px * var(--j-texto-cartao, 1));
-  line-height: 1.8;
+  font-size: calc(17px * var(--j-texto-cartao, 1));
+  line-height: 1.6;
 }
 
 /* Como funciona: linha do tempo com numerais editoriais */
@@ -594,7 +597,7 @@
   gap: 14px;
 }
 .lyra-jornada .jornada-passo-numero {
-  font-family: Georgia, 'Times New Roman', ui-serif, serif;
+  font-family: var(--font-imprima), 'Imprima', sans-serif;
   font-size: clamp(38px, 4cqi, 52px);
   line-height: 1;
   letter-spacing: -0.04em;
@@ -625,36 +628,46 @@
 }
 .lyra-jornada .jornada-grid-indicadores > div {
   background: #fffefa;
-  padding: 27px;
+  padding: 20px;
 }
 .lyra-jornada .jornada-grid-indicadores dt {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--j-secundario);
   font-weight: 600;
 }
 .lyra-jornada .jornada-grid-indicadores .jornada-indicador-valor {
-  font-family: Georgia, ui-serif, serif;
+  font-family: var(--font-imprima), 'Imprima', sans-serif;
   font-size: 43px;
   color: var(--j-turquesa);
   line-height: 1.25;
   padding-block: 5px;
 }
 .lyra-jornada .jornada-grid-indicadores .jornada-indicador-nota {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--j-secundario);
 }
 
 /* Valores: somente os dados reais da API /api/public/plans */
+.lyra-jornada section.jornada-planos {
+  padding-block: 18px;
+  scroll-margin-top: 82px;
+}
+.lyra-jornada .jornada-planos .jornada-secao-intro {
+  margin-bottom: 12px;
+}
+.lyra-jornada .jornada-planos .jornada-secao-intro h2 {
+  font-size: clamp(28px, calc(32px * var(--j-titulo-secao, 1)), 40px);
+}
 .lyra-jornada .jornada-grid-planos {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
+  gap: 16px;
   align-items: stretch;
 }
 .lyra-jornada .jornada-plano {
   display: flex;
   flex-direction: column;
-  padding: calc(28px * var(--j-plano, 1));
+  padding: calc(18px * var(--j-plano, 1));
   border: 1px solid var(--j-borda);
   border-radius: 18px;
   background: #fffefa;
@@ -666,33 +679,36 @@
 .lyra-jornada .jornada-plano-topo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px 10px;
+  flex-wrap: wrap;
   justify-content: space-between;
 }
 .lyra-jornada .jornada-plano-topo h3 {
-  font-size: 29px;
+  font-size: 27px;
+  line-height: 1.2;
 }
 .lyra-jornada .jornada-plano-topo > span {
   border: 1px solid #f0a48f;
   border-radius: 999px;
   padding: 3px 9px;
-  font-size: 12px;
+  font-size: 14px;
   color: var(--j-coral-texto);
 }
 .lyra-jornada .jornada-plano > p:not(.jornada-preco) {
-  font-size: 13px;
+  font-size: 15px;
+  line-height: 1.4;
   color: var(--j-secundario);
 }
 .lyra-jornada .jornada-plano .jornada-preco {
-  font-family: Georgia, serif;
-  font-size: clamp(29px, 3.2cqi, 44px);
-  margin-top: 23px;
+  font-family: var(--font-imprima), 'Imprima', sans-serif;
+  font-size: clamp(29px, 2.6cqi, 36px);
+  margin-top: 10px;
   letter-spacing: -0.04em;
   line-height: 1.15;
 }
 .lyra-jornada .jornada-plano .jornada-preco span {
   font:
-    13px var(--font-inter),
+    14px var(--font-imprima),
     sans-serif;
   color: var(--j-secundario);
 }
@@ -700,21 +716,32 @@
   margin-top: 5px;
 }
 .lyra-jornada .jornada-plano .jornada-descricao-plano {
-  margin-top: 18px;
-  line-height: 1.8;
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.4;
+  color: var(--j-secundario);
+}
+.lyra-jornada .jornada-descricao-plano summary {
+  cursor: pointer;
+  min-height: 28px;
+  padding-block: 3px;
+  color: var(--j-turquesa-profundo);
+}
+.lyra-jornada .jornada-descricao-plano p {
+  margin-top: 6px;
 }
 .lyra-jornada .jornada-plano .jornada-inclui {
-  font-size: 13px;
+  font-size: 15px;
   border-top: 1px solid var(--j-borda);
-  padding-top: 16px;
-  margin-top: 18px;
+  padding-top: 10px;
+  margin-top: 10px;
   font-weight: 700;
   color: var(--j-escuro);
 }
 .lyra-jornada .jornada-plano ul {
-  margin-block: 15px 22px;
+  margin-block: 10px 12px;
   display: grid;
-  gap: 11px;
+  gap: 4px;
   flex: 1;
   /* Sem isto a grade estica as linhas para preencher a altura do cartão e
    * planos com poucos itens ficam com vãos grandes entre eles. */
@@ -725,8 +752,8 @@
   align-items: flex-start;
   gap: 8px;
   color: var(--j-secundario);
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: 15px;
+  line-height: 1.4;
 }
 .lyra-jornada .jornada-plano li svg {
   width: 17px;
@@ -734,6 +761,8 @@
   color: var(--j-turquesa);
 }
 .lyra-jornada .jornada-botao-plano {
+  min-height: 44px;
+  padding-block: 10px;
   border-color: var(--j-turquesa);
   color: var(--j-turquesa-profundo);
 }
@@ -762,7 +791,7 @@
 /* Perguntas */
 .lyra-jornada .jornada-faq-layout {
   display: grid;
-  grid-template-columns: minmax(0, 40%) minmax(0, 60%);
+  grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
   gap: 35px;
 }
 .lyra-jornada .jornada-faq-perguntas {
@@ -794,8 +823,8 @@
 .lyra-jornada .jornada-faq-perguntas details > p {
   color: var(--j-secundario);
   margin-top: 13px;
-  font-size: 14px;
-  line-height: 1.8;
+  font-size: 16px;
+  line-height: 1.6;
   padding-right: 36px;
 }
 
@@ -876,7 +905,7 @@
   max-width: 450px;
   margin-top: 5px;
   color: var(--j-secundario);
-  font-size: 13px;
+  font-size: 15px;
 }
 .lyra-jornada .jornada-login-expansivel {
   width: 100%;
@@ -892,7 +921,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
   min-height: 40px;
@@ -913,7 +942,7 @@
 }
 .lyra-jornada .jornada-login-expansivel label {
   font-weight: 600;
-  font-size: 13px;
+  font-size: 15px;
 }
 .lyra-jornada .jornada-login-expansivel input {
   width: 100%;
@@ -980,7 +1009,7 @@
 }
 .lyra-jornada .jornada-rodape-conteudo > p {
   color: var(--j-secundario);
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.65;
 }
 .lyra-jornada .jornada-rodape nav {
@@ -988,7 +1017,7 @@
   flex-wrap: wrap;
   gap: 16px;
   justify-content: flex-end;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
 }
 .lyra-jornada .jornada-rodape nav a:hover {
@@ -1004,7 +1033,7 @@
   padding-top: 16px;
   margin-top: 21px;
   color: var(--j-secundario);
-  font-size: 11px;
+  font-size: 13px;
 }
 .lyra-jornada .jornada-rodape-fim svg {
   color: var(--j-turquesa);
@@ -1033,7 +1062,7 @@
     min-height: 490px;
   }
 }
-@container jornada (max-width: 900px) {
+@container jornada (max-width: 1200px) {
   .lyra-jornada .jornada-cabecalho-conteudo {
     min-height: 75px;
   }
@@ -1078,11 +1107,6 @@
   .lyra-jornada .jornada-grid-indicadores {
     grid-template-columns: repeat(2, 1fr);
   }
-  .lyra-jornada .jornada-grid-planos {
-    grid-template-columns: 1fr;
-    max-width: 600px;
-    margin: 0 auto;
-  }
   .lyra-jornada .jornada-rodape-conteudo {
     grid-template-columns: 1fr 1.3fr;
   }
@@ -1113,7 +1137,7 @@
     min-height: 70px;
   }
   .lyra-jornada .jornada-entrar {
-    font-size: 13px;
+    font-size: 15px;
   }
   .lyra-jornada .jornada-hero {
     min-height: 0;
@@ -1136,7 +1160,7 @@
     display: inline;
   }
   .lyra-jornada .jornada-hero-descricao {
-    font-size: clamp(14px, calc(15px * var(--j-corpo, 1)), 17px);
+    font-size: clamp(16px, calc(17px * var(--j-corpo, 1)), 19px);
     margin-block: 20px 22px;
   }
   .lyra-jornada .jornada-assinatura {
@@ -1164,7 +1188,7 @@
     font-size: 20px;
   }
   .lyra-jornada .jornada-pilar p {
-    font-size: 12px;
+    font-size: 14px;
   }
   .lyra-jornada .jornada-manifesto-grid {
     display: flex;
@@ -1183,7 +1207,10 @@
     font-size: clamp(31px, 8cqi, 45px);
   }
   .lyra-jornada .jornada-secao {
-    padding-block: 55px;
+    padding-block: 32px;
+  }
+  .lyra-jornada section.jornada-planos {
+    padding-block: 32px;
   }
   .lyra-jornada .jornada-grid-recursos,
   .lyra-jornada .jornada-grid-passos {
@@ -1256,8 +1283,7 @@
   }
 }
 
-/* Paridade do seletor de tema existente: o modo claro é o conceito aprovado,
- * mas o controle real do projeto também pode alternar para modo escuro. */
+/* Os dois temas permanecem disponíveis; escuro é o padrão público. */
 .dark .lyra-jornada {
   --j-escuro: #eaf5f3;
   --j-secundario: #b1c8c7;
@@ -1360,4 +1386,98 @@
 }
 .dark .lyra-jornada .jornada-menu-aberto {
   background: #182d31;
+}
+
+/* Leituras de mapas: a mesma superfície calma e as cores da marca. */
+.lyra-jornada .jornada-mapas {
+  background: var(--j-fundo);
+}
+.lyra-jornada .jornada-grid-mapas {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.lyra-jornada .jornada-mapa {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px;
+  border: 1px solid var(--j-borda);
+  border-radius: 20px;
+  background: var(--j-branco);
+}
+.lyra-jornada .jornada-mapa .jornada-icone {
+  width: calc(44px * var(--j-icone, 1));
+  height: calc(44px * var(--j-icone, 1));
+}
+.lyra-jornada .jornada-mapa .jornada-icone svg {
+  width: 24px;
+  height: 24px;
+}
+.lyra-jornada .jornada-mapa .jornada-mapa-tipo {
+  margin-top: 12px;
+  color: var(--j-coral-texto);
+  font-size: 16px;
+}
+.lyra-jornada .jornada-mapa h3 {
+  margin-block: 6px 12px;
+  font-size: calc(24px * var(--j-titulo-cartao, 1));
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.lyra-jornada .jornada-mapa p {
+  color: var(--j-secundario);
+  font-size: calc(17px * var(--j-texto-cartao, 1));
+  line-height: 1.5;
+}
+.lyra-jornada .jornada-mapa .jornada-mapa-detalhe {
+  margin-top: auto;
+  padding-top: 12px;
+  font-size: 16px;
+  color: var(--j-turquesa-profundo);
+}
+.lyra-jornada .jornada-mapas-nota {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 960px;
+  margin: 28px auto 0;
+  color: var(--j-secundario);
+  font-size: 16px;
+  line-height: 1.65;
+}
+.lyra-jornada .jornada-mapas-nota svg {
+  margin-top: 3px;
+  color: var(--j-turquesa);
+}
+@container jornada (max-width: 900px) {
+  .lyra-jornada .jornada-grid-mapas,
+  .lyra-jornada .jornada-grid-planos {
+    grid-template-columns: 1fr;
+    max-width: 600px;
+    margin-inline: auto;
+  }
+}
+/* Imprima é regular: conserva a família também nos controles e rótulos
+ * que antes tinham pesos e fontes próprios da landing. */
+.lyra-jornada
+  :is(
+    h1,
+    h2,
+    h3,
+    p,
+    a,
+    span,
+    strong,
+    em,
+    label,
+    input,
+    button,
+    summary,
+    li,
+    dt,
+    dd
+  ) {
+  font-weight: 400;
+  font-style: normal;
 }

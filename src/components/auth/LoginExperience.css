@@ -1,0 +1,160 @@
+/* A composição cresce com o conteúdo, sem zoom, escala ou recorte.
+ * A altura é reduzida pelos intervalos, preservando a legibilidade. */
+.lyra-login {
+  --foreground: 190 49% 15%;
+  --muted-foreground: 185 14% 34%;
+  --card: 48 100% 99%;
+  --background: 36 45% 98%;
+  --muted: 180 43% 93%;
+  --border: 165 20% 88%;
+  color: var(--public-texto);
+  background: var(--public-fundo);
+  padding: 20px max(24px, calc((100% - 1180px) / 2));
+  column-gap: clamp(32px, 4vw, 64px);
+  font-family: var(--font-imprima), 'Imprima', sans-serif;
+  font-size: 17px;
+}
+.lyra-login .login-coluna-intro {
+  width: 100%;
+  max-width: var(--login-largura-intro, 520px);
+  margin-inline: auto;
+  text-align: left;
+}
+.lyra-login .login-coluna-intro > div {
+  margin-inline: auto;
+}
+.lyra-login .login-marca {
+  position: relative;
+  justify-content: flex-start;
+  padding-right: 44px;
+}
+.lyra-login .login-marca > button {
+  position: absolute;
+  right: 0;
+}
+.lyra-login .login-nome-marca {
+  font-size: 28px;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+.lyra-login .login-abertura {
+  padding-block: 14px 20px;
+}
+.lyra-login .login-acesso {
+  align-self: center;
+  background: var(--public-superficie);
+  border: 1px solid var(--public-borda);
+  border-radius: 20px;
+  padding: 22px 26px;
+}
+.lyra-login .login-acesso > div {
+  margin-inline: auto;
+}
+.lyra-login .login-acesso > div > p,
+.lyra-login .login-acesso h2 {
+  text-align: center;
+}
+.lyra-login .login-acesso > div > p {
+  line-height: 1.4;
+}
+.lyra-login .login-acesso [role='tab'] {
+  font-size: 16px;
+}
+.lyra-login .login-acesso input:not([type='checkbox']) {
+  min-height: 44px;
+}
+.lyra-login .login-detalhes {
+  padding-top: 20px;
+}
+.lyra-login .login-destaques {
+  margin-inline: 0;
+  text-align: left;
+}
+.lyra-login .login-nota {
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: var(--public-suave);
+}
+.lyra-login .login-rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0 16px;
+  padding-bottom: 0;
+  font-size: 15px;
+}
+.lyra-login .login-rodape a,
+.lyra-login .login-legais {
+  font-size: 15px;
+}
+.lyra-login h1,
+.lyra-login h2,
+.lyra-login .font-display {
+  font-family: var(--font-imprima), 'Imprima', sans-serif;
+  font-weight: 400;
+}
+.lyra-login .text-primary {
+  color: var(--public-teal);
+}
+.lyra-login .text-muted-foreground {
+  color: var(--public-secundario);
+}
+.dark .lyra-login {
+  --foreground: 169 35% 94%;
+  --muted-foreground: 177 18% 74%;
+  --card: 193 33% 14%;
+  --background: 193 37% 10%;
+  --muted: 189 27% 20%;
+  --border: 187 25% 27%;
+}
+@media (min-width: 1024px) {
+  .lyra-login {
+    align-content: center;
+    padding-block: 16px;
+  }
+  .lyra-login .login-abertura {
+    padding-block: 12px 0;
+  }
+  .lyra-login .login-detalhes {
+    padding-top: 12px;
+  }
+}
+/* Janelas de notebook mais baixas: compacta intervalos e preenchimentos,
+ * sem diminuir fontes nem ocultar controles. Em alturas menores o documento
+ * continua rolável, inclusive ao ampliar o texto no navegador. */
+@media (min-width: 1024px) and (max-height: 720px) {
+  .lyra-login {
+    padding-block: 12px;
+  }
+  .lyra-login .login-acesso {
+    padding-block: 16px;
+  }
+  .lyra-login .login-acesso form {
+    gap: 8px;
+  }
+  .lyra-login .login-acesso [role='tabpanel'] {
+    margin-top: 12px;
+  }
+  .lyra-login .login-troca-conta button {
+    min-height: 32px;
+  }
+  .lyra-login .login-destaques {
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .lyra-login .login-nota {
+    margin-top: 12px;
+  }
+}
+@media (max-width: 420px) {
+  .lyra-login {
+    padding-inline: 18px;
+  }
+  .lyra-login .login-acesso {
+    padding-inline: 20px;
+  }
+  .lyra-login .login-nome-marca {
+    font-size: 25px;
+  }
+}

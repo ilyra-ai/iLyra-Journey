@@ -82,11 +82,14 @@ exceção de espaçamento) e o seletor de zoom interno do Puck (abaixo).
 
 ## Tema escuro (tarefa 34)
 
-- **Alternância:** o tema claro continua sendo o padrão. No app, o menu do
+- **Alternância:** desde 2026-10-20, o padrão é escuro somente na landing e
+  no login, por solicitação do usuário; nas demais rotas continua claro.
+  No app, o menu do
   perfil tem o grupo "Tema" (Claro, Escuro, Do sistema), que não fecha o menu
   ao escolher; nas telas públicas (landing, entrada, política de privacidade
   e termos) há um botão "Tema escuro" com `aria-pressed`. A escolha fica no
-  navegador (`localStorage`, chave `theme` do `next-themes`) e é aplicada
+  navegador (`localStorage`, chave `lyra-public-theme` para landing/login e
+  `theme` nas demais rotas, via `next-themes`) e é aplicada
   antes da pintura, sem piscar. "Do sistema" segue `prefers-color-scheme`.
 - **Tokens (`.dark` em `src/app/globals.css`):** superfícies em grafite
   azulado (nunca preto puro), com popover um degrau acima do cartão. As cores

@@ -5,7 +5,6 @@ import {
   type FormEvent,
   type MouseEvent,
   type ReactNode,
-  Fragment,
   useEffect,
   useMemo,
   useState,
@@ -50,6 +49,7 @@ import type {
 } from '@/lib/site-page-config/schema';
 import type { PlanMatrixPlan } from '@/types/subscription';
 import './LandingJornada.css';
+import '../public/PublicTheme.css';
 
 /**
  * Landing de evolução consciente da Lyra MetaCare.
@@ -250,16 +250,43 @@ export function LandingPage({
     }
   }
 
-  const menu = [
-    { label: 'Início', href: '#topo', visible: true },
-    { label: 'Jornada', href: '#fluxo', visible: config.flow.visible },
-    {
+  // O padrão antigo colocava Benefícios antes de Jornada. A sequência
+  // pública aprovada passa a ser o padrão, preservando ordens personalizadas
+  // no Construtor; nesses casos, o menu acompanha a mesma sequência.
+  const ordemInicial: LandingSectionKey[] = [
+    'flow',
+    'features',
+    'metrics',
+    'plans',
+    'faq',
+    'finalCta',
+  ];
+  const ordemConfigurada =
+    config.sectionOrder.join(',') === 'features,metrics,flow,plans,faq,finalCta'
+      ? ordemInicial
+      : config.sectionOrder;
+  const ordem = Array.from(
+    new Set([...ordemConfigurada, ...ordemInicial])
+  ).filter((chave) => chave !== 'finalCta');
+  const ligacoesDasSecoes: Partial<
+    Record<LandingSectionKey, { label: string; href: string; visible: boolean }>
+  > = {
+    flow: { label: 'Jornada', href: '#fluxo', visible: config.flow.visible },
+    features: {
       label: 'Benefícios',
       href: '#recursos',
       visible: config.features.visible,
     },
-    { label: 'Planos', href: '#planos', visible: config.plans.visible },
-    { label: 'Dúvidas', href: '#faq', visible: config.faq.visible },
+    plans: { label: 'Planos', href: '#planos', visible: config.plans.visible },
+    faq: { label: 'Dúvidas', href: '#faq', visible: config.faq.visible },
+  };
+  const menu = [
+    { label: 'Início', href: '#topo', visible: true },
+    { label: 'Leituras de Mapas', href: '#leituras-de-mapas', visible: true },
+    ...ordem.flatMap((chave) => {
+      const ligacao = ligacoesDasSecoes[chave];
+      return ligacao ? [ligacao] : [];
+    }),
     { label: 'Sobre', href: '#sobre', visible: true },
   ].filter((item) => item.visible);
 
@@ -513,9 +540,10 @@ export function LandingPage({
                           ou {moedaPtBr(plano.annualPrice, plano.currencyCode)}{' '}
                           por ano
                         </p>
-                        <p className="jornada-descricao-plano">
-                          {plano.description}
-                        </p>
+                        <details className="jornada-descricao-plano">
+                          <summary>Sobre este plano</summary>
+                          <p>{plano.description}</p>
+                        </details>
                         <p className="jornada-inclui">
                           {herda
                             ? `Tudo do ${anterior.name}, mais:`
@@ -630,16 +658,35 @@ export function LandingPage({
     }
   }
 
-  const ordem = Array.from(
-    new Set<LandingSectionKey>([
-      ...config.sectionOrder,
-      'features',
-      'metrics',
-      'flow',
-      'plans',
-      'faq',
-      'finalCta',
-    ])
+  const secaoSobre = (
+    <section
+      className="jornada-manifesto"
+      id="sobre"
+      aria-labelledby="titulo-manifesto"
+    >
+      <div className="jornada-container jornada-manifesto-grid">
+        <div
+          className="jornada-vale"
+          role="img"
+          aria-label="Portal de luz sobre um vale com água e montanhas"
+        />
+        <div className="jornada-manifesto-texto">
+          <p className="jornada-etiqueta">Presença e transformação</p>
+          <h2 id="titulo-manifesto">
+            Viva com mais <em>presença e significado.</em>
+          </h2>
+          <p>
+            A vida ganha novas possibilidades quando você se reconecta com o que
+            realmente importa. A Lyra MetaCare acompanha a sua jornada
+            combinando tecnologia, cuidado e autoconhecimento.
+          </p>
+          <div className="jornada-compromisso">
+            <Compass aria-hidden="true" /> Mais vida <span>•</span> Mais clareza{' '}
+            <span>•</span> Mais você
+          </div>
+        </div>
+      </div>
+    </section>
   );
   const Principal = previewMode ? 'div' : 'main';
 
@@ -720,7 +767,7 @@ export function LandingPage({
 
   return (
     <div
-      className={`lyra-jornada${COM_ARTE ? ' jornada-com-arte' : ''}`}
+      className={`lyra-public-theme imprima-regular lyra-jornada${COM_ARTE ? ' jornada-com-arte' : ''}`}
       style={fatoresDeEscala}
     >
       {/* O "Pular para o conteúdo" vem do layout raiz (src/app/layout.tsx),
@@ -851,31 +898,76 @@ export function LandingPage({
         </section>
 
         <section
-          className="jornada-manifesto"
-          id="sobre"
-          aria-labelledby="titulo-manifesto"
+          id="leituras-de-mapas"
+          className="jornada-secao jornada-mapas"
+          aria-labelledby="titulo-mapas"
         >
-          <div className="jornada-container jornada-manifesto-grid">
-            <div
-              className="jornada-vale"
-              role="img"
-              aria-label="Portal de luz sobre um vale com água e montanhas"
+          <div className="jornada-container">
+            <TituloSecao
+              id="titulo-mapas"
+              rotulo="Leituras de Mapas"
+              titulo="Três caminhos para se conhecer melhor"
+              descricao="Do seu céu de nascimento às escolhas de hoje: conheça as leituras que o motor da Lyra reúne para acompanhar você."
             />
-            <div className="jornada-manifesto-texto">
-              <p className="jornada-etiqueta">Presença e transformação</p>
-              <h2 id="titulo-manifesto">
-                Viva com mais <em>presença e significado.</em>
-              </h2>
-              <p>
-                A vida ganha novas possibilidades quando você se reconecta com o
-                que realmente importa. A Lyra MetaCare acompanha a sua jornada
-                combinando tecnologia, cuidado e autoconhecimento.
-              </p>
-              <div className="jornada-compromisso">
-                <Compass aria-hidden="true" /> Mais vida <span>•</span> Mais
-                clareza <span>•</span> Mais você
-              </div>
+            <div className="jornada-grid-mapas">
+              <article className="jornada-mapa">
+                <span className="jornada-icone">
+                  <Sun aria-hidden="true" />
+                </span>
+                <p className="jornada-mapa-tipo">Seu céu de nascimento</p>
+                <h3>Védico tradicional — Jyotish</h3>
+                <p>
+                  Ascendente, planetas, signos, casas, nakshatras e períodos
+                  planetários (dashas), calculados a partir da data, hora e
+                  cidade do seu nascimento.
+                </p>
+                <p className="jornada-mapa-detalhe">
+                  Uma base para explorar seus ritmos e as fases da vida.
+                </p>
+              </article>
+              <article className="jornada-mapa">
+                <span className="jornada-icone">
+                  <Compass aria-hidden="true" />
+                </span>
+                <p className="jornada-mapa-tipo">Conexões e significado</p>
+                <h3>Lyra DM Samadhi</h3>
+                <p>
+                  Integra o mapa védico às correspondências simbólicas de
+                  elementos, Roda de Cura, chakras, metais e alquimia definidas
+                  no método.
+                </p>
+                <p className="jornada-mapa-detalhe">
+                  Uma leitura de autoconhecimento que respeita a sua própria
+                  percepção.
+                </p>
+              </article>
+              <article className="jornada-mapa">
+                <span className="jornada-icone">
+                  <Sparkles aria-hidden="true" />
+                </span>
+                <p className="jornada-mapa-tipo">Da leitura à prática</p>
+                <h3>Quantum — Lyra e Arkático</h3>
+                <p>
+                  Transforma a reflexão em próximos passos e calcula um Score de
+                  Ação com a energia, a pressão e o tempo disponível que você
+                  informa.
+                </p>
+                <p className="jornada-mapa-detalhe">
+                  Pequenas ações para experimentar no seu ritmo, um ciclo de
+                  cada vez.
+                </p>
+              </article>
             </div>
+            <p className="jornada-mapas-nota">
+              <ShieldCheck aria-hidden="true" />
+              <span>
+                Clareza em cada leitura: Desenho Humano ainda não é calculado.
+                Aspectos pessoais simbólicos de Samadhi e Arkático dependem de
+                você e não são deduzidos automaticamente. “Quantum” é o nome do
+                método, com uso simbólico; as leituras não substituem avaliação
+                profissional de saúde.
+              </span>
+            </p>
           </div>
         </section>
 
@@ -914,19 +1006,12 @@ export function LandingPage({
 
         <PuckClientRenderer documentKey="landing-home" className="w-full" />
 
-        {/* A entrada rápida vem logo antes do convite final, para que o
-            convite feche a página (antes ficava depois dele, solta). A ordem
-            das demais seções continua a do Construtor. */}
-        {ordem.map((chave) =>
-          chave === 'finalCta' ? (
-            <Fragment key="entrada-e-convite">
-              {secaoEntrada}
-              {renderizarSecao(chave)}
-            </Fragment>
-          ) : (
-            renderizarSecao(chave)
-          )
-        )}
+        {/* Menu e blocos usam a mesma ordem. Sobre encerra a apresentação,
+            seguido do acesso rápido e do convite final. */}
+        {ordem.map(renderizarSecao)}
+        {secaoSobre}
+        {secaoEntrada}
+        {renderizarSecao('finalCta')}
       </Principal>
 
       <footer className="jornada-rodape">

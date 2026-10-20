@@ -1,5 +1,10 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import {
+  Imprima,
+  Inter,
+  JetBrains_Mono,
+  Space_Grotesk,
+} from 'next/font/google';
 import './globals.css';
 import { AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/components/ThemeProvider';
@@ -12,6 +17,16 @@ const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   weight: ['300', '400', '500', '600', '700'],
+});
+
+// Fonte das telas públicas, servida pelo próprio Next.js sem chamadas ao
+// Google no navegador. A variável só é aplicada na landing e no login.
+const imprima = Imprima({
+  variable: '--font-imprima',
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  preload: false,
 });
 
 const spaceGrotesk = Space_Grotesk({
@@ -92,8 +107,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   // Sem maximumScale: o zoom do navegador precisa continuar disponível
   // (WCAG 1.4.4, redimensionar texto).
-  // Valor inicial (tema claro, o padrão); o `ThemeColorSync` troca a cor
-  // quando o tema escuro é aplicado.
+  // Valor inicial da área interna; o `ThemeColorSync` acompanha o tema
+  // escolhido, inclusive o padrão escuro da landing e do login.
   themeColor: COR_DA_BARRA_DO_NAVEGADOR.light,
   // A aplicação oferece os dois esquemas; o `next-themes` grava no <html> o
   // `color-scheme` do tema escolhido.
@@ -113,14 +128,14 @@ export default function RootLayout({
       // atributo o Next a desliga durante a troca de rota (o modo dev avisava
       // em todas as páginas).
       data-scroll-behavior="smooth"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${imprima.variable}`}
     >
       <body className="min-h-screen font-sans antialiased">
         <a href="#conteudo-principal" className="skip-nav">
           Pular para o conteúdo principal
         </a>
-        {/* Claro por padrão; a pessoa pode escolher Escuro ou Do sistema
-            (menu do perfil ou botão das telas públicas). */}
+        {/* A área interna mantém o padrão claro. O provedor separa a
+            preferência pública, com padrão escuro só na landing e login. */}
         <ThemeProvider
           attribute="class"
           defaultTheme="light"
