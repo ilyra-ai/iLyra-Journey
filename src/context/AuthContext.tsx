@@ -16,6 +16,12 @@ type AuthContextType = {
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
+const RotaLiberadaContext = createContext(false);
+
+/** Protege o conteúdo sem adiar a montagem dos provedores globais. */
+export function AuthGate({ children }: { children: React.ReactNode }) {
+  return useContext(RotaLiberadaContext) ? children : null;
+}
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [session, setSession] = useState<AppSession | null>(null);
@@ -94,7 +100,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     <AuthContext.Provider
       value={{ session, db, userRole: session?.user.role ?? null }}
     >
-      {podeRenderizar && children}
+      <RotaLiberadaContext.Provider value={podeRenderizar}>
+        {children}
+      </RotaLiberadaContext.Provider>
     </AuthContext.Provider>
   );
 };

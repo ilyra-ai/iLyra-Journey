@@ -6,7 +6,7 @@ import {
   Space_Grotesk,
 } from 'next/font/google';
 import './globals.css';
-import { AuthProvider } from '@/context/AuthContext';
+import { AuthGate, AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { ThemeColorSync } from '@/components/theme/ThemeControls';
 import { COR_DA_BARRA_DO_NAVEGADOR } from '@/components/theme/tema';
@@ -136,15 +136,17 @@ export default function RootLayout({
         </a>
         {/* O padrão é claro em todas as rotas. As preferências pública e
             interna continuam independentes para quem alternar o tema. */}
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <ThemeColorSync />
-          <AuthProvider>
-            <div className="page-shell">{children}</div>
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="light"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ThemeColorSync />
+            <AuthGate>
+              <div className="page-shell">{children}</div>
+            </AuthGate>
             {/* As classes dos avisos ficam só em `ui/sonner.tsx` (tarefa 60):
                 este `toastOptions` substituía o de lá por inteiro e os tons
                 de sucesso, erro, alerta e informação não valiam. */}
@@ -154,8 +156,8 @@ export default function RootLayout({
               expand={false}
               closeButton
             />
-          </AuthProvider>
-        </ThemeProvider>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

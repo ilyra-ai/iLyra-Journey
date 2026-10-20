@@ -28,6 +28,9 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'unit',
+          // Evita saturar CPU e disco no WSL durante verificações de senha e
+          // leituras extensas; preserva os limites de tempo dos testes.
+          maxWorkers: 4,
           include: ['**/*.test.{ts,tsx,mjs}'],
           exclude: ['**/node_modules/**', '.next/**', INTEGRATION_GLOB],
         },

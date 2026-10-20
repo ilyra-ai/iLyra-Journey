@@ -4,6 +4,7 @@ import * as React from 'react';
 import { usePathname } from 'next/navigation';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { type ThemeProviderProps } from 'next-themes';
+import { useAuth } from '@/context/AuthContext';
 
 type Tema = 'light' | 'dark' | 'system';
 type TemaDaLyra = {
@@ -64,7 +65,9 @@ export function useTheme(): TemaDaLyra {
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   const pathname = usePathname();
-  const publico = pathname === '/' || pathname === '/login';
+  const { session } = useAuth();
+  // A rota raiz é a landing para visitantes e o painel para quem entrou.
+  const publico = pathname === '/login' || (pathname === '/' && !session);
   const chave = publico ? 'lyra-public-theme' : 'theme';
   const padrao: Tema = 'light';
   const lerTema = React.useCallback(() => lerPreferencia(chave), [chave]);
