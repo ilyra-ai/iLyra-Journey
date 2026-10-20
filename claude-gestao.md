@@ -22,15 +22,15 @@
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
 | Progresso          | `███████████████████░` **97%** |
-| Tarefas totais     | 76                             |
-| 🟢 Finalizadas     | 74                             |
+| Tarefas totais     | 77                             |
+| 🟢 Finalizadas     | 75                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
 | ⚪ A iniciar       | 1                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-20                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (74 ÷ 76 ≈ 97%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (75 ÷ 77 ≈ 97%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,18 +49,16 @@
 
 ### ANDAMENTO
 
-### 75 · Legibilidade, espaçamento e altura do login
+### 77 · Conexão, descoberta e configuração dos provedores de IA
 
-- **Status:** em conferência da implementação existente · **Início:** 2026-10-20.
-- **Nova orientação do usuário:** tema claro como padrão em todo o aplicativo, incluindo landing e login, preservando a alternância. Substitui o pedido anterior de padrão escuro público.
-- **Publicação imediata solicitada pelo usuário:** `699fb5a` enviado para `origin/main` e confirmado por `git ls-remote`; tema claro padrão aplicado e conferido no navegador. A validação final da tarefa continua em andamento; esse commit não é apresentado como conclusão de verificações ainda em execução.
-- **Dispositivos:** uso em mobile e desktop confirmado pelo usuário; conferência também em larguras intermediárias e em 320 px, mantendo toque, teclado, zoom e rolagem acessíveis.
-- **Verificação antes de nova implementação (2026-10-20):** o código já contém a compactação do login e da landing, Imprima, descrição expansível dos planos e preferência pública de tema independente da interna. Esses ajustes serão validados, sem serem refeitos. No perfil, a ordem solicitada dos cartões ainda não está aplicada, e o cartão de hábitos ainda usa altura de 100% dentro de uma coluna com outros cartões.
-- **Pedido:** remover “Conhecer minhas leituras”, ampliar a legibilidade, reduzir espaços excessivos e centralizar os conjuntos do login para o formulário caber na altura da janela em zoom de 100%. O anexo mostra o estado atual com o problema, não um modelo de layout desejado.
-- **Escopo:** refinamento da tarefa 74, mantendo Imprima, configurações do Construtor e todos os controles de autenticação. Publicação por tarefa retomada por orientação mais recente.
-- **Ajustes adicionais solicitados:** reduzir um pouco os textos e a largura da coluna esquerda do login, alinhando seus textos à esquerda; compactar os planos e demais cartões da landing para uso em 100% de zoom; modo escuro padrão somente na landing e login, com preferência independente da área interna. A solicitação específica de tema prevalece sobre a preferência geral por tema claro do AGENTS.md.
-- **Implementação em revisão:** introdução até 520 px; planos com descrição completa expansível, espaçamentos menores e três colunas acima de 900 px; mapas e indicadores compactos; proporção da grade de dúvidas corrigida para incluir o espaço entre colunas. Nenhum conteúdo de plano excluído.
-- **Evidência intermediária:** formulário de entrada completo na janela natural de 1463 × 690 px, cartão de aproximadamente 573 px e campos em 17 px; planos antes desta compactação com aproximadamente 654 px cada. Checagens de formatação e lint passaram na primeira execução; tipos pararam por corrupção em `.next/dev/types/routes.d.ts`. A repetição será feita com Dev parado e tipos regenerados oficialmente. `@current_problems` não disponível.
+- **Status:** 🔵 em andamento · **Início:** 2026-10-20.
+- **Pedido do usuário:** verificar toda a configuração de provedores locais e em nuvem em `/admin/ai-config`. O Jan configurado em `http://127.0.0.1:1337/v1` retorna zero modelos apesar do modelo “Gemma-4-E4B-Uncensored-HauhauCS-Aggressive” disponível; a configuração manual também falha. O usuário esclareceu que `8080` era apenas exemplo, não uma porta incorreta confirmada.
+- **Evidência real inicial:** o Jan no Windows responde HTTP 200 em `/v1/models`, com cinco identificadores, incluindo `Gemma-4-E4B-Uncensored-HauhauCS-Aggressive-IQ4_XS`. O mesmo loopback no WSL recusa a conexão; o cliente nativo do Windows executado pelo WSL alcança o serviço. A fronteira de rede Windows/WSL está comprovada, sem necessidade de abrir o Jan para a rede.
+- **Implementação e prova intermediária:** transporte nativo do Windows limitado a loopback em WSL, apenas após recusa de conexão do Node. A listagem retornou HTTP 200 com cinco modelos e a geração real do Gemma retornou HTTP 200: “Sim, a conexão está funcionando.” Vinte testes do cliente/transporte e a checagem de tipos passaram. Acrescentada regressão das rotas para Jan, LocalAI e nuvem com endereço ainda não salvo; validação completa em execução.
+- **Tela administrativa:** contador identificado como modelos selecionados, consulta com quantidade disponível e erro persistente, filtro sem truncar em 40 itens e invalidação de resultados após mudar a conexão. A verificação final será feita no navegador com o Jan real.
+- **Investigação:** conferir o endereço enviado pelo formulário, a configuração persistida, a descoberta de modelos, o teste de conexão e o uso efetivo pelo motor; verificar também o acesso entre o WSL e o servidor local no Windows. Não presumir que um erro de conexão seja ausência de modelos.
+- **Ordem de execução:** esta investigação do backend precede a implementação visual do perfil, seguindo o protocolo do projeto. As tarefas 75 e 76 permanecem no escopo.
+- **Critérios de entrega:** corrigir a causa comprovada, preservar credenciais, validar descoberta e geração com o serviço real disponível e acrescentar testes de regressão para os defeitos encontrados; registrar limites reais de serviços externos sem simular êxito.
 
 ### BLOQUEADAS
 
@@ -1441,3 +1439,15 @@ Nenhuma tarefa bloqueada.
 - **Conferência antes de implementar:** os ajustes já estavam no código local; foram preservados e validados em produção, sem refazer a entrega.
 - **Evidências atuais:** três mapas presentes; sete links clicados com hashes corretos e seções em ordem crescente; Imprima computada no navegador. Landing sem estouro horizontal em 1280, 768, 390 e 320 px; cartões se empilham nas telas menores. Login completo em 1280 × 720 (cartão de 573 px) e sem estouro em 390 px. Nenhum erro ou aviso de console na aba de validação. Formatação, lint, tipos, 514 unitários, 175 integrações e build passaram no runtime oficial.
 - **Documentação:** sistema visual e acessibilidade atualizados. A solicitação posterior de tema claro padrão está registrada na tarefa 75 e será aplicada preservando a alternância.
+
+### 75 · Legibilidade, espaçamento e altura do login
+
+- **Status:** 🟢 finalizada · **Início/conclusão:** 2026-10-20.
+- **Commits:** `699fb5a` (tema claro, publicado imediatamente a pedido do usuário) e `1be944c` (escopo autenticado e montagem inicial). **Push final:** `57eab97..1be944c main -> main`, confirmado por `git ls-remote`.
+- **Pedido atendido:** login com Imprima, introdução mais estreita (até 520 px), textos à esquerda, maior legibilidade, menos espaços excessivos e formulário centralizado; ação “Conhecer minhas leituras” ausente. Planos e demais cartões da landing compactados, descrição completa dos planos expansível e três colunas acima de 900 px. As implementações existentes foram conferidas antes de qualquer ajuste adicional.
+- **Tema:** claro como padrão em todas as páginas, mobile e desktop, conforme a orientação mais recente; alternância disponível e preferências pública e interna independentes. A raiz autenticada usa a preferência da conta, preservada no percurso Perfil → Painel.
+- **Causa e correção adicional:** o provedor considera a sessão; monta desde a renderização inicial, enquanto `AuthGate` retém somente o conteúdo protegido até resolver sessão e redirecionamento. A versão de produção abriu sem os avisos de script e sem os erros de chunks/exportação vistos em sessões anteriores de desenvolvimento.
+- **Responsividade real:** 1280 × 720, 768 × 844, 390 × 844 e 320 × 844 sem estouro horizontal. No desktop o cartão mede aproximadamente 573 px (termina em 646 px); em 320 px mede 679 px e termina em 835 px. Cadastro, controles de senha, entrada administrativa e navegação autenticada conferidos; nenhum campo ou controle foi cortado.
+- **Gates:** `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, testes unitários (520/520 na árvore de trabalho com os testes da tarefa 77), integração com MySQL real (176/176) e build passaram. Console da nova sessão de produção sem erros ou avisos na abertura e no percurso de tema.
+- **Ocorrências tratadas:** dois artefatos gerados de tipos do Dev estavam inválidos e foram recriados pelo gerador oficial do Next com Dev parado; nenhuma exclusão de checagem ou supressão foi usada. A concorrência irrestrita excedeu o tempo em dois testes; os mesmos arquivos passaram isolados e a suíte passou com quatro processos. O limite de quatro processos foi aplicado sem alterar asserções ou tempos máximos, e a execução padrão passou.
+- **Evidências locais:** `.logs/qa75-login-final.png`, `.logs/qa77-{format,fix-lint,lint,format-check,types-final,unit,integration,build}.log`; servidor de produção conferido na porta 3001 para preservar outra execução do projeto na porta 3000. `@current_problems` não é oferecido neste ambiente; diagnósticos de lint, tipos, build e navegador foram conferidos.
