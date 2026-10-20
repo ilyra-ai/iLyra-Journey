@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `███████████████████░` **97%** |
+| Progresso          | `████████████████████` **99%** |
 | Tarefas totais     | 77                             |
-| 🟢 Finalizadas     | 75                             |
+| 🟢 Finalizadas     | 76                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 1                              |
+| ⚪ A iniciar       | 0                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-20                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (75 ÷ 77 ≈ 97%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (76 ÷ 77 ≈ 99%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,16 +49,13 @@
 
 ### ANDAMENTO
 
-### 77 · Conexão, descoberta e configuração dos provedores de IA
+### 76 · Organização e responsividade dos cartões do perfil
 
 - **Status:** 🔵 em andamento · **Início:** 2026-10-20.
-- **Pedido do usuário:** verificar toda a configuração de provedores locais e em nuvem em `/admin/ai-config`. O Jan configurado em `http://127.0.0.1:1337/v1` retorna zero modelos apesar do modelo “Gemma-4-E4B-Uncensored-HauhauCS-Aggressive” disponível; a configuração manual também falha. O usuário esclareceu que `8080` era apenas exemplo, não uma porta incorreta confirmada.
-- **Evidência real inicial:** o Jan no Windows responde HTTP 200 em `/v1/models`, com cinco identificadores, incluindo `Gemma-4-E4B-Uncensored-HauhauCS-Aggressive-IQ4_XS`. O mesmo loopback no WSL recusa a conexão; o cliente nativo do Windows executado pelo WSL alcança o serviço. A fronteira de rede Windows/WSL está comprovada, sem necessidade de abrir o Jan para a rede.
-- **Implementação e prova intermediária:** transporte nativo do Windows limitado a loopback em WSL, apenas após recusa de conexão do Node. A listagem retornou HTTP 200 com cinco modelos e a geração real do Gemma retornou HTTP 200: “Sim, a conexão está funcionando.” Vinte testes do cliente/transporte e a checagem de tipos passaram. Acrescentada regressão das rotas para Jan, LocalAI e nuvem com endereço ainda não salvo; validação completa em execução.
-- **Tela administrativa:** contador identificado como modelos selecionados, consulta com quantidade disponível e erro persistente, filtro sem truncar em 40 itens e invalidação de resultados após mudar a conexão. A verificação final será feita no navegador com o Jan real.
-- **Investigação:** conferir o endereço enviado pelo formulário, a configuração persistida, a descoberta de modelos, o teste de conexão e o uso efetivo pelo motor; verificar também o acesso entre o WSL e o servidor local no Windows. Não presumir que um erro de conexão seja ausência de modelos.
-- **Ordem de execução:** esta investigação do backend precede a implementação visual do perfil, seguindo o protocolo do projeto. As tarefas 75 e 76 permanecem no escopo.
-- **Critérios de entrega:** corrigir a causa comprovada, preservar credenciais, validar descoberta e geração com o serviço real disponível e acrescentar testes de regressão para os defeitos encontrados; registrar limites reais de serviços externos sem simular êxito.
+- **Pedido do usuário:** na página `/profile`, colocar “Ações da Conta” acima do cartão “Care”; reorganizar “E-mail de login”, “Privacidade e dados” e “Hábitos de Longevidade”; corrigir o crescimento vertical sem fim relatado em “Hábitos de Longevidade”; reorganizar todos os cartões de forma harmoniosa, responsiva e alinhada às referências de UI/UX de 2026.
+- **Critérios de entrega:** investigar a causa do crescimento vertical; preservar campos, controles e funcionalidades; organizar a hierarquia e os espaçamentos de todos os cartões; pesquisar referências atuais antes da edição visual; validar desktop, tablet e celular, incluindo altura, rolagem e ausência de sobreposição ou estouro horizontal.
+- **Verificação antes da edição:** o cartão de hábitos usa `h-full` dentro da coluna com os demais cartões. No navegador, sem hábitos cadastrados, atingiu cerca de 3465 px; a página mediu aproximadamente 6881 px em 1280 px de largura. A ordem atual coloca Ações da Conta depois de Care. Campos e operações existentes serão preservados.
+- **Referências pesquisadas:** layouts canônicos adaptativos SAP Fiori Android v26-4 e Material 3; WCAG 2.2 Reflow (320 px). Aplicação do sistema Lyra Clean, com seções por assunto, colunas amplas no desktop e fluxo único no celular. Backend da tarefa 77 concluído e publicado antes desta edição visual.
 
 ### BLOQUEADAS
 
@@ -68,12 +65,7 @@ Nenhuma tarefa bloqueada.
 
 ## Tópico 3 · Tarefas a Iniciar
 
-### 76 · Organização e responsividade dos cartões do perfil
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
-- **Pedido do usuário:** na página `/profile`, colocar “Ações da Conta” acima do cartão “Care”; reorganizar “E-mail de login”, “Privacidade e dados” e “Hábitos de Longevidade”; corrigir o crescimento vertical sem fim relatado em “Hábitos de Longevidade”; reorganizar todos os cartões de forma harmoniosa, responsiva e alinhada às referências de UI/UX de 2026.
-- **Critérios de entrega:** investigar a causa do crescimento vertical; preservar campos, controles e funcionalidades; organizar a hierarquia e os espaçamentos de todos os cartões; pesquisar referências atuais antes da edição visual; validar desktop, tablet e celular, incluindo altura, rolagem e ausência de sobreposição ou estouro horizontal.
-- **Estado real:** solicitação acrescentada ao levantamento de pendências. Os componentes foram localizados no código; nenhuma alteração visual ou validação no navegador foi realizada nesta retomada.
+Nenhuma tarefa a iniciar.
 
 ---
 
@@ -1451,3 +1443,13 @@ Nenhuma tarefa bloqueada.
 - **Gates:** `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, testes unitários (520/520 na árvore de trabalho com os testes da tarefa 77), integração com MySQL real (176/176) e build passaram. Console da nova sessão de produção sem erros ou avisos na abertura e no percurso de tema.
 - **Ocorrências tratadas:** dois artefatos gerados de tipos do Dev estavam inválidos e foram recriados pelo gerador oficial do Next com Dev parado; nenhuma exclusão de checagem ou supressão foi usada. A concorrência irrestrita excedeu o tempo em dois testes; os mesmos arquivos passaram isolados e a suíte passou com quatro processos. O limite de quatro processos foi aplicado sem alterar asserções ou tempos máximos, e a execução padrão passou.
 - **Evidências locais:** `.logs/qa75-login-final.png`, `.logs/qa77-{format,fix-lint,lint,format-check,types-final,unit,integration,build}.log`; servidor de produção conferido na porta 3001 para preservar outra execução do projeto na porta 3000. `@current_problems` não é oferecido neste ambiente; diagnósticos de lint, tipos, build e navegador foram conferidos.
+
+### 77 · Conexão, descoberta e configuração dos provedores de IA
+
+- **Status:** 🟢 finalizada · **Commit:** `fef9045` · **Push:** `d59d793..fef9045 main -> main`, confirmado por `git ls-remote`.
+- **Causa comprovada:** Jan acessível no loopback do Windows, enquanto o Node no WSL NAT recebia recusa no mesmo endereço. `8080` era somente exemplo informado pelo usuário. Transporte nativo do Windows restrito a loopback no WSL, somente após recusa de conexão, sem alterar firewall, exposição do servidor ou verificação TLS.
+- **Interface:** distinção entre modelos disponíveis e selecionados, erro de consulta persistente, filtro completo do catálogo, invalidação após mudança de conexão e bloqueio de edições concorrentes durante operações.
+- **Prova real no navegador:** Jan retornou cinco modelos; `Gemma-4-E4B-Uncensored-HauhauCS-Aggressive-IQ4_XS` gerou resposta e mostrou “Funcionando” (468–637 ms). Configuração manual do preset LocalAI apontando para o mesmo servidor Jan também funcionou (562 ms); isso comprova a compatibilidade manual, sem afirmar execução de um servidor LocalAI separado.
+- **Nuvem:** catálogo público real do OpenRouter retornou 468 modelos pela interface; filtro alcançou os modelos `z-ai/`, além do antigo limite de 40. Geração autenticada em nuvem não foi executada por ausência de chaves; testes de contrato das APIs cobrem endereço editado, autenticação, resposta e falhas, sem serem apresentados como geração externa real.
+- **Persistência:** salvo Jan em `http://127.0.0.1:1337/v1`, com o identificador exato acima, como primeiro modelo; Motor da Lyra em segundo. Recarregar confirmou endereço, seleção e ordem, e o novo teste de geração passou. Provedores temporários da validação não foram salvos.
+- **Validação:** formatação, lint, tipos, 520 testes unitários, 176 integrações com MySQL e build passaram. Tela sem estouro horizontal em 1280 e 320 px; console sem erros ou avisos. Evidências: `.logs/qa77-jan-desktop.png`, `.logs/qa77-jan-mobile.png` e `.logs/qa77-*.log`. Documentação em `docs/ia-automatica.md`.
