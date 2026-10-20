@@ -10,6 +10,8 @@ export async function register() {
     // das 3 h locais). Só no servidor Node.js: no Edge não há MySQL.
     const { iniciarRotinaDoCoach } = await import('./lib/coach/rotina');
     iniciarRotinaDoCoach();
+    const { iniciarRotinaDaMemoria } = await import('./lib/memoria/rotina');
+    iniciarRotinaDaMemoria();
   }
 
   if (process.env.NEXT_RUNTIME === 'edge') {

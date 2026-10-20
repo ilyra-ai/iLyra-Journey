@@ -84,6 +84,15 @@ export default function PoliticaDePrivacidadePage() {
             agenda e profissionais cadastrados por você.
           </li>
           <li>
+            <strong>Conversas e memória opcional:</strong> mensagens e respostas
+            ficam no histórico da sua conta. Se você ativar a memória, relatos
+            das suas mensagens também podem ser organizados em lembranças,
+            relações e datas para personalizar outras conversas. Esses relatos
+            podem conter dados sensíveis que você escrever; não representam
+            diagnósticos ou confirmação independente. Mensagens enviadas no modo
+            privado não entram na memória, inclusive em importações futuras.
+          </li>
+          <li>
             <strong>Assinatura e compras:</strong> plano, período e faturas
             pagas (valores, datas, número da fatura e os dados do comprador
             informados no pagamento). Os dados do cartão são tratados pela
@@ -167,9 +176,14 @@ export default function PoliticaDePrivacidadePage() {
               <strong>Google Gemini</strong>, somente quando você informa a sua
               própria chave de IA no chat e o modo privacidade está desligado: a
               sua pergunta e a análise local dos seus indicadores seguem para o
-              Gemini para compor a resposta. Sem a sua chave, a resposta vem dos
-              motores da própria Lyra ou do modelo de IA da plataforma apenas
-              quando ele roda na infraestrutura da Lyra.
+              Gemini para compor a resposta. Sem essa escolha, provedores em
+              nuvem só recebem mensagens, lembranças e contexto pessoal quando
+              você autoriza explicitamente o uso de nuvem nos controles de
+              memória do chat. Essa autorização permite tanto gerar respostas
+              quanto extrair lembranças com os provedores configurados pela
+              plataforma. O padrão é local; os índices semânticos da memória são
+              calculados localmente. O modo privado usa apenas o Motor Lyra e
+              não consulta nem acrescenta lembranças.
             </li>
             <li>
               <strong>
@@ -223,6 +237,17 @@ export default function PoliticaDePrivacidadePage() {
             guardados por 90 dias e são apagados automaticamente depois disso.
           </p>
           <p>
+            Você pode pausar ou apagar a memória sem apagar as conversas. Ao
+            apagar, ela deixa de participar das respostas imediatamente. Se o
+            serviço estiver indisponível ou uma atualização ainda estiver
+            terminando, mostramos a exclusão pendente até confirmar a remoção do
+            grafo e dos relatos. A exclusão da conta também depende dessa
+            confirmação; não informamos que os dados foram apagados antes disso.
+            Um marcador técnico com o identificador da conta e a geração da
+            memória, sem conversas ou perfil, é mantido por até 24 horas para
+            impedir que requisições antigas reponham lembranças apagadas.
+          </p>
+          <p>
             <strong>Exceção: registros fiscais.</strong> As faturas pagas não
             são excluídas pela plataforma, porque a legislação tributária obriga
             a guarda dos comprovantes até a prescrição dos créditos tributários
@@ -251,6 +276,12 @@ export default function PoliticaDePrivacidadePage() {
             <li>
               <strong>Corrigir</strong> os dados do perfil e do primeiro acesso,
               e trocar o e-mail de login.
+            </li>
+            <li>
+              <strong>Consultar, corrigir e apagar lembranças</strong> no botão
+              Memória do chat, além de desativar sua utilização entre conversas
+              e escolher se permite provedores em nuvem. A exportação dos dados
+              inclui os relatos e o grafo da memória.
             </li>
             <li>
               <strong>Ver os consentimentos</strong> que você deu, com a versão

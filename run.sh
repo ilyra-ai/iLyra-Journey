@@ -751,6 +751,18 @@ etapa_build() {
   ok "Build concluído."
 }
 
+etapa_memoria() {
+  etapa "Memória Graphiti (serviço privado e banco de grafos)"
+  executar "Subida da memória Graphiti" compose up -d --build --wait memoria || return 1
+  local porta_memoria
+  porta_memoria="$(env_valor LYRA_MEMORIA_PORTA)"
+  if [[ "$(consultar_http "http://127.0.0.1:${porta_memoria:-8019}/saude")" != "200" ]]; then
+    erro "A memória Graphiti não respondeu à verificação de saúde."
+    return 1
+  fi
+  ok "Graphiti, banco de grafos e índices locais saudáveis."
+}
+
 url_local() {  # ajusta URLs locais para a porta efetiva (URLs externas são mantidas)
   local valor="$1" porta="$2"
   if [[ "$valor" =~ ^(https?://(localhost|127\.0\.0\.1))(:[0-9]+)?(/.*)?$ ]]; then
@@ -792,6 +804,11 @@ etapa_app() {  # etapa_app <dev|prod>
   local base_url public_url
   base_url="$(env_valor APP_BASE_URL)"; public_url="$(env_valor NEXT_PUBLIC_APP_URL)"
   local -a ambiente=("PORT=$porta")
+  local origem_memoria
+  origem_memoria="$(env_valor LYRA_MEMORIA_APP_URL)"
+  if [[ "$origem_memoria" =~ ^(https?://(host\.docker\.internal|localhost|127\.0\.0\.1))(:[0-9]+)?/?$ ]]; then
+    ambiente+=("LYRA_MEMORIA_APP_URL=${BASH_REMATCH[1]}:$porta")
+  fi
   [[ -n "$base_url" ]] && ambiente+=("APP_BASE_URL=$(url_local "$base_url" "$porta")")
   [[ -n "$public_url" ]] && ambiente+=("NEXT_PUBLIC_APP_URL=$(url_local "$public_url" "$porta")")
 
@@ -919,6 +936,9 @@ parar_app() {
 
 parar_banco() {
   etapa "Parando o MySQL (dados preservados no volume)"
+  if [[ -f "$ENV_LOCAL" ]]; then
+    executar "Parada da memória (dados preservados)" compose stop memoria falkordb || return 1
+  fi
   if [[ ! -f "$ENV_LOCAL" ]]; then
     # Sem .env.local o Compose não interpola o serviço; o container do projeto
     # ainda é parado diretamente pelo nome (o volume é mantido).
@@ -973,6 +993,7 @@ cmd_up() {
   etapa_dependencias || return 1
   etapa_banco || return 1
   etapa_migrations || return 1
+  etapa_memoria || return 1
   estado_app
   if [[ "$modo" == prod && -z "$APP_PID_ATUAL" ]]; then etapa_build || return 1; fi
   etapa_app "$modo" || return 1
@@ -996,6 +1017,7 @@ cmd_app() {
     return 1
   fi
   etapa_dependencias || return 1
+  etapa_memoria || return 1
   estado_app
   if [[ "$modo" == prod && -z "$APP_PID_ATUAL" ]]; then etapa_build || return 1; fi
   etapa_app "$modo" || return 1

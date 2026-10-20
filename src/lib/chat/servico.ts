@@ -246,14 +246,15 @@ export async function iniciarTurno(
 export async function concluirTurno(
   userId: string,
   turno: TurnoEmExecucao,
-  resposta: string
+  resposta: string,
+  memoriaPrivada = false
 ) {
   await withTransaction(async (conexao) => {
     const [resultado] = await conexao.execute<ResultSetHeader>(
       `UPDATE chat_turns SET answer = ?, status = 'concluido', error_message = NULL,
-          updated_at = UTC_TIMESTAMP(3)
+          memory_excluded = memory_excluded OR ?, updated_at = UTC_TIMESTAMP(3)
        WHERE id = ? AND user_id = ? AND attempt_id = ?`,
-      [resposta, turno.turnId, userId, turno.attemptId]
+      [resposta, memoriaPrivada, turno.turnId, userId, turno.attemptId]
     );
     if (resultado.affectedRows !== 1) {
       throw new HttpError(
@@ -264,6 +265,16 @@ export async function concluirTurno(
     await conexao.execute(
       'UPDATE chat_conversations SET updated_at = UTC_TIMESTAMP(3) WHERE id = ? AND user_id = ?',
       [turno.conversationId, userId]
+    );
+    // A resposta e o relato entram na mesma transação. Refazer a resposta não
+    // duplica o episódio e uma mensagem privada não participa da importação.
+    await conexao.execute(
+      `INSERT IGNORE INTO memory_episodes (id, user_id, turn_id, content, reference_at, generation)
+       SELECT ?, t.user_id, t.id, t.question, t.created_at, p.generation
+       FROM chat_turns t JOIN memory_preferences p ON p.user_id = t.user_id
+       WHERE t.id = ? AND t.user_id = ? AND t.memory_excluded = FALSE
+         AND p.enabled = TRUE AND p.purge_pending = FALSE`,
+      [randomUUID(), turno.turnId, userId]
     );
   });
 }

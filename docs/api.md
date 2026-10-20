@@ -16,6 +16,32 @@ Todas as rotas ficam em `src/app/api/**/route.ts` e rodam no runtime Node.js. A 
 - **Recursos do plano:** o que o plano vigente não habilita (`plan_entitlements`) responde **403** com "O plano X não inclui Y". Em `/api/data/[table]`, leitura e escrita de `goals`, `ai_plans`, `appointments` (`appointments_active`) e `professionals` (`professionals_total`) e leitura de `ai_tips` exigem o recurso; `/api/semana` omite as metas sem `goal_progress_tracking`. Administradores não dependem do plano. No app, a mesma regra esconde as páginas e os atalhos: `src/lib/plans/rotas.ts` (`RECURSOS_DA_ROTA`) e o hook `useRotaLiberada`.
 - **Cadastro:** a conta, o perfil (`onboarding_completed = false`), os aceites LGPD e a assinatura Free (`source = auth_register`) nascem na mesma transação.
 
+## Memória pessoal Graphiti
+
+- `GET /api/memoria?inicio=0`: sessão obrigatória; preferências, contagens da
+  fila, disponibilidade e até 40 lembranças, com datas e os três relatos de
+  origem mais recentes. A paginação retorna `proximo`. O titular vem da sessão.
+- `POST /api/memoria`: sessão obrigatória; `acao: configurar` recebe `ativa` e
+  `nuvem`; `acao: relato` recebe `texto` (1–2000 caracteres) e `corrige`
+  opcional (UUID de lembrança da própria pessoa); `acao: importar` enfileira
+  mensagens salvas não privadas e responde 202. Até 60 alterações por hora
+  por titular, com 429 e `Retry-After` ao exceder.
+- `DELETE /api/memoria`: sessão obrigatória; desativa e apaga o grafo e os
+  relatos. Responde 200 somente após confirmação real; 202 indica exclusão
+  pendente, retomada automaticamente pela rotina.
+- `POST /api/internal/memoria/gerar`: servidor do Graphiti autenticado com
+  segredo próprio, comparado em tempo constante; não aceita o cookie como
+  credencial. Confere as preferências do titular indicado internamente e usa
+  somente provedores autorizados. Retorna `{ resultado: objeto }`; falha de
+  extração responde 503, sem conteúdo fictício de substituição.
+
+As rotas do titular usam `Cache-Control: private, no-store`. Os dados ficam
+em `memory_preferences`, `memory_episodes` e no grafo próprio no FalkorDB.
+A pergunta do chat aceita `privacyMode`: impede recuperação e captura de
+memória, e a mensagem fica excluída de importações posteriores. Consulte
+[`memoria-graphiti.md`](./memoria-graphiti.md) para contratos internos,
+persistência, exclusão, instalação e verificações.
+
 ## Mapa das rotas
 
 As rotas `/api/admin/ui-config` e `/api/public/ui-config` foram removidas na tarefa 20: desde o commit `6774c18` (março de 2026) a landing e o login usam `site_page_configs` (`page-config`) e nenhum código chamava mais essas rotas. A tabela `ui_config` permanece no banco, sem uso, para não descartar dados existentes.

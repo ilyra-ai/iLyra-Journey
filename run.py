@@ -1367,6 +1367,21 @@ def etapa_build() -> None:
     saida.ok("Build concluído.")
 
 
+def etapa_memoria() -> None:
+    saida.etapa("Memória Graphiti (serviço privado e banco de grafos)")
+    executar(
+        compose("up", "-d", "--build", "--wait", "memoria"),
+        descricao="Subida da memória Graphiti",
+    )
+    env = ler_env()
+    codigo, _ = consultar_http(
+        f"http://127.0.0.1:{env.get('LYRA_MEMORIA_PORTA', '8019')}/saude"
+    )
+    if codigo != 200:
+        raise FalhaEtapa("A memória Graphiti não respondeu à verificação de saúde.")
+    saida.ok("Graphiti, banco de grafos e índices locais saudáveis.")
+
+
 def etapa_app(modo: str) -> EstadoApp:
     saida.etapa(
         f"Aplicação Next.js ({'produção' if modo == 'prod' else 'desenvolvimento'})"
@@ -1412,6 +1427,14 @@ def etapa_app(modo: str) -> EstadoApp:
     # Só sobrescreve as URLs presentes: um valor vazio no ambiente do processo
     # esconderia o do .env.local.
     extra = {"PORT": str(porta)}
+    origem_memoria = env.get("LYRA_MEMORIA_APP_URL", "")
+    if re.fullmatch(
+        r"https?://(?:host\.docker\.internal|localhost|127\.0\.0\.1)(?::\d+)?/?",
+        origem_memoria,
+    ):
+        extra["LYRA_MEMORIA_APP_URL"] = re.sub(
+            r"(?::\d+)?/?$", f":{porta}", origem_memoria, count=1
+        )
     for chave in ("APP_BASE_URL", "NEXT_PUBLIC_APP_URL"):
         if env.get(chave):
             extra[chave] = _url_local(env[chave], porta)
@@ -1630,6 +1653,11 @@ def _arvore_de_processos(raiz: int) -> list[int]:
 
 def parar_banco() -> None:
     saida.etapa("Parando o MySQL (dados preservados no volume)")
+    if ENV_LOCAL.exists():
+        executar(
+            compose("stop", "memoria", "falkordb"),
+            descricao="Parada da memória (dados preservados)",
+        )
     if not ENV_LOCAL.exists():
         # Sem .env.local o Compose não interpola o serviço; o container do
         # projeto ainda é parado diretamente pelo nome (o volume é mantido).
@@ -1686,6 +1714,7 @@ def cmd_up(args: argparse.Namespace) -> int:
     etapa_dependencias()
     etapa_banco()
     etapa_migrations()
+    etapa_memoria()
     if args.prod and not estado_app().pid:
         etapa_build()
     app = etapa_app("prod" if args.prod else "dev")
@@ -1713,6 +1742,7 @@ def cmd_app(args: argparse.Namespace) -> int:
             "O MySQL não está saudável; rode `python3 run.py db` (ou `up`)."
         )
     etapa_dependencias()
+    etapa_memoria()
     if args.prod and not estado_app().pid:
         etapa_build()
     app = etapa_app("prod" if args.prod else "dev")

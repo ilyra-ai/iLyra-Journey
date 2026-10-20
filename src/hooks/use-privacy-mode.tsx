@@ -14,8 +14,9 @@ import { useLocalStorageValue } from '@/hooks/use-local-storage-value';
  *  - O chat NÃO envia a chave de modelo externo (BYOK); a conversa é atendida
  *    apenas pelo motor determinístico local, sem trafegar para LLMs externos.
  *
- * A preferência é persistida localmente (localStorage), sem ir ao servidor, e
- * compartilhada entre todos os componentes e abas abertas.
+ * A preferência é persistida localmente e compartilhada entre componentes e
+ * abas. A escolha acompanha cada pergunta para o servidor impedir consulta,
+ * gravação e importação posterior dessa mensagem na memória Graphiti.
  */
 
 const STORAGE_KEY = 'lyra_privacy_mode';

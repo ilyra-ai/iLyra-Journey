@@ -36,6 +36,7 @@ import { scaleRem } from '@/lib/site-page-config/runtime';
 import { ChatBubble } from './ChatBubble';
 import { ChatInput } from './ChatInput';
 import { TypingIndicator } from './TypingIndicator';
+import { MemoriaDaLyra } from './MemoriaDaLyra';
 
 /**
  * Chat com a Lyra (redesenho da tarefa 52): uma coluna só, centrada, no
@@ -348,6 +349,7 @@ export function ChatAssistantContent({
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-1">
+          <MemoriaDaLyra />
           {semConversa ? null : (
             <Button
               variant="ghost"

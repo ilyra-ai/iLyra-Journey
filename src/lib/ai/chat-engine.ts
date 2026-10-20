@@ -51,6 +51,7 @@ interface ChatContext {
   // Mapa natal da pessoa para o motor da Lyra (tarefa 55): leitura védica,
   // Mapa Lyra DM Samādhi, Mapa Quantum e a base de saberes védicos.
   lyra?: Omit<ContextoDaLyra, 'nome'>;
+  memorias?: readonly string[];
 }
 
 function resumoDoDia(dia: BriefingDoDia) {
@@ -134,6 +135,15 @@ export function generateLocalAssistantReply(
 ): string {
   const text = query.toLowerCase();
   const name = context.profile?.first_name ?? 'usuário';
+
+  if (
+    context.memorias?.length &&
+    /lembr|contei|te disse|meu nome|minha gata|meu gato|meu cachorro|meu objetivo|onde moro|prefer[êe]ncia/u.test(
+      text
+    )
+  ) {
+    return `${name}, encontrei estes registros dos seus relatos anteriores:\n\n${context.memorias.map((relato) => `• ${relato}`).join('\n')}\n\nSe algo mudou, você pode corrigir a lembrança nos controles de memória.`;
+  }
 
   // Motor da Lyra (tarefa 55): mapa natal, os três tipos de mapa, Vedanta,
   // Upavedas e Vedangas, respondidos pela base curada, sem modelo de IA.

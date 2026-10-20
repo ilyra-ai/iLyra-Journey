@@ -9,6 +9,7 @@ import {
   VERSAO_POR_TIPO,
   type TipoDeConsentimento,
 } from '@/lib/lgpd/documentos';
+import { apagarMemorias, exportarMemorias } from '@/lib/memoria/servico';
 import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
 import { registrarErroInterno } from '@/lib/observability/log-seguro';
 import { STORAGE_BUCKETS, resolveStoragePath } from '@/lib/storage/local';
@@ -235,6 +236,8 @@ const TABELAS_DO_TITULAR = [
   ['ai_plans', 'user_id'],
   ['chat_conversations', 'user_id'],
   ['chat_turns', 'user_id'],
+  ['memory_preferences', 'user_id'],
+  ['memory_episodes', 'user_id'],
   ['appointments', 'user_id'],
   ['professionals', 'user_id'],
   ['user_assessments', 'user_id'],
@@ -306,6 +309,7 @@ export async function exportarDadosDoTitular(userId: string) {
     assinaturas,
     clientes_de_cobranca: clientesDeCobranca,
     agenda_no_calendario: agendaNoCalendario,
+    memoria_graphiti: await exportarMemorias(userId),
     ...tabelas,
   };
 }
@@ -325,6 +329,13 @@ export async function exportarDadosDoTitular(userId: string) {
  * - último administrador: a plataforma ficaria sem ninguém para geri-la.
  */
 export async function excluirConta(userId: string) {
+  await validarOuExcluirConta(userId, false);
+  await apagarMemorias(userId);
+  await validarOuExcluirConta(userId, true);
+  await removerArquivosDoTitular(userId);
+}
+
+async function validarOuExcluirConta(userId: string, excluir: boolean) {
   await withTransaction(async (connection) => {
     const [contas] = await connection.query<RowDataPacket[]>(
       `
@@ -377,10 +388,9 @@ export async function excluirConta(userId: string) {
     // Perfil, métricas, metas, hábitos, planos, agenda, avaliações,
     // assinaturas, consentimentos e contadores saem em cascata; os registros
     // fiscais ficam, com user_id = NULL.
-    await connection.execute('DELETE FROM users WHERE id = ?', [userId]);
+    if (excluir)
+      await connection.execute('DELETE FROM users WHERE id = ?', [userId]);
   });
-
-  await removerArquivosDoTitular(userId);
 }
 
 /** Apaga as imagens enviadas pela pessoa (pasta `<bucket>/<userId>`). */

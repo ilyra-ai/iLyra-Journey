@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import { usePrivacyMode } from '@/hooks/use-privacy-mode';
 import {
   EVENTO_DO_HISTORICO,
   type PaginaDaConversa,
@@ -15,6 +16,7 @@ export function useConversaLyra(
   aoAbrir?: (id: string | null) => void
 ) {
   const { db } = useAuth();
+  const { privacyMode } = usePrivacyMode();
   const [turnos, setTurnos] = useState<TurnoDaConversa[]>([]);
   const [carregando, setCarregando] = useState(Boolean(conversaInicial));
   const [enviando, setEnviando] = useState(false);
@@ -112,6 +114,7 @@ export function useConversaLyra(
             conversationId: idConversa,
             turnId: idTurno,
             regenerate: refazer?.estado === 'concluido',
+            privacyMode,
           },
         }
       );

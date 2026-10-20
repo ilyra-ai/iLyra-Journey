@@ -26,6 +26,17 @@ function responder(
 }
 
 describe('assistente local', () => {
+  it('recupera relatos fornecidos pela memória sem inventar detalhes ausentes', () => {
+    expect(
+      responder('Você lembra o nome da minha gata?', {
+        memorias: ['A gata da pessoa se chama Aurora.'],
+      })
+    ).toContain('Aurora');
+    expect(responder('Você lembra o nome da minha gata?')).not.toContain(
+      'Aurora'
+    );
+  });
+
   it('reconhece saudações com acento, inclusive no fim da frase', () => {
     for (const saudacao of ['Olá', 'olá!', 'Oi', 'Bom dia', 'tudo bem?']) {
       expect(responder(saudacao)).toMatch(/^Olá, Ana!/);

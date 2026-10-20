@@ -72,5 +72,55 @@ services:
       start_period: 120s
       start_interval: 5s
 
+  falkordb:
+    image: falkordb/falkordb-server:6.0.2
+    restart: unless-stopped
+    environment:
+      REDIS_ARGS: '--appendonly yes --requirepass ${LYRA_MEMORIA_BANCO_SENHA:?gere os segredos com pnpm env:init}'
+      REDISCLI_AUTH: ${LYRA_MEMORIA_BANCO_SENHA:?gere os segredos com pnpm env:init}
+    volumes:
+      - memoria_data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    security_opt:
+      - no-new-privileges:true
+
+  memoria:
+    build:
+      context: ./services/memoria
+    restart: unless-stopped
+    depends_on:
+      falkordb:
+        condition: service_healthy
+    environment:
+      LYRA_MEMORIA_SEGREDO: ${LYRA_MEMORIA_SEGREDO:?gere os segredos com pnpm env:init}
+      LYRA_MEMORIA_BANCO_SENHA: ${LYRA_MEMORIA_BANCO_SENHA:?gere os segredos com pnpm env:init}
+      LYRA_MEMORIA_APP_URL: ${LYRA_MEMORIA_APP_URL:-http://host.docker.internal:3000}
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    ports:
+      - '127.0.0.1:${LYRA_MEMORIA_PORTA:-8019}:8000'
+    read_only: true
+    tmpfs:
+      - /tmp:size=128m,mode=1777
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'python',
+          '-c',
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/saude', timeout=5)",
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 12
+      start_period: 90s
+
 volumes:
   mysql_data:
+  memoria_data:

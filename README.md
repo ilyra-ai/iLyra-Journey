@@ -289,6 +289,7 @@ O `.env.local` é a **fonte única de configuração**, lida pelo Next.js, pelos
 - Mapa védico e dia védico (método, base de cidades e validação contra o Swiss Ephemeris): [`docs/astrologia.md`](./docs/astrologia.md).
 - Coach diário "Seu dia" (regras, rotina automática, notificações e privacidade): [`docs/coach.md`](./docs/coach.md).
 - O que a IA faz sozinha (prontidão gravada, metas automáticas, sequências, plano que se refaz, dica do dia, monitoramento e a leitura védica do "Seu dia" por qualquer modelo de IA, inclusive local): [`docs/ia-automatica.md`](./docs/ia-automatica.md).
+- Memória pessoal Graphiti (infraestrutura, provedores, controles, fila, privacidade e verificação real): [`docs/memoria-graphiti.md`](./docs/memoria-graphiti.md).
 - Modelo de segurança (sessão, CSRF, limites de tentativa, cabeçalhos, XSS, dados de saúde, Stripe e Sentry): [`docs/seguranca.md`](./docs/seguranca.md).
 - LGPD (consentimentos, exportação, exclusão e dados fiscais): [`docs/lgpd.md`](./docs/lgpd.md).
 - Performance (medições por rota, gargalos corrigidos e como medir): [`docs/performance.md`](./docs/performance.md).

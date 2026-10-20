@@ -10,6 +10,23 @@ Três pontos de entrada sobem o ambiente local, com duas implementações: `run.
 
 ## `run.py` (WSL2 Ubuntu / Linux)
 
+### Memória Graphiti nos comandos de aplicação
+
+Desde a tarefa 85, `up` e `app` também constroem, iniciam e aguardam a saúde
+do serviço privado `memoria` e do `falkordb`, antes de abrir o Next.js. Isso
+vale para `run.py`, `run.sh` e o wrapper `run_windows.py`. A instalação da
+memória usa Python dentro do contêiner e não altera o Python do computador.
+O primeiro build baixa os pesos públicos do índice semântico; os seguintes
+reutilizam as camadas do Docker quando os arquivos não mudaram.
+
+Os segredos e a porta do serviço vêm do `.env.local`, gerados pelo
+`pnpm env:init`. O retorno ao aplicativo (`LYRA_MEMORIA_APP_URL`) acompanha
+a porta escolhida pelo launcher. `stop db` e `stop` também param os dois
+serviços de memória, preservando `memoria_data`; `stop app` encerra somente
+o Next.js. Os comandos `db` e `migrate` continuam específicos do MySQL.
+Configuração, privacidade e verificações estão em
+[`memoria-graphiti.md`](./memoria-graphiti.md).
+
 ### Requisitos
 
 - Python 3.10+ (o Ubuntu 22.04 traz 3.10; o 24.04 traz 3.12).
@@ -24,7 +41,7 @@ Na primeira execução, o `run.py` cria `.lyra-run/venv` e instala o `requiremen
 | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `python3 run.py`            | Menu interativo (com terminal); sem terminal, mostra a ajuda.                                                                                                                                                                                                                          |
 | `up [--prod]`               | Pré-requisitos → `.env.local` → dependências → MySQL → migrations → aplicação → verificação (`/api/health`, `/`, `/login`, login do admin). `--prod` faz `next build` e `next start`.                                                                                                  |
-| `app [--prod]`              | Só a aplicação (exige o MySQL saudável).                                                                                                                                                                                                                                               |
+| `app [--prod]`              | Aplicação + memória Graphiti (exige o MySQL saudável).                                                                                                                                                                                                                                 |
 | `db`                        | MySQL + migrations.                                                                                                                                                                                                                                                                    |
 | `migrate`                   | Só as migrations.                                                                                                                                                                                                                                                                      |
 | `doctor`                    | Diagnóstico somente leitura: plataforma, Ubuntu, Python, Node (contra `.nvmrc`/`engines`), Corepack/pnpm, Docker, Compose, `.env.local` (faltando, permissão e variáveis que o app não usa mais), dependências, portas com dono, MySQL, migrations e aplicação. Exit 1 se houver erro. |

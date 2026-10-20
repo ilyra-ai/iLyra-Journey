@@ -1,0 +1,10 @@
+# Dependências diretas do serviço de memória; requirements.lock é gerado
+# pelo resolvedor com versões transitivas e hashes, usando Python 3.14.
+graphiti-core[falkordb]==0.31.2
+numpy==2.5.4
+onnxruntime==1.31.0
+tokenizers==0.23.3
+huggingface-hub==1.33.0
+fastapi==0.156.2
+uvicorn==0.54.0
+redis==8.1.0
