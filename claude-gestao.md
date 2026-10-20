@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████████` **99%** |
-| Tarefas totais     | 77                             |
+| Progresso          | `███████████████████░` **96%** |
+| Tarefas totais     | 79                             |
 | 🟢 Finalizadas     | 76                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 0                              |
+| ⚪ A iniciar       | 2                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-20                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (76 ÷ 77 ≈ 99%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (76 ÷ 79 ≈ 96%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -56,6 +56,7 @@
 - **Critérios de entrega:** investigar a causa do crescimento vertical; preservar campos, controles e funcionalidades; organizar a hierarquia e os espaçamentos de todos os cartões; pesquisar referências atuais antes da edição visual; validar desktop, tablet e celular, incluindo altura, rolagem e ausência de sobreposição ou estouro horizontal.
 - **Verificação antes da edição:** o cartão de hábitos usa `h-full` dentro da coluna com os demais cartões. No navegador, sem hábitos cadastrados, atingiu cerca de 3465 px; a página mediu aproximadamente 6881 px em 1280 px de largura. A ordem atual coloca Ações da Conta depois de Care. Campos e operações existentes serão preservados.
 - **Referências pesquisadas:** layouts canônicos adaptativos SAP Fiori Android v26-4 e Material 3; WCAG 2.2 Reflow (320 px). Aplicação do sistema Lyra Clean, com seções por assunto, colunas amplas no desktop e fluxo único no celular. Backend da tarefa 77 concluído e publicado antes desta edição visual.
+- **Revisão solicitada pelo usuário:** os dois anexos de 2026-10-20 mostram vazios extensos sob a coluna de apoio e ao lado de Care/compras. A primeira versão por seções foi validada funcionalmente, mas não atende ao aproveitamento visual pedido. A tarefa permanece aberta: distribuição contínua com altura real dos cartões, preservando leitura, teclado e empilhamento no celular. Pesquisa complementar: posicionamento automático do CSS Grid, ResizeObserver e ordem de foco WCAG 2.2.
 
 ### BLOQUEADAS
 
@@ -65,7 +66,17 @@ Nenhuma tarefa bloqueada.
 
 ## Tópico 3 · Tarefas a Iniciar
 
-Nenhuma tarefa a iniciar.
+### 78 · Identidade Lyra AI no menu lateral
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Pedido do usuário:** no sidebar, mudar o menu “Chat IA” para “Lyra AI” e substituir o ícone pelo logo oficial da Lyra.
+- **Critérios:** conferir a navegação existente antes de editar, manter destino e permissões, aplicar nome e logo acessíveis em desktop e mobile, validar a navegação e publicar a tarefa individualmente na main.
+
+### 79 · Histórico real de conversas no sidebar
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Pedido do usuário:** abaixo de “Lyra AI”, mostrar as três conversas mais recentes e ocultar as demais até a ação “Ver mais”, logo após a última conversa visível; pesquisar na internet as melhores referências de navegação e histórico para 2026.
+- **Critérios:** auditar o armazenamento atual de conversas; implementar persistência real e acesso isolado por usuário, se necessário, antes da interface; abrir a conversa escolhida com suas mensagens, manter histórico após recarregar, atualizar ordem e título conforme o fluxo real e tratar carregamento, vazio e falha. Validar teclado, celular e desktop, sem conversas fictícias nem lista fixa. Commit e push próprios ao concluir.
 
 ---
 
