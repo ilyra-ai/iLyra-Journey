@@ -233,6 +233,8 @@ const TABELAS_DO_TITULAR = [
   ['goals', 'user_id'],
   ['habits', 'user_id'],
   ['ai_plans', 'user_id'],
+  ['chat_conversations', 'user_id'],
+  ['chat_turns', 'user_id'],
   ['appointments', 'user_id'],
   ['professionals', 'user_id'],
   ['user_assessments', 'user_id'],

@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Menu } from 'lucide-react';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
+import { HistoricoDeConversas } from '@/components/chat/HistoricoDeConversas';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -119,6 +120,9 @@ export function MobileSidebar() {
                     >
                       {item.label}
                     </SidebarLink>
+                    {item.href === '/chat' ? (
+                      <HistoricoDeConversas aoEscolher={() => setOpen(false)} />
+                    ) : null}
                   </li>
                 ))}
               </ul>

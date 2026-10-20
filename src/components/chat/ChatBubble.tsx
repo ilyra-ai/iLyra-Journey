@@ -9,6 +9,7 @@ import { MarcaLyra } from '@/components/marca/MarcaLyra';
 interface ChatBubbleProps {
   message: string;
   isUser: boolean;
+  animate?: boolean;
   onRegenerate?: () => void;
 }
 
@@ -23,7 +24,12 @@ const INTERVALO_MS = 16;
  * sem caixa, como nas interfaces de conversa de 2026. Copiar e refazer
  * aparecem no hover, no foco do teclado e sempre nas telas de toque.
  */
-export function ChatBubble({ message, isUser, onRegenerate }: ChatBubbleProps) {
+export function ChatBubble({
+  message,
+  isUser,
+  onRegenerate,
+  animate = true,
+}: ChatBubbleProps) {
   const [isCopied, setIsCopied] = useState(false);
   // Quantos caracteres da resposta já apareceram. Quando o texto muda, a
   // contagem recomeça durante a renderização (estado derivado).
@@ -33,11 +39,12 @@ export function ChatBubble({ message, isUser, onRegenerate }: ChatBubbleProps) {
     setTypedMessage(message);
     setRevealedCount(0);
   }
-  const displayedText = isUser ? message : message.slice(0, revealedCount);
-  const isTyping = !isUser && revealedCount < message.length;
+  const displayedText =
+    isUser || !animate ? message : message.slice(0, revealedCount);
+  const isTyping = !isUser && animate && revealedCount < message.length;
 
   useEffect(() => {
-    if (isUser || !message) {
+    if (isUser || !animate || !message) {
       return;
     }
     // Movimento reduzido: a resposta aparece inteira.
@@ -57,7 +64,7 @@ export function ChatBubble({ message, isUser, onRegenerate }: ChatBubbleProps) {
     }, INTERVALO_MS);
 
     return () => clearInterval(typingInterval);
-  }, [message, isUser]);
+  }, [message, isUser, animate]);
 
   const handleCopy = async () => {
     try {

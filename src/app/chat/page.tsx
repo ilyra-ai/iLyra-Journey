@@ -1,11 +1,35 @@
 'use client';
 
+import { Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { AppShell } from '@/components/layout/AppShell';
 import { useAuth } from '@/context/AuthContext';
 import { SplashScreen } from '@/components/SplashScreen';
 import { ChatAssistantContent } from '@/components/chat/ChatAssistantContent';
 import { usePlanFeatureAccess } from '@/hooks/use-plan-feature-access';
 import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
+
+function ConversaSelecionada() {
+  const { session } = useAuth();
+  const busca = useSearchParams();
+  const router = useRouter();
+  const id = busca.get('conversa');
+  return (
+    <ChatAssistantContent
+      key={`${session?.user.id ?? 'visitante'}:${id ?? 'nova'}`}
+      conversaId={id}
+      aoAbrirConversa={(conversa) => {
+        if (conversa !== id)
+          router.replace(
+            conversa
+              ? `/chat?conversa=${encodeURIComponent(conversa)}`
+              : '/chat',
+            { scroll: false }
+          );
+      }}
+    />
+  );
+}
 
 export default function ChatPage() {
   const { session } = useAuth();
@@ -26,7 +50,9 @@ export default function ChatPage() {
   return (
     <AppShell puckDocumentKey="chat" contentClassName="py-4 md:py-6">
       {chatEnabled ? (
-        <ChatAssistantContent />
+        <Suspense fallback={<p role="status">Carregando conversa…</p>}>
+          <ConversaSelecionada />
+        </Suspense>
       ) : (
         <PlanUpgradeNotice
           currentPlanKey={subscription?.plan.key ?? 'free'}

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import React from 'react';
 import { Settings2 } from 'lucide-react';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
+import { HistoricoDeConversas } from '@/components/chat/HistoricoDeConversas';
 import { useAuth } from '@/context/AuthContext';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
@@ -120,6 +121,9 @@ export function Sidebar({
                     >
                       {item.label}
                     </SidebarLink>
+                    {item.href === '/chat' && !previa ? (
+                      <HistoricoDeConversas />
+                    ) : null}
                   </li>
                 ))}
               </ul>
