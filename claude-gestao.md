@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `███████████████████░` **96%** |
-| Tarefas totais     | 79                             |
+| Progresso          | `███████████████████░` **94%** |
+| Tarefas totais     | 81                             |
 | 🟢 Finalizadas     | 76                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 2                              |
+| ⚪ A iniciar       | 4                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-20                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (76 ÷ 79 ≈ 96%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (76 ÷ 81 ≈ 94%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -77,6 +77,18 @@ Nenhuma tarefa bloqueada.
 - **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
 - **Pedido do usuário:** abaixo de “Lyra AI”, mostrar as três conversas mais recentes e ocultar as demais até a ação “Ver mais”, logo após a última conversa visível; pesquisar na internet as melhores referências de navegação e histórico para 2026.
 - **Critérios:** auditar o armazenamento atual de conversas; implementar persistência real e acesso isolado por usuário, se necessário, antes da interface; abrir a conversa escolhida com suas mensagens, manter histórico após recarregar, atualizar ordem e título conforme o fluxo real e tratar carregamento, vazio e falha. Validar teclado, celular e desktop, sem conversas fictícias nem lista fixa. Commit e push próprios ao concluir.
+
+### 80 · Formatação das respostas da Lyra AI
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Pedido do usuário:** respostas com `**texto**` estão mostrando os asteriscos em vez do negrito; corrigir a apresentação da formatação produzida pelo modelo.
+- **Critérios:** conferir o renderizador existente, apresentar negrito de forma semântica e acessível, preservar o texto original para cópia e histórico e evitar execução de HTML ou links inseguros vindos de mensagens. Validar resposta real, trechos formatados e texto comum; publicação individual na main.
+
+### 81 · Aproveitamento da largura da tela do chat
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Pedido do usuário:** o anexo mostra o chat excessivamente centralizado, sem ocupar a área disponível até a margem esquerda do conteúdo. Ajustar o layout para aproveitar essa largura.
+- **Critérios:** pesquisar referências atuais, revisar a limitação de largura e os espaçamentos, alinhar a área da conversa ao conteúdo do app, manter legibilidade das mensagens e campo de envio acessível, testar sidebar, desktop, tablet e celular, sem estouro ou cortes; publicação individual na main.
 
 ---
 
