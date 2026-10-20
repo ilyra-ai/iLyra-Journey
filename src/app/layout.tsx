@@ -107,8 +107,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   // Sem maximumScale: o zoom do navegador precisa continuar disponível
   // (WCAG 1.4.4, redimensionar texto).
-  // Valor inicial da área interna; o `ThemeColorSync` acompanha o tema
-  // escolhido, inclusive o padrão escuro da landing e do login.
+  // O tema inicial é claro em todas as rotas; o `ThemeColorSync` acompanha
+  // a preferência escolhida pela pessoa.
   themeColor: COR_DA_BARRA_DO_NAVEGADOR.light,
   // A aplicação oferece os dois esquemas; o `next-themes` grava no <html> o
   // `color-scheme` do tema escolhido.
@@ -134,8 +134,8 @@ export default function RootLayout({
         <a href="#conteudo-principal" className="skip-nav">
           Pular para o conteúdo principal
         </a>
-        {/* A área interna mantém o padrão claro. O provedor separa a
-            preferência pública, com padrão escuro só na landing e login. */}
+        {/* O padrão é claro em todas as rotas. As preferências pública e
+            interna continuam independentes para quem alternar o tema. */}
         <ThemeProvider
           attribute="class"
           defaultTheme="light"

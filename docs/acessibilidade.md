@@ -82,8 +82,9 @@ exceção de espaçamento) e o seletor de zoom interno do Puck (abaixo).
 
 ## Tema escuro (tarefa 34)
 
-- **Alternância:** desde 2026-10-20, o padrão é escuro somente na landing e
-  no login, por solicitação do usuário; nas demais rotas continua claro.
+- **Alternância:** a orientação mais recente de 2026-10-20 define o tema
+  claro como padrão em todas as páginas, no mobile e no desktop. As
+  preferências de tema escolhidas pela pessoa continuam respeitadas.
   No app, o menu do
   perfil tem o grupo "Tema" (Claro, Escuro, Do sistema), que não fecha o menu
   ao escolher; nas telas públicas (landing, entrada, política de privacidade

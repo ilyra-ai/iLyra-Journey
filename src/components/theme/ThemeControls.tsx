@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { Check, Monitor, Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/components/ThemeProvider';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -13,7 +13,7 @@ import {
 
 import { COR_DA_BARRA_DO_NAVEGADOR } from './tema';
 
-/** Opções de tema oferecidas à pessoa (o claro continua sendo o padrão). */
+/** Ambos os temas e o acompanhamento da preferência do sistema. */
 export const OPCOES_DE_TEMA = [
   { valor: 'light', rotulo: 'Claro', Icone: Sun },
   { valor: 'dark', rotulo: 'Escuro', Icone: Moon },

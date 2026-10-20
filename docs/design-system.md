@@ -130,11 +130,11 @@ frio (matiz 346) justamente para não se confundir com o coral de destaque.
   usam preenchimentos menores; seções com 32–48 px (planos com 18 px
   no desktop e 32 px no celular).
   A grade de planos mantém três colunas acima de 900 px e empilha abaixo.
-- **Padrão de tema solicitado em 2026-10-20:** escuro somente na landing
-  e no login, preservando ambos os temas e a identidade existente. A escolha
-  pública é guardada separadamente da área interna; não modifica sua
-  preferência nem o padrão claro das demais rotas. Essa solicitação
-  específica prevalece sobre a preferência geral anterior por tema claro.
+- **Padrão de tema confirmado em 2026-10-20:** claro em todas as páginas,
+  incluindo landing e login, no mobile e no desktop. A orientação mais
+  recente substitui o pedido anterior de escuro nas telas públicas. A
+  alternância permanece disponível e respeita escolhas já salvas; as
+  preferências pública e interna continuam independentes.
 
 ## Referências históricas
 
