@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **92%** |
-| Tarefas totais     | 85                             |
+| Progresso          | `██████████████████░░` **91%** |
+| Tarefas totais     | 86                             |
 | 🟢 Finalizadas     | 78                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 6                              |
+| ⚪ A iniciar       | 7                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-20                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (78 ÷ 85 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (78 ÷ 86 ≈ 91%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -57,6 +57,7 @@
 - **Privacidade e qualidade:** isolamento entre titulares imposto no servidor, sem confiar em identificadores enviados pelo cliente; controles para consultar, corrigir e apagar memórias, integração à exportação e exclusão da conta e tratamento explícito de conteúdo sensível. Separar relato do usuário de inferência do modelo, sem apresentar hipóteses como fatos nem produzir diagnóstico psicológico automático. Respeitar as escolhas de privacidade e de envio a provedores externos.
 - **Validação e entrega:** testar persistência após reiniciar, lembrança entre conversas, troca de provedor, contradições ao longo do tempo, indisponibilidade do serviço, retentativas, exclusão e bloqueio de acesso entre contas. Comprovar com Graphiti e banco de grafos reais, além das rotas e da interface mobile/desktop, passando os gates e publicando commit e push próprios na main.
 - **Pesquisa inicial:** [Graphiti oficial](https://github.com/getzep/graphiti), licença Apache 2.0, biblioteca Python e bancos de grafos suportados; exemplos REST/MCP não oferecem autenticação nem isolamento de usuários e não serão expostos como serviço de produção. A integração será iniciada pela infraestrutura e pelo backend, antes dos controles visuais.
+- **Progresso verificado em 2026-10-20:** serviço Python com `graphiti-core` 0.31.2 e FalkorDB 6.0.2 executados de verdade no Docker, ambos saudáveis; índices multilíngues locais de 256 dimensões com pesos em revisão fixa e dependências com hashes. A API privada recusou chamada sem autenticação (401), consultou um grafo vazio autenticado (200) e o apagou (200). Migração 031 aplicada ao MySQL existente sem apagar dados; quatro testes contra o MySQL real passaram, cobrindo autorização, ativação explícita, fila sem duplicação, modo privado, isolamento e retentativa. Recuperação com o modelo real, controles visuais, revisão completa e publicação ainda estão em execução; a tarefa não está finalizada.
 
 ### BLOQUEADAS
 
@@ -101,6 +102,17 @@ Nenhuma tarefa bloqueada.
 - **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
 - **Pedido do usuário:** aplicar `gatilho_++-.md` somente na mensagem que começar com `++-`; mensagens sem o prefixo não devem manter essa instrução ativada.
 - **Critérios:** arquivo lido integralmente; detectar o prefixo no início, compor instruções pontuais de análise aprofundada e explicação acessível e preservar as demais instruções. Testar prefixo no começo, no meio, ausente e mensagem seguinte; não persistir esse modo como preferência da conversa. Trechos que pedem contorno de proteções não serão convertidos em mecanismos de evasão; profundidade não deve ser apresentada como garantia de verdade absoluta.
+
+---
+
+### 86 · Geração de imagens no chat com modelos conectados
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Pedido do usuário:** o chat do app deve permitir criar imagens. Conforme complemento recebido em 2026-10-20, usar o segundo modelo de IA conectado nas configurações do app, que permitem conectar cinco modelos simultaneamente, tanto quando o usuário solicitar uma imagem quanto quando o Motor Lyra fizer a leitura do mapa pessoal, gerando também a imagem do mapa daquele usuário.
+- **Roteamento e mapa pessoal:** conferir a ordem real das cinco conexões e encaminhar a geração de imagens ao segundo modelo configurado, preservando a configuração dos demais. Na leitura do mapa, construir a imagem a partir dos dados reais e autorizados do próprio titular e vinculá-la à leitura e à conversa correspondentes. Não inventar dados do mapa nem substituir o segundo modelo silenciosamente; se ele não estiver configurado, estiver indisponível ou não oferecer geração de imagens, informar a condição e permitir corrigir a conexão e tentar novamente.
+- **Critérios:** inspecionar a configuração e as capacidades reais dos provedores, pesquisar suas APIs oficiais atuais e implementar geração real pelo servidor, verificando a compatibilidade do segundo modelo e exibindo mensagens claras quando a conexão só oferecer texto. Não simular imagens nem atribuir essa capacidade a modelos que não a possuem. Integrar envio do pedido, andamento, falhas e retentativa à experiência simples e responsiva do chat, exibindo o resultado e permitindo baixar a imagem.
+- **Persistência e acesso:** preservar pedido, imagem e referência ao modelo na conversa, com armazenamento real vinculado ao titular, autorização no servidor, validação dos arquivos e limites de uso. Respeitar modo privado e consentimento para provedores externos, incluir os dados na exportação e exclusão da conta e não expor chaves ou imagens privadas em URLs públicas.
+- **Validação e entrega:** conferir geração solicitada no chat e geração do mapa após sua leitura, comprovando o uso do segundo modelo entre as cinco conexões e o tratamento de conexão ausente ou incompatível. Testar provedor e modelo capazes de criar imagens, reabertura da conversa, download, isolamento entre contas e interface desktop/mobile, além dos quality gates. A implementação terá commit e push próprios na main; este registro não significa funcionalidade já implementada.
 
 ---
 
