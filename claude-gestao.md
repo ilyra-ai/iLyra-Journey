@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **91%** |
+| Progresso          | `██████████████████░░` **92%** |
 | Tarefas totais     | 88                             |
-| 🟢 Finalizadas     | 80                             |
+| 🟢 Finalizadas     | 81                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 7                              |
+| ⚪ A iniciar       | 6                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-21                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (80 ÷ 88 ≈ 91%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (81 ÷ 88 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,16 +51,12 @@
 
 ### ANDAMENTO
 
-### 78 · Identidade Lyra AI no menu lateral
+### 88 · Histórico recolhido por padrão e controle de exibição
 
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-20 · **Início:** 2026-10-21.
-- **Pedido do usuário:** no sidebar, mudar o menu “Chat IA” para “Lyra AI” e substituir o ícone pelo logo oficial da Lyra.
-- **Complemento de ordem:** Lyra AI e seu histórico devem ser o primeiro bloco da sidebar, acima de Painel, tanto no desktop quanto no menu móvel. Aplicar também às configurações antigas, preservando a ordem relativa dos demais itens e as permissões. Conferir novamente essa ordem antes do commit da tarefa 78.
-- **Critérios:** conferir a navegação existente antes de editar, manter destino e permissões, aplicar nome e logo acessíveis em desktop e mobile, validar a navegação e publicar a tarefa individualmente na main.
-- **Conferência:** nome antigo presente na navegação e no padrão do construtor; menus desktop e móvel compartilham `SidebarLink`. Reutilizar `MarcaLyra`, preservar rótulos personalizados e converter os nomes padrão antigos também nas configurações já salvas. Pesquisa: navegação Fluent 2 e diretrizes vigentes do sistema Lyra Clean, consultadas em 21/10/2026.
-- **Implementação:** nome e marca oficial na sidebar, menu móvel, busca e atalho; mesma rota `/chat`, metadados atualizados e histórico preservado. Nomes antigos padrão recebem o rótulo novo na apresentação; nomes personalizados continuam válidos.
-- **Validação obtida:** 559 unitários, formatação, lint, tipos, build e launcher de produção passaram; integração em execução antes da publicação. Navegador conferiu nome, logo carregado com texto alternativo decorativo, destino, item ativo, busca por teclado e fechamento do menu móvel por navegação e Escape. Sem estouro em 1440, 390 e 320 px e sem erros ou avisos no console. Evidências `.logs/qa78-menu-desktop.png`, `.logs/qa78-menu-mobile.png`, `.logs/qa78-menu-320.png` e `.logs/qa78-*.log`.
-- **Validação final da ordem acrescentada:** novo build e launcher aprovados; formatação, lint, tipos, 560 unitários e 192 integrações passaram. Conferência real em 1440, 390 e 320 px confirmou Lyra AI como primeiro link, histórico abaixo e Painel depois do histórico; capturas anteriores substituídas pelas da ordem final. Gates em `.logs/qa78-final-*.log`; pronta para commit e push individuais.
+- **Status:** 🔵 em andamento · **Registro/início:** 2026-10-21.
+- **Pedido do usuário:** permitir esconder e voltar a ver o histórico abaixo de Lyra AI; deixar oculto por padrão e mostrá-lo somente após clicar em “Ver mais”. Esta orientação substitui o padrão anterior de três conversas inicialmente visíveis da tarefa 79.
+- **Critérios:** conferir o componente existente e reaproveitar consulta, paginação e isolamento. Ao abrir o app ou o menu, não exibir a lista de conversas por padrão; “Ver mais” abre o histórico e “Ocultar histórico” permite recolhê-lo. Preservar o acesso às três recentes, expansão das demais, estados de carregamento, vazio e erro, seleção da conversa, teclado e fechamento do menu móvel. Não apagar conversas nem alterar a API ou as preferências de privacidade.
+- **Sequência e entrega:** implementar após a tarefa 78, já publicada em `e776f10`, antes de modernizar o chat, por se tratar da nova orientação para a mesma sidebar. Validar desktop/mobile e gates; commit e push próprios na main.
 
 ---
 
@@ -110,15 +106,6 @@
 - **Disponibilidade informada posteriormente:** usuário confirmou Jan aberto em `http://127.0.0.1:1337/v1`, com `Gemma-4-E4B-Uncensored-HauhauCS-Aggressive`. Consultar o identificador exato no catálogo durante a validação, sem presumir que o nome abreviado é o identificador da API.
 - **Critérios:** conferir a causa no código e na interface antes de alterar. Distinguir configuração e modelo salvos de disponibilidade confirmada por conexão recente; não apresentar “online” com base somente na seleção persistida ou em resultado antigo. Mostrar indisponibilidade, verificação em andamento e estado ainda não verificado com mensagens claras, data da última checagem e retentativa quando apropriado. Invalidar resultados após mudanças de endereço, credenciais ou modelo e impedir respostas atrasadas de sobrescrever uma conexão mais recente. Preservar configuração e modelo quando o servidor local fechar.
 - **Validação e entrega:** conferir conexão ativa e recusa real, reabertura do provedor, atualização do catálogo e separação entre modelos configurados e disponíveis; não encerrar o Jan do usuário para provocar falha. Aplicar aos provedores locais e em nuvem conforme seus contratos reais. Validar backend, interface desktop/mobile, gates e commit/push individuais na main, sem branches ou worktrees. Implementar após a sequência já autorizada, sem misturar a correção à tarefa 78.
-
----
-
-### 88 · Histórico recolhido por padrão e controle de exibição
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-21.
-- **Pedido do usuário:** permitir esconder e voltar a ver o histórico abaixo de Lyra AI; deixar oculto por padrão e mostrá-lo somente após clicar em “Ver mais”. Esta orientação substitui o padrão anterior de três conversas inicialmente visíveis da tarefa 79.
-- **Critérios:** conferir o componente existente e reaproveitar consulta, paginação e isolamento. Ao abrir o app ou o menu, não exibir a lista de conversas por padrão; “Ver mais” abre o histórico e “Ocultar histórico” permite recolhê-lo. Preservar o acesso às três recentes, expansão das demais, estados de carregamento, vazio e erro, seleção da conversa, teclado e fechamento do menu móvel. Não apagar conversas nem alterar a API ou as preferências de privacidade.
-- **Sequência e entrega:** implementar logo após a publicação individual da tarefa 78, antes de modernizar o chat, por se tratar da nova orientação para a mesma sidebar. Validar desktop/mobile e gates; commit e push próprios na main, sem misturar com a publicação do nome e da posição do menu.
 
 ---
 
@@ -1515,6 +1502,15 @@
 - **Nuvem:** catálogo público real do OpenRouter retornou 468 modelos pela interface; filtro alcançou os modelos `z-ai/`, além do antigo limite de 40. Geração autenticada em nuvem não foi executada por ausência de chaves; testes de contrato das APIs cobrem endereço editado, autenticação, resposta e falhas, sem serem apresentados como geração externa real.
 - **Persistência:** salvo Jan em `http://127.0.0.1:1337/v1`, com o identificador exato acima, como primeiro modelo; Motor da Lyra em segundo. Recarregar confirmou endereço, seleção e ordem, e o novo teste de geração passou. Provedores temporários da validação não foram salvos.
 - **Validação:** formatação, lint, tipos, 520 testes unitários, 176 integrações com MySQL e build passaram. Tela sem estouro horizontal em 1280 e 320 px; console sem erros ou avisos. Evidências: `.logs/qa77-jan-desktop.png`, `.logs/qa77-jan-mobile.png` e `.logs/qa77-*.log`. Documentação em `docs/ia-automatica.md`.
+
+### 78 · Identidade Lyra AI no menu lateral
+
+- **Status:** 🟢 finalizada · **Commit:** `e776f10134f905893014ca5d708cc4870ce809bd` · **Push:** `91fc344..e776f10 main -> main`, confirmado por `git ls-remote` · **Conclusão:** 2026-10-21.
+- **Pedido do usuário:** mudar “Chat IA” para “Lyra AI”, usar o logo oficial e colocar o acesso com seu histórico como primeiro bloco da sidebar, acima de Painel, no desktop e no menu móvel.
+- **Conferência e entrega:** navegação e componente compartilhado conferidos antes de alterar. Marca oficial na sidebar, menu móvel, busca e atalho; mesma rota `/chat`, metadados atualizados e histórico preservado. Nomes padrão antigos são convertidos na apresentação e o acesso é posicionado primeiro também em configurações antigas; nomes personalizados, ordem relativa dos demais itens, atalhos, visibilidade e permissões foram preservados, sem regravar o banco.
+- **Gates finais:** `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 560 unitários (69 arquivos), 192 integrações (23 arquivos), build e launcher de produção aprovados. Saúde com 35 migrações, páginas e login administrativo conferidos. Seis testes de navegação cobrem padrões antigos, personalização, ordem e permissões.
+- **QA visual final:** 1440, 390 e 320 px sem estouro. Nome, logo carregado com texto alternativo decorativo, destino, item ativo, busca por teclado e fechamento do menu móvel por navegação e Escape aprovados. Posição medida no navegador: Lyra AI primeiro, histórico abaixo e Painel após o histórico. Console sem erros ou avisos. Imagens `.logs/qa78-menu-desktop.png`, `.logs/qa78-menu-mobile.png`, `.logs/qa78-menu-320.png`; gates em `.logs/qa78-final-*.log`. Pesquisa e decisões em `docs/design-system.md`, com referência à navegação Fluent 2 consultada em 21/10/2026.
+- **Solicitação posterior:** o novo padrão de histórico totalmente recolhido tem entrega própria na tarefa 88, sem misturar sua implementação com este commit.
 
 ### 79 · Histórico real de conversas no sidebar
 
