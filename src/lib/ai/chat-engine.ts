@@ -13,7 +13,10 @@ import {
   SINAIS_DOS_CHAKRAS,
   SINAIS_DOS_KOSHAS,
 } from '@/lib/integrativo/cobertura';
-import { IDENTIDADE_DA_LYRA } from '@/lib/lyra/personalidade';
+import {
+  expressarComoLyra,
+  IDENTIDADE_DA_LYRA,
+} from '@/lib/lyra/personalidade';
 import { type ContextoDaLyra, responderComoLyra } from '@/lib/lyra/responder';
 
 /** O mesmo snapshot só com ausências (dosha pela Lua, sem sinais). */
@@ -52,6 +55,8 @@ interface ChatContext {
   // Mapa Lyra DM Samādhi, Mapa Quantum e a base de saberes védicos.
   lyra?: Omit<ContextoDaLyra, 'nome'>;
   memorias?: readonly string[];
+  /** Forma de tratamento já resolvida no servidor; ausência usa o padrão afetivo. */
+  tratamento?: string;
 }
 
 function resumoDoDia(dia: BriefingDoDia) {
@@ -133,8 +138,12 @@ export function generateLocalAssistantReply(
   query: string,
   context: ChatContext
 ): string {
+  return expressarComoLyra(gerarRespostaDoMotor(query, context), query);
+}
+
+function gerarRespostaDoMotor(query: string, context: ChatContext): string {
   const text = query.toLowerCase();
-  const name = context.profile?.first_name ?? 'usuário';
+  const name = context.tratamento ?? 'xuxu';
 
   if (
     context.memorias?.length &&
@@ -148,7 +157,7 @@ export function generateLocalAssistantReply(
   // Motor da Lyra (tarefa 55): mapa natal, os três tipos de mapa, Vedanta,
   // Upavedas e Vedangas, respondidos pela base curada, sem modelo de IA.
   const daLyra = responderComoLyra(query, {
-    nome: context.profile?.first_name ?? null,
+    nome: name,
     mapa: context.lyra?.mapa ?? null,
     faltando: context.lyra?.faltando,
     agora: context.lyra?.agora,

@@ -7,6 +7,7 @@ import {
   TABLE_CONFIG,
 } from '@/lib/mysql/table-config';
 import { HttpError } from '@/lib/http-error';
+import { apelidoSchema } from '@/lib/perfil/apelido';
 import { QueryRecord } from '@/lib/mysql/types';
 import {
   assertActiveRowsQuota,
@@ -461,6 +462,15 @@ function ensureCanWrite(
 function prepareWriteValue(table: TableName, column: string, value: unknown) {
   if (value === undefined) {
     return undefined;
+  }
+  if (table === 'profiles' && column === 'nickname') {
+    const validado = apelidoSchema.safeParse(value === null ? '' : value);
+    if (!validado.success)
+      throw new HttpError(
+        validado.error.issues[0]?.message ?? 'Apelido inválido.',
+        400
+      );
+    return validado.data || null;
   }
   if (!JSON_COLUMNS[table].includes(column)) {
     assertScalarValue(table, column, value);

@@ -17,6 +17,7 @@ export interface ProfileRow extends AuditedRow {
   id: string;
   first_name: string | null;
   last_name: string | null;
+  nickname: string | null;
   email: string;
   onboarding_completed: boolean;
   role: string;

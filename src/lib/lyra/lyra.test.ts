@@ -270,7 +270,7 @@ describe('respostas da Lyra sem IA', () => {
       astrology: getAstrologicalContext(new Date('2026-10-16T12:00:00Z')),
       lyra: { mapa: null },
     });
-    expect(resposta).toMatch(/^Vedanta/);
+    expect(resposta).toMatch(/^💡 Vedanta/);
     const ola = generateLocalAssistantReply('oi', {
       profile: { first_name: 'Ana', goals: null },
       latestMetric: null,

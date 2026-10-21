@@ -17,6 +17,14 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
+import { apelidoSchema } from '@/lib/perfil/apelido';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -76,6 +84,7 @@ import { paginaSaindo } from '@/lib/navegador/saida-da-pagina';
 export const profileSchema = z.object({
   first_name: z.string().min(2, 'O nome deve ter pelo menos 2 caracteres.'),
   last_name: z.string().min(2, 'O sobrenome deve ter pelo menos 2 caracteres.'),
+  nickname: apelidoSchema.optional(),
 
   birth_date: z.date().optional().nullable(),
   birth_time: z
@@ -140,6 +149,7 @@ export function buildProfileUpdatePayload(data: ProfileValues) {
   // localização (LocaisDoPerfil), com coordenadas e fuso.
   return {
     ...data,
+    nickname: data.nickname?.trim() || null,
     birth_date: formattedBirthDate,
     birth_time: formattedBirthTime,
     activity_level: data.activity_level ?? null,
@@ -334,6 +344,7 @@ export function ProfileForm() {
     defaultValues: {
       first_name: '',
       last_name: '',
+      nickname: '',
       age: '',
       gender: 'prefer_not-to-say',
       birth_date: null,
@@ -370,7 +381,7 @@ export function ProfileForm() {
       const { data, error } = await db
         .from('profiles')
         .select(
-          'first_name, last_name, age, gender, birth_date, birth_time, birth_location, birth_city_id, residence_location, residence_city_id, avatar_url, activity_level, goals'
+          'first_name, last_name, nickname, age, gender, birth_date, birth_time, birth_location, birth_city_id, residence_location, residence_city_id, avatar_url, activity_level, goals'
         )
         .eq('id', profileUserId)
         .maybeSingle();
@@ -404,6 +415,7 @@ export function ProfileForm() {
         form.reset({
           first_name: data.first_name ?? '',
           last_name: data.last_name ?? '',
+          nickname: data.nickname ?? '',
           // Sem idade gravada, a idade vem da data de nascimento; sem as
           // duas, o campo fica vazio (antes, 18 inventado era gravado).
           age:
@@ -551,6 +563,37 @@ export function ProfileForm() {
                       </FormItem>
                     )}
                   />
+                  <FieldGroup className="md:col-span-2">
+                    <FormField
+                      control={form.control}
+                      name="nickname"
+                      render={({ field, fieldState }) => (
+                        <Field data-invalid={Boolean(fieldState.error)}>
+                          <FieldLabel htmlFor="profile-nickname">
+                            Como Você Gostaria de Ser Chamado
+                          </FieldLabel>
+                          <Input
+                            {...field}
+                            value={field.value ?? ''}
+                            id="profile-nickname"
+                            autoComplete="nickname"
+                            maxLength={80}
+                            aria-invalid={Boolean(fieldState.error)}
+                            aria-describedby="profile-nickname-description profile-nickname-error"
+                          />
+                          <FieldDescription id="profile-nickname-description">
+                            Opcional. Se não quiser ser chamado de xuxu, peça à
+                            Lyra para usar este nome. Para removê-lo, deixe
+                            vazio e salve.
+                          </FieldDescription>
+                          <FieldError
+                            id="profile-nickname-error"
+                            errors={[fieldState.error]}
+                          />
+                        </Field>
+                      )}
+                    />
+                  </FieldGroup>
                   <FormField
                     control={form.control}
                     name="birth_date"

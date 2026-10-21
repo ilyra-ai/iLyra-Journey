@@ -66,6 +66,7 @@ export const TABLE_CONFIG: Record<TableName, TableConfig> = {
       'id',
       'first_name',
       'last_name',
+      'nickname',
       'email',
       'onboarding_completed',
       'role',

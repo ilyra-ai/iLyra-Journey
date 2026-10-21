@@ -65,10 +65,19 @@ import { DatePicker } from '@/components/ui/date-picker';
 import { differenceInYears, format } from 'date-fns';
 import { TimeInput } from '@/components/ui/time-input';
 import { SeletorDeCidade } from '@/components/geo/SeletorDeCidade';
+import { apelidoSchema } from '@/lib/perfil/apelido';
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
 
 const onboardingSchema = z.object({
   first_name: z.string().min(2, 'O nome deve ter pelo menos 2 caracteres.'),
   last_name: z.string().min(2, 'O sobrenome deve ter pelo menos 2 caracteres.'),
+  nickname: apelidoSchema.optional(),
   birth_date: z.date({
     error: (issue) =>
       issue.input === undefined
@@ -136,12 +145,16 @@ export function OnboardingForm() {
   const etapaAtual = useEtapaAtual(api);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const { db, session } = useAuth();
+  const titularId = session?.user.id;
+  const apelidoCarregado = React.useRef(false);
+  const apelidoEditado = React.useRef(false);
 
   const form = useForm<OnboardingInput, unknown, OnboardingValues>({
     resolver: zodResolver(onboardingSchema),
     defaultValues: {
       first_name: '',
       last_name: '',
+      nickname: '',
       // A idade vem da data de nascimento (efeito abaixo); sem valor
       // inventado.
       age: '',
@@ -160,6 +173,40 @@ export function OnboardingForm() {
 
   // useWatch assina apenas este campo e é compatível com o React Compiler.
   const birthDate = useWatch({ control: form.control, name: 'birth_date' });
+
+  React.useEffect(() => {
+    if (!titularId) return;
+    let ativa = true;
+    apelidoCarregado.current = false;
+    apelidoEditado.current = false;
+    form.setValue('nickname', '');
+    async function carregarApelido() {
+      try {
+        const { data, error } = await db
+          .from('profiles')
+          .select('nickname')
+          .eq('id', titularId)
+          .maybeSingle();
+        if (!ativa) return;
+        if (error) throw new Error(error.message);
+        if (!apelidoEditado.current) {
+          form.setValue('nickname', data?.nickname ?? '');
+        }
+        apelidoCarregado.current = true;
+      } catch {
+        if (ativa) {
+          toast.error('Não foi possível recuperar o apelido cadastrado.', {
+            description:
+              'Recarregue para tentar novamente ou informe o apelido. Sem edição, o valor anterior será preservado.',
+          });
+        }
+      }
+    }
+    void carregarApelido();
+    return () => {
+      ativa = false;
+    };
+  }, [db, form, titularId]);
 
   React.useEffect(() => {
     if (birthDate) {
@@ -264,6 +311,9 @@ export function OnboardingForm() {
     const updatePayload = {
       first_name: profileData.first_name,
       last_name: profileData.last_name,
+      ...(apelidoCarregado.current || apelidoEditado.current
+        ? { nickname: profileData.nickname?.trim() || null }
+        : {}),
       age: ageInt,
       gender: profileData.gender,
       activity_level: profileData.activity_level,
@@ -340,7 +390,12 @@ export function OnboardingForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-2xl">
+      <form
+        onSubmit={(evento) => {
+          void form.handleSubmit(onSubmit)(evento);
+        }}
+        className="w-full max-w-2xl"
+      >
         <Carousel
           setApi={setApi}
           className="w-full"
@@ -450,6 +505,42 @@ export function OnboardingForm() {
                     )}
                   />
                 </div>
+
+                <FieldGroup>
+                  <FormField
+                    control={form.control}
+                    name="nickname"
+                    render={({ field, fieldState }) => (
+                      <Field data-invalid={Boolean(fieldState.error)}>
+                        <FieldLabel htmlFor="onboarding-nickname">
+                          Como Você Gostaria de Ser Chamado
+                        </FieldLabel>
+                        <Input
+                          {...field}
+                          value={field.value ?? ''}
+                          onChange={(evento) => {
+                            apelidoEditado.current = true;
+                            field.onChange(evento);
+                          }}
+                          id="onboarding-nickname"
+                          autoComplete="nickname"
+                          maxLength={80}
+                          aria-invalid={Boolean(fieldState.error)}
+                          aria-describedby="onboarding-nickname-description onboarding-nickname-error"
+                        />
+                        <FieldDescription id="onboarding-nickname-description">
+                          Opcional. Se preferir este nome a xuxu ou xuxuzinho,
+                          peça à Lyra para usá-lo. Você pode alterá-lo no
+                          perfil.
+                        </FieldDescription>
+                        <FieldError
+                          id="onboarding-nickname-error"
+                          errors={[fieldState.error]}
+                        />
+                      </Field>
+                    )}
+                  />
+                </FieldGroup>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                   <FormField
@@ -644,6 +735,7 @@ export function OnboardingForm() {
                       handleNext([
                         'first_name',
                         'last_name',
+                        'nickname',
                         'birth_date',
                         'birth_time',
                         'birth_city',

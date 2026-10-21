@@ -10,6 +10,14 @@ import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from '@/components/ui/field';
+import { apelidoSchema } from '@/lib/perfil/apelido';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -83,6 +91,8 @@ export function LoginExperience({
   const [loginPassword, setLoginPassword] = useState('');
   const [registerFirstName, setRegisterFirstName] = useState('');
   const [registerLastName, setRegisterLastName] = useState('');
+  const [registerNickname, setRegisterNickname] = useState('');
+  const [nicknameError, setNicknameError] = useState<string | null>(null);
   const [registerEmail, setRegisterEmail] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [submitMode, setSubmitMode] = useState<SubmitMode>(null);
@@ -134,6 +144,11 @@ export function LoginExperience({
   async function handleRegister(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (previewMode) return;
+    const apelido = apelidoSchema.safeParse(registerNickname);
+    if (!apelido.success) {
+      setNicknameError(apelido.error.issues[0]?.message ?? 'Revise o apelido.');
+      return;
+    }
 
     setSubmitMode('register');
 
@@ -142,6 +157,7 @@ export function LoginExperience({
       password: registerPassword,
       firstName: registerFirstName,
       lastName: registerLastName,
+      nickname: apelido.data,
       acceptTerms: aceiteDosTermos,
     });
 
@@ -413,6 +429,35 @@ export function LoginExperience({
                     />
                   </div>
                 </div>
+
+                <FieldGroup>
+                  <Field data-invalid={Boolean(nicknameError)}>
+                    <FieldLabel htmlFor="reg-nickname">
+                      Como Você Gostaria de Ser Chamado
+                    </FieldLabel>
+                    <Input
+                      id="reg-nickname"
+                      name="nickname"
+                      autoComplete="nickname"
+                      maxLength={80}
+                      value={registerNickname}
+                      disabled={previewMode}
+                      aria-invalid={Boolean(nicknameError)}
+                      aria-describedby="reg-nickname-description reg-nickname-error"
+                      onChange={(e) => {
+                        setRegisterNickname(e.target.value);
+                        setNicknameError(null);
+                      }}
+                    />
+                    <FieldDescription id="reg-nickname-description">
+                      Opcional. A Lyra chama você de xuxu. Se preferir, peça no
+                      chat para ela usar o nome informado aqui.
+                    </FieldDescription>
+                    <FieldError id="reg-nickname-error">
+                      {nicknameError}
+                    </FieldError>
+                  </Field>
+                </FieldGroup>
 
                 <div className="flex flex-col gap-1.5">
                   <Label

@@ -143,7 +143,7 @@ describe('assistente de IA', () => {
       });
       expect(resposta.status).toBe(200);
       expect((resposta.json as { response: string }).response).toBe(
-        'Durma cedo hoje: o seu sono recente foi curto.'
+        '🌙 Durma cedo hoje: o seu sono recente foi curto.'
       );
       expect(
         servidor.requisicoes.map((r) => (r.corpo as { model: string }).model)
@@ -207,7 +207,7 @@ describe('assistente de IA', () => {
       });
       expect(resposta.status).toBe(200);
       expect((resposta.json as { response: string }).response).toBe(
-        'Aqui é a Lyra: o seu sono recente foi curto, então hoje vale deitar mais cedo.'
+        '🌙 Aqui é a Lyra: o seu sono recente foi curto, então hoje vale deitar mais cedo.'
       );
       expect(
         servidor.requisicoes.map((r) => (r.corpo as { model: string }).model)

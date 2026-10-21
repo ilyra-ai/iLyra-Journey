@@ -39,7 +39,7 @@ describe('assistente local', () => {
 
   it('reconhece saudações com acento, inclusive no fim da frase', () => {
     for (const saudacao of ['Olá', 'olá!', 'Oi', 'Bom dia', 'tudo bem?']) {
-      expect(responder(saudacao)).toMatch(/^Olá, Ana!/);
+      expect(responder(saudacao)).toMatch(/^✨ Olá, xuxu!/);
     }
   });
 
@@ -47,7 +47,7 @@ describe('assistente local', () => {
     // "lua" dentro de "evolua" e "oi" dentro de "dois" não são intenções.
     const resposta = responder('evolua dois pontos');
     expect(resposta).not.toMatch(/Neste instante astronômico/);
-    expect(resposta).not.toMatch(/^Olá, Ana!/);
+    expect(resposta).not.toContain('Olá, xuxu!');
   });
 
   it('analisa sono curto, glicose alta e HRV baixa a partir das métricas', () => {
@@ -95,7 +95,7 @@ describe('assistente local', () => {
   });
 
   it('cai no resumo determinístico quando não reconhece a intenção', () => {
-    expect(responder('xyz')).toMatch(/^Ana, o motor de análise estruturou/);
+    expect(responder('xyz')).toMatch(/^✨ xuxu, o motor de análise estruturou/);
   });
 });
 

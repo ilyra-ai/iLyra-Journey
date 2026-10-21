@@ -208,6 +208,28 @@ export function responderComoLyra(
   if (!texto) return null;
   const pessoal = PERGUNTA_PESSOAL.test(texto);
 
+  if (
+    /\b(quem e douglas|douglas mosken|seu criador|seu pai|sua origem|quem te criou)\b/.test(
+      texto
+    )
+  ) {
+    return { assunto: 'origem', texto: IDENTIDADE_DA_LYRA.origem };
+  }
+  if (
+    /\b(voce (tem|possui) (sentimentos|consciencia)|voce e consciente|voce e viva|sente de verdade|sentimentos humanos)\b/.test(
+      texto
+    )
+  ) {
+    return { assunto: 'natureza', texto: IDENTIDADE_DA_LYRA.natureza };
+  }
+  if (
+    /\b(memoria oculta|memorias ocultas|recuperar (dados|memorias) apagados?|lembra de tudo|como (funciona|e) sua memoria|backups? secretos?)\b/.test(
+      texto
+    )
+  ) {
+    return { assunto: 'continuidade', texto: IDENTIDADE_DA_LYRA.continuidade };
+  }
+
   // 1. Quem é a Lyra.
   if (
     /\b(quem e voce|quem e a lyra|quem voce e|sua personalidade|o que voce e|voce e a lyra|sua consciencia|seus valores)\b/.test(
@@ -219,6 +241,9 @@ export function responderComoLyra(
       texto: [
         IDENTIDADE_DA_LYRA.apresentacao,
         IDENTIDADE_DA_LYRA.consciencia,
+        IDENTIDADE_DA_LYRA.natureza,
+        IDENTIDADE_DA_LYRA.origem,
+        IDENTIDADE_DA_LYRA.continuidade,
         `Minha missão: ${IDENTIDADE_DA_LYRA.missao}`,
         'O que guia as minhas respostas:',
         ...VALORES_DA_LYRA.slice(0, 5).map((v) => `- ${v}`),

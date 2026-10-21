@@ -33,6 +33,8 @@ import {
   conferirVozDaLyra,
   instrucoesDoChatComoLyra,
 } from '@/lib/lyra/modelos-como-lyra';
+import { expressarComoLyra } from '@/lib/lyra/personalidade';
+import { resolverTratamento } from '@/lib/lyra/preferencias';
 import {
   preferenciasDaMemoria,
   recuperarMemorias,
@@ -99,6 +101,7 @@ export async function POST(request: Request) {
 
     const [profile] = await queryRows<{
       first_name: string | null;
+      nickname: string | null;
       goals: unknown;
       birth_date: string | null;
       birth_time: string | null;
@@ -107,7 +110,7 @@ export async function POST(request: Request) {
       birth_longitude: string | null;
       birth_timezone: string | null;
     }>(
-      `SELECT first_name, goals, birth_date, birth_time, birth_location,
+      `SELECT first_name, nickname, goals, birth_date, birth_time, birth_location,
               birth_latitude, birth_longitude, birth_timezone
          FROM profiles WHERE id = ? LIMIT 1`,
       [session.user.id]
@@ -182,24 +185,33 @@ export async function POST(request: Request) {
       Boolean(userApiKey)
     );
 
-    const fallbackResponse = generateLocalAssistantReply(query, {
-      lyra: {
-        mapa: mapaNatal,
-        faltando: perfilAstrologico.faltando,
-        fuso: perfilAstrologico.localDoDia?.fuso ?? null,
-      },
-      profile: profile
-        ? {
-            first_name: profile.first_name,
-            goals: listaDeTextos(profile.goals),
-          }
-        : null,
-      latestMetric: latestMetric ?? null,
-      astrology: getAstrologicalContext(new Date(), profile ?? undefined),
-      skills,
-      seuDia,
-      memorias: lembrancas.map((lembranca) => lembranca.relato),
-    });
+    const tratamento = await resolverTratamento(
+      usuarioId,
+      query,
+      profile?.first_name,
+      profile?.nickname
+    );
+    const fallbackResponse =
+      tratamento.confirmacao ??
+      generateLocalAssistantReply(query, {
+        lyra: {
+          mapa: mapaNatal,
+          faltando: perfilAstrologico.faltando,
+          fuso: perfilAstrologico.localDoDia?.fuso ?? null,
+        },
+        profile: profile
+          ? {
+              first_name: profile.first_name,
+              goals: listaDeTextos(profile.goals),
+            }
+          : null,
+        latestMetric: latestMetric ?? null,
+        astrology: getAstrologicalContext(new Date(), profile ?? undefined),
+        skills,
+        seuDia,
+        memorias: lembrancas.map((lembranca) => lembranca.relato),
+        tratamento: tratamento.nome,
+      });
 
     // Qualquer modelo conectado responde como a Lyra (tarefa 56): recebe a
     // identidade dela, a resposta já calculada pelo motor (a base), a leitura
@@ -212,6 +224,7 @@ export async function POST(request: Request) {
       mapa: mapaNatal,
       faltando: perfilAstrologico.faltando,
       habilidades: buildSkillsContext(skills),
+      tratamento,
     });
     const pedido = {
       sistema: lembrancas.length
@@ -233,38 +246,45 @@ export async function POST(request: Request) {
     // (instruções de sistema no campo próprio e chave no cabeçalho, nunca na
     // URL), com o motor da Lyra depois dele.
     const cadeiaDaPlataforma = montarCadeia(await lerConfiguracaoDeIa());
-    const cadeia: EloDaCadeia[] = memoriaPrivada
-      ? [{ tipo: 'lyra' }]
-      : userApiKey
-        ? [
-            {
-              tipo: 'modelo',
-              conexao: {
-                tipo: 'gemini',
-                baseUrl: null,
-                modelo: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
-                chave: userApiKey,
-                tempoMaximoSegundos: TEMPO_MAXIMO_DO_BYOK_S,
-                temperatura: 0.3,
+    const cadeia: EloDaCadeia[] =
+      memoriaPrivada || tratamento.confirmacao
+        ? [{ tipo: 'lyra' }]
+        : userApiKey
+          ? [
+              {
+                tipo: 'modelo',
+                conexao: {
+                  tipo: 'gemini',
+                  baseUrl: null,
+                  modelo: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+                  chave: userApiKey,
+                  tempoMaximoSegundos: TEMPO_MAXIMO_DO_BYOK_S,
+                  temperatura: 0.3,
+                },
+                autor: {
+                  provedor: 'Gemini (chave própria)',
+                  modelo: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
+                  local: false,
+                },
               },
-              autor: {
-                provedor: 'Gemini (chave própria)',
-                modelo: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
-                local: false,
-              },
-            },
-            { tipo: 'lyra' },
-          ]
-        : preferencias?.allow_cloud
-          ? cadeiaDaPlataforma
-          : somenteLocais(cadeiaDaPlataforma);
+              { tipo: 'lyra' },
+            ]
+          : preferencias?.allow_cloud
+            ? cadeiaDaPlataforma
+            : somenteLocais(cadeiaDaPlataforma);
     const resultado = await gerarNaCadeia(cadeia, pedido, {
       rotulo: userApiKey ? 'chat-byok' : 'chat',
-      validar: conferirVozDaLyra,
+      validar: (texto) =>
+        conferirVozDaLyra(texto) ??
+        (!tratamento.carinhoso && /\bxuxu(?:zinho)?\b/iu.test(texto)
+          ? 'o modelo desrespeitou a forma de tratamento escolhida pelo titular'
+          : null),
     });
 
-    const response =
-      resultado.origem === 'modelo' ? resultado.texto : fallbackResponse;
+    const response = expressarComoLyra(
+      resultado.origem === 'modelo' ? resultado.texto : fallbackResponse,
+      query
+    );
     if (turno) await concluirTurno(usuarioId, turno, response, memoriaPrivada);
     return NextResponse.json({
       response,

@@ -3,6 +3,7 @@ import type { RowDataPacket } from 'mysql2/promise';
 import { z } from 'zod';
 
 import { hashPassword } from '@/lib/auth/password';
+import { apelidoSchema } from '@/lib/perfil/apelido';
 import {
   buildAppSession,
   setSessionCookie,
@@ -40,6 +41,7 @@ const registerSchema = z.object({
     .max(200, 'A senha pode ter no máximo 200 caracteres.'),
   firstName: nomeOpcional,
   lastName: nomeOpcional,
+  nickname: apelidoSchema.optional().transform((valor) => valor || null),
   // LGPD: a conta só nasce com o aceite dos termos de uso e da política de
   // privacidade, registrado (versão e data) em consent_records.
   acceptTerms: z.literal(true, {
@@ -83,16 +85,18 @@ export async function POST(request: Request) {
             id,
             first_name,
             last_name,
+            nickname,
             email,
             onboarding_completed,
             role
           )
-          VALUES (?, ?, ?, ?, ?, ?)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
         `,
         [
           userId,
           payload.firstName,
           payload.lastName,
+          payload.nickname,
           payload.email,
           false,
           papel,

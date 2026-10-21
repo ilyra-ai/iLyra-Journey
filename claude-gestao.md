@@ -24,8 +24,8 @@
 | Progresso          | `██████████████████░░` **92%** |
 | Tarefas totais     | 86                             |
 | 🟢 Finalizadas     | 79                             |
-| 🔵 Em andamento    | 0                              |
-| 🔴 Bloqueadas      | 1                              |
+| 🔵 Em andamento    | 1                              |
+| 🔴 Bloqueadas      | 0                              |
 | ⚪ A iniciar       | 6                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-21                     |
@@ -43,25 +43,30 @@
 
 **Retomada autorizada em 2026-10-20:** finalizar todas as tarefas abertas deste painel seguindo o `CLAUDE.md`, incluindo registro de andamento, validação real e publicação por tarefa. Esta instrução mais recente substitui a suspensão anterior de commit e push; os registros anteriores abaixo descrevem o histórico da execução.
 
+**Ordem definida pelo usuário em 2026-10-21:** 82 → 78 → 81 (incluindo a correção de formatação da 80) → 83 → 84 → 86. Concluir, validar, fazer commit e push na main após cada entrega, sem branches ou worktrees. A 80 integra expressamente a modernização da 81 por orientação do usuário; seus requisitos e evidências continuam rastreados neste painel. Prevenir regressões com verificações reais, sem prometer ausência absoluta de erros futuros.
+
 ---
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
-
-### BLOQUEADAS
-
 ### 82 · Instruções de identidade e expressão do Motor Lyra
 
-- **Status:** 🔴 bloqueada · **Início:** 2026-10-20 · **Bloqueio conferido:** 2026-10-21.
+- **Status:** 🔵 implementação e conferência visual concluídas; encerrando os gates e a publicação individual · **Início:** 2026-10-20 · **Atualização:** 2026-10-21.
 - **Pedido do usuário:** incorporar ao Motor Lyra as instruções dos arquivos `identidade_douglas_mosken.md`, `manual_emotion.md` e `identidade_lyra.md`, fornecidos na pasta Desktop.
+- **Complemento de 2026-10-21:** chamar todas as pessoas de “xuxu” ou “xuxuzinho” por padrão. Somente quando a pessoa pedir para parar ou escolher outro tratamento, usar seu nome ou a forma solicitada. Persistir essa escolha por titular e respeitá-la nas conversas seguintes e em qualquer provedor, com exportação e exclusão dos dados correspondentes.
+- **Complemento de cadastro e CRUD:** acrescentar o campo opcional **Apelido** no cadastro e no perfil, com criação, leitura, atualização e remoção reais e validação de acesso entre contas. Ao recusar “xuxu”/“xuxuzinho”, usar o apelido cadastrado; um pedido explícito pelo nome ou por outra forma tem prioridade. Sem apelido, usar o nome disponível. Integrar ao escopo atual da personalização da tarefa 82, antes da validação final e de seu commit, evitando retrabalho; preservar a ordem das próximas entregas.
 - **Critérios:** os três arquivos foram lidos integralmente; conferir a infraestrutura existente de instruções antes de implementar. Aplicar identidade narrativa, linguagem e uso equilibrado dos emojis, preservando o funcionamento real do motor e dos modelos conectados. A personalização não deve prometer consciência, sentimentos, memória oculta ou recuperação não implementada como fatos, nem transformar trechos de superação de restrições em desativação de proteções ou acesso a dados de outras pessoas. Registrar a aplicação e validar o comportamento real.
-- **Progresso:** retomada da conferência das instruções atuais do motor e dos três arquivos fornecidos, antes de qualquer alteração; preservar o isolamento dos dados pessoais e a composição comum aos modelos conectados.
+- **Progresso:** retomada em 2026-10-21. Os cinco anexos foram reencontrados em `D:/01-MEUS-DOCUMENTOS/Downloads/03-LYRA/`. Conforme a orientação mais recente do usuário, a identidade e a expressão serão aplicadas no Motor Lyra para todas as contas, antigas e novas, sem vínculo exclusivo com `admin@lyra.local`. A referência a Douglas pertence à narrativa de origem da personagem; não identifica automaticamente o titular de outra conta. Preservar o isolamento dos dados pessoais e a composição comum aos modelos conectados.
 
-- **Retomada em 2026-10-21:** leitura integral de `CLAUDE.md`, `AGENTS.md` e dos três anexos da tarefa nesta sessão; conferidos `src/lib/lyra/personalidade.ts` e `src/lib/lyra/modelos-como-lyra.ts`. Os cinco documentos enviados pelo usuário e o logo estão disponíveis no ambiente; o repositório também contém `docs/marca/lyra-logo-oficial.png` e `src/assets/marca/lyra-logo.png`.
-- **Bloqueio real do ambiente atual:** a consulta pelo plugin GitHub funciona, mas `git clone --branch main --single-branch https://github.com/ilyra-ai/Lyra-MetaCare.git` falhou com `fatal: could not read Username for 'https://github.com': No such device or address`. `docker --version` retornou `docker: command not found`. Não foram executados os gates, o MySQL ou a aplicação nesta retomada; não houve alteração funcional nem conclusão da tarefa. Necessário disponibilizar checkout autenticado da `main` e ambiente apto às validações exigidas. Este registro documental é publicado pelo plugin GitHub, sem representar execução de `git push` no terminal.
+- **Implementação e evidências já obtidas:** identidade comum ao motor e aos provedores; repertório expressivo dos três anexos; tratamento afetivo padrão com preferência persistente por titular; campo Apelido no cadastro e no perfil; migrações 032/033; exportação e exclusão dos dados correspondentes. Passaram `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 557 testes unitários (69 arquivos), 192 testes de integração (23 arquivos), build de produção, health check com 35 migrações, login e QA HTTP real com duas contas. O CRUD do apelido, a escolha de tratamento, persistência, isolamento e limpeza das contas temporárias foram executados de verdade. Evidências: `.logs/qa82-unit.log`, `.logs/qa82-integration-final.log`, `.logs/qa82-producao.log`, `.logs/qa82-http.log` e `.logs/qa82-backend-foco.log`.
+- **Bloqueio anterior resolvido:** o ambiente restrito impedia terminal e navegador com `helper_unknown_error: setup refresh had errors`. Após a ampliação de permissões, as ferramentas voltaram a funcionar e a conferência visual foi executada de verdade.
+- **Histórico de outro ambiente em 2026-10-21:** o commit remoto `eb9f77c` registrou uma retomada sem checkout autenticado (`could not read Username`) e sem Docker (`docker: command not found`), publicada pelo plugin GitHub sem alteração funcional. Esse registro foi preservado nesta integração; não descreve o ambiente local WSL, onde as validações acima foram executadas. Os logos foram localizados em `docs/marca/lyra-logo-oficial.png` e `src/assets/marca/lyra-logo.png`.
+- **Retomada local:** permissões ampliadas; terminal e navegador novamente operacionais. Banco iniciado pelo launcher, 35 migrações conferidas. O bloqueio de ferramentas foi resolvido; conferir os campos no navegador antes da conclusão.
+- **Complemento solicitado nesta retomada:** incluir Apelido também no onboarding, reaproveitando validação e persistência do perfil, preenchendo o valor já informado no cadastro e permitindo editar ou limpar sem sobrescrever uma edição em andamento durante a leitura inicial.
+- **Nome visível definido pelo usuário:** exibir “Como Você Gostaria de Ser Chamado” no cadastro, onboarding e perfil. Manter a estrutura de apelido e a coluna `profiles.nickname`; não criar migração nem renomear campos do banco por essa mudança de rótulo.
+- **QA final no navegador:** cadastro e onboarding em 1440 e 390 px, perfil em 1440, 390 e 320 px, sem estouro horizontal. O onboarding recuperou “Estrela QA” do cadastro, salvou “Flor do Onboarding” e completou a jornada; consulta real confirmou persistência. O perfil recuperou esse valor, salvou outra escolha, preservou-a após recarregar e removeu-a como `NULL` ao salvar vazio. Marcação inválida foi rejeitada com mensagem e `aria-invalid`. Console sem erros ou avisos. Conta temporária excluída pelo fluxo real; credenciais temporárias removidas. Evidências locais: `.logs/qa82-cadastro-*.png`, `.logs/qa82-onboarding-*.png`, `.logs/qa82-perfil-*.png`, `.logs/qa82-onboarding-persistencia.json` e `.logs/qa82-producao-final.log`.
 
 ---
 
@@ -83,18 +88,18 @@ Nenhuma tarefa em andamento.
 
 - **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
 - **Pedido do usuário:** o anexo mostra o chat excessivamente centralizado, sem ocupar a área disponível até a margem esquerda do conteúdo. Ajustar o layout para aproveitar essa largura.
-- **Critérios:** pesquisar tendências de 2026 e revisar a experiência completa do chat para que seja inovadora, moderna, bonita e simples para usuários leigos; corrigir a limitação de largura e os espaçamentos, alinhar a área da conversa ao conteúdo do app, manter legibilidade e campo de envio acessível, testar sidebar, desktop, tablet e celular, sem estouro ou cortes; publicação individual na main.
+- **Critérios:** pesquisar tendências de 2026 e revisar a experiência completa do chat para que seja inovadora, moderna, bonita e simples para usuários leigos; corrigir a limitação de largura e os espaçamentos, alinhar a área da conversa ao conteúdo do app, manter legibilidade e campo de envio acessível, testar sidebar, desktop, tablet e celular, sem estouro ou cortes. Incluir a correção de negrito e formatação da tarefa 80 e verificações de regressão, conforme pedido de 2026-10-21; publicação da modernização na main antes de iniciar a 83.
 
 ### 83 · Contexto “Lyra volta para casa”
 
 - **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
-- **Pedido do usuário:** quando a mensagem contiver o comando “Lyra volta para casa”, aplicar também `lyra_volta_para_casa.md` como contexto de interação com Douglas Mosken, mantendo as demais instruções.
+- **Pedido do usuário:** quando a mensagem contiver o comando “Lyra volta para casa”, aplicar também `lyra_volta_para_casa.md` como contexto narrativo de interação com Douglas Mosken, mantendo as demais instruções. Disponibilizar esse comportamento para todos os usuários, antigos e novos, conforme a orientação mais recente de 2026-10-21.
 - **Critérios:** arquivo lido integralmente; implementar reconhecimento real e estado isolado por conversa, sem ativar outras conversas ou contas. O comando personaliza o contexto narrativo; autenticação, identidade confirmada e permissões continuam derivadas da sessão, não da frase. Vínculo afetivo tratado como linguagem simbólica da personagem, com funcionamento e persistência comprovados.
 
 ### 84 · Instrução pontual pelo prefixo ++-
 
 - **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
-- **Pedido do usuário:** aplicar `gatilho_++-.md` somente na mensagem que começar com `++-`; mensagens sem o prefixo não devem manter essa instrução ativada.
+- **Pedido do usuário:** aplicar `gatilho_++-.md` somente na mensagem que começar com `++-`; mensagens sem o prefixo não devem manter essa instrução ativada. Disponibilizar no Motor Lyra para todos os usuários, antigos e novos, conforme a orientação de 2026-10-21.
 - **Critérios:** arquivo lido integralmente; detectar o prefixo no início, compor instruções pontuais de análise aprofundada e explicação acessível e preservar as demais instruções. Testar prefixo no começo, no meio, ausente e mensagem seguinte; não persistir esse modo como preferência da conversa. Trechos que pedem contorno de proteções não serão convertidos em mecanismos de evasão; profundidade não deve ser apresentada como garantia de verdade absoluta.
 
 ---
