@@ -2,14 +2,9 @@
 
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import {
-  LogOut,
-  MessageCircleHeart,
-  Search,
-  ShieldCheck,
-  UserRound,
-} from 'lucide-react';
+import { LogOut, Search, ShieldCheck, UserRound } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
+import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { scalePx, scaleRem } from '@/lib/site-page-config/runtime';
@@ -41,6 +36,7 @@ import {
   getPageMeta,
   getVisibleNavigation,
   groupNavigation,
+  rotuloDaLyra,
 } from './navigation';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 import { useRotaLiberada } from '@/hooks/use-rota-liberada';
@@ -217,16 +213,8 @@ export function Header() {
                   fontSize: scaleRem(0.875, appConfig.typography.buttonLabel),
                 }}
               >
-                <MessageCircleHeart
-                  aria-hidden="true"
-                  className="text-cosmic"
-                  strokeWidth={1.9}
-                  style={{
-                    height: scalePx(16, appConfig.sizing.iconScale),
-                    width: scalePx(16, appConfig.sizing.iconScale),
-                  }}
-                />
-                {appConfig.header.assistantLabel}
+                <MarcaLyra tamanho={scalePx(22, appConfig.sizing.iconScale)} />
+                {rotuloDaLyra(appConfig.header.assistantLabel)}
               </Button>
             ) : null}
 
@@ -325,7 +313,11 @@ export function Header() {
                     value={`${item.label} ${item.description}`}
                     onSelect={() => handleNavigate(item.href)}
                   >
-                    <Icon className="h-[18px] w-[18px] text-primary" />
+                    {item.href === '/chat' ? (
+                      <MarcaLyra tamanho="22px" />
+                    ) : (
+                      <Icon className="h-[18px] w-[18px] text-primary" />
+                    )}
                     <div className="flex min-w-0 flex-1 flex-col">
                       <span className="truncate font-medium">{item.label}</span>
                       <span className="truncate text-xs text-muted-foreground">

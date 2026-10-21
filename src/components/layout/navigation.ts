@@ -45,6 +45,16 @@ type NavigationDefinition = NavigationItem & {
 
 export const navigationItems: NavigationDefinition[] = [
   {
+    href: '/chat',
+    label: 'Lyra AI',
+    description:
+      'Converse com a Lyra sobre o seu dia, o seu sono e o seu mapa.',
+    icon: BrainCircuit,
+    section: 'Principal',
+    sectionKey: 'principal',
+    shortcut: 'G C',
+  },
+  {
     href: '/',
     label: 'Painel',
     description: 'Seu dia em um olhar: energia, sono e o céu de hoje.',
@@ -116,16 +126,6 @@ export const navigationItems: NavigationDefinition[] = [
     section: 'Fluxo guiado',
     sectionKey: 'guidedFlow',
     shortcut: 'G R',
-  },
-  {
-    href: '/chat',
-    label: 'Chat IA',
-    description:
-      'Converse com a Lyra sobre o seu dia, o seu sono e o seu mapa.',
-    icon: BrainCircuit,
-    section: 'Fluxo guiado',
-    sectionKey: 'guidedFlow',
-    shortcut: 'G C',
   },
   {
     href: '/connect',
@@ -282,6 +282,11 @@ function getSectionLabel(
   }[sectionKey];
 }
 
+/** Atualiza o nome padrão antigo sem substituir escolhas do construtor. */
+export function rotuloDaLyra(rotulo: string): string {
+  return /^chat (?:ia|ai)$/iu.test(rotulo.trim()) ? 'Lyra AI' : rotulo;
+}
+
 function buildConfiguredNavigation(appConfig?: AppPageConfig) {
   if (!appConfig) {
     return navigationItems;
@@ -300,7 +305,7 @@ function buildConfiguredNavigation(appConfig?: AppPageConfig) {
 
     return {
       href: item.href,
-      label: item.label,
+      label: item.href === '/chat' ? rotuloDaLyra(item.label) : item.label,
       description: item.description,
       icon: baseItem?.icon ?? Sparkles,
       section: getSectionLabel(sectionKey, appConfig) ?? 'Principal',
@@ -334,7 +339,11 @@ function buildConfiguredNavigation(appConfig?: AppPageConfig) {
     result.splice(position, 0, missing);
   });
 
-  return result;
+  // Acesso principal solicitado pelo usuário, inclusive em configurações antigas.
+  const chat = result.find((item) => item.href === '/chat');
+  return chat
+    ? [chat, ...result.filter((item) => item.href !== '/chat')]
+    : result;
 }
 
 /**

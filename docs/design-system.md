@@ -93,11 +93,27 @@ frio (matiz 346) justamente para não se confundir com o coral de destaque.
 
 - `AppShell` (`src/components/layout/AppShell.tsx`): sidebar de 248 px
   (largura configurável no construtor de UI), cabeçalho de 64 px com o `<h1>`
-  da página, busca Ctrl K, notificações, Chat IA e menu do usuário; conteúdo
+  da página, busca Ctrl K, notificações, Lyra AI e menu do usuário; conteúdo
   com largura máxima de 1280 px e o documento Puck da página, quando houver.
 - `PageIntro`: abertura padrão da página (rótulo, título `<h2>`, descrição e
   ações), com as escalas de tipografia do construtor.
 - `AccessDenied`: tela única de acesso negado das áreas administrativas.
+
+## Identidade da navegação Lyra AI (2026-10-21)
+
+- O acesso `/chat` usa **Lyra AI** e a marca oficial na sidebar, no menu
+  móvel, no atalho do cabeçalho e na busca de páginas. A imagem é decorativa
+  quando acompanhada do nome, evitando anúncio duplicado por leitor de tela.
+- Configurações antigas com os rótulos padrão “Chat IA” ou “Chat AI” recebem
+  o nome atual na apresentação. Nomes personalizados do construtor, destino,
+  atalhos, visibilidade e permissões são preservados, sem regravar o banco.
+- Por solicitação do usuário, **Lyra AI e seu histórico são o primeiro bloco**
+  da seção Principal, acima de Painel, no desktop e no menu móvel. Essa posição
+  também vale para configurações antigas; a ordem relativa dos demais itens
+  permanece a mesma. O histórico continua logo abaixo do acesso ao chat.
+- Referência consultada: [navegação Fluent 2](https://fluent2.microsoft.design/components/web/react/core/nav/usage/),
+  com nomes breves, ícones reconhecíveis, agrupamento e consistência entre
+  desktop e celular; componentes e cores seguem o Lyra Clean existente.
 
 ## Telas públicas: landing e login
 

@@ -342,6 +342,13 @@ const defaultAppPageConfig: AppPageConfig = {
     },
     items: [
       {
+        href: '/chat',
+        label: 'Lyra AI',
+        description:
+          'Converse com a Lyra sobre o seu dia, o seu sono e o seu mapa.',
+        visible: true,
+      },
+      {
         href: '/',
         label: 'Painel',
         description: 'Seu dia em um olhar: energia, sono e o céu de hoje.',
@@ -393,13 +400,6 @@ const defaultAppPageConfig: AppPageConfig = {
         label: 'Monitoramento',
         description:
           'Seus sinais em tempo real, com alertas e leitura por voz.',
-        visible: true,
-      },
-      {
-        href: '/chat',
-        label: 'Chat IA',
-        description:
-          'Converse com a Lyra sobre o seu dia, o seu sono e o seu mapa.',
         visible: true,
       },
       {
@@ -475,7 +475,7 @@ const defaultAppPageConfig: AppPageConfig = {
   header: {
     commandPlaceholder: 'Buscar páginas e ações',
     commandShortcutLabel: 'Ctrl K',
-    assistantLabel: 'Chat IA',
+    assistantLabel: 'Lyra AI',
     profileMenuLabel: 'Meu perfil',
   },
   dashboard: {

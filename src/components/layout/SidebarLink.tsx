@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { cn } from '@/lib/utils';
 import { scalePx, scaleRem } from '@/lib/site-page-config/runtime';
 
@@ -46,15 +47,19 @@ export function SidebarLink({
       )}
       style={{ fontSize: scaleRem(0.875, labelScale) }}
     >
-      <Icon
-        aria-hidden="true"
-        className="shrink-0"
-        strokeWidth={isActive ? 2.1 : 1.8}
-        style={{
-          height: scalePx(18, iconScale),
-          width: scalePx(18, iconScale),
-        }}
-      />
+      {href === '/chat' ? (
+        <MarcaLyra tamanho={scalePx(22, iconScale)} />
+      ) : (
+        <Icon
+          aria-hidden="true"
+          className="shrink-0"
+          strokeWidth={isActive ? 2.1 : 1.8}
+          style={{
+            height: scalePx(18, iconScale),
+            width: scalePx(18, iconScale),
+          }}
+        />
+      )}
       <span className="truncate">{children}</span>
     </Link>
   );
