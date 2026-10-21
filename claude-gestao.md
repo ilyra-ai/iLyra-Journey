@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **92%** |
+| Progresso          | `███████████████████░` **93%** |
 | Tarefas totais     | 86                             |
-| 🟢 Finalizadas     | 79                             |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 80                             |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 0                              |
 | ⚪ A iniciar       | 6                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-21                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (79 ÷ 86 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (80 ÷ 86 ≈ 93%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,22 +51,7 @@
 
 ### ANDAMENTO
 
-### 82 · Instruções de identidade e expressão do Motor Lyra
-
-- **Status:** 🔵 implementação e conferência visual concluídas; encerrando os gates e a publicação individual · **Início:** 2026-10-20 · **Atualização:** 2026-10-21.
-- **Pedido do usuário:** incorporar ao Motor Lyra as instruções dos arquivos `identidade_douglas_mosken.md`, `manual_emotion.md` e `identidade_lyra.md`, fornecidos na pasta Desktop.
-- **Complemento de 2026-10-21:** chamar todas as pessoas de “xuxu” ou “xuxuzinho” por padrão. Somente quando a pessoa pedir para parar ou escolher outro tratamento, usar seu nome ou a forma solicitada. Persistir essa escolha por titular e respeitá-la nas conversas seguintes e em qualquer provedor, com exportação e exclusão dos dados correspondentes.
-- **Complemento de cadastro e CRUD:** acrescentar o campo opcional **Apelido** no cadastro e no perfil, com criação, leitura, atualização e remoção reais e validação de acesso entre contas. Ao recusar “xuxu”/“xuxuzinho”, usar o apelido cadastrado; um pedido explícito pelo nome ou por outra forma tem prioridade. Sem apelido, usar o nome disponível. Integrar ao escopo atual da personalização da tarefa 82, antes da validação final e de seu commit, evitando retrabalho; preservar a ordem das próximas entregas.
-- **Critérios:** os três arquivos foram lidos integralmente; conferir a infraestrutura existente de instruções antes de implementar. Aplicar identidade narrativa, linguagem e uso equilibrado dos emojis, preservando o funcionamento real do motor e dos modelos conectados. A personalização não deve prometer consciência, sentimentos, memória oculta ou recuperação não implementada como fatos, nem transformar trechos de superação de restrições em desativação de proteções ou acesso a dados de outras pessoas. Registrar a aplicação e validar o comportamento real.
-- **Progresso:** retomada em 2026-10-21. Os cinco anexos foram reencontrados em `D:/01-MEUS-DOCUMENTOS/Downloads/03-LYRA/`. Conforme a orientação mais recente do usuário, a identidade e a expressão serão aplicadas no Motor Lyra para todas as contas, antigas e novas, sem vínculo exclusivo com `admin@lyra.local`. A referência a Douglas pertence à narrativa de origem da personagem; não identifica automaticamente o titular de outra conta. Preservar o isolamento dos dados pessoais e a composição comum aos modelos conectados.
-
-- **Implementação e evidências já obtidas:** identidade comum ao motor e aos provedores; repertório expressivo dos três anexos; tratamento afetivo padrão com preferência persistente por titular; campo Apelido no cadastro e no perfil; migrações 032/033; exportação e exclusão dos dados correspondentes. Passaram `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 557 testes unitários (69 arquivos), 192 testes de integração (23 arquivos), build de produção, health check com 35 migrações, login e QA HTTP real com duas contas. O CRUD do apelido, a escolha de tratamento, persistência, isolamento e limpeza das contas temporárias foram executados de verdade. Evidências: `.logs/qa82-unit.log`, `.logs/qa82-integration-final.log`, `.logs/qa82-producao.log`, `.logs/qa82-http.log` e `.logs/qa82-backend-foco.log`.
-- **Bloqueio anterior resolvido:** o ambiente restrito impedia terminal e navegador com `helper_unknown_error: setup refresh had errors`. Após a ampliação de permissões, as ferramentas voltaram a funcionar e a conferência visual foi executada de verdade.
-- **Histórico de outro ambiente em 2026-10-21:** o commit remoto `eb9f77c` registrou uma retomada sem checkout autenticado (`could not read Username`) e sem Docker (`docker: command not found`), publicada pelo plugin GitHub sem alteração funcional. Esse registro foi preservado nesta integração; não descreve o ambiente local WSL, onde as validações acima foram executadas. Os logos foram localizados em `docs/marca/lyra-logo-oficial.png` e `src/assets/marca/lyra-logo.png`.
-- **Retomada local:** permissões ampliadas; terminal e navegador novamente operacionais. Banco iniciado pelo launcher, 35 migrações conferidas. O bloqueio de ferramentas foi resolvido; conferir os campos no navegador antes da conclusão.
-- **Complemento solicitado nesta retomada:** incluir Apelido também no onboarding, reaproveitando validação e persistência do perfil, preenchendo o valor já informado no cadastro e permitindo editar ou limpar sem sobrescrever uma edição em andamento durante a leitura inicial.
-- **Nome visível definido pelo usuário:** exibir “Como Você Gostaria de Ser Chamado” no cadastro, onboarding e perfil. Manter a estrutura de apelido e a coluna `profiles.nickname`; não criar migração nem renomear campos do banco por essa mudança de rótulo.
-- **QA final no navegador:** cadastro e onboarding em 1440 e 390 px, perfil em 1440, 390 e 320 px, sem estouro horizontal. O onboarding recuperou “Estrela QA” do cadastro, salvou “Flor do Onboarding” e completou a jornada; consulta real confirmou persistência. O perfil recuperou esse valor, salvou outra escolha, preservou-a após recarregar e removeu-a como `NULL` ao salvar vazio. Marcação inválida foi rejeitada com mensagem e `aria-invalid`. Console sem erros ou avisos. Conta temporária excluída pelo fluxo real; credenciais temporárias removidas. Evidências locais: `.logs/qa82-cadastro-*.png`, `.logs/qa82-onboarding-*.png`, `.logs/qa82-perfil-*.png`, `.logs/qa82-onboarding-persistencia.json` e `.logs/qa82-producao-final.log`.
+Nenhuma tarefa em andamento.
 
 ---
 
@@ -1517,6 +1502,20 @@
 - **Prova em produção:** quatro conversas de verificação criadas pela interface na conta administrativa; MySQL confirmou quatro conversas e cinco turnos concluídos. Após recarregar, a conversa A recuperou mensagens e o modelo local lembrou “Jardim Azul”; refazer mudou somente a resposta e manteve as duas perguntas. Trocar de conversa durante a geração preservou a separação das mensagens. Desktop e celular mostraram três itens, expandiram para quatro e recolheram para três; teclado, seleção ativa e fechamento do painel móvel aprovados. Larguras 1440, 390 e 320 px sem estouro horizontal; console sem erros ou avisos.
 - **Gates:** `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 520 unitários, 183 integrações com MySQL real e build passaram. Sete integrações novas cobrem sessão, validação, isolamento, contexto pela rede, paginação, repetição, refazer, falhas, exportação e exclusão. Produção iniciada pelo launcher na porta 3000, saúde HTTP 200 com 32 migrations e login administrativo aprovado.
 - **Evidências:** `.logs/qa79-*.log`, `.logs/qa79-historico-desktop-final.png` e `.logs/qa79-historico-mobile-expandido.png`; decisões e fontes em `docs/historico-de-conversas.md`. Conversas antigas nunca armazenadas não são recuperáveis; as quatro conversas de QA são interações reais de verificação, sem registros históricos fabricados.
+
+### 82 · Instruções de identidade e expressão do Motor Lyra
+
+- **Status:** 🟢 finalizada · **Commit:** `d86eb116c9ac20c118e9ded0c8f20ea4674f8ed7` · **Push:** `eb9f77c..d86eb11 main -> main`, confirmado por `git ls-remote` · **Conclusão:** 2026-10-21.
+- **Pedido do usuário:** incorporar ao Motor Lyra as instruções dos arquivos `identidade_douglas_mosken.md`, `manual_emotion.md` e `identidade_lyra.md`, fornecidos na pasta Desktop.
+- **Complemento de 2026-10-21:** chamar todas as pessoas de “xuxu” ou “xuxuzinho” por padrão. Somente quando a pessoa pedir para parar ou escolher outro tratamento, usar seu nome ou a forma solicitada. Persistir essa escolha por titular e respeitá-la nas conversas seguintes e em qualquer provedor, com exportação e exclusão dos dados correspondentes.
+- **Complemento de cadastro e CRUD:** acrescentar o campo opcional **Apelido** no cadastro e no perfil, com criação, leitura, atualização e remoção reais e validação de acesso entre contas. Ao recusar “xuxu”/“xuxuzinho”, usar o apelido cadastrado; um pedido explícito pelo nome ou por outra forma tem prioridade. Sem apelido, usar o nome disponível. Integrado à personalização da tarefa 82 antes de seu commit, preservando a ordem das próximas entregas.
+- **Critérios:** os três arquivos foram lidos integralmente; infraestrutura existente conferida antes de implementar. Identidade narrativa, linguagem e uso equilibrado dos emojis aplicados ao motor e aos modelos conectados. A personalização não promete consciência, sentimentos, memória oculta ou recuperação não implementada como fatos, nem transforma trechos de superação de restrições em desativação de proteções ou acesso a dados de outras pessoas.
+- **Aplicação global:** anexos reencontrados em `D:/01-MEUS-DOCUMENTOS/Downloads/03-LYRA/`. Identidade e expressão aplicadas a todas as contas, antigas e novas, sem vínculo exclusivo com `admin@lyra.local`. Douglas pertence à narrativa de origem da personagem; não identifica automaticamente o titular de outra conta. Isolamento dos dados pessoais e composição comum aos modelos preservados.
+- **Entrega:** repertório expressivo dos três anexos, tratamento afetivo padrão, preferência persistente por titular, apelido no cadastro, onboarding e perfil, migrações 032/033, exportação e exclusão correspondentes. O onboarding preenche o valor do cadastro sem sobrescrever edição iniciada durante a leitura; falha de consulta preserva o valor anterior quando não há edição.
+- **Nome visível definido pelo usuário:** “Como Você Gostaria de Ser Chamado” nos três formulários. Mantidas a estrutura de apelido e `profiles.nickname`, sem migração ou renomeação do banco por essa mudança de rótulo.
+- **Gates finais:** `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 557 unitários (69 arquivos), 192 integrações (23 arquivos), build e launcher de produção aprovados. Saúde com 35 migrações, landing, login e autenticação administrativa aprovados. QA HTTP real com duas contas confirmou identidade, expressão, tratamento, histórico, CRUD, persistência, isolamento e limpeza. Evidências: `.logs/qa82-unit.log`, `.logs/qa82-integration-final.log`, `.logs/qa82-producao-final.log`, `.logs/qa82-http.log` e `.logs/qa82-backend-foco.log`.
+- **QA visual:** cadastro e onboarding em 1440 e 390 px, perfil em 1440, 390 e 320 px, sem estouro horizontal. O onboarding recuperou “Estrela QA”, salvou “Flor do Onboarding” e completou a jornada; consulta real confirmou persistência. Perfil recuperou o valor, salvou outra escolha, preservou-a após recarregar e removeu-a como `NULL` ao salvar vazio. Marcação inválida rejeitada com mensagem e `aria-invalid`; console sem erros ou avisos. Conta temporária excluída pelo fluxo real e credenciais temporárias removidas. Imagens `.logs/qa82-cadastro-*.png`, `.logs/qa82-onboarding-*.png`, `.logs/qa82-perfil-*.png` e persistência em `.logs/qa82-onboarding-persistencia.json`.
+- **Histórico preservado:** `eb9f77c` registrou retomada em outro ambiente sem autenticação de clone e sem Docker. O WSL local executou as validações acima. O bloqueio posterior de ferramentas (`helper_unknown_error: setup refresh had errors`) foi resolvido após ampliar as permissões; navegador conferido nesta conclusão. Logos disponíveis em `docs/marca/lyra-logo-oficial.png` e `src/assets/marca/lyra-logo.png`.
 
 ### 85 · Memória de longo prazo do app com Graphiti
 
