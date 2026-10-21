@@ -24,11 +24,11 @@
 | Progresso          | `██████████████████░░` **92%** |
 | Tarefas totais     | 86                             |
 | 🟢 Finalizadas     | 79                             |
-| 🔵 Em andamento    | 1                              |
-| 🔴 Bloqueadas      | 0                              |
+| 🔵 Em andamento    | 0                              |
+| 🔴 Bloqueadas      | 1                              |
 | ⚪ A iniciar       | 6                              |
 | Branch de trabalho | `main` (única permitida)       |
-| Última atualização | 2026-10-20                     |
+| Última atualização | 2026-10-21                     |
 
 > Cálculo: tarefas finalizadas ÷ tarefas totais (79 ÷ 86 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
@@ -49,16 +49,19 @@
 
 ### ANDAMENTO
 
+Nenhuma tarefa em andamento.
+
+### BLOQUEADAS
+
 ### 82 · Instruções de identidade e expressão do Motor Lyra
 
-- **Status:** 🔵 em andamento · **Início:** 2026-10-20.
+- **Status:** 🔴 bloqueada · **Início:** 2026-10-20 · **Bloqueio conferido:** 2026-10-21.
 - **Pedido do usuário:** incorporar ao Motor Lyra as instruções dos arquivos `identidade_douglas_mosken.md`, `manual_emotion.md` e `identidade_lyra.md`, fornecidos na pasta Desktop.
 - **Critérios:** os três arquivos foram lidos integralmente; conferir a infraestrutura existente de instruções antes de implementar. Aplicar identidade narrativa, linguagem e uso equilibrado dos emojis, preservando o funcionamento real do motor e dos modelos conectados. A personalização não deve prometer consciência, sentimentos, memória oculta ou recuperação não implementada como fatos, nem transformar trechos de superação de restrições em desativação de proteções ou acesso a dados de outras pessoas. Registrar a aplicação e validar o comportamento real.
 - **Progresso:** retomada da conferência das instruções atuais do motor e dos três arquivos fornecidos, antes de qualquer alteração; preservar o isolamento dos dados pessoais e a composição comum aos modelos conectados.
 
-### BLOQUEADAS
-
-Nenhuma tarefa bloqueada.
+- **Retomada em 2026-10-21:** leitura integral de `CLAUDE.md`, `AGENTS.md` e dos três anexos da tarefa nesta sessão; conferidos `src/lib/lyra/personalidade.ts` e `src/lib/lyra/modelos-como-lyra.ts`. Os cinco documentos enviados pelo usuário e o logo estão disponíveis no ambiente; o repositório também contém `docs/marca/lyra-logo-oficial.png` e `src/assets/marca/lyra-logo.png`.
+- **Bloqueio real do ambiente atual:** a consulta pelo plugin GitHub funciona, mas `git clone --branch main --single-branch https://github.com/ilyra-ai/Lyra-MetaCare.git` falhou com `fatal: could not read Username for 'https://github.com': No such device or address`. `docker --version` retornou `docker: command not found`. Não foram executados os gates, o MySQL ou a aplicação nesta retomada; não houve alteração funcional nem conclusão da tarefa. Necessário disponibilizar checkout autenticado da `main` e ambiente apto às validações exigidas. Este registro documental é publicado pelo plugin GitHub, sem representar execução de `git push` no terminal.
 
 ---
 
