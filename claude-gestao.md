@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `█████████████████░░░` **85%** |
-| Tarefas totais     | 97                             |
+| Progresso          | `█████████████████░░░` **84%** |
+| Tarefas totais     | 98                             |
 | 🟢 Finalizadas     | 82                             |
 | 🔵 Em andamento    | 2                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 13                             |
+| ⚪ A iniciar       | 14                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (82 ÷ 97 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (82 ÷ 98 ≈ 84%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -175,6 +175,17 @@
 - **Pedido do usuário:** em `http://localhost:3000/admin/data-health`, na seção **“Análise de métricas”**, a coluna **“Métrica”** mostra identificadores técnicos, descritos pelo usuário como nomes de arquivos, em vez do nome compreensível da métrica. Substituir a apresentação pelo nome real de **todas as métricas**, incluindo as que não aparecem no recorte do anexo; não limitar a correção aos exemplos visíveis.
 - **Investigação e implementação:** inventariar o catálogo completo e a origem dos identificadores, conferir os rótulos e unidades já existentes no app para evitar retrabalho e divergência e usar uma fonte de nomes em pt-BR consistente. Manter as chaves técnicas do banco e os cálculos; corrigir a apresentação, sem renomear colunas ou alterar dados por inferência. Exemplos do anexo incluem `steps`, `sleep_duration_minutes`, `resting_heart_rate`, `calories_burned`, `hrv_ms`, `spo2_average`, `vo2_max`, nutrientes, hidratação e cafeína, mas o escopo é o catálogo inteiro.
 - **Validação e entrega:** confrontar cada identificador com seu nome e unidade corretos, comprovar cobertura integral sem nomes técnicos vazando como rótulos, conferir preenchimento e faixas de valores sem regressão, estados vazios e erros, leitura no celular e desktop, acessibilidade e fluxo real da página/API. Não usar simulações, placeholders, hardcode para mascarar lacunas ou cortes de código; executar os gates aplicáveis, atualizar este painel e publicar commit e push próprios na main, sem branches ou worktrees. Este registro não declara a correção implementada.
+
+---
+
+### 98 · Remoção integral da página administrativa duplicada /admin/page-builder
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** remover `/admin/page-builder` por completo, na íntegra e em sua totalidade, com o mesmo rigor de remoção e validação solicitado para o Editor Puck na tarefa 89. Conferência prévia identificou que a página abre o mesmo `SiteExperienceBuilder` já oferecido na aba **“Experiência Web”** de `/admin/content`; esta continua reunindo também Hábitos Sugeridos e Dicas de IA.
+- **Escopo integral:** inventariar e remover a rota duplicada, página, componentes exclusivos, item **“Construtor UI”** do sidebar e menu móvel, resultados de busca, atalhos, registros de navegação e configuração, permissões exclusivas, imports, testes e documentação operacional que apontem para essa entrada. Remover dependências somente quando comprovadamente exclusivas e não utilizadas no restante do app. Verificar configurações antigas persistidas para que não reintroduzam links quebrados.
+- **Preservação obrigatória:** manter o editor compartilhado e suas dependências efetivamente usadas em `/admin/content`, incluindo leitura, edição, prévia, rascunho e publicação das configurações reais. Preservar Hábitos Sugeridos, Dicas de IA, dados e versões existentes. A remoção do Editor Puck permanece uma tarefa separada; não confundir o Puck com o construtor compartilhado nem apagar a funcionalidade de Conteúdo.
+- **Integridade e prova de remoção:** realizar busca verificável com `rg` após as remoções, investigar qualquer referência restante e registrar o tratamento explícito de histórico de auditoria e migrações já aplicadas, sem modificar checksums ou destruir dados silenciosamente. Confirmar que a antiga rota deixa de oferecer o editor duplicado e que não há navegação operacional para ela.
+- **Validação e entrega:** testar CRUD e publicação reais do editor em Conteúdo, hábitos e dicas, autenticação e autorização, sidebar desktop/mobile, busca, configurações antigas, demais páginas afetadas e ausência de regressões. Executar formatação, lint, tipos, testes unitários e de integração, build, runtime e QA em múltiplas larguras; corrigir causas reais, sem simulações, placeholders, hardcode para mascarar falhas ou cortes de código. Atualizar este painel e publicar commit e push próprios na main, sem branches ou worktrees. Este registro não declara a remoção implementada.
 
 ---
 
