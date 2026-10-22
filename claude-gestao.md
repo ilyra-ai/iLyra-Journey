@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **82%** |
-| Tarefas totais     | 103                            |
+| Progresso          | `████████████████░░░░` **79%** |
+| Tarefas totais     | 106                            |
 | 🟢 Finalizadas     | 84                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 18                             |
+| ⚪ A iniciar       | 21                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (84 ÷ 103 ≈ 82%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (84 ÷ 106 ≈ 79%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -214,7 +214,30 @@
 - **Investigação e implementação:** inventariar relatórios, dados e necessidades administrativas reais, pesquisar fontes oficiais atuais e registrar possibilidades, seleção justificada e definições verificáveis dos indicadores. Implementar consultas, filtros, períodos, comparações, evolução temporal, detalhamento e exportações pertinentes, reaproveitando as fontes do dashboard e do faturamento para impedir totais divergentes. Diferenciar a consulta analítica da visão geral e das operações transacionais, mantendo acesso claro aos detalhes e ações disponíveis.
 - **Qualidade e validação:** cada métrica deve ter fonte, fórmula, período e unidade conferíveis; não usar números fixos, gráficos simulados, placeholders ou cortes de código para aparentar completude. Validar consistência com banco e demais páginas, limites de datas e fusos, filtros combinados, exportações, estados vazios, falhas, autorização e privacidade, desempenho, acessibilidade e mobile/desktop. Executar CRUD aplicável, testes e gates, publicar commit e push próprios na main e atualizar este painel com evidências reais.
 
-**Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação imediata deste registro não declara as funcionalidades implementadas. Após commit e push deste arquivo, retomar as tarefas 80/81 no ponto em que estavam, preservando as alterações em andamento.
+**Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
+
+### 104 · Edição dos próprios dados para usuários de todos os planos
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22 · **Prioridade:** correção do bloqueio relatado pelo usuário antes de retomar a tarefa 83.
+- **Pedido do usuário:** usuários de planos não administrativos estão recebendo “Gestão de perfil bloqueada”, mas precisam alterar somente os próprios dados.
+- **Investigação e correção:** verificar primeiro as regras de autorização do servidor, os entitlements e a página de perfil. Garantir edição dos próprios dados para todos os planos, sem conceder gestão de outras contas, alteração de papel administrativo ou privilégios adicionais. Preservar restrições reais de funcionalidades avançadas e distinguir edição pessoal de gestão administrativa.
+- **Validação:** comprovar leitura, atualização e persistência do próprio perfil em Free, Meta e Care, inclusive com o entitlement relacionado desativado; testar tentativas de acessar ou alterar dados de outro titular e campos administrativos. Executar testes pertinentes, QA real no navegador e gates; publicar commit e push próprios na main e registrar evidências.
+
+### 105 · Conteúdo acessível para todos os menus habilitados pelo plano
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** os menus do sidebar habilitados para os planos devem apresentar o conteúdo das páginas liberadas para esses menus.
+- **Investigação e implementação:** confrontar a matriz de entitlements, o plano efetivo da sessão, a visibilidade dos menus, as páginas e as autorizações das APIs. Corrigir divergências para que o usuário autorizado consiga visualizar e utilizar o conteúdo real da página correspondente, sem bloqueios contraditórios, preservando limites do plano, isolamento entre titulares e permissões administrativas. Reaproveitar a auditoria das tarefas 91 e 96 e a correção 104 para evitar retrabalho.
+- **Validação e entrega:** conferir cada menu liberado nos planos Free, Meta e Care e no acesso administrativo, em desktop e mobile; testar navegação direta, atualização da matriz, recarga, leitura, operações de escrita aplicáveis e persistência. Comprovar também a recusa real de páginas e APIs não autorizadas, sem placeholders ou permissões apenas visuais. Executar testes e gates, commit e push próprios na main e atualizar as evidências neste painel.
+
+### 106 · Menu Planos para compra e upgrade dos usuários
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** criar o menu **“Planos”** no sidebar para todos os planos e perfis não administrativos, permitindo comprar e fazer upgrade do próprio plano. O administrador não deve receber esse menu comercial, pois utiliza a gestão administrativa dos planos e usuários para realizar os upgrades correspondentes.
+- **Implementação:** inspecionar e reaproveitar a jornada comercial e os serviços de cobrança existentes antes de criar outra página. Oferecer comparação e seleção dos planos comercializáveis, identificação do plano atual e compra ou upgrade reais da própria conta, respeitando elegibilidade, estados da assinatura e provedores efetivamente configurados. Não oferecer o plano Administrador para compra nem confundir assinatura comercial com papel administrativo. Preservar a gestão administrativa de planos e usuários, incluindo seus fluxos autorizados de alteração de plano.
+- **Qualidade e validação:** pesquisar referências oficiais atuais antes dos ajustes visuais e seguir o Lyra Clean claro, acessível e responsivo. Conferir sidebar desktop/mobile, presença para usuários comuns, ausência para administradores, autorização no servidor, prevenção de alteração de outra conta e sincronização do plano após confirmação real do pagamento. Validar falhas e indisponibilidade de cobrança sem simular transações; executar testes e gates, publicar commit e push próprios na main e registrar evidências.
+
+**Registro adicional de 2026-10-22:** tarefas 104–106 registradas; a implementação ainda não foi concluída. A tarefa 104 registra o bloqueio de perfil informado imediatamente antes das novas solicitações 105 e 106.
 
 ---
 
