@@ -22,15 +22,15 @@
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
 | Progresso          | `████████████████░░░░` **81%** |
-| Tarefas totais     | 108                            |
-| 🟢 Finalizadas     | 87                             |
+| Tarefas totais     | 109                            |
+| 🟢 Finalizadas     | 88                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
 | ⚪ A iniciar       | 20                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (87 ÷ 108 ≈ 81%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (88 ÷ 109 ≈ 81%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,12 +51,11 @@
 
 ### ANDAMENTO
 
-### 108 · Corrigir orientações preexistentes de sono sem base individual
+### 109 · Corrigir inferências clínicas preexistentes de glicose, HRV e exercício
 
-- **Status:** 🔵 em andamento · **Registro e início:** 2026-10-22 · **Origem:** QA real da tarefa 84, dentro da autorização de investigar e corrigir erros do app.
-- **Problema confirmado:** a resposta determinística de sono sugere ajustar magnésio e carboidratos sem avaliação individual e apresenta associação entre fase lunar e ativação como fato. A mesma orientação aparece com e sem prefixo, portanto antecede a tarefa 84.
-- **Correção:** pesquisar fontes primárias atuais de saúde e revisar a origem dessas recomendações no Motor Lyra e nas instruções compartilhadas. Substituir recomendações sem fundamento individual por orientação geral sustentada e distinguir interpretação simbólica de evidência fisiológica; preservar métricas reais e funcionalidades do chat. Não apresentar suplementação ou mudança alimentar como conduta individual prescrita pelo app.
-- **Validação e entrega:** testes de regressão sobre respostas com e sem dados de sono e prefixo, prova de remoção das frases indevidas no código ativo, QA real, gates e commit/push próprios na main. Corrigir antes de retomar a tarefa 86, sem misturar os commits.
+- **Status:** 🔵 em andamento · **Registro e início:** 2026-10-22 · **Origem:** inspeção da causa raiz na tarefa 108, dentro da autorização de QA e correção geral.
+- **Problema confirmado no código:** glicose acima de 100 mg/dL é associada automaticamente a estresse oxidativo sem contexto de jejum; HRV abaixo de 40 ms é interpretada como sobrecarga simpática sem referência individual; contagem de passos e interpretação lunar fundamentam recomendações de exercício como se fossem avaliação fisiológica. As regras antecedem as tarefas atuais.
+- **Correção e validação:** consultar fontes primárias oficiais; preservar valores reais, distinguir ausência de zero e retirar conclusões clínicas sem contexto. Orientar comparação e avaliação individual quando pertinente, sem diagnóstico ou prescrição por limiar isolado ou astrologia. Acrescentar regressões, comprovar remoção das frases indevidas no código ativo, executar QA e gates e publicar commit/push próprios na main. Corrigir antes de retomar a tarefa 86, sem misturar entregas.
 
 ---
 
@@ -1720,3 +1719,11 @@
 - **Testes:** 577 unitários e 195 integrações aprovados. Integração real verifica persistência de nome e apelido em Free, Meta e Care e impossibilidade de ler ou alterar outro titular; testes existentes continuam comprovando a proteção do papel administrativo. Teste de navegação confirma perfil acessível com todos os recursos do plano desligados. Formatação, lint, tipos e build de produção aprovados.
 - **QA real:** conta comum descartável criada pela API, login pelo navegador, formulário Free disponível, nome e preferência de tratamento salvos e mantidos após recarga; persistência também confirmada pela API. Autopromoção recusada com 403 no runtime. Desktop e mobile de 390 px sem overflow horizontal e console sem erros ou avisos. Conta temporária excluída e credenciais locais removidas ao terminar.
 - **Evidências:** `.logs/qa104-{unit,integration,format,lint-fix,lint,format-check,types,producao}.log`, `.logs/qa104-runtime.json`, `.logs/qa104-perfil-desktop.png` e `.logs/qa104-perfil-mobile.png`. Launcher confirmou produção na porta 3000, banco saudável, 35 migrações, landing, login e autenticação administrativa. `@current_problems` indisponível neste ambiente; verificações executadas pelas ferramentas reais acima.
+
+### 108 · Corrigir orientações preexistentes de sono sem base individual
+
+- **Status:** 🟢 finalizada · **Registro e conclusão:** 2026-10-22 · **Commit:** `0ba80fd35dc7c536200635d02ed412ddee4d90ad` · **Push:** `765b1d1..0ba80fd main -> main`, confirmado.
+- **Causa e correção:** resposta antiga recomendava ajustar magnésio/carboidratos e inferia recuperação ou adequação pelo tempo de sono e pela Lua. Substituída por hábitos gerais com fonte oficial, apresentação do registro sem diagnóstico e investigação profissional para dificuldade persistente. Registro zero preservado. Descrições lunares compartilhadas explicitamente simbólicas, sem atribuir estado fisiológico ao titular; cálculos astronômicos preservados.
+- **Fontes:** páginas oficiais NCCIH/NIH sobre magnésio, NHLBI/NIH sobre hábitos de sono e MedlinePlus sobre rotina, consultadas em 22/10/2026 e vinculadas em `docs/identidade-motor-lyra.md`. Instruções dos modelos passaram à versão 3 para invalidar cache antigo da leitura diária.
+- **Validação:** 591 unitários e 199 integrações aprovados, além de lint, formatação, tipos e build. Testes cobrem resposta normal/aprofundada, ausência de dados, registro zero, duração maior sem garantia de adequação e descrições simbólicas durante 60 dias de fases. Busca no código ativo comprovou remoção das frases inadequadas. QA de produção confirmou resposta corrigida com e sem prefixo, fonte clicável e persistência pela API; mobile sem overflow e console sem erros ou avisos. Conta descartável excluída e credenciais removidas.
+- **Evidências:** `.logs/qa108-{format,lint-fix,lint,format-check,types,unit,integration,producao}.log`, `.logs/qa108-runtime.json` e `.logs/qa108-sono-{desktop,mobile}.png`. Launcher confirmou produção na porta 3000 e saúde com 35 migrações. Outras inferências antigas encontradas na inspeção foram registradas separadamente na tarefa 109, sem ocultar pendências ou misturar commits.
