@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **92%** |
-| Tarefas totais     | 88                             |
+| Progresso          | `█████████████████░░░` **85%** |
+| Tarefas totais     | 95                             |
 | 🟢 Finalizadas     | 81                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 6                              |
+| ⚪ A iniciar       | 13                             |
 | Branch de trabalho | `main` (única permitida)       |
-| Última atualização | 2026-10-21                     |
+| Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (81 ÷ 88 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (81 ÷ 95 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -106,6 +106,64 @@
 - **Disponibilidade informada posteriormente:** usuário confirmou Jan aberto em `http://127.0.0.1:1337/v1`, com `Gemma-4-E4B-Uncensored-HauhauCS-Aggressive`. Consultar o identificador exato no catálogo durante a validação, sem presumir que o nome abreviado é o identificador da API.
 - **Critérios:** conferir a causa no código e na interface antes de alterar. Distinguir configuração e modelo salvos de disponibilidade confirmada por conexão recente; não apresentar “online” com base somente na seleção persistida ou em resultado antigo. Mostrar indisponibilidade, verificação em andamento e estado ainda não verificado com mensagens claras, data da última checagem e retentativa quando apropriado. Invalidar resultados após mudanças de endereço, credenciais ou modelo e impedir respostas atrasadas de sobrescrever uma conexão mais recente. Preservar configuração e modelo quando o servidor local fechar.
 - **Validação e entrega:** conferir conexão ativa e recusa real, reabertura do provedor, atualização do catálogo e separação entre modelos configurados e disponíveis; não encerrar o Jan do usuário para provocar falha. Aplicar aos provedores locais e em nuvem conforme seus contratos reais. Validar backend, interface desktop/mobile, gates e commit/push individuais na main, sem branches ou worktrees. Implementar após a sequência já autorizada, sem misturar a correção à tarefa 78.
+
+---
+
+### 89 · Remoção integral do Editor Puck e validação de regressões
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** remover por completo, na íntegra e em sua totalidade, o Editor Puck do app, incluindo seus requerimentos, dependências, rotas e referências, sem prejudicar ou danificar o aplicativo.
+- **Investigação:** conferir o que já existe antes de implementar; inventariar código, configurações, pacotes diretos e transitivos, assets, menus, permissões, APIs, documentação, dados e integrações do editor. Examinar dependências compartilhadas para preservar as demais funções. Identificar explicitamente o tratamento de referências históricas e migrações já aplicadas, preservando checksums e integridade do banco; não apagar dados ou reescrever migrações silenciosamente.
+- **Validação obrigatória:** realizar testes e verificação geral para comprovar que a remoção não ocasionou erros ou falhas nas funções, funcionalidades e funcionamento do app. Executar busca verificável com `rg` após as remoções, conferir rotas e navegação, CRUD afetado, banco existente e instalação limpa, testes unitários e de integração, lint, formatação, tipos, build e runtime. Documentar os resultados reais e publicar commit e push próprios na main, sem branches ou worktrees.
+
+### 90 · Treinamento real por Aprendizado por Reforço com Feedback Humano via chat
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Controle administrativo:** acrescentar no chat da Lyra, ao lado de “Como a Lyra responde”, um botão de alternância On/Off chamado **“Treinamento”**, visível somente para o administrador do app. Ao ativar On, habilitar automaticamente o treinamento do Motor Lyra via chat. Exigir um modelo de IA realmente conectado: sem modelo conectado o treinamento não funciona, e a interface deve informar essa condição.
+- **Ativação e salvamento:** ao clicar em On, informar ao Motor Lyra e ao modelo conectado que foi habilitado o treinamento do tipo **Aprendizado por Reforço com Feedback Humano**. Salvar automaticamente tudo que for treinado durante o processo, sem depender de clicar em Off para persistir os dados; preservar o treinamento diante de recarga ou interrupção.
+- **Finalização e aplicação:** ao clicar em Off, informar que o treinamento foi finalizado e que o Motor Lyra deve começar a usar os novos treinamentos com **todos os usuários**, antigos e novos. Preservar rastreabilidade da versão aplicada e isolamento dos dados pessoais das conversas.
+- **Implementação real:** investigar a arquitetura, as capacidades dos modelos e as APIs oficiais antes de definir o mecanismo. Comprovar feedback humano, processo de aprendizagem, persistência e efeito do treinamento; não apresentar simples armazenamento de mensagens, memória ou alteração de prompt como treinamento RLHF de pesos do modelo. Registrar com precisão o mecanismo implementado e qualquer capacidade externa indispensável, sem simular resultados.
+- **Permissões e validação:** comprovar que o controle não aparece para outros planos, perfis e usuários não administradores e que o servidor também recusa operações não autorizadas. Validar On/Off, ausência e perda de conexão, salvamento durante On, retomada, aplicação global após Off, CRUD dos dados de treinamento e regressões do chat, desktop/mobile, testes, gates, commit e push individuais na main.
+
+### 91 · Auditoria exaustiva dos planos e entitlements e plano Administrador
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Free automático:** investigar, verificar e analisar profundamente se o plano Free é concedido automaticamente a novos usuários, novos cadastros e usuários inseridos pelo administrador. Conferir as implementações e evidências existentes antes de corrigir, evitando retrabalho.
+- **Free, Meta e Care:** verificar se as funções e funcionalidades reais de cada plano correspondem às habilitações e desabilitações na **“Matriz editável de entitlements”** em `http://localhost:3000/admin/plans`, tanto na interface quanto no servidor. Auditar se a matriz contém todas as funções e funcionalidades que o aplicativo pode fornecer e incluir o que estiver faltando.
+- **Administrador:** criar o perfil/plano **“Administrador”**, com todas as funções e funcionalidades gerais do app habilitadas, e conceder esse plano **somente a `admin@lyra.local`**. Ele não pode aparecer como plano comprável nem na landing page. Preservar a separação entre assinatura e autorização administrativa: compra ou troca de plano não pode conceder permissões de administrador.
+- **Página de planos:** acrescentar o cartão Administrador à direita de Care em `/admin/plans`; os quatro cartões devem caber responsivamente na tela, sem barra de rolagem horizontal. Tornar também a matriz editável responsiva, sem barra de rolagem inferior, mantendo leitura, edição e acessibilidade no mobile e desktop.
+- **Validação:** conferir cadastro público e criação administrativa, concessão única do Free, CRUD dos planos e da matriz, aplicação real de cada entitlement ligado/desligado, limites e isolamento, acesso total da conta designada, ausência do plano privado na compra e landing, responsividade e gates completos. Registrar evidências e publicar commit e push próprios na main.
+
+### 92 · Bloquear e desbloquear usuários na gestão administrativa
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** em `http://localhost:3000/admin/users`, no menu de três pontos **“Ações”**, acrescentar **“Bloquear”** quando o usuário não estiver bloqueado e **“Desbloquear”** quando estiver bloqueado.
+- **Critérios:** conferir o estado e a infraestrutura existentes antes de alterar; implementar transição persistente real e autorização no servidor. Verificar o efeito do bloqueio no login, nas sessões e nas APIs protegidas, o restabelecimento de acesso após desbloquear, os estados da interface e a proteção contra bloqueio administrativo que inviabilize recuperar a administração.
+- **Validação:** CRUD e fluxo completo com contas de teste identificadas, sem afetar usuários reais; tentar acesso não autorizado, recarregar a página, conferir persistência e alternância da ação, teclado e mobile/desktop. Executar gates e publicar commit e push próprios na main.
+
+### 93 · Cinco novas funcionalidades relevantes na gestão de usuários e perfis
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** incluir mais **cinco funções ou funcionalidades** em `http://localhost:3000/admin/users` para gestão de usuários/perfis, que ainda não existam no app, sejam extremamente importantes e estejam alinhadas às tendências de 2026.
+- **Investigação e definição:** inventariar os recursos existentes para não duplicar funcionalidades; pesquisar referências atuais e fontes oficiais na internet antes de escolher. Registrar as cinco funções escolhidas, justificativa, escopo, requisitos e critérios verificáveis no início da implementação. Bloquear/desbloquear, já previsto na tarefa 92, não conta como uma das cinco adicionais.
+- **Entrega real:** implementar backend antes da interface, persistência, permissões administrativas, validação, feedback de operações, estados de falha e auditoria apropriada. Validar integralmente o CRUD e cada fluxo com dados de teste, isolamento, acessibilidade e responsividade. Cada função lógica concluída deve receber seu próprio commit e push na main antes da próxima, com atualização deste painel; não acumular as cinco em um único lote de publicação.
+
+### 94 · Atualização automática dos itens Inclui na landing a partir dos planos
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** quando o administrador atualizar a **“Matriz editável de entitlements”** de qualquer plano em `http://localhost:3000/admin/plans`, atualizar automaticamente os itens **“Inclui:”** na seção `http://localhost:3000/#planos` da landing page.
+- **Critérios:** verificar a fonte atual dos benefícios e usar a mesma configuração persistida de entitlements, com atualização/invalidação real, sem listas comerciais paralelas que fiquem desatualizadas. Respeitar funções desabilitadas, limites e valores zero; descrever os benefícios em pt-BR compreensível. Excluir o plano Administrador da exposição pública, conforme tarefa 91.
+- **Validação:** editar cada plano pela interface administrativa, confirmar persistência e o reflexo automático na landing, inclusive desabilitação e alteração de limites, recarga e sessão pública. Restaurar os valores de teste; validar CRUD, mobile/desktop, acessibilidade e gates. Commit e push próprios na main.
+
+### 95 · Onboarding objetivo, rápido e visualmente inovador
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** remover do **onboarding** os itens **“Objetivos”** que o usuário precisa selecionar, conforme anexo; tornar o percurso objetivo, assertivo e rápido, evitando cansaço no preenchimento. Criar uma experiência visual incrível, inovadora, surpreendente de forma positiva e que incentive entrar logo no app.
+- **Escopo e preservação:** conferir fluxo, validações e gravação existentes antes de implementar. Retirar a seleção de objetivos do onboarding sem remover os objetivos do perfil por inferência. Preservar os dados existentes, os consentimentos necessários e o campo opcional **“Como Você Gostaria de Ser Chamado”**, mantendo `nickname` no banco. Não marcar dados não fornecidos como preenchidos nem inventar escolhas do usuário.
+- **Design e implementação:** pesquisar profundamente referências e tendências atuais de 2026 antes de alterar o visual; seguir Lyra Clean e tema claro, com qualidade premium, mobile-first e desktop, acessibilidade, clareza, poucas etapas e controles simples. Corrigir causas de eventuais erros no backend antes da interface.
+- **Validação integral:** cadastro → onboarding → persistência → entrada no app, leitura e atualização dos dados, retorno e retomada, recarga e novo login sem repetição indevida do onboarding concluído. Conferir erros, campos opcionais, consentimento e isolamento, ausência da seleção de objetivos, responsividade em múltiplas larguras e CRUD real; executar gates e publicar commit e push próprios na main.
+
+**Registro desta solicitação:** tarefas 89–95 acrescentadas em 2026-10-22 como **a iniciar**, sem declarar implementação ou validação funcional. A publicação imediata deste registro é documental; cada implementação seguirá com validação, atualização do painel, commit e push próprios na main, sem branches ou worktrees.
 
 ---
 
