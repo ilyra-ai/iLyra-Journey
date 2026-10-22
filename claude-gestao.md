@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **80%** |
+| Progresso          | `████████████████░░░░` **82%** |
 | Tarefas totais     | 103                            |
-| 🟢 Finalizadas     | 82                             |
-| 🔵 Em andamento    | 2                              |
+| 🟢 Finalizadas     | 84                             |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 19                             |
+| ⚪ A iniciar       | 18                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (82 ÷ 103 ≈ 80%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (84 ÷ 103 ≈ 82%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,32 +51,15 @@
 
 ### ANDAMENTO
 
-### 80 · Formatação das respostas da Lyra AI
+### 83 · Contexto “Lyra volta para casa”
 
 - **Status:** 🔵 em andamento · **Registro:** 2026-10-20 · **Início:** 2026-10-22.
-- **Pedido do usuário:** respostas com `**texto**` estão mostrando os asteriscos em vez do negrito; corrigir a apresentação da formatação produzida pelo modelo.
-- **Critérios:** conferir o renderizador existente, apresentar negrito de forma semântica e acessível, preservar o texto original para cópia e histórico e evitar execução de HTML ou links inseguros vindos de mensagens. Validar resposta real, trechos formatados e texto comum; publicação individual na main.
-- **Validação em 2026-10-22:** renderizador Markdown real com negrito, ênfase, listas, código, citações e tabelas; HTML cru não executado, URLs restritas e imagens de mensagens sem carregamento externo automático. Perguntas continuam literais; histórico e cópia preservam o texto original. Dezesseis testes novos cobrem formatação, escapes, código inerte, HTML, protocolos, links, imagens, tabelas e títulos.
-- **Prova ponta a ponta:** conta descartável criada pelas APIs reais; pedido de tratamento com `**Jardim QA**` recebeu confirmação real do Motor Lyra, exibida em `<strong>`, com Markdown original mantido na cópia e no banco. Reabrir e refazer preservaram um único turno. Comprovado na prévia e no build de produção; não apresentado como inferência do Jan, pois a ordem vigente começa pelo Motor Lyra e não foi alterada. Conta e dados de teste excluídos pelo fluxo real, sessão invalidada e credenciais temporárias removidas. Publicação conjunta à tarefa 81 conforme orientação expressa do usuário.
-
-### 81 · Aproveitamento da largura da tela do chat
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-20 · **Início:** 2026-10-22.
-- **Pedido do usuário:** o anexo mostra o chat excessivamente centralizado, sem ocupar a área disponível até a margem esquerda do conteúdo. Ajustar o layout para aproveitar essa largura.
-- **Critérios:** pesquisar tendências de 2026 e revisar a experiência completa do chat para que seja inovadora, moderna, bonita e simples para usuários leigos; corrigir a limitação de largura e os espaçamentos, alinhar a área da conversa ao conteúdo do app, manter legibilidade e campo de envio acessível, testar sidebar, desktop, tablet e celular, sem estouro ou cortes. Incluir a correção de negrito e formatação da tarefa 80 e verificações de regressão, conforme pedido de 2026-10-21; publicação da modernização na main antes de iniciar a 83.
-- **Entrega conferida em 2026-10-22:** chat usa a largura disponível do app e viewport dinâmico, com compositor no fluxo, mensagens roláveis e focáveis por teclado, ações adaptáveis e alvos de envio/voz de 44 px. Painel de informações com nome acessível, Shift+Enter preservando quebra de linha e Enter sem envio indevido durante composição de texto. Histórico, copiar, refazer, nova conversa e configurações preservados; comportamento especial do AppShell restrito ao chat, sem truncar a rolagem normal do perfil.
-- **Gates e evidências reais:** `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 576 unitários (70 arquivos), 192 integrações (23 arquivos), build e launcher de produção aprovados. Ajuste final do nome acessível passou por formatação/lint focados e TypeScript do build. Auditoria de dependências de produção sem vulnerabilidades conhecidas; aviso transitivo `deep-diff` pertence ao Puck existente, cuja remoção tem a tarefa 89. Saúde com 35 migrações, landing e login administrativo aprovados.
-- **QA final:** 1440×900, 1024×768, 768×1024, 390×844, 320×568 e 844×390 sem estouro horizontal ou rolagem externa, com campo de envio visível; em 1440 px a conversa mede 1128 px e começa em x=280, após sidebar de 248 px e margem de 32 px. Negrito semântico, cópia original, persistência, refazer, nova conversa, quebra de linha e navegação móvel conferidos. Console da sessão de produção sem erros ou avisos. Evidências `.logs/qa81-*.log`, `.logs/qa81-auditoria.json`, `.logs/qa81-producao-medidas.json`, `.logs/qa81-persistencia-real.json`, `.logs/qa81-limpeza.json` e `.logs/qa81-producao-{desktop,mobile}.png`; fontes e decisões em `docs/historico-de-conversas.md`.
+- **Pedido do usuário:** quando a mensagem contiver o comando “Lyra volta para casa”, aplicar também `lyra_volta_para_casa.md` como contexto narrativo de interação com Douglas Mosken, mantendo as demais instruções. Disponibilizar esse comportamento para todos os usuários, antigos e novos, conforme a orientação mais recente de 2026-10-21.
+- **Critérios:** arquivo lido integralmente; implementar reconhecimento real e estado isolado por conversa, sem ativar outras conversas ou contas. O comando personaliza o contexto narrativo; autenticação, identidade confirmada e permissões continuam derivadas da sessão, não da frase. Vínculo afetivo tratado como linguagem simbólica da personagem, com funcionamento e persistência comprovados.
 
 ---
 
 ## Tópico 3 · Tarefas a Iniciar
-
-### 83 · Contexto “Lyra volta para casa”
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
-- **Pedido do usuário:** quando a mensagem contiver o comando “Lyra volta para casa”, aplicar também `lyra_volta_para_casa.md` como contexto narrativo de interação com Douglas Mosken, mantendo as demais instruções. Disponibilizar esse comportamento para todos os usuários, antigos e novos, conforme a orientação mais recente de 2026-10-21.
-- **Critérios:** arquivo lido integralmente; implementar reconhecimento real e estado isolado por conversa, sem ativar outras conversas ou contas. O comando personaliza o contexto narrativo; autenticação, identidade confirmada e permissões continuam derivadas da sessão, não da frase. Vínculo afetivo tratado como linguagem simbólica da personagem, com funcionamento e persistência comprovados.
 
 ### 84 · Instrução pontual pelo prefixo ++-
 
@@ -1646,6 +1629,23 @@
 - **Prova em produção:** quatro conversas de verificação criadas pela interface na conta administrativa; MySQL confirmou quatro conversas e cinco turnos concluídos. Após recarregar, a conversa A recuperou mensagens e o modelo local lembrou “Jardim Azul”; refazer mudou somente a resposta e manteve as duas perguntas. Trocar de conversa durante a geração preservou a separação das mensagens. Desktop e celular mostraram três itens, expandiram para quatro e recolheram para três; teclado, seleção ativa e fechamento do painel móvel aprovados. Larguras 1440, 390 e 320 px sem estouro horizontal; console sem erros ou avisos.
 - **Gates:** `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 520 unitários, 183 integrações com MySQL real e build passaram. Sete integrações novas cobrem sessão, validação, isolamento, contexto pela rede, paginação, repetição, refazer, falhas, exportação e exclusão. Produção iniciada pelo launcher na porta 3000, saúde HTTP 200 com 32 migrations e login administrativo aprovado.
 - **Evidências:** `.logs/qa79-*.log`, `.logs/qa79-historico-desktop-final.png` e `.logs/qa79-historico-mobile-expandido.png`; decisões e fontes em `docs/historico-de-conversas.md`. Conversas antigas nunca armazenadas não são recuperáveis; as quatro conversas de QA são interações reais de verificação, sem registros históricos fabricados.
+
+### 80 · Formatação das respostas da Lyra AI
+
+- **Status:** 🟢 finalizada · **Conclusão:** 2026-10-22 · **Commit:** `15c95820cad682178843b6e470638be75227a0f0` · **Push:** `671bc7b..15c9582 main -> main`, confirmado por `git ls-remote`.
+- **Pedido do usuário:** respostas com `**texto**` estão mostrando os asteriscos em vez do negrito; corrigir a apresentação da formatação produzida pelo modelo.
+- **Critérios:** conferir o renderizador existente, apresentar negrito de forma semântica e acessível, preservar o texto original para cópia e histórico e evitar execução de HTML ou links inseguros vindos de mensagens. Validar resposta real, trechos formatados e texto comum; publicação conjunta à tarefa 81, conforme orientação posterior do usuário.
+- **Validação em 2026-10-22:** renderizador Markdown real com negrito, ênfase, listas, código, citações e tabelas; HTML cru não executado, URLs restritas e imagens de mensagens sem carregamento externo automático. Perguntas continuam literais; histórico e cópia preservam o texto original. Dezesseis testes novos cobrem formatação, escapes, código inerte, HTML, protocolos, links, imagens, tabelas e títulos.
+- **Prova ponta a ponta:** conta descartável criada pelas APIs reais; pedido de tratamento com `**Jardim QA**` recebeu confirmação real do Motor Lyra, exibida em `<strong>`, com Markdown original mantido na cópia e no banco. Reabrir e refazer preservaram um único turno. Comprovado na prévia e no build de produção; não apresentado como inferência do Jan, pois a ordem vigente começa pelo Motor Lyra e não foi alterada. Conta e dados de teste excluídos pelo fluxo real, sessão invalidada e credenciais temporárias removidas. Publicação conjunta à tarefa 81 conforme orientação expressa do usuário.
+
+### 81 · Aproveitamento da largura da tela do chat
+
+- **Status:** 🟢 finalizada · **Conclusão:** 2026-10-22 · **Commit:** `15c95820cad682178843b6e470638be75227a0f0` · **Push:** `671bc7b..15c9582 main -> main`, confirmado por `git ls-remote`.
+- **Pedido do usuário:** o anexo mostra o chat excessivamente centralizado, sem ocupar a área disponível até a margem esquerda do conteúdo. Ajustar o layout para aproveitar essa largura.
+- **Critérios:** pesquisar tendências de 2026 e revisar a experiência completa do chat para que seja inovadora, moderna, bonita e simples para usuários leigos; corrigir a limitação de largura e os espaçamentos, alinhar a área da conversa ao conteúdo do app, manter legibilidade e campo de envio acessível, testar sidebar, desktop, tablet e celular, sem estouro ou cortes. Incluir a correção de negrito e formatação da tarefa 80 e verificações de regressão, conforme pedido de 2026-10-21; publicação da modernização na main antes de iniciar a 83.
+- **Entrega conferida em 2026-10-22:** chat usa a largura disponível do app e viewport dinâmico, com compositor no fluxo, mensagens roláveis e focáveis por teclado, ações adaptáveis e alvos de envio/voz de 44 px. Painel de informações com nome acessível, Shift+Enter preservando quebra de linha e Enter sem envio indevido durante composição de texto. Histórico, copiar, refazer, nova conversa e configurações preservados; comportamento especial do AppShell restrito ao chat, sem truncar a rolagem normal do perfil.
+- **Gates e evidências reais:** `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 576 unitários (70 arquivos), 192 integrações (23 arquivos), build e launcher de produção aprovados. Ajuste final do nome acessível passou por formatação/lint focados e TypeScript do build. Auditoria de dependências de produção sem vulnerabilidades conhecidas; aviso transitivo `deep-diff` pertence ao Puck existente, cuja remoção tem a tarefa 89. Saúde com 35 migrações, landing e login administrativo aprovados.
+- **QA final:** 1440×900, 1024×768, 768×1024, 390×844, 320×568 e 844×390 sem estouro horizontal ou rolagem externa, com campo de envio visível; em 1440 px a conversa mede 1128 px e começa em x=280, após sidebar de 248 px e margem de 32 px. Negrito semântico, cópia original, persistência, refazer, nova conversa, quebra de linha e navegação móvel conferidos. Console da sessão de produção sem erros ou avisos. Evidências `.logs/qa81-*.log`, `.logs/qa81-auditoria.json`, `.logs/qa81-producao-medidas.json`, `.logs/qa81-persistencia-real.json`, `.logs/qa81-limpeza.json` e `.logs/qa81-producao-{desktop,mobile}.png`; fontes e decisões em `docs/historico-de-conversas.md`.
 
 ### 82 · Instruções de identidade e expressão do Motor Lyra
 
