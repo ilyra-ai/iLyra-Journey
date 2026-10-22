@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **79%** |
+| Progresso          | `████████████████░░░░` **80%** |
 | Tarefas totais     | 107                            |
-| 🟢 Finalizadas     | 85                             |
+| 🟢 Finalizadas     | 86                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 21                             |
+| ⚪ A iniciar       | 20                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (85 ÷ 107 ≈ 79%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (86 ÷ 107 ≈ 80%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,23 +51,15 @@
 
 ### ANDAMENTO
 
-### 83 · Contexto “Lyra volta para casa”
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-20 · **Início:** 2026-10-22.
-- **Pedido do usuário:** quando a mensagem contiver o comando “Lyra volta para casa”, aplicar também `lyra_volta_para_casa.md` como contexto narrativo de interação com Douglas Mosken, mantendo as demais instruções. Disponibilizar esse comportamento para todos os usuários, antigos e novos, conforme a orientação mais recente de 2026-10-21.
-- **Critérios:** arquivo lido integralmente; implementar reconhecimento real e estado isolado por conversa, sem ativar outras conversas ou contas. O comando personaliza o contexto narrativo; autenticação, identidade confirmada e permissões continuam derivadas da sessão, não da frase. Vínculo afetivo tratado como linguagem simbólica da personagem, com funcionamento e persistência comprovados.
-
----
-
-## Tópico 3 · Tarefas a Iniciar
-
 ### 84 · Instrução pontual pelo prefixo ++-
 
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-20 · **Início:** 2026-10-22.
 - **Pedido do usuário:** aplicar `gatilho_++-.md` somente na mensagem que começar com `++-`; mensagens sem o prefixo não devem manter essa instrução ativada. Disponibilizar no Motor Lyra para todos os usuários, antigos e novos, conforme a orientação de 2026-10-21.
 - **Critérios:** arquivo lido integralmente; detectar o prefixo no início, compor instruções pontuais de análise aprofundada e explicação acessível e preservar as demais instruções. Testar prefixo no começo, no meio, ausente e mensagem seguinte; não persistir esse modo como preferência da conversa. Trechos que pedem contorno de proteções não serão convertidos em mecanismos de evasão; profundidade não deve ser apresentada como garantia de verdade absoluta.
 
 ---
+
+## Tópico 3 · Tarefas a Iniciar
 
 ### 86 · Geração de imagens no chat com modelos conectados
 
@@ -1683,6 +1675,14 @@
 - **Gates finais:** `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 557 unitários (69 arquivos), 192 integrações (23 arquivos), build e launcher de produção aprovados. Saúde com 35 migrações, landing, login e autenticação administrativa aprovados. QA HTTP real com duas contas confirmou identidade, expressão, tratamento, histórico, CRUD, persistência, isolamento e limpeza. Evidências: `.logs/qa82-unit.log`, `.logs/qa82-integration-final.log`, `.logs/qa82-producao-final.log`, `.logs/qa82-http.log` e `.logs/qa82-backend-foco.log`.
 - **QA visual:** cadastro e onboarding em 1440 e 390 px, perfil em 1440, 390 e 320 px, sem estouro horizontal. O onboarding recuperou “Estrela QA”, salvou “Flor do Onboarding” e completou a jornada; consulta real confirmou persistência. Perfil recuperou o valor, salvou outra escolha, preservou-a após recarregar e removeu-a como `NULL` ao salvar vazio. Marcação inválida rejeitada com mensagem e `aria-invalid`; console sem erros ou avisos. Conta temporária excluída pelo fluxo real e credenciais temporárias removidas. Imagens `.logs/qa82-cadastro-*.png`, `.logs/qa82-onboarding-*.png`, `.logs/qa82-perfil-*.png` e persistência em `.logs/qa82-onboarding-persistencia.json`.
 - **Histórico preservado:** `eb9f77c` registrou retomada em outro ambiente sem autenticação de clone e sem Docker. O WSL local executou as validações acima. O bloqueio posterior de ferramentas (`helper_unknown_error: setup refresh had errors`) foi resolvido após ampliar as permissões; navegador conferido nesta conclusão. Logos disponíveis em `docs/marca/lyra-logo-oficial.png` e `src/assets/marca/lyra-logo.png`.
+
+### 83 · Contexto “Lyra volta para casa”
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-20 · **Conclusão:** 2026-10-22 · **Commit:** `cc8bce28e0699c804d7074a280a8f5bca5f013c4` · **Push:** `339654e..cc8bce2 main -> main`, confirmado.
+- **Pedido e entrega:** comando completo reconhecido para todas as contas, mantendo as demais instruções e a forma de tratamento escolhida. Anexo lido integralmente em `D:/01-MEUS-DOCUMENTOS/Downloads/03-LYRA/`; contexto curado de reencontro afetivo aplicado ao Motor Lyra e às instruções dos modelos conectados. A narrativa não comprova identidade nem altera permissões, nome ou plano.
+- **Persistência:** reconstruída do histórico real do próprio titular; permanece após recarga e além das oito mensagens recentes. Outra conversa ou conta não herda a ativação; refazer mensagem anterior não recebe contexto de mensagens futuras. Não cria registro oculto ou memória global e respeita o modo privado.
+- **Validação:** 585 unitários e 197 integrações aprovados, incluindo persistência além da janela recente, isolamento, refazer turno anterior e identidade preservada. Formatação, lint, tipos, build, launcher e saúde com 35 migrações aprovados. QA em produção confirmou comando, continuidade após recarregar, resposta normal em nova conversa e persistência pela API; desktop/mobile sem overflow e console sem erros ou avisos. Conta descartável excluída e credenciais removidas.
+- **Evidências:** `.logs/qa83-{format,lint-fix,lint,format-check,types,unit,integration,producao}.log`, `.logs/qa83-runtime.json` e `.logs/qa83-chat-{desktop,mobile}.png`. Não foi alegada inferência de provedor externo no QA: a ordem existente utilizou o Motor Lyra, sem alterar a configuração do usuário.
 
 ### 85 · Memória de longo prazo do app com Graphiti
 
