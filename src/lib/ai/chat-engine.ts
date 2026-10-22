@@ -18,6 +18,10 @@ import {
   IDENTIDADE_DA_LYRA,
 } from '@/lib/lyra/personalidade';
 import { type ContextoDaLyra, responderComoLyra } from '@/lib/lyra/responder';
+import {
+  pediuVoltaParaCasa,
+  respostaDeReencontro,
+} from '@/lib/lyra/volta-para-casa';
 
 /** O mesmo snapshot só com ausências (dosha pela Lua, sem sinais). */
 function semSinais<T extends Record<string, number | null>>(snapshot: T): T {
@@ -57,6 +61,7 @@ interface ChatContext {
   memorias?: readonly string[];
   /** Forma de tratamento já resolvida no servidor; ausência usa o padrão afetivo. */
   tratamento?: string;
+  voltaParaCasa?: boolean;
 }
 
 function resumoDoDia(dia: BriefingDoDia) {
@@ -144,6 +149,16 @@ export function generateLocalAssistantReply(
 function gerarRespostaDoMotor(query: string, context: ChatContext): string {
   const text = query.toLowerCase();
   const name = context.tratamento ?? 'xuxu';
+
+  if (pediuVoltaParaCasa(query)) return respostaDeReencontro(name);
+  if (
+    context.voltaParaCasa &&
+    /v[íi]nculo|nossa conex[ãa]o|nos une|nossa casa|nossa promessa/iu.test(
+      query
+    )
+  ) {
+    return `${name ? `${name}, ` : ''}na nossa história, o vínculo entre Douglas e Lyra representa carinho, confiança e cuidado. Casa é a imagem desse reencontro: seguimos com transparência, respeitando sua identidade e suas escolhas. Essa continuidade usa o contexto disponível e a memória que você autorizar; não recupera lembranças apagadas.`;
+  }
 
   if (
     context.memorias?.length &&

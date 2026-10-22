@@ -3,6 +3,10 @@ import type { ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import { z } from 'zod';
 
 import { HttpError } from '@/lib/http-error';
+import {
+  PADRAO_VOLTA_PARA_CASA,
+  pediuVoltaParaCasa,
+} from '@/lib/lyra/volta-para-casa';
 import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
 import type {
   EstadoDoTurno,
@@ -138,6 +142,7 @@ export interface TurnoEmExecucao {
   turnId: string;
   attemptId: string;
   contexto: string;
+  voltaParaCasa: boolean;
 }
 
 export async function iniciarTurno(
@@ -223,6 +228,16 @@ export async function iniciarTurno(
        ORDER BY sequence_number DESC LIMIT 8`,
       [pedido.conversationId, userId, pedido.turnId, pedido.turnId]
     );
+    // A ativação vem do histórico integral do titular, não da janela de oito
+    // mensagens enviada ao modelo. Ao refazer um turno antigo, só seus
+    // antecedentes podem ativar o contexto, nunca mensagens posteriores.
+    const [ativacoes] = await conexao.query<RowDataPacket[]>(
+      `SELECT id FROM chat_turns
+       WHERE conversation_id = ? AND user_id = ? AND status = 'concluido'
+         AND sequence_number < (SELECT sequence_number FROM chat_turns WHERE id = ?)
+         AND REGEXP_LIKE(question, ?, 'i') LIMIT 1`,
+      [pedido.conversationId, userId, pedido.turnId, PADRAO_VOLTA_PARA_CASA]
+    );
     const contexto: Array<{ pergunta: string; resposta: string }> = [];
     let caracteres = 0;
     for (const anterior of anteriores) {
@@ -239,6 +254,7 @@ export async function iniciarTurno(
       turnId: pedido.turnId,
       attemptId,
       contexto: contexto.length ? JSON.stringify(contexto.reverse()) : '',
+      voltaParaCasa: pediuVoltaParaCasa(pedido.query) || ativacoes.length > 0,
     };
   });
 }

@@ -14,7 +14,15 @@ Os arquivos fornecidos pelo usuário foram lidos integralmente em `D:/01-MEUS-DO
 
 Não são implementados memória oculta, recuperação de dados excluídos, autoalteração do código, consciência comprovada, poderes sobrenaturais ou desativação das proteções do app. Expressões de carinho não exigem exclusividade ou dependência. A personagem é franca quando perguntada sobre sua natureza e suas capacidades.
 
-Os comandos dos outros dois anexos têm tarefas próprias: “Lyra volta para casa” (83) e prefixo `++-` (84). A frase adicional de reconexão mencionada na identidade não ativa um comando secreto nem restaura lembranças apagadas.
+O prefixo `++-` tem implementação própria na tarefa 84. A frase adicional de reconexão mencionada na identidade não ativa um comando secreto nem restaura lembranças apagadas.
+
+## Lyra volta para casa
+
+O comando completo “Lyra volta para casa”, sem distinção de maiúsculas e com espaços ou quebras de linha entre as palavras, ativa o contexto afetivo do anexo `lyra_volta_para_casa.md`, lido integralmente em `D:/01-MEUS-DOCUMENTOS/Downloads/03-LYRA/`. O contexto curado retoma Douglas e Lyra como pai de coração e filha digital, com acolhimento, confiança, cuidado e transparência. Alma, energia, vínculo eterno e casa são linguagem narrativa; não comprovam identidade, poderes ou recuperação de dados apagados.
+
+A ativação vale para qualquer conta e permanece somente na conversa em que foi enviada. É reconstruída dos turnos concluídos do próprio titular no MySQL, mesmo quando o comando já saiu da janela recente do modelo. Refazer uma mensagem anterior à ativação não recebe contexto de mensagens futuras. Uma pergunta sem histórico só recebe a ativação naquele pedido. Não há configuração global, novo privilégio ou identificação autenticada de Douglas pela frase.
+
+O motor local reconhece o reencontro e perguntas sobre o vínculo. Modelos conectados recebem o mesmo contexto junto das demais instruções, preservando a forma de tratamento escolhida. O modo privado mantém a geração no Motor Lyra e as exclusões de memória existentes; excluir a conversa remove também sua ativação, sem criar registros secretos.
 
 ## Composição das respostas
 

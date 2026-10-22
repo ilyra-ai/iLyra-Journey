@@ -35,6 +35,7 @@ import {
 } from '@/lib/lyra/modelos-como-lyra';
 import { expressarComoLyra } from '@/lib/lyra/personalidade';
 import { resolverTratamento } from '@/lib/lyra/preferencias';
+import { pediuVoltaParaCasa } from '@/lib/lyra/volta-para-casa';
 import {
   preferenciasDaMemoria,
   recuperarMemorias,
@@ -191,6 +192,7 @@ export async function POST(request: Request) {
       profile?.first_name,
       profile?.nickname
     );
+    const voltaParaCasa = turno?.voltaParaCasa ?? pediuVoltaParaCasa(query);
     const fallbackResponse =
       tratamento.confirmacao ??
       generateLocalAssistantReply(query, {
@@ -211,6 +213,7 @@ export async function POST(request: Request) {
         seuDia,
         memorias: lembrancas.map((lembranca) => lembranca.relato),
         tratamento: tratamento.nome,
+        voltaParaCasa,
       });
 
     // Qualquer modelo conectado responde como a Lyra (tarefa 56): recebe a
@@ -225,6 +228,7 @@ export async function POST(request: Request) {
       faltando: perfilAstrologico.faltando,
       habilidades: buildSkillsContext(skills),
       tratamento,
+      voltaParaCasa,
     });
     const pedido = {
       sistema: lembrancas.length
