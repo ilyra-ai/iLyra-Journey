@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `█████████████████░░░` **84%** |
+| Progresso          | `█████████████████░░░` **85%** |
 | Tarefas totais     | 96                             |
-| 🟢 Finalizadas     | 81                             |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 82                             |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 0                              |
 | ⚪ A iniciar       | 14                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (81 ÷ 96 ≈ 84%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (82 ÷ 96 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,15 +51,7 @@
 
 ### ANDAMENTO
 
-### 88 · Histórico recolhido por padrão e controle de exibição
-
-- **Status:** 🔵 em andamento · **Registro/início:** 2026-10-21.
-- **Pedido do usuário:** permitir esconder e voltar a ver o histórico abaixo de Lyra AI; deixar oculto por padrão e mostrá-lo somente após clicar em “Ver mais”. Esta orientação substitui o padrão anterior de três conversas inicialmente visíveis da tarefa 79.
-- **Complemento de 2026-10-22:** a fonte de “Ver mais” deve ser menor que a de “Conversas recentes”, preservando legibilidade e área de toque confortável no desktop e celular. Conferir os tamanhos efetivamente renderizados no navegador.
-- **Critérios:** conferir o componente existente e reaproveitar consulta, paginação e isolamento. Ao abrir o app ou o menu, não exibir a lista de conversas por padrão; “Ver mais” abre o histórico e “Ocultar histórico” permite recolhê-lo. Preservar o acesso às três recentes, expansão das demais, estados de carregamento, vazio e erro, seleção da conversa, teclado e fechamento do menu móvel. Não apagar conversas nem alterar a API ou as preferências de privacidade.
-- **Sequência e entrega:** implementar após a tarefa 78, já publicada em `e776f10`, antes de modernizar o chat, por se tratar da nova orientação para a mesma sidebar. Validar desktop/mobile e gates; commit e push próprios na main.
-- **Validação em 2026-10-22:** implementação conferida em produção, pronta para publicação individual. Histórico oculto inicialmente, três recentes ao abrir, paginação para seis registros existentes, recolhimento por Espaço e abertura por Enter, seleção preservada e menu móvel reaberto com lista oculta. Falha real de rede pelo navegador manteve três recentes, erro e retentativa; rede restaurada e consulta recuperada. Nenhuma conversa criada ou apagada nesta verificação.
-- **Evidências:** 1440, 390 e 320 px sem estouro horizontal; medições reais de 11 px em “Ver mais”, 12 px em “Conversas recentes” e alvo de 44 px. `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 560 testes unitários e 192 integrações passaram; após o ajuste final, formatação e lint focados e build com TypeScript aprovados. Launcher confirmou produção na porta 3000, saúde com 35 migrações, landing, login e autenticação administrativa. Arquivos `.logs/qa88-{format,lint-fix,lint,format-check,types,unit,integration}.log`, `.logs/qa88-producao-final.log`, `.logs/qa88-medidas.json` e capturas `.logs/qa88-{desktop-recolhido,mobile-390,mobile-320}.png`.
+Nenhuma tarefa em andamento neste registro de conclusão.
 
 ---
 
@@ -1614,3 +1606,13 @@
 - **Validação e entrega:** testar persistência após reiniciar, lembrança entre conversas, troca de provedor, contradições ao longo do tempo, indisponibilidade do serviço, retentativas, exclusão e bloqueio de acesso entre contas. Comprovar com Graphiti e banco de grafos reais, além das rotas e da interface mobile/desktop, passando os gates e publicando commit e push próprios na main.
 - **Pesquisa inicial:** [Graphiti oficial](https://github.com/getzep/graphiti), licença Apache 2.0, biblioteca Python e bancos de grafos suportados; exemplos REST/MCP não oferecem autenticação nem isolamento de usuários e não serão expostos como serviço de produção. A integração foi iniciada pela infraestrutura e pelo backend, antes dos controles visuais.
 - **Progresso verificado em 2026-10-20:** implementação e revisão concluídas. Graphiti 0.31.2, FalkorDB 6.0.2 e índices locais de 256 dimensões saudáveis; migração 031 aplicada sem apagar dados. Passaram 521 testes unitários, 187 de integração, 30 dos launchers, lint, formatação, tipos e build de produção, com saúde HTTP 200 e 33 migrations. Depois de o usuário reabrir o Jan, o roteiro HTTP completo confirmou extração real, origem, isolamento, alternância entre titulares, recuperação em outra conversa, reinício, correção temporal, exportação, Motor Lyra, modo privado, retentativa e exclusão pendente. Na interface, ativação, relato, origem, correção, download, pausa persistente e mensagem privada sem captura passaram; desktop e celulares de 390 e 320 pixels sem excesso horizontal. Auditoria Python sem vulnerabilidades conhecidas e inferência ONNX com vetores idênticos à referência. Configuração de modelos e modo privado restaurados; nenhuma conta temporária de memória ficou no banco. Relatório e artefatos verificáveis em `docs/memoria-graphiti.md`; commit e push individuais publicados e confirmados na main.
+
+### 88 · Histórico recolhido por padrão e controle de exibição
+
+- **Status:** 🟢 finalizada · **Conclusão:** 2026-10-22 · **Commit:** `1235bd115603b23fd7f3a4b7464e8125372d73d1` · **Push:** `f3f157c..1235bd1 main -> main`, confirmado por `git ls-remote`.
+- **Pedido do usuário:** permitir esconder e voltar a ver o histórico abaixo de Lyra AI; deixar oculto por padrão e mostrá-lo somente após clicar em “Ver mais”. Esta orientação substitui o padrão anterior de três conversas inicialmente visíveis da tarefa 79.
+- **Complemento de 2026-10-22:** a fonte de “Ver mais” deve ser menor que a de “Conversas recentes”, preservando legibilidade e área de toque confortável no desktop e celular. Conferir os tamanhos efetivamente renderizados no navegador.
+- **Critérios:** conferir o componente existente e reaproveitar consulta, paginação e isolamento. Ao abrir o app ou o menu, não exibir a lista de conversas por padrão; “Ver mais” abre o histórico e “Ocultar histórico” permite recolhê-lo. Preservar o acesso às três recentes, expansão das demais, estados de carregamento, vazio e erro, seleção da conversa, teclado e fechamento do menu móvel. Não apagar conversas nem alterar a API ou as preferências de privacidade.
+- **Sequência e entrega:** implementar após a tarefa 78, já publicada em `e776f10`, antes de modernizar o chat, por se tratar da nova orientação para a mesma sidebar. Validar desktop/mobile e gates; commit e push próprios na main.
+- **Validação em 2026-10-22:** implementação conferida em produção e publicada individualmente. Histórico oculto inicialmente, três recentes ao abrir, paginação para seis registros existentes, recolhimento por Espaço e abertura por Enter, seleção preservada e menu móvel reaberto com lista oculta. Falha real de rede pelo navegador manteve três recentes, erro e retentativa; rede restaurada e consulta recuperada. Nenhuma conversa criada ou apagada nesta verificação.
+- **Evidências:** 1440, 390 e 320 px sem estouro horizontal; medições reais de 11 px em “Ver mais”, 12 px em “Conversas recentes” e alvo de 44 px. `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 560 testes unitários e 192 integrações passaram; após o ajuste final, formatação e lint focados e build com TypeScript aprovados. Launcher confirmou produção na porta 3000, saúde com 35 migrações, landing, login e autenticação administrativa. Arquivos `.logs/qa88-{format,lint-fix,lint,format-check,types,unit,integration}.log`, `.logs/qa88-producao-final.log`, `.logs/qa88-medidas.json` e capturas `.logs/qa88-{desktop-recolhido,mobile-390,mobile-320}.png`.
