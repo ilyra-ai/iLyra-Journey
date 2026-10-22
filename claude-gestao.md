@@ -22,15 +22,15 @@
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
 | Progresso          | `█████████████████░░░` **85%** |
-| Tarefas totais     | 96                             |
+| Tarefas totais     | 97                             |
 | 🟢 Finalizadas     | 82                             |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 2                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 14                             |
+| ⚪ A iniciar       | 13                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (82 ÷ 96 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (82 ÷ 97 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,23 +51,21 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento neste registro de conclusão.
-
----
-
-## Tópico 3 · Tarefas a Iniciar
-
 ### 80 · Formatação das respostas da Lyra AI
 
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-20 · **Início:** 2026-10-22.
 - **Pedido do usuário:** respostas com `**texto**` estão mostrando os asteriscos em vez do negrito; corrigir a apresentação da formatação produzida pelo modelo.
 - **Critérios:** conferir o renderizador existente, apresentar negrito de forma semântica e acessível, preservar o texto original para cópia e histórico e evitar execução de HTML ou links inseguros vindos de mensagens. Validar resposta real, trechos formatados e texto comum; publicação individual na main.
 
 ### 81 · Aproveitamento da largura da tela do chat
 
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-20 · **Início:** 2026-10-22.
 - **Pedido do usuário:** o anexo mostra o chat excessivamente centralizado, sem ocupar a área disponível até a margem esquerda do conteúdo. Ajustar o layout para aproveitar essa largura.
 - **Critérios:** pesquisar tendências de 2026 e revisar a experiência completa do chat para que seja inovadora, moderna, bonita e simples para usuários leigos; corrigir a limitação de largura e os espaçamentos, alinhar a área da conversa ao conteúdo do app, manter legibilidade e campo de envio acessível, testar sidebar, desktop, tablet e celular, sem estouro ou cortes. Incluir a correção de negrito e formatação da tarefa 80 e verificações de regressão, conforme pedido de 2026-10-21; publicação da modernização na main antes de iniciar a 83.
+
+---
+
+## Tópico 3 · Tarefas a Iniciar
 
 ### 83 · Contexto “Lyra volta para casa”
 
@@ -168,6 +166,15 @@ Nenhuma tarefa em andamento neste registro de conclusão.
 - **Correção integral:** acrescentar os controles ausentes e corrigir os existentes pela causa raiz, com configuração persistida como fonte de verdade. Ligar e desligar cada recurso deve alterar efetivamente sua disponibilidade e execução em todas as entradas correspondentes, incluindo acesso direto às páginas e APIs; esconder um botão não comprova bloqueio. Respeitar limites, dependências entre recursos, sessões existentes e a separação entre plano e papel administrativo, sem conceder privilégios por simples ativação comercial.
 - **Validação real por recurso e plano:** testar individualmente ativação e desativação pela matriz, persistência após recarga e novo login, comportamento da interface e chamadas diretas ao backend, limites e operações CRUD aplicáveis, contas antigas e novas, isolamento e tentativas não autorizadas. Conferir Free, Meta, Care e o plano Administrador da tarefa 91 conforme suas regras próprias; preservar dados e restaurar configurações usadas nos testes. Não declarar cobertura completa com testes simulados ou somente visuais.
 - **Evidências e entrega:** registrar lacunas encontradas, correções e resultado verificável de cada controle, validar responsividade e acessibilidade da matriz e executar os gates do projeto. Coordenar com as tarefas 91 e 94 para não duplicar auditoria nem divergir da landing. Publicar commit e push próprios na main e atualizar este painel com os resultados reais. Este registro não declara a auditoria executada; aguardar instruções após sua publicação, conforme pedido do usuário.
+
+---
+
+### 97 · Nomes compreensíveis de todas as métricas na análise de saúde dos dados
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** em `http://localhost:3000/admin/data-health`, na seção **“Análise de métricas”**, a coluna **“Métrica”** mostra identificadores técnicos, descritos pelo usuário como nomes de arquivos, em vez do nome compreensível da métrica. Substituir a apresentação pelo nome real de **todas as métricas**, incluindo as que não aparecem no recorte do anexo; não limitar a correção aos exemplos visíveis.
+- **Investigação e implementação:** inventariar o catálogo completo e a origem dos identificadores, conferir os rótulos e unidades já existentes no app para evitar retrabalho e divergência e usar uma fonte de nomes em pt-BR consistente. Manter as chaves técnicas do banco e os cálculos; corrigir a apresentação, sem renomear colunas ou alterar dados por inferência. Exemplos do anexo incluem `steps`, `sleep_duration_minutes`, `resting_heart_rate`, `calories_burned`, `hrv_ms`, `spo2_average`, `vo2_max`, nutrientes, hidratação e cafeína, mas o escopo é o catálogo inteiro.
+- **Validação e entrega:** confrontar cada identificador com seu nome e unidade corretos, comprovar cobertura integral sem nomes técnicos vazando como rótulos, conferir preenchimento e faixas de valores sem regressão, estados vazios e erros, leitura no celular e desktop, acessibilidade e fluxo real da página/API. Não usar simulações, placeholders, hardcode para mascarar lacunas ou cortes de código; executar os gates aplicáveis, atualizar este painel e publicar commit e push próprios na main, sem branches ou worktrees. Este registro não declara a correção implementada.
 
 ---
 
