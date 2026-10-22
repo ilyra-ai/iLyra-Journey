@@ -50,15 +50,47 @@ describe('assistente local', () => {
     expect(resposta).not.toContain('Olá, xuxu!');
   });
 
-  it('analisa sono curto, glicose alta e HRV baixa a partir das métricas', () => {
+  it('apresenta os registros de sono, glicose, HRV e passos sem trocar valores', () => {
     expect(responder('Como está meu sono?')).toMatch(
-      /6h 20m.*menos do que o mínimo recomendado/
+      /6h 20m.*duração isolada não determina/
     );
     expect(responder('minha glicose')).toMatch(
       /118 mg\/dL.*estresse oxidativo/
     );
     expect(responder('meu HRV')).toMatch(/35 ms e prontidão de 61\/100/);
     expect(responder('quero mais passos')).toMatch(/5200 passos.*NEAT/);
+  });
+
+  it('não prescreve suplemento ou infere recuperação pela duração ou pela Lua', () => {
+    for (const pergunta of ['Como está meu sono?', '++- Como está meu sono?']) {
+      const resposta = responder(pergunta);
+      expect(resposta).toContain('Leitura simbólica:');
+      expect(resposta).toContain('horários regulares');
+      expect(resposta).toContain(
+        'https://www.nhlbi.nih.gov/health/sleep-deprivation/healthy-sleep-habits'
+      );
+      expect(resposta).not.toMatch(
+        /ajuste a ingestão|magnésio|sono está adequado|mínimo recomendado/iu
+      );
+    }
+    const semSono = responder('meu sono', { latestMetric: null });
+    expect(semSono).toContain('Ainda não tenho dados recentes');
+    expect(semSono).toContain('procure avaliação profissional');
+  });
+
+  it('preserva registro zero e não declara que muitas horas garantem sono adequado', () => {
+    for (const minutos of [0, 600]) {
+      const resposta = responder('meu sono', {
+        latestMetric: {
+          steps: null,
+          sleep_duration_minutes: minutos,
+          hrv_ms: null,
+          readiness_score: null,
+        },
+      });
+      expect(resposta).toContain(minutos === 0 ? '0h 0m' : '10h 0m');
+      expect(resposta).toContain('duração isolada não determina');
+    }
   });
 
   it('informa ausência de dados em vez de inventar valores', () => {

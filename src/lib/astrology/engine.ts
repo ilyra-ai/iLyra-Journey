@@ -80,39 +80,39 @@ function buildHealthImpact(
   if (nearFullMoon) {
     return {
       sleep:
-        'Janela de Lua Cheia: maior chance de latência do sono e hiperalerta. Priorize luz baixa, temperatura ambiente menor e desaceleração cognitiva antecipada.',
-      energy: `Expansão de energia em ${moonSign}. Use para treino técnico ou força submáxima, evitando excesso de intensidade à noite.`,
+        'Lua Cheia: na leitura simbólica, um convite à pausa e à reflexão. A fase lunar não permite avaliar seu sono ou prever sua recuperação.',
+      energy: `Lua em ${moonSign}: expansão como tema simbólico de reflexão, sem medir disposição física ou definir intensidade de treino.`,
       stress:
-        'Tendência de maior reatividade emocional. Respiração diafragmática, alongamento restaurativo e redução de estímulo social tardio ajudam a modular a carga autonômica.',
+        'Leitura simbólica de expressão e observação das emoções; não é uma avaliação de estresse ou da resposta autonômica.',
     };
   }
 
   if (nearNewMoon) {
     return {
       sleep:
-        'Janela de Lua Nova: maior propensão a recuperação profunda. Vale consolidar rotina, ampliar higiene do sono e preservar horários consistentes.',
-      energy: `Energia mais contida em ${moonSign}. Favorece recuperação ativa, mobilidade e trabalho aeróbico leve.`,
+        'Lua Nova: na leitura simbólica, um convite ao recolhimento. A fase lunar não comprova sono profundo ou recuperação física.',
+      energy: `Lua em ${moonSign}: recolhimento como tema simbólico, sem determinar sua capacidade física ou o treino indicado.`,
       stress:
-        'Momento bom para introspecção, revisão de metas e redução de ruído decisório. Evite sobrecarga de agenda e excesso de cafeína.',
+        'Leitura simbólica de introspecção e revisão de prioridades, sem inferir o estado emocional da pessoa.',
     };
   }
 
   if (paksha === 'Shukla Paksha') {
     return {
       sleep:
-        'Fase de crescimento lunar com tendência a aumento progressivo de ativação. Termine o dia com rotina estável para não perder profundidade de sono.',
-      energy: `Crescimento de energia em ${moonSign}. Janela favorável para construir volume de treino e consistência metabólica.`,
+        'Lua crescente: crescimento é um tema simbólico desta fase, não uma medição de ativação ou profundidade do sono.',
+      energy: `Lua em ${moonSign}: crescimento como tema simbólico de planejamento, sem prever desempenho ou resposta metabólica.`,
       stress:
-        'Boa fase para planejamento e execução, desde que a carga externa não ultrapasse a recuperação percebida.',
+        'Leitura simbólica de construção e planejamento; o estresse real depende dos seus relatos e sinais, não da fase lunar.',
     };
   }
 
   return {
     sleep:
-      'Fase de recolhimento lunar. O corpo responde melhor a previsibilidade, menor estímulo noturno e redução de carga nas últimas horas do dia.',
-    energy: `Energia em depuração sob ${moonSign}. Combine rotina, hidratação e movimento moderado com menor impulsividade.`,
+      'Lua minguante: recolhimento é um tema simbólico, sem estabelecer como seu corpo dorme ou responde à rotina.',
+    energy: `Lua em ${moonSign}: revisão como tema simbólico, sem inferir fadiga ou necessidades fisiológicas.`,
     stress:
-      'Tendência a sensibilidade maior a variações de humor e fadiga acumulada. Reforce pausas estratégicas e critérios de priorização.',
+      'Leitura simbólica de revisão e pausa, sem prever alterações de humor ou fadiga.',
   };
 }
 

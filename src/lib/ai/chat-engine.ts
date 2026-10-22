@@ -135,7 +135,7 @@ function contemTermo(texto: string, termos: string[]) {
 }
 
 function formatSleep(minutes: number | null | undefined) {
-  if (!minutes) {
+  if (minutes === null || minutes === undefined) {
     return 'sem registro recente de sono';
   }
   const hours = Math.floor(minutes / 60);
@@ -444,16 +444,23 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
 
   // 4. Análise de Sono
   if (isSleepQuery) {
-    if (metrics?.sleep_duration_minutes) {
-      const isLowSleep = metrics.sleep_duration_minutes < 420; // menos de 7 horas
+    if (
+      typeof metrics?.sleep_duration_minutes === 'number' &&
+      Number.isFinite(metrics.sleep_duration_minutes) &&
+      metrics.sleep_duration_minutes >= 0
+    ) {
       responses.push(
-        `Analisando seu último registro de ${formatSleep(metrics.sleep_duration_minutes)}: ${isLowSleep ? 'Você está dormindo menos do que o mínimo recomendado (7 horas) para longevidade e reparo celular.' : 'Seu tempo total de sono está adequado.'}`
+        `Seu último registro soma ${formatSleep(metrics.sleep_duration_minutes)} de sono. A duração isolada não determina se o sono foi suficiente ou reparador: necessidades variam com a idade, e qualidade, regularidade e disposição ao acordar também importam.`
       );
     } else {
       responses.push('Ainda não tenho dados recentes do seu sono.');
     }
     responses.push(
-      `Astrologicamente: ${astro.impactOnHealth.sleep} Recomendo reduzir exposição à luz azul e manter regularidade cronobiológica. Se os problemas persistirem, ajuste a ingestão de magnésio e carboidratos no período noturno.`
+      'Para cuidar da rotina, procure manter horários regulares para dormir e acordar, reduzir luz intensa e telas perto de deitar, evitar cafeína no fim do dia e preparar um ambiente escuro, silencioso e confortável. Se a dificuldade persistir ou prejudicar seu dia, procure avaliação profissional para investigar a causa.'
+    );
+    responses.push(`Leitura simbólica: ${astro.impactOnHealth.sleep}`);
+    responses.push(
+      'Referência: [Hábitos de sono — NHLBI/NIH](https://www.nhlbi.nih.gov/health/sleep-deprivation/healthy-sleep-habits).'
     );
   }
 
@@ -505,7 +512,7 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
     responses.push(
       `Neste instante astronômico: Lua em ${astro.moonSign}, sob o domínio de ${astro.nakshatra} durante a fase ${astro.tithi}. Ayanamsha calculado: ${astro.ayanamshaDegrees.toFixed(2)} graus.`
     );
-    responses.push(`Impactos orgânicos diretos:`);
+    responses.push('Leituras simbólicas do céu:');
     responses.push(`- Energia: ${astro.impactOnHealth.energy}`);
     responses.push(`- Estresse: ${astro.impactOnHealth.stress}`);
     responses.push(`- Sono: ${astro.impactOnHealth.sleep}`);

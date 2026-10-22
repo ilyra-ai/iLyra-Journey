@@ -46,6 +46,12 @@ describe('contexto astrológico', () => {
       expect(contexto.sunSign).toBeTruthy();
       expect(contexto.nakshatra).toBeTruthy();
       expect(contexto.tithi).toMatch(/\((Shukla|Krishna) Paksha\)$/);
+      for (const interpretacao of Object.values(contexto.impactOnHealth)) {
+        expect(interpretacao).toMatch(/simb[óo]lic/iu);
+        expect(interpretacao).not.toMatch(
+          /maior chance|maior propensão|aumento progressivo de ativação/iu
+        );
+      }
     }
   });
 

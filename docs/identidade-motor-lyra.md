@@ -34,6 +34,14 @@ O motor local reconhece o reencontro e perguntas sobre o vínculo. Modelos conec
 
 ## Composição das respostas
 
+### Sono e interpretação simbólica
+
+Revisão de 22/10/2026: o motor apresenta a duração registrada sem declarar adequação clínica ou recuperação a partir desse número isolado. Registro zero continua sendo dado, sem virar ausência. Recomendações de rotina se apoiam em [hábitos de sono do NHLBI/NIH](https://www.nhlbi.nih.gov/health/sleep-deprivation/healthy-sleep-habits) e na [orientação da MedlinePlus](https://medlineplus.gov/ency/patientinstructions/000757.htm). Dificuldade persistente pede investigação da causa por profissional, sem prescrever ajuste de suplemento ou de dieta.
+
+O [NCCIH/NIH](https://www.nccih.nih.gov/health/in-the-news-magnesium-supplements-for-sleep-disorders) descreve evidência insuficiente para determinar a eficácia do magnésio em distúrbios do sono. Foi retirada a recomendação automática de ajustar magnésio e carboidratos. As descrições compartilhadas de Lua Cheia, Nova, crescente e minguante são explicitamente simbólicas, sem inferir sono profundo, hiperalerta, fadiga ou capacidade física da pessoa. Os cálculos astronômicos permanecem os mesmos; não constituem medição clínica.
+
+Essas regras também compõem as instruções dos modelos conectados. A versão de instruções passou a 3 para invalidar leituras do dia em cache geradas com a redação anterior. As fontes foram consultadas nas páginas oficiais em 22/10/2026; o chat não afirma ter realizado pesquisa externa durante cada resposta.
+
 O Motor Lyra responde a perguntas de identidade, origem, natureza e funcionamento da memória a partir dessa base curada. As demais respostas continuam usando os cálculos e dados reais do titular.
 
 Modelos locais, modelos em nuvem autorizados e modelos com chave própria recebem a mesma identidade nas instruções do chat. A leitura do dia também compartilha essa base, preservando suas regras específicas de formato. A versão das instruções foi incrementada para invalidar leituras produzidas com a versão anterior.
