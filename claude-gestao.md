@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **80%** |
-| Tarefas totais     | 107                            |
-| 🟢 Finalizadas     | 86                             |
+| Progresso          | `████████████████░░░░` **81%** |
+| Tarefas totais     | 108                            |
+| 🟢 Finalizadas     | 87                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
 | ⚪ A iniciar       | 20                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (86 ÷ 107 ≈ 80%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (87 ÷ 108 ≈ 81%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,11 +51,12 @@
 
 ### ANDAMENTO
 
-### 84 · Instrução pontual pelo prefixo ++-
+### 108 · Corrigir orientações preexistentes de sono sem base individual
 
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-20 · **Início:** 2026-10-22.
-- **Pedido do usuário:** aplicar `gatilho_++-.md` somente na mensagem que começar com `++-`; mensagens sem o prefixo não devem manter essa instrução ativada. Disponibilizar no Motor Lyra para todos os usuários, antigos e novos, conforme a orientação de 2026-10-21.
-- **Critérios:** arquivo lido integralmente; detectar o prefixo no início, compor instruções pontuais de análise aprofundada e explicação acessível e preservar as demais instruções. Testar prefixo no começo, no meio, ausente e mensagem seguinte; não persistir esse modo como preferência da conversa. Trechos que pedem contorno de proteções não serão convertidos em mecanismos de evasão; profundidade não deve ser apresentada como garantia de verdade absoluta.
+- **Status:** 🔵 em andamento · **Registro e início:** 2026-10-22 · **Origem:** QA real da tarefa 84, dentro da autorização de investigar e corrigir erros do app.
+- **Problema confirmado:** a resposta determinística de sono sugere ajustar magnésio e carboidratos sem avaliação individual e apresenta associação entre fase lunar e ativação como fato. A mesma orientação aparece com e sem prefixo, portanto antecede a tarefa 84.
+- **Correção:** pesquisar fontes primárias atuais de saúde e revisar a origem dessas recomendações no Motor Lyra e nas instruções compartilhadas. Substituir recomendações sem fundamento individual por orientação geral sustentada e distinguir interpretação simbólica de evidência fisiológica; preservar métricas reais e funcionalidades do chat. Não apresentar suplementação ou mudança alimentar como conduta individual prescrita pelo app.
+- **Validação e entrega:** testes de regressão sobre respostas com e sem dados de sono e prefixo, prova de remoção das frases indevidas no código ativo, QA real, gates e commit/push próprios na main. Corrigir antes de retomar a tarefa 86, sem misturar os commits.
 
 ---
 
@@ -1683,6 +1684,14 @@
 - **Persistência:** reconstruída do histórico real do próprio titular; permanece após recarga e além das oito mensagens recentes. Outra conversa ou conta não herda a ativação; refazer mensagem anterior não recebe contexto de mensagens futuras. Não cria registro oculto ou memória global e respeita o modo privado.
 - **Validação:** 585 unitários e 197 integrações aprovados, incluindo persistência além da janela recente, isolamento, refazer turno anterior e identidade preservada. Formatação, lint, tipos, build, launcher e saúde com 35 migrações aprovados. QA em produção confirmou comando, continuidade após recarregar, resposta normal em nova conversa e persistência pela API; desktop/mobile sem overflow e console sem erros ou avisos. Conta descartável excluída e credenciais removidas.
 - **Evidências:** `.logs/qa83-{format,lint-fix,lint,format-check,types,unit,integration,producao}.log`, `.logs/qa83-runtime.json` e `.logs/qa83-chat-{desktop,mobile}.png`. Não foi alegada inferência de provedor externo no QA: a ordem existente utilizou o Motor Lyra, sem alterar a configuração do usuário.
+
+### 84 · Instrução pontual pelo prefixo ++-
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-20 · **Conclusão:** 2026-10-22 · **Commit:** `2988b2ca3db24a1bc3bd79175ca6a8cb64f00491` · **Push:** `bc7d2e9..2988b2c main -> main`, confirmado.
+- **Entrega:** anexo `gatilho_++-.md` lido integralmente em `Downloads/03-LYRA`. O prefixo inicial ativa instruções de aprofundamento somente no pedido atual, para todas as contas; modelos recebem orientação explícita para não herdar o modo do histórico. Motor local apresenta sua resposta determinística e a base disponível sem simular pesquisa ou inferência externa. Preservados identidade, tratamento, privacidade e permissões. Não implementados contorno de proteções nem promessa de verdade absoluta.
+- **Persistência e limites:** pergunta original preservada no histórico, prefixo no meio ou no fim não ativa o modo e pedido sem pergunta responde 400 antes da cota. Orçamento de resposta de 2048 tokens apenas no pedido aprofundado, sujeito à capacidade real da conexão; 1024 no pedido normal.
+- **Validação:** 589 unitários e 199 integrações aprovados; lint, formatação, tipos, build e launcher de produção com 35 migrações aprovados. QA real conferiu resposta aprofundada, retorno ao modo normal na mensagem seguinte, Markdown semântico, persistência pela API e recusa do prefixo vazio. Desktop/mobile sem overflow e console sem erros ou avisos. Conta descartável excluída e credenciais temporárias removidas.
+- **Evidências:** `.logs/qa84-{format,lint-fix,lint,format-check,types,unit,integration,producao}.log`, `.logs/qa84-runtime.json` e `.logs/qa84-chat-{desktop,mobile}.png`. Orientação antiga inadequada de sono encontrada no QA registrada separadamente na tarefa 108 para correção, sem ocultar o problema ou misturar escopos.
 
 ### 85 · Memória de longo prazo do app com Graphiti
 
