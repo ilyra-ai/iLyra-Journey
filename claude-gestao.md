@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `█████████████████░░░` **85%** |
-| Tarefas totais     | 95                             |
+| Progresso          | `█████████████████░░░` **84%** |
+| Tarefas totais     | 96                             |
 | 🟢 Finalizadas     | 81                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 13                             |
+| ⚪ A iniciar       | 14                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (81 ÷ 95 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (81 ÷ 96 ≈ 84%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -129,7 +129,7 @@
 
 - **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
 - **Free automático:** investigar, verificar e analisar profundamente se o plano Free é concedido automaticamente a novos usuários, novos cadastros e usuários inseridos pelo administrador. Conferir as implementações e evidências existentes antes de corrigir, evitando retrabalho.
-- **Free, Meta e Care:** verificar se as funções e funcionalidades reais de cada plano correspondem às habilitações e desabilitações na **“Matriz editável de entitlements”** em `http://localhost:3000/admin/plans`, tanto na interface quanto no servidor. Auditar se a matriz contém todas as funções e funcionalidades que o aplicativo pode fornecer e incluir o que estiver faltando.
+- **Free, Meta e Care:** verificar se as funções e funcionalidades reais de cada plano correspondem às habilitações e desabilitações na **“Matriz editável de entitlements”** em `http://localhost:3000/admin/plans`, tanto na interface quanto no servidor. A auditoria exaustiva da cobertura de todas as funcionalidades, inclusão das ausentes e comprovação individual dos controles passa a ter rastreamento próprio na tarefa 96, conforme complemento do usuário; reaproveitar suas evidências para evitar retrabalho.
 - **Administrador:** criar o perfil/plano **“Administrador”**, com todas as funções e funcionalidades gerais do app habilitadas, e conceder esse plano **somente a `admin@lyra.local`**. Ele não pode aparecer como plano comprável nem na landing page. Preservar a separação entre assinatura e autorização administrativa: compra ou troca de plano não pode conceder permissões de administrador.
 - **Página de planos:** acrescentar o cartão Administrador à direita de Care em `/admin/plans`; os quatro cartões devem caber responsivamente na tela, sem barra de rolagem horizontal. Tornar também a matriz editável responsiva, sem barra de rolagem inferior, mantendo leitura, edição e acessibilidade no mobile e desktop.
 - **Validação:** conferir cadastro público e criação administrativa, concessão única do Free, CRUD dos planos e da matriz, aplicação real de cada entitlement ligado/desligado, limites e isolamento, acesso total da conta designada, ausência do plano privado na compra e landing, responsividade e gates completos. Registrar evidências e publicar commit e push próprios na main.
@@ -164,6 +164,15 @@
 - **Validação integral:** cadastro → onboarding → persistência → entrada no app, leitura e atualização dos dados, retorno e retomada, recarga e novo login sem repetição indevida do onboarding concluído. Conferir erros, campos opcionais, consentimento e isolamento, ausência da seleção de objetivos, responsividade em múltiplas larguras e CRUD real; executar gates e publicar commit e push próprios na main.
 
 **Registro desta solicitação:** tarefas 89–95 acrescentadas em 2026-10-22 como **a iniciar**, sem declarar implementação ou validação funcional. A publicação imediata deste registro é documental; cada implementação seguirá com validação, atualização do painel, commit e push próprios na main, sem branches ou worktrees.
+
+### 96 · Auditoria integral da cobertura e funcionamento real da matriz de entitlements
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido complementar do usuário:** analisar e verificar profundamente se **todas as funções e funcionalidades do aplicativo** estão na **“Matriz editável de entitlements”** da página `http://localhost:3000/admin/plans`, permitindo ativá-las ou desativá-las nos planos. Os controles precisam funcionar de forma real, sem simulações, placeholders, hardcode ou cortes de código ou linhas.
+- **Inventário e rastreabilidade:** investigar código, rotas, APIs, serviços, motores, integrações, operações e interfaces existentes antes de implementar; confrontar cada função com os itens da matriz e os pontos de autorização no servidor. Produzir relação verificável de funcionalidade → entitlement → planos → pontos de aplicação → testes, identificando ausências, duplicidades, controles sem efeito e permissões administrativas que não podem ser adquiridas por troca de plano.
+- **Correção integral:** acrescentar os controles ausentes e corrigir os existentes pela causa raiz, com configuração persistida como fonte de verdade. Ligar e desligar cada recurso deve alterar efetivamente sua disponibilidade e execução em todas as entradas correspondentes, incluindo acesso direto às páginas e APIs; esconder um botão não comprova bloqueio. Respeitar limites, dependências entre recursos, sessões existentes e a separação entre plano e papel administrativo, sem conceder privilégios por simples ativação comercial.
+- **Validação real por recurso e plano:** testar individualmente ativação e desativação pela matriz, persistência após recarga e novo login, comportamento da interface e chamadas diretas ao backend, limites e operações CRUD aplicáveis, contas antigas e novas, isolamento e tentativas não autorizadas. Conferir Free, Meta, Care e o plano Administrador da tarefa 91 conforme suas regras próprias; preservar dados e restaurar configurações usadas nos testes. Não declarar cobertura completa com testes simulados ou somente visuais.
+- **Evidências e entrega:** registrar lacunas encontradas, correções e resultado verificável de cada controle, validar responsividade e acessibilidade da matriz e executar os gates do projeto. Coordenar com as tarefas 91 e 94 para não duplicar auditoria nem divergir da landing. Publicar commit e push próprios na main e atualizar este painel com os resultados reais. Este registro não declara a auditoria executada; aguardar instruções após sua publicação, conforme pedido do usuário.
 
 ---
 
