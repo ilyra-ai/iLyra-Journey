@@ -39,7 +39,7 @@ import { TypingIndicator } from './TypingIndicator';
 import { MemoriaDaLyra } from './MemoriaDaLyra';
 
 /**
- * Chat com a Lyra (redesenho da tarefa 52): uma coluna só, centrada, no
+ * Chat com a Lyra: uma coluna que aproveita a área disponível do app, no
  * padrão das interfaces de conversa de 2026. Sem conversa, a tela mostra a
  * Lyra, a mensagem de boas-vindas e as perguntas prontas em cartões; com
  * conversa, só as mensagens e o campo de envio fixo embaixo. O que antes
@@ -128,6 +128,7 @@ function SobreOChat({
       </PopoverTrigger>
       <PopoverContent
         align="end"
+        aria-label={titulo}
         className="w-[min(24rem,calc(100vw-2rem))] border-border bg-popover p-0"
       >
         <div className="border-b border-border px-5 py-4">
@@ -319,10 +320,10 @@ export function ChatAssistantContent({
   return (
     <section
       aria-labelledby="titulo-do-chat"
-      className="mx-auto flex h-[calc(100dvh-7rem)] min-h-[28rem] w-full max-w-3xl flex-col lg:h-[calc(100dvh-8.5rem)]"
+      className="flex min-h-0 w-full min-w-0 flex-1 flex-col"
     >
       {/* Barra mínima: quem responde, o estado e as duas ações. */}
-      <header className="flex items-center justify-between gap-3 border-b border-border pb-3">
+      <header className="flex shrink-0 flex-wrap items-center justify-between gap-3 border-b border-border pb-3">
         <div className="flex min-w-0 items-center gap-3">
           <span className="relative">
             <MarcaLyra tamanho="2.25rem" />
@@ -381,7 +382,10 @@ export function ChatAssistantContent({
 
       <div
         ref={messagesContainerRef}
-        className="relative min-h-0 flex-1 overflow-y-auto py-6"
+        tabIndex={0}
+        role="region"
+        aria-label="Mensagens da conversa"
+        className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain py-5 pr-1 focus-visible:outline-2 focus-visible:outline-ring"
         style={{
           scrollbarWidth: 'thin',
           scrollbarColor: 'hsl(var(--control)) transparent',
@@ -460,7 +464,7 @@ export function ChatAssistantContent({
             <div className="flex flex-col items-center gap-4 text-center">
               <MarcaLyra tamanho="3.5rem" />
               <div className="flex flex-col gap-2">
-                <p className="text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground">
+                <p className="text-xs font-medium text-muted-foreground">
                   {chatConfig.pageEyebrow}
                 </p>
                 <h2
@@ -538,7 +542,7 @@ export function ChatAssistantContent({
         )}
       </div>
 
-      <div className="relative pb-1 pt-2">
+      <div className="relative shrink-0 border-t border-border bg-background pb-1 pt-3">
         {showScrollButton ? (
           <button
             onClick={() => {

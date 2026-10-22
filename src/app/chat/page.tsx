@@ -48,7 +48,11 @@ export default function ChatPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="chat" contentClassName="py-4 md:py-6">
+    <AppShell
+      puckDocumentKey="chat"
+      ajustarAoViewport={chatEnabled}
+      contentClassName="py-3 md:py-4"
+    >
       {chatEnabled ? (
         <Suspense fallback={<p role="status">Carregando conversa…</p>}>
           <ConversaSelecionada />

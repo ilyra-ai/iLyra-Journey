@@ -170,7 +170,12 @@ function ChatInput({
 
   const onKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === 'Enter' && !e.shiftKey && !disabled) {
+      if (
+        e.key === 'Enter' &&
+        !e.shiftKey &&
+        !e.nativeEvent.isComposing &&
+        !disabled
+      ) {
         e.preventDefault();
         send();
       }
@@ -228,7 +233,7 @@ function ChatInput({
               }
               aria-pressed={isListening}
               className={cn(
-                'h-9 w-9 rounded-full disabled:cursor-not-allowed disabled:opacity-50',
+                'size-11 rounded-full disabled:cursor-not-allowed disabled:opacity-50',
                 isListening
                   ? 'bg-destructive text-destructive-foreground hover:bg-destructive-hover hover:text-destructive-foreground'
                   : 'border border-border bg-background text-muted-foreground hover:bg-muted hover:text-foreground'
@@ -249,7 +254,7 @@ function ChatInput({
             size="icon"
             aria-label="Enviar mensagem"
             className={cn(
-              'h-9 w-9 rounded-full disabled:cursor-not-allowed',
+              'size-11 rounded-full disabled:cursor-not-allowed',
               !disabled && text.trim()
                 ? 'bg-primary text-primary-foreground hover:bg-primary-hover'
                 : 'border border-border bg-background text-muted-foreground disabled:opacity-100'

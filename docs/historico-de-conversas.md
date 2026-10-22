@@ -59,6 +59,34 @@ alvos de toque de pelo menos 44 px. Mensagens antigas aparecem completas,
 sem repetir a animação de uma resposta nova. Carregar mensagens anteriores
 preserva a posição de leitura.
 
+## Formatação e área de conversa
+
+As respostas passam pelo `react-markdown` 10.1.0 com `remark-gfm` 4.0.1:
+negrito, ênfase, listas, citações, código e tabelas são elementos semânticos.
+O histórico e o botão Copiar continuam usando o texto original, inclusive a
+marcação. Perguntas da pessoa permanecem como texto literal. HTML do modelo
+não é executado; links passam pela transformação segura da biblioteca e pela
+restrição de protocolos. Imagens mencionadas no Markdown exibem sua descrição,
+sem carregar rastreadores externos automaticamente. A geração de imagens da
+tarefa 86 continua com implementação e autorização próprias.
+
+O chat usa a largura disponível depois da sidebar e mantém o campo de envio
+no fluxo de uma área ajustada ao viewport dinâmico, sem altura mínima artificial
+de 28 rem. Mensagens têm rolagem própria e acesso por teclado; tabelas e código
+largos têm rolagem local. O comportamento especial do `AppShell` é opcional e
+usado apenas no chat liberado pelo plano. As demais páginas preservam o layout
+anterior. Copiar, refazer, nova conversa, memória, privacidade e histórico
+continuam integrados aos mesmos serviços reais.
+
+Pesquisa de 22/10/2026: [Chat do shadcn](https://ui.shadcn.com/docs/ai-elements/aria/chat)
+orienta a área de mensagens com preservação da posição de leitura;
+[Fluent 2](https://fluent2.microsoft.design/content-engineering/design-interaction-behavior/)
+orienta interação previsível, ações claras e recuperação após falhas.
+A [documentação oficial do renderizador](https://github.com/remarkjs/react-markdown)
+fundamenta o uso de Markdown sem `dangerouslySetInnerHTML` nem plugins de HTML
+cru. A interface preserva os tokens claros do Lyra Clean e as configurações
+publicadas de texto e escala.
+
 ## Evidências automatizadas
 
 `src/app/api/chat/historico.integration.test.ts` usa as rotas e o MySQL reais
@@ -66,3 +94,8 @@ em banco de teste isolado. O caso de contexto usa um servidor HTTP de contrato
 compatível com a OpenAI; não representa geração em um provedor externo real.
 O teste cobre autenticação, isolamento, paginação, gravação, repetição,
 refazer, falhas, tentativas vencidas e exportação/exclusão.
+
+`src/components/chat/RespostaMarkdown.test.ts` verifica formatação semântica,
+texto escapado, código inerte, HTML, protocolos inseguros, links seguros,
+ausência de carregamento automático de imagens, tabelas e títulos sem outro
+`h1` na página. Testes de renderização não substituem a validação no navegador.

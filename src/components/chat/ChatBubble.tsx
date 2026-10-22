@@ -5,6 +5,7 @@ import { Check, Copy, RotateCw } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
+import { RespostaMarkdown } from './RespostaMarkdown';
 
 interface ChatBubbleProps {
   message: string;
@@ -142,19 +143,19 @@ export function ChatBubble({
             da região ao vivo e era anunciada em pedaços. O texto animado fica
             oculto para a tecnologia assistiva e a resposta inteira entra uma
             vez só, ao terminar, como acréscimo do registro da conversa. */}
-        {isTyping ? null : <p className="sr-only">A Lyra disse: {message}</p>}
-        <p
-          aria-hidden="true"
-          className="whitespace-pre-wrap break-words text-[0.9375rem] leading-7 text-foreground"
+        <div
+          key={isTyping ? 'revelando' : 'resposta-completa'}
+          aria-hidden={isTyping || undefined}
         >
-          {displayedText}
+          {isTyping ? null : <p className="sr-only">A Lyra disse:</p>}
+          <RespostaMarkdown texto={displayedText} />
           {isTyping ? (
             <span
               className="ml-0.5 inline-block h-4 w-1 animate-pulse rounded-full bg-primary align-middle"
               aria-hidden="true"
             />
           ) : null}
-        </p>
+        </div>
         {acoes}
       </div>
     </div>
