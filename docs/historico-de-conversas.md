@@ -1,9 +1,13 @@
 # Histórico de conversas da Lyra
 
-O chat guarda novas conversas no MySQL da aplicação. O menu lateral mostra
-as três mais recentes. **Ver mais** carrega outras três por vez; **Ver menos**
-volta às três recentes. O mesmo componente atende desktop e celular. Escolher
-uma conversa abre suas mensagens e identifica a seleção no menu.
+O chat guarda novas conversas no MySQL da aplicação. O histórico começa
+oculto no menu lateral. **Ver mais** abre as três conversas mais recentes;
+o controle de mesmo nome abaixo da lista carrega outras três por vez.
+**Ocultar histórico** recolhe todas as conversas, inclusive com a lista vazia
+ou em erro. Reabrir atualiza as três recentes, sem alterar os registros.
+O mesmo componente atende desktop e celular. Escolher uma conversa abre
+suas mensagens, identifica a seleção e recolhe o histórico; no celular também
+fecha o menu. Reabrir o menu móvel ou recarregar o app começa com a lista oculta.
 
 ## Armazenamento e acesso
 
@@ -37,6 +41,12 @@ não podem ser recuperadas após terem sido fechadas. O histórico começa com
 as novas conversas efetivamente gravadas.
 
 ## Decisões de experiência
+
+O controle de exibição segue o [padrão Disclosure da W3C](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/),
+consultado em 22/10/2026: botão nativo operável por Enter e Espaço, estado
+`aria-expanded` e vínculo `aria-controls` com a lista. Conversas recolhidas
+ficam fora da navegação por teclado e da árvore de acessibilidade. O botão
+de ocultar permanece disponível durante carregamento e falhas.
 
 Pesquisa consultada em outubro de 2026: [navegação do Fluent 2](https://fluent2.microsoft.design/components/web/react/core/nav/usage/)
 orienta hierarquia curta, linguagem simples, seleção identificável e consistência

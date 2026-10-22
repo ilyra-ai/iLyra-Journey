@@ -83,7 +83,6 @@ function ListaDeConversas({ aoEscolher }: { aoEscolher?: () => void }) {
   }, [carregar]);
 
   if (!usuarioId) return null;
-  const visiveis = aberto ? conversas : conversas.slice(0, 3);
   return (
     <div className="ml-5 mt-1 flex min-w-0 flex-col gap-1 border-l border-sidebar-border pl-2 pb-2">
       <p className="px-2 text-xs text-muted-foreground">Conversas recentes</p>
@@ -91,13 +90,17 @@ function ListaDeConversas({ aoEscolher }: { aoEscolher?: () => void }) {
         id={id}
         aria-label="Histórico de conversas"
         aria-busy={carregando}
-        className="flex min-w-0 flex-col gap-0.5"
+        hidden={!aberto}
+        className={cn('flex min-w-0 flex-col gap-0.5', !aberto && 'hidden')}
       >
-        {visiveis.map((conversa) => (
+        {conversas.map((conversa) => (
           <li key={conversa.id} className="min-w-0">
             <Link
               href={`/chat?conversa=${conversa.id}`}
-              onClick={aoEscolher}
+              onClick={() => {
+                setAberto(false);
+                aoEscolher?.();
+              }}
               aria-current={selecionada === conversa.id ? 'page' : undefined}
               title={conversa.titulo}
               className={cn(
@@ -115,12 +118,12 @@ function ListaDeConversas({ aoEscolher }: { aoEscolher?: () => void }) {
           </li>
         ))}
       </ul>
-      {carregando ? (
+      {aberto && carregando ? (
         <p role="status" className="px-2 text-xs text-muted-foreground">
           Carregando conversas…
         </p>
       ) : null}
-      {erro ? (
+      {aberto && erro ? (
         <div role="alert" className="px-2 text-xs text-destructive">
           <p>{erro}</p>
           <Button
@@ -133,42 +136,46 @@ function ListaDeConversas({ aoEscolher }: { aoEscolher?: () => void }) {
           </Button>
         </div>
       ) : null}
-      {!carregando && !erro && conversas.length === 0 ? (
+      {aberto && !carregando && !erro && conversas.length === 0 ? (
         <p className="px-2 text-xs leading-5 text-muted-foreground">
           Suas novas conversas aparecerão aqui.
         </p>
       ) : null}
-      {cursor || (!aberto && conversas.length > 3) ? (
+      {aberto && cursor ? (
         <Button
           variant="ghost"
           size="sm"
-          className="min-h-11 justify-start"
+          className="min-h-11 justify-start text-micro"
           aria-controls={id}
-          aria-expanded={aberto}
           disabled={carregando}
-          onClick={() => {
-            setAberto(true);
-            if (cursor && (aberto || conversas.length === 3))
-              void carregar(cursor);
-          }}
+          onClick={() => void carregar(cursor)}
         >
-          <ChevronDown aria-hidden="true" />
+          <ChevronDown data-icon="inline-start" aria-hidden="true" />
           Ver mais
         </Button>
       ) : null}
-      {aberto && conversas.length > 3 ? (
-        <Button
-          variant="ghost"
-          size="sm"
-          className="min-h-11 justify-start"
-          aria-controls={id}
-          aria-expanded={aberto}
-          onClick={() => setAberto(false)}
-        >
-          <ChevronUp aria-hidden="true" />
-          Ver menos
-        </Button>
-      ) : null}
+      <Button
+        variant="ghost"
+        size="sm"
+        className="min-h-11 justify-start text-micro"
+        aria-controls={id}
+        aria-expanded={aberto}
+        onClick={() => {
+          setAberto(!aberto);
+          if (!aberto) {
+            setConversas((atuais) => atuais.slice(0, 3));
+            setCursor(null);
+            void carregar();
+          }
+        }}
+      >
+        {aberto ? (
+          <ChevronUp data-icon="inline-start" aria-hidden="true" />
+        ) : (
+          <ChevronDown data-icon="inline-start" aria-hidden="true" />
+        )}
+        {aberto ? 'Ocultar histórico' : 'Ver mais'}
+      </Button>
     </div>
   );
 }
