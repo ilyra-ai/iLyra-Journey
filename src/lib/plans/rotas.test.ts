@@ -136,6 +136,12 @@ describe('rotas do app conforme o plano', () => {
     expect(hrefsVisiveis(semChat)).not.toContain('/chat');
   });
 
+  it('mantém o próprio perfil acessível mesmo com todos os recursos desativados', () => {
+    const semRecursos = assinaturaCom([]);
+    expect(rotaLiberadaNoPlano('/profile', semRecursos, false)).toBe(true);
+    expect(hrefsVisiveis(semRecursos)).toContain('/profile');
+  });
+
   it('com o plano ainda carregando, só as páginas sem recurso aparecem', () => {
     const hrefs = hrefsVisiveis(null);
     expect(hrefs).toEqual(

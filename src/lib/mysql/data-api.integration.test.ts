@@ -13,6 +13,7 @@ import {
 } from '@/lib/mysql/data-api';
 import { executeStatement, queryRows } from '@/lib/mysql/pool';
 import { TABLE_CONFIG, type QueryFilter } from '@/lib/mysql/table-config';
+import { assignPlanToUserByAdmin } from '@/lib/plans/service';
 
 import {
   contar,
@@ -329,6 +330,50 @@ describe('data-api · escrita', () => {
       ])
     ).toBe(2);
   });
+
+  it.each(['free', 'meta', 'care'] as const)(
+    'permite editar somente o próprio perfil no plano %s',
+    async (planKey) => {
+      const dono = await criarUsuario('patient', 'Titular');
+      await assignPlanToUserByAdmin({
+        targetUserId: dono.id,
+        planKey,
+        actorUserId: admin.id,
+        billingInterval: 'monthly',
+      });
+      await runUpdateQuery({
+        table: 'profiles',
+        values: { first_name: 'Nome atualizado', nickname: 'Meu nome' },
+        filters: [{ type: 'eq', column: 'id', value: dono.id }],
+        session: dono.session,
+      });
+      const proprio = await selecionar('profiles', dono);
+      expect(proprio.data).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            id: dono.id,
+            first_name: 'Nome atualizado',
+            nickname: 'Meu nome',
+          }),
+        ])
+      );
+      const outro = await selecionar('profiles', dono, {
+        filters: [{ type: 'eq', column: 'id', value: bruno.id }],
+      });
+      expect(outro.data).toEqual([]);
+      await runUpdateQuery({
+        table: 'profiles',
+        values: { first_name: 'Alteração indevida' },
+        filters: [{ type: 'eq', column: 'id', value: bruno.id }],
+        session: dono.session,
+      });
+      const persistido = await queryRows<{ first_name: string }>(
+        'SELECT first_name FROM profiles WHERE id = ?',
+        [bruno.id]
+      );
+      expect(persistido[0]?.first_name).toBe('Bruno');
+    }
+  );
 
   it('impede a autopromoção a administrador', async () => {
     await esperarHttp(
