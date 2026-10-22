@@ -22,15 +22,15 @@
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
 | Progresso          | `████████████████░░░░` **79%** |
-| Tarefas totais     | 106                            |
+| Tarefas totais     | 107                            |
 | 🟢 Finalizadas     | 84                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 21                             |
+| ⚪ A iniciar       | 22                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (84 ÷ 106 ≈ 79%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (84 ÷ 107 ≈ 79%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -238,6 +238,13 @@
 - **Qualidade e validação:** pesquisar referências oficiais atuais antes dos ajustes visuais e seguir o Lyra Clean claro, acessível e responsivo. Conferir sidebar desktop/mobile, presença para usuários comuns, ausência para administradores, autorização no servidor, prevenção de alteração de outra conta e sincronização do plano após confirmação real do pagamento. Validar falhas e indisponibilidade de cobrança sem simular transações; executar testes e gates, publicar commit e push próprios na main e registrar evidências.
 
 **Registro adicional de 2026-10-22:** tarefas 104–106 registradas; a implementação ainda não foi concluída. A tarefa 104 registra o bloqueio de perfil informado imediatamente antes das novas solicitações 105 e 106.
+
+### 107 · Identificação do plano ao lado do logo na área autenticada
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** após o acesso ao app, mostrar ao lado direito do logo Lyra MetaCare indicado no anexo uma identificação do tipo de plano do usuário, por texto, ícone ou emoji.
+- **Implementação:** inspecionar o componente compartilhado do logo e a fonte real da assinatura; apresentar o nome do plano vigente com tratamento visual coerente com o Lyra Clean. Caso seja utilizado ícone ou emoji, manter identificação textual acessível e inequívoca. Contemplar Free, Meta, Care e o plano Administrador quando implementado, sem inferir assinatura comercial apenas pelo papel da conta e sem exibir um plano fictício durante carregamento ou falha.
+- **Validação e entrega:** pesquisar referências atuais antes do ajuste visual; conferir desktop, mobile e estados expandido e recolhido do sidebar, sem cortar o logo ou prejudicar a navegação. Comprovar identificação correta em contas de planos diferentes e atualização após alteração ou upgrade confirmado, inclusive recarga e nova sessão. Executar testes pertinentes e gates, publicar commit e push próprios na main e registrar evidências neste painel. Este registro não representa implementação concluída.
 
 ---
 
