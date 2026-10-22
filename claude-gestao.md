@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **81%** |
+| Progresso          | `████████████████░░░░` **82%** |
 | Tarefas totais     | 109                            |
-| 🟢 Finalizadas     | 88                             |
+| 🟢 Finalizadas     | 89                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 20                             |
+| ⚪ A iniciar       | 19                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (88 ÷ 109 ≈ 81%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (89 ÷ 109 ≈ 82%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,19 +51,9 @@
 
 ### ANDAMENTO
 
-### 109 · Corrigir inferências clínicas preexistentes de glicose, HRV e exercício
-
-- **Status:** 🔵 em andamento · **Registro e início:** 2026-10-22 · **Origem:** inspeção da causa raiz na tarefa 108, dentro da autorização de QA e correção geral.
-- **Problema confirmado no código:** glicose acima de 100 mg/dL é associada automaticamente a estresse oxidativo sem contexto de jejum; HRV abaixo de 40 ms é interpretada como sobrecarga simpática sem referência individual; contagem de passos e interpretação lunar fundamentam recomendações de exercício como se fossem avaliação fisiológica. As regras antecedem as tarefas atuais.
-- **Correção e validação:** consultar fontes primárias oficiais; preservar valores reais, distinguir ausência de zero e retirar conclusões clínicas sem contexto. Orientar comparação e avaliação individual quando pertinente, sem diagnóstico ou prescrição por limiar isolado ou astrologia. Acrescentar regressões, comprovar remoção das frases indevidas no código ativo, executar QA e gates e publicar commit/push próprios na main. Corrigir antes de retomar a tarefa 86, sem misturar entregas.
-
----
-
-## Tópico 3 · Tarefas a Iniciar
-
 ### 86 · Geração de imagens no chat com modelos conectados
 
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-20.
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-20 · **Início:** 2026-10-22.
 - **Pedido do usuário:** o chat do app deve permitir criar imagens. Conforme complemento recebido em 2026-10-20, usar o segundo modelo de IA conectado nas configurações do app, que permitem conectar cinco modelos simultaneamente, tanto quando o usuário solicitar uma imagem quanto quando o Motor Lyra fizer a leitura do mapa pessoal, gerando também a imagem do mapa daquele usuário.
 - **Roteamento e mapa pessoal:** conferir a ordem real das cinco conexões e encaminhar a geração de imagens ao segundo modelo configurado, preservando a configuração dos demais. Na leitura do mapa, construir a imagem a partir dos dados reais e autorizados do próprio titular e vinculá-la à leitura e à conversa correspondentes. Não inventar dados do mapa nem substituir o segundo modelo silenciosamente; se ele não estiver configurado, estiver indisponível ou não oferecer geração de imagens, informar a condição e permitir corrigir a conexão e tentar novamente.
 - **Critérios:** inspecionar a configuração e as capacidades reais dos provedores, pesquisar suas APIs oficiais atuais e implementar geração real pelo servidor, verificando a compatibilidade do segundo modelo e exibindo mensagens claras quando a conexão só oferecer texto. Não simular imagens nem atribuir essa capacidade a modelos que não a possuem. Integrar envio do pedido, andamento, falhas e retentativa à experiência simples e responsiva do chat, exibindo o resultado e permitindo baixar a imagem.
@@ -71,6 +61,8 @@
 - **Validação e entrega:** conferir geração solicitada no chat e geração do mapa após sua leitura, comprovando o uso do segundo modelo entre as cinco conexões e o tratamento de conexão ausente ou incompatível. Testar provedor e modelo capazes de criar imagens, reabertura da conversa, download, isolamento entre contas e interface desktop/mobile, além dos quality gates. A implementação terá commit e push próprios na main; este registro não significa funcionalidade já implementada.
 
 ---
+
+## Tópico 3 · Tarefas a Iniciar
 
 ### 87 · Estado real dos provedores de IA no painel
 
@@ -1727,3 +1719,11 @@
 - **Fontes:** páginas oficiais NCCIH/NIH sobre magnésio, NHLBI/NIH sobre hábitos de sono e MedlinePlus sobre rotina, consultadas em 22/10/2026 e vinculadas em `docs/identidade-motor-lyra.md`. Instruções dos modelos passaram à versão 3 para invalidar cache antigo da leitura diária.
 - **Validação:** 591 unitários e 199 integrações aprovados, além de lint, formatação, tipos e build. Testes cobrem resposta normal/aprofundada, ausência de dados, registro zero, duração maior sem garantia de adequação e descrições simbólicas durante 60 dias de fases. Busca no código ativo comprovou remoção das frases inadequadas. QA de produção confirmou resposta corrigida com e sem prefixo, fonte clicável e persistência pela API; mobile sem overflow e console sem erros ou avisos. Conta descartável excluída e credenciais removidas.
 - **Evidências:** `.logs/qa108-{format,lint-fix,lint,format-check,types,unit,integration,producao}.log`, `.logs/qa108-runtime.json` e `.logs/qa108-sono-{desktop,mobile}.png`. Launcher confirmou produção na porta 3000 e saúde com 35 migrações. Outras inferências antigas encontradas na inspeção foram registradas separadamente na tarefa 109, sem ocultar pendências ou misturar commits.
+
+### 109 · Corrigir inferências clínicas preexistentes de glicose, HRV e exercício
+
+- **Status:** 🟢 finalizada · **Registro e conclusão:** 2026-10-22 · **Commit:** `847e9f675aaeb8b746b68500de7359c9b752f9a7` · **Push:** `fceb8cc..847e9f6 main -> main`, confirmado.
+- **Correção:** retiradas classificações automáticas de controle glicêmico, estresse oxidativo e sobrecarga autonômica por limiares isolados, além de prescrição de exercício pela contagem de passos ou astrologia. Valores preservados, inclusive zero; ausência de glicose, HRV e prontidão explicitada, sem prometer compatibilidade universal de dispositivos. Instruções dos modelos na versão 4 e cache antigo da leitura diária invalidado.
+- **Fontes e limite de pesquisa:** NIDDK/NIH, OMS e trechos indexados das diretrizes da APS de 2026, com links e acesso integral recusado pelo editor documentados em `docs/identidade-motor-lyra.md`. Não foi alegada leitura integral da publicação inacessível.
+- **Validação:** 593 unitários e 199 integrações aprovados; lint, formatação, tipos e build aprovados. Ajuste final de redação validado por lint, formatação e 15 testes focados, seguido de novo build com tipos e launcher. Busca no código ativo comprovou remoção das frases indevidas. QA com conta comum registrou pela API glicose 118 mg/dL, zero passos e sono 380 minutos; chat preservou glicose/passos, informou ausência de HRV e apresentou fontes reais. Redação final conferida após reinício, persistência confirmada pela API, desktop/mobile sem overflow e console sem erros ou avisos. Conta de teste e suas métricas excluídas e credenciais temporárias removidas.
+- **Evidências:** `.logs/qa109-{format,lint-fix,lint,format-check,types,unit,integration,producao,producao-final,lint-final,format-final,unit-final}.log`, `.logs/qa109-runtime.json` e `.logs/qa109-metricas-{desktop,mobile}-final.png`. Produção na porta 3000 com saúde de banco, 35 migrações, landing, login e autenticação administrativa confirmados.
