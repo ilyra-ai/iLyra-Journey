@@ -55,10 +55,58 @@ describe('assistente local', () => {
       /6h 20m.*duração isolada não determina/
     );
     expect(responder('minha glicose')).toMatch(
-      /118 mg\/dL.*estresse oxidativo/
+      /118 mg\/dL.*não permite concluir controle da glicemia/
     );
-    expect(responder('meu HRV')).toMatch(/35 ms e prontidão de 61\/100/);
-    expect(responder('quero mais passos')).toMatch(/5200 passos.*NEAT/);
+    expect(responder('meu HRV')).toMatch(
+      /35 ms e prontidão registrada de 61\/100/
+    );
+    expect(responder('quero mais passos')).toMatch(
+      /5200 passos.*não define uma meta universal/
+    );
+  });
+
+  it('não diagnostica controle glicêmico ou sobrecarga autonômica por cortes isolados', () => {
+    for (const valor of [0, 35, 118]) {
+      const contexto = {
+        latestMetric: {
+          steps: valor,
+          sleep_duration_minutes: null,
+          hrv_ms: valor,
+          readiness_score: null,
+          blood_glucose_mgdl: valor,
+        },
+      };
+      const glicose = responder('minha glicose', contexto);
+      expect(glicose).toContain(`${valor} mg/dL`);
+      expect(glicose).toContain('não informa jejum');
+      expect(glicose).not.toMatch(
+        /glicemia.*parece controlada|valor indica possível/iu
+      );
+      const hrv = responder('meu HRV', contexto);
+      expect(hrv).toContain(`${valor} ms`);
+      expect(hrv).toContain('sem prontidão registrada');
+      expect(hrv).not.toMatch(
+        /parece sobrecarregado|boa capacidade de adaptação|N\/A|undefined/iu
+      );
+      const passos = responder('meus passos', contexto);
+      expect(passos).toContain(`${valor} passos`);
+      expect(passos).not.toMatch(
+        /é essencial para melhorar o fluxo|calibre a intensidade/iu
+      );
+    }
+  });
+
+  it('explicita a ausência de glicose, HRV e passos sem inventar compatibilidade', () => {
+    const contexto = { latestMetric: null };
+    expect(responder('minha glicose', contexto)).toContain(
+      'Não tenho registro recente'
+    );
+    expect(responder('meu HRV', contexto)).toContain(
+      'não garante que ele forneça esse dado'
+    );
+    expect(responder('meus passos', contexto)).toContain(
+      'Não tenho contagem recente'
+    );
   });
 
   it('não prescreve suplemento ou infere recuperação pela duração ou pela Lua', () => {

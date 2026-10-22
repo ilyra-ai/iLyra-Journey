@@ -466,44 +466,48 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
 
   // 5. Análise de Glicose e Metabolismo
   if (isGlucoseQuery) {
-    if (metrics?.blood_glucose_mgdl) {
-      const isHighGlucose = metrics.blood_glucose_mgdl > 100;
+    if (
+      metrics?.blood_glucose_mgdl !== null &&
+      metrics?.blood_glucose_mgdl !== undefined
+    ) {
       responses.push(
-        `Sua última leitura de glicose foi de ${metrics.blood_glucose_mgdl} mg/dL. ${isHighGlucose ? 'Este valor indica possível estresse oxidativo ou carga glicêmica excessiva.' : 'Sua glicemia em jejum ou basal parece controlada.'}`
+        `Sua última leitura de glicose foi de ${metrics.blood_glucose_mgdl} mg/dL. Este registro não informa jejum, horário da refeição, método ou contexto clínico; não permite concluir controle da glicemia ou estresse oxidativo. Confira a medição e converse com o profissional que acompanha você sobre a interpretação e as metas pessoais.`
       );
+    } else {
+      responses.push('Não tenho registro recente de glicose para analisar.');
     }
     responses.push(
-      `Para gerir o metabolismo: Observe a resposta pós-prandial. Combine carboidratos com fibras, proteínas e gorduras boas. Uma caminhada de 15 minutos logo após as refeições ajuda a atenuar picos insulínicos, alinhando-se aos seus objetivos de ${goals}.`
+      'Referência: [Exames e diagnóstico de diabetes — NIDDK/NIH](https://www.niddk.nih.gov/health-information/diabetes/overview/tests-diagnosis).'
     );
   }
 
   // 6. Análise de Recuperação e HRV
   if (isHeartHrvQuery) {
-    if (metrics?.hrv_ms) {
-      const isLowHrv = metrics.hrv_ms < 40;
+    if (metrics?.hrv_ms !== null && metrics?.hrv_ms !== undefined) {
       responses.push(
-        `Seu último HRV (Variabilidade da Frequência Cardíaca) foi de ${metrics.hrv_ms} ms e prontidão de ${metrics.readiness_score ?? 'N/A'}/100. ${isLowHrv ? 'Seu sistema nervoso simpático parece sobrecarregado; priorize recuperação passiva.' : 'Seu sistema nervoso parassimpático mostra boa capacidade de adaptação ao estresse.'}`
+        `Seu último HRV (Variabilidade da Frequência Cardíaca) foi de ${metrics.hrv_ms} ms${metrics.readiness_score !== null ? ` e prontidão registrada de ${metrics.readiness_score}/100` : ', sem prontidão registrada'}. Um valor isolado não determina sobrecarga ou equilíbrio do sistema nervoso. A interpretação depende do índice medido, duração do registro, qualidade do sinal e condições da coleta; compare registros obtidos pelo mesmo método e contexto, sem usar um corte universal de 40 ms.`
       );
     } else {
       responses.push(
-        'Sem registros recentes de Variabilidade da Frequência Cardíaca (HRV). Use o monitoramento Bluetooth para medir.'
+        'Sem registros recentes de Variabilidade da Frequência Cardíaca (HRV). O app só apresenta HRV quando houver uma medição compatível; conectar um dispositivo não garante que ele forneça esse dado.'
       );
     }
     responses.push(
-      `O contexto atual astrológico para seu estresse é: ${astro.impactOnHealth.stress.toLowerCase()}. Técnicas de respiração coerente (ex: 5s inalação, 5s exalação) são fundamentais agora.`
+      `${astro.impactOnHealth.stress} Referência sobre medição: [Diretrizes de HRV — American Physiological Society](https://doi.org/10.1152/ajpheart.00041.2026).`
     );
   }
 
   // 7. Análise de Exercício e Movimento
   if (isActivityQuery) {
-    if (metrics?.steps) {
-      const isLowSteps = metrics.steps < 8000;
+    if (metrics?.steps !== null && metrics?.steps !== undefined) {
       responses.push(
-        `Você registrou ${metrics.steps} passos recentemente. ${isLowSteps ? 'Aumentar seu NEAT (Termogênese da Atividade Não Relacionada ao Exercício) é essencial para melhorar o fluxo linfático e metabólico.' : 'Excelente volume basal de movimento.'}`
+        `Você registrou ${metrics.steps} passos recentemente. A contagem não informa sozinha intensidade, duração ou capacidade física e não define uma meta universal de exercício.`
       );
+    } else {
+      responses.push('Não tenho contagem recente de passos registrada.');
     }
     responses.push(
-      `A energia cósmica no momento sugere: ${astro.impactOnHealth.energy}. Para ${goals}, calibre a intensidade do treinamento de força para não comprometer a recuperação sistêmica.`
+      `Movimento pode ser incorporado à rotina de acordo com suas possibilidades e condições de saúde, com progressão individual. A leitura astrológica não define intensidade de treino. Leitura simbólica: ${astro.impactOnHealth.energy} Referência: [Atividade física — OMS](https://www.who.int/health-topics/noncommunicable-diseases/physical-activity).`
     );
   }
 

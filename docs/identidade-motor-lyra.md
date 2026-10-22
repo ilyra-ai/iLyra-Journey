@@ -42,6 +42,12 @@ O [NCCIH/NIH](https://www.nccih.nih.gov/health/in-the-news-magnesium-supplements
 
 Essas regras também compõem as instruções dos modelos conectados. A versão de instruções passou a 3 para invalidar leituras do dia em cache geradas com a redação anterior. As fontes foram consultadas nas páginas oficiais em 22/10/2026; o chat não afirma ter realizado pesquisa externa durante cada resposta.
 
+### Glicose, HRV e movimento
+
+A revisão seguinte preserva os valores registrados, inclusive zero, e distingue ausência de dado. Glicose sem contexto de coleta não classifica controle glicêmico ou estresse oxidativo; a referência é [NIDDK/NIH — exames e diagnóstico](https://www.niddk.nih.gov/health-information/diabetes/overview/tests-diagnosis). HRV sem definição do índice, método, duração e contexto individual não classifica sobrecarga autonômica por um corte universal de 40 ms. As [diretrizes de medição da American Physiological Society de 2026](https://doi.org/10.1152/ajpheart.00041.2026) foram identificadas e seus trechos indexados consultados; o acesso ao texto integral pelo site do editor respondeu 403, sem contorno de acesso.
+
+Contagem de passos não determina intensidade, capacidade ou uma prescrição universal. A orientação geral de movimento considera possibilidades e condições individuais, com referência na [OMS](https://www.who.int/health-topics/noncommunicable-diseases/physical-activity). A astrologia permanece simbólica. Conectar Bluetooth não é apresentado como garantia de obter HRV, pois isso depende do dispositivo e da medição compatível. Instruções compartilhadas atualizadas à versão 4, invalidando novamente o cache antigo da leitura diária.
+
 O Motor Lyra responde a perguntas de identidade, origem, natureza e funcionamento da memória a partir dessa base curada. As demais respostas continuam usando os cálculos e dados reais do titular.
 
 Modelos locais, modelos em nuvem autorizados e modelos com chave própria recebem a mesma identidade nas instruções do chat. A leitura do dia também compartilha essa base, preservando suas regras específicas de formato. A versão das instruções foi incrementada para invalidar leituras produzidas com a versão anterior.
