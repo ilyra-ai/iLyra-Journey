@@ -23,14 +23,14 @@
 | ------------------ | ------------------------------ |
 | Progresso          | `████████████████░░░░` **79%** |
 | Tarefas totais     | 107                            |
-| 🟢 Finalizadas     | 84                             |
+| 🟢 Finalizadas     | 85                             |
 | 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 22                             |
+| ⚪ A iniciar       | 21                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (84 ÷ 107 ≈ 79%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (85 ÷ 107 ≈ 79%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -215,13 +215,6 @@
 - **Qualidade e validação:** cada métrica deve ter fonte, fórmula, período e unidade conferíveis; não usar números fixos, gráficos simulados, placeholders ou cortes de código para aparentar completude. Validar consistência com banco e demais páginas, limites de datas e fusos, filtros combinados, exportações, estados vazios, falhas, autorização e privacidade, desempenho, acessibilidade e mobile/desktop. Executar CRUD aplicável, testes e gates, publicar commit e push próprios na main e atualizar este painel com evidências reais.
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 104 · Edição dos próprios dados para usuários de todos os planos
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22 · **Prioridade:** correção do bloqueio relatado pelo usuário antes de retomar a tarefa 83.
-- **Pedido do usuário:** usuários de planos não administrativos estão recebendo “Gestão de perfil bloqueada”, mas precisam alterar somente os próprios dados.
-- **Investigação e correção:** verificar primeiro as regras de autorização do servidor, os entitlements e a página de perfil. Garantir edição dos próprios dados para todos os planos, sem conceder gestão de outras contas, alteração de papel administrativo ou privilégios adicionais. Preservar restrições reais de funcionalidades avançadas e distinguir edição pessoal de gestão administrativa.
-- **Validação:** comprovar leitura, atualização e persistência do próprio perfil em Free, Meta e Care, inclusive com o entitlement relacionado desativado; testar tentativas de acessar ou alterar dados de outro titular e campos administrativos. Executar testes pertinentes, QA real no navegador e gates; publicar commit e push próprios na main e registrar evidências.
 
 ### 105 · Conteúdo acessível para todos os menus habilitados pelo plano
 
@@ -1710,3 +1703,11 @@
 - **Sequência e entrega:** implementar após a tarefa 78, já publicada em `e776f10`, antes de modernizar o chat, por se tratar da nova orientação para a mesma sidebar. Validar desktop/mobile e gates; commit e push próprios na main.
 - **Validação em 2026-10-22:** implementação conferida em produção e publicada individualmente. Histórico oculto inicialmente, três recentes ao abrir, paginação para seis registros existentes, recolhimento por Espaço e abertura por Enter, seleção preservada e menu móvel reaberto com lista oculta. Falha real de rede pelo navegador manteve três recentes, erro e retentativa; rede restaurada e consulta recuperada. Nenhuma conversa criada ou apagada nesta verificação.
 - **Evidências:** 1440, 390 e 320 px sem estouro horizontal; medições reais de 11 px em “Ver mais”, 12 px em “Conversas recentes” e alvo de 44 px. `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 560 testes unitários e 192 integrações passaram; após o ajuste final, formatação e lint focados e build com TypeScript aprovados. Launcher confirmou produção na porta 3000, saúde com 35 migrações, landing, login e autenticação administrativa. Arquivos `.logs/qa88-{format,lint-fix,lint,format-check,types,unit,integration}.log`, `.logs/qa88-producao-final.log`, `.logs/qa88-medidas.json` e capturas `.logs/qa88-{desktop-recolhido,mobile-390,mobile-320}.png`.
+
+### 104 · Edição dos próprios dados para usuários de todos os planos
+
+- **Status:** 🟢 finalizada · **Registro, início e conclusão:** 2026-10-22 · **Commit:** `6bd6c3c2c1b929c3db9f37d715e3aec50262df87` · **Push:** `19d9803..6bd6c3c main -> main`, confirmado.
+- **Correção:** removido o bloqueio comercial do formulário de `/profile`; todos os usuários autenticados podem editar os próprios dados independentemente de `profile_management`. A API já restringia o titular e as colunas administrativas e foi preservada, sem ampliar privilégios.
+- **Testes:** 577 unitários e 195 integrações aprovados. Integração real verifica persistência de nome e apelido em Free, Meta e Care e impossibilidade de ler ou alterar outro titular; testes existentes continuam comprovando a proteção do papel administrativo. Teste de navegação confirma perfil acessível com todos os recursos do plano desligados. Formatação, lint, tipos e build de produção aprovados.
+- **QA real:** conta comum descartável criada pela API, login pelo navegador, formulário Free disponível, nome e preferência de tratamento salvos e mantidos após recarga; persistência também confirmada pela API. Autopromoção recusada com 403 no runtime. Desktop e mobile de 390 px sem overflow horizontal e console sem erros ou avisos. Conta temporária excluída e credenciais locais removidas ao terminar.
+- **Evidências:** `.logs/qa104-{unit,integration,format,lint-fix,lint,format-check,types,producao}.log`, `.logs/qa104-runtime.json`, `.logs/qa104-perfil-desktop.png` e `.logs/qa104-perfil-mobile.png`. Launcher confirmou produção na porta 3000, banco saudável, 35 migrações, landing, login e autenticação administrativa. `@current_problems` indisponível neste ambiente; verificações executadas pelas ferramentas reais acima.
