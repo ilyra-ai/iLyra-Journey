@@ -19,6 +19,10 @@ import {
 } from '@/lib/lyra/personalidade';
 import { type ContextoDaLyra, responderComoLyra } from '@/lib/lyra/responder';
 import {
+  detalharRespostaDoMotor,
+  pedidoDeAnalise,
+} from '@/lib/lyra/analise-aprofundada';
+import {
   pediuVoltaParaCasa,
   respostaDeReencontro,
 } from '@/lib/lyra/volta-para-casa';
@@ -143,7 +147,27 @@ export function generateLocalAssistantReply(
   query: string,
   context: ChatContext
 ): string {
-  return expressarComoLyra(gerarRespostaDoMotor(query, context), query);
+  const pedido = pedidoDeAnalise(query);
+  const resposta = gerarRespostaDoMotor(pedido.pergunta, context);
+  if (!pedido.aprofundar) return expressarComoLyra(resposta, query);
+  const base = [
+    context.lyra?.mapa
+      ? 'Mapa natal calculado com os dados de nascimento cadastrados pelo titular.'
+      : `Mapa natal indisponível${context.lyra?.faltando?.length ? `: falta informar ${context.lyra.faltando.join(', ')} de nascimento` : ''}.`,
+    context.latestMetric
+      ? 'Registro biométrico de hoje ou de ontem, quando preenchido; medidas ausentes não foram estimadas.'
+      : 'Sem registro biométrico recente disponível; a resposta não é uma avaliação atual de saúde.',
+    context.seuDia
+      ? `Leitura do dia ${context.seuDia.local.rotulo}, calculada pelo app.`
+      : 'Sem leitura pessoal do dia disponível neste pedido.',
+    ...(context.memorias?.length
+      ? ['Relatos anteriores autorizados, tratados como relatos do titular.']
+      : []),
+  ];
+  return expressarComoLyra(
+    detalharRespostaDoMotor(pedido.pergunta, resposta, base),
+    query
+  );
 }
 
 function gerarRespostaDoMotor(query: string, context: ChatContext): string {

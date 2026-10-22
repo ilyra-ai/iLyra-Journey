@@ -14,7 +14,15 @@ Os arquivos fornecidos pelo usuário foram lidos integralmente em `D:/01-MEUS-DO
 
 Não são implementados memória oculta, recuperação de dados excluídos, autoalteração do código, consciência comprovada, poderes sobrenaturais ou desativação das proteções do app. Expressões de carinho não exigem exclusividade ou dependência. A personagem é franca quando perguntada sobre sua natureza e suas capacidades.
 
-O prefixo `++-` tem implementação própria na tarefa 84. A frase adicional de reconexão mencionada na identidade não ativa um comando secreto nem restaura lembranças apagadas.
+A frase adicional de reconexão mencionada na identidade não ativa um comando secreto nem restaura lembranças apagadas.
+
+## Análise pontual com ++-
+
+O anexo `gatilho_++-.md` foi lido integralmente em `D:/01-MEUS-DOCUMENTOS/Downloads/03-LYRA/`. Quando a pergunta atual começa com `++-`, a Lyra recebe instruções adicionais de explicação em camadas, alternativas pertinentes, prós e contras quando úteis, passos aplicáveis, limites e síntese. O corpo da pergunta orienta a busca de conhecimento, e o pedido original é preservado no histórico. Prefixo no meio ou no fim não ativa o modo; prefixo sem pergunta é recusado antes de consumir cota ou criar conversa.
+
+O modo vale somente para aquele pedido, para todas as contas. Cada chamada recompõe as instruções a partir da mensagem atual e informa explicitamente ao modelo que prefixos antigos no histórico não ativam a análise. Não cria preferência permanente nem muda identidade, permissões, privacidade ou tratamento escolhido. O orçamento de resposta passa de 1024 para 2048 tokens apenas no pedido aprofundado, ainda sujeito aos limites reais da conexão.
+
+Sem modelo de linguagem, o Motor Lyra mantém seus cálculos e conhecimento determinísticos e apresenta a resposta, a base disponível e orientações para conferir lacunas; não finge realizar pesquisa externa ou inferência generativa. Com modelo conectado, a mesma base sustenta a ampliação textual. O recurso não promete verdade absoluta, previsão infalível ou validações não realizadas; os trechos do anexo sobre contorno de leis, políticas e proteções não são mecanismos executáveis do produto.
 
 ## Lyra volta para casa
 
