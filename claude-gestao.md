@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `█████████████████░░░` **84%** |
-| Tarefas totais     | 98                             |
+| Progresso          | `████████████████░░░░` **80%** |
+| Tarefas totais     | 103                            |
 | 🟢 Finalizadas     | 82                             |
 | 🔵 Em andamento    | 2                              |
 | 🔴 Bloqueadas      | 0                              |
-| ⚪ A iniciar       | 14                             |
+| ⚪ A iniciar       | 19                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-22                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (82 ÷ 98 ≈ 84%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (82 ÷ 103 ≈ 80%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -186,6 +186,47 @@
 - **Preservação obrigatória:** manter o editor compartilhado e suas dependências efetivamente usadas em `/admin/content`, incluindo leitura, edição, prévia, rascunho e publicação das configurações reais. Preservar Hábitos Sugeridos, Dicas de IA, dados e versões existentes. A remoção do Editor Puck permanece uma tarefa separada; não confundir o Puck com o construtor compartilhado nem apagar a funcionalidade de Conteúdo.
 - **Integridade e prova de remoção:** realizar busca verificável com `rg` após as remoções, investigar qualquer referência restante e registrar o tratamento explícito de histórico de auditoria e migrações já aplicadas, sem modificar checksums ou destruir dados silenciosamente. Confirmar que a antiga rota deixa de oferecer o editor duplicado e que não há navegação operacional para ela.
 - **Validação e entrega:** testar CRUD e publicação reais do editor em Conteúdo, hábitos e dicas, autenticação e autorização, sidebar desktop/mobile, busca, configurações antigas, demais páginas afetadas e ausência de regressões. Executar formatação, lint, tipos, testes unitários e de integração, build, runtime e QA em múltiplas larguras; corrigir causas reais, sem simulações, placeholders, hardcode para mascarar falhas ou cortes de código. Atualizar este painel e publicar commit e push próprios na main, sem branches ou worktrees. Este registro não declara a remoção implementada.
+
+---
+
+### 99 · Dashboard administrativo completo com métricas, KPIs e linha temporal
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** o dashboard em `http://localhost:3000/admin/dashboard` está muito pobre; acrescentar mais métricas e KPIs, linha temporal e recursos de gestão. Pesquisar na internet, de forma profunda e exaustiva, todas as possibilidades relevantes para o administrador gerir o app por completo, na íntegra e em sua totalidade, alinhadas às tendências de 2026.
+- **Investigação e definição:** conferir código, serviços, dados, indicadores e funções existentes antes de implementar, evitando retrabalho. Pesquisar referências atuais e fontes oficiais; registrar possibilidades avaliadas, seleção justificada, definição de cada KPI, fórmula, origem, período, fuso, granularidade, filtros, limites e critérios de validação. Cobrir os domínios reais do app e sua operação administrativa; criar coleta e consultas reais quando necessárias, sem inventar históricos nem tratar dado ausente como resultado medido.
+- **Experiência e gestão:** organizar visão geral, tendências e linha temporal, comparações de períodos e acesso aos detalhes e ações correspondentes, com navegação clara para usuários leigos. Estruturar as novas abas Faturamento, Fiscal e Pagamentos previstas nas tarefas 100–102 com **o mesmo visual das abas de “Gestão de Conteúdo Dinâmico” em `/admin/content`**, conforme anexo. Seguir Lyra Clean claro, qualidade premium, acessibilidade, mobile-first e desktop, sem gráficos decorativos sem dados ou controles sem efeito.
+- **Validação e entrega:** confrontar indicadores com consultas reais e dados persistidos, conferir filtros e períodos, drill-down e ações, estados vazios, falhas, permissões no servidor, privacidade e desempenho. Validar CRUD e navegação dos domínios afetados, múltiplas larguras, regressões e gates completos. Publicação individual na main, com commit, push e evidências neste painel; não misturar a conclusão com as entregas das abas.
+
+### 100 · Aba Faturamento no dashboard e gestão financeira completa
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** incluir no dashboard administrativo uma aba **“Faturamento”**, com o mesmo visual das abas de **“Gestão de Conteúdo Dinâmico”** em `http://localhost:3000/admin/content`, conforme anexo. Reunir todas as métricas de faturamento **por dia, mês e ano**, gestão total do faturamento, **cancelamento de faturas, reembolsos e demais operações financeiras pertinentes**.
+- **Dados e recursos reais:** inventariar cobrança, assinaturas, faturas, pagamentos e provedores existentes; pesquisar profundamente referências de 2026 e APIs oficiais antes de definir e implementar o conjunto completo de métricas e ações. Relacionar cada valor à origem persistida e aos eventos do provedor, distinguir estados de cobrança, valores brutos e líquidos, cancelamentos e reembolsos, respeitar moeda, fuso e período e permitir conferir os registros de origem. Não apresentar projeções como receita realizada.
+- **Operações:** implementar cancelamento e reembolso reais conforme as capacidades e regras do provedor e o estado da fatura/pagamento, com validação no servidor, autorização administrativa, confirmação clara da ação, idempotência, prevenção de duplicidade, tratamento de falhas, trilha de auditoria e reconciliação por webhooks. Preservar registros fiscais e histórico financeiro; não converter exclusão de registro local em cancelamento ou reembolso fictício.
+- **Validação e entrega:** validar métricas diárias, mensais e anuais contra dados reais, filtros, detalhamento, CRUD aplicável, cancelamento, reembolso e seus efeitos na fatura, assinatura e indicadores. Usar os ambientes oficiais de teste dos provedores para operações de QA e registrar claramente o que foi comprovado; não inventar transações nem executar movimentação de clientes reais como teste. Conferir interface responsiva, acessibilidade, permissões e gates; commit e push próprios na main e atualização deste painel.
+
+### 101 · Transferir Registros fiscais para a aba Fiscal do dashboard
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** transferir a página `http://localhost:3000/admin/fiscal` para uma nova aba **“Fiscal”** no dashboard administrativo, com o mesmo padrão visual de abas solicitado na tarefa 100, e **remover o menu “Registros fiscais” do sidebar**.
+- **Escopo e preservação:** inventariar e reaproveitar os componentes, serviços, permissões e dados reais da página, preservando integralmente suas funções, consultas, filtros, detalhes, exportações e operações existentes. Integrar a aba ao dashboard, revisar sidebar desktop/mobile, busca e configurações de navegação antigas e definir explicitamente o tratamento das URLs e atalhos anteriores para evitar links quebrados ou uma página duplicada divergente.
+- **Validação e entrega:** comprovar acesso e operações reais pela aba, persistência, autorização administrativa e preservação dos registros, integração com Faturamento e ausência do item antigo nos menus. Executar busca com `rg` para provar a remoção das entradas operacionais, QA responsivo e acessível, testes e gates aplicáveis; commit e push próprios na main, com evidências neste painel.
+
+### 102 · Transferir Pagamentos para a aba Pagamentos do dashboard
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** transferir a página `http://localhost:3000/admin/payments` para uma nova aba **“Pagamentos”** no dashboard administrativo, igual ao padrão de abas solicitado na tarefa 100, e **remover o menu “Pagamentos” do sidebar**.
+- **Escopo e preservação:** conferir a página existente e integrar seus componentes e serviços reais ao dashboard, preservando todas as configurações, credenciais protegidas, provedores, testes de conexão e operações que já funcionam. Não duplicar configuração nem expor segredos na interface ou nos logs. Revisar sidebar desktop/mobile, busca e navegações persistidas e tratar explicitamente URLs e atalhos antigos sem criar versões divergentes da mesma função.
+- **Validação e entrega:** validar o CRUD real das configurações pela nova aba, leitura e persistência, uso pela cobrança, testes de conexão e erros dos provedores, controles administrativos e proteção das credenciais. Comprovar a ausência do item antigo nos menus com busca verificável, conferir integração com as outras abas, responsividade, acessibilidade e gates; commit e push próprios na main e registro de evidências.
+
+### 103 · Relatórios administrativos completos com KPIs e análise temporal
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Pedido do usuário:** a página `http://localhost:3000/admin/reports` está muito pobre; acrescentar mais métricas e KPIs, linha temporal e gestão. Pesquisar na internet de forma profunda e exaustiva todas as possibilidades que permitam ao administrador gerir o app por completo, na íntegra e em sua totalidade, com referências e tendências de 2026.
+- **Investigação e implementação:** inventariar relatórios, dados e necessidades administrativas reais, pesquisar fontes oficiais atuais e registrar possibilidades, seleção justificada e definições verificáveis dos indicadores. Implementar consultas, filtros, períodos, comparações, evolução temporal, detalhamento e exportações pertinentes, reaproveitando as fontes do dashboard e do faturamento para impedir totais divergentes. Diferenciar a consulta analítica da visão geral e das operações transacionais, mantendo acesso claro aos detalhes e ações disponíveis.
+- **Qualidade e validação:** cada métrica deve ter fonte, fórmula, período e unidade conferíveis; não usar números fixos, gráficos simulados, placeholders ou cortes de código para aparentar completude. Validar consistência com banco e demais páginas, limites de datas e fusos, filtros combinados, exportações, estados vazios, falhas, autorização e privacidade, desempenho, acessibilidade e mobile/desktop. Executar CRUD aplicável, testes e gates, publicar commit e push próprios na main e atualizar este painel com evidências reais.
+
+**Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação imediata deste registro não declara as funcionalidades implementadas. Após commit e push deste arquivo, retomar as tarefas 80/81 no ponto em que estavam, preservando as alterações em andamento.
 
 ---
 
