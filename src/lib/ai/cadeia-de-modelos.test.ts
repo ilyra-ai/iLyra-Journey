@@ -165,6 +165,23 @@ describe('gerarNaCadeia', () => {
     expect(pedidos[2].usuario).toContain('Primeira parte');
   });
 
+  it('preserva espaços da resposta cortada ao enviar o trecho ao próximo modelo', async () => {
+    const parcial = '{"resumo":"Hoje a Lua pede ';
+    const { buscar, pedidos } = servidorFalso({
+      a: { texto: parcial, cortado: true },
+      b: { texto: 'calma."}' },
+    });
+    const resultado = await gerarNaCadeia(
+      [elo('a'), elo('b'), { tipo: 'lyra' }],
+      pedido,
+      { buscar }
+    );
+    expect(pedidos[1].usuario).toContain(`Resposta até aqui:\n${parcial}`);
+    expect(resultado.origem === 'modelo' && resultado.texto).toBe(
+      '{"resumo":"Hoje a Lua pede calma."}'
+    );
+  });
+
   it('resposta recusada na conferência passa ao próximo, do zero', async () => {
     const { buscar, pedidos } = servidorFalso({
       a: { texto: 'sem json' },

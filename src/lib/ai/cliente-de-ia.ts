@@ -429,10 +429,13 @@ export async function gerarTextoDetalhado(
     cortado = corpo.stop_reason === 'max_tokens';
   }
   // Raciocínio aberto e não fechado (cortado no meio) sai inteiro.
-  const limpo = semRaciocinio(texto)
-    .replace(/<think>[\s\S]*$/i, '')
-    .trim();
-  if (!limpo) {
+  const semPensamento = texto
+    .replace(/<think>[\s\S]*?<\/think>/gi, '')
+    .replace(/<think>[\s\S]*$/i, '');
+  // O próximo modelo precisa receber o trecho incompleto sem perder os
+  // espaços que pertencem ao conteúdo (inclusive dentro de strings JSON).
+  const limpo = cortado ? semPensamento : semPensamento.trim();
+  if (!limpo.trim()) {
     throw new ErroDoProvedor(
       cortado
         ? 'O modelo atingiu o limite de tokens antes de escrever a resposta.'
