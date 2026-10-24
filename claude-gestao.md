@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **80%** |
+| Progresso          | `████████████████░░░░` **81%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 89                             |
+| 🟢 Finalizadas     | 90                             |
 | 🔵 Em andamento    | 2                              |
-| 🔴 Bloqueadas      | 1                              |
+| 🔴 Bloqueadas      | 0                              |
 | ⚪ A iniciar       | 19                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-24                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (89 ÷ 111 ≈ 80%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (90 ÷ 111 ≈ 81%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -60,22 +60,13 @@
 - **Persistência e acesso:** preservar pedido, imagem e referência ao modelo na conversa, com armazenamento real vinculado ao titular, autorização no servidor, validação dos arquivos e limites de uso. Respeitar modo privado e consentimento para provedores externos, incluir os dados na exportação e exclusão da conta e não expor chaves ou imagens privadas em URLs públicas.
 - **Validação e entrega:** conferir geração solicitada no chat e geração do mapa após sua leitura, comprovando o uso do segundo modelo entre as cinco conexões e o tratamento de conexão ausente ou incompatível. Testar provedor e modelo capazes de criar imagens, reabertura da conversa, download, isolamento entre contas e interface desktop/mobile, além dos quality gates. A implementação terá commit e push próprios na main; este registro não significa funcionalidade já implementada.
 
-### 111 · Fontes locais e substituição da Imprima
-
-- **Status:** 🔵 em andamento · **Registro e início:** 2026-10-24.
-- **Pedido do usuário:** substituir o Google Fonts por fonte parecida com a Imprima e eliminar o erro de carregamento, preservando qualidade visual, legibilidade e experiência para usuários leigos.
-- **Implementação:** Source Sans 3 Regular nas telas públicas; Inter, Space Grotesk e JetBrains Mono preservadas e hospedadas localmente por `next/font/local`. Arquivos originais Fontsource com SHA-512 conferido, licença e origem por família. Sem novas dependências de runtime ou mudança do lockfile.
-- **Validação:** build de produção, tipos, lint, formatação, 594 unitários e 199 integrações aprovados. Runtime confirmou página HTTP 200, saúde com 35 migrações e 12 WOFF2 locais válidos, sem URLs do Google no CSS. Chromium falhou no ambiente durante as tentativas de captura; inspeção visual automatizada não comprovada. Nenhuma alteração de layout, cores ou espaçamentos. Evidências em `/tmp/lyra111-*.log`. Publicação individual em preparação.
-
-### BLOQUEADAS
-
 ### 110 · Preservar o trecho incompleto na troca entre modelos
 
-- **Status:** 🔴 bloqueada no build por restrição de rede · **Registro e início:** 2026-10-24.
+- **Status:** 🔵 em andamento · gates aprovados; publicação em preparação · **Registro e início:** 2026-10-24.
 - **Causa reproduzida:** o cliente aplicava `trim()` a uma resposta cortada por limite de tokens, removendo espaços pertencentes ao trecho que o modelo seguinte precisa continuar. A integração do coach falhou na comparação do trecho parcial e acabou respondendo pelo motor local após timeout.
 - **Escopo:** reutilizar cliente e cadeia existentes, preservar o conteúdo parcial após remover raciocínio e manter a normalização das respostas completas e a recusa de resposta vazia. Publicar correção e painel separadamente antes de retomar a tarefa 86.
 - **Validação:** regressão reproduzida antes da correção; depois passaram 25 testes focados, 594 unitários (72 arquivos), 199 integrações (25 arquivos), `fix:format`, `fix:lint`, `check:lint` e `check:format`. Evidências desta instância: `/tmp/lyra-continuacao-antes.log`, `/tmp/lyra-continuacao-depois.log` e `/tmp/lyra110-{unit,integration,lint,format}.log`.
-- **Bloqueio externo:** `pnpm build` falhou ao baixar as quatro famílias de fontes usadas pelo layout. Pedido HTTPS ao Google Fonts pelo proxy retornou HTTP 403. Os domínios `fonts.googleapis.com` e `fonts.gstatic.com` foram salvos no rascunho de rede; é necessário aplicar a configuração no ambiente e repetir o build. A checagem de tipos passou após `pnpm exec next typegen` gerar as declarações oficiais do Next (`/tmp/lyra110-typegen.log` e `/tmp/lyra110-types.log`). Sem commit/push enquanto os gates obrigatórios não estiverem aprovados, conforme item 31 do `CLAUDE.md`. A tarefa não foi concluída.
+- **Bloqueio externo:** `pnpm build` falhou ao baixar as quatro famílias de fontes usadas pelo layout. Pedido HTTPS ao Google Fonts pelo proxy retornou HTTP 403. Os domínios `fonts.googleapis.com` e `fonts.gstatic.com` foram salvos no rascunho de rede; é necessário aplicar a configuração no ambiente e repetir o build. A checagem de tipos passou após `pnpm exec next typegen` gerar as declarações oficiais do Next (`/tmp/lyra110-typegen.log` e `/tmp/lyra110-types.log`). O bloqueio foi resolvido pela tarefa 111: novo build e tipos aprovados, além dos 594 unitários e 199 integrações. Correção de continuação pronta para publicação individual.
 
 ---
 
@@ -1744,3 +1735,10 @@
 - **Fontes e limite de pesquisa:** NIDDK/NIH, OMS e trechos indexados das diretrizes da APS de 2026, com links e acesso integral recusado pelo editor documentados em `docs/identidade-motor-lyra.md`. Não foi alegada leitura integral da publicação inacessível.
 - **Validação:** 593 unitários e 199 integrações aprovados; lint, formatação, tipos e build aprovados. Ajuste final de redação validado por lint, formatação e 15 testes focados, seguido de novo build com tipos e launcher. Busca no código ativo comprovou remoção das frases indevidas. QA com conta comum registrou pela API glicose 118 mg/dL, zero passos e sono 380 minutos; chat preservou glicose/passos, informou ausência de HRV e apresentou fontes reais. Redação final conferida após reinício, persistência confirmada pela API, desktop/mobile sem overflow e console sem erros ou avisos. Conta de teste e suas métricas excluídas e credenciais temporárias removidas.
 - **Evidências:** `.logs/qa109-{format,lint-fix,lint,format-check,types,unit,integration,producao,producao-final,lint-final,format-final,unit-final}.log`, `.logs/qa109-runtime.json` e `.logs/qa109-metricas-{desktop,mobile}-final.png`. Produção na porta 3000 com saúde de banco, 35 migrações, landing, login e autenticação administrativa confirmados.
+
+### 111 · Fontes locais e substituição da Imprima
+
+- **Status:** 🟢 finalizada · **Registro e início:** 2026-10-24.
+- **Pedido do usuário:** substituir o Google Fonts por fonte parecida com a Imprima e eliminar o erro de carregamento, preservando qualidade visual, legibilidade e experiência para usuários leigos.
+- **Implementação:** Source Sans 3 Regular nas telas públicas; Inter, Space Grotesk e JetBrains Mono preservadas e hospedadas localmente por `next/font/local`. Arquivos originais Fontsource com SHA-512 conferido, licença e origem por família. Sem novas dependências de runtime ou mudança do lockfile.
+- **Validação:** build de produção, tipos, lint, formatação, 594 unitários e 199 integrações aprovados. Runtime confirmou página HTTP 200, saúde com 35 migrações e 12 WOFF2 locais válidos, sem URLs do Google no CSS. Chromium falhou no ambiente durante as tentativas de captura; inspeção visual automatizada não comprovada. Nenhuma alteração de layout, cores ou espaçamentos. Evidências em `/tmp/lyra111-*.log`. **Commit:** `f834247` · **Push:** `84c6b21..f834247 main -> main`, confirmado.
