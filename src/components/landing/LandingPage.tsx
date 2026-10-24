@@ -767,7 +767,7 @@ export function LandingPage({
 
   return (
     <div
-      className={`lyra-public-theme imprima-regular lyra-jornada${COM_ARTE ? ' jornada-com-arte' : ''}`}
+      className={`lyra-public-theme source-sans-regular lyra-jornada${COM_ARTE ? ' jornada-com-arte' : ''}`}
       style={fatoresDeEscala}
     >
       {/* O "Pular para o conteúdo" vem do layout raiz (src/app/layout.tsx),

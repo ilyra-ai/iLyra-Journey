@@ -117,11 +117,13 @@ frio (matiz 346) justamente para não se confundir com o coral de destaque.
 
 ## Telas públicas: landing e login
 
-- Desde 2026-10-20, por solicitação do usuário, **Imprima Regular (400)** é
-  a fonte padrão dessas duas telas, incluindo títulos, textos e controles.
-  O `next/font/google` carrega a fonte uma única vez e a serve no próprio
-  site, com `display: swap`; a variável `--font-imprima` só é aplicada nas
-  telas públicas. As demais telas mantêm suas fontes.
+- Desde 2026-10-24, por solicitação do usuário, **Source Sans 3 Regular (400)**
+  substitui a Imprima nas telas públicas, incluindo títulos, textos e controles.
+  É uma alternativa humanista servida por `next/font/local`, com `display: swap`
+  e variável `--font-source-sans`. Inter, Space Grotesk e JetBrains Mono também
+  usam arquivos WOFF2 locais, preservando as famílias das telas internas.
+  As fontes e licenças estão em `src/assets/fonts`; nenhuma delas depende de
+  acesso ao Google durante o build ou no navegador.
 - `src/components/public/PublicTheme.css` compartilha os fundos e superfícies
   de cada tema, os tons teal e coral e a tipografia; o login usa borda
   fina, marca e introdução agrupadas, formulário à direita no desktop e

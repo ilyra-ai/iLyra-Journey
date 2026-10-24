@@ -1,10 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import {
-  Imprima,
-  Inter,
-  JetBrains_Mono,
-  Space_Grotesk,
-} from 'next/font/google';
+import localFont from 'next/font/local';
 import './globals.css';
 import { AuthGate, AuthProvider } from '@/context/AuthContext';
 import { ThemeProvider } from '@/components/ThemeProvider';
@@ -12,35 +7,93 @@ import { ThemeColorSync } from '@/components/theme/ThemeControls';
 import { COR_DA_BARRA_DO_NAVEGADOR } from '@/components/theme/tema';
 import { Toaster } from '@/components/ui/sonner';
 
-const inter = Inter({
+const inter = localFont({
   variable: '--font-inter',
-  subsets: ['latin'],
+  src: [
+    {
+      path: '../assets/fonts/inter/inter-latin-300-normal.woff2',
+      weight: '300',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/inter/inter-latin-400-normal.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/inter/inter-latin-500-normal.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/inter/inter-latin-600-normal.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/inter/inter-latin-700-normal.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700'],
 });
 
-// Fonte das telas públicas, servida pelo próprio Next.js sem chamadas ao
-// Google no navegador. A variável só é aplicada na landing e no login.
-const imprima = Imprima({
-  variable: '--font-imprima',
-  subsets: ['latin'],
-  weight: '400',
+const sourceSans = localFont({
+  variable: '--font-source-sans',
+  src: [
+    {
+      path: '../assets/fonts/source-sans-3/source-sans-3-latin-400-normal.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+  ],
   display: 'swap',
   preload: false,
 });
 
-const spaceGrotesk = Space_Grotesk({
+const spaceGrotesk = localFont({
   variable: '--font-space-grotesk',
-  subsets: ['latin'],
+  src: [
+    {
+      path: '../assets/fonts/space-grotesk/space-grotesk-latin-500-normal.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/space-grotesk/space-grotesk-latin-600-normal.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/space-grotesk/space-grotesk-latin-700-normal.woff2',
+      weight: '700',
+      style: 'normal',
+    },
+  ],
   display: 'swap',
-  weight: ['500', '600', '700'],
 });
 
-const jetbrainsMono = JetBrains_Mono({
+const jetbrainsMono = localFont({
   variable: '--font-jetbrains-mono',
-  subsets: ['latin'],
+  src: [
+    {
+      path: '../assets/fonts/jetbrains-mono/jetbrains-mono-latin-400-normal.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/jetbrains-mono/jetbrains-mono-latin-500-normal.woff2',
+      weight: '500',
+      style: 'normal',
+    },
+    {
+      path: '../assets/fonts/jetbrains-mono/jetbrains-mono-latin-600-normal.woff2',
+      weight: '600',
+      style: 'normal',
+    },
+  ],
   display: 'swap',
-  weight: ['400', '500', '600'],
 });
 
 /**
@@ -128,7 +181,7 @@ export default function RootLayout({
       // atributo o Next a desliga durante a troca de rota (o modo dev avisava
       // em todas as páginas).
       data-scroll-behavior="smooth"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${imprima.variable}`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${sourceSans.variable}`}
     >
       <body className="min-h-screen font-sans antialiased">
         <a href="#conteudo-principal" className="skip-nav">

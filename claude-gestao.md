@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **82%** |
-| Tarefas totais     | 109                            |
+| Progresso          | `████████████████░░░░` **80%** |
+| Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 89                             |
-| 🔵 Em andamento    | 1                              |
-| 🔴 Bloqueadas      | 0                              |
+| 🔵 Em andamento    | 2                              |
+| 🔴 Bloqueadas      | 1                              |
 | ⚪ A iniciar       | 19                             |
 | Branch de trabalho | `main` (única permitida)       |
-| Última atualização | 2026-10-22                     |
+| Última atualização | 2026-10-24                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (89 ÷ 109 ≈ 82%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (89 ÷ 111 ≈ 80%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -59,6 +59,23 @@
 - **Critérios:** inspecionar a configuração e as capacidades reais dos provedores, pesquisar suas APIs oficiais atuais e implementar geração real pelo servidor, verificando a compatibilidade do segundo modelo e exibindo mensagens claras quando a conexão só oferecer texto. Não simular imagens nem atribuir essa capacidade a modelos que não a possuem. Integrar envio do pedido, andamento, falhas e retentativa à experiência simples e responsiva do chat, exibindo o resultado e permitindo baixar a imagem.
 - **Persistência e acesso:** preservar pedido, imagem e referência ao modelo na conversa, com armazenamento real vinculado ao titular, autorização no servidor, validação dos arquivos e limites de uso. Respeitar modo privado e consentimento para provedores externos, incluir os dados na exportação e exclusão da conta e não expor chaves ou imagens privadas em URLs públicas.
 - **Validação e entrega:** conferir geração solicitada no chat e geração do mapa após sua leitura, comprovando o uso do segundo modelo entre as cinco conexões e o tratamento de conexão ausente ou incompatível. Testar provedor e modelo capazes de criar imagens, reabertura da conversa, download, isolamento entre contas e interface desktop/mobile, além dos quality gates. A implementação terá commit e push próprios na main; este registro não significa funcionalidade já implementada.
+
+### 111 · Fontes locais e substituição da Imprima
+
+- **Status:** 🔵 em andamento · **Registro e início:** 2026-10-24.
+- **Pedido do usuário:** substituir o Google Fonts por fonte parecida com a Imprima e eliminar o erro de carregamento, preservando qualidade visual, legibilidade e experiência para usuários leigos.
+- **Implementação:** Source Sans 3 Regular nas telas públicas; Inter, Space Grotesk e JetBrains Mono preservadas e hospedadas localmente por `next/font/local`. Arquivos originais Fontsource com SHA-512 conferido, licença e origem por família. Sem novas dependências de runtime ou mudança do lockfile.
+- **Validação:** build de produção, tipos, lint, formatação, 594 unitários e 199 integrações aprovados. Runtime confirmou página HTTP 200, saúde com 35 migrações e 12 WOFF2 locais válidos, sem URLs do Google no CSS. Chromium falhou no ambiente durante as tentativas de captura; inspeção visual automatizada não comprovada. Nenhuma alteração de layout, cores ou espaçamentos. Evidências em `/tmp/lyra111-*.log`. Publicação individual em preparação.
+
+### BLOQUEADAS
+
+### 110 · Preservar o trecho incompleto na troca entre modelos
+
+- **Status:** 🔴 bloqueada no build por restrição de rede · **Registro e início:** 2026-10-24.
+- **Causa reproduzida:** o cliente aplicava `trim()` a uma resposta cortada por limite de tokens, removendo espaços pertencentes ao trecho que o modelo seguinte precisa continuar. A integração do coach falhou na comparação do trecho parcial e acabou respondendo pelo motor local após timeout.
+- **Escopo:** reutilizar cliente e cadeia existentes, preservar o conteúdo parcial após remover raciocínio e manter a normalização das respostas completas e a recusa de resposta vazia. Publicar correção e painel separadamente antes de retomar a tarefa 86.
+- **Validação:** regressão reproduzida antes da correção; depois passaram 25 testes focados, 594 unitários (72 arquivos), 199 integrações (25 arquivos), `fix:format`, `fix:lint`, `check:lint` e `check:format`. Evidências desta instância: `/tmp/lyra-continuacao-antes.log`, `/tmp/lyra-continuacao-depois.log` e `/tmp/lyra110-{unit,integration,lint,format}.log`.
+- **Bloqueio externo:** `pnpm build` falhou ao baixar as quatro famílias de fontes usadas pelo layout. Pedido HTTPS ao Google Fonts pelo proxy retornou HTTP 403. Os domínios `fonts.googleapis.com` e `fonts.gstatic.com` foram salvos no rascunho de rede; é necessário aplicar a configuração no ambiente e repetir o build. A checagem de tipos passou após `pnpm exec next typegen` gerar as declarações oficiais do Next (`/tmp/lyra110-typegen.log` e `/tmp/lyra110-types.log`). Sem commit/push enquanto os gates obrigatórios não estiverem aprovados, conforme item 31 do `CLAUDE.md`. A tarefa não foi concluída.
 
 ---
 

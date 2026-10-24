@@ -193,7 +193,7 @@ export function LoginExperience({
   return (
     <main
       id={previewMode ? undefined : 'conteudo-principal'}
-      className="lyra-public-theme imprima-regular lyra-login grid min-h-dvh w-full grid-cols-1 content-start lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:grid-rows-[auto_auto_auto_auto]"
+      className="lyra-public-theme source-sans-regular lyra-login grid min-h-dvh w-full grid-cols-1 content-start lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:grid-rows-[auto_auto_auto_auto]"
       style={
         {
           '--login-largura-intro': larguraDaIntroducao.maxWidth,

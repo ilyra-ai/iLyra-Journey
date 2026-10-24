@@ -30,7 +30,7 @@ Chamadas de API ao abrir `/chat`: 12 → 8 (`/api/public/page-config/app` saía 
 
 ## Verificado sem alteração
 
-- **Fontes:** `next/font/google` já baixa as fontes no build e as serve da própria origem (subset latin), com preload apenas das três famílias usadas.
+- **Fontes:** `next/font/local` serve arquivos WOFF2 versionados no projeto (subset latin, incluindo os acentos do português). O build não baixa fontes do Google; preload apenas das três famílias internas.
 - **Banco:** consultas por usuário usam índices (`daily_metrics` por `user_id,date`, assinaturas por `user_id,status,current_period_end`, contadores por usuário e período); pool único por processo (tarefa 24).
 - **Prefetch:** o pré-carregamento das rotas do menu é o comportamento padrão do `<Link>` do Next.js e torna a navegação seguinte instantânea; não foi desativado.
 

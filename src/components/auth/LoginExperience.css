@@ -11,7 +11,7 @@
   background: var(--public-fundo);
   padding: 20px max(24px, calc((100% - 1180px) / 2));
   column-gap: clamp(32px, 4vw, 64px);
-  font-family: var(--font-imprima), 'Imprima', sans-serif;
+  font-family: var(--font-source-sans), 'Source Sans 3', sans-serif;
   font-size: 17px;
 }
 .lyra-login .login-coluna-intro {
@@ -91,7 +91,7 @@
 .lyra-login h1,
 .lyra-login h2,
 .lyra-login .font-display {
-  font-family: var(--font-imprima), 'Imprima', sans-serif;
+  font-family: var(--font-source-sans), 'Source Sans 3', sans-serif;
   font-weight: 400;
 }
 .lyra-login .text-primary {

@@ -11,7 +11,7 @@
   --public-coral: #a3381a;
 }
 
-.imprima-regular,
+.source-sans-regular,
 .lyra-public-theme
   :where(
     h1,
@@ -32,7 +32,7 @@
     dd,
     [role='tab']
   ) {
-  font-family: var(--font-imprima), 'Imprima', sans-serif;
+  font-family: var(--font-source-sans), 'Source Sans 3', sans-serif;
   font-weight: 400;
   font-style: normal;
 }
