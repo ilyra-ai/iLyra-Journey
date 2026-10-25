@@ -11,7 +11,7 @@
 [![MySQL](https://img.shields.io/badge/MySQL-9.7_LTS-4479A1?style=flat-square&logo=mysql&logoColor=white)](https://www.mysql.com/)
 [![Node.js](https://img.shields.io/badge/Node.js-24_LTS-5FA04E?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![Stripe](https://img.shields.io/badge/Stripe-Billing-635BFF?style=flat-square&logo=stripe&logoColor=white)](https://stripe.com/)
-[![Vitest](https://img.shields.io/badge/Vitest-875_testes-6E9F18?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Vitest](https://img.shields.io/badge/Vitest-904_testes-6E9F18?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
 [![IA local](https://img.shields.io/badge/IA-local_ou_nuvem-7C3AED?style=flat-square)](./docs/ia-automatica.md)
 [![pnpm](https://img.shields.io/badge/pnpm-workspace-F69220?style=flat-square&logo=pnpm&logoColor=white)](https://pnpm.io/)
 [![Licença](https://img.shields.io/badge/Licença-MIT-22C55E?style=flat-square)](#-licença)
@@ -80,6 +80,7 @@ Cinco melhorias baseadas em tendências reais de 2026, **todas implementadas de 
 <details open>
 <summary><strong>Experiência do usuário</strong></summary>
 
+- **Dashboard administrativo** com três indicadores principais, comparação de períodos, séries diárias/semanais/mensais, base atual, contagens de 14 áreas, linha temporal e detalhes paginados. Filtros reais por plano vigente, sem expor textos de conversa ou valores clínicos. [Definições, fontes e limites](./docs/dashboard-administrativo.md).
 - **Dashboard** com o cartão **"Seu dia"** (resumo da leitura védica, prontidão, faixa das 24 h com o "Agora" e os tópicos emocional, físico e espiritual do período atual), pulso vital, sono, dica do dia e a seção **Inteligência Lyra 2026**.
 - **Meu dia (`/dia`)**: relógio radial das 24 h, a leitura do dia em abas por período, pontos positivos e negativos, dicas do mapa com o "Por quê?", horários bons e de cautela, recomendações por área e o céu de hoje.
 - **Check-in do dia** (sono, energia, humor, estresse, água, passos e outras métricas) e **sino de notificações**.
@@ -338,7 +339,7 @@ tui-webnova.sh         # Painel TUI-WEBNOVA (WSL2): orquestrador independente co
 
 ## 🧪 Testes & Qualidade
 
-- **539 testes unitários** (motores de domínio, mapa védico, coach e leitura, linguagem simples das leituras, leitura da semana, cliente de IA, cifra, autenticação, segurança, configuração, contraste WCAG dos temas, iCalendar, respiração guiada, reflexão, retrospectiva da semana e detecção da saída da página) e **336 testes de integração** contra um MySQL real isolado (API de dados, rotas administrativas, coach, modelos de IA, metas, métricas, reflexão, respiração, agenda no calendário, semana, LGPD, planos, billing e webhook da Stripe), além de **30 testes dos launchers** (`pnpm test:launchers`). As integrações de IA usam contratos HTTP controlados compatíveis com a OpenAI (`tests/support`); elas não comprovam inferência de um modelo externo.
+- **554 testes unitários** (motores de domínio, mapa védico, coach e leitura, linguagem simples das leituras, leitura da semana, cliente de IA, cifra, autenticação, segurança, configuração, contraste WCAG dos temas, iCalendar, respiração guiada, reflexão, retrospectiva da semana e detecção da saída da página) e **350 testes de integração** contra um MySQL real isolado (API de dados, rotas administrativas, coach, modelos de IA, metas, métricas, reflexão, respiração, agenda no calendário, semana, LGPD, planos, billing e webhook da Stripe), além de **30 testes dos launchers** (`pnpm test:launchers`). As integrações de IA usam contratos HTTP controlados compatíveis com a OpenAI (`tests/support`); elas não comprovam inferência de um modelo externo.
 - Portões de qualidade obrigatórios antes de cada entrega:
 
 ```bash

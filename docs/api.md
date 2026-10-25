@@ -16,6 +16,10 @@ Todas as rotas ficam em `src/app/api/**/route.ts` e rodam no runtime Node.js. A 
 - **Recursos do plano:** o que o plano vigente não habilita (`plan_entitlements`) responde **403** com "O plano X não inclui Y". Em `/api/data/[table]`, leitura e escrita de `goals`, `ai_plans`, `appointments` (`appointments_active`) e `professionals` (`professionals_total`) e leitura de `ai_tips` exigem o recurso; `/api/semana` omite as metas sem `goal_progress_tracking`. Administradores não dependem do plano. No app, a mesma regra esconde as páginas e os atalhos: `src/lib/plans/rotas.ts` (`RECURSOS_DA_ROTA`) e o hook `useRotaLiberada`.
 - **Cadastro:** a conta, o perfil (`onboarding_completed = false`), os aceites LGPD e a assinatura Free (`source = auth_register`) nascem na mesma transação.
 
+## Dashboard administrativo
+
+`GET /api/admin/dashboard` retorna indicadores calculados no MySQL, comparação com período anterior, séries, base atual, uso de 14 áreas e eventos paginados. Exige administrador no servidor e responde `no-store`. Datas UTC inclusivas, até 366 dias, filtros por plano **atual** e agrupamento diário/semanal/mensal. `detalhe` e `pagina` permitem conferir os registros com a mesma população, sem textos privados ou valores clínicos. Contrato, fórmulas, fontes, pesquisa e limites em [dashboard-administrativo.md](./dashboard-administrativo.md).
+
 ## Saúde dos dados e catálogo de métricas
 
 `GET /api/admin/saude-dos-dados` continua restrito ao administrador e retorna agregados, não registros individuais. Cada item de `metricas` mantém `metrica` e os valores de preenchimento/média/extremos e acrescenta `nome`, `unidade` e `tipo` (`numero`/`categoria`). O catálogo cobre 63 colunas numéricas e o fluxo menstrual, que recebe preenchimento e valores estatísticos NULL; `metrics_updated_at` é metadado e não entra como métrica. Detalhes em [nomes-das-metricas.md](./nomes-das-metricas.md).
