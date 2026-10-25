@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **87%** |
+| Progresso          | `██████████████████░░` **88%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 97                             |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 98                             |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 2                              |
 | ⚪ A iniciar       | 11                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-25                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (97 ÷ 111 ≈ 87%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (98 ÷ 111 ≈ 88%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,17 +51,7 @@
 
 ### ANDAMENTO
 
-### 95 · Onboarding objetivo, rápido e visualmente inovador
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
-- **Pedido do usuário:** remover do **onboarding** os itens **“Objetivos”** que o usuário precisa selecionar, conforme anexo; tornar o percurso objetivo, assertivo e rápido, evitando cansaço no preenchimento. Criar uma experiência visual incrível, inovadora, surpreendente de forma positiva e que incentive entrar logo no app.
-- **Escopo e preservação:** conferir fluxo, validações e gravação existentes antes de implementar. Retirar a seleção de objetivos do onboarding sem remover os objetivos do perfil por inferência. Preservar os dados existentes, os consentimentos necessários e o campo opcional **“Como Você Gostaria de Ser Chamado”**, mantendo `nickname` no banco. Não marcar dados não fornecidos como preenchidos nem inventar escolhas do usuário.
-- **Design e implementação:** pesquisar profundamente referências e tendências atuais de 2026 antes de alterar o visual; seguir Lyra Clean e tema claro, com qualidade premium, mobile-first e desktop, acessibilidade, clareza, poucas etapas e controles simples. Corrigir causas de eventuais erros no backend antes da interface.
-- **Validação integral:** cadastro → onboarding → persistência → entrada no app, leitura e atualização dos dados, retorno e retomada, recarga e novo login sem repetição indevida do onboarding concluído. Conferir erros, campos opcionais, consentimento e isolamento, ausência da seleção de objetivos, responsividade em múltiplas larguras e CRUD real; executar gates e publicar commit e push próprios na main.
-
-- **Início em 2026-10-25:** inventário identificou cinco etapas, uma tela exclusiva de objetivos, escolhas iniciais de atividade e envio que zera objetivos não selecionados. Reutilizar os controles de nome/apelido, data/hora e cidade; reduzir o percurso, preservar objetivos existentes e não inventar gênero/atividade. Validar conclusão no servidor, manter consentimento explícito e retomar rascunho apenas na aba da própria conta. Referência oficial consultada: GOV.UK Question pages (fonte atual no repositório oficial), para perguntas necessárias, campos opcionais claros, navegação de retorno e grupos relacionados.
-
-- **Validação concluída em 2026-10-25; aguardando publicação individual:** três etapas sem seleção de objetivos, apelido e objetivos anteriores preservados, opcionais sem escolhas inventadas. Conclusão e consentimento transacionais pelo novo endpoint, validação canônica de cidade e proteção da conclusão genérica. Rascunho na aba por conta, consentimento não persistido, retorno nativo e retentativa. 528 unitários, 245 integrações, formato, lint, tipos e build aprovados. QA real cadastro → app, recarga/retorno, offline/retentativa, banco e novo login; 1440/390/320 px sem estouro e capturas conferidas. Conta temporária excluída. Detalhes em `docs/onboarding.md`.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -1741,6 +1731,20 @@
 - **Validação:** editar cada plano pela interface administrativa, confirmar persistência e o reflexo automático na landing, inclusive desabilitação e alteração de limites, recarga e sessão pública. Restaurar os valores de teste; validar CRUD, mobile/desktop, acessibilidade e gates. Commit e push próprios na main.
 
 - **Commit:** `9d499b8` · **Push:** `4302911..9d499b8 main -> main` (confirmado). **Implementado e validado:** mesma matriz persistida como fonte, todos os benefícios utilizáveis, cotas e intervalos em pt-BR, zero/desligados omitidos, singular/ilimitado, sem herança presumida ou corte de lista. Catálogo explicitamente exclui Administrador e usa `no-store`; evento entre abas, foco e reconsulta de 30 s enquanto visível atualizam a landing aberta. 528 unitários, 240 integrações, formato, lint, tipos e build aprovados. QA de produção editou Free/Meta/Care pela interface e comprovou limites, zero, desabilitação, ilimitado e atualização periódica real; matriz restaurada. 1440/390/320 px sem estouro e visual preservado. Detalhes em `docs/beneficios-publicos-dos-planos.md`.
+
+### 95 · Onboarding objetivo, rápido e visualmente inovador
+
+- **Status:** 🟢 finalizada · **Conclusão:** 2026-10-25 · **Registro:** 2026-10-22.
+- **Pedido do usuário:** remover do **onboarding** os itens **“Objetivos”** que o usuário precisa selecionar, conforme anexo; tornar o percurso objetivo, assertivo e rápido, evitando cansaço no preenchimento. Criar uma experiência visual incrível, inovadora, surpreendente de forma positiva e que incentive entrar logo no app.
+- **Escopo e preservação:** conferir fluxo, validações e gravação existentes antes de implementar. Retirar a seleção de objetivos do onboarding sem remover os objetivos do perfil por inferência. Preservar os dados existentes, os consentimentos necessários e o campo opcional **“Como Você Gostaria de Ser Chamado”**, mantendo `nickname` no banco. Não marcar dados não fornecidos como preenchidos nem inventar escolhas do usuário.
+- **Design e implementação:** pesquisar profundamente referências e tendências atuais de 2026 antes de alterar o visual; seguir Lyra Clean e tema claro, com qualidade premium, mobile-first e desktop, acessibilidade, clareza, poucas etapas e controles simples. Corrigir causas de eventuais erros no backend antes da interface.
+- **Validação integral:** cadastro → onboarding → persistência → entrada no app, leitura e atualização dos dados, retorno e retomada, recarga e novo login sem repetição indevida do onboarding concluído. Conferir erros, campos opcionais, consentimento e isolamento, ausência da seleção de objetivos, responsividade em múltiplas larguras e CRUD real; executar gates e publicar commit e push próprios na main.
+
+- **Início em 2026-10-25:** inventário identificou cinco etapas, uma tela exclusiva de objetivos, escolhas iniciais de atividade e envio que zera objetivos não selecionados. Reutilizar os controles de nome/apelido, data/hora e cidade; reduzir o percurso, preservar objetivos existentes e não inventar gênero/atividade. Validar conclusão no servidor, manter consentimento explícito e retomar rascunho apenas na aba da própria conta. Referência oficial consultada: GOV.UK Question pages (fonte atual no repositório oficial), para perguntas necessárias, campos opcionais claros, navegação de retorno e grupos relacionados.
+
+- **Entrega validada e publicada em 2026-10-25:** três etapas sem seleção de objetivos, apelido e objetivos anteriores preservados, opcionais sem escolhas inventadas. Conclusão e consentimento transacionais pelo novo endpoint, validação canônica de cidade e proteção da conclusão genérica. Rascunho na aba por conta, consentimento não persistido, retorno nativo e retentativa. 528 unitários, 245 integrações, formato, lint, tipos e build aprovados. QA real cadastro → app, recarga/retorno, offline/retentativa, banco e novo login; 1440/390/320 px sem estouro e capturas conferidas. Conta temporária excluída. Detalhes em `docs/onboarding.md`.
+
+- **Commit:** `f535134fba8246cce7bf32a7bd77564722801bfe` · **Push:** `c100d5a..f535134 main -> main`, confirmado por `git ls-remote`.
 
 ### 104 · Edição dos próprios dados para usuários de todos os planos
 
