@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **84%** |
+| Progresso          | `████████████████░░░░` **85%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 93                             |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 94                             |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 2                              |
 | ⚪ A iniciar       | 15                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-24                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (93 ÷ 111 ≈ 84%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (94 ÷ 111 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,17 +51,7 @@
 
 ### ANDAMENTO
 
-### 91 · Auditoria exaustiva dos planos e entitlements e plano Administrador
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
-- **Free automático:** investigar, verificar e analisar profundamente se o plano Free é concedido automaticamente a novos usuários, novos cadastros e usuários inseridos pelo administrador. Conferir as implementações e evidências existentes antes de corrigir, evitando retrabalho.
-- **Free, Meta e Care:** verificar se as funções e funcionalidades reais de cada plano correspondem às habilitações e desabilitações na **“Matriz editável de entitlements”** em `http://localhost:3000/admin/plans`, tanto na interface quanto no servidor. A auditoria exaustiva da cobertura de todas as funcionalidades, inclusão das ausentes e comprovação individual dos controles passa a ter rastreamento próprio na tarefa 96, conforme complemento do usuário; reaproveitar suas evidências para evitar retrabalho.
-- **Administrador:** criar o perfil/plano **“Administrador”**, com todas as funções e funcionalidades gerais do app habilitadas, e conceder esse plano **somente a `admin@lyra.local`**. Ele não pode aparecer como plano comprável nem na landing page. Preservar a separação entre assinatura e autorização administrativa: compra ou troca de plano não pode conceder permissões de administrador.
-- **Página de planos:** acrescentar o cartão Administrador à direita de Care em `/admin/plans`; os quatro cartões devem caber responsivamente na tela, sem barra de rolagem horizontal. Tornar também a matriz editável responsiva, sem barra de rolagem inferior, mantendo leitura, edição e acessibilidade no mobile e desktop.
-- **Validação:** conferir cadastro público e criação administrativa, concessão única do Free, CRUD dos planos e da matriz, aplicação real de cada entitlement ligado/desligado, limites e isolamento, acesso total da conta designada, ausência do plano privado na compra e landing, responsividade e gates completos. Registrar evidências e publicar commit e push próprios na main.
-
-- **Implementação em 2026-10-24:** migração 035 para Administrador privado com todos os entitlements atuais habilitados e ilimitados; concessão somente à conta canônica designada, sem promover papel. Bootstrap e reparação de assinatura preservam cobrança externa; catálogos e preços comerciais excluem o plano interno, checkout e atribuição indevida são recusados. Cadastro público Free preservado; fluxo administrativo inexistente foi acrescentado com Free e conta comum na mesma transação. Matriz reorganizada responsivamente, sem redesenhar outras páginas.
-- **Evidências:** 528 unitários, 206 integrações e mais 14 verificações focadas após a revisão final; tipos, lint, formatação e build aprovados. QA HTTP/browser comprovou quatro planos administrativos, plano privado ausente da landing, cadastro administrativo Free, recusa de atribuição a outra conta, bloqueio do chat Free por entitlement e restauração dos valores. Matriz em 1440/390/320 px sem overflow ou rolagem horizontal; contas de QA excluídas. Documentação em `docs/plano-administrador.md`, logs `/tmp/lyra91-*.log` e capturas `/tmp/lyra91-*.png`. Cobertura integral da matriz continua na tarefa 96, conforme escopo original; regra de perfil da tarefa 104 preservada. Publicação individual em preparação.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -1722,6 +1712,18 @@
 - **Entrega em validação final:** editor, 55 arquivos de biblioteca exclusivos, renderizadores, rotas, estilos, menu e diretório de instruções removidos; dependências `@puckeditor/core` e `parse5` removidas com lockfile regenerado e instalação congelada aprovada. O construtor de Conteúdo e `/admin/page-builder` foram preservados, pois a remoção da rota duplicada é a tarefa 98. Configurações antigas são filtradas no schema e na navegação; teste verifica que a personalização de Conteúdo permanece.
 - **Dados preservados:** nenhuma migração ou tabela histórica foi alterada ou apagada. Teste com registro real em `puck_documents` confirma retenção e recusa pela API genérica. Referências restantes estão restritas a compatibilidade, regressões, migrações e histórico explicitamente identificado; código de execução e pacote removidos.
 - **Evidências:** 528 unitários (69 arquivos) e 202 integrações (27 arquivos), tipos, lint, formatação e build aprovados. Foram aposentados 75 testes unitários exclusivos do editor e acrescentadas duas regressões de navegação/configuração; um teste de integração exclusivo do editor saiu e outro verifica retenção histórica. Não houve teste falhando ocultado ou desativado. QA HTTP/browser conferiu 404 das três rotas removidas, ausência do menu, rascunho/publicação reais do construtor e preservação de Conteúdo, login e chat em 1440/390/320 px sem overflow. Configurações temporárias restauradas. Logs `/tmp/lyra89-*.log` e capturas `/tmp/lyra89-*.png`; documentação em `docs/remocao-editor-visual.md`. **Commit:** `9590ab1` · **Push:** `b019a45..9590ab1 main -> main`, confirmado.
+
+### 91 · Auditoria exaustiva dos planos e entitlements e plano Administrador
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22.
+- **Free automático:** investigar, verificar e analisar profundamente se o plano Free é concedido automaticamente a novos usuários, novos cadastros e usuários inseridos pelo administrador. Conferir as implementações e evidências existentes antes de corrigir, evitando retrabalho.
+- **Free, Meta e Care:** verificar se as funções e funcionalidades reais de cada plano correspondem às habilitações e desabilitações na **“Matriz editável de entitlements”** em `http://localhost:3000/admin/plans`, tanto na interface quanto no servidor. A auditoria exaustiva da cobertura de todas as funcionalidades, inclusão das ausentes e comprovação individual dos controles passa a ter rastreamento próprio na tarefa 96, conforme complemento do usuário; reaproveitar suas evidências para evitar retrabalho.
+- **Administrador:** criar o perfil/plano **“Administrador”**, com todas as funções e funcionalidades gerais do app habilitadas, e conceder esse plano **somente a `admin@lyra.local`**. Ele não pode aparecer como plano comprável nem na landing page. Preservar a separação entre assinatura e autorização administrativa: compra ou troca de plano não pode conceder permissões de administrador.
+- **Página de planos:** acrescentar o cartão Administrador à direita de Care em `/admin/plans`; os quatro cartões devem caber responsivamente na tela, sem barra de rolagem horizontal. Tornar também a matriz editável responsiva, sem barra de rolagem inferior, mantendo leitura, edição e acessibilidade no mobile e desktop.
+- **Validação:** conferir cadastro público e criação administrativa, concessão única do Free, CRUD dos planos e da matriz, aplicação real de cada entitlement ligado/desligado, limites e isolamento, acesso total da conta designada, ausência do plano privado na compra e landing, responsividade e gates completos. Registrar evidências e publicar commit e push próprios na main.
+
+- **Implementação em 2026-10-24:** migração 035 para Administrador privado com todos os entitlements atuais habilitados e ilimitados; concessão somente à conta canônica designada, sem promover papel. Bootstrap e reparação de assinatura preservam cobrança externa; catálogos e preços comerciais excluem o plano interno, checkout e atribuição indevida são recusados. Cadastro público Free preservado; fluxo administrativo inexistente foi acrescentado com Free e conta comum na mesma transação. Matriz reorganizada responsivamente, sem redesenhar outras páginas.
+- **Evidências:** 528 unitários, 206 integrações e mais 14 verificações focadas após a revisão final; tipos, lint, formatação e build aprovados. QA HTTP/browser comprovou quatro planos administrativos, plano privado ausente da landing, cadastro administrativo Free, recusa de atribuição a outra conta, bloqueio do chat Free por entitlement e restauração dos valores. Matriz em 1440/390/320 px sem overflow ou rolagem horizontal; contas de QA excluídas. Documentação em `docs/plano-administrador.md`, logs `/tmp/lyra91-*.log` e capturas `/tmp/lyra91-*.png`. Cobertura integral da matriz continua na tarefa 96, conforme escopo original; regra de perfil da tarefa 104 preservada. **Commit:** `f07c6f1` · **Push:** `23b7b64..f07c6f1 main -> main`, confirmado.
 
 ### 104 · Edição dos próprios dados para usuários de todos os planos
 
