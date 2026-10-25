@@ -14,6 +14,11 @@ const planVisuals: Record<
     icon: typeof Sparkles;
   }
 > = {
+  admin: {
+    label: 'Administrador',
+    className: 'border-border bg-muted text-foreground',
+    icon: ShieldCheck,
+  },
   free: {
     label: 'Free',
     className: 'border-border bg-muted text-muted-foreground',

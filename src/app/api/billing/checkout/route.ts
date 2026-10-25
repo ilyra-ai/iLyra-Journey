@@ -4,12 +4,12 @@ import { z } from 'zod';
 import { createStripeCheckoutUrl } from '@/lib/billing/service';
 import { lerJson, respostaDeErro } from '@/lib/http/api';
 import { requireServerSession } from '@/lib/mysql/server-auth';
-import { PLAN_KEYS } from '@/types/subscription';
+import { COMMERCIAL_PLAN_KEYS } from '@/types/subscription';
 
 export const runtime = 'nodejs';
 
 const checkoutPayloadSchema = z.object({
-  planKey: z.enum(PLAN_KEYS),
+  planKey: z.enum(COMMERCIAL_PLAN_KEYS),
   billingInterval: z.enum(['monthly', 'annual']),
 });
 

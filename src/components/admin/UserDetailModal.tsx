@@ -60,12 +60,14 @@ type BillingInterval = 'monthly' | 'annual';
 
 const planNameMap: Record<PlanKey, string> = {
   free: 'Free',
+  admin: 'Administrador',
   meta: 'Meta',
   care: 'Care',
 };
 
 const planDescriptionMap: Record<PlanKey, string> = {
   free: 'Base operacional e onboarding seguro.',
+  admin: 'Acesso interno reservado.',
   meta: 'Camada intermediária com IA e continuidade.',
   care: 'Matriz completa de capacidades e governança premium.',
 };
@@ -297,7 +299,12 @@ export function UserDetailModal({
                           <SelectValue placeholder="Selecione o plano" />
                         </SelectTrigger>
                         <SelectContent>
-                          {PLAN_KEYS.map((planKey) => (
+                          {PLAN_KEYS.filter((key) =>
+                            user.email?.toLowerCase() === 'admin@lyra.local' &&
+                            user.role === 'admin'
+                              ? key === 'admin'
+                              : key !== 'admin'
+                          ).map((planKey) => (
                             <SelectItem key={planKey} value={planKey}>
                               {planNameMap[planKey]}:{' '}
                               {planDescriptionMap[planKey]}

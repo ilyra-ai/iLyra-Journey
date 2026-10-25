@@ -49,7 +49,7 @@ async function linhasDosPrecos(ambiente: AmbienteDaStripe) {
        FROM subscription_plans p
        LEFT JOIN stripe_plan_prices s
          ON s.plan_id = p.id AND s.environment = ?
-      WHERE p.plan_key <> 'free'
+      WHERE p.plan_key IN ('meta', 'care')
       ORDER BY p.display_order ASC`,
     [ambiente]
   );
@@ -133,7 +133,7 @@ export async function salvarPrecosDaStripe(
 ): Promise<void> {
   if (precos.length === 0) return;
   const planos = await queryRows<{ id: string; plan_key: string }>(
-    "SELECT id, plan_key FROM subscription_plans WHERE plan_key <> 'free'"
+    "SELECT id, plan_key FROM subscription_plans WHERE plan_key IN ('meta', 'care')"
   );
   const idDoPlano = new Map(planos.map((p) => [p.plan_key, p.id]));
   const executar = (sql: string, parametros: unknown[]) =>

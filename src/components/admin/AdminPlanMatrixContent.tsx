@@ -23,13 +23,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
 import { Textarea } from '@/components/ui/textarea';
 import { PlanBadge } from '@/components/subscription/PlanBadge';
 import { moedaPtBr } from '@/lib/formato/numero';
@@ -43,6 +43,7 @@ import {
 
 const planDescriptions: Record<PlanKey, string> = {
   free: 'Base operacional para onboarding, ativação e uso inicial do produto com segurança.',
+  admin: 'Acesso interno completo, privado e reservado.',
   meta: 'Plano intermediário orientado por continuidade de acompanhamento, IA e automações clínicas.',
   care: 'Camada premium, completa e integral para máxima profundidade de uso e retenção.',
 };
@@ -308,7 +309,7 @@ export function AdminPlanMatrixContent() {
         </CardHeader>
       </Card>
 
-      <div className="grid gap-6 xl:grid-cols-3">
+      <div className="grid gap-6 xl:grid-cols-4">
         {plans.map((plan) => (
           <Card key={plan.key} className="min-w-0 overflow-hidden">
             {/* Faixa chapada com a cor principal configurada para o plano (dado do banco). */}
@@ -320,14 +321,21 @@ export function AdminPlanMatrixContent() {
             <CardHeader className="space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <PlanBadge planKey={plan.key} />
-                <Badge variant="secondary">{planDescriptions[plan.key]}</Badge>
+                <Badge
+                  variant="secondary"
+                  className="max-w-full whitespace-normal text-left"
+                >
+                  {planDescriptions[plan.key]}
+                </Badge>
               </div>
 
               <div className="rounded-md border border-border bg-background p-5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 space-y-2">
                     <p className="text-sm font-medium text-muted-foreground">
-                      Preview comercial
+                      {plan.key === 'admin'
+                        ? 'Plano interno — não comercial'
+                        : 'Preview comercial'}
                     </p>
                     {/* h3: cada plano fica sob "Matriz real de capacidades". */}
                     <h3 className="break-words font-display text-2xl font-semibold tracking-tight text-foreground">
@@ -337,211 +345,240 @@ export function AdminPlanMatrixContent() {
                       {plan.tagline}
                     </p>
                   </div>
-                  <div className="flex shrink-0 items-center gap-1.5">
-                    <Palette
-                      className="h-4 w-4 text-muted-foreground"
-                      aria-hidden="true"
-                    />
-                    <span
-                      className="h-4 w-4 rounded-full border border-border"
-                      style={{ backgroundColor: plan.accentFrom }}
-                      title={`Cor inicial ${plan.accentFrom}`}
-                      aria-hidden="true"
-                    />
-                    <span
-                      className="h-4 w-4 rounded-full border border-border"
-                      style={{ backgroundColor: plan.accentTo }}
-                      title={`Cor final ${plan.accentTo}`}
-                      aria-hidden="true"
-                    />
-                  </div>
+                  {plan.key !== 'admin' ? (
+                    <div className="flex shrink-0 items-center gap-1.5">
+                      <Palette
+                        className="h-4 w-4 text-muted-foreground"
+                        aria-hidden="true"
+                      />
+                      <span
+                        className="h-4 w-4 rounded-full border border-border"
+                        style={{ backgroundColor: plan.accentFrom }}
+                        title={`Cor inicial ${plan.accentFrom}`}
+                        aria-hidden="true"
+                      />
+                      <span
+                        className="h-4 w-4 rounded-full border border-border"
+                        style={{ backgroundColor: plan.accentTo }}
+                        title={`Cor final ${plan.accentTo}`}
+                        aria-hidden="true"
+                      />
+                    </div>
+                  ) : null}
                 </div>
-                <div className="mt-5 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-4">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Mensal</p>
-                    <p className="font-display text-3xl font-semibold tracking-tight text-foreground">
-                      {moedaPtBr(plan.monthlyPrice, plan.currencyCode)}
-                    </p>
+                {plan.key === 'admin' ? (
+                  <p className="mt-5 border-t border-border pt-4 text-sm font-medium">
+                    Acesso interno sem cobrança
+                  </p>
+                ) : (
+                  <div className="mt-5 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-4">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Mensal</p>
+                      <p className="font-display text-3xl font-semibold tracking-tight text-foreground">
+                        {moedaPtBr(plan.monthlyPrice, plan.currencyCode)}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-sm text-muted-foreground">Anual</p>
+                      <p className="font-display text-xl font-semibold tracking-tight text-foreground">
+                        {moedaPtBr(plan.annualPrice, plan.currencyCode)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-sm text-muted-foreground">Anual</p>
-                    <p className="font-display text-xl font-semibold tracking-tight text-foreground">
-                      {moedaPtBr(plan.annualPrice, plan.currencyCode)}
-                    </p>
-                  </div>
-                </div>
+                )}
               </div>
             </CardHeader>
             <CardContent className="space-y-5">
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor={`name-${plan.key}`}>Nome</Label>
-                  <Input
-                    id={`name-${plan.key}`}
-                    value={plan.name}
-                    onChange={(event) =>
-                      updatePlanField(plan.key, 'name', event.target.value)
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor={`highlight-${plan.key}`}>Destaque</Label>
-                  <Input
-                    id={`highlight-${plan.key}`}
-                    value={plan.highlightText || ''}
-                    onChange={(event) =>
-                      updatePlanField(
-                        plan.key,
-                        'highlightText',
-                        event.target.value
-                      )
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`tagline-${plan.key}`}>Tagline</Label>
-                <Input
-                  id={`tagline-${plan.key}`}
-                  value={plan.tagline}
-                  onChange={(event) =>
-                    updatePlanField(plan.key, 'tagline', event.target.value)
-                  }
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor={`description-${plan.key}`}>Descrição</Label>
-                <Textarea
-                  id={`description-${plan.key}`}
-                  value={plan.description}
-                  onChange={(event) =>
-                    updatePlanField(plan.key, 'description', event.target.value)
-                  }
-                  rows={4}
-                />
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor={`monthly-${plan.key}`}>Preço mensal</Label>
-                  <Input
-                    id={`monthly-${plan.key}`}
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={plan.monthlyPrice}
-                    onChange={(event) =>
-                      updatePlanField(
-                        plan.key,
-                        'monthlyPrice',
-                        Number(event.target.value)
-                      )
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor={`annual-${plan.key}`}>Preço anual</Label>
-                  <Input
-                    id={`annual-${plan.key}`}
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={plan.annualPrice}
-                    onChange={(event) =>
-                      updatePlanField(
-                        plan.key,
-                        'annualPrice',
-                        Number(event.target.value)
-                      )
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Label htmlFor={`accent-from-${plan.key}`}>Cor inicial</Label>
-                  <Input
-                    id={`accent-from-${plan.key}`}
-                    type="color"
-                    value={plan.accentFrom}
-                    onChange={(event) =>
-                      updatePlanField(
-                        plan.key,
-                        'accentFrom',
-                        event.target.value
-                      )
-                    }
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor={`accent-to-${plan.key}`}>Cor final</Label>
-                  <Input
-                    id={`accent-to-${plan.key}`}
-                    type="color"
-                    value={plan.accentTo}
-                    onChange={(event) =>
-                      updatePlanField(plan.key, 'accentTo', event.target.value)
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="flex items-center justify-between gap-3 rounded-md border border-border bg-background p-4">
-                  <div className="min-w-0 space-y-1">
-                    <p className="text-sm font-medium">Plano ativo</p>
-                    <p className="text-xs text-muted-foreground">
-                      Disponível para atribuição e uso.
-                    </p>
-                  </div>
-                  <Switch
-                    aria-label={`Plano ${plan.name} ativo`}
-                    checked={plan.isActive}
-                    onCheckedChange={(checked) =>
-                      updatePlanField(plan.key, 'isActive', checked)
-                    }
-                  />
-                </div>
-                <div className="flex items-center justify-between gap-3 rounded-md border border-border bg-background p-4">
-                  <div className="min-w-0 space-y-1">
-                    <p className="text-sm font-medium">Plano público</p>
-                    <p className="text-xs text-muted-foreground">
-                      Exibido para escolha comercial.
-                    </p>
-                  </div>
-                  <Switch
-                    aria-label={`Plano ${plan.name} público`}
-                    checked={plan.isPublic}
-                    onCheckedChange={(checked) =>
-                      updatePlanField(plan.key, 'isPublic', checked)
-                    }
-                  />
-                </div>
-              </div>
-
-              <Button
-                onClick={() => savePlan(plan.key)}
-                className="w-full"
-                disabled={savingPlanKey === plan.key}
+              {plan.key === 'admin' ? (
+                <p className="text-sm text-muted-foreground">
+                  Acesso interno completo da conta designada. Este plano não é
+                  vendido nem permite desabilitar capacidades.
+                </p>
+              ) : null}
+              <fieldset
+                disabled={plan.key === 'admin'}
+                className="space-y-5 min-w-0"
               >
-                {savingPlanKey === plan.key ? (
-                  <>
-                    <Loader2
-                      className="mr-2 h-4 w-4 animate-spin"
-                      aria-hidden="true"
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor={`name-${plan.key}`}>Nome</Label>
+                    <Input
+                      id={`name-${plan.key}`}
+                      value={plan.name}
+                      onChange={(event) =>
+                        updatePlanField(plan.key, 'name', event.target.value)
+                      }
                     />
-                    Salvando plano
-                  </>
-                ) : (
-                  <>
-                    <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />
-                    Salvar {plan.name}
-                  </>
-                )}
-              </Button>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`highlight-${plan.key}`}>Destaque</Label>
+                    <Input
+                      id={`highlight-${plan.key}`}
+                      value={plan.highlightText || ''}
+                      onChange={(event) =>
+                        updatePlanField(
+                          plan.key,
+                          'highlightText',
+                          event.target.value
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`tagline-${plan.key}`}>Tagline</Label>
+                  <Input
+                    id={`tagline-${plan.key}`}
+                    value={plan.tagline}
+                    onChange={(event) =>
+                      updatePlanField(plan.key, 'tagline', event.target.value)
+                    }
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor={`description-${plan.key}`}>Descrição</Label>
+                  <Textarea
+                    id={`description-${plan.key}`}
+                    value={plan.description}
+                    onChange={(event) =>
+                      updatePlanField(
+                        plan.key,
+                        'description',
+                        event.target.value
+                      )
+                    }
+                    rows={4}
+                  />
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor={`monthly-${plan.key}`}>Preço mensal</Label>
+                    <Input
+                      id={`monthly-${plan.key}`}
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={plan.monthlyPrice}
+                      onChange={(event) =>
+                        updatePlanField(
+                          plan.key,
+                          'monthlyPrice',
+                          Number(event.target.value)
+                        )
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`annual-${plan.key}`}>Preço anual</Label>
+                    <Input
+                      id={`annual-${plan.key}`}
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={plan.annualPrice}
+                      onChange={(event) =>
+                        updatePlanField(
+                          plan.key,
+                          'annualPrice',
+                          Number(event.target.value)
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor={`accent-from-${plan.key}`}>
+                      Cor inicial
+                    </Label>
+                    <Input
+                      id={`accent-from-${plan.key}`}
+                      type="color"
+                      value={plan.accentFrom}
+                      onChange={(event) =>
+                        updatePlanField(
+                          plan.key,
+                          'accentFrom',
+                          event.target.value
+                        )
+                      }
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor={`accent-to-${plan.key}`}>Cor final</Label>
+                    <Input
+                      id={`accent-to-${plan.key}`}
+                      type="color"
+                      value={plan.accentTo}
+                      onChange={(event) =>
+                        updatePlanField(
+                          plan.key,
+                          'accentTo',
+                          event.target.value
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="flex items-center justify-between gap-3 rounded-md border border-border bg-background p-4">
+                    <div className="min-w-0 space-y-1">
+                      <p className="text-sm font-medium">Plano ativo</p>
+                      <p className="text-xs text-muted-foreground">
+                        Disponível para atribuição e uso.
+                      </p>
+                    </div>
+                    <Switch
+                      aria-label={`Plano ${plan.name} ativo`}
+                      checked={plan.isActive}
+                      onCheckedChange={(checked) =>
+                        updatePlanField(plan.key, 'isActive', checked)
+                      }
+                    />
+                  </div>
+                  <div className="flex items-center justify-between gap-3 rounded-md border border-border bg-background p-4">
+                    <div className="min-w-0 space-y-1">
+                      <p className="text-sm font-medium">Plano público</p>
+                      <p className="text-xs text-muted-foreground">
+                        Exibido para escolha comercial.
+                      </p>
+                    </div>
+                    <Switch
+                      aria-label={`Plano ${plan.name} público`}
+                      checked={plan.isPublic}
+                      onCheckedChange={(checked) =>
+                        updatePlanField(plan.key, 'isPublic', checked)
+                      }
+                    />
+                  </div>
+                </div>
+
+                <Button
+                  onClick={() => savePlan(plan.key)}
+                  className="w-full"
+                  disabled={savingPlanKey === plan.key}
+                >
+                  {savingPlanKey === plan.key ? (
+                    <>
+                      <Loader2
+                        className="mr-2 h-4 w-4 animate-spin"
+                        aria-hidden="true"
+                      />
+                      Salvando plano
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />
+                      Salvar {plan.name}
+                    </>
+                  )}
+                </Button>
+              </fieldset>
             </CardContent>
           </Card>
         ))}
@@ -552,60 +589,67 @@ export function AdminPlanMatrixContent() {
           <CardTitle as="h2">Matriz editável de entitlements</CardTitle>
           <CardDescription>
             Cada linha abaixo representa uma capacidade real do produto e cada
-            coluna reflete o comportamento liberado para `Free`, `Meta` e
-            `Care`.
+            coluna reflete o comportamento liberado para `Free`, `Meta` e `Care`
+            e o plano interno Administrador.
           </CardDescription>
+          <div className="flex flex-wrap gap-2">
+            {plans
+              .filter((plan) => plan.key !== 'admin')
+              .map((plan) => (
+                <Button
+                  key={plan.key}
+                  variant="outline"
+                  disabled={savingPlanKey !== null}
+                  onClick={() => void savePlan(plan.key)}
+                >
+                  Salvar {plan.name}
+                </Button>
+              ))}
+          </div>
         </CardHeader>
         <CardContent>
-          <Table
-            scrollLabel="Matriz de entitlements por plano"
-            caption="Recursos liberados em cada plano"
-          >
-            <TableHeader>
-              <TableRow>
-                <TableHead className="min-w-[320px]">Capacidade</TableHead>
-                {plans.map((plan) => (
-                  <TableHead key={plan.key} className="min-w-[280px] align-top">
-                    <div className="space-y-2">
-                      <PlanBadge planKey={plan.key} />
-                      <div className="text-xs text-muted-foreground">
-                        {plan.tagline}
-                      </div>
+          <div className="space-y-6">
+            {featureCatalog.map((feature) => (
+              <section
+                key={feature.key}
+                className="space-y-3 rounded-xl border border-border p-3 sm:p-4"
+              >
+                <div className="min-w-0">
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="font-medium">{feature.name}</p>
+                      <Badge variant="secondary">{feature.category}</Badge>
                     </div>
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {featureCatalog.map((feature) => (
-                <TableRow key={feature.key}>
-                  <TableCell className="align-top">
-                    <div className="space-y-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <p className="font-medium">{feature.name}</p>
-                        <Badge variant="secondary">{feature.category}</Badge>
-                      </div>
-                      <p className="text-sm leading-6 text-muted-foreground">
-                        {feature.description}
-                      </p>
-                      <p className="text-xs font-medium text-muted-foreground">
-                        {feature.featureType === 'boolean'
-                          ? 'Toggle'
-                          : `${feature.meterKind} ${feature.unit ? `• ${feature.unit}` : ''}`}
-                      </p>
-                    </div>
-                  </TableCell>
+                    <p className="text-sm leading-6 text-muted-foreground">
+                      {feature.description}
+                    </p>
+                    <p className="text-xs font-medium text-muted-foreground">
+                      {feature.featureType === 'boolean'
+                        ? 'Ativar ou desativar acesso'
+                        : `Limite de uso${feature.unit ? ` · ${feature.unit}` : ''}`}
+                    </p>
+                  </div>
+                </div>
+                <div className="grid min-w-0 gap-3 sm:grid-cols-2 2xl:grid-cols-4">
                   {plans.map((plan) => {
                     const planFeature = plan.features.find(
                       (item) => item.key === feature.key
                     );
                     if (!planFeature) {
-                      return <TableCell key={plan.key}>-</TableCell>;
+                      return (
+                        <div key={plan.key}>Capacidade não configurada.</div>
+                      );
                     }
 
                     return (
-                      <TableCell key={plan.key} className="align-top">
-                        <div className="space-y-4 rounded-md border border-border bg-background p-4">
+                      <div key={plan.key} className="min-w-0">
+                        <fieldset
+                          disabled={plan.key === 'admin'}
+                          className="min-w-0 space-y-4 rounded-md border border-border bg-background p-3"
+                        >
+                          <legend className="px-1">
+                            <PlanBadge planKey={plan.key} />
+                          </legend>
                           <div className="flex items-center justify-between gap-3">
                             <div>
                               <p className="text-sm font-medium">Habilitado</p>
@@ -635,7 +679,7 @@ export function AdminPlanMatrixContent() {
                                     Ilimitado
                                   </p>
                                   <p className="text-xs text-muted-foreground">
-                                    Quota nula libera uso sem teto.
+                                    Uso sem limite para esta capacidade.
                                   </p>
                                 </div>
                                 <Switch
@@ -682,31 +726,50 @@ export function AdminPlanMatrixContent() {
                                 <Label
                                   htmlFor={`${plan.key}-${planFeature.key}-reset`}
                                 >
-                                  Janela de reset
+                                  Período de renovação
                                 </Label>
-                                <Input
-                                  id={`${plan.key}-${planFeature.key}-reset`}
-                                  value={planFeature.resetInterval || ''}
-                                  onChange={(event) =>
+                                <Select
+                                  value={planFeature.resetInterval || 'nenhum'}
+                                  onValueChange={(value) =>
                                     updateFeatureField(
                                       plan.key,
                                       planFeature.key,
                                       'resetInterval',
-                                      event.target.value || null
+                                      value === 'nenhum' ? null : value
                                     )
                                   }
-                                />
+                                >
+                                  <SelectTrigger
+                                    id={`${plan.key}-${planFeature.key}-reset`}
+                                  >
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="nenhum">
+                                      Sem renovação automática
+                                    </SelectItem>
+                                    <SelectItem value="monthly">
+                                      A cada mês
+                                    </SelectItem>
+                                    <SelectItem value="concurrent">
+                                      Por itens ativos
+                                    </SelectItem>
+                                    <SelectItem value="rolling">
+                                      Janela de dias recentes
+                                    </SelectItem>
+                                  </SelectContent>
+                                </Select>
                               </div>
                             </div>
                           ) : null}
-                        </div>
-                      </TableCell>
+                        </fieldset>
+                      </div>
                     );
                   })}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                </div>
+              </section>
+            ))}
+          </div>
         </CardContent>
       </Card>
     </div>

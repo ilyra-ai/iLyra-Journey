@@ -24,9 +24,9 @@
 | Progresso          | `████████████████░░░░` **84%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 93                             |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 2                              |
-| ⚪ A iniciar       | 16                             |
+| ⚪ A iniciar       | 15                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-24                     |
 
@@ -51,7 +51,17 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 91 · Auditoria exaustiva dos planos e entitlements e plano Administrador
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
+- **Free automático:** investigar, verificar e analisar profundamente se o plano Free é concedido automaticamente a novos usuários, novos cadastros e usuários inseridos pelo administrador. Conferir as implementações e evidências existentes antes de corrigir, evitando retrabalho.
+- **Free, Meta e Care:** verificar se as funções e funcionalidades reais de cada plano correspondem às habilitações e desabilitações na **“Matriz editável de entitlements”** em `http://localhost:3000/admin/plans`, tanto na interface quanto no servidor. A auditoria exaustiva da cobertura de todas as funcionalidades, inclusão das ausentes e comprovação individual dos controles passa a ter rastreamento próprio na tarefa 96, conforme complemento do usuário; reaproveitar suas evidências para evitar retrabalho.
+- **Administrador:** criar o perfil/plano **“Administrador”**, com todas as funções e funcionalidades gerais do app habilitadas, e conceder esse plano **somente a `admin@lyra.local`**. Ele não pode aparecer como plano comprável nem na landing page. Preservar a separação entre assinatura e autorização administrativa: compra ou troca de plano não pode conceder permissões de administrador.
+- **Página de planos:** acrescentar o cartão Administrador à direita de Care em `/admin/plans`; os quatro cartões devem caber responsivamente na tela, sem barra de rolagem horizontal. Tornar também a matriz editável responsiva, sem barra de rolagem inferior, mantendo leitura, edição e acessibilidade no mobile e desktop.
+- **Validação:** conferir cadastro público e criação administrativa, concessão única do Free, CRUD dos planos e da matriz, aplicação real de cada entitlement ligado/desligado, limites e isolamento, acesso total da conta designada, ausência do plano privado na compra e landing, responsividade e gates completos. Registrar evidências e publicar commit e push próprios na main.
+
+- **Implementação em 2026-10-24:** migração 035 para Administrador privado com todos os entitlements atuais habilitados e ilimitados; concessão somente à conta canônica designada, sem promover papel. Bootstrap e reparação de assinatura preservam cobrança externa; catálogos e preços comerciais excluem o plano interno, checkout e atribuição indevida são recusados. Cadastro público Free preservado; fluxo administrativo inexistente foi acrescentado com Free e conta comum na mesma transação. Matriz reorganizada responsivamente, sem redesenhar outras páginas.
+- **Evidências:** 528 unitários, 206 integrações e mais 14 verificações focadas após a revisão final; tipos, lint, formatação e build aprovados. QA HTTP/browser comprovou quatro planos administrativos, plano privado ausente da landing, cadastro administrativo Free, recusa de atribuição a outra conta, bloqueio do chat Free por entitlement e restauração dos valores. Matriz em 1440/390/320 px sem overflow ou rolagem horizontal; contas de QA excluídas. Documentação em `docs/plano-administrador.md`, logs `/tmp/lyra91-*.log` e capturas `/tmp/lyra91-*.png`. Cobertura integral da matriz continua na tarefa 96, conforme escopo original; regra de perfil da tarefa 104 preservada. Publicação individual em preparação.
 
 ### BLOQUEADAS
 
@@ -85,15 +95,6 @@ Nenhuma tarefa em andamento.
 ## Tópico 3 · Tarefas a Iniciar
 
 ---
-
-### 91 · Auditoria exaustiva dos planos e entitlements e plano Administrador
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Free automático:** investigar, verificar e analisar profundamente se o plano Free é concedido automaticamente a novos usuários, novos cadastros e usuários inseridos pelo administrador. Conferir as implementações e evidências existentes antes de corrigir, evitando retrabalho.
-- **Free, Meta e Care:** verificar se as funções e funcionalidades reais de cada plano correspondem às habilitações e desabilitações na **“Matriz editável de entitlements”** em `http://localhost:3000/admin/plans`, tanto na interface quanto no servidor. A auditoria exaustiva da cobertura de todas as funcionalidades, inclusão das ausentes e comprovação individual dos controles passa a ter rastreamento próprio na tarefa 96, conforme complemento do usuário; reaproveitar suas evidências para evitar retrabalho.
-- **Administrador:** criar o perfil/plano **“Administrador”**, com todas as funções e funcionalidades gerais do app habilitadas, e conceder esse plano **somente a `admin@lyra.local`**. Ele não pode aparecer como plano comprável nem na landing page. Preservar a separação entre assinatura e autorização administrativa: compra ou troca de plano não pode conceder permissões de administrador.
-- **Página de planos:** acrescentar o cartão Administrador à direita de Care em `/admin/plans`; os quatro cartões devem caber responsivamente na tela, sem barra de rolagem horizontal. Tornar também a matriz editável responsiva, sem barra de rolagem inferior, mantendo leitura, edição e acessibilidade no mobile e desktop.
-- **Validação:** conferir cadastro público e criação administrativa, concessão única do Free, CRUD dos planos e da matriz, aplicação real de cada entitlement ligado/desligado, limites e isolamento, acesso total da conta designada, ausência do plano privado na compra e landing, responsividade e gates completos. Registrar evidências e publicar commit e push próprios na main.
 
 ### 92 · Bloquear e desbloquear usuários na gestão administrativa
 

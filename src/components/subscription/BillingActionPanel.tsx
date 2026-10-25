@@ -12,6 +12,7 @@ import { PlanKey } from '@/types/subscription';
 
 const PLAN_ORDER: Record<PlanKey, number> = {
   free: 0,
+  admin: 3,
   meta: 1,
   care: 2,
 };

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { PLAN_KEYS } from '@/types/subscription';
+import { COMMERCIAL_PLAN_KEYS } from '@/types/subscription';
 
 import {
   AMBIENTES_DE_PAGAMENTO,
@@ -50,13 +50,13 @@ export const credencialSchema = z.object({
   precos: z
     .array(
       z.object({
-        plano: z.enum(PLAN_KEYS),
+        plano: z.enum(COMMERCIAL_PLAN_KEYS),
         produto: idDaStripe,
         mensal: idDaStripe,
         anual: idDaStripe,
       })
     )
-    .max(PLAN_KEYS.length)
+    .max(COMMERCIAL_PLAN_KEYS.length)
     .optional(),
 });
 

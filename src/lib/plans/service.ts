@@ -27,6 +27,7 @@ type QueryableConnection = PoolConnection;
 
 interface CurrentSubscriptionRow {
   subscription_id: string;
+  external_subscription_id: string | null;
   status: string;
   billing_interval: string;
   source: string;
@@ -203,6 +204,7 @@ async function fetchCurrentSubscriptionRow(
       us.current_period_start,
       us.current_period_end,
       us.cancel_at_period_end,
+      us.external_subscription_id,
       p.id AS plan_id,
       p.plan_key,
       p.name AS plan_name,
@@ -312,6 +314,18 @@ async function lockUserRow(connection: QueryableConnection, userId: string) {
   }
 }
 
+/** A identidade reservada é conferida no banco, nunca no payload do cliente. */
+export async function contaAdministrativaDesignada(
+  userId: string,
+  connection?: QueryableConnection
+) {
+  const sql = `SELECT u.id FROM users u JOIN profiles p ON p.id = u.id WHERE u.id = ? AND LOWER(u.email) = 'admin@lyra.local' AND p.role = 'admin'`;
+  const rows = connection
+    ? await queryWithConnection<{ id: string }>(connection, sql, [userId])
+    : await queryRows<{ id: string }>(sql, [userId]);
+  return rows.length === 1;
+}
+
 async function ensureUserSubscriptionWithConnection(
   connection: QueryableConnection,
   userId: string,
@@ -319,6 +333,14 @@ async function ensureUserSubscriptionWithConnection(
   source: string
 ): Promise<CurrentSubscriptionRow> {
   await lockUserRow(connection, userId);
+  if (
+    preferredPlanKey === 'admin' &&
+    !(await contaAdministrativaDesignada(userId, connection))
+  )
+    throw new HttpError(
+      'O plano Administrador é reservado à conta administrativa designada.',
+      403
+    );
   const active = await fetchCurrentSubscriptionRow(userId, connection);
   if (active) {
     return active;
@@ -525,7 +547,11 @@ async function fetchFeatureAccess(
   featureKey: PlanFeatureKey,
   connection?: QueryableConnection
 ) {
-  const preferredPlan = role === 'admin' ? 'care' : 'free';
+  const preferredPlan = (await contaAdministrativaDesignada(userId, connection))
+    ? 'admin'
+    : role === 'admin'
+      ? 'care'
+      : 'free';
   const current =
     (await fetchCurrentSubscriptionRow(userId, connection)) ??
     (await ensureUserSubscription(
@@ -556,10 +582,23 @@ export async function getAccountSubscriptionSummary(
   userId: string,
   role: string
 ): Promise<AccountSubscriptionSummary> {
-  const preferredPlan = role === 'admin' ? 'care' : 'free';
-  const current =
+  const preferredPlan = (await contaAdministrativaDesignada(userId))
+    ? 'admin'
+    : role === 'admin'
+      ? 'care'
+      : 'free';
+  let current =
     (await fetchCurrentSubscriptionRow(userId)) ??
     (await ensureUserSubscription(userId, preferredPlan, 'auto_repair_plan'));
+  if (preferredPlan === 'admin' && current.plan_key !== 'admin') {
+    await assignPlanToUserByAdmin({
+      targetUserId: userId,
+      actorUserId: userId,
+      planKey: 'admin',
+      source: 'reserved_admin_access',
+    });
+    current = (await fetchCurrentSubscriptionRow(userId))!;
+  }
   const features = await buildFeatureAccessList(userId, current.plan_id);
 
   return {
@@ -621,6 +660,7 @@ export async function getPlanMatrix(): Promise<PlanMatrixResponse> {
   const assinavel = (planId: string, planKey: PlanKey) =>
     cobrancaPronta &&
     planKey !== 'free' &&
+    planKey !== 'admin' &&
     (['monthly', 'annual'] as const).some((intervalo) =>
       Boolean(
         resolveStripePriceId(
@@ -685,6 +725,11 @@ export async function updatePlanMatrixByKey(
   planKey: PlanKey,
   input: PlanMatrixUpdateInput
 ) {
+  if (planKey === 'admin')
+    throw new HttpError(
+      'O plano Administrador é interno, sempre habilitado e não comercializável.',
+      403
+    );
   await withTransaction(async (connection) => {
     const planId = await fetchPlanIdByKey(planKey, connection);
 
@@ -777,11 +822,26 @@ export async function assignPlanToUserByAdmin(options: {
     // 404 para usuário inexistente (antes, erro de chave estrangeira) e
     // serialização com outras trocas de plano do mesmo usuário.
     await lockUserRow(connection, options.targetUserId);
+    const designada = await contaAdministrativaDesignada(
+      options.targetUserId,
+      connection
+    );
+    if ((options.planKey === 'admin') !== designada)
+      throw new HttpError(
+        'O plano Administrador pertence somente à conta administrativa designada.',
+        403
+      );
     const planId = await fetchPlanIdByKey(options.planKey, connection);
     const current = await fetchCurrentSubscriptionRow(
       options.targetUserId,
       connection
     );
+
+    if (options.planKey === 'admin' && current?.external_subscription_id)
+      throw new HttpError(
+        'Regularize a assinatura externa antes de atribuir o plano interno; a cobrança não foi alterada.',
+        409
+      );
 
     if (current) {
       await connection.execute(

@@ -125,12 +125,13 @@ describe('planos · assinatura', () => {
     ).toBe(1);
   });
 
-  it('a matriz pública lista os três planos em ordem', async () => {
+  it('a matriz administrativa inclui o plano privado depois dos planos comerciais', async () => {
     const matriz = await getPlanMatrix();
     expect(matriz.plans.map((plano) => plano.key)).toEqual([
       'free',
       'meta',
       'care',
+      'admin',
     ]);
     for (const plano of matriz.plans) {
       expect(plano.features.length).toBeGreaterThan(0);

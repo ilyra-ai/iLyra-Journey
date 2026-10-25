@@ -1,3 +1,4 @@
+import { contaAdministrativaDesignada } from '@/lib/plans/service';
 import Stripe from 'stripe';
 import type { PoolConnection, RowDataPacket } from 'mysql2/promise';
 
@@ -155,7 +156,7 @@ async function getPlanCatalogRows() {
 export async function getPublicPlanCatalog() {
   const rows = await getPlanCatalogRows();
   return rows
-    .filter((row) => row.is_public === 1)
+    .filter((row) => row.is_public === 1 && row.plan_key !== 'admin')
     .map((row) => toPlanSummary(row));
 }
 
@@ -672,6 +673,13 @@ export async function createStripeCheckoutUrl(options: {
   billingInterval: 'monthly' | 'annual';
   origin?: string;
 }) {
+  if (await contaAdministrativaDesignada(options.session.user.id))
+    throw new HttpError(
+      'A conta administrativa designada usa um plano interno e não realiza compra de assinatura.',
+      403
+    );
+  if (options.planKey === 'admin')
+    throw new HttpError('O plano Administrador não pode ser comprado.', 403);
   const credenciais = await exigirCobrancaConfigurada(
     options.session,
     options.origin

@@ -1,4 +1,5 @@
-export const PLAN_KEYS = ['free', 'meta', 'care'] as const;
+export const COMMERCIAL_PLAN_KEYS = ['free', 'meta', 'care'] as const;
+export const PLAN_KEYS = [...COMMERCIAL_PLAN_KEYS, 'admin'] as const;
 
 export type PlanKey = (typeof PLAN_KEYS)[number];
 

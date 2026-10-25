@@ -1,4 +1,5 @@
 'use client';
+import { CriarUsuario } from './CriarUsuario';
 
 import * as React from 'react';
 import { useAuth } from '@/context/AuthContext';
@@ -245,6 +246,13 @@ export function UserManagementContent() {
     <>
       <Card>
         <CardHeader>
+          <div className="flex justify-end">
+            <CriarUsuario
+              aoCriar={() => {
+                void fetchUsers();
+              }}
+            />
+          </div>
           <CardTitle as="h2">Gerenciamento de Usuários</CardTitle>
           <CardDescription>
             Total de {totalUsers} usuários. Visualizando página {page + 1} de{' '}

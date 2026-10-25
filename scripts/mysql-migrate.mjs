@@ -129,16 +129,17 @@ async function ensureBootstrapAdminUser(pool, admin) {
       `
         SELECT id
         FROM subscription_plans
-        WHERE plan_key = 'care'
+        WHERE plan_key = ?
         LIMIT 1
-      `
+      `,
+      [admin.email.toLowerCase() === 'admin@lyra.local' ? 'admin' : 'care']
     );
     const carePlanId = carePlanRows[0]?.id;
 
     if (carePlanId) {
       const [activeSubscriptionRows] = await connection.query(
         `
-          SELECT plan_id
+          SELECT plan_id, external_subscription_id
           FROM user_subscriptions
           WHERE user_id = ?
             AND status = 'active'
@@ -151,6 +152,10 @@ async function ensureBootstrapAdminUser(pool, admin) {
       const activePlanId = activeSubscriptionRows[0]?.plan_id;
 
       if (activePlanId !== carePlanId) {
+        if (activeSubscriptionRows[0]?.external_subscription_id)
+          throw new Error(
+            'A conta de bootstrap tem assinatura externa ativa; regularize a cobrança antes de trocar seu plano interno.'
+          );
         await connection.execute(
           `
             UPDATE user_subscriptions
