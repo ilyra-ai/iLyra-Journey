@@ -25,8 +25,8 @@
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 93                             |
 | 🔵 Em andamento    | 0                              |
-| 🔴 Bloqueadas      | 1                              |
-| ⚪ A iniciar       | 17                             |
+| 🔴 Bloqueadas      | 2                              |
+| ⚪ A iniciar       | 16                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-24                     |
 
@@ -69,20 +69,22 @@ Nenhuma tarefa em andamento.
 - **Persistência e acesso:** preservar pedido, imagem e referência ao modelo na conversa, com armazenamento real vinculado ao titular, autorização no servidor, validação dos arquivos e limites de uso. Respeitar modo privado e consentimento para provedores externos, incluir os dados na exportação e exclusão da conta e não expor chaves ou imagens privadas em URLs públicas.
 - **Validação e entrega:** conferir geração solicitada no chat e geração do mapa após sua leitura, comprovando o uso do segundo modelo entre as cinco conexões e o tratamento de conexão ausente ou incompatível. Testar provedor e modelo capazes de criar imagens, reabertura da conversa, download, isolamento entre contas e interface desktop/mobile, além dos quality gates. A implementação terá commit e push próprios na main; este registro não significa funcionalidade já implementada.
 
----
-
-## Tópico 3 · Tarefas a Iniciar
-
----
-
 ### 90 · Treinamento real por Aprendizado por Reforço com Feedback Humano via chat
 
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
+- **Status:** 🔴 bloqueada em pré-requisito de treinamento real · **Registro:** 2026-10-22.
 - **Controle administrativo:** acrescentar no chat da Lyra, ao lado de “Como a Lyra responde”, um botão de alternância On/Off chamado **“Treinamento”**, visível somente para o administrador do app. Ao ativar On, habilitar automaticamente o treinamento do Motor Lyra via chat. Exigir um modelo de IA realmente conectado: sem modelo conectado o treinamento não funciona, e a interface deve informar essa condição.
 - **Ativação e salvamento:** ao clicar em On, informar ao Motor Lyra e ao modelo conectado que foi habilitado o treinamento do tipo **Aprendizado por Reforço com Feedback Humano**. Salvar automaticamente tudo que for treinado durante o processo, sem depender de clicar em Off para persistir os dados; preservar o treinamento diante de recarga ou interrupção.
 - **Finalização e aplicação:** ao clicar em Off, informar que o treinamento foi finalizado e que o Motor Lyra deve começar a usar os novos treinamentos com **todos os usuários**, antigos e novos. Preservar rastreabilidade da versão aplicada e isolamento dos dados pessoais das conversas.
 - **Implementação real:** investigar a arquitetura, as capacidades dos modelos e as APIs oficiais antes de definir o mecanismo. Comprovar feedback humano, processo de aprendizagem, persistência e efeito do treinamento; não apresentar simples armazenamento de mensagens, memória ou alteração de prompt como treinamento RLHF de pesos do modelo. Registrar com precisão o mecanismo implementado e qualquer capacidade externa indispensável, sem simular resultados.
 - **Permissões e validação:** comprovar que o controle não aparece para outros planos, perfis e usuários não administradores e que o servidor também recusa operações não autorizadas. Validar On/Off, ausência e perda de conexão, salvamento durante On, retomada, aplicação global após Off, CRUD dos dados de treinamento e regressões do chat, desktop/mobile, testes, gates, commit e push individuais na main.
+- **Verificação em 2026-10-24:** a base atual possui documentos de conhecimento e preferências do chat, mas isso não treina pesos. Não há provedor de treinamento conectado nesta nuvem nem pesos locais licenciados e disponíveis para treino; o download no Hugging Face foi recusado pelo proxy com HTTP 403. O Jan do computador do usuário não é acessível pelo localhost da nuvem. Ambiente Python de inferência foi preparado separadamente, sem alegar que ele oferece RLHF ou que foi treinado.
+- **Limite preservado:** não foi acrescentado um botão que apenas salve mensagens e o apresente como RLHF. Retomar a implementação quando houver um modelo treinável/endpoint real acessível, com licença e capacidade de persistir e aplicar a versão treinada. As demais tarefas independentes continuam.
+
+---
+
+## Tópico 3 · Tarefas a Iniciar
+
+---
 
 ### 91 · Auditoria exaustiva dos planos e entitlements e plano Administrador
 
