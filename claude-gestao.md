@@ -24,9 +24,9 @@
 | Progresso          | `██████████████████░░` **92%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 102                            |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 2                              |
-| ⚪ A iniciar       | 7                              |
+| ⚪ A iniciar       | 6                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-25                     |
 
@@ -51,7 +51,18 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 100 · Aba Faturamento no dashboard e gestão financeira completa
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22 · **Início:** 2026-10-25.
+- **Pedido do usuário:** incluir no dashboard administrativo uma aba **“Faturamento”**, com o mesmo visual das abas de **“Gestão de Conteúdo Dinâmico”** em `http://localhost:3000/admin/content`, conforme anexo. Reunir todas as métricas de faturamento **por dia, mês e ano**, gestão total do faturamento, **cancelamento de faturas, reembolsos e demais operações financeiras pertinentes**.
+- **Dados e recursos reais:** inventariar cobrança, assinaturas, faturas, pagamentos e provedores existentes; pesquisar profundamente referências de 2026 e APIs oficiais antes de definir e implementar o conjunto completo de métricas e ações. Relacionar cada valor à origem persistida e aos eventos do provedor, distinguir estados de cobrança, valores brutos e líquidos, cancelamentos e reembolsos, respeitar moeda, fuso e período e permitir conferir os registros de origem. Não apresentar projeções como receita realizada.
+- **Operações:** implementar cancelamento e reembolso reais conforme as capacidades e regras do provedor e o estado da fatura/pagamento, com validação no servidor, autorização administrativa, confirmação clara da ação, idempotência, prevenção de duplicidade, tratamento de falhas, trilha de auditoria e reconciliação por webhooks. Preservar registros fiscais e histórico financeiro; não converter exclusão de registro local em cancelamento ou reembolso fictício.
+- **Validação e entrega:** validar métricas diárias, mensais e anuais contra dados reais, filtros, detalhamento, CRUD aplicável, cancelamento, reembolso e seus efeitos na fatura, assinatura e indicadores. Usar os ambientes oficiais de teste dos provedores para operações de QA e registrar claramente o que foi comprovado; não inventar transações nem executar movimentação de clientes reais como teste. Conferir interface responsiva, acessibilidade, permissões e gates; commit e push próprios na main e atualização deste painel.
+
+- **Publicação intermediária solicitada pelo usuário em 2026-10-25:** commit `e80a9558442178998f24dd7bbe388bb8342cb216` · push `8b8dbe6..e80a955 main -> main`, confirmado. **A tarefa 100 permanece em andamento**; este registro não a transfere para as finalizadas. Nenhuma branch ou worktree criada.
+- **Progresso publicado:** aba Faturamento com filtros, séries diárias/mensais/anuais, valores separados por moeda e ambiente, detalhes e ações confirmadas; seis tabelas financeiras na migração 044; bruto/taxas/líquido vindos dos movimentos de saldo; sincronização paginada e retomável; intenção e auditoria antes de operações externas, nonce estável, controle de concorrência e recuperação de resultado ambíguo. Webhooks reconciliados pela API, sem substituir registro fiscal por exclusão local. A renovação da assinatura tem controle separado do cancelamento/reembolso da fatura. Implementação e limites em `docs/faturamento-administrativo.md`.
+- **Evidências locais do progresso:** 573 unitários (71 arquivos), 375 integrações (43 arquivos), formatação, lint sem avisos, tipos e build aprovados. Novos testes: 19 de moeda/filtros, 11 de MySQL/espelhos e 14 por contrato HTTP local da SDK, sem alegar transações reais. QA de produção com base financeira vazia: APIs administrativas 200, visitante 401, paciente 403, sincronização sem chaves recusada 503 sem criar registros; URL da aba, teclado, recarga, preservação de rascunho entre abas, filtros e retentativa após falha de rede. 1440/390/320 px sem overflow; axe 28 regras aprovadas e nenhuma exceção JavaScript. Conta de QA removida; nenhum movimento financeiro fabricado no runtime. Evidências `/tmp/lyra100-*.log` e capturas.
+- **Pendências para encerrar:** chave e segredo oficial de teste da Stripe ausentes no processo, `.env.local` e painel; conferir cancelamento/reembolso/sincronização reais e seus webhooks no ambiente oficial, além da interface com esses movimentos. Completar paginação dos históricos de operações/refunds do modal além dos 100 atualmente informados e concluir revisão da exportação LGPD dos novos espelhos vinculáveis ao titular. Não declarar operações externas comprovadas usando os contratos locais. As tarefas 101–103 e 105–107 não integram esta publicação.
 
 ### BLOQUEADAS
 
@@ -93,14 +104,6 @@ Nenhuma tarefa em andamento.
 ---
 
 ---
-
-### 100 · Aba Faturamento no dashboard e gestão financeira completa
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** incluir no dashboard administrativo uma aba **“Faturamento”**, com o mesmo visual das abas de **“Gestão de Conteúdo Dinâmico”** em `http://localhost:3000/admin/content`, conforme anexo. Reunir todas as métricas de faturamento **por dia, mês e ano**, gestão total do faturamento, **cancelamento de faturas, reembolsos e demais operações financeiras pertinentes**.
-- **Dados e recursos reais:** inventariar cobrança, assinaturas, faturas, pagamentos e provedores existentes; pesquisar profundamente referências de 2026 e APIs oficiais antes de definir e implementar o conjunto completo de métricas e ações. Relacionar cada valor à origem persistida e aos eventos do provedor, distinguir estados de cobrança, valores brutos e líquidos, cancelamentos e reembolsos, respeitar moeda, fuso e período e permitir conferir os registros de origem. Não apresentar projeções como receita realizada.
-- **Operações:** implementar cancelamento e reembolso reais conforme as capacidades e regras do provedor e o estado da fatura/pagamento, com validação no servidor, autorização administrativa, confirmação clara da ação, idempotência, prevenção de duplicidade, tratamento de falhas, trilha de auditoria e reconciliação por webhooks. Preservar registros fiscais e histórico financeiro; não converter exclusão de registro local em cancelamento ou reembolso fictício.
-- **Validação e entrega:** validar métricas diárias, mensais e anuais contra dados reais, filtros, detalhamento, CRUD aplicável, cancelamento, reembolso e seus efeitos na fatura, assinatura e indicadores. Usar os ambientes oficiais de teste dos provedores para operações de QA e registrar claramente o que foi comprovado; não inventar transações nem executar movimentação de clientes reais como teste. Conferir interface responsiva, acessibilidade, permissões e gates; commit e push próprios na main e atualização deste painel.
 
 ### 101 · Transferir Registros fiscais para a aba Fiscal do dashboard
 
