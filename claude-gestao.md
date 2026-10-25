@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **85%** |
+| Progresso          | `████████████████░░░░` **86%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 94                             |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 95                             |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 2                              |
 | ⚪ A iniciar       | 14                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-24                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (94 ÷ 111 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (95 ÷ 111 ≈ 86%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,14 +51,7 @@
 
 ### ANDAMENTO
 
-### 92 · Bloquear e desbloquear usuários na gestão administrativa
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
-- **Pedido do usuário:** em `http://localhost:3000/admin/users`, no menu de três pontos **“Ações”**, acrescentar **“Bloquear”** quando o usuário não estiver bloqueado e **“Desbloquear”** quando estiver bloqueado.
-- **Critérios:** conferir o estado e a infraestrutura existentes antes de alterar; implementar transição persistente real e autorização no servidor. Verificar o efeito do bloqueio no login, nas sessões e nas APIs protegidas, o restabelecimento de acesso após desbloquear, os estados da interface e a proteção contra bloqueio administrativo que inviabilize recuperar a administração.
-- **Validação:** CRUD e fluxo completo com contas de teste identificadas, sem afetar usuários reais; tentar acesso não autorizado, recarregar a página, conferir persistência e alternância da ação, teclado e mobile/desktop. Executar gates e publicar commit e push próprios na main.
-
-- **Implementado e validado em 2026-10-24, aguardando publicação:** migração 036, bloqueio persistente, revogação durável dos cookies anteriores, recusa de login após conferir senha, desbloqueio com novo login, menu e confirmação no padrão existente, proteção contra autobloqueio e bloqueio cruzado concorrente. Exclusão considera somente administradores ativos; troca de e-mail preserva a versão da sessão. Gates passaram: 528 unitários, 211 integrações, tipos, lint, formato e build. QA de produção pelo Chromium confirmou persistência após recarga, 403 no login, 401 em APIs, retorno com novo login, teclado e diálogos sem estouro em 1440/390/320 px. Detalhes e limites em `docs/bloqueio-de-contas.md`.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -1724,6 +1717,17 @@
 
 - **Implementação em 2026-10-24:** migração 035 para Administrador privado com todos os entitlements atuais habilitados e ilimitados; concessão somente à conta canônica designada, sem promover papel. Bootstrap e reparação de assinatura preservam cobrança externa; catálogos e preços comerciais excluem o plano interno, checkout e atribuição indevida são recusados. Cadastro público Free preservado; fluxo administrativo inexistente foi acrescentado com Free e conta comum na mesma transação. Matriz reorganizada responsivamente, sem redesenhar outras páginas.
 - **Evidências:** 528 unitários, 206 integrações e mais 14 verificações focadas após a revisão final; tipos, lint, formatação e build aprovados. QA HTTP/browser comprovou quatro planos administrativos, plano privado ausente da landing, cadastro administrativo Free, recusa de atribuição a outra conta, bloqueio do chat Free por entitlement e restauração dos valores. Matriz em 1440/390/320 px sem overflow ou rolagem horizontal; contas de QA excluídas. Documentação em `docs/plano-administrador.md`, logs `/tmp/lyra91-*.log` e capturas `/tmp/lyra91-*.png`. Cobertura integral da matriz continua na tarefa 96, conforme escopo original; regra de perfil da tarefa 104 preservada. **Commit:** `f07c6f1` · **Push:** `23b7b64..f07c6f1 main -> main`, confirmado.
+
+### 92 · Bloquear e desbloquear usuários na gestão administrativa
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22.
+- **Pedido do usuário:** em `http://localhost:3000/admin/users`, no menu de três pontos **“Ações”**, acrescentar **“Bloquear”** quando o usuário não estiver bloqueado e **“Desbloquear”** quando estiver bloqueado.
+- **Critérios:** conferir o estado e a infraestrutura existentes antes de alterar; implementar transição persistente real e autorização no servidor. Verificar o efeito do bloqueio no login, nas sessões e nas APIs protegidas, o restabelecimento de acesso após desbloquear, os estados da interface e a proteção contra bloqueio administrativo que inviabilize recuperar a administração.
+- **Validação:** CRUD e fluxo completo com contas de teste identificadas, sem afetar usuários reais; tentar acesso não autorizado, recarregar a página, conferir persistência e alternância da ação, teclado e mobile/desktop. Executar gates e publicar commit e push próprios na main.
+
+- **Implementado e validado em 2026-10-24:** migração 036, bloqueio persistente, revogação durável dos cookies anteriores, recusa de login após conferir senha, desbloqueio com novo login, menu e confirmação no padrão existente, proteção contra autobloqueio e bloqueio cruzado concorrente. Exclusão considera somente administradores ativos; troca de e-mail preserva a versão da sessão. Gates passaram: 528 unitários, 211 integrações, tipos, lint, formato e build. QA de produção pelo Chromium confirmou persistência após recarga, 403 no login, 401 em APIs, retorno com novo login, teclado e diálogos sem estouro em 1440/390/320 px. Detalhes e limites em `docs/bloqueio-de-contas.md`.
+
+- **Commit:** `4ce602e` · **Push:** `b9ccc0b..4ce602e main -> main` (confirmado).
 
 ### 104 · Edição dos próprios dados para usuários de todos os planos
 
