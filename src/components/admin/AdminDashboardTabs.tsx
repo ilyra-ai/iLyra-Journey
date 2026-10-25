@@ -1,7 +1,8 @@
 'use client';
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-/** Mesmos primitivos e disposição da Gestão de Conteúdo. Abas só entram com conteúdo implementado. */
+/** Mesmos primitivos da Gestão de Conteúdo; mantém estados das abas visitadas. */
 export function AdminDashboardTabs({
   visaoGeral,
   abas = [],
@@ -13,8 +14,22 @@ export function AdminDashboardTabs({
     { chave: 'visao-geral', nome: 'Visão geral', conteudo: visaoGeral },
     ...abas,
   ];
+  const router = useRouter(),
+    params = useSearchParams(),
+    pathname = usePathname();
+  const pedida = params.get('aba') ?? 'visao-geral',
+    selecionada = todas.some((a) => a.chave === pedida)
+      ? pedida
+      : 'visao-geral';
+  const [visitadas, setVisitadas] = useState<string[]>([]);
+  function mudar(value: string) {
+    setVisitadas((v) => [...new Set([...v, selecionada, value])]);
+    const q = new URLSearchParams(params);
+    q.set('aba', value);
+    router.replace(pathname + '?' + q.toString(), { scroll: false });
+  }
   return (
-    <Tabs defaultValue="visao-geral">
+    <Tabs value={selecionada} onValueChange={mudar}>
       <TabsList className="flex h-auto w-full flex-wrap justify-start">
         {todas.map((a) => (
           <TabsTrigger key={a.chave} value={a.chave}>
@@ -23,7 +38,13 @@ export function AdminDashboardTabs({
         ))}
       </TabsList>
       {todas.map((a) => (
-        <TabsContent key={a.chave} value={a.chave} className="mt-6">
+        <TabsContent
+          key={a.chave}
+          value={a.chave}
+          forceMount={visitadas.includes(a.chave) ? true : undefined}
+          hidden={a.chave !== selecionada}
+          className={a.chave === selecionada ? 'mt-6' : 'hidden'}
+        >
           {a.conteudo}
         </TabsContent>
       ))}

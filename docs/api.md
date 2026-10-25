@@ -16,6 +16,10 @@ Todas as rotas ficam em `src/app/api/**/route.ts` e rodam no runtime Node.js. A 
 - **Recursos do plano:** o que o plano vigente não habilita (`plan_entitlements`) responde **403** com "O plano X não inclui Y". Em `/api/data/[table]`, leitura e escrita de `goals`, `ai_plans`, `appointments` (`appointments_active`) e `professionals` (`professionals_total`) e leitura de `ai_tips` exigem o recurso; `/api/semana` omite as metas sem `goal_progress_tracking`. Administradores não dependem do plano. No app, a mesma regra esconde as páginas e os atalhos: `src/lib/plans/rotas.ts` (`RECURSOS_DA_ROTA`) e o hook `useRotaLiberada`.
 - **Cadastro:** a conta, o perfil (`onboarding_completed = false`), os aceites LGPD e a assinatura Free (`source = auth_register`) nascem na mesma transação.
 
+## Faturamento administrativo em andamento
+
+A aba `/admin/dashboard?aba=faturamento` usa `GET /api/admin/faturamento` e `/saldos`, com filtros UTC, ambiente, provedor, moeda e agrupamento diário/mensal/anual. Detalhes, reconciliação, ações confirmadas e sincronização paginada ficam sob `/api/admin/faturamento`. Todas as rotas exigem administrador; os espelhos são separados dos registros fiscais originais. A tarefa 100 ainda está em andamento: operações reais no ambiente oficial Stripe não foram comprovadas sem credenciais, e existem pendências documentadas de histórico e exportação. Contratos, evidências e limites em [faturamento-administrativo.md](./faturamento-administrativo.md).
+
 ## Dashboard administrativo
 
 `GET /api/admin/dashboard` retorna indicadores calculados no MySQL, comparação com período anterior, séries, base atual, uso de 14 áreas e eventos paginados. Exige administrador no servidor e responde `no-store`. Datas UTC inclusivas, até 366 dias, filtros por plano **atual** e agrupamento diário/semanal/mensal. `detalhe` e `pagina` permitem conferir os registros com a mesma população, sem textos privados ou valores clínicos. Contrato, fórmulas, fontes, pesquisa e limites em [dashboard-administrativo.md](./dashboard-administrativo.md).

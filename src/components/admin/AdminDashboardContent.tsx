@@ -1,4 +1,5 @@
 'use client';
+import { AdminBillingContent } from './AdminBillingContent';
 import * as React from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -298,7 +299,20 @@ function Indicador({
   );
 }
 export function AdminDashboardContent() {
-  return <AdminDashboardTabs visaoGeral={<VisaoGeral />} />;
+  return (
+    <React.Suspense fallback={<Skeleton className="h-48 w-full" />}>
+      <AdminDashboardTabs
+        visaoGeral={<VisaoGeral />}
+        abas={[
+          {
+            chave: 'faturamento',
+            nome: 'Faturamento',
+            conteudo: <AdminBillingContent />,
+          },
+        ]}
+      />
+    </React.Suspense>
+  );
 }
 function VisaoGeral() {
   const { session } = useAuth();

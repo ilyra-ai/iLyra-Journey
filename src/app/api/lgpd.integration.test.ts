@@ -1,3 +1,4 @@
+import { iniciarContratoStripe } from '../../../tests/support/contrato-http-stripe';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { mkdir, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -31,8 +32,8 @@ import { SESSION_COOKIE_NAME } from '@/lib/auth/session';
 
 // LGPD (tarefa 28) contra o MySQL real: consentimento, portabilidade,
 // segregação dos dados do titular, registros fiscais e exclusão da conta.
-// As faturas chegam por webhook assinado localmente pela SDK da Stripe (sem
-// rede), como no teste do serviço de cobrança.
+// Faturas chegam por webhook assinado pela SDK; a reconciliação financeira
+// lê a API por contrato HTTP local. Não comprova transação externa na Stripe.
 
 const ORIGEM = { 'x-forwarded-for': '203.0.113.28' };
 const SENHA = 'Senha-Lgpd-2026';
@@ -45,6 +46,7 @@ const precoCareAnual = `price_lgpd_${randomUUID().slice(0, 8)}`;
 const sdk = new Stripe('sk_test_somente_assinatura_local');
 
 let admin: UsuarioDeTeste;
+let transporte: Awaited<ReturnType<typeof iniciarContratoStripe>>;
 
 async function cadastrar(nome: string) {
   const email = `lgpd-${nome}-${randomUUID().slice(0, 8)}@teste.lyra.local`;
@@ -82,6 +84,11 @@ async function faturaPaga(options: {
   const fatura = {
     id: `in_${randomUUID().replace(/-/g, '').slice(0, 20)}`,
     object: 'invoice',
+    livemode: false,
+    collection_method: 'charge_automatically',
+    amount_paid: 29900,
+    amount_due: 29900,
+    amount_remaining: 0,
     number: `LYRA-${randomUUID().slice(0, 6).toUpperCase()}`,
     customer: options.clienteId,
     customer_name: 'Comprador Fiscal',
@@ -121,6 +128,7 @@ async function faturaPaga(options: {
       ],
     },
   };
+  transporte.faturas.set(fatura.id, fatura);
   const payload = JSON.stringify({
     id: `evt_${randomUUID().replace(/-/g, '')}`,
     object: 'event',
@@ -140,6 +148,7 @@ async function faturaPaga(options: {
 
 beforeAll(async () => {
   process.env.STRIPE_SECRET_KEY = 'sk_test_somente_assinatura_local';
+  transporte = await iniciarContratoStripe(process.env.STRIPE_SECRET_KEY);
   process.env.STRIPE_WEBHOOK_SECRET = segredoWebhook;
   // Preço do Care anual no ambiente de teste da Stripe (Admin → Pagamentos).
   await executeStatement(
@@ -154,7 +163,8 @@ beforeAll(async () => {
   admin = await criarUsuario('admin', 'AdminLgpd');
 });
 
-afterAll(() => {
+afterAll(async () => {
+  await transporte?.close();
   for (const [chave, valor] of Object.entries(AMBIENTE_ORIGINAL)) {
     if (valor === undefined) {
       delete process.env[chave];

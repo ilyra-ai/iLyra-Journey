@@ -1,3 +1,4 @@
+import { receberEventoFinanceiro } from '@/lib/billing/admin/provedor';
 import { contaAdministrativaDesignada } from '@/lib/plans/service';
 import Stripe from 'stripe';
 import type { PoolConnection, RowDataPacket } from 'mysql2/promise';
@@ -1159,6 +1160,7 @@ export async function processStripeWebhook(options: {
   });
 
   try {
+    await receberEventoFinanceiro(event);
     switch (event.type) {
       case 'checkout.session.completed': {
         const checkoutSession = event.data.object as Stripe.Checkout.Session;

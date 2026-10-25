@@ -17,8 +17,10 @@ const globalStripeState = globalThis as GlobalStripeState;
  * Cliente Stripe com as chaves em uso: as do painel do administrador ou, na
  * falta delas, STRIPE_SECRET_KEY do .env.local.
  */
-export async function getStripeClient(): Promise<Stripe> {
-  const { chaveSecreta } = await credenciaisDoStripe();
+export async function getStripeClient(credenciais?: {
+  chaveSecreta: string | null;
+}): Promise<Stripe> {
+  const { chaveSecreta } = credenciais ?? (await credenciaisDoStripe());
 
   if (!chaveSecreta) {
     throw new HttpError(
