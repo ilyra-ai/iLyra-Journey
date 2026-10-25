@@ -24,9 +24,9 @@
 | Progresso          | `████████████████░░░░` **85%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 94                             |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 2                              |
-| ⚪ A iniciar       | 15                             |
+| ⚪ A iniciar       | 14                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-24                     |
 
@@ -51,7 +51,14 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 92 · Bloquear e desbloquear usuários na gestão administrativa
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
+- **Pedido do usuário:** em `http://localhost:3000/admin/users`, no menu de três pontos **“Ações”**, acrescentar **“Bloquear”** quando o usuário não estiver bloqueado e **“Desbloquear”** quando estiver bloqueado.
+- **Critérios:** conferir o estado e a infraestrutura existentes antes de alterar; implementar transição persistente real e autorização no servidor. Verificar o efeito do bloqueio no login, nas sessões e nas APIs protegidas, o restabelecimento de acesso após desbloquear, os estados da interface e a proteção contra bloqueio administrativo que inviabilize recuperar a administração.
+- **Validação:** CRUD e fluxo completo com contas de teste identificadas, sem afetar usuários reais; tentar acesso não autorizado, recarregar a página, conferir persistência e alternância da ação, teclado e mobile/desktop. Executar gates e publicar commit e push próprios na main.
+
+- **Implementado e validado em 2026-10-24, aguardando publicação:** migração 036, bloqueio persistente, revogação durável dos cookies anteriores, recusa de login após conferir senha, desbloqueio com novo login, menu e confirmação no padrão existente, proteção contra autobloqueio e bloqueio cruzado concorrente. Exclusão considera somente administradores ativos; troca de e-mail preserva a versão da sessão. Gates passaram: 528 unitários, 211 integrações, tipos, lint, formato e build. QA de produção pelo Chromium confirmou persistência após recarga, 403 no login, 401 em APIs, retorno com novo login, teclado e diálogos sem estouro em 1440/390/320 px. Detalhes e limites em `docs/bloqueio-de-contas.md`.
 
 ### BLOQUEADAS
 
@@ -85,13 +92,6 @@ Nenhuma tarefa em andamento.
 ## Tópico 3 · Tarefas a Iniciar
 
 ---
-
-### 92 · Bloquear e desbloquear usuários na gestão administrativa
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** em `http://localhost:3000/admin/users`, no menu de três pontos **“Ações”**, acrescentar **“Bloquear”** quando o usuário não estiver bloqueado e **“Desbloquear”** quando estiver bloqueado.
-- **Critérios:** conferir o estado e a infraestrutura existentes antes de alterar; implementar transição persistente real e autorização no servidor. Verificar o efeito do bloqueio no login, nas sessões e nas APIs protegidas, o restabelecimento de acesso após desbloquear, os estados da interface e a proteção contra bloqueio administrativo que inviabilize recuperar a administração.
-- **Validação:** CRUD e fluxo completo com contas de teste identificadas, sem afetar usuários reais; tentar acesso não autorizado, recarregar a página, conferir persistência e alternância da ação, teclado e mobile/desktop. Executar gates e publicar commit e push próprios na main.
 
 ### 93 · Cinco novas funcionalidades relevantes na gestão de usuários e perfis
 

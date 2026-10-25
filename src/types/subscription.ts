@@ -123,6 +123,7 @@ export interface AdminUserPlanSummary {
 }
 
 export interface AdminUserListItem {
+  blockedAt: string | null;
   id: string;
   firstName: string | null;
   lastName: string | null;

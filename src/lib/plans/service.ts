@@ -106,6 +106,7 @@ interface UserIdentityRow {
 }
 
 interface AdminUserListRow {
+  blocked_at: string | null;
   id: string;
   first_name: string | null;
   last_name: string | null;
@@ -964,12 +965,14 @@ export async function listAdminUsersWithSubscriptions(options: {
           p.onboarding_completed,
           p.created_at,
           p.avatar_url,
+          u.blocked_at,
           p.role,
           sp.plan_key,
           sp.name AS plan_name,
           us.billing_interval,
           us.status AS subscription_status
         FROM profiles p
+        INNER JOIN users u ON u.id = p.id
         LEFT JOIN user_subscriptions us
           ON us.id = (
             SELECT us2.id
@@ -999,6 +1002,7 @@ export async function listAdminUsersWithSubscriptions(options: {
   ]);
 
   const users: AdminUserListItem[] = rows.map((row) => ({
+    blockedAt: row.blocked_at,
     id: row.id,
     firstName: row.first_name,
     lastName: row.last_name,

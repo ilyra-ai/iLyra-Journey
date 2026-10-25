@@ -1,3 +1,4 @@
+import { travarAdministracao } from '@/lib/auth/bloqueio';
 import { rm } from 'node:fs/promises';
 
 import type { PoolConnection, RowDataPacket } from 'mysql2/promise';
@@ -253,7 +254,7 @@ const TABELAS_DO_TITULAR = [
 
 export async function exportarDadosDoTitular(userId: string) {
   const contas = await queryRows<RowDataPacket>(
-    'SELECT id, email, created_at, updated_at FROM users WHERE id = ? LIMIT 1',
+    'SELECT id, email, blocked_at, created_at, updated_at FROM users WHERE id = ? LIMIT 1',
     [userId]
   );
   if (!contas[0]) {
@@ -349,9 +350,10 @@ export async function excluirConta(userId: string) {
 
 async function validarOuExcluirConta(userId: string, excluir: boolean) {
   await withTransaction(async (connection) => {
+    await travarAdministracao(connection);
     const [contas] = await connection.query<RowDataPacket[]>(
       `
-        SELECT u.id, p.role
+        SELECT u.id, p.role, u.blocked_at
         FROM users u
         LEFT JOIN profiles p ON p.id = u.id
         WHERE u.id = ?
@@ -385,13 +387,13 @@ async function validarOuExcluirConta(userId: string, excluir: boolean) {
       );
     }
 
-    if (conta.role === 'admin') {
+    if (conta.role === 'admin' && !conta.blocked_at) {
       const [admins] = await connection.query<RowDataPacket[]>(
-        "SELECT COUNT(*) AS total FROM profiles WHERE role = 'admin' FOR UPDATE"
+        "SELECT u.id FROM users u JOIN profiles p ON p.id = u.id WHERE p.role = 'admin' AND u.blocked_at IS NULL FOR UPDATE"
       );
-      if (Number(admins[0]?.total ?? 0) <= 1) {
+      if (admins.length <= 1) {
         throw new HttpError(
-          'Esta é a única conta de administrador. Promova outra pessoa a administradora antes de excluí-la.',
+          'Esta é a única conta de administrador ativo. Promova outra pessoa a administradora antes de excluí-la.',
           409
         );
       }

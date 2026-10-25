@@ -36,6 +36,8 @@ import {
   Trash2,
   CheckCircle,
   Eye,
+  LockKeyhole,
+  LockKeyholeOpen,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -93,7 +95,11 @@ function extractApiError(payload: unknown) {
 }
 
 export function UserManagementContent() {
-  const { db } = useAuth();
+  const { db, session } = useAuth();
+  const [acessoAlvo, setAcessoAlvo] = React.useState<AdminUserListItem | null>(
+    null
+  );
+  const [alterandoAcesso, setAlterandoAcesso] = React.useState(false);
   const [users, setUsers] = React.useState<AdminUserListItem[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -172,6 +178,37 @@ export function UserManagementContent() {
       controle.abort();
     };
   }, [fetchUsers]);
+
+  const alterarAcesso = async () => {
+    if (!acessoAlvo || alterandoAcesso) return;
+    setAlterandoAcesso(true);
+    try {
+      const resposta = await buscarJson(
+        `/api/admin/users/${acessoAlvo.id}/bloqueio`,
+        {
+          method: 'PATCH',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ blocked: !acessoAlvo.blockedAt }),
+        }
+      );
+      if (!resposta.ok) throw new Error(resposta.falha.message);
+      toast.success(
+        acessoAlvo.blockedAt
+          ? 'Acesso restabelecido. A pessoa já pode entrar novamente.'
+          : 'Conta bloqueada e sessões anteriores encerradas.'
+      );
+      setAcessoAlvo(null);
+      await fetchUsers();
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : 'Não foi possível alterar o acesso.'
+      );
+    } finally {
+      setAlterandoAcesso(false);
+    }
+  };
 
   const handleSort = (column: SortColumn) => {
     setSort((prev) => ({
@@ -371,6 +408,9 @@ export function UserManagementContent() {
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-wrap gap-2">
+                          {user.blockedAt && (
+                            <Badge variant="destructive">Bloqueado</Badge>
+                          )}
                           {user.onboardingCompleted ? (
                             <Badge variant="success">Completo</Badge>
                           ) : (
@@ -418,6 +458,21 @@ export function UserManagementContent() {
                               {user.onboardingCompleted
                                 ? 'Redefinir Onboarding'
                                 : 'Completar Onboarding'}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              disabled={user.id === session?.user.id}
+                              onSelect={() => setAcessoAlvo(user)}
+                            >
+                              {user.blockedAt ? (
+                                <LockKeyholeOpen className="mr-2 h-4 w-4" />
+                              ) : (
+                                <LockKeyhole className="mr-2 h-4 w-4" />
+                              )}
+                              {user.blockedAt
+                                ? 'Desbloquear'
+                                : user.id === session?.user.id
+                                  ? 'Bloquear (sua conta protegida)'
+                                  : 'Bloquear'}
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
@@ -478,6 +533,45 @@ export function UserManagementContent() {
           onSubscriptionUpdated={() => fetchUsers()}
         />
       )}
+
+      <AlertDialog
+        open={Boolean(acessoAlvo)}
+        onOpenChange={(open) => {
+          if (!open && !alterandoAcesso) setAcessoAlvo(null);
+        }}
+      >
+        <AlertDialogContent aria-busy={alterandoAcesso}>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {acessoAlvo?.blockedAt ? 'Desbloquear conta?' : 'Bloquear conta?'}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="break-words">
+              {acessoAlvo?.email}.{' '}
+              {acessoAlvo?.blockedAt
+                ? 'A pessoa poderá entrar novamente com sua senha. As sessões encerradas continuarão inválidas.'
+                : 'A pessoa perderá o acesso e suas sessões anteriores serão encerradas. Seus dados e sua assinatura serão preservados. O bloqueio não cancela cobranças. Você poderá desbloquear depois.'}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={alterandoAcesso}>
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              disabled={alterandoAcesso}
+              onClick={(event) => {
+                event.preventDefault();
+                void alterarAcesso();
+              }}
+            >
+              {alterandoAcesso
+                ? 'Salvando…'
+                : acessoAlvo?.blockedAt
+                  ? 'Desbloquear'
+                  : 'Bloquear'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       <AlertDialog open={isDeleteAlertOpen} onOpenChange={setIsDeleteAlertOpen}>
         <AlertDialogContent>

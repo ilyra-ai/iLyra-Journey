@@ -1,3 +1,4 @@
+import { HttpError } from '@/lib/http-error';
 import { randomBytes } from 'node:crypto';
 
 import { after, NextResponse } from 'next/server';
@@ -40,6 +41,8 @@ const loginSchema = z.object({
 });
 
 interface UserRow {
+  blocked_at: string | null;
+  session_version: number;
   id: string;
   email: string;
   password_hash: string;
@@ -76,6 +79,8 @@ export async function POST(request: Request) {
           u.id,
           u.email,
           u.password_hash,
+          u.blocked_at,
+          u.session_version,
           p.role,
           p.first_name,
           p.last_name,
@@ -103,6 +108,12 @@ export async function POST(request: Request) {
         { status: 401 }
       );
     }
+    if (user.blocked_at) {
+      throw new HttpError(
+        'Sua conta está bloqueada. Entre em contato com a administração para recuperar o acesso.',
+        403
+      );
+    }
     await zerarLimite(LIMITE_LOGIN_POR_CONTA, payload.email);
 
     const sessionOptions = { persistent: payload.remember === true };
@@ -111,6 +122,7 @@ export async function POST(request: Request) {
         sub: user.id,
         email: user.email,
         role: user.role,
+        sessionVersion: user.session_version,
       },
       sessionOptions
     );

@@ -9,6 +9,7 @@ interface SessionPayload extends JWTPayload {
   sub: string;
   email: string;
   role: string;
+  sessionVersion?: number;
 }
 
 // HS256 exige chave de pelo menos 256 bits (RFC 7518, seção 3.2).
@@ -66,6 +67,8 @@ export async function verifySessionToken(
       sub: String(payload.sub),
       email: String(payload.email),
       role: String(payload.role),
+      sessionVersion:
+        typeof payload.sessionVersion === 'number' ? payload.sessionVersion : 0,
     };
   } catch {
     return null;

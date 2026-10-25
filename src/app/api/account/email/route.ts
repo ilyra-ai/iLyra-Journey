@@ -8,6 +8,7 @@ import {
   sessaoEhPersistente,
   setSessionCookie,
   signSessionToken,
+  verifySessionToken,
 } from '@/lib/auth/session';
 import { HttpError } from '@/lib/http-error';
 import { lerJson, respostaDeErro } from '@/lib/http/api';
@@ -97,6 +98,9 @@ export async function PATCH(request: Request) {
         sub: session.user.id,
         email: payload.newEmail,
         role: session.user.role,
+        sessionVersion: tokenAtual
+          ? (await verifySessionToken(tokenAtual))?.sessionVersion
+          : 0,
       },
       opcoes
     );

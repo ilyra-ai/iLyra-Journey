@@ -8,6 +8,8 @@ import { HttpError } from '@/lib/http-error';
 import { AppSession } from '@/types/app-session';
 
 interface ProfileRow {
+  blocked_at: string | null;
+  session_version: number;
   email: string;
   role: string;
   first_name: string | null;
@@ -48,7 +50,7 @@ export async function getServerSession(): Promise<AppSession | null> {
   // ter sessão válida.
   const profiles = await queryRows<ProfileRow>(
     `
-      SELECT u.email, p.role, p.first_name, p.last_name, p.onboarding_completed
+      SELECT u.email, u.blocked_at, u.session_version, p.role, p.first_name, p.last_name, p.onboarding_completed
       FROM users u
       INNER JOIN profiles p ON p.id = u.id
       WHERE u.id = ?
@@ -57,7 +59,11 @@ export async function getServerSession(): Promise<AppSession | null> {
     [payload.sub]
   );
   const profile = profiles[0];
-  if (!profile) {
+  if (
+    !profile ||
+    profile.blocked_at ||
+    profile.session_version !== (payload.sessionVersion ?? 0)
+  ) {
     return null;
   }
 
