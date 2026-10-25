@@ -310,6 +310,17 @@ export async function exportarDadosDoTitular(userId: string) {
     assinaturas,
     clientes_de_cobranca: clientesDeCobranca,
     agenda_no_calendario: agendaNoCalendario,
+    imagens_do_chat: (
+      await queryRows<RowDataPacket>(
+        `SELECT i.turn_id, i.request_kind, i.status, i.prompt, i.provider_preset, i.model_name, i.image_data, i.mime_type, i.width, i.height, i.error_message, i.created_at, i.updated_at FROM chat_generated_images i JOIN chat_turns t ON t.id = i.turn_id WHERE t.user_id = ?`,
+        [userId]
+      )
+    ).map(({ image_data, ...linha }) => ({
+      ...linha,
+      image_base64: Buffer.isBuffer(image_data)
+        ? image_data.toString('base64')
+        : null,
+    })),
     memoria_graphiti: await exportarMemorias(userId),
     ...tabelas,
   };

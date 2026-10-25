@@ -1,3 +1,13 @@
+import {
+  gerarImagemDoTurno,
+  lerImagemDoTurno,
+  metadadosDaImagem,
+} from '@/lib/chat/imagens';
+import {
+  pedidoDeImagemParaConversa,
+  solicitouCriacaoDeImagem,
+} from '@/lib/chat/pedido-de-imagem';
+import { HttpError } from '@/lib/http-error';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -93,10 +103,29 @@ export async function POST(request: Request) {
       conversationId && turnId
         ? { conversationId, turnId, query, regenerate }
         : null;
+    if (solicitouCriacaoDeImagem(query) && !historico)
+      throw new HttpError(
+        'Envie o pedido de imagem em uma conversa para salvar e acessar o arquivo com privacidade.',
+        400
+      );
     if (historico) {
       const gravada = await respostaJaGravada(usuarioId, historico);
       if (gravada !== null) {
-        return NextResponse.json({ response: gravada, conversationId, turnId });
+        let imagem = null;
+        try {
+          imagem = metadadosDaImagem(
+            await lerImagemDoTurno(usuarioId, historico.turnId)
+          );
+        } catch (erro) {
+          if (!(erro instanceof HttpError) || erro.statusCode !== 404)
+            throw erro;
+        }
+        return NextResponse.json({
+          response: gravada,
+          conversationId,
+          turnId,
+          imagem,
+        });
       }
     }
 
@@ -290,13 +319,33 @@ export async function POST(request: Request) {
           : null),
     });
 
-    const response = expressarComoLyra(
-      resultado.origem === 'modelo' ? resultado.texto : fallbackResponse,
-      query
-    );
-    if (turno) await concluirTurno(usuarioId, turno, response, memoriaPrivada);
+    const pedidoDeImagem = pedidoDeImagemParaConversa(query, mapaNatal);
+    const response =
+      pedidoDeImagem?.tipo === 'solicitada'
+        ? 'Pedido de imagem registrado. Confira o resultado abaixo.'
+        : expressarComoLyra(
+            resultado.origem === 'modelo' ? resultado.texto : fallbackResponse,
+            query
+          );
+    let imagem = null;
+    if (turno) {
+      await concluirTurno(
+        usuarioId,
+        turno,
+        response,
+        memoriaPrivada,
+        pedidoDeImagem
+      );
+      if (pedidoDeImagem)
+        imagem = await gerarImagemDoTurno(
+          session,
+          turno.turnId,
+          memoriaPrivada
+        );
+    }
     return NextResponse.json({
       response,
+      imagem,
       ...(turno ? { conversationId, turnId } : {}),
     });
   } catch (error) {

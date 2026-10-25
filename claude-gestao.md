@@ -24,8 +24,8 @@
 | Progresso          | `████████████████░░░░` **82%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 91                             |
-| 🔵 Em andamento    | 1                              |
-| 🔴 Bloqueadas      | 0                              |
+| 🔵 Em andamento    | 0                              |
+| 🔴 Bloqueadas      | 1                              |
 | ⚪ A iniciar       | 19                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-24                     |
@@ -51,10 +51,18 @@
 
 ### ANDAMENTO
 
+Nenhuma tarefa em andamento.
+
+### BLOQUEADAS
+
 ### 86 · Geração de imagens no chat com modelos conectados
 
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-20 · **Início:** 2026-10-22.
+- **Status:** 🔴 bloqueada somente na validação final de inferência real e QA visual · **Registro:** 2026-10-20 · **Início:** 2026-10-22.
+- **Retomada em 2026-10-24:** arquivos originais de geração, pedido e migração recuperados dos patches do chat anterior e reutilizados após revisão. Integração ao chat, armazenamento privado, retentativa e exportação em validação. Contratos conferidos nos pacotes oficiais do SDK; detalhes em `docs/imagens-do-chat.md`. Validação com modelo gerador real ainda depende de provedor acessível nesta nuvem; solicitado ao usuário sem pedir segredo no chat.
 - **Pedido do usuário:** o chat do app deve permitir criar imagens. Conforme complemento recebido em 2026-10-20, usar o segundo modelo de IA conectado nas configurações do app, que permitem conectar cinco modelos simultaneamente, tanto quando o usuário solicitar uma imagem quanto quando o Motor Lyra fizer a leitura do mapa pessoal, gerando também a imagem do mapa daquele usuário.
+- **Implementação nesta nuvem:** seleção exata do segundo modelo, validação e normalização real de imagens raster, arquivo privado por titular no MySQL, reabertura, download, retentativa, limite de uso, trava por tentativa, privacidade e consentimento, exportação LGPD e exclusão em cascade. Componente de resultado integrado sem redesenhar o chat. SDKs fixados e instalação congelada aprovada; nenhuma exceção à política de dependências acrescentada.
+- **Evidência local:** 599 testes unitários (74 arquivos), 201 integrações (26 arquivos), tipos, lint, formatação, build e instalação congelada passaram. Migração 034 aplicada: 36 migrations na saúde HTTP 200. QA HTTP de produção confirmou login, pedido persistido, mensagem de segundo modelo ausente, reabertura e recusa anônima; conversa temporária removida. Testes de imagem usam PNG real e HTTP controlado, não inferência de um modelo.
+- **Fronteira pendente:** usuário indicou Gemini para o teste real. O requisito seguro `GEMINI_IMAGE_API_KEY` e o destino `generativelanguage.googleapis.com` foram salvos no rascunho; valor não copiado para arquivos, comandos ou logs. É necessário configurar e aplicar essa credencial para consultar modelos e testar geração real. Chromium apresentou falhas do ambiente nas tentativas anteriores de captura; conferência visual mobile/desktop permanece sem comprovação. A tarefa não foi declarada finalizada e não se alegou imagem gerada por IA externa.
 - **Roteamento e mapa pessoal:** conferir a ordem real das cinco conexões e encaminhar a geração de imagens ao segundo modelo configurado, preservando a configuração dos demais. Na leitura do mapa, construir a imagem a partir dos dados reais e autorizados do próprio titular e vinculá-la à leitura e à conversa correspondentes. Não inventar dados do mapa nem substituir o segundo modelo silenciosamente; se ele não estiver configurado, estiver indisponível ou não oferecer geração de imagens, informar a condição e permitir corrigir a conexão e tentar novamente.
 - **Critérios:** inspecionar a configuração e as capacidades reais dos provedores, pesquisar suas APIs oficiais atuais e implementar geração real pelo servidor, verificando a compatibilidade do segundo modelo e exibindo mensagens claras quando a conexão só oferecer texto. Não simular imagens nem atribuir essa capacidade a modelos que não a possuem. Integrar envio do pedido, andamento, falhas e retentativa à experiência simples e responsiva do chat, exibindo o resultado e permitindo baixar a imagem.
 - **Persistência e acesso:** preservar pedido, imagem e referência ao modelo na conversa, com armazenamento real vinculado ao titular, autorização no servidor, validação dos arquivos e limites de uso. Respeitar modo privado e consentimento para provedores externos, incluir os dados na exportação e exclusão da conta e não expor chaves ou imagens privadas em URLs públicas.

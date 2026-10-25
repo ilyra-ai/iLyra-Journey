@@ -1,3 +1,5 @@
+import { metadadosDaImagem } from './imagens';
+import type { PedidoDeImagemDoTurno } from './tipos';
 import { randomUUID } from 'node:crypto';
 import type { ResultSetHeader, RowDataPacket } from 'mysql2/promise';
 import { z } from 'zod';
@@ -105,10 +107,21 @@ export async function lerConversa(
     antes === null ? [id, userId] : [id, userId, antes]
   );
   const pagina = linhas.slice(0, 40).reverse();
+  const imagens = new Map(
+    (pagina.length
+      ? await queryRows<Parameters<typeof metadadosDaImagem>[0]>(
+          `SELECT i.turn_id, i.request_kind, i.status, i.provider_preset, i.model_name, i.width, i.height, i.error_message, i.deadline_at > UTC_TIMESTAMP(3) AS ativa FROM chat_generated_images i JOIN chat_turns t ON t.id = i.turn_id
+     WHERE t.conversation_id = ? AND t.user_id = ? AND t.id IN (?)`,
+          [id, userId, pagina.map((linha) => linha.id)]
+        )
+      : []
+    ).map((linha) => [linha.turn_id, metadadosDaImagem(linha)])
+  );
   return {
     conversa: resumo(conversa),
     turnos: pagina.map((linha) => ({
       id: linha.id,
+      imagem: imagens.get(linha.id) ?? null,
       sequencia: Number(linha.sequence_number),
       pergunta: linha.question,
       resposta: linha.answer,
@@ -263,7 +276,8 @@ export async function concluirTurno(
   userId: string,
   turno: TurnoEmExecucao,
   resposta: string,
-  memoriaPrivada = false
+  memoriaPrivada = false,
+  imagem: PedidoDeImagemDoTurno | null = null
 ) {
   await withTransaction(async (conexao) => {
     const [resultado] = await conexao.execute<ResultSetHeader>(
@@ -282,6 +296,12 @@ export async function concluirTurno(
       'UPDATE chat_conversations SET updated_at = UTC_TIMESTAMP(3) WHERE id = ? AND user_id = ?',
       [turno.conversationId, userId]
     );
+    if (imagem)
+      await conexao.execute(
+        `INSERT IGNORE INTO chat_generated_images (turn_id, request_kind, status, prompt, attempt_id, deadline_at)
+       VALUES (?, ?, 'pendente', ?, ?, UTC_TIMESTAMP(3))`,
+        [turno.turnId, imagem.tipo, imagem.prompt, randomUUID()]
+      );
     // A resposta e o relato entram na mesma transação. Refazer a resposta não
     // duplica o episódio e uma mensagem privada não participa da importação.
     await conexao.execute(

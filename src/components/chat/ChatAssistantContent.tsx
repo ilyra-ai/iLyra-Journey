@@ -1,4 +1,6 @@
 'use client';
+import { ImagemDaConversa } from './ImagemDaConversa';
+import type { ImagemDoTurno } from '@/lib/chat/tipos';
 
 import React, {
   useEffect,
@@ -53,6 +55,7 @@ export interface Message {
   text: string;
   sender: 'user' | 'ai';
   turnoId?: string;
+  imagem?: ImagemDoTurno | null;
 }
 
 const WELCOME_MESSAGE_ID = 'boas-vindas';
@@ -228,6 +231,7 @@ export function ChatAssistantContent({
                 text: turno.resposta,
                 sender: 'ai' as const,
                 turnoId: turno.id,
+                imagem: turno.imagem,
               },
             ]
           : []),
@@ -534,6 +538,12 @@ export function ChatAssistantContent({
                       : undefined
                   }
                 />
+                {msg.imagem ? (
+                  <ImagemDaConversa
+                    key={`${msg.imagem.turnoId}:${msg.imagem.estado}`}
+                    imagem={msg.imagem}
+                  />
+                ) : null}
               </div>
             ))}
 

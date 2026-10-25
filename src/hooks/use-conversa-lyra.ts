@@ -126,6 +126,7 @@ export function useConversaLyra(
               ? {
                   ...turno,
                   resposta: data.response,
+                  imagem: data.imagem,
                   estado: 'concluido',
                   erro: null,
                 }
