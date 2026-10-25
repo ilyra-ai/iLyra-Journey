@@ -24,9 +24,9 @@
 | Progresso          | `████████████████░░░░` **82%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 91                             |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 1                              |
-| ⚪ A iniciar       | 19                             |
+| ⚪ A iniciar       | 18                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-24                     |
 
@@ -51,7 +51,15 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 87 · Estado real dos provedores de IA no painel
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-21.
+- **Implementação e validação em 2026-10-24:** configuração salva identificada separadamente da resposta real. Estados não verificado, verificando, resposta confirmada no último teste, indisponível e antigo; horário da última consulta, validade de dois minutos e retentativa. Edição de conexão, credencial ou modelo invalida resultados; versão da edição impede resposta atrasada de sobrescrever configuração nova. Modelos salvos preservados quando o servidor fecha.
+- **Evidências:** 601 unitários, 202 integrações, tipos, lint, formatação e build aprovados. QA em produção por navegador real confirmou estado inicial desconhecido, catálogo HTTP local, servidor de teste encerrado e erro real de conexão, preservação do modelo e 1440/390/320 px sem overflow. Configuração temporária restaurada; nenhum Jan do usuário foi encerrado. Arquivos `/tmp/lyra87-{unit-final,integration-final,types,lint-final,format-final,build-final}.log` e `/tmp/lyra87-{1440,390,320}.png`. Ajuste final do rótulo “Ordem salva” em validação focada; publicação individual em preparação.
+- **Relato do usuário:** Jan estava fechado, mas Configurações de IA mostrava o provedor online e um modelo. O usuário informou que abriria o Jan em seguida.
+- **Disponibilidade informada posteriormente:** usuário confirmou Jan aberto em `http://127.0.0.1:1337/v1`, com `Gemma-4-E4B-Uncensored-HauhauCS-Aggressive`. Consultar o identificador exato no catálogo durante a validação, sem presumir que o nome abreviado é o identificador da API.
+- **Critérios:** conferir a causa no código e na interface antes de alterar. Distinguir configuração e modelo salvos de disponibilidade confirmada por conexão recente; não apresentar “online” com base somente na seleção persistida ou em resultado antigo. Mostrar indisponibilidade, verificação em andamento e estado ainda não verificado com mensagens claras, data da última checagem e retentativa quando apropriado. Invalidar resultados após mudanças de endereço, credenciais ou modelo e impedir respostas atrasadas de sobrescrever uma conexão mais recente. Preservar configuração e modelo quando o servidor local fechar.
+- **Validação e entrega:** conferir conexão ativa e recusa real, reabertura do provedor, atualização do catálogo e separação entre modelos configurados e disponíveis; não encerrar o Jan do usuário para provocar falha. Aplicar aos provedores locais e em nuvem conforme seus contratos reais. Validar backend, interface desktop/mobile, gates e commit/push individuais na main, sem branches ou worktrees. Implementar após a sequência já autorizada, sem misturar a correção à tarefa 78.
 
 ### BLOQUEADAS
 
@@ -72,14 +80,6 @@ Nenhuma tarefa em andamento.
 ---
 
 ## Tópico 3 · Tarefas a Iniciar
-
-### 87 · Estado real dos provedores de IA no painel
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-21.
-- **Relato do usuário:** Jan estava fechado, mas Configurações de IA mostrava o provedor online e um modelo. O usuário informou que abriria o Jan em seguida.
-- **Disponibilidade informada posteriormente:** usuário confirmou Jan aberto em `http://127.0.0.1:1337/v1`, com `Gemma-4-E4B-Uncensored-HauhauCS-Aggressive`. Consultar o identificador exato no catálogo durante a validação, sem presumir que o nome abreviado é o identificador da API.
-- **Critérios:** conferir a causa no código e na interface antes de alterar. Distinguir configuração e modelo salvos de disponibilidade confirmada por conexão recente; não apresentar “online” com base somente na seleção persistida ou em resultado antigo. Mostrar indisponibilidade, verificação em andamento e estado ainda não verificado com mensagens claras, data da última checagem e retentativa quando apropriado. Invalidar resultados após mudanças de endereço, credenciais ou modelo e impedir respostas atrasadas de sobrescrever uma conexão mais recente. Preservar configuração e modelo quando o servidor local fechar.
-- **Validação e entrega:** conferir conexão ativa e recusa real, reabertura do provedor, atualização do catálogo e separação entre modelos configurados e disponíveis; não encerrar o Jan do usuário para provocar falha. Aplicar aos provedores locais e em nuvem conforme seus contratos reais. Validar backend, interface desktop/mobile, gates e commit/push individuais na main, sem branches ou worktrees. Implementar após a sequência já autorizada, sem misturar a correção à tarefa 78.
 
 ---
 

@@ -49,6 +49,11 @@ import {
   urlEhLocal,
 } from '@/lib/ai/provedores-catalogo';
 import { cn } from '@/lib/utils';
+import {
+  aplicarResultadoDaConexao,
+  estadoDaConexao,
+  type VerificacaoDaConexao,
+} from '@/lib/ai/estado-da-conexao';
 
 interface Resposta {
   provedores: ProvedorPublico[];
@@ -63,6 +68,9 @@ type Teste =
 
 /** Provedor marcado na tela, com os valores ainda não salvos. */
 interface ProvedorEmEdicao {
+  versaoConexao: string;
+  verificacao: VerificacaoDaConexao | null;
+  testesEm: Record<string, number>;
   preset: string;
   baseUrl: string;
   chave: string;
@@ -115,6 +123,9 @@ function emEdicao(
   salvo?: ProvedorPublico
 ): ProvedorEmEdicao {
   return {
+    versaoConexao: crypto.randomUUID(),
+    verificacao: null,
+    testesEm: {},
     preset: preset.id,
     baseUrl: salvo?.baseUrl ?? preset.urlPadrao ?? '',
     chave: '',
@@ -139,6 +150,11 @@ function emEdicao(
  * últimos caracteres.
  */
 export function ProvedorDeIa() {
+  const [agora, setAgora] = React.useState(() => Date.now());
+  React.useEffect(() => {
+    const timer = window.setInterval(() => setAgora(Date.now()), 10_000);
+    return () => window.clearInterval(timer);
+  }, []);
   const [dados, setDados] = React.useState<Resposta | null>(null);
   const [erro, setErro] = React.useState<string | null>(null);
   const [selecionados, setSelecionados] = React.useState<ProvedorEmEdicao[]>(
@@ -207,10 +223,18 @@ export function ProvedorDeIa() {
     dados.provedores.find((p) => p.preset === id);
   const selecionado = (id: string) => selecionados.find((p) => p.preset === id);
 
-  const atualizar = (id: string, mudanca: Partial<ProvedorEmEdicao>) =>
+  const atualizar = (
+    id: string,
+    mudanca: Partial<ProvedorEmEdicao>,
+    versao?: string
+  ) =>
     setSelecionados((atual) =>
       atual.map((p) => {
-        if (p.preset !== id) return p;
+        if (
+          p.preset !== id ||
+          (versao !== undefined && p.versaoConexao !== versao)
+        )
+          return p;
         const mudouConexao =
           (mudanca.baseUrl !== undefined && mudanca.baseUrl !== p.baseUrl) ||
           (mudanca.chave !== undefined && mudanca.chave !== p.chave) ||
@@ -218,6 +242,7 @@ export function ProvedorDeIa() {
             mudanca.apagarChave !== p.apagarChave);
         const mudouTeste =
           mudouConexao ||
+          mudanca.modelos !== undefined ||
           (mudanca.temperatura !== undefined &&
             mudanca.temperatura !== p.temperatura) ||
           (mudanca.tempoMaximo !== undefined &&
@@ -225,7 +250,14 @@ export function ProvedorDeIa() {
         return {
           ...p,
           ...mudanca,
-          ...(mudouTeste ? { testes: {} } : {}),
+          ...(mudouTeste
+            ? {
+                testes: {},
+                testesEm: {},
+                verificacao: null,
+                versaoConexao: crypto.randomUUID(),
+              }
+            : {}),
           ...(mudouConexao
             ? { encontrados: [], modelosConsultados: false, erroModelos: null }
             : {}),
@@ -285,7 +317,7 @@ export function ProvedorDeIa() {
 
   const buscarModelos = async (p: ProvedorEmEdicao) => {
     setOcupado(`modelos:${p.preset}`);
-    atualizar(p.preset, { erroModelos: null });
+    atualizar(p.preset, { erroModelos: null }, p.versaoConexao);
     try {
       const r = await json<{ modelos: string[] }>(
         await fetch('/api/admin/ia/modelos', {
@@ -295,25 +327,35 @@ export function ProvedorDeIa() {
           body: JSON.stringify(corpoDoProvedor(p)),
         })
       );
-      atualizar(p.preset, {
-        encontrados: r.modelos,
-        modelosConsultados: true,
-        erroModelos: null,
-      });
+      atualizar(
+        p.preset,
+        {
+          verificacao: { ok: true, verificadaEm: Date.now() },
+          encontrados: r.modelos,
+          modelosConsultados: true,
+          erroModelos: null,
+        },
+        p.versaoConexao
+      );
       if (r.modelos.length === 0) {
         toast.info('O servidor respondeu, mas não há modelos carregados.');
       } else {
         toast.success(`${r.modelos.length} modelo(s) encontrado(s).`);
       }
     } catch (falha) {
-      atualizar(p.preset, {
-        encontrados: [],
-        modelosConsultados: false,
-        erroModelos:
-          falha instanceof Error
-            ? falha.message
-            : 'Falha ao consultar o servidor.',
-      });
+      atualizar(
+        p.preset,
+        {
+          verificacao: { ok: false, verificadaEm: Date.now() },
+          encontrados: [],
+          modelosConsultados: false,
+          erroModelos:
+            falha instanceof Error
+              ? falha.message
+              : 'Falha ao consultar o servidor.',
+        },
+        p.versaoConexao
+      );
       toast.error('Não foi possível listar os modelos.', {
         description: falha instanceof Error ? falha.message : undefined,
       });
@@ -343,7 +385,11 @@ export function ProvedorDeIa() {
     setSelecionados((atual) =>
       atual.map((item) =>
         item.preset === p.preset
-          ? { ...item, testes: { ...item.testes, [modelo]: resultado } }
+          ? aplicarResultadoDaConexao(item, p.versaoConexao, {
+              testes: { ...item.testes, [modelo]: resultado },
+              testesEm: { ...item.testesEm, [modelo]: Date.now() },
+              verificacao: { ok: resultado.ok, verificadaEm: Date.now() },
+            })
           : item
       )
     );
@@ -468,7 +514,7 @@ export function ProvedorDeIa() {
           </div>
           <span
             className="inline-flex max-w-full items-center gap-2 rounded-full border border-border bg-background px-3 py-1 text-xs font-medium text-foreground"
-            aria-label={`Ordem em uso: ${resumoSalvo}`}
+            aria-label={`Ordem salva: ${resumoSalvo}`}
           >
             <span
               aria-hidden="true"
@@ -477,7 +523,7 @@ export function ProvedorDeIa() {
                 dados.ordem[0]?.tipo === 'lyra' ? 'bg-cosmic' : 'bg-success'
               )}
             />
-            <span className="truncate">Em uso: {resumoSalvo}</span>
+            <span className="truncate">Ordem salva: {resumoSalvo}</span>
           </span>
         </div>
       </CardHeader>
@@ -527,7 +573,7 @@ export function ProvedorDeIa() {
                           {ehLyra ? 'Motor da Lyra' : p.nome}
                         </span>
                         {!ehLyra && selecionado(p.id) ? (
-                          <span className="ml-auto rounded-full bg-success-light px-2 py-px text-micro font-semibold text-foreground">
+                          <span className="ml-auto rounded-full bg-muted px-2 py-px text-micro font-semibold text-foreground">
                             {selecionado(p.id)?.modelos.length ?? 0}{' '}
                             selecionado(s)
                           </span>
@@ -558,6 +604,19 @@ export function ProvedorDeIa() {
             preset.tipo === 'anthropic';
           const ehLocal = usaUrl && urlEhLocal(p.baseUrl);
           const idBase = `ia-${p.preset}`;
+          const estado = estadoDaConexao(
+            p.verificacao,
+            ocupado === `modelos:${p.preset}` ||
+              ocupado?.startsWith(`testar:${p.preset}|`) === true,
+            agora
+          );
+          const rotuloEstado = {
+            nao_verificada: 'Conexão ainda não verificada',
+            verificando: 'Verificando conexão…',
+            disponivel: 'Respondeu à última verificação',
+            indisponivel: 'Indisponível na última verificação',
+            expirada: 'Verificação antiga: teste novamente',
+          }[estado];
           const sugestoes = [
             ...new Set([...p.encontrados, ...p.modelos]),
           ].filter((modelo) =>
@@ -595,6 +654,14 @@ export function ProvedorDeIa() {
                 </Button>
               </div>
 
+              <p role="status" className="text-xs text-muted-foreground">
+                {rotuloEstado}
+                {p.verificacao
+                  ? ` · Última checagem: ${new Date(p.verificacao.verificadaEm).toLocaleTimeString('pt-BR')}`
+                  : ''}
+                . A seleção salva não comprova que o servidor está disponível
+                agora.
+              </p>
               {usaUrl ? (
                 <div className="grid gap-2">
                   <Label htmlFor={`${idBase}-url`}>URL base da API</Label>
@@ -715,7 +782,7 @@ export function ProvedorDeIa() {
                 ) : (
                   <p role="status" className="text-xs text-muted-foreground">
                     {p.modelosConsultados
-                      ? `${p.encontrados.length} modelo(s) disponível(is) no servidor · ${p.modelos.length} selecionado(s).`
+                      ? `${p.encontrados.length} modelo(s) no último catálogo consultado · ${p.modelos.length} selecionado(s).`
                       : 'Lista ainda não consultada. Clique em Buscar modelos; o contador mostra somente os modelos selecionados.'}
                   </p>
                 )}
@@ -828,7 +895,7 @@ export function ProvedorDeIa() {
                               )}
                               <span className="min-w-0 break-words text-foreground">
                                 {teste.ok
-                                  ? `Funcionando · ${segundos(teste.milissegundos)}`
+                                  ? `${estadoDaConexao({ ok: teste.ok, verificadaEm: p.testesEm[m] }, false, agora) === 'expirada' ? 'Teste antigo; verifique novamente' : 'Respondeu no teste'} às ${new Date(p.testesEm[m]).toLocaleTimeString('pt-BR')} · ${segundos(teste.milissegundos)}`
                                   : teste.error}
                               </span>
                             </span>
