@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -31,6 +32,7 @@ const alteracao = z.discriminatedUnion('acao', [
 export async function GET(request: Request) {
   try {
     const sessao = await requireServerSession();
+    await requireFeatureEnabled(sessao, 'lyra_memory');
     const inicio = z.coerce
       .number()
       .int()
@@ -49,6 +51,9 @@ export async function POST(request: Request) {
   try {
     const sessao = await requireServerSession();
     const pedido = await lerJson(request, alteracao);
+    // Desativar e excluir continuam disponíveis como direitos de privacidade.
+    if (pedido.acao !== 'configurar' || pedido.ativa)
+      await requireFeatureEnabled(sessao, 'lyra_memory');
     await exigirDentroDoLimite(
       { escopo: 'memoria-escrita', limite: 60, janelaSegundos: 3600 },
       sessao.user.id

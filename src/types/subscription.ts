@@ -17,6 +17,19 @@ export const PLAN_FEATURE_KEYS = [
   'professionals_total',
   'appointments_active',
   'metrics_history_days',
+  'daily_checkin',
+  'weekly_review',
+  'guided_breathing',
+  'evening_reflection',
+  'vedic_insights',
+  'calendar_integration',
+  'personal_habits',
+  'wellbeing_assessments',
+  'chat_history',
+  'chat_images',
+  'lyra_memory',
+  'personal_notifications',
+  'health_intelligence',
 ] as const;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_KEYS)[number];
@@ -62,6 +75,7 @@ export interface SubscriptionPlanSummary {
 }
 
 export interface AccountSubscriptionSummary {
+  administrativeAccess?: boolean;
   subscriptionId: string;
   status: string;
   billingInterval: string;

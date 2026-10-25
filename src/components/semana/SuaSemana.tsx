@@ -1,4 +1,5 @@
 'use client';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import * as React from 'react';
 import Link from 'next/link';
@@ -743,11 +744,14 @@ export function SuaSemana() {
                 valor={String(semana.resumo.diasComRegistro)}
                 unidade="de 7"
               />
-              <Indicador
-                rotulo="Respiração guiada"
-                valor={String(semana.resumo.respiracaoMinutos)}
-                unidade="min"
-              />
+              <PlanFeatureGate features={['guided_breathing']} ocultar>
+                {' '}
+                <Indicador
+                  rotulo="Respiração guiada"
+                  valor={String(semana.resumo.respiracaoMinutos)}
+                  unidade="min"
+                />
+              </PlanFeatureGate>
             </dl>
             {semana.resumo.diasComRegistro === 0 ? (
               <div className="mt-4">
@@ -804,7 +808,9 @@ export function SuaSemana() {
             {metasLiberadas ? <Metas semana={semana} /> : null}
           </div>
           <div className="grid gap-6 lg:grid-cols-2">
-            <Reflexoes semana={semana} diaLiberado={diaLiberado} />
+            <PlanFeatureGate features={['evening_reflection']} ocultar>
+              <Reflexoes semana={semana} diaLiberado={diaLiberado} />
+            </PlanFeatureGate>
             <CeuDaSemana semana={semana} />
           </div>
           <TabelaDaSemana semana={semana} />

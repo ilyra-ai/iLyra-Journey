@@ -7,16 +7,22 @@ import { useAuth } from '@/context/AuthContext';
 import { SplashScreen } from '@/components/SplashScreen';
 import { ChatAssistantContent } from '@/components/chat/ChatAssistantContent';
 import { usePlanFeatureAccess } from '@/hooks/use-plan-feature-access';
+import { isPlanFeatureEnabled } from '@/lib/plans/access';
+import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
 
 function ConversaSelecionada() {
   const { session } = useAuth();
   const busca = useSearchParams();
   const router = useRouter();
-  const id = busca.get('conversa');
+  const { data: subscription, loading } = useAccountSubscription();
+  const salvarHistorico = isPlanFeatureEnabled(subscription, 'chat_history');
+  const id = salvarHistorico ? busca.get('conversa') : null;
+  if (loading) return <p role="status">Carregando conversa…</p>;
   return (
     <ChatAssistantContent
-      key={`${session?.user.id ?? 'visitante'}:${id ?? 'nova'}`}
+      key={`${session?.user.id ?? 'visitante'}:${id ?? 'nova'}:${salvarHistorico}`}
+      salvarHistorico={salvarHistorico}
       conversaId={id}
       aoAbrirConversa={(conversa) => {
         if (conversa !== id)

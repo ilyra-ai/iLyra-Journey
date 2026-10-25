@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -18,6 +19,8 @@ export async function GET(
 ) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'chat_history');
+
     const rota = await contexto.params;
     const { id, antes } = parametros.parse({
       id: rota.id,

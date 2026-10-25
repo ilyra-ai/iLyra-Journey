@@ -1,3 +1,4 @@
+import { contaTemRecurso } from '@/lib/plans/service';
 import { randomUUID } from 'node:crypto';
 import type { RowDataPacket } from 'mysql2/promise';
 import { z } from 'zod';
@@ -60,6 +61,8 @@ export async function guardarRelato(
   turno: string | null = null,
   corrige: string | null = null
 ) {
+  if (!(await contaTemRecurso(usuario, 'lyra_memory')))
+    throw new HttpError('Seu plano não inclui a memória da Lyra.', 403);
   if (corrige) {
     const preferencias = await preferenciasDaMemoria(usuario);
     if (!preferencias?.enabled || preferencias.purge_pending)
@@ -94,6 +97,11 @@ export async function guardarRelato(
 }
 
 export async function importarHistoricoNaMemoria(usuario: string) {
+  if (
+    !(await contaTemRecurso(usuario, 'lyra_memory')) ||
+    !(await contaTemRecurso(usuario, 'chat_history'))
+  )
+    throw new HttpError('Seu plano não inclui a importação da memória.', 403);
   return withTransaction(async (conexao) => {
     const [linhas] = await conexao.query<Preferencias[]>(
       'SELECT * FROM memory_preferences WHERE user_id = ? FOR UPDATE',
@@ -206,7 +214,7 @@ export async function recuperarMemorias(
   privada: boolean,
   externa: boolean
 ) {
-  if (privada) return [];
+  if (privada || !(await contaTemRecurso(usuario, 'lyra_memory'))) return [];
   const preferencias = await preferenciasDaMemoria(usuario);
   if (
     !preferencias?.enabled ||
@@ -313,18 +321,48 @@ export async function processarFilaDaMemoria() {
       /* Permanece pendente para a próxima execução. */
     }
   }
+  let permitida: string | null = null;
+  let cursor = '';
+  let cursorAtualizado: string | null = null;
+  while (!permitida) {
+    const candidatas: Array<{ user_id: string; updated_at: string }> =
+      await queryRows<{ user_id: string; updated_at: string }>(
+        `SELECT p.user_id,p.updated_at FROM memory_preferences p WHERE p.enabled=TRUE AND p.purge_pending=FALSE
+      AND (? IS NULL OR p.updated_at > ? OR (p.updated_at = ? AND p.user_id > ?))
+      AND (SELECT e.next_attempt_at FROM memory_episodes e WHERE e.user_id=p.user_id AND e.generation=p.generation
+        AND e.status <> 'pronto' ORDER BY e.reference_at,e.created_at,e.id LIMIT 1) <= UTC_TIMESTAMP(3)
+      AND NOT EXISTS (SELECT 1 FROM memory_episodes e WHERE e.user_id=p.user_id AND e.lease_until > UTC_TIMESTAMP(3))
+      ORDER BY p.updated_at,p.user_id LIMIT 100`,
+        [cursorAtualizado, cursorAtualizado, cursorAtualizado, cursor]
+      );
+    if (!candidatas.length) break;
+    for (const candidata of candidatas) {
+      cursor = candidata.user_id;
+      cursorAtualizado = candidata.updated_at;
+      if (await contaTemRecurso(cursor, 'lyra_memory')) {
+        permitida = cursor;
+        break;
+      }
+    }
+  }
+  if (!permitida) return { processado: false };
   const lease = randomUUID();
   const episodio = await withTransaction(async (conexao) => {
     const [pessoas] = await conexao.query<Preferencias[]>(
-      `SELECT p.* FROM memory_preferences p WHERE p.enabled = TRUE AND p.purge_pending = FALSE
+      `SELECT p.* FROM memory_preferences p WHERE p.enabled = TRUE AND p.purge_pending = FALSE AND p.user_id = ?
        AND (SELECT e.next_attempt_at FROM memory_episodes e WHERE e.user_id = p.user_id AND e.generation = p.generation
          AND e.status <> 'pronto' ORDER BY e.reference_at, e.created_at, e.id LIMIT 1) <= UTC_TIMESTAMP(3)
        AND NOT EXISTS (SELECT 1 FROM memory_episodes e WHERE e.user_id = p.user_id
          AND e.lease_until > UTC_TIMESTAMP(3))
-       ORDER BY p.updated_at LIMIT 1 FOR UPDATE SKIP LOCKED`
+       ORDER BY p.updated_at LIMIT 1 FOR UPDATE SKIP LOCKED`,
+      [permitida]
     );
     const pessoa = pessoas[0];
-    if (!pessoa) return null;
+    if (
+      !pessoa ||
+      !(await contaTemRecurso(pessoa.user_id, 'lyra_memory', conexao))
+    )
+      return null;
     const [episodios] = await conexao.query<Episodio[]>(
       `SELECT * FROM memory_episodes WHERE user_id = ? AND generation = ? AND status <> 'pronto'
        ORDER BY reference_at, created_at, id LIMIT 1 FOR UPDATE`,

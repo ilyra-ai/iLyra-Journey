@@ -1,3 +1,5 @@
+import { limiteDeMetricasDaConta, contaTemRecurso } from '@/lib/plans/service';
+import { corteDoHistorico } from '@/lib/plans/historico';
 import { LocalSemNascerDoSolError } from '@/lib/astrology/panchang';
 import {
   diaVedicoDoPerfil,
@@ -133,26 +135,35 @@ export async function lerSemana(
   const colunas = [
     ...new Set<string>([...COLUNAS_FIXAS, ...metas.map((m) => m.coluna)]),
   ];
-  const linhas = await queryRows<LinhaDaMetrica>(
-    `SELECT date, ${colunas.join(', ')}
+  const limiteHistorico = await limiteDeMetricasDaConta(userId);
+  const corte = corteDoHistorico(limiteHistorico);
+  const linhas =
+    limiteHistorico === 0
+      ? []
+      : await queryRows<LinhaDaMetrica>(
+          `SELECT date, ${colunas.join(', ')}
        FROM daily_metrics
-      WHERE user_id = ? AND date BETWEEN ? AND ?`,
-    [userId, inicioAnterior, hoje]
-  );
+      WHERE user_id = ? AND date BETWEEN ? AND ? AND (? IS NULL OR date >= ?)`,
+          [userId, inicioAnterior, hoje, corte, corte]
+        );
   const porData = new Map(linhas.map((l) => [String(l.date), l]));
 
   const reflexoes = new Map(
-    (await lerReflexoes(userId, inicio, hoje)).map((r) => [r.data, r])
+    ((await contaTemRecurso(userId, 'evening_reflection'))
+      ? await lerReflexoes(userId, inicio, hoje)
+      : []
+    ).map((r) => [r.data, r])
   );
   const respiracao = new Map(
-    (
-      await queryRows<{ session_date: string; minutos: number | string }>(
-        `SELECT session_date, SUM(minutes_logged) AS minutos
+    ((await contaTemRecurso(userId, 'guided_breathing'))
+      ? await queryRows<{ session_date: string; minutos: number | string }>(
+          `SELECT session_date, SUM(minutes_logged) AS minutos
            FROM breathing_sessions
           WHERE user_id = ? AND session_date BETWEEN ? AND ?
           GROUP BY session_date`,
-        [userId, inicio, hoje]
-      )
+          [userId, inicio, hoje]
+        )
+      : []
     ).map((l) => [String(l.session_date), Number(l.minutos)])
   );
 
@@ -174,13 +185,14 @@ export async function lerSemana(
     }
   };
 
+  const comScores = await contaTemRecurso(userId, 'ai_scores');
   const montarDia = (data: string, comCeu: boolean): DiaDaSemana => {
     const linha = porData.get(data);
     const reflexao = reflexoes.get(data);
     return {
       data,
       diaDaSemana: nomeDoDia(data),
-      prontidao: numero(linha?.readiness_score),
+      prontidao: comScores ? numero(linha?.readiness_score) : null,
       sonoMinutos: numero(linha?.sleep_duration_minutes),
       meditacaoMinutos: numero(linha?.meditation_minutes),
       respiracaoMinutos: comCeu ? (respiracao.get(data) ?? 0) : 0,

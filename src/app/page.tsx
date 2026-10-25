@@ -1,4 +1,5 @@
 'use client';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -161,7 +162,9 @@ export default function Home() {
               </p>
             </div>
 
-            <HarmoniaAtualCard appConfig={appConfig} />
+            <PlanFeatureGate features={['vedic_insights']} ocultar>
+              <HarmoniaAtualCard appConfig={appConfig} />
+            </PlanFeatureGate>
           </section>
 
           <Dashboard />

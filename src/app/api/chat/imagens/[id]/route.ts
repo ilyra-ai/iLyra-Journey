@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import {
@@ -18,6 +19,8 @@ type Contexto = { params: Promise<{ id: string }> };
 export async function GET(request: Request, contexto: Contexto) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'chat_images');
+
     const id = z.uuid().parse((await contexto.params).id);
     const linha = await lerImagemDoTurno(session.user.id, id);
     if (new URL(request.url).searchParams.get('arquivo') === '1') {
@@ -39,6 +42,8 @@ export async function GET(request: Request, contexto: Contexto) {
 export async function POST(request: Request, contexto: Contexto) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'chat_images');
+
     const id = z.uuid().parse((await contexto.params).id);
     const { privacyMode } = await lerJson(
       request,

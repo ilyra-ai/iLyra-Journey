@@ -1,4 +1,5 @@
 'use client';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import * as React from 'react';
 import { format } from 'date-fns';
@@ -476,7 +477,7 @@ export function BotaoRegistroDoDia({
 }) {
   const [aberto, setAberto] = React.useState(false);
   return (
-    <>
+    <PlanFeatureGate features={['daily_checkin']} ocultar>
       <Button
         type="button"
         variant={variant}
@@ -487,6 +488,6 @@ export function BotaoRegistroDoDia({
         Registrar meu dia
       </Button>
       <RegistroDoDiaDialog open={aberto} onOpenChange={setAberto} />
-    </>
+    </PlanFeatureGate>
   );
 }

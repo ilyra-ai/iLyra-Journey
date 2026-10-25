@@ -14,6 +14,9 @@ export const runtime = 'nodejs';
 export async function GET() {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'vedic_insights');
+    await requireFeatureEnabled(session, 'ai_scores');
+
     await requireFeatureEnabled(session, 'ai_tips_feed');
     const estado = await obterBriefingDoDia(session.user.id);
     return NextResponse.json(estado, {

@@ -1,4 +1,5 @@
 'use client';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import * as React from 'react';
 import Link from 'next/link';
@@ -262,24 +263,30 @@ export function MeuDia() {
               aria-label="Ações do dia"
               className="flex flex-wrap items-center gap-2"
             >
-              <Button asChild size="sm">
-                <Link href="/respiracao">
-                  <Wind aria-hidden="true" />
-                  Respirar agora
-                </Link>
-              </Button>
-              <Button asChild size="sm" variant="outline">
-                <a href="#janelas">
-                  <CalendarPlus aria-hidden="true" />
-                  Levar para o calendário
-                </a>
-              </Button>
-              <Button asChild size="sm" variant="outline">
-                <a href="#reflexao">
-                  <MoonStar aria-hidden="true" />
-                  Reflexão da noite
-                </a>
-              </Button>
+              <PlanFeatureGate features={['guided_breathing']} ocultar>
+                <Button asChild size="sm">
+                  <Link href="/respiracao">
+                    <Wind aria-hidden="true" />
+                    Respirar agora
+                  </Link>
+                </Button>
+              </PlanFeatureGate>
+              <PlanFeatureGate features={['calendar_integration']} ocultar>
+                <Button asChild size="sm" variant="outline">
+                  <a href="#janelas">
+                    <CalendarPlus aria-hidden="true" />
+                    Levar para o calendário
+                  </a>
+                </Button>
+              </PlanFeatureGate>
+              <PlanFeatureGate features={['evening_reflection']} ocultar>
+                <Button asChild size="sm" variant="outline">
+                  <a href="#reflexao">
+                    <MoonStar aria-hidden="true" />
+                    Reflexão da noite
+                  </a>
+                </Button>
+              </PlanFeatureGate>
             </nav>
             <div className="mt-3 flex flex-wrap items-center gap-6">
               {/* Margem do tamanho do halo (-inset-3), para ele não encostar
@@ -331,8 +338,12 @@ export function MeuDia() {
       <LeituraDoDia briefing={briefing} agora={agora} />
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <JanelasDeHoje agora={agora} />
-        <CartaoDeRespiracao />
+        <PlanFeatureGate features={['calendar_integration']} ocultar>
+          <JanelasDeHoje agora={agora} />
+        </PlanFeatureGate>
+        <PlanFeatureGate features={['guided_breathing']} ocultar>
+          <CartaoDeRespiracao />
+        </PlanFeatureGate>
         <div className="md:col-span-2 xl:col-span-1">
           <CartaoDaSemana />
         </div>
@@ -473,10 +484,13 @@ export function MeuDia() {
         </section>
       ) : null}
 
-      <ReflexaoDaNoite
-        dataDoBriefing={briefing.data}
-        feedbackInicial={estado.feedback}
-      />
+      <PlanFeatureGate features={['evening_reflection']} ocultar>
+        {' '}
+        <ReflexaoDaNoite
+          dataDoBriefing={briefing.data}
+          feedbackInicial={estado.feedback}
+        />
+      </PlanFeatureGate>
 
       <footer className="flex flex-col gap-4 border-t border-border pt-6">
         <p className="text-xs leading-relaxed text-muted-foreground">

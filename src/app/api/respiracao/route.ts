@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 
 import { lerJson, respostaDeErro } from '@/lib/http/api';
@@ -16,6 +17,8 @@ const SEM_CACHE = { 'Cache-Control': 'private, no-store' };
 export async function GET() {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'guided_breathing');
+
     const resumo = await lerResumoDaRespiracao(session.user.id);
     return NextResponse.json(resumo, { headers: SEM_CACHE });
   } catch (error) {
@@ -27,6 +30,8 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'guided_breathing');
+
     const sessao = await lerJson(request, sessaoDeRespiracaoSchema);
     const resumo = await registrarSessaoDeRespiracao(session.user.id, sessao);
     return NextResponse.json(resumo, { status: 201, headers: SEM_CACHE });

@@ -1,8 +1,6 @@
 'use client';
-import {
-  beneficiosPublicos,
-  recursoIncluido,
-} from '@/lib/plans/beneficios-publicos';
+import { capacidadeDisponivel } from '@/lib/plans/dependencias';
+import { beneficiosPublicos } from '@/lib/plans/beneficios-publicos';
 import { EVENTO_PLANOS_ATUALIZADOS } from '@/lib/plans/atualizacao-publica';
 
 import {
@@ -227,7 +225,7 @@ export function LandingPage({
 
   const estatisticas = useMemo(() => {
     const habilitados = planos.flatMap((plano) =>
-      plano.features.filter(recursoIncluido)
+      plano.features.filter((f) => capacidadeDisponivel(plano.features, f.key))
     );
     const categorias = new Set(habilitados.map((recurso) => recurso.category));
     const comAssinatura = planos.filter((plano) => plano.assinaturaOnline);

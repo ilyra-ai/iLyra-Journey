@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 
 import {
@@ -25,6 +26,8 @@ function contexto(request: Request) {
 export async function GET(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'calendar_integration');
+
     const { origem, lembretes } = contexto(request);
     const estado = await lerAssinatura(session.user.id, origem, lembretes);
     return NextResponse.json(estado, { headers: SEM_CACHE });
@@ -37,6 +40,8 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'calendar_integration');
+
     const { origem, lembretes } = contexto(request);
     const estado = await criarAssinatura(session.user.id, origem, lembretes);
     return NextResponse.json(estado, { status: 201, headers: SEM_CACHE });
@@ -49,6 +54,8 @@ export async function POST(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'calendar_integration');
+
     const { origem } = contexto(request);
     const estado = await apagarAssinatura(session.user.id, origem);
     return NextResponse.json(estado, { headers: SEM_CACHE });

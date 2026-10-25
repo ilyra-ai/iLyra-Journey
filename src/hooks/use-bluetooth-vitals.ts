@@ -1,4 +1,6 @@
 'use client';
+import { useAccountSubscription } from '@/hooks/use-account-subscription';
+import { isPlanFeatureEnabled } from '@/lib/plans/access';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { format } from 'date-fns';
@@ -40,6 +42,11 @@ export const MENSAGEM_SEM_BLUETOOTH =
  * implementações (painel e central de dispositivos) e nenhuma gravava nada.
  */
 export function useBluetoothVitals(): BluetoothVitals {
+  const { data: subscription } = useAccountSubscription();
+  const permitido = isPlanFeatureEnabled(
+    subscription,
+    'wearable_bluetooth_connection'
+  );
   const [status, setStatus] = useState<EstadoDaConexao>('idle');
   const [heartRate, setHeartRate] = useState<number | null>(null);
   const [hrv, setHrv] = useState<number | null>(null);
@@ -169,6 +176,10 @@ export function useBluetoothVitals(): BluetoothVitals {
   const disconnect = useCallback(() => encerrar(true), [encerrar]);
 
   const connect = useCallback(async () => {
+    if (!permitido) {
+      setErrorMessage('Seu plano não inclui a conexão com dispositivos.');
+      return;
+    }
     const bluetooth = navigator.bluetooth;
     setErrorMessage(null);
     if (!bluetooth) {
@@ -225,7 +236,7 @@ export function useBluetoothVitals(): BluetoothVitals {
       setErrorMessage(message);
       toast.error('Falha na conexão', { description: message });
     }
-  }, [encerrar, handleMeasurement]);
+  }, [encerrar, handleMeasurement, permitido]);
 
   // Gravação periódica enquanto conectado.
   useEffect(() => {
@@ -235,6 +246,11 @@ export function useBluetoothVitals(): BluetoothVitals {
     }, INTERVALO_DE_GRAVACAO_MS);
     return () => window.clearInterval(intervalo);
   }, [gravarSessao, status]);
+
+  useEffect(() => {
+    if (!permitido && deviceRef.current?.gatt?.connected)
+      deviceRef.current.gatt.disconnect();
+  }, [permitido]);
 
   // Saída da página (fechar aba, trocar de rota) grava o que ficou pendente.
   useEffect(() => {

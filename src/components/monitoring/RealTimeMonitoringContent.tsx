@@ -171,8 +171,17 @@ export function RealTimeMonitoringContent({
     };
   }, []);
 
+  useEffect(() => {
+    if (!voiceUpdatesEnabled && 'speechSynthesis' in window)
+      window.speechSynthesis.cancel();
+    return () => {
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    };
+  }, [voiceUpdatesEnabled]);
+
   // Só é chamado pelo botão de voz, que só existe quando o plano a libera.
   const handleVoiceUpdate = () => {
+    if (!voiceUpdatesEnabled) return;
     if ('speechSynthesis' in window) {
       setIsSpeaking(true);
       const utterance = new SpeechSynthesisUtterance(

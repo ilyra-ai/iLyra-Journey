@@ -1,3 +1,5 @@
+import { exigirDiaNoHistorico } from '@/lib/plans/historico';
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 
 import { HttpError } from '@/lib/http-error';
@@ -15,6 +17,8 @@ export const runtime = 'nodejs';
 export async function GET(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'daily_checkin');
+
     const data = new URL(request.url).searchParams.get('data') ?? '';
     if (!dataDoRegistroValida(data)) {
       throw new HttpError(
@@ -22,6 +26,7 @@ export async function GET(request: Request) {
         400
       );
     }
+    await exigirDiaNoHistorico(session.user.id, data);
     const registro = await lerRegistroDoDia(session.user.id, data);
     return NextResponse.json({ registro });
   } catch (error) {
@@ -37,7 +42,10 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'daily_checkin');
+
     const registro = await lerJson(request, registroDoDiaSchema);
+    await exigirDiaNoHistorico(session.user.id, registro.data);
     const salvo = await gravarRegistroDoDia(session.user.id, registro);
     return NextResponse.json({ registro: salvo });
   } catch (error) {

@@ -1,4 +1,6 @@
 'use client';
+import { useAccountSubscription } from '@/hooks/use-account-subscription';
+import { isPlanFeatureEnabled } from '@/lib/plans/access';
 
 /**
  * Hook useVedicInsights — Lyra MetaCare
@@ -150,7 +152,15 @@ const SEM_SINAIS: Snapshot = {
  */
 export function useVedicInsights(enabled = true): VedicInsights {
   const { astrology } = useHealthOrchestrator();
-  const { metrics, todayMetrics, loading } = useDailyMetrics(7, enabled);
+  const { data: subscription } = useAccountSubscription();
+  const comHistorico = isPlanFeatureEnabled(
+    subscription,
+    'metrics_history_days'
+  );
+  const { metrics, todayMetrics, loading } = useDailyMetrics(
+    7,
+    enabled && comHistorico
+  );
 
   // Sem registro hoje, nenhum sinal entra (nunca zeros).
   const snapshot = useMemo<Snapshot | null>(

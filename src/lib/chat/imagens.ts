@@ -8,7 +8,7 @@ import { lerConfiguracaoDeIa } from '@/lib/ai/provedores-da-plataforma';
 import { HttpError } from '@/lib/http-error';
 import { preferenciasDaMemoria } from '@/lib/memoria/servico';
 import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
-import { consumeUsageQuota } from '@/lib/plans/service';
+import { consumeUsageQuota, requireFeatureEnabled } from '@/lib/plans/service';
 import type { AppSession } from '@/types/app-session';
 import type { ImagemDoTurno } from './tipos';
 
@@ -63,6 +63,7 @@ export async function gerarImagemDoTurno(
   privacyMode = false,
   buscar: typeof fetch = fetch
 ) {
+  await requireFeatureEnabled(session, 'chat_images');
   const userId = session.user.id;
   const atual = await lerImagemDoTurno(userId, turnId);
   if (atual.status === 'pronta') return metadadosDaImagem(atual);

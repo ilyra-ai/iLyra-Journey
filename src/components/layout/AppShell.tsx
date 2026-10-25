@@ -6,6 +6,9 @@ import { cn } from '@/lib/utils';
 import { Sidebar } from '@/components/layout/sidebar';
 import { Header } from '@/components/layout/header';
 import { MadeWithIlyra } from '@/components/made-with-ilyra';
+import { usePathname } from 'next/navigation';
+import { recursosDaRota } from '@/lib/plans/rotas';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 type AppShellProps = {
   children: ReactNode;
@@ -30,6 +33,7 @@ export function AppShell({
   ajustarAoViewport = false,
 }: AppShellProps) {
   const { config: appConfig } = usePublicSitePageConfig('app');
+  const pathname = usePathname();
   const { cardScale, tableScale, buttonScale } = appConfig.sizing;
   return (
     <div
@@ -70,7 +74,9 @@ export function AppShell({
               contentClassName
             )}
           >
-            {children}
+            <PlanFeatureGate features={recursosDaRota(pathname)}>
+              {children}
+            </PlanFeatureGate>
           </div>
         </main>
         <MadeWithIlyra />

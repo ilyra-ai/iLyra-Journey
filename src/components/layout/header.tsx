@@ -1,4 +1,5 @@
 'use client';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -201,7 +202,9 @@ export function Header() {
               <Search className="h-[18px] w-[18px]" strokeWidth={1.9} />
             </Button>
 
-            <NotificationsMenu iconScale={appConfig.sizing.iconScale} />
+            <PlanFeatureGate features={['personal_notifications']} ocultar>
+              <NotificationsMenu iconScale={appConfig.sizing.iconScale} />
+            </PlanFeatureGate>
 
             {rotaLiberada('/chat') ? (
               <Button

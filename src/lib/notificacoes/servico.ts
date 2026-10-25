@@ -1,3 +1,4 @@
+import { contaTemRecurso } from '@/lib/plans/service';
 import { randomUUID } from 'node:crypto';
 
 import { executeStatement, queryRows } from '@/lib/mysql/pool';
@@ -39,6 +40,7 @@ function limitar(texto: string, maximo: number) {
 
 /** Cria a notificação; `false` quando a mesma chave já existia. */
 export async function criarNotificacao(nova: NovaNotificacao) {
+  if (!(await contaTemRecurso(nova.userId, 'personal_notifications'))) return;
   const resultado = await executeStatement(
     `INSERT IGNORE INTO user_notifications
        (id, user_id, kind, title, body, link, dedupe_key)

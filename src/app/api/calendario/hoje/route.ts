@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { agendaDaPessoa, calendarioDaAgenda } from '@/lib/calendario/servico';
 import { respostaDeErro } from '@/lib/http/api';
 import { requireServerSession } from '@/lib/mysql/server-auth';
@@ -11,6 +12,8 @@ export const runtime = 'nodejs';
 export async function GET(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'calendar_integration');
+
     const lembretes =
       new URL(request.url).searchParams.get('lembretes') !== 'nao';
     const agenda = await agendaDaPessoa(session.user.id, 1, { lembretes });

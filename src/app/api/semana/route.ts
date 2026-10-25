@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 import { respostaDeErro } from '@/lib/http/api';
 import { requireServerSession } from '@/lib/mysql/server-auth';
-import { recursoHabilitado } from '@/lib/plans/service';
+import { recursoHabilitado, requireFeatureEnabled } from '@/lib/plans/service';
 import { lerSemana } from '@/lib/semana/servico';
 
 export const runtime = 'nodejs';
@@ -11,6 +11,9 @@ export const runtime = 'nodejs';
 export async function GET() {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'weekly_review');
+    await requireFeatureEnabled(session, 'vedic_insights');
+
     // Metas só entram na semana quando o plano inclui o acompanhamento.
     const comMetas = await recursoHabilitado(
       session.user.id,

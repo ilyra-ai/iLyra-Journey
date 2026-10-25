@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 
 import {
@@ -19,6 +20,8 @@ export const runtime = 'nodejs';
 export async function GET() {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'vedic_insights');
+
     const perfil = await lerPerfilAstrologico(session.user.id);
     const mapa = mapaDoPerfil(perfil);
     return NextResponse.json({

@@ -1,3 +1,4 @@
+import { contaTemRecurso } from '@/lib/plans/service';
 import { randomUUID } from 'node:crypto';
 
 import { limiteDeFrequencia } from '@/lib/health/limite-de-frequencia';
@@ -12,8 +13,10 @@ import { recalcularEscoresDesde } from './escores-do-dia';
  * dia (e dos 7 seguintes), metas automáticas, prazos e sequências.
  */
 async function depoisDeGravar(userId: string, data: string) {
-  await recalcularEscoresDesde(userId, data);
-  await atualizarMetasESequencias(userId);
+  if (await contaTemRecurso(userId, 'ai_scores'))
+    await recalcularEscoresDesde(userId, data);
+  if (await contaTemRecurso(userId, 'goal_progress_tracking'))
+    await atualizarMetasESequencias(userId);
 }
 
 /**
@@ -74,6 +77,10 @@ export async function lerRegistroDoDia(
       LIMIT 1`,
     [userId, data]
   );
+  if (linha && !(await contaTemRecurso(userId, 'ai_scores'))) {
+    linha.readiness_score = null;
+    linha.recovery_score = null;
+  }
   return linha ?? null;
 }
 

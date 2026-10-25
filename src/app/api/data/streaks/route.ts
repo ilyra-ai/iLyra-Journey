@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 
 import { respostaDeErro } from '@/lib/http/api';
@@ -15,6 +16,8 @@ export const runtime = 'nodejs';
 export async function GET() {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'goal_progress_tracking');
+
     const streaks = await getUserStreaks(session.user.id);
     const adherence = calculateAdherenceScore(streaks);
 

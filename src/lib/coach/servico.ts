@@ -8,7 +8,7 @@ import { atualizarMetasESequencias } from '@/lib/metas/servico';
 import { executeStatement, queryRows } from '@/lib/mysql/pool';
 import { criarNotificacao } from '@/lib/notificacoes/servico';
 import { registrarErroInterno } from '@/lib/observability/log-seguro';
-import { recursoHabilitado } from '@/lib/plans/service';
+import { recursoHabilitado, contaTemRecurso } from '@/lib/plans/service';
 
 import {
   assinaturaDaCadeia,
@@ -97,6 +97,7 @@ function chaveDoAlerta(data: string, texto: string) {
 }
 
 async function notificar(userId: string, briefing: BriefingDoDia) {
+  if (!(await contaTemRecurso(userId, 'personal_notifications'))) return;
   await criarNotificacao({
     userId,
     tipo: 'coach_dia',
@@ -290,8 +291,8 @@ export async function executarRotinaDoCoach(
                  THEN p.residence_timezone ELSE p.birth_timezone END AS fuso,
             (SELECT MAX(b.briefing_date) FROM daily_briefings b
               WHERE b.user_id = p.id) AS ultima
-       FROM profiles p
-      WHERE p.onboarding_completed = TRUE
+       FROM profiles p JOIN users u ON u.id=p.id
+      WHERE p.onboarding_completed = TRUE AND u.blocked_at IS NULL
         AND ((p.residence_latitude IS NOT NULL AND p.residence_timezone IS NOT NULL)
           OR (p.birth_latitude IS NOT NULL AND p.birth_timezone IS NOT NULL))`
   );
@@ -318,7 +319,9 @@ export async function executarRotinaDoCoach(
           pessoa.id,
           pessoa.role ?? 'user',
           'ai_tips_feed'
-        ))
+        )) ||
+        !(await contaTemRecurso(pessoa.id, 'vedic_insights')) ||
+        !(await contaTemRecurso(pessoa.id, 'ai_scores'))
       ) {
         continue;
       }

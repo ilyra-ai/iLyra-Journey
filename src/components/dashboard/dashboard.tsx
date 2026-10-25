@@ -1,4 +1,5 @@
 'use client';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import * as React from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
@@ -259,11 +260,15 @@ export function Dashboard() {
   const aiScoresEnabled = isPlanFeatureEnabled(subscription, 'ai_scores');
   const aiTipsEnabled = isPlanFeatureEnabled(subscription, 'ai_tips_feed');
 
+  const comHistorico = isPlanFeatureEnabled(
+    subscription,
+    'metrics_history_days'
+  );
   const {
     metrics,
     todayMetrics,
     loading: metricsLoading,
-  } = useDailyMetrics(7, dashboardEnabled);
+  } = useDailyMetrics(7, dashboardEnabled && comHistorico);
   const { scores, loading: scoresLoading } = useAIScores(aiScoresEnabled);
   const {
     profile: intelligenceProfile,
@@ -278,8 +283,9 @@ export function Dashboard() {
   const previousMetrics =
     metrics.length > 1 ? metrics[metrics.length - 2] : null;
 
-  const readinessScore =
-    scores?.readinessScore ?? todayMetrics?.readiness_score ?? null;
+  const readinessScore = aiScoresEnabled
+    ? (scores?.readinessScore ?? todayMetrics?.readiness_score ?? null)
+    : null;
   const longevityScore = scores?.longevityScore ?? null;
   // Sem dados, "—". Sem os scores no plano, a longevidade nem aparece.
   const rotuloDaLongevidade =
@@ -466,7 +472,12 @@ export function Dashboard() {
       <div className="w-full relative z-20"></div>
 
       {/* Coach diário (tarefa 42): o feed de dicas de IA do plano. */}
-      {aiTipsEnabled ? <SeuDiaCard /> : null}
+      <PlanFeatureGate
+        features={['ai_tips_feed', 'vedic_insights', 'ai_scores']}
+        ocultar
+      >
+        <SeuDiaCard />
+      </PlanFeatureGate>
 
       <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         <Card className="min-w-0 md:col-span-2">
@@ -956,14 +967,17 @@ export function Dashboard() {
         </CardContent>
       </Card>
 
-      <LyraIntelligence2026
-        metrics={metrics}
-        todayMetrics={todayMetrics}
-        profile={intelligenceProfile}
-        chronologicalAge={chronologicalAge}
-        isFemale={isFemale}
-        readinessScore={readinessScore}
-      />
+      <PlanFeatureGate features={['health_intelligence']} ocultar>
+        {' '}
+        <LyraIntelligence2026
+          metrics={metrics}
+          todayMetrics={todayMetrics}
+          profile={intelligenceProfile}
+          chronologicalAge={chronologicalAge}
+          isFemale={isFemale}
+          readinessScore={readinessScore}
+        />
+      </PlanFeatureGate>
 
       {/* `todayMetrics` sempre existe (linha do dia com `registrado: false`):
           sem testar o registro, o estado vazio nunca aparecia. */}
@@ -993,10 +1007,14 @@ export function Dashboard() {
       )}
 
       <section className="flex flex-col gap-5">
-        <AssessmentCard />
+        <PlanFeatureGate features={['wellbeing_assessments']} ocultar>
+          <AssessmentCard />
+        </PlanFeatureGate>
       </section>
 
-      <VedicDashboard featureEnabled={dashboardEnabled} />
+      <PlanFeatureGate features={['vedic_insights']} ocultar>
+        <VedicDashboard featureEnabled={dashboardEnabled} />
+      </PlanFeatureGate>
     </div>
   );
 }

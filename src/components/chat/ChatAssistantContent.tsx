@@ -1,4 +1,5 @@
 'use client';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 import { ImagemDaConversa } from './ImagemDaConversa';
 import type { ImagemDoTurno } from '@/lib/chat/tipos';
 
@@ -204,11 +205,17 @@ function SobreOChat({
 export function ChatAssistantContent({
   conversaId = null,
   aoAbrirConversa,
+  salvarHistorico = true,
 }: {
+  salvarHistorico?: boolean;
   conversaId?: string | null;
   aoAbrirConversa?: (id: string | null) => void;
 } = {}) {
-  const historico = useConversaLyra(conversaId, aoAbrirConversa);
+  const historico = useConversaLyra(
+    conversaId,
+    aoAbrirConversa,
+    salvarHistorico
+  );
   const { config: appConfig } = usePublicSitePageConfig('app');
   const { privacyMode } = usePrivacyMode();
   const chatConfig = appConfig.chat;
@@ -354,7 +361,9 @@ export function ChatAssistantContent({
           </div>
         </div>
         <div className="flex shrink-0 items-center gap-1">
-          <MemoriaDaLyra />
+          <PlanFeatureGate features={['lyra_memory']} ocultar>
+            <MemoriaDaLyra />
+          </PlanFeatureGate>
           {semConversa ? null : (
             <Button
               variant="ghost"
@@ -383,6 +392,12 @@ export function ChatAssistantContent({
           ) : null}
         </div>
       </header>
+      {!salvarHistorico ? (
+        <p className="shrink-0 pt-3 text-xs leading-5 text-muted-foreground">
+          Esta conversa fica apenas nesta página. Seu plano não inclui salvar o
+          histórico.
+        </p>
+      ) : null}
 
       <div
         ref={messagesContainerRef}
@@ -539,10 +554,13 @@ export function ChatAssistantContent({
                   }
                 />
                 {msg.imagem ? (
-                  <ImagemDaConversa
-                    key={`${msg.imagem.turnoId}:${msg.imagem.estado}`}
-                    imagem={msg.imagem}
-                  />
+                  <PlanFeatureGate features={['chat_images']} ocultar>
+                    {' '}
+                    <ImagemDaConversa
+                      key={`${msg.imagem.turnoId}:${msg.imagem.estado}`}
+                      imagem={msg.imagem}
+                    />
+                  </PlanFeatureGate>
                 ) : null}
               </div>
             ))}

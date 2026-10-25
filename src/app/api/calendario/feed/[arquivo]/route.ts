@@ -1,3 +1,4 @@
+import { contaTemRecurso } from '@/lib/plans/service';
 import {
   agendaDaPessoa,
   calendarioDaAgenda,
@@ -38,7 +39,7 @@ export async function GET(
     const { arquivo } = await params;
     const token = arquivo.endsWith('.ics') ? arquivo.slice(0, -4) : '';
     const userId = await donoDoToken(token);
-    if (!userId) {
+    if (!userId || !(await contaTemRecurso(userId, 'calendar_integration'))) {
       throw new HttpError('Agenda não encontrada.', 404);
     }
     await exigirDentroDoLimite(LIMITE_DO_FEED, hashDoToken(token));

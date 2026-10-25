@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 
 import { lerJson, respostaDeErro } from '@/lib/http/api';
@@ -21,6 +22,8 @@ function dataDaBusca(request: Request) {
 export async function GET(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'evening_reflection');
+
     const estado = await lerEstadoDaReflexao(
       session.user.id,
       dataDaBusca(request)
@@ -35,6 +38,8 @@ export async function GET(request: Request) {
 export async function PUT(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'evening_reflection');
+
     const entrada = await lerJson(request, reflexaoSchema);
     const estado = await salvarReflexao(session.user.id, entrada);
     return NextResponse.json(estado, { headers: SEM_CACHE });
@@ -47,6 +52,8 @@ export async function PUT(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'evening_reflection');
+
     const estado = await apagarReflexao(session.user.id, dataDaBusca(request));
     return NextResponse.json(estado, { headers: SEM_CACHE });
   } catch (error) {

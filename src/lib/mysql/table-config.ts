@@ -282,6 +282,8 @@ export const TABLE_CONFIG: Record<TableName, TableConfig> = {
     adminOnlyRead: true,
   },
   ai_plans: {
+    escritaSoPorRotaPropria:
+      'Use o gerador do Plano de IA para validar o recurso e consumir a cota.',
     columns: ['id', 'user_id', 'plan_data', 'created_at', 'updated_at'],
     userScopedBy: 'user_id',
   },
@@ -313,6 +315,8 @@ export const TABLE_CONFIG: Record<TableName, TableConfig> = {
     userScopedBy: 'user_id',
   },
   user_assessments: {
+    escritaSoPorRotaPropria:
+      'Use a avaliação de bem-estar para validar as respostas e calcular a pontuação.',
     columns: [
       'id',
       'user_id',

@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 
 import {
@@ -34,6 +35,7 @@ export async function GET(request: Request) {
     // Com sessão, o céu do momento vem com o dasha natal da pessoa (o mesmo
     // mapa do coach); sem sessão, só o céu geral.
     const sessao = await getServerSession();
+    if (sessao) await requireFeatureEnabled(sessao, 'vedic_insights');
     const [nascimento] = sessao
       ? await queryRows<BirthReference>(
           `SELECT birth_date, birth_time, birth_location, birth_latitude,

@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -17,6 +18,9 @@ const feedbackSchema = z.object({
 export async function POST(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'ai_tips_feed');
+    await requireFeatureEnabled(session, 'vedic_insights');
+
     const { data, util } = await lerJson(request, feedbackSchema);
     await registrarFeedback(session.user.id, data, util);
     return NextResponse.json({ feedback: util ? 1 : -1 });

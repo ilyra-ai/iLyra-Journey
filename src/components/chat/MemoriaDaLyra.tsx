@@ -1,4 +1,5 @@
 'use client';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -478,25 +479,27 @@ export function MemoriaDaLyra() {
                 </div>
               </FieldGroup>
             </form>
-            <Button
-              variant="outline"
-              className="h-auto min-h-10 whitespace-normal"
-              disabled={!estado.ativa || bloqueado || privacyMode}
-              onClick={() =>
-                void executar(
-                  'POST',
-                  { acao: 'importar' },
-                  'Conversas salvas enviadas para processamento, sem duplicar relatos já incluídos.'
-                )
-              }
-            >
-              Aprender com minhas conversas salvas
-            </Button>
-            <p className="text-xs leading-5 text-muted-foreground">
-              A importação é opcional. Mensagens privadas ficam de fora. Pausar
-              preserva lembranças; apagar a memória preserva o histórico de
-              conversas.
-            </p>
+            <PlanFeatureGate features={['chat_history']} ocultar>
+              <Button
+                variant="outline"
+                className="h-auto min-h-10 whitespace-normal"
+                disabled={!estado.ativa || bloqueado || privacyMode}
+                onClick={() =>
+                  void executar(
+                    'POST',
+                    { acao: 'importar' },
+                    'Conversas salvas enviadas para processamento, sem duplicar relatos já incluídos.'
+                  )
+                }
+              >
+                Aprender com minhas conversas salvas
+              </Button>
+              <p className="text-xs leading-5 text-muted-foreground">
+                A importação é opcional. Mensagens privadas ficam de fora.
+                Pausar preserva lembranças; apagar a memória preserva o
+                histórico de conversas.
+              </p>
+            </PlanFeatureGate>
             <Separator />
             <div className="flex flex-wrap gap-2">
               <Button variant="outline" asChild>

@@ -26,6 +26,14 @@ function responder(
 }
 
 describe('assistente local', () => {
+  it('continua respondendo com os sinais disponíveis sem calcular leituras védicas desativadas', () => {
+    const texto = responder('Como está meu sono?', { astrology: null });
+    expect(texto).toContain('6h 20m');
+    expect(texto).not.toMatch(/Lua|Leitura simbólica|Dosha/);
+    expect(responder('resumo de hoje', { astrology: null })).not.toMatch(
+      /Ciclo Astrológico|Dosha dominante/
+    );
+  });
   it('recupera relatos fornecidos pela memória sem inventar detalhes ausentes', () => {
     expect(
       responder('Você lembra o nome da minha gata?', {

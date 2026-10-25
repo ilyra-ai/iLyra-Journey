@@ -14,6 +14,8 @@ export interface UseAccountResourceResult<T> {
 }
 
 interface AccountResourceOptions<T> {
+  compartilharAtualizacoes?: boolean;
+  preservarAoAtualizarComFalha?: boolean;
   // Rota da API da conta autenticada (ex.: /api/account/billing).
   endpoint: string;
   // Valida a forma da resposta de sucesso.
@@ -42,6 +44,8 @@ function extractApiError(payload: unknown) {
  * usuário (ao trocar de sessão os dados anteriores deixam de ser exibidos).
  */
 export function useAccountResource<T>({
+  compartilharAtualizacoes = false,
+  preservarAoAtualizarComFalha = false,
   endpoint,
   isValid,
   fallbackErrorMessage,
@@ -71,18 +75,20 @@ export function useAccountResource<T>({
   const notifyError = React.useCallback(
     (error: unknown) => {
       toast.error(errorToastTitle, {
+        id: `recurso:${endpoint}`,
         description:
           error instanceof Error ? error.message : 'Erro desconhecido.',
       });
     },
-    [errorToastTitle]
+    [endpoint, errorToastTitle]
   );
 
   return useKeyedResource<T | null>(
     userId,
-    request,
+    compartilharAtualizacoes ? initialRequest : request,
     notifyError,
     null,
-    initialRequest
+    initialRequest,
+    preservarAoAtualizarComFalha
   );
 }

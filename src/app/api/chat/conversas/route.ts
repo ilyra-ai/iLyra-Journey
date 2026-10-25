@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -15,6 +16,8 @@ const parametros = z.object({
 export async function GET(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'chat_history');
+
     const busca = new URL(request.url).searchParams;
     const { limite, cursor } = parametros.parse({
       limite: busca.get('limite') ?? undefined,

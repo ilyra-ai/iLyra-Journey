@@ -1,4 +1,6 @@
 'use client';
+import { useAccountSubscription } from '@/hooks/use-account-subscription';
+import { isPlanFeatureEnabled } from '@/lib/plans/access';
 
 import React, {
   createContext,
@@ -65,28 +67,31 @@ interface SyncSnapshot {
 // desativada: ela exige um app de celular que o projeto não tem.
 async function runHealthSync(
   userId: string | null,
-  previousAstrology: AstrologicalData | null
+  previousAstrology: AstrologicalData | null,
+  comVedico = true,
+  comHistorico = true
 ): Promise<SyncSnapshot> {
   const falhas: string[] = [];
-  let astrology = previousAstrology;
+  let astrology = comVedico ? previousAstrology : null;
   let vitals: HealthDataMetrics | null = null;
 
-  try {
-    const resAstro = await fetch('/api/astrology/ephemeris');
-    if (!resAstro.ok) {
-      throw new Error(`HTTP ${resAstro.status}`);
+  if (comVedico)
+    try {
+      const resAstro = await fetch('/api/astrology/ephemeris');
+      if (!resAstro.ok) {
+        throw new Error(`HTTP ${resAstro.status}`);
+      }
+      const astroData = (await resAstro.json()) as { data: AstrologicalData };
+      astrology = astroData.data;
+    } catch (error) {
+      // Página saindo: o navegador cancelou a busca (não é falha).
+      if (!paginaSaindo()) {
+        console.error('Falha ao ler as efemérides:', error);
+        falhas.push('o céu do momento');
+      }
     }
-    const astroData = (await resAstro.json()) as { data: AstrologicalData };
-    astrology = astroData.data;
-  } catch (error) {
-    // Página saindo: o navegador cancelou a busca (não é falha).
-    if (!paginaSaindo()) {
-      console.error('Falha ao ler as efemérides:', error);
-      falhas.push('o céu do momento');
-    }
-  }
 
-  if (userId) {
+  if (userId && comHistorico) {
     const hoje = format(new Date(), 'yyyy-MM-dd');
     const { data, error } = await db
       .from<RegistroDosSinaisDoDia>('daily_metrics')
@@ -118,6 +123,12 @@ export const HealthOrchestratorProvider: React.FC<{
 }> = ({ children }) => {
   const { session } = useAuth();
   const userId = session?.user.id ?? null;
+  const { data: subscription } = useAccountSubscription();
+  const comVedico = isPlanFeatureEnabled(subscription, 'vedic_insights');
+  const comHistorico = isPlanFeatureEnabled(
+    subscription,
+    'metrics_history_days'
+  );
   // Sinais do dia gravados no banco na última sincronização.
   const [syncedVitals, setSyncedVitals] = useState<HealthDataMetrics | null>(
     null
@@ -154,16 +165,21 @@ export const HealthOrchestratorProvider: React.FC<{
   const triggerManualSync = useCallback(async (): Promise<HealthSyncResult> => {
     setIsSyncing(true);
     setSyncError(null);
-    const snapshot = await runHealthSync(userId, astrology);
+    const snapshot = await runHealthSync(
+      userId,
+      astrology,
+      comVedico,
+      comHistorico
+    );
     applySnapshot(snapshot);
     return { error: snapshot.error };
-  }, [applySnapshot, astrology, userId]);
+  }, [applySnapshot, astrology, userId, comVedico, comHistorico]);
 
   // Sincronização inicial (o estado inicial já é "sincronizando") e a cada
   // troca de conta.
   useEffect(() => {
     let active = true;
-    runHealthSync(userId, null)
+    runHealthSync(userId, null, comVedico, comHistorico)
       .then((snapshot) => {
         if (active) applySnapshot(snapshot);
       })
@@ -174,19 +190,19 @@ export const HealthOrchestratorProvider: React.FC<{
     return () => {
       active = false;
     };
-  }, [applySnapshot, userId]);
+  }, [applySnapshot, userId, comVedico, comHistorico]);
 
   // Check-in salvo ou sessão da pulseira gravada: relê os sinais do dia.
   useEffect(() => {
     if (!userId) return;
     return ouvirMetricasAtualizadas(() => {
-      void runHealthSync(userId, astrology)
+      void runHealthSync(userId, astrology, comVedico, comHistorico)
         .then(applySnapshot)
         .catch((erro: unknown) => {
           console.error('Falha ao reler os sinais do dia:', erro);
         });
     });
-  }, [applySnapshot, astrology, userId]);
+  }, [applySnapshot, astrology, userId, comVedico, comHistorico]);
 
   // Canal em tempo real para eventos de wearables publicados pelo app.
   useEffect(() => {

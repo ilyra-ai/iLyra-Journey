@@ -1,3 +1,4 @@
+import { exigirDiaNoHistorico } from '@/lib/plans/historico';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -35,6 +36,7 @@ export async function POST(request: Request) {
     const { data: pedida } = await lerJsonOpcional(request, pedidoSchema);
     const data = pedida ?? new Date().toISOString().slice(0, 10);
 
+    await exigirDiaNoHistorico(session.user.id, data);
     const [metric] = await queryRows<MetricSnapshot>(
       'SELECT * FROM daily_metrics WHERE user_id = ? AND date = ? LIMIT 1',
       [session.user.id, data]

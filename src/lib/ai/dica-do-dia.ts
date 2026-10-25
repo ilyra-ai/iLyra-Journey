@@ -1,3 +1,5 @@
+import { limiteDeMetricasDaConta } from '@/lib/plans/service';
+import { corteDoHistorico } from '@/lib/plans/historico';
 import { queryRows } from '@/lib/mysql/pool';
 
 /**
@@ -120,12 +122,17 @@ export async function dicaDoDia(userId: string, hoje: string) {
   const dicas = await queryRows<Dica>(
     'SELECT id, title, detail, category FROM ai_tips WHERE is_active = TRUE'
   );
-  const [linha] = await queryRows<Record<string, unknown>>(
-    `SELECT sleep_duration_minutes, water_liters, steps, active_minutes,
+  const limiteHistorico = await limiteDeMetricasDaConta(userId);
+  const corte = corteDoHistorico(limiteHistorico);
+  const [linha] =
+    limiteHistorico === 0 || (corte && hoje < corte)
+      ? []
+      : await queryRows<Record<string, unknown>>(
+          `SELECT sleep_duration_minutes, water_liters, steps, active_minutes,
             stress_score, protein_grams
        FROM daily_metrics WHERE user_id = ? AND date = ? LIMIT 1`,
-    [userId, hoje]
-  );
+          [userId, hoje]
+        );
   const numero = (valor: unknown) =>
     valor === null || valor === undefined ? null : Number(valor);
   const sinais: SinaisDaDica | null = linha

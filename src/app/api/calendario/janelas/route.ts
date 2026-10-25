@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 
 import { janelasDeHoje } from '@/lib/calendario/servico';
@@ -10,6 +11,8 @@ export const runtime = 'nodejs';
 export async function GET() {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'calendar_integration');
+
     const janelas = await janelasDeHoje(session.user.id);
     return NextResponse.json(janelas, {
       headers: { 'Cache-Control': 'private, no-store' },

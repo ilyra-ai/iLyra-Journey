@@ -84,9 +84,10 @@ export async function closeMysqlPool(): Promise<void> {
 
 export async function queryRows<TRow extends object = QueryRecord>(
   sql: string,
-  params: readonly unknown[] = []
+  params: readonly unknown[] = [],
+  connection?: mysql.PoolConnection
 ): Promise<TRow[]> {
-  const [rows] = await getMysqlPool().query<RowDataPacket[]>(
+  const [rows] = await (connection ?? getMysqlPool()).query<RowDataPacket[]>(
     sql,
     params as MySqlParameter[]
   );
@@ -95,12 +96,12 @@ export async function queryRows<TRow extends object = QueryRecord>(
 
 export async function executeStatement(
   sql: string,
-  params: readonly unknown[] = []
+  params: readonly unknown[] = [],
+  connection?: mysql.PoolConnection
 ): Promise<ResultSetHeader> {
-  const [result] = await getMysqlPool().execute<ResultSetHeader>(
-    sql,
-    params as MySqlParameter[]
-  );
+  const [result] = await (
+    connection ?? getMysqlPool()
+  ).execute<ResultSetHeader>(sql, params as MySqlParameter[]);
   return result;
 }
 

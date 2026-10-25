@@ -34,7 +34,8 @@ export function useKeyedResource<T>(
   request: () => Promise<T>,
   onError: (error: unknown) => void,
   fallback: T,
-  initialRequest: () => Promise<T> = request
+  initialRequest: () => Promise<T> = request,
+  preservarAoAtualizarComFalha = false
 ): KeyedResource<T> {
   const [loaded, setLoaded] = useState<{ key: string; data: T } | null>(null);
   const [refreshing, setRefreshing] = useState(false);
@@ -72,10 +73,10 @@ export function useKeyedResource<T>(
       .catch((error: unknown) => {
         if (paginaSaindo()) return;
         onError(error);
-        setLoaded({ key, data: fallback });
+        if (!preservarAoAtualizarComFalha) setLoaded({ key, data: fallback });
       })
       .finally(() => setRefreshing(false));
-  }, [fallback, key, onError, request]);
+  }, [fallback, key, onError, request, preservarAoAtualizarComFalha]);
 
   const isCurrent = key !== null && loaded?.key === key;
 

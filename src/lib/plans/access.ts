@@ -3,6 +3,7 @@ import {
   PlanFeatureAccess,
   PlanFeatureKey,
 } from '@/types/subscription';
+import { capacidadeDisponivel } from './dependencias';
 
 export function getPlanFeature(
   summary: AccountSubscriptionSummary | null,
@@ -19,7 +20,10 @@ export function isPlanFeatureEnabled(
   summary: AccountSubscriptionSummary | null,
   featureKey: PlanFeatureKey
 ) {
-  return getPlanFeature(summary, featureKey)?.enabled ?? false;
+  if (summary?.administrativeAccess) return true;
+  if (summary && featureKey !== 'profile_management' && !summary.plan.isActive)
+    return false;
+  return summary ? capacidadeDisponivel(summary.features, featureKey) : false;
 }
 
 export function getQuotaUsagePercentage(feature: PlanFeatureAccess | null) {

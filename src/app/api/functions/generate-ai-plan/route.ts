@@ -5,7 +5,7 @@ import { gerarPlanoDaPessoa, gravarPlano } from '@/lib/ai/plano-do-dia';
 import { lerJsonOpcional, respostaDeErro } from '@/lib/http/api';
 import { withTransaction } from '@/lib/mysql/pool';
 import { requireServerSession } from '@/lib/mysql/server-auth';
-import { consumeUsageQuota } from '@/lib/plans/service';
+import { consumeUsageQuota, requireFeatureEnabled } from '@/lib/plans/service';
 
 export const runtime = 'nodejs';
 
@@ -20,6 +20,7 @@ const pedidoSchema = z.object({}).strict();
 export async function POST(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'ai_plan_generations');
     // Só valida (o corpo não traz dados: o plano usa os do servidor).
     await lerJsonOpcional(request, pedidoSchema);
 

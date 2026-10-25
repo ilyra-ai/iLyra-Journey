@@ -13,7 +13,8 @@ import { buscarJson } from '@/lib/http/transporte';
 
 export function useConversaLyra(
   conversaInicial: string | null,
-  aoAbrir?: (id: string | null) => void
+  aoAbrir?: (id: string | null) => void,
+  salvarHistorico = true
 ) {
   const { db } = useAuth();
   const { privacyMode } = usePrivacyMode();
@@ -111,8 +112,9 @@ export function useConversaLyra(
           body: {
             query: texto.trim(),
             userApiKey: chave,
-            conversationId: idConversa,
-            turnId: idTurno,
+            ...(salvarHistorico
+              ? { conversationId: idConversa, turnId: idTurno }
+              : {}),
             regenerate: refazer?.estado === 'concluido',
             privacyMode,
           },
@@ -134,7 +136,7 @@ export function useConversaLyra(
           )
         );
         setAnimarTurno(idTurno);
-        aoAbrir?.(idConversa);
+        if (salvarHistorico) aoAbrir?.(idConversa);
       }
     } catch (falha) {
       if (montado.current) {
@@ -152,7 +154,7 @@ export function useConversaLyra(
         );
       }
     } finally {
-      window.dispatchEvent(new Event(EVENTO_DO_HISTORICO));
+      if (salvarHistorico) window.dispatchEvent(new Event(EVENTO_DO_HISTORICO));
       ocupado.current = false;
       if (montado.current) setEnviando(false);
     }

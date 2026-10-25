@@ -1,4 +1,5 @@
 'use client';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import Link from 'next/link';
 import React from 'react';
@@ -122,7 +123,9 @@ export function Sidebar({
                       {item.label}
                     </SidebarLink>
                     {item.href === '/chat' && !previa ? (
-                      <HistoricoDeConversas />
+                      <PlanFeatureGate features={['chat_history']} ocultar>
+                        <HistoricoDeConversas />
+                      </PlanFeatureGate>
                     ) : null}
                   </li>
                 ))}

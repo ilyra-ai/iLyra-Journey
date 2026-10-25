@@ -1,3 +1,5 @@
+import { limiteDeMetricasDaConta } from '@/lib/plans/service';
+import { corteDoHistorico } from '@/lib/plans/historico';
 import { createHash } from 'node:crypto';
 
 import {
@@ -126,13 +128,18 @@ export async function lerContextoDoCoach(
        FROM profiles WHERE id = ? LIMIT 1`,
     [userId]
   );
-  const linhas = await queryRows<Record<string, unknown>>(
-    `SELECT date, menstrual_flow, ${COLUNAS_DO_COACH.join(', ')}
+  const limiteHistorico = await limiteDeMetricasDaConta(userId);
+  const corte = corteDoHistorico(limiteHistorico);
+  const linhas =
+    limiteHistorico === 0
+      ? []
+      : await queryRows<Record<string, unknown>>(
+          `SELECT date, menstrual_flow, ${COLUNAS_DO_COACH.join(', ')}
        FROM daily_metrics
-      WHERE user_id = ? AND date BETWEEN ? AND ?
+      WHERE user_id = ? AND date BETWEEN ? AND ? AND (? IS NULL OR date >= ?)
       ORDER BY date DESC`,
-    [userId, diaAnterior(data, 7), data]
-  );
+          [userId, diaAnterior(data, 7), data, corte, corte]
+        );
   const metricas = linhas.map(normalizarMetricas);
 
   return {

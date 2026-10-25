@@ -1,4 +1,5 @@
 'use client';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import React from 'react';
 import Link from 'next/link';
@@ -121,7 +122,11 @@ export function MobileSidebar() {
                       {item.label}
                     </SidebarLink>
                     {item.href === '/chat' ? (
-                      <HistoricoDeConversas aoEscolher={() => setOpen(false)} />
+                      <PlanFeatureGate features={['chat_history']} ocultar>
+                        <HistoricoDeConversas
+                          aoEscolher={() => setOpen(false)}
+                        />
+                      </PlanFeatureGate>
                     ) : null}
                   </li>
                 ))}

@@ -1,7 +1,13 @@
-import type { RowDataPacket } from 'mysql2/promise';
+import type { PoolConnection, RowDataPacket } from 'mysql2/promise';
 import { travarAdministracao } from '@/lib/auth/bloqueio';
 import { registrarEventoDeUsuario } from '@/lib/admin/eventos-usuarios';
-import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
+import {
+  executeStatement as executar,
+  queryRows as consultar,
+  withTransaction,
+} from '@/lib/mysql/pool';
+const executeStatement = executar;
+const queryRows = consultar;
 import { AppSession } from '@/types/app-session';
 import {
   QueryFilter,
@@ -16,6 +22,7 @@ import {
   assertActiveRowsQuota,
   getMetricsHistoryLimit,
   requireFeatureEnabled,
+  recursoHabilitado,
 } from '@/lib/plans/service';
 import { PlanFeatureKey } from '@/types/subscription';
 
@@ -112,6 +119,13 @@ const TABLE_FEATURE_ACCESS: Partial<
     }
   >
 > = {
+  habits: { read: 'personal_habits', write: 'personal_habits' },
+  suggested_habits: { read: 'personal_habits' },
+  user_assessments: {
+    read: 'wellbeing_assessments',
+    write: 'wellbeing_assessments',
+  },
+  user_streaks: { read: 'goal_progress_tracking' },
   goals: {
     read: 'goal_progress_tracking',
     write: 'goal_progress_tracking',
@@ -297,6 +311,17 @@ function protectWriteColumns(
 ) {
   const config = TABLE_CONFIG[table];
   const admin = isAdmin(session);
+  if (
+    table === 'profiles' &&
+    !admin &&
+    !session.user.onboarding_completed &&
+    payload.onboarding_completed
+  ) {
+    throw new HttpError(
+      'Conclua sua configuração inicial pelo formulário para validar os dados e o consentimento.',
+      409
+    );
+  }
 
   // Datas de criação e de atualização são do servidor (tarefa 58): o MySQL
   // preenche `created_at` e mantém `updated_at` (ON UPDATE
@@ -484,7 +509,8 @@ function prepareWriteValue(table: TableName, column: string, value: unknown) {
 async function ensurePlanFeatureAccessForTable(
   table: TableName,
   session: AppSession | null,
-  mode: 'read' | 'write'
+  mode: 'read' | 'write',
+  connection?: PoolConnection
 ) {
   if (!session || isAdmin(session)) {
     return;
@@ -495,7 +521,7 @@ async function ensurePlanFeatureAccessForTable(
     return;
   }
 
-  await requireFeatureEnabled(session, featureKey);
+  await requireFeatureEnabled(session, featureKey, connection);
 }
 
 function sanitizeColumns(table: TableName, select: string) {
@@ -711,7 +737,7 @@ async function selectAppointmentsWithProfessionals(
         p.specialty AS professional_specialty,
         p.avatar_url AS professional_avatar_url
       FROM appointments t
-      LEFT JOIN professionals p ON p.id = t.professional_id
+      LEFT JOIN professionals p ON p.id = t.professional_id AND p.user_id = t.user_id
       ${where.clause}
       ${order}
     `,
@@ -975,6 +1001,25 @@ export async function runSelectQuery(options: {
     data = data.map((row) => normalizeRow(table, row));
   }
 
+  if (
+    table === 'daily_metrics' &&
+    options.session &&
+    !(await recursoHabilitado(
+      options.session.user.id,
+      options.session.user.role,
+      'ai_scores'
+    ))
+  ) {
+    data = data.map((row) =>
+      Object.fromEntries(
+        Object.entries(row).map(([key, value]) => [
+          key,
+          key === 'readiness_score' || key === 'recovery_score' ? null : value,
+        ])
+      )
+    );
+  }
+
   let count: number | null = null;
   if (options.count === 'exact') {
     const countRows = await queryRows<{ total: number }>(
@@ -1006,15 +1051,63 @@ export async function runSelectQuery(options: {
   return { data, count, error: null };
 }
 
+async function validarProfissionaisDaConsulta(
+  payloads: Record<string, unknown>[],
+  session: AppSession,
+  connection?: PoolConnection
+) {
+  const ids = [
+    ...new Set(
+      payloads
+        .map((p) => p.professional_id)
+        .filter((id) => id !== undefined && id !== null)
+    ),
+  ];
+  if (!ids.length) return;
+  const rows = await consultar<{ id: string }>(
+    `SELECT id FROM professionals WHERE user_id=? AND id IN (${ids.map(() => '?').join(',')})`,
+    [session.user.id, ...ids],
+    connection
+  );
+  if (rows.length !== ids.length)
+    throw new HttpError('Escolha um profissional da sua própria conta.', 403);
+}
+
 export async function runInsertQuery(options: {
   table: string;
   values: Record<string, unknown> | Record<string, unknown>[];
   session: AppSession | null;
-}) {
+  connection?: PoolConnection;
+}): Promise<{ data: QueryRecord | QueryRecord[]; error: null }> {
   assertTable(options.table);
   const table = options.table;
   const session = ensureCanWrite(table, options.session);
-  await ensurePlanFeatureAccessForTable(table, session, 'write');
+  // Uma transação por titular: contar, verificar a cota e gravar são indivisíveis.
+  if (
+    (table === 'professionals' || table === 'appointments') &&
+    !isAdmin(session) &&
+    !options.connection
+  ) {
+    return withTransaction(async (connection) => {
+      await connection.query('SELECT id FROM users WHERE id = ? FOR UPDATE', [
+        session.user.id,
+      ]);
+      return runInsertQuery({ ...options, connection });
+    });
+  }
+  const queryRows = <T extends object>(
+    sql: string,
+    params: readonly unknown[] = []
+  ) => consultar<T>(sql, params, options.connection);
+  const executeStatement = (sql: string, params: readonly unknown[] = []) =>
+    executar(sql, params, options.connection);
+
+  await ensurePlanFeatureAccessForTable(
+    table,
+    session,
+    'write',
+    options.connection
+  );
 
   const config = TABLE_CONFIG[table];
   const payloads = Array.isArray(options.values)
@@ -1066,6 +1159,13 @@ export async function runInsertQuery(options: {
     return nextPayload;
   });
 
+  if (table === 'appointments')
+    await validarProfissionaisDaConsulta(
+      preparedPayloads,
+      session,
+      options.connection
+    );
+
   // Um INSERT de várias linhas usa uma única lista de colunas.
   const columnSignature = Object.keys(preparedPayloads[0]).sort().join(',');
   if (
@@ -1086,6 +1186,7 @@ export async function runInsertQuery(options: {
         [options.session.user.id]
       );
       await assertActiveRowsQuota({
+        connection: options.connection,
         session: options.session,
         featureKey: 'professionals_total',
         currentCount: Number(countRows[0]?.total ?? 0),
@@ -1107,12 +1208,13 @@ export async function runInsertQuery(options: {
         const appointmentTime = payload.appointment_time;
         return (
           typeof appointmentTime === 'string' &&
-          new Date(appointmentTime).getTime() >= Date.now()
+          appointmentTime >= formatUtcDateTime(new Date())
         );
       }).length;
 
       if (futureInserts > 0) {
         await assertActiveRowsQuota({
+          connection: options.connection,
           session: options.session,
           featureKey: 'appointments_active',
           currentCount: Number(countRows[0]?.total ?? 0),
@@ -1148,11 +1250,37 @@ export async function runUpsertQuery(options: {
   values: Record<string, unknown>;
   onConflict: string;
   session: AppSession | null;
-}) {
+  connection?: PoolConnection;
+}): Promise<{ data: QueryRecord; error: null }> {
   assertTable(options.table);
   const table = options.table;
   const session = ensureCanWrite(table, options.session);
-  await ensurePlanFeatureAccessForTable(table, session, 'write');
+  // Uma transação por titular: contar, verificar a cota e gravar são indivisíveis.
+  if (
+    (table === 'professionals' || table === 'appointments') &&
+    !isAdmin(session) &&
+    !options.connection
+  ) {
+    return withTransaction(async (connection) => {
+      await connection.query('SELECT id FROM users WHERE id = ? FOR UPDATE', [
+        session.user.id,
+      ]);
+      return runUpsertQuery({ ...options, connection });
+    });
+  }
+  const queryRows = <T extends object>(
+    sql: string,
+    params: readonly unknown[] = []
+  ) => consultar<T>(sql, params, options.connection);
+  const executeStatement = (sql: string, params: readonly unknown[] = []) =>
+    executar(sql, params, options.connection);
+
+  await ensurePlanFeatureAccessForTable(
+    table,
+    session,
+    'write',
+    options.connection
+  );
 
   const config = TABLE_CONFIG[table];
   if (
@@ -1192,6 +1320,12 @@ export async function runUpsertQuery(options: {
     payload[config.userScopedBy] = session.user.id;
   }
   protectWriteColumns(table, session, payload, 'upsert');
+  if (table === 'appointments')
+    await validarProfissionaisDaConsulta(
+      [payload],
+      session,
+      options.connection
+    );
 
   // O ON DUPLICATE KEY UPDATE sobrescreveria a linha de outro usuário que
   // tivesse o mesmo id: a linha existente precisa pertencer à sessão.
@@ -1209,6 +1343,45 @@ export async function runUpsertQuery(options: {
     }
   }
 
+  if (
+    !isAdmin(session) &&
+    (table === 'professionals' || table === 'appointments')
+  ) {
+    if (options.onConflict !== 'id')
+      throw new HttpError(
+        'Use o identificador do registro para atualizar itens com cota.',
+        400
+      );
+    const current = await queryRows<{ total: number }>(
+      `SELECT COUNT(*) AS total FROM ${table} WHERE user_id = ? AND id <> ? ${table === 'appointments' ? 'AND appointment_time >= UTC_TIMESTAMP()' : ''}`,
+      [session.user.id, payload.id]
+    );
+    const increment =
+      table === 'professionals' ||
+      (typeof payload.appointment_time === 'string' &&
+        payload.appointment_time >= formatUtcDateTime(new Date()))
+        ? 1
+        : 0;
+    // Horário omitido em atualização mantém o horário atual da consulta.
+    const [existing] =
+      table === 'appointments' && payload.appointment_time === undefined
+        ? await queryRows<{ active: number }>(
+            'SELECT appointment_time >= UTC_TIMESTAMP() AS active FROM appointments WHERE user_id=? AND id=?',
+            [session.user.id, payload.id]
+          )
+        : [];
+    await assertActiveRowsQuota({
+      session,
+      featureKey:
+        table === 'professionals'
+          ? 'professionals_total'
+          : 'appointments_active',
+      currentCount: Number(current[0]?.total ?? 0),
+      increment: existing ? Number(existing.active) : increment,
+      connection: options.connection,
+    });
+  }
+
   const columns = Object.keys(payload);
   const updateColumns = columns.filter(
     (column) =>
@@ -1219,7 +1392,13 @@ export async function runUpsertQuery(options: {
   // no-op explícito (`id = id`).
   const updateAssignments =
     updateColumns.length > 0
-      ? updateColumns.map((column) => `${column} = novo.${column}`).join(', ')
+      ? updateColumns
+          .map((column) =>
+            owner
+              ? `${column} = IF(${table}.${owner} = novo.${owner}, novo.${column}, ${table}.${column})`
+              : `${column} = novo.${column}`
+          )
+          .join(', ')
       : `id = ${table}.id`;
   const sql = `
     INSERT INTO ${table} (${columns.join(', ')})
@@ -1230,6 +1409,16 @@ export async function runUpsertQuery(options: {
     sql,
     columns.map((column) => payload[column])
   );
+  // A checagem na atribuição SQL cobre duas contas criando o mesmo id ao mesmo tempo.
+  // Leitura corrente (FOR UPDATE) não usa o snapshot anterior ao conflito.
+  if (owner && typeof payload.id === 'string') {
+    const [atual] = await queryRows<{ owner: unknown }>(
+      `SELECT ${owner} AS owner FROM ${table} WHERE id=? FOR UPDATE`,
+      [payload.id]
+    );
+    if (atual && atual.owner !== payload[owner])
+      throw new HttpError('O registro pertence a outra conta.', 403);
+  }
   return { data: normalizeRow(table, payload as QueryRecord), error: null };
 }
 
@@ -1238,11 +1427,37 @@ export async function runUpdateQuery(options: {
   values: Record<string, unknown>;
   filters: QueryFilter[];
   session: AppSession | null;
-}) {
+  connection?: PoolConnection;
+}): Promise<{ data: QueryRecord | null; error: { message: string } | null }> {
   assertTable(options.table);
   const table = options.table;
   const session = ensureCanWrite(table, options.session);
-  await ensurePlanFeatureAccessForTable(table, session, 'write');
+  // Uma transação por titular: contar, verificar a cota e gravar são indivisíveis.
+  if (
+    (table === 'professionals' || table === 'appointments') &&
+    !isAdmin(session) &&
+    !options.connection
+  ) {
+    return withTransaction(async (connection) => {
+      await connection.query('SELECT id FROM users WHERE id = ? FOR UPDATE', [
+        session.user.id,
+      ]);
+      return runUpdateQuery({ ...options, connection });
+    });
+  }
+  const queryRows = <T extends object>(
+    sql: string,
+    params: readonly unknown[] = []
+  ) => consultar<T>(sql, params, options.connection);
+  const executeStatement = (sql: string, params: readonly unknown[] = []) =>
+    executar(sql, params, options.connection);
+
+  await ensurePlanFeatureAccessForTable(
+    table,
+    session,
+    'write',
+    options.connection
+  );
 
   if (
     !options.values ||
@@ -1266,18 +1481,12 @@ export async function runUpdateQuery(options: {
     }
   }
   protectWriteColumns(table, session, payload, 'update');
-  if (
-    table === 'profiles' &&
-    !isAdmin(session) &&
-    !session.user.onboarding_completed &&
-    payload.onboarding_completed
-  ) {
-    throw new HttpError(
-      'Conclua sua configuração inicial pelo formulário para validar os dados e o consentimento.',
-      409
+  if (table === 'appointments')
+    await validarProfissionaisDaConsulta(
+      [payload],
+      session,
+      options.connection
     );
-  }
-
   // LGPD: em outras contas o administrador só altera as colunas liberadas
   // (ex.: papel e status do onboarding), nunca dados do titular.
   if (acessoEntreContas(table, options.filters, session)) {
@@ -1316,7 +1525,7 @@ export async function runUpdateQuery(options: {
     );
     const targetWillBeActive =
       typeof normalizedAppointmentTime === 'string' &&
-      new Date(normalizedAppointmentTime).getTime() >= Date.now();
+      normalizedAppointmentTime >= formatUtcDateTime(new Date());
 
     if (targetWillBeActive) {
       const scopedRows = await queryRows<{ id: string }>(
@@ -1338,6 +1547,7 @@ export async function runUpdateQuery(options: {
         );
 
         await assertActiveRowsQuota({
+          connection: options.connection,
           session: options.session,
           featureKey: 'appointments_active',
           currentCount: Number(countRows[0]?.total ?? 0),

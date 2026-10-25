@@ -72,6 +72,9 @@ const FREE: PlanFeatureKey[] = [
   'professionals_total',
   'appointments_active',
   'metrics_history_days',
+  'weekly_review',
+  'guided_breathing',
+  'vedic_insights',
 ];
 
 const hrefsVisiveis = (assinatura: AccountSubscriptionSummary | null) =>
@@ -89,9 +92,16 @@ describe('rotas do app conforme o plano', () => {
   });
 
   it('ignora consulta e âncora ao identificar a rota', () => {
-    expect(recursosDaRota('/dia#reflexao')).toEqual(['ai_tips_feed']);
+    expect(recursosDaRota('/dia#reflexao')).toEqual([
+      'ai_tips_feed',
+      'vedic_insights',
+      'ai_scores',
+    ]);
     expect(recursosDaRota('/chat?origem=painel')).toEqual(['ai_chat_messages']);
-    expect(recursosDaRota('/semana')).toEqual([]);
+    expect(recursosDaRota('/semana')).toEqual([
+      'weekly_review',
+      'vedic_insights',
+    ]);
   });
 
   it('Free não vê Monitoramento nem Dispositivos e vê o restante', () => {

@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -49,6 +50,8 @@ const assessmentSchema = z.discriminatedUnion('type', [
 export async function POST(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'wellbeing_assessments');
+
     const assessment = await lerJson(request, assessmentSchema);
 
     let scoreValue: number;

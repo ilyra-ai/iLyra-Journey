@@ -52,7 +52,7 @@ interface ChatContext {
     readiness_score: number | null;
     blood_glucose_mgdl?: number | null;
   } | null;
-  astrology: AstrologicalData;
+  astrology: AstrologicalData | null;
   // Documentos/skills configurados no admin que orientam o que a IA deve
   // saber, fazer e executar no app. Injetados em tempo real no contexto.
   skills?: AiSkillDocument[];
@@ -195,13 +195,15 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
 
   // Motor da Lyra (tarefa 55): mapa natal, os três tipos de mapa, Vedanta,
   // Upavedas e Vedangas, respondidos pela base curada, sem modelo de IA.
-  const daLyra = responderComoLyra(query, {
-    nome: name,
-    mapa: context.lyra?.mapa ?? null,
-    faltando: context.lyra?.faltando,
-    agora: context.lyra?.agora,
-    fuso: context.lyra?.fuso,
-  });
+  const daLyra = context.astrology
+    ? responderComoLyra(query, {
+        nome: name,
+        mapa: context.lyra?.mapa ?? null,
+        faltando: context.lyra?.faltando,
+        agora: context.lyra?.agora,
+        fuso: context.lyra?.fuso,
+      })
+    : null;
   if (daLyra) {
     return daLyra.texto;
   }
@@ -244,25 +246,30 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
   // os motores completariam o resto com valores de referência e a resposta
   // apresentaria números que não vieram da pessoa.
   const doshaPelosSinais = avaliarCobertura(snap, SINAIS_DO_DOSHA).suficiente;
-  const dosha = calculateDynamicDosha(
-    doshaPelosSinais ? snap : semSinais(snap),
-    astro
-  );
-  const icq = avaliarCobertura(snap, SINAIS_DA_COERENCIA).suficiente
-    ? calculateQuantumCoherence(snap, astro)
+  const dosha = astro
+    ? calculateDynamicDosha(doshaPelosSinais ? snap : semSinais(snap), astro)
     : null;
-  const chakras = avaliarCobertura(snap, SINAIS_DOS_CHAKRAS).suficiente
-    ? calculateChakraAlignment(snap)
-    : null;
-  const prana = avaliarCobertura(snap, SINAIS_DO_PRANA).suficiente
-    ? calculatePranicIndex(snap, astro)
-    : null;
-  const koshas = avaliarCobertura(snap, SINAIS_DOS_KOSHAS).suficiente
-    ? calculateKoshas(snap, astro)
-    : null;
-  const doshaTexto = doshaPelosSinais
-    ? `${dosha.dominant} (${dosha.prakritiLabel})`
-    : `${dosha.dominant} (tendência pela Lua do dia, sem sinais suficientes do corpo)`;
+  const icq =
+    astro && avaliarCobertura(snap, SINAIS_DA_COERENCIA).suficiente
+      ? calculateQuantumCoherence(snap, astro)
+      : null;
+  const chakras =
+    astro && avaliarCobertura(snap, SINAIS_DOS_CHAKRAS).suficiente
+      ? calculateChakraAlignment(snap)
+      : null;
+  const prana =
+    astro && avaliarCobertura(snap, SINAIS_DO_PRANA).suficiente
+      ? calculatePranicIndex(snap, astro)
+      : null;
+  const koshas =
+    astro && avaliarCobertura(snap, SINAIS_DOS_KOSHAS).suficiente
+      ? calculateKoshas(snap, astro)
+      : null;
+  const doshaTexto = !dosha
+    ? null
+    : doshaPelosSinais
+      ? `${dosha.dominant} (${dosha.prakritiLabel})`
+      : `${dosha.dominant} (tendência pela Lua do dia, sem sinais suficientes do corpo)`;
   const indicesIntegrativos = [
     icq ? `- ICQ: ${icq.index}/100 (${icq.level})` : null,
     chakras
@@ -425,11 +432,12 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
       );
     }
 
-    responses.push(
-      `- Ciclo Astrológico: A Lua está em ${astro.moonSign} sob o Nakshatra ${astro.nakshatra} (${astro.tithi}). Isso significa que sua energia geral está ${astro.impactOnHealth.energy.toLowerCase()}.`
-    );
+    if (astro)
+      responses.push(
+        `- Ciclo Astrológico: A Lua está em ${astro.moonSign} sob o Nakshatra ${astro.nakshatra} (${astro.tithi}). Isso significa que sua energia geral está ${astro.impactOnHealth.energy.toLowerCase()}.`
+      );
 
-    responses.push(`- Dosha dominante: ${doshaTexto}.`);
+    if (doshaTexto) responses.push(`- Dosha dominante: ${doshaTexto}.`);
     responses.push(
       icq || prana
         ? `- Insights Védico-Quânticos: ${[
@@ -458,7 +466,8 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
     responses.push(
       'Para cuidar da rotina, procure manter horários regulares para dormir e acordar, reduzir luz intensa e telas perto de deitar, evitar cafeína no fim do dia e preparar um ambiente escuro, silencioso e confortável. Se a dificuldade persistir ou prejudicar seu dia, procure avaliação profissional para investigar a causa.'
     );
-    responses.push(`Leitura simbólica: ${astro.impactOnHealth.sleep}`);
+    if (astro)
+      responses.push(`Leitura simbólica: ${astro.impactOnHealth.sleep}`);
     responses.push(
       'Referência: [Hábitos de sono — NHLBI/NIH](https://www.nhlbi.nih.gov/health/sleep-deprivation/healthy-sleep-habits).'
     );
@@ -493,7 +502,7 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
       );
     }
     responses.push(
-      `${astro.impactOnHealth.stress} Referência sobre medição: [Diretrizes de HRV — American Physiological Society](https://doi.org/10.1152/ajpheart.00041.2026).`
+      `${astro ? astro.impactOnHealth.stress + ' ' : ''}Referência sobre medição: [Diretrizes de HRV — American Physiological Society](https://doi.org/10.1152/ajpheart.00041.2026).`
     );
   }
 
@@ -507,12 +516,12 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
       responses.push('Não tenho contagem recente de passos registrada.');
     }
     responses.push(
-      `Movimento pode ser incorporado à rotina de acordo com suas possibilidades e condições de saúde, com progressão individual. A leitura astrológica não define intensidade de treino. Leitura simbólica: ${astro.impactOnHealth.energy} Referência: [Atividade física — OMS](https://www.who.int/health-topics/noncommunicable-diseases/physical-activity).`
+      `Movimento pode ser incorporado à rotina de acordo com suas possibilidades e condições de saúde, com progressão individual. A leitura astrológica não define intensidade de treino. ${astro ? `Leitura simbólica: ${astro.impactOnHealth.energy} ` : ''}Referência: [Atividade física — OMS](https://www.who.int/health-topics/noncommunicable-diseases/physical-activity).`
     );
   }
 
   // 8. Análise Astrológica
-  if (isAstrologyQuery) {
+  if (isAstrologyQuery && astro) {
     responses.push(
       `Neste instante astronômico: Lua em ${astro.moonSign}, sob o domínio de ${astro.nakshatra} durante a fase ${astro.tithi}. Ayanamsha calculado: ${astro.ayanamshaDegrees.toFixed(2)} graus.`
     );
@@ -556,7 +565,7 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
   // 10. Fallback Deterministico
   if (responses.length === 0) {
     responses.push(
-      `${name}, o motor de análise estruturou seu contexto: Sua meta principal foca em ${goals}. O céu atual (Lua em ${astro.moonSign}, ${astro.tithi}) e suas métricas fisiológicas são monitorados para lhe orientar.`
+      `${name}, o motor de análise estruturou seu contexto: Sua meta principal foca em ${goals}. ${astro ? `O céu atual (Lua em ${astro.moonSign}, ${astro.tithi}) e suas métricas fisiológicas são monitorados para lhe orientar.` : 'Podemos conversar a partir das informações disponíveis e dos sinais que você registrar.'}`
     );
     responses.push(
       `Você pode me perguntar sobre o seu sono, glicose, recuperação (HRV), exercícios, o resumo do dia ou o céu de hoje. Também leio o seu mapa védico (Ascendente, Lua, dasha, casas), o seu Mapa Lyra DM Samādhi e o Score de Ação do Mapa Quantum, e explico Vedanta, Upanishads, Ayurveda, Vastu, música védica e os Vedangas.`

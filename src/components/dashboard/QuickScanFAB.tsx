@@ -1,4 +1,5 @@
 'use client';
+import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
@@ -76,17 +77,20 @@ export function QuickScanFAB() {
         >
           <DropdownMenuLabel>Centro rápido da Lyra</DropdownMenuLabel>
           <DropdownMenuGroup>
-            <DropdownMenuItem onSelect={() => setRegistroAberto(true)}>
-              <ClipboardCheck className="text-primary" />
-              <div className="flex flex-1 flex-col gap-0.5">
-                <span className="font-medium text-foreground">
-                  Registrar meu dia
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  Humor, energia, sono e as métricas que você quiser anotar.
-                </span>
-              </div>
-            </DropdownMenuItem>
+            <PlanFeatureGate features={['daily_checkin']} ocultar>
+              {' '}
+              <DropdownMenuItem onSelect={() => setRegistroAberto(true)}>
+                <ClipboardCheck className="text-primary" />
+                <div className="flex flex-1 flex-col gap-0.5">
+                  <span className="font-medium text-foreground">
+                    Registrar meu dia
+                  </span>
+                  <span className="text-xs text-muted-foreground">
+                    Humor, energia, sono e as métricas que você quiser anotar.
+                  </span>
+                </div>
+              </DropdownMenuItem>
+            </PlanFeatureGate>
             <DropdownMenuItem onSelect={() => void handleSync()}>
               <HeartPulse className="text-primary" />
               <div className="flex flex-1 flex-col gap-0.5">
@@ -149,10 +153,13 @@ export function QuickScanFAB() {
           ) : null}
         </DropdownMenuContent>
       </DropdownMenu>
-      <RegistroDoDiaDialog
-        open={registroAberto}
-        onOpenChange={setRegistroAberto}
-      />
+      <PlanFeatureGate features={['daily_checkin']} ocultar>
+        {' '}
+        <RegistroDoDiaDialog
+          open={registroAberto}
+          onOpenChange={setRegistroAberto}
+        />
+      </PlanFeatureGate>
     </div>
   );
 }

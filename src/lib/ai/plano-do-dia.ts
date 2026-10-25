@@ -1,3 +1,5 @@
+import { limiteDeMetricasDaConta, contaTemRecurso } from '@/lib/plans/service';
+import { corteDoHistorico } from '@/lib/plans/historico';
 import { createHash, randomUUID } from 'node:crypto';
 
 import type { PoolConnection } from 'mysql2/promise';
@@ -76,14 +78,19 @@ async function entradas(userId: string, hoje: string) {
        FROM profiles WHERE id = ? LIMIT 1`,
     [userId]
   );
-  const linhas = await queryRows<LinhaDoDia>(
-    `SELECT date, hrv_ms, sleep_duration_minutes, steps, blood_glucose_mgdl,
+  const limiteHistorico = await limiteDeMetricasDaConta(userId);
+  const corte = corteDoHistorico(limiteHistorico);
+  const linhas =
+    limiteHistorico === 0
+      ? []
+      : await queryRows<LinhaDoDia>(
+          `SELECT date, hrv_ms, sleep_duration_minutes, steps, blood_glucose_mgdl,
             weight_kg, readiness_score
        FROM daily_metrics
-      WHERE user_id = ? AND date BETWEEN ? AND ?
+      WHERE user_id = ? AND date BETWEEN ? AND ? AND (? IS NULL OR date >= ?)
       ORDER BY date DESC`,
-    [userId, diasAntes(hoje, 6), hoje]
-  );
+          [userId, diasAntes(hoje, 6), hoje, corte, corte]
+        );
   const sono = media(linhas, 'sleep_duration_minutes');
   const passos = media(linhas, 'steps');
   const vfc = media(linhas, 'hrv_ms');
@@ -95,7 +102,10 @@ async function entradas(userId: string, hoje: string) {
     weight_kg: ultimo(linhas, 'weight_kg'),
   };
   const hojeLinha = linhas.find((l) => String(l.date).slice(0, 10) === hoje);
-  const prontidao = hojeLinha ? numero(hojeLinha.readiness_score) : null;
+  const prontidao =
+    hojeLinha && (await contaTemRecurso(userId, 'ai_scores'))
+      ? numero(hojeLinha.readiness_score)
+      : null;
   const objetivos = listaDeTextos(perfil?.goals);
 
   const base: string[] = [];

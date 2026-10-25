@@ -1,4 +1,6 @@
 'use client';
+import { useAccountSubscription } from '@/hooks/use-account-subscription';
+import { isPlanFeatureEnabled } from '@/lib/plans/access';
 
 import * as React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -329,6 +331,7 @@ function ProgressChart({
 
 // --- Main Component ---
 export function ProfileForm() {
+  const { data: subscription } = useAccountSubscription();
   const { db, session } = useAuth();
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(true);
@@ -503,9 +506,11 @@ export function ProfileForm() {
         <Button asChild variant="outline" className="min-h-11">
           <a href="#perfil-conta">Conta e privacidade</a>
         </Button>
-        <Button asChild variant="outline" className="min-h-11">
-          <a href="#perfil-contexto">Mapa e evolução</a>
-        </Button>
+        {isPlanFeatureEnabled(subscription, 'vedic_insights') ? (
+          <Button asChild variant="outline" className="min-h-11">
+            <a href="#perfil-contexto">Mapa e evolução</a>
+          </Button>
+        ) : null}
       </nav>
       <GradeDeCartoesDoPerfil>
         <section
@@ -839,7 +844,9 @@ export function ProfileForm() {
             </CardContent>
           </Card>
         </section>
-        <HabitList />
+        {isPlanFeatureEnabled(subscription, 'personal_habits') ? (
+          <HabitList />
+        ) : null}
         {genderWatch === 'female' ? <MenstrualCycleSettings /> : null}
         <AccountSubscriptionCard />
         <section
@@ -851,14 +858,19 @@ export function ProfileForm() {
         </section>
         <PrivacyDataCard />
         <PurchaseHistoryCard />
-        <section
-          id="perfil-contexto"
-          aria-label="Meu mapa védico"
-          className="min-w-0 scroll-mt-24"
-        >
-          <MapaVedicoCard />
-        </section>
-        {session?.user && <ProgressChart userId={session.user.id} db={db} />}
+        {isPlanFeatureEnabled(subscription, 'vedic_insights') ? (
+          <section
+            id="perfil-contexto"
+            aria-label="Meu mapa védico"
+            className="min-w-0 scroll-mt-24"
+          >
+            <MapaVedicoCard />
+          </section>
+        ) : null}
+        {session?.user &&
+          isPlanFeatureEnabled(subscription, 'metrics_history_days') && (
+            <ProgressChart userId={session.user.id} db={db} />
+          )}
       </GradeDeCartoesDoPerfil>
     </div>
   );

@@ -23,6 +23,7 @@ import {
   UserSubscriptionAssignment,
 } from '@/types/subscription';
 import { AppSession } from '@/types/app-session';
+import { capacidadeDisponivel } from './dependencias';
 
 type QueryableConnection = PoolConnection;
 
@@ -575,7 +576,13 @@ async function fetchFeatureAccess(
   }
 
   return {
-    feature,
+    feature: {
+      ...feature,
+      enabled:
+        featureKey === 'profile_management' ||
+        (current.is_active === 1 &&
+          capacidadeDisponivel(featureList, featureKey)),
+    },
     subscription: current,
   };
 }
@@ -604,6 +611,7 @@ export async function getAccountSubscriptionSummary(
   const features = await buildFeatureAccessList(userId, current.plan_id);
 
   return {
+    administrativeAccess: role === 'admin',
     subscriptionId: current.subscription_id,
     status: current.status,
     billingInterval: current.billing_interval,
@@ -613,7 +621,15 @@ export async function getAccountSubscriptionSummary(
     currentPeriodEnd: current.current_period_end,
     cancelAtPeriodEnd: current.cancel_at_period_end === 1,
     plan: toPlanSummary(current),
-    features,
+    features:
+      role === 'admin'
+        ? features.map((f) => ({
+            ...f,
+            enabled: true,
+            quotaValue: null,
+            remainingValue: null,
+          }))
+        : features,
   };
 }
 
@@ -727,6 +743,20 @@ export async function updatePlanMatrixByKey(
   planKey: PlanKey,
   input: PlanMatrixUpdateInput
 ) {
+  if (new Set(input.features.map((f) => f.key)).size !== input.features.length)
+    throw new HttpError('Há capacidades repetidas na alteração.', 400);
+  for (const feature of input.features) {
+    if (
+      feature.key === 'profile_management' &&
+      (!feature.enabled ||
+        feature.quotaValue !== null ||
+        feature.resetInterval !== null)
+    )
+      throw new HttpError(
+        'Perfil e direitos da conta ficam sempre acessíveis em todos os planos.',
+        400
+      );
+  }
   if (planKey === 'admin')
     throw new HttpError(
       'O plano Administrador é interno, sempre habilitado e não comercializável.',
@@ -778,6 +808,27 @@ export async function updatePlanMatrixByKey(
       if (!featureId) {
         throw new HttpError(`Feature inexistente: ${feature.key}`, 400);
       }
+
+      const [definition] = await queryWithConnection<{
+        meter_kind: PlanFeatureAccess['meterKind'];
+      }>(connection, 'SELECT meter_kind FROM plan_features WHERE id = ?', [
+        featureId,
+      ]);
+      const interval = {
+        toggle: null,
+        usage_counter: 'monthly',
+        active_rows: 'concurrent',
+        rolling_days: 'rolling',
+      }[definition.meter_kind];
+      if (
+        (feature.resetInterval !== interval &&
+          !(feature.quotaValue === null && feature.resetInterval === null)) ||
+        (definition.meter_kind === 'toggle' && feature.quotaValue !== null)
+      )
+        throw new HttpError(
+          'O período e o limite devem corresponder ao tipo da capacidade.',
+          400
+        );
 
       await connection.execute(
         `
@@ -1103,9 +1154,48 @@ export async function recursoHabilitado(
   return feature.enabled;
 }
 
+/** Rotinas e links privados sem cookie também usam papel/bloqueio atuais. */
+export async function contaTemRecurso(
+  userId: string,
+  key: PlanFeatureKey,
+  connection?: PoolConnection
+) {
+  const sql =
+    'SELECT p.role,u.blocked_at FROM users u JOIN profiles p ON p.id=u.id WHERE u.id=?';
+  const [conta] = connection
+    ? await queryWithConnection<{ role: string; blocked_at: string | null }>(
+        connection,
+        sql,
+        [userId]
+      )
+    : await queryRows<{ role: string; blocked_at: string | null }>(sql, [
+        userId,
+      ]);
+  if (!conta || conta.blocked_at) return false;
+  if (conta.role === 'admin') return true;
+  return (await fetchFeatureAccess(userId, conta.role, key, connection)).feature
+    .enabled;
+}
+
+export async function limiteDeMetricasDaConta(userId: string) {
+  const [conta] = await queryRows<{ role: string; blocked_at: string | null }>(
+    'SELECT p.role,u.blocked_at FROM users u JOIN profiles p ON p.id=u.id WHERE u.id=?',
+    [userId]
+  );
+  if (!conta || conta.blocked_at) return 0;
+  if (conta.role === 'admin') return null;
+  const { feature } = await fetchFeatureAccess(
+    userId,
+    conta.role,
+    'metrics_history_days'
+  );
+  return feature.enabled ? feature.quotaValue : 0;
+}
+
 export async function requireFeatureEnabled(
   session: AppSession,
-  featureKey: PlanFeatureKey
+  featureKey: PlanFeatureKey,
+  connection?: PoolConnection
 ) {
   if (session.user.role === 'admin') {
     return;
@@ -1114,7 +1204,8 @@ export async function requireFeatureEnabled(
   const { feature, subscription } = await fetchFeatureAccess(
     session.user.id,
     session.user.role,
-    featureKey
+    featureKey,
+    connection
   );
 
   if (!feature.enabled) {
@@ -1133,6 +1224,7 @@ export async function assertActiveRowsQuota(options: {
   >;
   currentCount: number;
   increment?: number;
+  connection?: PoolConnection;
 }) {
   if (options.session.user.role === 'admin') {
     return;
@@ -1141,7 +1233,8 @@ export async function assertActiveRowsQuota(options: {
   const { feature, subscription } = await fetchFeatureAccess(
     options.session.user.id,
     options.session.user.role,
-    options.featureKey
+    options.featureKey,
+    options.connection
   );
 
   if (!feature.enabled) {

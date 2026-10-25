@@ -8,9 +8,8 @@ import type {
  * Recursos do plano que cada página do app exige. Uma página só aparece
  * (menu lateral, menu do celular, busca Ctrl K, atalhos, botões e avisos que
  * levam a ela) quando TODOS os recursos listados estão habilitados no plano
- * vigente. Páginas fora desta lista não dependem do plano: o Painel, "Sua
- * semana", "Respiração" e o Perfil (que reúne a assinatura e os direitos do
- * titular da LGPD e por isso fica sempre acessível).
+ * vigente. Páginas fora desta lista não dependem do plano. O Perfil reúne a assinatura e os direitos do
+ * titular da LGPD e por isso fica sempre acessível.
  *
  * As APIs continuam recusando com 403 o que o plano não inclui; esta lista
  * apenas evita mostrar à pessoa o que ela não pode usar.
@@ -18,7 +17,10 @@ import type {
 export const RECURSOS_DA_ROTA: Readonly<
   Record<string, readonly PlanFeatureKey[]>
 > = {
-  '/dia': ['ai_tips_feed'],
+  '/': ['dashboard_access'],
+  '/dia': ['ai_tips_feed', 'vedic_insights', 'ai_scores'],
+  '/semana': ['weekly_review', 'vedic_insights'],
+  '/respiracao': ['guided_breathing'],
   '/plan': ['ai_plan_generations'],
   '/goals': ['goal_progress_tracking'],
   // Toda consulta pertence a um profissional cadastrado na mesma página.

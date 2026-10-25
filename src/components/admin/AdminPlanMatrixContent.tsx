@@ -1,6 +1,7 @@
 'use client';
 import { notificarPlanosAtualizados } from '@/lib/plans/atualizacao-publica';
 
+import { DEPENDENCIAS } from '@/lib/plans/dependencias';
 import * as React from 'react';
 import {
   Loader2,
@@ -23,13 +24,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 import { Textarea } from '@/components/ui/textarea';
 import { PlanBadge } from '@/components/subscription/PlanBadge';
@@ -226,7 +220,14 @@ export function AdminPlanMatrixContent() {
             key: feature.key,
             enabled: feature.enabled,
             quotaValue: feature.quotaValue,
-            resetInterval: feature.resetInterval,
+            resetInterval:
+              feature.meterKind === 'usage_counter'
+                ? 'monthly'
+                : feature.meterKind === 'active_rows'
+                  ? 'concurrent'
+                  : feature.meterKind === 'rolling_days'
+                    ? 'rolling'
+                    : null,
           })),
         };
 
@@ -625,6 +626,17 @@ export function AdminPlanMatrixContent() {
                     <p className="text-sm leading-6 text-muted-foreground">
                       {feature.description}
                     </p>
+                    {DEPENDENCIAS[feature.key]?.length ? (
+                      <p className="text-xs text-muted-foreground">
+                        Também precisa de:{' '}
+                        {DEPENDENCIAS[feature.key]!.map(
+                          (key) =>
+                            featureCatalog.find((f) => f.key === key)?.name ??
+                            key
+                        ).join(', ')}
+                        .
+                      </p>
+                    ) : null}
                     <p className="text-xs font-medium text-muted-foreground">
                       {feature.featureType === 'boolean'
                         ? 'Ativar ou desativar acesso'
@@ -646,7 +658,10 @@ export function AdminPlanMatrixContent() {
                     return (
                       <div key={plan.key} className="min-w-0">
                         <fieldset
-                          disabled={plan.key === 'admin'}
+                          disabled={
+                            plan.key === 'admin' ||
+                            feature.key === 'profile_management'
+                          }
                           className="min-w-0 space-y-4 rounded-md border border-border bg-background p-3"
                         >
                           <legend className="px-1">
@@ -656,7 +671,9 @@ export function AdminPlanMatrixContent() {
                             <div>
                               <p className="text-sm font-medium">Habilitado</p>
                               <p className="text-xs text-muted-foreground">
-                                Controle real do entitlement.
+                                {feature.key === 'profile_management'
+                                  ? 'Essencial: sempre disponível.'
+                                  : 'Controle real do recurso.'}
                               </p>
                             </div>
                             <Switch
@@ -730,37 +747,16 @@ export function AdminPlanMatrixContent() {
                                 >
                                   Período de renovação
                                 </Label>
-                                <Select
-                                  value={planFeature.resetInterval || 'nenhum'}
-                                  onValueChange={(value) =>
-                                    updateFeatureField(
-                                      plan.key,
-                                      planFeature.key,
-                                      'resetInterval',
-                                      value === 'nenhum' ? null : value
-                                    )
-                                  }
+                                <p
+                                  id={`${plan.key}-${planFeature.key}-reset`}
+                                  className="text-sm text-muted-foreground"
                                 >
-                                  <SelectTrigger
-                                    id={`${plan.key}-${planFeature.key}-reset`}
-                                  >
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="nenhum">
-                                      Sem renovação automática
-                                    </SelectItem>
-                                    <SelectItem value="monthly">
-                                      A cada mês
-                                    </SelectItem>
-                                    <SelectItem value="concurrent">
-                                      Por itens ativos
-                                    </SelectItem>
-                                    <SelectItem value="rolling">
-                                      Janela de dias recentes
-                                    </SelectItem>
-                                  </SelectContent>
-                                </Select>
+                                  {planFeature.meterKind === 'usage_counter'
+                                    ? 'A cada mês (UTC)'
+                                    : planFeature.meterKind === 'active_rows'
+                                      ? 'Por itens ativos'
+                                      : 'Janela de dias recentes'}
+                                </p>
                               </div>
                             </div>
                           ) : null}

@@ -24,9 +24,9 @@
 | Progresso          | `██████████████████░░` **88%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 98                             |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 2                              |
-| ⚪ A iniciar       | 11                             |
+| ⚪ A iniciar       | 10                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-25                     |
 
@@ -51,7 +51,18 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 96 · Auditoria integral da cobertura e funcionamento real da matriz de entitlements
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
+- **Pedido complementar do usuário:** analisar e verificar profundamente se **todas as funções e funcionalidades do aplicativo** estão na **“Matriz editável de entitlements”** da página `http://localhost:3000/admin/plans`, permitindo ativá-las ou desativá-las nos planos. Os controles precisam funcionar de forma real, sem simulações, placeholders, hardcode ou cortes de código ou linhas.
+- **Inventário e rastreabilidade:** investigar código, rotas, APIs, serviços, motores, integrações, operações e interfaces existentes antes de implementar; confrontar cada função com os itens da matriz e os pontos de autorização no servidor. Produzir relação verificável de funcionalidade → entitlement → planos → pontos de aplicação → testes, identificando ausências, duplicidades, controles sem efeito e permissões administrativas que não podem ser adquiridas por troca de plano.
+- **Correção integral:** acrescentar os controles ausentes e corrigir os existentes pela causa raiz, com configuração persistida como fonte de verdade. Ligar e desligar cada recurso deve alterar efetivamente sua disponibilidade e execução em todas as entradas correspondentes, incluindo acesso direto às páginas e APIs; esconder um botão não comprova bloqueio. Respeitar limites, dependências entre recursos, sessões existentes e a separação entre plano e papel administrativo, sem conceder privilégios por simples ativação comercial.
+- **Validação real por recurso e plano:** testar individualmente ativação e desativação pela matriz, persistência após recarga e novo login, comportamento da interface e chamadas diretas ao backend, limites e operações CRUD aplicáveis, contas antigas e novas, isolamento e tentativas não autorizadas. Conferir Free, Meta, Care e o plano Administrador da tarefa 91 conforme suas regras próprias; preservar dados e restaurar configurações usadas nos testes. Não declarar cobertura completa com testes simulados ou somente visuais.
+- **Evidências e entrega:** registrar lacunas encontradas, correções e resultado verificável de cada controle, validar responsividade e acessibilidade da matriz e executar os gates do projeto. Coordenar com as tarefas 91 e 94 para não duplicar auditoria nem divergir da landing. Publicar commit e push próprios na main e atualizar este painel com os resultados reais. Este registro não declara a auditoria executada; aguardar instruções após sua publicação, conforme pedido do usuário.
+
+- **Início em 2026-10-25:** conferência prévia dos 13 direitos existentes, rotas, APIs, serviços e navegação; reaproveitar controles e evidências anteriores. A autorização posterior de continuar todas as tarefas substitui a espera histórica registrada acima. Identificar controles sem efeito e funcionalidades novas ainda fora do catálogo antes de modificar a matriz.
+
+- **Validação concluída em 2026-10-25; aguardando publicação individual:** catálogo de 13 para 26 capacidades persistidas, sem redesenhar páginas existentes. Portões de rota/componentes e APIs, dependências, cota zero, plano inativo, Perfil essencial somente leitura e direitos administrativos separados do plano. Cotas atômicas em insert/upsert/horário, janela em entradas alternativas, UTC independente do fuso, propriedade de profissional e colisão entre titulares protegidas. Chat sem histórico funciona sem persistência; memória/notificações desligadas não coletam, fila preserva justiça e privacidade continua acessível. 531 unitários, 332 integrações, formato, lint, tipos e build aprovados; migração 042 aplicada. QA real dos três planos comerciais, salvamento pela matriz, menus, dez acessos diretos, reativação e novo login; Perfil e rascunho preservados, inclusive 32 segundos offline no chat. 1440/390/320 px sem overflow; Axe 4.14.0 sem violações na matriz, chat sem histórico e perfil. Matriz restaurada e contas de QA excluídas. Inventário das 26 capacidades e exceções essenciais/administrativas em `docs/cobertura-entitlements.md`. Inferência externa e RLHF permanecem nas 86/90, sem alegar validação de hardware físico.
 
 ### BLOQUEADAS
 
@@ -87,15 +98,6 @@ Nenhuma tarefa em andamento.
 ---
 
 **Registro desta solicitação:** tarefas 89–95 acrescentadas em 2026-10-22 como **a iniciar**, sem declarar implementação ou validação funcional. A publicação imediata deste registro é documental; cada implementação seguirá com validação, atualização do painel, commit e push próprios na main, sem branches ou worktrees.
-
-### 96 · Auditoria integral da cobertura e funcionamento real da matriz de entitlements
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido complementar do usuário:** analisar e verificar profundamente se **todas as funções e funcionalidades do aplicativo** estão na **“Matriz editável de entitlements”** da página `http://localhost:3000/admin/plans`, permitindo ativá-las ou desativá-las nos planos. Os controles precisam funcionar de forma real, sem simulações, placeholders, hardcode ou cortes de código ou linhas.
-- **Inventário e rastreabilidade:** investigar código, rotas, APIs, serviços, motores, integrações, operações e interfaces existentes antes de implementar; confrontar cada função com os itens da matriz e os pontos de autorização no servidor. Produzir relação verificável de funcionalidade → entitlement → planos → pontos de aplicação → testes, identificando ausências, duplicidades, controles sem efeito e permissões administrativas que não podem ser adquiridas por troca de plano.
-- **Correção integral:** acrescentar os controles ausentes e corrigir os existentes pela causa raiz, com configuração persistida como fonte de verdade. Ligar e desligar cada recurso deve alterar efetivamente sua disponibilidade e execução em todas as entradas correspondentes, incluindo acesso direto às páginas e APIs; esconder um botão não comprova bloqueio. Respeitar limites, dependências entre recursos, sessões existentes e a separação entre plano e papel administrativo, sem conceder privilégios por simples ativação comercial.
-- **Validação real por recurso e plano:** testar individualmente ativação e desativação pela matriz, persistência após recarga e novo login, comportamento da interface e chamadas diretas ao backend, limites e operações CRUD aplicáveis, contas antigas e novas, isolamento e tentativas não autorizadas. Conferir Free, Meta, Care e o plano Administrador da tarefa 91 conforme suas regras próprias; preservar dados e restaurar configurações usadas nos testes. Não declarar cobertura completa com testes simulados ou somente visuais.
-- **Evidências e entrega:** registrar lacunas encontradas, correções e resultado verificável de cada controle, validar responsividade e acessibilidade da matriz e executar os gates do projeto. Coordenar com as tarefas 91 e 94 para não duplicar auditoria nem divergir da landing. Publicar commit e push próprios na main e atualizar este painel com os resultados reais. Este registro não declara a auditoria executada; aguardar instruções após sua publicação, conforme pedido do usuário.
 
 ---
 

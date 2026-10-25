@@ -1,3 +1,4 @@
+import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
@@ -14,6 +15,8 @@ export const runtime = 'nodejs';
 export async function GET() {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'personal_notifications');
+
     const resultado = await listarNotificacoes(session.user.id);
     return NextResponse.json(resultado, {
       headers: { 'Cache-Control': 'private, no-store' },
@@ -32,6 +35,8 @@ const leituraSchema = z.union([
 export async function PATCH(request: Request) {
   try {
     const session = await requireServerSession();
+    await requireFeatureEnabled(session, 'personal_notifications');
+
     const corpo = await lerJson(request, leituraSchema);
     const marcadas = await marcarComoLidas(
       session.user.id,

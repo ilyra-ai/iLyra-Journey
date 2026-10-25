@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
-import { getPlanFeature } from '@/lib/plans/access';
+import { getPlanFeature, isPlanFeatureEnabled } from '@/lib/plans/access';
 import { PlanFeatureKey } from '@/types/subscription';
 
 export function usePlanFeatureAccess(featureKey: PlanFeatureKey) {
@@ -17,7 +17,7 @@ export function usePlanFeatureAccess(featureKey: PlanFeatureKey) {
   return {
     subscription: data,
     feature,
-    enabled: feature?.enabled ?? false,
+    enabled: isPlanFeatureEnabled(data, featureKey),
     loading,
     refresh,
   };
