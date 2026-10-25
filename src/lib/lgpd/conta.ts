@@ -306,6 +306,10 @@ export async function exportarDadosDoTitular(userId: string) {
     gerado_em: new Date().toISOString(),
     conta: contas[0],
     perfil: perfil[0] ?? null,
+    segmentos_administrativos: await queryRows<RowDataPacket>(
+      'SELECT name,query_json,version,created_at,updated_at FROM admin_user_segments WHERE user_id=? ORDER BY name,id',
+      [userId]
+    ),
     marcadores_operacionais: await queryRows<RowDataPacket>(
       'SELECT m.name, m.color, a.created_at AS assigned_at FROM admin_user_marker_assignments a JOIN admin_user_markers m ON m.id = a.marker_id WHERE a.user_id = ? AND m.deleted_at IS NULL ORDER BY m.name, m.id',
       [userId]

@@ -1,0 +1,11 @@
+CREATE TABLE admin_user_segments (
+  id CHAR(36) NOT NULL PRIMARY KEY,
+  user_id CHAR(36) NOT NULL,
+  name VARCHAR(60) NOT NULL,
+  query_json JSON NOT NULL,
+  version INT UNSIGNED NOT NULL DEFAULT 1,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UNIQUE KEY uq_admin_segment_name (user_id, name),
+  CONSTRAINT fk_admin_segment_owner FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

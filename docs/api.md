@@ -18,6 +18,11 @@ Todas as rotas ficam em `src/app/api/**/route.ts` e rodam no runtime Node.js. A 
 
 ## Gestão administrativa de usuários
 
+- `GET /api/admin/users`: filtros combinados `access` (all/active/blocked), `role`, `onboarding` (all/complete/pending), `plan` (all/none/free/meta/care/admin) e `markerId`, além de busca, ordenação e paginação. Listagem e contagem compartilham as mesmas junções e condições; marcador ausente não remove o filtro nem amplia a consulta. Resposta `no-store`.
+- `GET /api/admin/users/filtros`: opções reais de perfis, planos e marcadores, restritas ao administrador, `no-store`.
+- `GET/POST /api/admin/users/segmentos`: segmentos privados do administrador da sessão; criação `{ id, name, query }`. A consulta contém busca, filtros e ordenação, não uma cópia dos usuários. Até 20 por administrador, nome de até 60 caracteres, criação idempotente.
+- `PATCH/DELETE /api/admin/users/segmentos/:segmentId`: edição `{ name, query, version }` e exclusão `{ version }`. Outro administrador recebe 404; 409 protege versão e criação já utilizada. Eventos sem texto da consulta, exportação e cascade da própria conta.
+
 - `GET/POST /api/admin/marcadores`: administrador ativo; catálogo com no máximo 50 marcadores ativos; criação `{ id: UUID, name, color }`. Nomes normalizados de até 40 caracteres e cor de uma paleta fixa. O identificador permite repetir a criação, sem ressuscitar um marcador excluído.
 - `PATCH/DELETE /api/admin/marcadores/:markerId`: edição `{ name, color, version }`; exclusão `{ version, expectedUsers }`. Conflitos de versão/impacto respondem 409 antes de remover associações. Excluir limpa os dados do marcador, suas associações e registra os eventos na mesma transação, retendo apenas a identidade para evitar reutilização.
 - `GET /api/admin/users/:userId/marcadores`: administrador ativo, `no-store`; catálogo e seleção da conta. `PUT /api/admin/users/:userId/marcadores/:markerId` recebe `{ assigned }`; idempotente por estado, até 10 marcadores por conta. Não altera papel/plano; dados do titular incluem suas associações na exportação/exclusão LGPD.

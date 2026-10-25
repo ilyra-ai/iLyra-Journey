@@ -1,3 +1,4 @@
+import { filtrosUsuariosSchema } from '@/lib/admin/esquema-filtros';
 import { registrarEventoDeUsuario } from '@/lib/admin/eventos-usuarios';
 import { randomUUID } from 'node:crypto';
 import { hashPassword } from '@/lib/auth/password';
@@ -14,6 +15,11 @@ import { listAdminUsersWithSubscriptions } from '@/lib/plans/service';
 export const runtime = 'nodejs';
 
 const querySchema = z.object({
+  access: filtrosUsuariosSchema.shape.access,
+  role: z.string().trim().min(1).max(32).optional(),
+  onboarding: filtrosUsuariosSchema.shape.onboarding,
+  plan: filtrosUsuariosSchema.shape.plan,
+  markerId: z.uuid().optional(),
   search: z.string().trim().max(120).optional(),
   page: z.coerce.number().int().min(0).max(100_000).default(0),
   pageSize: z.coerce.number().int().min(1).max(100).default(10),
@@ -30,6 +36,13 @@ export async function GET(request: NextRequest) {
     );
     const query = querySchema.parse(parametros);
     const response = await listAdminUsersWithSubscriptions({
+      filters: filtrosUsuariosSchema.parse({
+        access: query.access,
+        role: query.role ?? null,
+        onboarding: query.onboarding,
+        plan: query.plan,
+        markerId: query.markerId ?? null,
+      }),
       search: query.search,
       page: query.page,
       pageSize: query.pageSize,
@@ -37,7 +50,9 @@ export async function GET(request: NextRequest) {
       ascending: query.ascending === 'true',
     });
 
-    return NextResponse.json(response);
+    return NextResponse.json(response, {
+      headers: { 'Cache-Control': 'no-store' },
+    });
   } catch (error) {
     return respostaDeErro(
       error,

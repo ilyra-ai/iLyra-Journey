@@ -1,3 +1,4 @@
+import type { FiltrosUsuarios } from '@/lib/admin/esquema-filtros';
 import type { PoolConnection, RowDataPacket } from 'mysql2/promise';
 
 import {
@@ -928,6 +929,7 @@ export async function listAdminUsersWithSubscriptions(options: {
   pageSize?: number;
   sortColumn?: AdminUserSortColumn;
   ascending?: boolean;
+  filters?: FiltrosUsuarios;
 }): Promise<AdminUserListResponse> {
   const page = Math.max(0, Math.trunc(options.page ?? 0));
   const pageSize = Math.min(
@@ -951,6 +953,42 @@ export async function listAdminUsersWithSubscriptions(options: {
     whereParams.push(likeTerm, likeTerm, likeTerm);
   }
 
+  const f = options.filters;
+  if (f?.access === 'active') whereClauses.push('u.blocked_at IS NULL');
+  if (f?.access === 'blocked') whereClauses.push('u.blocked_at IS NOT NULL');
+  if (f?.role) {
+    whereClauses.push('p.role = ?');
+    whereParams.push(f.role);
+  }
+  if (f && f.onboarding !== 'all') {
+    whereClauses.push('p.onboarding_completed = ?');
+    whereParams.push(f.onboarding === 'complete' ? 1 : 0);
+  }
+  if (f?.plan === 'none') whereClauses.push('us.id IS NULL');
+  else if (f && f.plan !== 'all') {
+    whereClauses.push('sp.plan_key = ?');
+    whereParams.push(f.plan);
+  }
+  if (f?.markerId) {
+    whereClauses.push(
+      'EXISTS (SELECT 1 FROM admin_user_marker_assignments ma JOIN admin_user_markers mm ON mm.id = ma.marker_id AND mm.deleted_at IS NULL WHERE ma.user_id = p.id AND ma.marker_id = ?)'
+    );
+    whereParams.push(f.markerId);
+  }
+  const fromClause = `        FROM profiles p
+        INNER JOIN users u ON u.id = p.id
+        LEFT JOIN user_subscriptions us
+          ON us.id = (
+            SELECT us2.id
+            FROM user_subscriptions us2
+            WHERE us2.user_id = p.id
+              AND us2.status = 'active'
+              AND (us2.ended_at IS NULL OR us2.ended_at > UTC_TIMESTAMP())
+            ORDER BY us2.current_period_end DESC, us2.created_at DESC
+            LIMIT 1
+          )
+        LEFT JOIN subscription_plans sp ON sp.id = us.plan_id
+`;
   const whereClause =
     whereClauses.length > 0 ? `WHERE ${whereClauses.join(' AND ')}` : '';
 
@@ -971,19 +1009,7 @@ export async function listAdminUsersWithSubscriptions(options: {
           sp.name AS plan_name,
           us.billing_interval,
           us.status AS subscription_status
-        FROM profiles p
-        INNER JOIN users u ON u.id = p.id
-        LEFT JOIN user_subscriptions us
-          ON us.id = (
-            SELECT us2.id
-            FROM user_subscriptions us2
-            WHERE us2.user_id = p.id
-              AND us2.status = 'active'
-              AND (us2.ended_at IS NULL OR us2.ended_at > UTC_TIMESTAMP())
-            ORDER BY us2.current_period_end DESC, us2.created_at DESC
-            LIMIT 1
-          )
-        LEFT JOIN subscription_plans sp ON sp.id = us.plan_id
+        ${fromClause}
         ${whereClause}
         ORDER BY ${sortSql} ${sortDirection}, p.id ASC
         LIMIT ?
@@ -994,7 +1020,7 @@ export async function listAdminUsersWithSubscriptions(options: {
     queryRows<{ total: number }>(
       `
         SELECT COUNT(*) AS total
-        FROM profiles p
+        ${fromClause}
         ${whereClause}
       `,
       whereParams

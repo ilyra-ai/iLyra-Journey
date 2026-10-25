@@ -1,4 +1,9 @@
 'use client';
+import { FiltrosUsuarios } from './FiltrosUsuarios';
+import {
+  FILTROS_INICIAIS,
+  type ConsultaUsuarios,
+} from '@/lib/admin/esquema-filtros';
 import { MarcadoresUsuario } from './MarcadoresUsuario';
 import { NotasUsuario } from './NotasUsuario';
 import { HistoricoUsuario } from './HistoricoUsuario';
@@ -104,6 +109,7 @@ function extractApiError(payload: unknown) {
 
 export function UserManagementContent() {
   const { db, session } = useAuth();
+  const [filterRevision, setFilterRevision] = React.useState(0);
   const [marcadoresAlvo, setMarcadoresAlvo] =
     React.useState<AdminUserListItem | null>(null);
   const [notasAlvo, setNotasAlvo] = React.useState<AdminUserListItem | null>(
@@ -122,6 +128,7 @@ export function UserManagementContent() {
   const [users, setUsers] = React.useState<AdminUserListItem[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [filters, setFilters] = React.useState({ ...FILTROS_INICIAIS });
   const [page, setPage] = React.useState(0);
   const [totalUsers, setTotalUsers] = React.useState(0);
   const [sort, setSort] = React.useState<{
@@ -153,6 +160,11 @@ export function UserManagementContent() {
           ascending: String(sort.ascending),
         });
 
+        params.set('access', filters.access);
+        params.set('onboarding', filters.onboarding);
+        params.set('plan', filters.plan);
+        if (filters.role) params.set('role', filters.role);
+        if (filters.markerId) params.set('markerId', filters.markerId);
         if (searchTerm.trim()) {
           params.set('search', searchTerm.trim());
         }
@@ -184,7 +196,7 @@ export function UserManagementContent() {
         if (!signal?.aborted) setLoading(false);
       }
     },
-    [page, searchTerm, sort]
+    [page, searchTerm, sort, filters]
   );
 
   React.useEffect(() => {
@@ -316,6 +328,21 @@ export function UserManagementContent() {
           </CardDescription>
         </CardHeader>
         <CardContent>
+          <FiltrosUsuarios
+            metadataRevision={filterRevision}
+            query={{
+              search: searchTerm,
+              filters,
+              sortColumn: sort.column,
+              ascending: sort.ascending,
+            }}
+            onChange={(q: ConsultaUsuarios) => {
+              setSearchTerm(q.search);
+              setFilters(q.filters);
+              setSort({ column: q.sortColumn, ascending: q.ascending });
+              setPage(0);
+            }}
+          />
           <div className="relative mb-4 w-full md:w-1/3">
             <Search
               className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
@@ -577,7 +604,10 @@ export function UserManagementContent() {
         <MarcadoresUsuario
           key={marcadoresAlvo.id}
           user={marcadoresAlvo}
-          aoFechar={() => setMarcadoresAlvo(null)}
+          aoFechar={() => {
+            setMarcadoresAlvo(null);
+            setFilterRevision((v) => v + 1);
+          }}
         />
       )}
       {notasAlvo && (
