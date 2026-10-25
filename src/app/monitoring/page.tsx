@@ -39,7 +39,7 @@ export default function MonitoringPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="monitoring">
+    <AppShell>
       <PageIntro
         eyebrow={monitoringConfig.pageEyebrow}
         title={monitoringConfig.pageTitle}

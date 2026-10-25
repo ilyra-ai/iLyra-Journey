@@ -28,7 +28,7 @@ export default function AIConfigPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="admin-ai-config">
+    <AppShell>
       <PageIntro
         title="Modelos de IA"
         description="Gerencie a configuração central, comportamento e pesos do motor de IA da Lyra."

@@ -62,9 +62,10 @@ Definidos em `next.config.ts` para todas as respostas:
 
 ## XSS
 
-- O rich text do Puck é sanitizado por `src/lib/puck/sanitization/rich-text.ts`, com o parser HTML5 do **parse5** (mesmo algoritmo dos navegadores) e reconstrução por lista de permissões: só tags de texto, nenhum atributo além de `href` em links (http, https, mailto, tel ou relativo), texto e atributos sempre escapados, conteúdo de `<script>`, `<style>`, `<svg>` e similares descartado.
-- Antes, o servidor usava expressões regulares: `<a href='x" onmouseover="alert(1)'>` gerava um atributo de evento no HTML do SSR. Servidor e navegador agora usam a mesma função (sem divergência de hidratação).
-- Teste: `src/lib/puck/sanitization/rich-text.test.ts` (6 dos 10 casos falham no sanitizador anterior).
+O editor visual antigo e sua renderização HTML foram removidos. Os documentos
+históricos do banco foram preservados sem APIs de leitura ou gravação daquele
+editor. O construtor de Conteúdo permanece independente; não passou a receber
+HTML arbitrário por causa desta remoção.
 
 ## Upload e arquivos
 

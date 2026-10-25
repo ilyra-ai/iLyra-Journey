@@ -20,7 +20,7 @@ export default function AdminContentPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="admin-content">
+    <AppShell>
       <AdminContentManagement />
     </AppShell>
   );

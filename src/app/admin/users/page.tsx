@@ -20,7 +20,7 @@ export default function AdminUsersPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="admin-users">
+    <AppShell>
       <UserManagementContent />
     </AppShell>
   );

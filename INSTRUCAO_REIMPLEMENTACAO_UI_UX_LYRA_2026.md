@@ -1,5 +1,10 @@
 # INSTRUÇÃO MESTRA — REIMPLEMENTAÇÃO VISUAL (UI/UX) DO APP LYRA METACARE
 
+> Registro histórico: referências ao editor visual removido descrevem a
+> versão auditada anteriormente, não funcionalidades atuais. O runtime, as
+> APIs e as dependências daquele editor foram removidos pela tarefa 89.
+> Consulte [o tratamento da remoção](docs/remocao-editor-visual.md).
+
 > **Para o modelo de IA executor:** este documento descreve TODAS as funções, funcionalidades, recursos, dashboards, KPIs, métricas, telas, componentes, APIs e regras do app **Lyra MetaCare**. Sua tarefa é reimplementar **somente a camada visual (UI/UX, layout web gráfico CSS, mobile e desktop)** em um novo template visual, preservando 100% das funcionalidades, dados, lógicas e integrações descritas abaixo. Nada do comportamento pode ser perdido, simulado ou reduzido.
 
 ---

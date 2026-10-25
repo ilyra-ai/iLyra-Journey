@@ -110,3 +110,17 @@ describe('navegação com configuração salva', () => {
     expect(getVisibleNavigation(false)[0].href).toBe('/chat');
   });
 });
+
+it('configurações antigas não reintroduzem o editor removido no menu ou na busca', () => {
+  const config = getDefaultPageConfig('app');
+  config.sidebar.items.push({
+    href: '/admin/puck',
+    label: 'Editor antigo',
+    description: 'Configuração histórica',
+    visible: true,
+  });
+  const itens = getVisibleNavigation(true, config);
+  expect(itens.some((item) => item.href === '/admin/puck')).toBe(false);
+  expect(itens.some((item) => item.href === '/admin/content')).toBe(true);
+  expect(itens.some((item) => item.href === '/admin/page-builder')).toBe(true);
+});

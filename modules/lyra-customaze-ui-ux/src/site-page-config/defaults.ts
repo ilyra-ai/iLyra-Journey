@@ -463,13 +463,6 @@ const defaultAppPageConfig: AppPageConfig = {
         description: 'Textos, tamanhos e seções da landing, do login e do app.',
         visible: true,
       },
-      {
-        href: '/admin/puck',
-        label: 'Editor Puck',
-        description:
-          'Blocos visuais das páginas, com rascunho, publicação e histórico.',
-        visible: true,
-      },
     ],
   },
   header: {

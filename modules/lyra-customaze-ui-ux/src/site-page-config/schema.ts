@@ -170,7 +170,12 @@ const appPageConfigSchema = z.object({
       personal: z.string().min(1),
       admin: z.string().min(1),
     }),
-    items: z.array(appNavigationItemSchema).min(1),
+    items: z
+      .array(appNavigationItemSchema)
+      .min(1)
+      .transform((items) =>
+        items.filter((item) => !/^\/admin\/puck(?:\/|$)/.test(item.href))
+      ),
   }),
   header: z.object({
     commandPlaceholder: z.string().min(1),

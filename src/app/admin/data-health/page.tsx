@@ -21,7 +21,7 @@ export default function AdminDataHealthPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="admin-data-health">
+    <AppShell>
       <PageIntro title="Saúde dos dados" />
       <DataHealthContent />
     </AppShell>

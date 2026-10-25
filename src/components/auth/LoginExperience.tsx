@@ -25,7 +25,6 @@ import { cn } from '@/lib/utils';
 import type { LoginPageConfig, ToneKey } from '@/lib/site-page-config/schema';
 import { getBuilderIcon } from '@/lib/site-page-config/ui';
 import { ThemeToggleButton } from '@/components/theme/ThemeControls';
-import { PuckClientRenderer } from '@/components/puck/PuckClientRenderer';
 import {
   ROTA_POLITICA_DE_PRIVACIDADE,
   ROTA_TERMOS_DE_USO,
@@ -706,14 +705,6 @@ export function LoginExperience({
           </Link>
         </nav>
       </div>
-
-      {/* Blocos publicados no editor Puck (documento "login-experience"),
-          em largura total abaixo da tela de acesso. Sem blocos publicados,
-          nada é exibido. */}
-      <PuckClientRenderer
-        documentKey="login-experience"
-        className="w-full border-t border-border lg:col-span-2 lg:row-start-5"
-      />
     </main>
   );
 }

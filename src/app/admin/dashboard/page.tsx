@@ -21,7 +21,7 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="admin-dashboard">
+    <AppShell>
       <PageIntro title="Visão geral" />
       <AdminDashboardContent />
     </AppShell>

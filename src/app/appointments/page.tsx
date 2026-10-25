@@ -26,7 +26,7 @@ export default function AppointmentsPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="appointments">
+    <AppShell>
       {agendaLiberada ? (
         <AppointmentsContent />
       ) : (

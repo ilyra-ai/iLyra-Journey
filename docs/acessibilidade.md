@@ -1,5 +1,10 @@
 # Acessibilidade
 
+> Registro histórico: referências ao editor visual removido descrevem a
+> versão auditada anteriormente, não funcionalidades atuais. O runtime, as
+> APIs e as dependências daquele editor foram removidos pela tarefa 89.
+> Consulte [o tratamento da remoção](remocao-editor-visual.md).
+
 Auditoria feita com **axe-core** (regras `wcag2a`, `wcag2aa`, `wcag21a`,
 `wcag21aa`, `wcag22aa` e `best-practice`) sobre o build de produção
 (`pnpm build` + `pnpm start`), com Playwright/Chromium, em **1440px** e

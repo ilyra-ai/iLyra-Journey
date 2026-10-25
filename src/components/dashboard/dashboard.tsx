@@ -35,7 +35,6 @@ import { MetricGrid } from './MetricGrid';
 import { LyraIntelligence2026 } from './LyraIntelligence2026';
 import { VedicDashboard } from './VedicDashboard';
 import { AssessmentCard } from './AssessmentCard';
-import { PuckClientRenderer } from '@/components/puck/PuckClientRenderer';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -464,9 +463,7 @@ export function Dashboard() {
     // `pb-24`: espaço no fim da página para o botão flutuante "Ações rápidas"
     // (QuickScanFAB) não cobrir o último cartão, sobretudo no celular.
     <div className="flex flex-col gap-6 pb-24">
-      <div className="w-full relative z-20">
-        <PuckClientRenderer documentKey="dashboard" />
-      </div>
+      <div className="w-full relative z-20"></div>
 
       {/* Coach diário (tarefa 42): o feed de dicas de IA do plano. */}
       {aiTipsEnabled ? <SeuDiaCard /> : null}

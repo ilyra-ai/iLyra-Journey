@@ -51,7 +51,7 @@ describe('proxy · área administrativa', () => {
   });
 
   it('devolve o usuário comum ao próprio painel, sem entregar a tela', async () => {
-    for (const caminho of ['/admin', '/admin/users', '/admin/puck']) {
+    for (const caminho of ['/admin', '/admin/users', '/admin/reports']) {
       const resposta = await proxy(await requisicao(caminho, 'patient'));
       expect(resposta.status).toBe(307);
       expect(resposta.headers.get('location')).toBe(`${ORIGEM}/`);

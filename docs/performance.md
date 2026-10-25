@@ -1,5 +1,10 @@
 # Performance da Lyra MetaCare
 
+> Registro histórico: referências ao editor visual removido descrevem a
+> versão auditada anteriormente, não funcionalidades atuais. O runtime, as
+> APIs e as dependências daquele editor foram removidos pela tarefa 89.
+> Consulte [o tratamento da remoção](remocao-editor-visual.md).
+
 Auditoria da tarefa 20 da instrução mestra (2026-10-06). Medições reais com `pnpm build` + `pnpm start`, Chromium (Playwright) em contexto limpo, sem cache, tamanhos transferidos (comprimidos). "JS da página" é o que chega até o evento `load`; depois dele o Next.js ainda pré-carrega, em segundo plano, o código das rotas linkadas no menu (prefetch), que não bloqueia a página atual.
 
 ## Resultado

@@ -29,7 +29,7 @@ export default function DataConnectionPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="connect">
+    <AppShell>
       <PageIntro
         eyebrow={appConfig.connect.pageEyebrow}
         title={appConfig.connect.pageTitle}

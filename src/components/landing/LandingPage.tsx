@@ -34,7 +34,6 @@ import { toast } from 'sonner';
 
 import { useAuth } from '@/context/AuthContext';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
-import { PuckClientRenderer } from '@/components/puck/PuckClientRenderer';
 import { ThemeToggleButton } from '@/components/theme/ThemeControls';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { getBuilderIcon } from '@/lib/site-page-config/ui';
@@ -57,7 +56,7 @@ import '../public/PublicTheme.css';
  * Este componente substitui SOMENTE a landing pública. Ele mantém o contrato
  * original com o Construtor (overrideConfig e previewMode), os links
  * configuráveis, o login real, os planos obtidos da API, os recursos,
- * indicadores, FAQ, termos/LGPD e blocos Puck publicados.
+ * indicadores, FAQ, termos/LGPD.
  *
  * Ilustrações locais: /public/landing-jornada (extraídas exclusivamente da
  * arte aprovada pelo proprietário, sem imagens de pessoas). Só são usadas
@@ -1003,8 +1002,6 @@ export function LandingPage({
             </ul>
           </div>
         </section>
-
-        <PuckClientRenderer documentKey="landing-home" className="w-full" />
 
         {/* Menu e blocos usam a mesma ordem. Sobre encerra a apresentação,
             seguido do acesso rápido e do convite final. */}

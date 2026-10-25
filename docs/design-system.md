@@ -94,7 +94,7 @@ frio (matiz 346) justamente para não se confundir com o coral de destaque.
 - `AppShell` (`src/components/layout/AppShell.tsx`): sidebar de 248 px
   (largura configurável no construtor de UI), cabeçalho de 64 px com o `<h1>`
   da página, busca Ctrl K, notificações, Lyra AI e menu do usuário; conteúdo
-  com largura máxima de 1280 px e o documento Puck da página, quando houver.
+  com largura máxima de 1280 px.
 - `PageIntro`: abertura padrão da página (rótulo, título `<h2>`, descrição e
   ações), com as escalas de tipografia do construtor.
 - `AccessDenied`: tela única de acesso negado das áreas administrativas.

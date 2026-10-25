@@ -1,12 +1,11 @@
 import { OnboardingForm } from '@/components/onboarding/onboarding-form';
-import { PuckClientRenderer } from '@/components/puck/PuckClientRenderer';
 import { METADADOS_FORA_DO_MENU } from '@/lib/metadados/pagina';
 
 export const metadata = METADADOS_FORA_DO_MENU.onboarding;
 
 export default function OnboardingPage() {
-  // Coluna única: o bloco editável (Puck) acima e o formulário abaixo, os
-  // dois com a largura da tela. Antes era uma linha flex centralizada, e no
+  // Coluna única: o formulário mantém
+  // a largura da tela. Antes era uma linha flex centralizada, e no
   // celular o formulário crescia até 672px e estourava para os dois lados
   // (o início dos cartões ficava fora da tela, sem como rolar até ele).
   return (
@@ -17,10 +16,7 @@ export default function OnboardingPage() {
       {/* Título da página para leitores de tela; cada etapa tem o próprio
           título visível. */}
       <h1 className="sr-only">Configuração inicial do seu perfil</h1>
-      <PuckClientRenderer
-        documentKey="onboarding"
-        className="w-full max-w-2xl"
-      />
+
       <OnboardingForm />
     </main>
   );

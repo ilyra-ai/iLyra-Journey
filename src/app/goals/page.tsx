@@ -27,7 +27,7 @@ export default function GoalTrackingPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="goals">
+    <AppShell>
       <PageIntro
         eyebrow="Ritmo e consistência"
         title="Suas metas"

@@ -124,11 +124,7 @@ export function BillingReturnExperience({
     subscription?.source !== 'stripe';
 
   return (
-    <AppShell
-      puckDocumentKey={
-        mode === 'success' ? 'billing-success' : 'billing-cancel'
-      }
-    >
+    <AppShell>
       <div className="grid w-full gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
         <div className="space-y-6">
           <Card className="overflow-hidden">

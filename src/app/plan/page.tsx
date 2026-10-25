@@ -30,7 +30,7 @@ export default function AIPlanPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="app-shell">
+    <AppShell>
       <PageIntro
         eyebrow={appConfig.aiPlan.pageEyebrow}
         title={appConfig.aiPlan.pageTitle}

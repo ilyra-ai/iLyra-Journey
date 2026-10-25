@@ -13,13 +13,11 @@ import { chamar } from '../../../tests/integration/http';
 import * as paginaAdmin from './admin/page-config/[pageKey]/route';
 import * as planoAdmin from './admin/plans/[planKey]/route';
 import * as planosAdmin from './admin/plans/route';
-import * as puckAdmin from './admin/puck/documents/[documentKey]/route';
 import * as assinaturaAdmin from './admin/users/[userId]/subscription/route';
 import * as usuariosAdmin from './admin/users/route';
 import * as dados from './data/[table]/route';
 import * as paginaPublica from './public/page-config/[pageKey]/route';
 import * as planosPublicos from './public/plans/route';
-import * as puckPublico from './public/puck/documents/[documentKey]/route';
 import * as saudeDosDados from './admin/saude-dos-dados/route';
 
 let ana: UsuarioDeTeste;
@@ -247,25 +245,6 @@ describe('rotas administrativas', () => {
           usuario: ana,
         }),
       () =>
-        chamar(puckAdmin.GET, {
-          params: { documentKey: 'landing-home' },
-          usuario: ana,
-        }),
-      () =>
-        chamar(puckAdmin.PUT, {
-          method: 'PUT',
-          params: { documentKey: 'landing-home' },
-          body: { draftData: { content: [], root: { props: {} } } },
-          usuario: ana,
-        }),
-      () =>
-        chamar(puckAdmin.POST, {
-          method: 'POST',
-          params: { documentKey: 'landing-home' },
-          body: { action: 'publish' },
-          usuario: ana,
-        }),
-      () =>
         chamar(saudeDosDados.GET, {
           path: '/api/admin/saude-dos-dados',
           usuario: ana,
@@ -434,7 +413,7 @@ describe('rotas administrativas', () => {
     ).toBe(400);
   });
 
-  it('páginas e documentos Puck: chave inválida 404, corpo inválido 400, válido persiste', async () => {
+  it('páginas: chave inválida 404 e corpo inválido 400', async () => {
     expect(
       (await chamar(paginaPublica.GET, { params: { pageKey: 'nada' } })).status
     ).toBe(404);
@@ -466,54 +445,6 @@ describe('rotas administrativas', () => {
         })
       ).status
     ).toBe(400);
-
-    expect(
-      (await chamar(puckPublico.GET, { params: { documentKey: 'nada' } }))
-        .status
-    ).toBe(404);
-    expect(
-      (
-        await chamar(puckAdmin.PUT, {
-          method: 'PUT',
-          params: { documentKey: 'landing-home' },
-          body: { draftData: { content: 'nao-e-lista' } },
-          usuario: admin,
-        })
-      ).status
-    ).toBe(400);
-
-    const rascunho = {
-      root: { props: { title: 'Teste' } },
-      content: [
-        { type: 'LyraHeadingBlock', props: { id: 'h-teste', text: 'Olá' } },
-      ],
-    };
-    const salvo = await chamar(puckAdmin.PUT, {
-      method: 'PUT',
-      params: { documentKey: 'landing-home' },
-      body: { draftData: rascunho },
-      usuario: admin,
-    });
-    expect(salvo.status).toBe(200);
-    const linha = await queryRows<{ draft_data: { content: unknown[] } }>(
-      "SELECT draft_data FROM puck_documents WHERE document_key = 'landing-home'"
-    );
-    expect(JSON.stringify(linha[0]?.draft_data)).toContain('h-teste');
-
-    // O admin vê o nome legível de quem salvou (e não só o UUID)…
-    expect(salvo.json).toMatchObject({
-      updatedByUserId: admin.id,
-      updatedByName: 'Admin Teste',
-    });
-    // …e a rota pública não identifica o administrador.
-    const publico = await chamar(puckPublico.GET, {
-      params: { documentKey: 'landing-home' },
-    });
-    expect(publico.status).toBe(200);
-    expect(publico.json).toMatchObject({
-      updatedByUserId: null,
-      updatedByName: null,
-    });
   });
 
   it('construtor de UI publica a configuração enviada e a página pública a recebe', async () => {
@@ -614,42 +545,6 @@ describe('rotas administrativas', () => {
         sizing: { introCard: 1, authCard: 1 },
       },
     });
-  });
-
-  it('Puck grava o documento sem os textos resolvidos com dados de quem edita', async () => {
-    const comSessao = {
-      root: {
-        props: {
-          title: 'Landing',
-          resolvedContextSummary: 'admin@exemplo.com • perfil admin',
-        },
-      },
-      content: [
-        {
-          type: 'LyraHeroBlock',
-          props: {
-            id: 'hero-sessao',
-            dynamicSource: 'session-profile',
-            title: 'Bom dia, Admin.',
-            ctaLabel: 'Entrar',
-          },
-        },
-      ],
-    };
-    const publicado = await chamar(puckAdmin.POST, {
-      method: 'POST',
-      params: { documentKey: 'landing-home' },
-      body: { action: 'publish', draftData: comSessao },
-      usuario: admin,
-    });
-    expect(publicado.status).toBe(200);
-    const linha = await queryRows<{ published_data: unknown }>(
-      "SELECT published_data FROM puck_documents WHERE document_key = 'landing-home'"
-    );
-    const gravado = JSON.stringify(linha[0]?.published_data);
-    expect(gravado).toContain('hero-sessao');
-    expect(gravado).not.toContain('admin@exemplo.com');
-    expect(gravado).not.toContain('Bom dia, Admin.');
   });
 
   it('catálogo público só traz planos ativos e públicos', async () => {
@@ -760,4 +655,29 @@ describe('saúde dos dados (GET /api/admin/saude-dos-dados, tarefa 58)', () => {
       ).status
     ).toBe(400);
   });
+});
+
+it('documentos históricos permanecem no banco sem exposição pela API genérica', async () => {
+  const id = randomUUID();
+  const documento = JSON.stringify({
+    content: [],
+    root: { props: { title: 'Arquivo histórico de QA' } },
+  });
+  await executeStatement(
+    'INSERT INTO puck_documents (id, document_key, draft_data, published_data) VALUES (?, ?, ?, ?)',
+    [id, `arquivo-${id}`, documento, documento]
+  );
+  try {
+    const resposta = await consultarTabela('puck_documents', admin);
+    expect(resposta.status).not.toBe(200);
+    const linhas = await queryRows<{ published_data: unknown }>(
+      'SELECT published_data FROM puck_documents WHERE id = ?',
+      [id]
+    );
+    expect(JSON.stringify(linhas[0].published_data)).toContain(
+      'Arquivo histórico de QA'
+    );
+  } finally {
+    await executeStatement('DELETE FROM puck_documents WHERE id = ?', [id]);
+  }
 });

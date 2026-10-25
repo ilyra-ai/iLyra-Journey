@@ -10,7 +10,6 @@ import {
   Gem,
   HeartPulse,
   LayoutDashboard,
-  Layers3,
   Radio,
   Receipt,
   Settings2,
@@ -235,16 +234,6 @@ export const navigationItems: NavigationDefinition[] = [
     sectionKey: 'admin',
     adminOnly: true,
   },
-  {
-    href: '/admin/puck',
-    label: 'Editor Puck',
-    description:
-      'Blocos visuais das páginas, com rascunho, publicação e histórico.',
-    icon: Layers3,
-    section: 'Administração',
-    sectionKey: 'admin',
-    adminOnly: true,
-  },
 ];
 
 export const pageMetaByPath = Object.fromEntries(
@@ -299,22 +288,30 @@ function buildConfiguredNavigation(appConfig?: AppPageConfig) {
     appConfig.sidebar.items.map((item) => item.href)
   );
 
-  const configuredItems = appConfig.sidebar.items.map((item) => {
-    const baseItem = baseItemsByHref.get(item.href);
-    const sectionKey = baseItem?.sectionKey ?? 'principal';
+  const configuredItems = appConfig.sidebar.items
+    .filter(
+      (item) =>
+        !item.href
+          .split(/[?#]/)[0]
+          .replace(/\/+$/, '')
+          .startsWith('/admin/puck')
+    )
+    .map((item) => {
+      const baseItem = baseItemsByHref.get(item.href);
+      const sectionKey = baseItem?.sectionKey ?? 'principal';
 
-    return {
-      href: item.href,
-      label: item.href === '/chat' ? rotuloDaLyra(item.label) : item.label,
-      description: item.description,
-      icon: baseItem?.icon ?? Sparkles,
-      section: getSectionLabel(sectionKey, appConfig) ?? 'Principal',
-      sectionKey,
-      adminOnly: baseItem?.adminOnly ?? item.href.startsWith('/admin'),
-      shortcut: baseItem?.shortcut,
-      visible: item.visible,
-    } satisfies NavigationDefinition;
-  });
+      return {
+        href: item.href,
+        label: item.href === '/chat' ? rotuloDaLyra(item.label) : item.label,
+        description: item.description,
+        icon: baseItem?.icon ?? Sparkles,
+        section: getSectionLabel(sectionKey, appConfig) ?? 'Principal',
+        sectionKey,
+        adminOnly: baseItem?.adminOnly ?? item.href.startsWith('/admin'),
+        shortcut: baseItem?.shortcut,
+        visible: item.visible,
+      } satisfies NavigationDefinition;
+    });
 
   // Páginas novas que ainda não estão na configuração salva pelo
   // administrador entram logo depois da página que as antecede na navegação

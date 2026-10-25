@@ -3,7 +3,7 @@
  * Verificação do banco antes do `pnpm dev` (script `predev`).
  *
  * Sem o MySQL no ar, o servidor de desenvolvimento subia normalmente e todas
- * as páginas falhavam com 500 (configurações, planos, Puck, cadastro e
+ * as páginas falhavam com 500 (configurações, planos, cadastro e
  * login), sem dizer que a causa era o banco. Aqui, antes de iniciar o Next:
  *   1. conecta ao MySQL do `.env.local` (até 10 s);
  *   2. confere se todas as migrations do repositório estão aplicadas.

@@ -24,7 +24,7 @@ export default function AdminPlansPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="admin-plans">
+    <AppShell>
       <AdminPlanMatrixContent />
     </AppShell>
   );

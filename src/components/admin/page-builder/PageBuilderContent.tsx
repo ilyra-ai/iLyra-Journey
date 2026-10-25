@@ -29,10 +29,7 @@ export function PageBuilderContent() {
   }
 
   return (
-    <AppShell
-      contentClassName="max-w-[1680px]"
-      puckDocumentKey="admin-page-builder"
-    >
+    <AppShell contentClassName="max-w-[1680px]">
       <PageIntro
         eyebrow="Construtor da experiência pública"
         title="Superfícies editáveis em tempo real"

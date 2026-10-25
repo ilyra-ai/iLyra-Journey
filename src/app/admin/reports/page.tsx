@@ -21,7 +21,7 @@ export default function AdminReportsPage() {
   }
 
   return (
-    <AppShell puckDocumentKey="admin-reports">
+    <AppShell>
       <PageIntro title="Relatórios e exportação" />
       <AdminReportsContent />
     </AppShell>

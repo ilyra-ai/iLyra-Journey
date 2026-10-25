@@ -21,7 +21,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <AppShell puckDocumentKey="profile">
+    <AppShell>
       <PageIntro
         eyebrow={profileConfig.pageEyebrow}
         title={profileConfig.pageTitle}
