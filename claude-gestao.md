@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **89%** |
+| Progresso          | `██████████████████░░` **90%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 99                             |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 100                            |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 2                              |
 | ⚪ A iniciar       | 9                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-25                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (99 ÷ 111 ≈ 89%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (100 ÷ 111 ≈ 90%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,16 +51,7 @@
 
 ### ANDAMENTO
 
-### 97 · Nomes compreensíveis de todas as métricas na análise de saúde dos dados
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
-- **Pedido do usuário:** em `http://localhost:3000/admin/data-health`, na seção **“Análise de métricas”**, a coluna **“Métrica”** mostra identificadores técnicos, descritos pelo usuário como nomes de arquivos, em vez do nome compreensível da métrica. Substituir a apresentação pelo nome real de **todas as métricas**, incluindo as que não aparecem no recorte do anexo; não limitar a correção aos exemplos visíveis.
-- **Investigação e implementação:** inventariar o catálogo completo e a origem dos identificadores, conferir os rótulos e unidades já existentes no app para evitar retrabalho e divergência e usar uma fonte de nomes em pt-BR consistente. Manter as chaves técnicas do banco e os cálculos; corrigir a apresentação, sem renomear colunas ou alterar dados por inferência. Exemplos do anexo incluem `steps`, `sleep_duration_minutes`, `resting_heart_rate`, `calories_burned`, `hrv_ms`, `spo2_average`, `vo2_max`, nutrientes, hidratação e cafeína, mas o escopo é o catálogo inteiro.
-- **Validação e entrega:** confrontar cada identificador com seu nome e unidade corretos, comprovar cobertura integral sem nomes técnicos vazando como rótulos, conferir preenchimento e faixas de valores sem regressão, estados vazios e erros, leitura no celular e desktop, acessibilidade e fluxo real da página/API. Não usar simulações, placeholders, hardcode para mascarar lacunas ou cortes de código; executar os gates aplicáveis, atualizar este painel e publicar commit e push próprios na main, sem branches ou worktrees. Este registro não declara a correção implementada.
-
-- **Início em 2026-10-25:** confirmar todas as colunas e tipos reais da tabela, reaproveitar rótulos e unidades do check-in/grade de métricas, manter as chaves e agregações numéricas. A tela imprime diretamente a chave técnica; verificar também a inclusão indevida de campos não numéricos na seleção de métricas.
-
-- **Validação concluída em 2026-10-25; aguardando publicação individual:** 64 nomes e unidades em pt-BR no catálogo completo, reaproveitando check-in e unidades da grade; identificadores e cálculos numéricos preservados. Schema real comprova 63 métricas numéricas e fluxo menstrual categórico; corrigida inclusão de DATETIME e agregação numérica do texto, sem alterar dados. Unidade abaixo do nome, cabeçalho de linha acessível e tabela rolável preservada. 531 unitários, 334 integrações, formato, lint, tipos e build aprovados. QA produção: todos os rótulos/API, valores e preenchimento/MySQL, estado vazio, paciente recusado, falha de rede na requisição e retentativa, 1440/390/320 px sem overflow da página. Axe 4.14.0 sem violações (27 regras), sem exceções; conta temporária excluída. Detalhes em `docs/nomes-das-metricas.md`.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -1753,6 +1744,19 @@
 - **Entrega validada e publicada em 2026-10-25:** catálogo de 13 para 26 capacidades persistidas, sem redesenhar páginas existentes. Portões de rota/componentes e APIs, dependências, cota zero, plano inativo, Perfil essencial somente leitura e direitos administrativos separados do plano. Cotas atômicas em insert/upsert/horário, janela em entradas alternativas, UTC independente do fuso, propriedade de profissional e colisão entre titulares protegidas. Chat sem histórico funciona sem persistência; memória/notificações desligadas não coletam, fila preserva justiça e privacidade continua acessível. 531 unitários, 332 integrações, formato, lint, tipos e build aprovados; migração 042 aplicada. QA real dos três planos comerciais, salvamento pela matriz, menus, dez acessos diretos, reativação e novo login; Perfil e rascunho preservados, inclusive 32 segundos offline no chat. 1440/390/320 px sem overflow; Axe 4.14.0 sem violações na matriz, chat sem histórico e perfil. Matriz restaurada e contas de QA excluídas. Inventário das 26 capacidades e exceções essenciais/administrativas em `docs/cobertura-entitlements.md`. Inferência externa e RLHF permanecem nas 86/90, sem alegar validação de hardware físico.
 
 - **Commit:** `27ac4574f220484e3c238bc18f1a60c289ed7246` · **Push:** `e2a3390..27ac457 main -> main`, confirmado por `git ls-remote`.
+
+### 97 · Nomes compreensíveis de todas as métricas na análise de saúde dos dados
+
+- **Status:** 🟢 finalizada · **Conclusão:** 2026-10-25 · **Registro:** 2026-10-22.
+- **Pedido do usuário:** em `http://localhost:3000/admin/data-health`, na seção **“Análise de métricas”**, a coluna **“Métrica”** mostra identificadores técnicos, descritos pelo usuário como nomes de arquivos, em vez do nome compreensível da métrica. Substituir a apresentação pelo nome real de **todas as métricas**, incluindo as que não aparecem no recorte do anexo; não limitar a correção aos exemplos visíveis.
+- **Investigação e implementação:** inventariar o catálogo completo e a origem dos identificadores, conferir os rótulos e unidades já existentes no app para evitar retrabalho e divergência e usar uma fonte de nomes em pt-BR consistente. Manter as chaves técnicas do banco e os cálculos; corrigir a apresentação, sem renomear colunas ou alterar dados por inferência. Exemplos do anexo incluem `steps`, `sleep_duration_minutes`, `resting_heart_rate`, `calories_burned`, `hrv_ms`, `spo2_average`, `vo2_max`, nutrientes, hidratação e cafeína, mas o escopo é o catálogo inteiro.
+- **Validação e entrega:** confrontar cada identificador com seu nome e unidade corretos, comprovar cobertura integral sem nomes técnicos vazando como rótulos, conferir preenchimento e faixas de valores sem regressão, estados vazios e erros, leitura no celular e desktop, acessibilidade e fluxo real da página/API. Não usar simulações, placeholders, hardcode para mascarar lacunas ou cortes de código; executar os gates aplicáveis, atualizar este painel e publicar commit e push próprios na main, sem branches ou worktrees. Este registro não declara a correção implementada.
+
+- **Início em 2026-10-25:** confirmar todas as colunas e tipos reais da tabela, reaproveitar rótulos e unidades do check-in/grade de métricas, manter as chaves e agregações numéricas. A tela imprime diretamente a chave técnica; verificar também a inclusão indevida de campos não numéricos na seleção de métricas.
+
+- **Entrega validada e publicada em 2026-10-25:** 64 nomes e unidades em pt-BR no catálogo completo, reaproveitando check-in e unidades da grade; identificadores e cálculos numéricos preservados. Schema real comprova 63 métricas numéricas e fluxo menstrual categórico; corrigida inclusão de DATETIME e agregação numérica do texto, sem alterar dados. Unidade abaixo do nome, cabeçalho de linha acessível e tabela rolável preservada. 531 unitários, 334 integrações, formato, lint, tipos e build aprovados. QA produção: todos os rótulos/API, valores e preenchimento/MySQL, estado vazio, paciente recusado, falha de rede na requisição e retentativa, 1440/390/320 px sem overflow da página. Axe 4.14.0 sem violações (27 regras), sem exceções; conta temporária excluída. Detalhes em `docs/nomes-das-metricas.md`.
+
+- **Commit:** `d343f69fdb12cfa9bac165dbd4577e4cc8fe38cd` · **Push:** `6a3b176..d343f69 main -> main`, confirmado por `git ls-remote`.
 
 ### 104 · Edição dos próprios dados para usuários de todos os planos
 
