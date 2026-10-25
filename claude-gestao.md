@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **86%** |
+| Progresso          | `████████████████░░░░` **87%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 96                             |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 97                             |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 2                              |
 | ⚪ A iniciar       | 12                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-25                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (96 ÷ 111 ≈ 86%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (97 ÷ 111 ≈ 87%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,14 +51,7 @@
 
 ### ANDAMENTO
 
-### 94 · Atualização automática dos itens Inclui na landing a partir dos planos
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
-- **Pedido do usuário:** quando o administrador atualizar a **“Matriz editável de entitlements”** de qualquer plano em `http://localhost:3000/admin/plans`, atualizar automaticamente os itens **“Inclui:”** na seção `http://localhost:3000/#planos` da landing page.
-- **Critérios:** verificar a fonte atual dos benefícios e usar a mesma configuração persistida de entitlements, com atualização/invalidação real, sem listas comerciais paralelas que fiquem desatualizadas. Respeitar funções desabilitadas, limites e valores zero; descrever os benefícios em pt-BR compreensível. Excluir o plano Administrador da exposição pública, conforme tarefa 91.
-- **Validação:** editar cada plano pela interface administrativa, confirmar persistência e o reflexo automático na landing, inclusive desabilitação e alteração de limites, recarga e sessão pública. Restaurar os valores de teste; validar CRUD, mobile/desktop, acessibilidade e gates. Commit e push próprios na main.
-
-- **Implementado e validado, aguardando publicação:** mesma matriz persistida como fonte, todos os benefícios utilizáveis, cotas e intervalos em pt-BR, zero/desligados omitidos, singular/ilimitado, sem herança presumida ou corte de lista. Catálogo explicitamente exclui Administrador e usa `no-store`; evento entre abas, foco e reconsulta de 30 s enquanto visível atualizam a landing aberta. 528 unitários, 240 integrações, formato, lint, tipos e build aprovados. QA de produção editou Free/Meta/Care pela interface e comprovou limites, zero, desabilitação, ilimitado e atualização periódica real; matriz restaurada. 1440/390/320 px sem estouro e visual preservado. Detalhes em `docs/beneficios-publicos-dos-planos.md`.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -1737,6 +1730,15 @@
 - **Entrega 93.3 publicada:** `38c54c4` · **Push:** `4a99395..38c54c4 main -> main` (confirmado). notas operacionais com CRUD, autoria, última edição, versão, limite de 100 × 2.000 caracteres, confirmação de exclusão/descarte e criação idempotente. Rascunho preservado em falha e conflito; opção de reabrir a versão atual sem sobrescrita automática. Auditoria transacional sem conteúdo; exportação mínima e cascade LGPD. Migração 039, 528 unitários, 227 integrações, lint, formato, tipos e build aprovados. QA em produção confirmou CRUD, conflitos reais, offline/retentativa, recarga, teclado e 1440/390/320 px sem rolagem horizontal, inclusive dentro do diálogo. Detalhes em `docs/gestao-de-usuarios.md`. O estado das entregas seguintes consta nos registros abaixo.
 - **Entrega 93.4 publicada:** `986a327` · **Push:** `74b676e..986a327 main -> main` (confirmado). catálogo com CRUD, nome/cor, versão, unicidade, atribuição/remoção por conta e limites concorrentes de 50 ativos/10 por conta. Exclusão confirma versão e número de contas afetadas; mudança de impacto retorna 409 antes de remover associações. Transação/auditoria em lote, identificação excluída não reutilizável, nome/autoria limpos e exportação/cascade LGPD mínimos. 528 unitários, 234 integrações, formato, lint, tipos e build aprovados. QA de produção confirmou duas abas, nome contínuo de 40 caracteres, teclado, offline/retentativa, conflito de versão, impacto 1→2, recarga e 1440/390/320 px sem estouro. Seis cores medidas acima de 4,5:1. Detalhes em `docs/gestao-de-usuarios.md`; resta a entrega 93.5.
 - **Entrega 93.5 publicada:** `3db385c` · **Push:** `12d36c4..3db385c main -> main` (confirmado). filtros combinados por acesso, papel, onboarding, plano e marcador; busca, ordenação e paginação reaproveitadas, contagem/linhas com a mesma fonte. Segmentos privados com CRUD, versão, limite de 20, idempotência, auditoria mínima e LGPD; marcador removido mantém consulta vazia com aviso. Migração 041 aplicada, 528 unitários, 239 integrações, formato, lint, tipos e build aprovados. QA de produção comprovou salvar, recarregar, aplicar, editar com versão 2 e excluir; combinação real dos cinco filtros e 1440/390/320 px sem estouro. As cinco funções foram implementadas, validadas e publicadas individualmente.
+
+### 94 · Atualização automática dos itens Inclui na landing a partir dos planos
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22.
+- **Pedido do usuário:** quando o administrador atualizar a **“Matriz editável de entitlements”** de qualquer plano em `http://localhost:3000/admin/plans`, atualizar automaticamente os itens **“Inclui:”** na seção `http://localhost:3000/#planos` da landing page.
+- **Critérios:** verificar a fonte atual dos benefícios e usar a mesma configuração persistida de entitlements, com atualização/invalidação real, sem listas comerciais paralelas que fiquem desatualizadas. Respeitar funções desabilitadas, limites e valores zero; descrever os benefícios em pt-BR compreensível. Excluir o plano Administrador da exposição pública, conforme tarefa 91.
+- **Validação:** editar cada plano pela interface administrativa, confirmar persistência e o reflexo automático na landing, inclusive desabilitação e alteração de limites, recarga e sessão pública. Restaurar os valores de teste; validar CRUD, mobile/desktop, acessibilidade e gates. Commit e push próprios na main.
+
+- **Commit:** `9d499b8` · **Push:** `4302911..9d499b8 main -> main` (confirmado). **Implementado e validado:** mesma matriz persistida como fonte, todos os benefícios utilizáveis, cotas e intervalos em pt-BR, zero/desligados omitidos, singular/ilimitado, sem herança presumida ou corte de lista. Catálogo explicitamente exclui Administrador e usa `no-store`; evento entre abas, foco e reconsulta de 30 s enquanto visível atualizam a landing aberta. 528 unitários, 240 integrações, formato, lint, tipos e build aprovados. QA de produção editou Free/Meta/Care pela interface e comprovou limites, zero, desabilitação, ilimitado e atualização periódica real; matriz restaurada. 1440/390/320 px sem estouro e visual preservado. Detalhes em `docs/beneficios-publicos-dos-planos.md`.
 
 ### 104 · Edição dos próprios dados para usuários de todos os planos
 
