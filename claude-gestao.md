@@ -24,9 +24,9 @@
 | Progresso          | `████████████████░░░░` **86%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 96                             |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 2                              |
-| ⚪ A iniciar       | 13                             |
+| ⚪ A iniciar       | 12                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-25                     |
 
@@ -51,7 +51,14 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 94 · Atualização automática dos itens Inclui na landing a partir dos planos
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
+- **Pedido do usuário:** quando o administrador atualizar a **“Matriz editável de entitlements”** de qualquer plano em `http://localhost:3000/admin/plans`, atualizar automaticamente os itens **“Inclui:”** na seção `http://localhost:3000/#planos` da landing page.
+- **Critérios:** verificar a fonte atual dos benefícios e usar a mesma configuração persistida de entitlements, com atualização/invalidação real, sem listas comerciais paralelas que fiquem desatualizadas. Respeitar funções desabilitadas, limites e valores zero; descrever os benefícios em pt-BR compreensível. Excluir o plano Administrador da exposição pública, conforme tarefa 91.
+- **Validação:** editar cada plano pela interface administrativa, confirmar persistência e o reflexo automático na landing, inclusive desabilitação e alteração de limites, recarga e sessão pública. Restaurar os valores de teste; validar CRUD, mobile/desktop, acessibilidade e gates. Commit e push próprios na main.
+
+- **Implementado e validado, aguardando publicação:** mesma matriz persistida como fonte, todos os benefícios utilizáveis, cotas e intervalos em pt-BR, zero/desligados omitidos, singular/ilimitado, sem herança presumida ou corte de lista. Catálogo explicitamente exclui Administrador e usa `no-store`; evento entre abas, foco e reconsulta de 30 s enquanto visível atualizam a landing aberta. 528 unitários, 240 integrações, formato, lint, tipos e build aprovados. QA de produção editou Free/Meta/Care pela interface e comprovou limites, zero, desabilitação, ilimitado e atualização periódica real; matriz restaurada. 1440/390/320 px sem estouro e visual preservado. Detalhes em `docs/beneficios-publicos-dos-planos.md`.
 
 ### BLOQUEADAS
 
@@ -85,13 +92,6 @@ Nenhuma tarefa em andamento.
 ## Tópico 3 · Tarefas a Iniciar
 
 ---
-
-### 94 · Atualização automática dos itens Inclui na landing a partir dos planos
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** quando o administrador atualizar a **“Matriz editável de entitlements”** de qualquer plano em `http://localhost:3000/admin/plans`, atualizar automaticamente os itens **“Inclui:”** na seção `http://localhost:3000/#planos` da landing page.
-- **Critérios:** verificar a fonte atual dos benefícios e usar a mesma configuração persistida de entitlements, com atualização/invalidação real, sem listas comerciais paralelas que fiquem desatualizadas. Respeitar funções desabilitadas, limites e valores zero; descrever os benefícios em pt-BR compreensível. Excluir o plano Administrador da exposição pública, conforme tarefa 91.
-- **Validação:** editar cada plano pela interface administrativa, confirmar persistência e o reflexo automático na landing, inclusive desabilitação e alteração de limites, recarga e sessão pública. Restaurar os valores de teste; validar CRUD, mobile/desktop, acessibilidade e gates. Commit e push próprios na main.
 
 ### 95 · Onboarding objetivo, rápido e visualmente inovador
 

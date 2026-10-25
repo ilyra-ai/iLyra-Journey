@@ -1,4 +1,9 @@
 'use client';
+import {
+  beneficiosPublicos,
+  recursoIncluido,
+} from '@/lib/plans/beneficios-publicos';
+import { EVENTO_PLANOS_ATUALIZADOS } from '@/lib/plans/atualizacao-publica';
 
 import {
   type CSSProperties,
@@ -198,9 +203,31 @@ export function LandingPage({
     return () => controller.abort();
   }, [tentativaPlanos]);
 
+  useEffect(() => {
+    const atualizar = () => {
+      if (document.visibilityState === 'visible')
+        setTentativaPlanos((v) => v + 1);
+    };
+    const storage = (e: StorageEvent) => {
+      if (e.key === EVENTO_PLANOS_ATUALIZADOS) atualizar();
+    };
+    const timer = window.setInterval(atualizar, 30_000);
+    window.addEventListener('focus', atualizar);
+    document.addEventListener('visibilitychange', atualizar);
+    window.addEventListener(EVENTO_PLANOS_ATUALIZADOS, atualizar);
+    window.addEventListener('storage', storage);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('focus', atualizar);
+      document.removeEventListener('visibilitychange', atualizar);
+      window.removeEventListener(EVENTO_PLANOS_ATUALIZADOS, atualizar);
+      window.removeEventListener('storage', storage);
+    };
+  }, []);
+
   const estatisticas = useMemo(() => {
     const habilitados = planos.flatMap((plano) =>
-      plano.features.filter((recurso) => recurso.enabled)
+      plano.features.filter(recursoIncluido)
     );
     const categorias = new Set(habilitados.map((recurso) => recurso.category));
     const comAssinatura = planos.filter((plano) => plano.assinaturaOnline);
@@ -501,24 +528,8 @@ export function LandingPage({
               ) : null}
               {estadoPlanos === 'ready' && planos.length > 0 ? (
                 <div className="jornada-grid-planos">
-                  {planos.map((plano, indice) => {
-                    const anterior = indice > 0 ? planos[indice - 1] : null;
-                    const funcionalidades = plano.features.filter(
-                      (r) => r.enabled
-                    );
-                    const anteriores = new Set(
-                      anterior?.features
-                        .filter((r) => r.enabled)
-                        .map((r) => r.key) ?? []
-                    );
-                    const novidades = funcionalidades.filter(
-                      (r) => !anteriores.has(r.key)
-                    );
-                    const herda =
-                      anterior !== null &&
-                      novidades.length > 0 &&
-                      novidades.length < funcionalidades.length;
-                    const exibidas = herda ? novidades : funcionalidades;
+                  {planos.map((plano) => {
+                    const exibidas = beneficiosPublicos(plano.features);
                     return (
                       <article
                         className={`jornada-plano ${plano.key === 'meta' ? 'jornada-plano-destaque' : ''}`}
@@ -543,24 +554,17 @@ export function LandingPage({
                           <summary>Sobre este plano</summary>
                           <p>{plano.description}</p>
                         </details>
-                        <p className="jornada-inclui">
-                          {herda
-                            ? `Tudo do ${anterior.name}, mais:`
-                            : 'Inclui:'}
-                        </p>
+                        <p className="jornada-inclui">Inclui:</p>
                         <ul>
-                          {exibidas.slice(0, 5).map((recurso) => (
+                          {exibidas.map((recurso) => (
                             <li key={recurso.key}>
                               <Check aria-hidden="true" />
-                              {recurso.name}
+                              {recurso.label}
                             </li>
                           ))}
-                          {exibidas.length > 5 ? (
-                            <li>
-                              <Check aria-hidden="true" />E mais{' '}
-                              {exibidas.length - 5} recursos
-                            </li>
-                          ) : null}
+                          {exibidas.length === 0 && (
+                            <li>Nenhum recurso habilitado neste plano.</li>
+                          )}
                         </ul>
                         <Ligacao
                           href={config.hero.primaryCtaHref}

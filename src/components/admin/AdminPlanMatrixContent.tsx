@@ -1,4 +1,5 @@
 'use client';
+import { notificarPlanosAtualizados } from '@/lib/plans/atualizacao-publica';
 
 import * as React from 'react';
 import {
@@ -245,6 +246,7 @@ export function AdminPlanMatrixContent() {
         }
 
         setPlans(payload.plans);
+        notificarPlanosAtualizados();
         toast.success(`Plano ${plan.name} atualizado com sucesso.`);
       } catch (error) {
         toast.error(`Falha ao salvar o plano ${plan.name}.`, {

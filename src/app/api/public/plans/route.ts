@@ -8,9 +8,14 @@ export const runtime = 'nodejs';
 export async function GET() {
   try {
     const matrix = await getPlanMatrix();
-    return NextResponse.json({
-      plans: matrix.plans.filter((plan) => plan.isActive && plan.isPublic),
-    });
+    return NextResponse.json(
+      {
+        plans: matrix.plans.filter(
+          (plan) => plan.key !== 'admin' && plan.isActive && plan.isPublic
+        ),
+      },
+      { headers: { 'Cache-Control': 'no-store' } }
+    );
   } catch (error) {
     return respostaDeErro(
       error,
