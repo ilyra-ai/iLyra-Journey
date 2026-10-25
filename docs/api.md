@@ -19,6 +19,7 @@ Todas as rotas ficam em `src/app/api/**/route.ts` e rodam no runtime Node.js. A 
 ## Gestão do acesso de usuários
 
 - `PATCH /api/admin/users/:userId/bloqueio`: administrador ativo; corpo estrito `{ blocked: boolean }`, UUID de conta. Impede autobloqueio e preserva administração ativa. Bloquear invalida os cookies anteriores; desbloquear permite um novo login. Repetir o mesmo estado é idempotente. Detalhes em [bloqueio-de-contas.md](./bloqueio-de-contas.md).
+- `GET /api/admin/users/:userId/historico?cursor=...`: administrador ativo; até 20 eventos reais por página, cursor estável e `nextCursor`; reúne gestão e atribuição de planos. Resposta `no-store`; 400 cursor inválido, 404 conta inexistente. Não reconstrói eventos que não foram registrados.
 - `POST /api/admin/users/:userId/sessoes`: administrador ativo; corpo estrito `{ requestId: UUID, reason }`, com `reason` igual a `suspeita_de_acesso`, `suporte` ou `solicitacao_do_titular`. Encerra sessões anteriores sem bloquear a conta. Repetir a solicitação devolve `repeated: true` sem revogar sessões posteriores; mudar o autor/motivo do mesmo identificador retorna 409. Registra um evento mínimo na mesma transação. Anônimo/conta bloqueada: 401; paciente: 403; alvo inexistente: 404. Detalhes em [gestao-de-usuarios.md](./gestao-de-usuarios.md).
 
 ## Memória pessoal Graphiti

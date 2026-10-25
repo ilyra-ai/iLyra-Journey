@@ -28,7 +28,7 @@
 | 🔴 Bloqueadas      | 2                              |
 | ⚪ A iniciar       | 13                             |
 | Branch de trabalho | `main` (única permitida)       |
-| Última atualização | 2026-10-24                     |
+| Última atualização | 2026-10-25                     |
 
 > Cálculo: tarefas finalizadas ÷ tarefas totais (95 ÷ 111 ≈ 86%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
@@ -62,6 +62,7 @@
 - **Justificativa e critérios:** resposta a acesso suspeito sem impedir novo login; rastreabilidade; continuidade do suporte; classificação operacional sem acesso clínico; gestão de grupos sem exportar dados pessoais. Todas exigem servidor administrativo, persistência e testes negativos/isolamento; notas, marcadores e segmentos terão CRUD integral, validação, falhas explícitas e recarga. Preservar o visual existente, usar controles compartilhados acessíveis e validar teclado/mobile/desktop. Cada função será publicada antes de iniciar a implementação seguinte.
 - **Pesquisa:** consultados diretamente os repositórios oficiais atuais da OWASP (Session Management e Logging Cheat Sheets) e W3C (padrão de diálogo modal APG) em 2026-10-24; sites institucionais responderam 403 pela política da nuvem, mas as fontes oficiais no GitHub foram acessíveis. Referências e inventário em `docs/gestao-de-usuarios.md`; não se atribui data de publicação de 2026 a uma fonte que não a informa.
 - **Entrega 93.1 publicada:** `ed9cc04` · **Push:** `30a43bc..ed9cc04 main -> main` (confirmado). encerrar sessões sem bloquear; transação, motivo categórico, revogação por versão, idempotência concorrente, exportação LGPD mínima e cascade. 528 unitários, 216 integrações, tipos, lint, formato e build aprovados; QA de produção 1440/390/320 px, teclado, cookie antigo 401, login novo 200, repetição segura e saída local ao encerrar as próprias sessões. As outras quatro funções permanecem pendentes.
+- **Entrega 93.2 validada, aguardando publicação:** histórico por conta com autor, origem, data, cursor estável, páginas de 20 eventos e `no-store`, reutilizando auditoria de assinaturas e eventos de gestão. Coleta transacional de cadastro, bloqueio, sessões e mudanças efetivas de papel/onboarding. Migração 038 e proteção do último administrador ativo no rebaixamento de papel. 528 unitários, 221 integrações, formato, lint, tipos e build aprovados. QA de produção: 26 eventos em 20+6 itens, permissões, atualização, recarga, erro offline e retentativa, Escape e 1440/390/320 px sem estouro. As entregas 93.3–93.5 continuam pendentes; detalhes em `docs/gestao-de-usuarios.md`.
 
 ### BLOQUEADAS
 

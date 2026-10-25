@@ -1,4 +1,7 @@
-import { executeStatement, queryRows } from '@/lib/mysql/pool';
+import type { RowDataPacket } from 'mysql2/promise';
+import { travarAdministracao } from '@/lib/auth/bloqueio';
+import { registrarEventoDeUsuario } from '@/lib/admin/eventos-usuarios';
+import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
 import { AppSession } from '@/types/app-session';
 import {
   QueryFilter,
@@ -1334,7 +1337,67 @@ export async function runUpdateQuery(options: {
 
   const sql = `UPDATE ${table} t SET ${entries.map(([column]) => `${column} = ?`).join(', ')} ${where.clause}`;
   const params = [...entries.map(([, value]) => value), ...where.params];
-  await executeStatement(sql, params);
+  if (
+    table === 'profiles' &&
+    isAdmin(session) &&
+    ('role' in payload || 'onboarding_completed' in payload)
+  ) {
+    await withTransaction(async (db) => {
+      await travarAdministracao(db);
+      const [atores] = await db.query<RowDataPacket[]>(
+        "SELECT u.id FROM users u JOIN profiles p ON p.id = u.id WHERE u.id = ? AND u.blocked_at IS NULL AND p.role = 'admin' FOR UPDATE",
+        [session.user.id]
+      );
+      if (!atores.length)
+        throw new HttpError('Acesso restrito a administradores ativos.', 403);
+      const [anteriores] = await db.query<RowDataPacket[]>(
+        `SELECT t.id, t.role, t.onboarding_completed FROM profiles t ${where.clause} FOR UPDATE`,
+        where.params
+      );
+      if ('role' in payload && payload.role !== 'admin') {
+        const [ativos] = await db.query<RowDataPacket[]>(
+          "SELECT u.id FROM users u JOIN profiles p ON p.id = u.id WHERE p.role = 'admin' AND u.blocked_at IS NULL FOR UPDATE"
+        );
+        const alvos = new Set(anteriores.map((p) => p.id));
+        if (!ativos.some((p) => !alvos.has(p.id)))
+          throw new HttpError(
+            'É necessário manter um administrador ativo.',
+            409
+          );
+      }
+      await db.query(sql, params);
+      for (const perfil of anteriores) {
+        if ('role' in payload && perfil.role !== payload.role) {
+          const reason =
+            payload.role === 'admin'
+              ? 'admin'
+              : payload.role === 'patient'
+                ? 'patient'
+                : 'other_role';
+          await registrarEventoDeUsuario(db, {
+            userId: String(perfil.id),
+            actorId: session.user.id,
+            action: 'role_changed',
+            reason,
+          });
+        }
+        if (
+          'onboarding_completed' in payload &&
+          Boolean(perfil.onboarding_completed) !==
+            Boolean(payload.onboarding_completed)
+        ) {
+          await registrarEventoDeUsuario(db, {
+            userId: String(perfil.id),
+            actorId: session.user.id,
+            action: 'onboarding_changed',
+            reason: payload.onboarding_completed ? 'completed' : 'pending',
+          });
+        }
+      }
+    });
+  } else {
+    await executeStatement(sql, params);
+  }
 
   return {
     data: normalizeRow(table, Object.fromEntries(entries) as QueryRecord),

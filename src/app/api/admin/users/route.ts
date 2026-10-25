@@ -1,3 +1,4 @@
+import { registrarEventoDeUsuario } from '@/lib/admin/eventos-usuarios';
 import { randomUUID } from 'node:crypto';
 import { hashPassword } from '@/lib/auth/password';
 import { lerJson } from '@/lib/http/api';
@@ -65,7 +66,7 @@ const criarSchema = z
 /** Cadastro administrativo cria uma conta comum e Free; não concede papel administrativo. */
 export async function POST(request: Request) {
   try {
-    await requireAdminSession();
+    const session = await requireAdminSession();
     const body = await lerJson(request, criarSchema);
     const id = randomUUID();
     const hash = await hashPassword(body.password);
@@ -79,6 +80,11 @@ export async function POST(request: Request) {
         [id, body.email, body.firstName, body.lastName]
       );
       await ensureUserSubscription(id, 'free', 'admin_create', db);
+      await registrarEventoDeUsuario(db, {
+        userId: id,
+        actorId: session.user.id,
+        action: 'account_created',
+      });
     });
     return NextResponse.json({ id, planKey: 'free' }, { status: 201 });
   } catch (erro) {

@@ -1,4 +1,4 @@
-import { randomUUID } from 'node:crypto';
+import { registrarEventoDeUsuario } from '@/lib/admin/eventos-usuarios';
 import type { RowDataPacket } from 'mysql2/promise';
 import { travarAdministracao } from '@/lib/auth/bloqueio';
 import { HttpError } from '@/lib/http-error';
@@ -51,10 +51,13 @@ export async function encerrarSessoes(
       'UPDATE users SET session_version = session_version + 1 WHERE id = ?',
       [userId]
     );
-    await db.execute(
-      'INSERT INTO admin_user_events (id, user_id, actor_id, action, reason, request_id) VALUES (?, ?, ?, ?, ?, ?)',
-      [randomUUID(), userId, actorId, 'sessions_revoked', reason, requestId]
-    );
+    await registrarEventoDeUsuario(db, {
+      userId,
+      actorId,
+      action: 'sessions_revoked',
+      reason,
+      requestId,
+    });
     return { revoked: true, repeated: false };
   });
 }

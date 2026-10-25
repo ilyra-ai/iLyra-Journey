@@ -1,4 +1,5 @@
 'use client';
+import { HistoricoUsuario } from './HistoricoUsuario';
 import { EncerrarSessoesUsuario } from './EncerrarSessoesUsuario';
 import { CriarUsuario } from './CriarUsuario';
 
@@ -40,6 +41,7 @@ import {
   LockKeyhole,
   LockKeyholeOpen,
   LogOut,
+  History,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -98,6 +100,8 @@ function extractApiError(payload: unknown) {
 
 export function UserManagementContent() {
   const { db, session } = useAuth();
+  const [historicoAlvo, setHistoricoAlvo] =
+    React.useState<AdminUserListItem | null>(null);
   const [encerrarAlvo, setEncerrarAlvo] = React.useState<{
     user: AdminUserListItem;
     requestId: string;
@@ -491,6 +495,12 @@ export function UserManagementContent() {
                               <LogOut className="mr-2 h-4 w-4" /> Encerrar
                               sessões
                             </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onSelect={() => setHistoricoAlvo(user)}
+                            >
+                              <History className="mr-2 h-4 w-4" /> Histórico
+                              administrativo
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               className="text-destructive focus:text-destructive"
@@ -542,6 +552,13 @@ export function UserManagementContent() {
         </CardContent>
       </Card>
 
+      {historicoAlvo && (
+        <HistoricoUsuario
+          key={historicoAlvo.id}
+          user={historicoAlvo}
+          aoFechar={() => setHistoricoAlvo(null)}
+        />
+      )}
       {encerrarAlvo && (
         <EncerrarSessoesUsuario
           key={encerrarAlvo.requestId}

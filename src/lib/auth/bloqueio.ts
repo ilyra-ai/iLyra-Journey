@@ -1,3 +1,4 @@
+import { registrarEventoDeUsuario } from '@/lib/admin/eventos-usuarios';
 import type { PoolConnection, RowDataPacket } from 'mysql2/promise';
 import { HttpError } from '@/lib/http-error';
 import { withTransaction } from '@/lib/mysql/pool';
@@ -50,6 +51,11 @@ export async function definirBloqueio(
          session_version = session_version + ? WHERE id = ?`,
         [blocked ? 1 : 0, userId]
       );
+      await registrarEventoDeUsuario(db, {
+        userId,
+        actorId,
+        action: blocked ? 'account_blocked' : 'account_unblocked',
+      });
     }
     return { blocked };
   });
