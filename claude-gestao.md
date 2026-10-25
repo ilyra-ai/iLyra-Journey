@@ -24,9 +24,9 @@
 | Progresso          | `████████████████░░░░` **86%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 95                             |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 2                              |
-| ⚪ A iniciar       | 14                             |
+| ⚪ A iniciar       | 13                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-24                     |
 
@@ -51,7 +51,17 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 93 · Cinco novas funcionalidades relevantes na gestão de usuários e perfis
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
+- **Pedido do usuário:** incluir mais **cinco funções ou funcionalidades** em `http://localhost:3000/admin/users` para gestão de usuários/perfis, que ainda não existam no app, sejam extremamente importantes e estejam alinhadas às tendências de 2026.
+- **Investigação e definição:** inventariar os recursos existentes para não duplicar funcionalidades; pesquisar referências atuais e fontes oficiais na internet antes de escolher. Registrar as cinco funções escolhidas, justificativa, escopo, requisitos e critérios verificáveis no início da implementação. Bloquear/desbloquear, já previsto na tarefa 92, não conta como uma das cinco adicionais.
+- **Entrega real:** implementar backend antes da interface, persistência, permissões administrativas, validação, feedback de operações, estados de falha e auditoria apropriada. Validar integralmente o CRUD e cada fluxo com dados de teste, isolamento, acessibilidade e responsividade. Cada função lógica concluída deve receber seu próprio commit e push na main antes da próxima, com atualização deste painel; não acumular as cinco em um único lote de publicação.
+
+- **Definição em 2026-10-24, antes da implementação:** o inventário encontrou cadastro Free, busca textual, ordenação/paginação, detalhe/atribuição de plano, onboarding, exclusão e bloqueio/desbloqueio; relatórios já exportam usuários em CSV, portanto exportação não contará como novidade. Cinco funções adicionais: **(1)** encerrar sessões sem bloquear a conta, com motivo categórico, confirmação, revogação real e repetição idempotente; **(2)** linha temporal administrativa por usuário, paginada, com origem, autor, ação e data reais, sem fabricar eventos anteriores à coleta; **(3)** notas operacionais administrativas com CRUD, validação, autoria, controle de conflito, aviso contra dados clínicos e auditoria sem copiar o texto; **(4)** marcadores operacionais com CRUD de catálogo e atribuição/remoção nas contas, sem alterar papéis ou planos; **(5)** filtros combinados de acesso, papel, plano, onboarding e marcadores, com segmentos privados salvos por administrador (CRUD), reaplicados ao banco real.
+- **Justificativa e critérios:** resposta a acesso suspeito sem impedir novo login; rastreabilidade; continuidade do suporte; classificação operacional sem acesso clínico; gestão de grupos sem exportar dados pessoais. Todas exigem servidor administrativo, persistência e testes negativos/isolamento; notas, marcadores e segmentos terão CRUD integral, validação, falhas explícitas e recarga. Preservar o visual existente, usar controles compartilhados acessíveis e validar teclado/mobile/desktop. Cada função será publicada antes de iniciar a implementação seguinte.
+- **Pesquisa:** consultados diretamente os repositórios oficiais atuais da OWASP (Session Management e Logging Cheat Sheets) e W3C (padrão de diálogo modal APG) em 2026-10-24; sites institucionais responderam 403 pela política da nuvem, mas as fontes oficiais no GitHub foram acessíveis. Referências e inventário em `docs/gestao-de-usuarios.md`; não se atribui data de publicação de 2026 a uma fonte que não a informa.
+- **Entrega 93.1 validada, aguardando publicação:** encerrar sessões sem bloquear; transação, motivo categórico, revogação por versão, idempotência concorrente, exportação LGPD mínima e cascade. 528 unitários, 216 integrações, tipos, lint, formato e build aprovados; QA de produção 1440/390/320 px, teclado, cookie antigo 401, login novo 200, repetição segura e saída local ao encerrar as próprias sessões. As outras quatro funções permanecem pendentes.
 
 ### BLOQUEADAS
 
@@ -85,13 +95,6 @@ Nenhuma tarefa em andamento.
 ## Tópico 3 · Tarefas a Iniciar
 
 ---
-
-### 93 · Cinco novas funcionalidades relevantes na gestão de usuários e perfis
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** incluir mais **cinco funções ou funcionalidades** em `http://localhost:3000/admin/users` para gestão de usuários/perfis, que ainda não existam no app, sejam extremamente importantes e estejam alinhadas às tendências de 2026.
-- **Investigação e definição:** inventariar os recursos existentes para não duplicar funcionalidades; pesquisar referências atuais e fontes oficiais na internet antes de escolher. Registrar as cinco funções escolhidas, justificativa, escopo, requisitos e critérios verificáveis no início da implementação. Bloquear/desbloquear, já previsto na tarefa 92, não conta como uma das cinco adicionais.
-- **Entrega real:** implementar backend antes da interface, persistência, permissões administrativas, validação, feedback de operações, estados de falha e auditoria apropriada. Validar integralmente o CRUD e cada fluxo com dados de teste, isolamento, acessibilidade e responsividade. Cada função lógica concluída deve receber seu próprio commit e push na main antes da próxima, com atualização deste painel; não acumular as cinco em um único lote de publicação.
 
 ### 94 · Atualização automática dos itens Inclui na landing a partir dos planos
 

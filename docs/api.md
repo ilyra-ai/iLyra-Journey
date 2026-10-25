@@ -11,10 +11,15 @@ Todas as rotas ficam em `src/app/api/**/route.ts` e rodam no runtime Node.js. A 
   - Qualquer outra falha responde **500** só com a mensagem genérica da rota. O detalhe (SQL, caminho, stack) vai apenas para o log do servidor.
 - **CSRF:** escrita (`POST`, `PUT`, `PATCH`, `DELETE`) vinda de outra origem responde **403** (`src/proxy.ts`); detalhes em [`seguranca.md`](./seguranca.md).
 - **Limite de tentativas:** login e cadastro respondem **429** com `Retry-After` quando a janela estoura.
-- **Sessão:** o JWT fica só no cookie `httpOnly`; nenhuma rota o devolve no corpo. Papel e e-mail da sessão são lidos do banco a cada requisição.
+- **Sessão:** o JWT fica só no cookie `httpOnly`; nenhuma rota o devolve no corpo. Papel, e-mail, bloqueio e versão de sessão são lidos do banco a cada requisição. Cookies revogados não recuperam validade após desbloquear uma conta.
 - **Formato:** `{ "error": "mensagem" }`. As rotas do cliente de dados (`/api/data/[table]`, `/api/storage/upload`, `/api/rpc/*`) usam `{ "data": null, "error": { "message": "..." } }`.
 - **Recursos do plano:** o que o plano vigente não habilita (`plan_entitlements`) responde **403** com "O plano X não inclui Y". Em `/api/data/[table]`, leitura e escrita de `goals`, `ai_plans`, `appointments` (`appointments_active`) e `professionals` (`professionals_total`) e leitura de `ai_tips` exigem o recurso; `/api/semana` omite as metas sem `goal_progress_tracking`. Administradores não dependem do plano. No app, a mesma regra esconde as páginas e os atalhos: `src/lib/plans/rotas.ts` (`RECURSOS_DA_ROTA`) e o hook `useRotaLiberada`.
 - **Cadastro:** a conta, o perfil (`onboarding_completed = false`), os aceites LGPD e a assinatura Free (`source = auth_register`) nascem na mesma transação.
+
+## Gestão do acesso de usuários
+
+- `PATCH /api/admin/users/:userId/bloqueio`: administrador ativo; corpo estrito `{ blocked: boolean }`, UUID de conta. Impede autobloqueio e preserva administração ativa. Bloquear invalida os cookies anteriores; desbloquear permite um novo login. Repetir o mesmo estado é idempotente. Detalhes em [bloqueio-de-contas.md](./bloqueio-de-contas.md).
+- `POST /api/admin/users/:userId/sessoes`: administrador ativo; corpo estrito `{ requestId: UUID, reason }`, com `reason` igual a `suspeita_de_acesso`, `suporte` ou `solicitacao_do_titular`. Encerra sessões anteriores sem bloquear a conta. Repetir a solicitação devolve `repeated: true` sem revogar sessões posteriores; mudar o autor/motivo do mesmo identificador retorna 409. Registra um evento mínimo na mesma transação. Anônimo/conta bloqueada: 401; paciente: 403; alvo inexistente: 404. Detalhes em [gestao-de-usuarios.md](./gestao-de-usuarios.md).
 
 ## Memória pessoal Graphiti
 

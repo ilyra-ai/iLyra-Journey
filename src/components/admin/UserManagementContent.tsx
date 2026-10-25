@@ -1,4 +1,5 @@
 'use client';
+import { EncerrarSessoesUsuario } from './EncerrarSessoesUsuario';
 import { CriarUsuario } from './CriarUsuario';
 
 import * as React from 'react';
@@ -38,6 +39,7 @@ import {
   Eye,
   LockKeyhole,
   LockKeyholeOpen,
+  LogOut,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -96,6 +98,10 @@ function extractApiError(payload: unknown) {
 
 export function UserManagementContent() {
   const { db, session } = useAuth();
+  const [encerrarAlvo, setEncerrarAlvo] = React.useState<{
+    user: AdminUserListItem;
+    requestId: string;
+  } | null>(null);
   const [acessoAlvo, setAcessoAlvo] = React.useState<AdminUserListItem | null>(
     null
   );
@@ -474,6 +480,17 @@ export function UserManagementContent() {
                                   ? 'Bloquear (sua conta protegida)'
                                   : 'Bloquear'}
                             </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onSelect={() =>
+                                setEncerrarAlvo({
+                                  user,
+                                  requestId: crypto.randomUUID(),
+                                })
+                              }
+                            >
+                              <LogOut className="mr-2 h-4 w-4" /> Encerrar
+                              sessões
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               className="text-destructive focus:text-destructive"
@@ -524,6 +541,14 @@ export function UserManagementContent() {
           </div>
         </CardContent>
       </Card>
+
+      {encerrarAlvo && (
+        <EncerrarSessoesUsuario
+          key={encerrarAlvo.requestId}
+          {...encerrarAlvo}
+          aoFechar={() => setEncerrarAlvo(null)}
+        />
+      )}
 
       {selectedUser && (
         <UserDetailModal
