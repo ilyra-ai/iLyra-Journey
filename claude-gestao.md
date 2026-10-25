@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **82%** |
+| Progresso          | `████████████████░░░░` **83%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 91                             |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 92                             |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 1                              |
 | ⚪ A iniciar       | 18                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-24                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (91 ÷ 111 ≈ 82%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (92 ÷ 111 ≈ 83%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,15 +51,7 @@
 
 ### ANDAMENTO
 
-### 87 · Estado real dos provedores de IA no painel
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-21.
-- **Implementação e validação em 2026-10-24:** configuração salva identificada separadamente da resposta real. Estados não verificado, verificando, resposta confirmada no último teste, indisponível e antigo; horário da última consulta, validade de dois minutos e retentativa. Edição de conexão, credencial ou modelo invalida resultados; versão da edição impede resposta atrasada de sobrescrever configuração nova. Modelos salvos preservados quando o servidor fecha.
-- **Evidências:** 601 unitários, 202 integrações, tipos, lint, formatação e build aprovados. QA em produção por navegador real confirmou estado inicial desconhecido, catálogo HTTP local, servidor de teste encerrado e erro real de conexão, preservação do modelo e 1440/390/320 px sem overflow. Configuração temporária restaurada; nenhum Jan do usuário foi encerrado. Arquivos `/tmp/lyra87-{unit-final,integration-final,types,lint-final,format-final,build-final}.log` e `/tmp/lyra87-{1440,390,320}.png`. Ajuste final do rótulo “Ordem salva” em validação focada; publicação individual em preparação.
-- **Relato do usuário:** Jan estava fechado, mas Configurações de IA mostrava o provedor online e um modelo. O usuário informou que abriria o Jan em seguida.
-- **Disponibilidade informada posteriormente:** usuário confirmou Jan aberto em `http://127.0.0.1:1337/v1`, com `Gemma-4-E4B-Uncensored-HauhauCS-Aggressive`. Consultar o identificador exato no catálogo durante a validação, sem presumir que o nome abreviado é o identificador da API.
-- **Critérios:** conferir a causa no código e na interface antes de alterar. Distinguir configuração e modelo salvos de disponibilidade confirmada por conexão recente; não apresentar “online” com base somente na seleção persistida ou em resultado antigo. Mostrar indisponibilidade, verificação em andamento e estado ainda não verificado com mensagens claras, data da última checagem e retentativa quando apropriado. Invalidar resultados após mudanças de endereço, credenciais ou modelo e impedir respostas atrasadas de sobrescrever uma conexão mais recente. Preservar configuração e modelo quando o servidor local fechar.
-- **Validação e entrega:** conferir conexão ativa e recusa real, reabertura do provedor, atualização do catálogo e separação entre modelos configurados e disponíveis; não encerrar o Jan do usuário para provocar falha. Aplicar aos provedores locais e em nuvem conforme seus contratos reais. Validar backend, interface desktop/mobile, gates e commit/push individuais na main, sem branches ou worktrees. Implementar após a sequência já autorizada, sem misturar a correção à tarefa 78.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -1702,6 +1694,16 @@
 - **Validação e entrega:** testar persistência após reiniciar, lembrança entre conversas, troca de provedor, contradições ao longo do tempo, indisponibilidade do serviço, retentativas, exclusão e bloqueio de acesso entre contas. Comprovar com Graphiti e banco de grafos reais, além das rotas e da interface mobile/desktop, passando os gates e publicando commit e push próprios na main.
 - **Pesquisa inicial:** [Graphiti oficial](https://github.com/getzep/graphiti), licença Apache 2.0, biblioteca Python e bancos de grafos suportados; exemplos REST/MCP não oferecem autenticação nem isolamento de usuários e não serão expostos como serviço de produção. A integração foi iniciada pela infraestrutura e pelo backend, antes dos controles visuais.
 - **Progresso verificado em 2026-10-20:** implementação e revisão concluídas. Graphiti 0.31.2, FalkorDB 6.0.2 e índices locais de 256 dimensões saudáveis; migração 031 aplicada sem apagar dados. Passaram 521 testes unitários, 187 de integração, 30 dos launchers, lint, formatação, tipos e build de produção, com saúde HTTP 200 e 33 migrations. Depois de o usuário reabrir o Jan, o roteiro HTTP completo confirmou extração real, origem, isolamento, alternância entre titulares, recuperação em outra conversa, reinício, correção temporal, exportação, Motor Lyra, modo privado, retentativa e exclusão pendente. Na interface, ativação, relato, origem, correção, download, pausa persistente e mensagem privada sem captura passaram; desktop e celulares de 390 e 320 pixels sem excesso horizontal. Auditoria Python sem vulnerabilidades conhecidas e inferência ONNX com vetores idênticos à referência. Configuração de modelos e modo privado restaurados; nenhuma conta temporária de memória ficou no banco. Relatório e artefatos verificáveis em `docs/memoria-graphiti.md`; commit e push individuais publicados e confirmados na main.
+
+### 87 · Estado real dos provedores de IA no painel
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-21.
+- **Implementação e validação em 2026-10-24:** configuração salva identificada separadamente da resposta real. Estados não verificado, verificando, resposta confirmada no último teste, indisponível e antigo; horário da última consulta, validade de dois minutos e retentativa. Edição de conexão, credencial ou modelo invalida resultados; versão da edição impede resposta atrasada de sobrescrever configuração nova. Modelos salvos preservados quando o servidor fecha.
+- **Evidências:** 601 unitários, 202 integrações, tipos, lint, formatação e build aprovados. QA em produção por navegador real confirmou estado inicial desconhecido, catálogo HTTP local, servidor de teste encerrado e erro real de conexão, preservação do modelo e 1440/390/320 px sem overflow. Configuração temporária restaurada; nenhum Jan do usuário foi encerrado. Arquivos `/tmp/lyra87-{unit-final,integration-final,types,lint-final,format-final,build-final}.log` e `/tmp/lyra87-{1440,390,320}.png`. Ajuste final do rótulo “Ordem salva” validado por lint focado e novo build. **Commit:** `c478f9f` · **Push:** `babb8a5..c478f9f main -> main`, confirmado.
+- **Relato do usuário:** Jan estava fechado, mas Configurações de IA mostrava o provedor online e um modelo. O usuário informou que abriria o Jan em seguida.
+- **Disponibilidade informada posteriormente:** usuário confirmou Jan aberto em `http://127.0.0.1:1337/v1`, com `Gemma-4-E4B-Uncensored-HauhauCS-Aggressive`. Consultar o identificador exato no catálogo durante a validação, sem presumir que o nome abreviado é o identificador da API.
+- **Critérios:** conferir a causa no código e na interface antes de alterar. Distinguir configuração e modelo salvos de disponibilidade confirmada por conexão recente; não apresentar “online” com base somente na seleção persistida ou em resultado antigo. Mostrar indisponibilidade, verificação em andamento e estado ainda não verificado com mensagens claras, data da última checagem e retentativa quando apropriado. Invalidar resultados após mudanças de endereço, credenciais ou modelo e impedir respostas atrasadas de sobrescrever uma conexão mais recente. Preservar configuração e modelo quando o servidor local fechar.
+- **Validação e entrega:** conferir conexão ativa e recusa real, reabertura do provedor, atualização do catálogo e separação entre modelos configurados e disponíveis; não encerrar o Jan do usuário para provocar falha. Aplicar aos provedores locais e em nuvem conforme seus contratos reais. Validar backend, interface desktop/mobile, gates e commit/push individuais na main, sem branches ou worktrees. Implementar após a sequência já autorizada, sem misturar a correção à tarefa 78.
 
 ### 88 · Histórico recolhido por padrão e controle de exibição
 
