@@ -346,6 +346,4 @@ export const TABLE_CONFIG: Record<TableName, TableConfig> = {
   },
 };
 
-export const NUMERIC_METRIC_COLUMNS = TABLE_CONFIG.daily_metrics.columns.filter(
-  (column) => !['id', 'user_id', 'date', 'created_at'].includes(column)
-);
+export { NUMERIC_METRIC_COLUMNS } from '@/lib/metricas/catalogo';

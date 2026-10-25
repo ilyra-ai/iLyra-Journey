@@ -4,7 +4,10 @@ import { z } from 'zod';
 import { respostaDeErro } from '@/lib/http/api';
 import { queryRows } from '@/lib/mysql/pool';
 import { requireAdminSession } from '@/lib/mysql/server-auth';
-import { NUMERIC_METRIC_COLUMNS } from '@/lib/mysql/table-config';
+import {
+  CATALOGO_DE_METRICAS,
+  COLUNAS_DAS_METRICAS,
+} from '@/lib/metricas/catalogo';
 
 export const runtime = 'nodejs';
 
@@ -42,20 +45,25 @@ export async function GET(request: Request) {
     );
 
     // Nomes de coluna vêm da configuração da tabela (identificadores fixos).
-    const expressoes = NUMERIC_METRIC_COLUMNS.flatMap((coluna) => [
+    const expressoes = COLUNAS_DAS_METRICAS.flatMap((coluna) => [
       `COUNT(${coluna}) AS n__${coluna}`,
-      `AVG(${coluna}) AS media__${coluna}`,
-      `MIN(${coluna}) AS minimo__${coluna}`,
-      `MAX(${coluna}) AS maximo__${coluna}`,
+      ...(CATALOGO_DE_METRICAS[coluna].tipo === 'numero'
+        ? [
+            `AVG(${coluna}) AS media__${coluna}`,
+            `MIN(${coluna}) AS minimo__${coluna}`,
+            `MAX(${coluna}) AS maximo__${coluna}`,
+          ]
+        : []),
     ]);
     const [agregados] = await queryRows<LinhaDeAgregados>(
       `SELECT COUNT(*) AS total, ${expressoes.join(', ')} FROM daily_metrics`
     );
     const total = numero(agregados?.total) ?? 0;
-    const metricas = NUMERIC_METRIC_COLUMNS.map((coluna) => {
+    const metricas = COLUNAS_DAS_METRICAS.map((coluna) => {
       const preenchidos = numero(agregados?.[`n__${coluna}`]) ?? 0;
       return {
         metrica: coluna,
+        ...CATALOGO_DE_METRICAS[coluna],
         preenchimento: total === 0 ? 0 : (preenchidos / total) * 100,
         media: numero(agregados?.[`media__${coluna}`]),
         minimo: numero(agregados?.[`minimo__${coluna}`]),

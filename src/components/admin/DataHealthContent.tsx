@@ -46,6 +46,9 @@ import { buscarJson } from '@/lib/http/transporte';
 
 interface MetricaDaSaude {
   metrica: string;
+  nome: string;
+  unidade: string | null;
+  tipo: 'numero' | 'categoria';
   preenchimento: number;
   media: number | null;
   minimo: number | null;
@@ -236,19 +239,35 @@ export function DataHealthContent() {
               <TableBody>
                 {dados.metricas.map((m) => (
                   <TableRow key={m.metrica}>
-                    <TableCell className="font-medium">{m.metrica}</TableCell>
+                    <TableHead
+                      scope="row"
+                      className="min-w-48 text-sm font-medium text-foreground"
+                    >
+                      {m.nome}
+                      {m.unidade ? (
+                        <span className="mt-1 block text-xs font-normal text-muted-foreground">
+                          Unidade: {m.unidade}
+                        </span>
+                      ) : null}
+                    </TableHead>
                     <TableCell>
                       <Badge variant={varianteDoPreenchimento(m.preenchimento)}>
                         {DECIMAL.format(m.preenchimento)}%
                       </Badge>
                     </TableCell>
                     <TableCell className="tabular-nums">
-                      {m.media === null ? '—' : DECIMAL.format(m.media)}
+                      {m.tipo === 'categoria'
+                        ? 'Não se aplica'
+                        : m.media === null
+                          ? '—'
+                          : DECIMAL.format(m.media)}
                     </TableCell>
                     <TableCell className="tabular-nums">
-                      {m.minimo === null || m.maximo === null
-                        ? '—'
-                        : `${DECIMAL.format(m.minimo)} / ${DECIMAL.format(m.maximo)}`}
+                      {m.tipo === 'categoria'
+                        ? 'Não se aplica'
+                        : m.minimo === null || m.maximo === null
+                          ? '—'
+                          : `${DECIMAL.format(m.minimo)} / ${DECIMAL.format(m.maximo)}`}
                     </TableCell>
                   </TableRow>
                 ))}
