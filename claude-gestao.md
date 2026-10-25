@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **91%** |
+| Progresso          | `██████████████████░░` **92%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 101                            |
+| 🟢 Finalizadas     | 102                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 2                              |
-| ⚪ A iniciar       | 8                              |
+| ⚪ A iniciar       | 7                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-25                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (101 ÷ 111 ≈ 91%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (102 ÷ 111 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -93,14 +93,6 @@ Nenhuma tarefa em andamento.
 ---
 
 ---
-
-### 99 · Dashboard administrativo completo com métricas, KPIs e linha temporal
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** o dashboard em `http://localhost:3000/admin/dashboard` está muito pobre; acrescentar mais métricas e KPIs, linha temporal e recursos de gestão. Pesquisar na internet, de forma profunda e exaustiva, todas as possibilidades relevantes para o administrador gerir o app por completo, na íntegra e em sua totalidade, alinhadas às tendências de 2026.
-- **Investigação e definição:** conferir código, serviços, dados, indicadores e funções existentes antes de implementar, evitando retrabalho. Pesquisar referências atuais e fontes oficiais; registrar possibilidades avaliadas, seleção justificada, definição de cada KPI, fórmula, origem, período, fuso, granularidade, filtros, limites e critérios de validação. Cobrir os domínios reais do app e sua operação administrativa; criar coleta e consultas reais quando necessárias, sem inventar históricos nem tratar dado ausente como resultado medido.
-- **Experiência e gestão:** organizar visão geral, tendências e linha temporal, comparações de períodos e acesso aos detalhes e ações correspondentes, com navegação clara para usuários leigos. Estruturar as novas abas Faturamento, Fiscal e Pagamentos previstas nas tarefas 100–102 com **o mesmo visual das abas de “Gestão de Conteúdo Dinâmico” em `/admin/content`**, conforme anexo. Seguir Lyra Clean claro, qualidade premium, acessibilidade, mobile-first e desktop, sem gráficos decorativos sem dados ou controles sem efeito.
-- **Validação e entrega:** confrontar indicadores com consultas reais e dados persistidos, conferir filtros e períodos, drill-down e ações, estados vazios, falhas, permissões no servidor, privacidade e desempenho. Validar CRUD e navegação dos domínios afetados, múltiplas larguras, regressões e gates completos. Publicação individual na main, com commit, push e evidências neste painel; não misturar a conclusão com as entregas das abas.
 
 ### 100 · Aba Faturamento no dashboard e gestão financeira completa
 
@@ -1763,6 +1755,21 @@ Nenhuma tarefa em andamento.
 - **Entrega validada e publicada em 2026-10-25:** removidos página, layout e wrapper exclusivos, menu/defaults e entrada antiga do registro. Helper puro compartilhado filtra links históricos em schema/navegação sem perder personalização ou reescrever JSON na leitura; registro interno aponta para Conteúdo. Construtor compartilhado e dependências preservados; nenhuma migration alterada e nenhum dado removido. Busca de integridade deixa a URI apenas em guarda de rotas aposentadas, regressões e histórico/documentação. 539 unitários, 336 integrações, formato, lint, tipos e build aprovados. QA real confirmou 404 administrativo, proteção global de visitantes para login, menu/busca sem entrada, prévia/rascunho/publicação/recarga e CRUD de hábitos/dicas pela interface com comprovação no banco. Configuração restaurada integralmente e itens de QA inativos/excluídos; 1440/390/320 px sem overflow, Axe 4.14.0 sem violações (30 regras), sem exceções. Relatório em `docs/remocao-construtor-duplicado.md`.
 
 - **Commit:** `73ea5ffc2248f6be343a1804094da09e319f580a` · **Push:** `5c6594d..73ea5ff main -> main`, confirmado por `git ls-remote`.
+
+### 99 · Dashboard administrativo completo com métricas, KPIs e linha temporal
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22 · **Início:** 2026-10-25 · **Conclusão:** 2026-10-25.
+- **Pedido do usuário:** o dashboard em `http://localhost:3000/admin/dashboard` está muito pobre; acrescentar mais métricas e KPIs, linha temporal e recursos de gestão. Pesquisar na internet, de forma profunda e exaustiva, todas as possibilidades relevantes para o administrador gerir o app por completo, na íntegra e em sua totalidade, alinhadas às tendências de 2026.
+- **Investigação e definição:** conferir código, serviços, dados, indicadores e funções existentes antes de implementar, evitando retrabalho. Pesquisar referências atuais e fontes oficiais; registrar possibilidades avaliadas, seleção justificada, definição de cada KPI, fórmula, origem, período, fuso, granularidade, filtros, limites e critérios de validação. Cobrir os domínios reais do app e sua operação administrativa; criar coleta e consultas reais quando necessárias, sem inventar históricos nem tratar dado ausente como resultado medido.
+- **Experiência e gestão:** organizar visão geral, tendências e linha temporal, comparações de períodos e acesso aos detalhes e ações correspondentes, com navegação clara para usuários leigos. Estruturar as novas abas Faturamento, Fiscal e Pagamentos previstas nas tarefas 100–102 com **o mesmo visual das abas de “Gestão de Conteúdo Dinâmico” em `/admin/content`**, conforme anexo. Seguir Lyra Clean claro, qualidade premium, acessibilidade, mobile-first e desktop, sem gráficos decorativos sem dados ou controles sem efeito.
+- **Validação e entrega:** confrontar indicadores com consultas reais e dados persistidos, conferir filtros e períodos, drill-down e ações, estados vazios, falhas, permissões no servidor, privacidade e desempenho. Validar CRUD e navegação dos domínios afetados, múltiplas larguras, regressões e gates completos. Publicação individual na main, com commit, push e evidências neste painel; não misturar a conclusão com as entregas das abas.
+
+- **Retomada em 2026-10-25:** revisão das fontes persistidas, definições dos indicadores e componentes existentes em andamento; as abas 100–102 terão entregas individuais.
+
+- **Entrega:** três indicadores principais com fórmulas e limites explícitos; comparação com período anterior; séries por dia, semana e mês com pessoas distintas calculadas no SQL; base e distribuição atuais; volumes e erros atuais de 14 áreas; linha temporal paginada e acesso aos detalhes dos mesmos filtros. Reutilizados autenticação, primitivos, abas da Gestão de Conteúdo e serviços existentes. Faturamento/Fiscal/Pagamentos permanecem entregas próprias 100–102, sem abas vazias.
+- **Dados e privacidade:** intervalo UTC inclusivo de 1–366 dias, plano vigente, administradores excluídos da população, seleção única de assinatura e anomalias. Conclusão de perfil identificada como estado atual da coorte, sem inventar timestamp histórico. Chat efêmero e retenção/exclusões explicitados. Sem textos privados, valores clínicos, payloads ou segredos; zero denominador não vira percentual fictício. Migração 043 acrescenta índices temporais sem alterar migrations aplicadas. Definições, possibilidades avaliadas e pesquisa oficial em `docs/dashboard-administrativo.md`.
+- **Validação:** 554 unitários (70 arquivos), 350 integrações (41 arquivos), formatação, lint, tipos e build de produção aprovados. Novas suítes: 15 unitários e 14 integrações. MySQL real confirmou todas as fontes, limites UTC, agrupamentos DISTINCT, paginação, escolha de assinatura, privacidade e recusa administrativa. QA real de cadastro/onboarding/check-in, alteração de plano, bloqueio/exclusão, filtros, detalhes, recarga e falha de rede com retentativa. Atalhos HTTP 200; 1440/390/320 px sem overflow; gráfico visível e cartões mobile inspecionados. Axe 32–35 regras na página e 23–24 nos modais, zero violações e exceções JavaScript. Fixtures de turnos apenas para paginação, sem alegação de inferência externa; contas temporárias excluídas e base restaurada vazia. Dez consultas do recorte máximo em 25–40 ms na população pequena desta instância, sem alegar capacidade de carga maior. Evidências `/tmp/lyra99-*.log` e capturas.
+- **Publicação:** commit `23827172f352efcb056bbc50f2e5c2b2bc6c1af0` · push `bac9930..2382717 main -> main`, confirmado. Sem branch, worktree ou lote de tarefas.
 
 ### 104 · Edição dos próprios dados para usuários de todos os planos
 
