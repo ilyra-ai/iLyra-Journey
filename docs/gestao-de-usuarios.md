@@ -14,7 +14,7 @@ As cinco entregas são independentes e terão publicação individual:
 
 Todas as entregas exigem autenticação e autorização no servidor, validação, persistência após recarga, isolamento, tratamento de falhas e auditoria apropriada. Os dados administrativos associados à pessoa devem respeitar exportação e exclusão LGPD, sem expor informações de outras contas. Manter o visual existente com os primitivos compartilhados do projeto. Validar operações reais, permissões, teclado, mobile e desktop.
 
-## Referências oficiais consultadas em 2026-10-24
+## Referências oficiais consultadas em 2026-10-25
 
 Os sites institucionais da OWASP e W3C responderam 403 pela política de rede desta nuvem. As fontes oficiais atuais abaixo foram lidas diretamente nos repositórios dos mantenedores, com HTTP 200. A data é de consulta; não se inventa data de publicação nem estudo de tendências.
 
@@ -53,3 +53,17 @@ Edição e exclusão exigem a versão lida. Uma alteração concorrente retorna 
 A exportação LGPD do titular inclui texto, versão e datas das suas notas, omitindo a identidade dos administradores. Excluir a conta remove suas notas e eventos em cascata; excluir o administrador autor remove apenas a referência pessoal, preservando os registros de outras contas. O histórico registra criação, edição e exclusão, sem copiar o texto da nota.
 
 Validação: 528 unitários, 227 integrações em 33 arquivos, tipos, lint, formato e build aprovados. Seis integrações específicas cobrem CRUD por dois administradores, repetição e concorrência, limite, isolamento, acesso não autorizado, versões e LGPD; foram repetidas após conferir os cabeçalhos de cache. Migração 039 aplicada ao banco existente e ao banco novo isolado. QA HTTP/Chromium em produção comprovou CRUD, conflitos reais de edição/exclusão, preservação e descarte do rascunho, recarga, erro offline e retentativa segura, texto HTML literal, exportação minimizada, teclado e sete eventos de notas sem conteúdo. O grid do diálogo e os textos longos foram corrigidos pela inspeção visual: 1440/390/320 px sem estouro na página nem dentro do diálogo. O campo limita o redimensionamento ao eixo vertical. A conta QA foi removida.
+
+## Entrega 4 · Marcadores operacionais
+
+O menu Marcadores operacionais abre as abas Nesta conta e Gerenciar catálogo, reutilizando Tabs, diálogos e controles do app. A primeira atribui/remove marcadores individualmente, sem sobrescrever outras seleções; o estado só muda após confirmação do servidor. A segunda permite criar, ler, editar e excluir categorias. Cada marcador tem nome e cor, com identificação textual permanente. Limites: 50 marcadores ativos no catálogo, 10 por conta e nomes normalizados de até 40 caracteres. A interface orienta evitar nomes pessoais e informações de saúde.
+
+A migração 040 cria catálogo e associações. Nomes ativos são únicos; a criação aceita repetição do mesmo identificador/dados/autor sem duplicar. Edição exige a versão lida. Nome e cor são consultados no catálogo compartilhado: atualizá-los reflete nas contas associadas e na exportação. Marcadores não alteram papel, plano ou permissões.
+
+Excluir exige confirmar tanto a versão quanto o número de contas afetadas. Se alguém atribuiu o marcador a outra conta desde a leitura, o servidor responde 409 antes de qualquer exclusão. A operação aprovada remove associações e gera seus eventos em lote na mesma transação; limpa nome, cor original e autoria do catálogo e conserva somente identidade/metadados operacionais para impedir reaproveitar um identificador excluído ou ressuscitá-lo por repetição de rede. O nome pode ser usado novamente com um identificador novo.
+
+A trava administrativa e a revalidação do administrador são reaproveitadas. Alterações de catálogo ficam no histórico da conta administrativa autora; atribuições/remoções ficam no histórico das contas afetadas. Os eventos guardam somente identificador, ação, autor e data, sem copiar o nome. O titular exporta nome, cor e data da associação, sem identidade do administrador; excluir sua conta remove suas associações sem apagar o catálogo de outras pessoas.
+
+Validação: 528 unitários e 234 integrações em 34 arquivos, formato, lint, tipos e build aprovados. Sete integrações específicas cobrem CRUD, isolamento, cores/corpos inválidos, bloqueio administrativo, repetição, versões, nomes únicos, limites concorrentes, disputa entre atribuição/exclusão e LGPD. Migração 040 aplicada ao banco existente e ao novo banco isolado. QA HTTP/Chromium comprovou as duas abas em 1440/390/320 px sem rolagem horizontal, nome contínuo de 40 caracteres, seleção/paleta por teclado, formulário preservado em conflito, falha offline e recuperação sem estado fictício, impacto 1→2 recusando exclusão até reconfirmar, exportação mínima, recarga, descarte de rascunho, ausência de ressurreição do identificador e preservação de plano Free/papel paciente. As duas contas e os marcadores QA foram removidos; os eventos de catálogo desses identificadores de teste também foram limpos.
+
+Contraste das seis prévias reais, pelo estilo computado no Chromium convertido a sRGB: Neutro 15,51:1; Azul 9,53:1; Verde 9,14:1; Amarelo 8,73:1; Roxo 10,05:1; Rosa 8,75:1. Todas superaram 4,5:1 (WCAG AA para texto). Esta conferência não gravou marcadores.

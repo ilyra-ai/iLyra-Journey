@@ -5,6 +5,11 @@ export const ACOES_DE_GESTAO = {
   account_created: 'Conta criada pela administração',
   role_changed: 'Papel da conta alterado',
   onboarding_changed: 'Estado do onboarding alterado',
+  marker_catalog_created: 'Marcador criado no catálogo',
+  marker_catalog_updated: 'Marcador atualizado no catálogo',
+  marker_catalog_deleted: 'Marcador excluído do catálogo',
+  marker_assigned: 'Marcador adicionado à conta',
+  marker_removed: 'Marcador removido da conta',
   note_created: 'Nota operacional criada',
   note_updated: 'Nota operacional atualizada',
   note_deleted: 'Nota operacional excluída',
@@ -33,4 +38,22 @@ export interface NotaOperacional {
   editorEmail: string | null;
   createdAt: string;
   updatedAt: string;
+}
+
+export const CORES_MARCADOR = [
+  'neutro',
+  'azul',
+  'verde',
+  'amarelo',
+  'roxo',
+  'rosa',
+] as const;
+export type CorMarcador = (typeof CORES_MARCADOR)[number];
+export interface MarcadorOperacional {
+  id: string;
+  name: string;
+  color: CorMarcador;
+  version: number;
+  userCount: number;
+  assigned?: boolean;
 }

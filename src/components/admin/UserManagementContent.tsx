@@ -1,4 +1,5 @@
 'use client';
+import { MarcadoresUsuario } from './MarcadoresUsuario';
 import { NotasUsuario } from './NotasUsuario';
 import { HistoricoUsuario } from './HistoricoUsuario';
 import { EncerrarSessoesUsuario } from './EncerrarSessoesUsuario';
@@ -44,6 +45,7 @@ import {
   LogOut,
   History,
   FileText,
+  Tags,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -102,6 +104,8 @@ function extractApiError(payload: unknown) {
 
 export function UserManagementContent() {
   const { db, session } = useAuth();
+  const [marcadoresAlvo, setMarcadoresAlvo] =
+    React.useState<AdminUserListItem | null>(null);
   const [notasAlvo, setNotasAlvo] = React.useState<AdminUserListItem | null>(
     null
   );
@@ -512,6 +516,12 @@ export function UserManagementContent() {
                               <FileText className="mr-2 h-4 w-4" /> Notas
                               operacionais
                             </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onSelect={() => setMarcadoresAlvo(user)}
+                            >
+                              <Tags className="mr-2 h-4 w-4" /> Marcadores
+                              operacionais
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               className="text-destructive focus:text-destructive"
@@ -563,6 +573,13 @@ export function UserManagementContent() {
         </CardContent>
       </Card>
 
+      {marcadoresAlvo && (
+        <MarcadoresUsuario
+          key={marcadoresAlvo.id}
+          user={marcadoresAlvo}
+          aoFechar={() => setMarcadoresAlvo(null)}
+        />
+      )}
       {notasAlvo && (
         <NotasUsuario
           key={notasAlvo.id}
