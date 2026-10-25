@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **83%** |
+| Progresso          | `████████████████░░░░` **84%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 92                             |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 93                             |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 1                              |
 | ⚪ A iniciar       | 17                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-24                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (92 ÷ 111 ≈ 83%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (93 ÷ 111 ≈ 84%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -51,17 +51,7 @@
 
 ### ANDAMENTO
 
-### 89 · Remoção integral do Editor Puck e validação de regressões
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
-- **Pedido do usuário:** remover por completo, na íntegra e em sua totalidade, o Editor Puck do app, incluindo seus requerimentos, dependências, rotas e referências, sem prejudicar ou danificar o aplicativo.
-- **Investigação:** conferir o que já existe antes de implementar; inventariar código, configurações, pacotes diretos e transitivos, assets, menus, permissões, APIs, documentação, dados e integrações do editor. Examinar dependências compartilhadas para preservar as demais funções. Identificar explicitamente o tratamento de referências históricas e migrações já aplicadas, preservando checksums e integridade do banco; não apagar dados ou reescrever migrações silenciosamente.
-- **Validação obrigatória:** realizar testes e verificação geral para comprovar que a remoção não ocasionou erros ou falhas nas funções, funcionalidades e funcionamento do app. Executar busca verificável com `rg` após as remoções, conferir rotas e navegação, CRUD afetado, banco existente e instalação limpa, testes unitários e de integração, lint, formatação, tipos, build e runtime. Documentar os resultados reais e publicar commit e push próprios na main, sem branches ou worktrees.
-- **Início em 2026-10-24:** inventário identificou editor, renderizadores, APIs e 55 arquivos de biblioteca exclusivos. Migrações e tabelas existentes serão preservadas sem alteração de checksum; remover código de execução e menus, mantendo o construtor compartilhado de Conteúdo. Documentação histórica será distinguida de instruções operacionais.
-
-- **Entrega em validação final:** editor, 55 arquivos de biblioteca exclusivos, renderizadores, rotas, estilos, menu e diretório de instruções removidos; dependências `@puckeditor/core` e `parse5` removidas com lockfile regenerado e instalação congelada aprovada. O construtor de Conteúdo e `/admin/page-builder` foram preservados, pois a remoção da rota duplicada é a tarefa 98. Configurações antigas são filtradas no schema e na navegação; teste verifica que a personalização de Conteúdo permanece.
-- **Dados preservados:** nenhuma migração ou tabela histórica foi alterada ou apagada. Teste com registro real em `puck_documents` confirma retenção e recusa pela API genérica. Referências restantes estão restritas a compatibilidade, regressões, migrações e histórico explicitamente identificado; código de execução e pacote removidos.
-- **Evidências:** 528 unitários (69 arquivos) e 202 integrações (27 arquivos), tipos, lint, formatação e build aprovados. Foram aposentados 75 testes unitários exclusivos do editor e acrescentadas duas regressões de navegação/configuração; um teste de integração exclusivo do editor saiu e outro verifica retenção histórica. Não houve teste falhando ocultado ou desativado. QA HTTP/browser conferiu 404 das três rotas removidas, ausência do menu, rascunho/publicação reais do construtor e preservação de Conteúdo, login e chat em 1440/390/320 px sem overflow. Configurações temporárias restauradas. Logs `/tmp/lyra89-*.log` e capturas `/tmp/lyra89-*.png`; documentação em `docs/remocao-editor-visual.md`. Publicação individual em preparação.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -1717,6 +1707,18 @@
 - **Sequência e entrega:** implementar após a tarefa 78, já publicada em `e776f10`, antes de modernizar o chat, por se tratar da nova orientação para a mesma sidebar. Validar desktop/mobile e gates; commit e push próprios na main.
 - **Validação em 2026-10-22:** implementação conferida em produção e publicada individualmente. Histórico oculto inicialmente, três recentes ao abrir, paginação para seis registros existentes, recolhimento por Espaço e abertura por Enter, seleção preservada e menu móvel reaberto com lista oculta. Falha real de rede pelo navegador manteve três recentes, erro e retentativa; rede restaurada e consulta recuperada. Nenhuma conversa criada ou apagada nesta verificação.
 - **Evidências:** 1440, 390 e 320 px sem estouro horizontal; medições reais de 11 px em “Ver mais”, 12 px em “Conversas recentes” e alvo de 44 px. `fix:format`, `fix:lint`, `check:lint`, `check:format`, `check:types`, 560 testes unitários e 192 integrações passaram; após o ajuste final, formatação e lint focados e build com TypeScript aprovados. Launcher confirmou produção na porta 3000, saúde com 35 migrações, landing, login e autenticação administrativa. Arquivos `.logs/qa88-{format,lint-fix,lint,format-check,types,unit,integration}.log`, `.logs/qa88-producao-final.log`, `.logs/qa88-medidas.json` e capturas `.logs/qa88-{desktop-recolhido,mobile-390,mobile-320}.png`.
+
+### 89 · Remoção integral do Editor Puck e validação de regressões
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22.
+- **Pedido do usuário:** remover por completo, na íntegra e em sua totalidade, o Editor Puck do app, incluindo seus requerimentos, dependências, rotas e referências, sem prejudicar ou danificar o aplicativo.
+- **Investigação:** conferir o que já existe antes de implementar; inventariar código, configurações, pacotes diretos e transitivos, assets, menus, permissões, APIs, documentação, dados e integrações do editor. Examinar dependências compartilhadas para preservar as demais funções. Identificar explicitamente o tratamento de referências históricas e migrações já aplicadas, preservando checksums e integridade do banco; não apagar dados ou reescrever migrações silenciosamente.
+- **Validação obrigatória:** realizar testes e verificação geral para comprovar que a remoção não ocasionou erros ou falhas nas funções, funcionalidades e funcionamento do app. Executar busca verificável com `rg` após as remoções, conferir rotas e navegação, CRUD afetado, banco existente e instalação limpa, testes unitários e de integração, lint, formatação, tipos, build e runtime. Documentar os resultados reais e publicar commit e push próprios na main, sem branches ou worktrees.
+- **Início em 2026-10-24:** inventário identificou editor, renderizadores, APIs e 55 arquivos de biblioteca exclusivos. Migrações e tabelas existentes serão preservadas sem alteração de checksum; remover código de execução e menus, mantendo o construtor compartilhado de Conteúdo. Documentação histórica será distinguida de instruções operacionais.
+
+- **Entrega em validação final:** editor, 55 arquivos de biblioteca exclusivos, renderizadores, rotas, estilos, menu e diretório de instruções removidos; dependências `@puckeditor/core` e `parse5` removidas com lockfile regenerado e instalação congelada aprovada. O construtor de Conteúdo e `/admin/page-builder` foram preservados, pois a remoção da rota duplicada é a tarefa 98. Configurações antigas são filtradas no schema e na navegação; teste verifica que a personalização de Conteúdo permanece.
+- **Dados preservados:** nenhuma migração ou tabela histórica foi alterada ou apagada. Teste com registro real em `puck_documents` confirma retenção e recusa pela API genérica. Referências restantes estão restritas a compatibilidade, regressões, migrações e histórico explicitamente identificado; código de execução e pacote removidos.
+- **Evidências:** 528 unitários (69 arquivos) e 202 integrações (27 arquivos), tipos, lint, formatação e build aprovados. Foram aposentados 75 testes unitários exclusivos do editor e acrescentadas duas regressões de navegação/configuração; um teste de integração exclusivo do editor saiu e outro verifica retenção histórica. Não houve teste falhando ocultado ou desativado. QA HTTP/browser conferiu 404 das três rotas removidas, ausência do menu, rascunho/publicação reais do construtor e preservação de Conteúdo, login e chat em 1440/390/320 px sem overflow. Configurações temporárias restauradas. Logs `/tmp/lyra89-*.log` e capturas `/tmp/lyra89-*.png`; documentação em `docs/remocao-editor-visual.md`. **Commit:** `9590ab1` · **Push:** `b019a45..9590ab1 main -> main`, confirmado.
 
 ### 104 · Edição dos próprios dados para usuários de todos os planos
 
