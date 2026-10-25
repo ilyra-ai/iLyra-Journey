@@ -306,6 +306,10 @@ export async function exportarDadosDoTitular(userId: string) {
     gerado_em: new Date().toISOString(),
     conta: contas[0],
     perfil: perfil[0] ?? null,
+    notas_operacionais: await queryRows<RowDataPacket>(
+      'SELECT body, version, created_at, updated_at FROM admin_user_notes WHERE user_id = ? ORDER BY created_at, id',
+      [userId]
+    ),
     eventos_administrativos: await queryRows<RowDataPacket>(
       'SELECT action, reason, created_at FROM admin_user_events WHERE user_id = ? ORDER BY created_at, id',
       [userId]

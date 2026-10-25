@@ -1,4 +1,5 @@
 'use client';
+import { NotasUsuario } from './NotasUsuario';
 import { HistoricoUsuario } from './HistoricoUsuario';
 import { EncerrarSessoesUsuario } from './EncerrarSessoesUsuario';
 import { CriarUsuario } from './CriarUsuario';
@@ -42,6 +43,7 @@ import {
   LockKeyholeOpen,
   LogOut,
   History,
+  FileText,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -100,6 +102,9 @@ function extractApiError(payload: unknown) {
 
 export function UserManagementContent() {
   const { db, session } = useAuth();
+  const [notasAlvo, setNotasAlvo] = React.useState<AdminUserListItem | null>(
+    null
+  );
   const [historicoAlvo, setHistoricoAlvo] =
     React.useState<AdminUserListItem | null>(null);
   const [encerrarAlvo, setEncerrarAlvo] = React.useState<{
@@ -501,6 +506,12 @@ export function UserManagementContent() {
                               <History className="mr-2 h-4 w-4" /> Histórico
                               administrativo
                             </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onSelect={() => setNotasAlvo(user)}
+                            >
+                              <FileText className="mr-2 h-4 w-4" /> Notas
+                              operacionais
+                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                               className="text-destructive focus:text-destructive"
@@ -552,6 +563,13 @@ export function UserManagementContent() {
         </CardContent>
       </Card>
 
+      {notasAlvo && (
+        <NotasUsuario
+          key={notasAlvo.id}
+          user={notasAlvo}
+          aoFechar={() => setNotasAlvo(null)}
+        />
+      )}
       {historicoAlvo && (
         <HistoricoUsuario
           key={historicoAlvo.id}
