@@ -16,6 +16,10 @@ Todas as rotas ficam em `src/app/api/**/route.ts` e rodam no runtime Node.js. A 
 - **Recursos do plano:** o que o plano vigente não habilita (`plan_entitlements`) responde **403** com "O plano X não inclui Y". Em `/api/data/[table]`, leitura e escrita de `goals`, `ai_plans`, `appointments` (`appointments_active`) e `professionals` (`professionals_total`) e leitura de `ai_tips` exigem o recurso; `/api/semana` omite as metas sem `goal_progress_tracking`. Administradores não dependem do plano. No app, a mesma regra esconde as páginas e os atalhos: `src/lib/plans/rotas.ts` (`RECURSOS_DA_ROTA`) e o hook `useRotaLiberada`.
 - **Cadastro:** a conta, o perfil (`onboarding_completed = false`), os aceites LGPD e a assinatura Free (`source = auth_register`) nascem na mesma transação.
 
+## Conclusão do onboarding
+
+`POST /api/onboarding`: sessão, corpo estrito com `first_name`, `last_name`, `birth_date`, `birth_city_id`, `consent: true`; opcionais `nickname`, `birth_time`, `residence_city_id`, `gender`, `activity_level`. Valida idade, horário e cidades no servidor; grava perfil e consentimento na mesma transação, sem alterar objetivos. Omitir opcional preserva o valor; horário/moradia aceitam `null`. Resposta `{ completed: true }`, `no-store`; limite de 20 solicitações válidas por hora/conta, 429 com `Retry-After`. A atualização genérica de um perfil pendente não pode antecipar a conclusão (409), preservado o controle administrativo existente. Detalhes e evidências em [onboarding.md](./onboarding.md).
+
 ## Gestão administrativa de usuários
 
 - `GET /api/admin/users`: filtros combinados `access` (all/active/blocked), `role`, `onboarding` (all/complete/pending), `plan` (all/none/free/meta/care/admin) e `markerId`, além de busca, ordenação e paginação. Listagem e contagem compartilham as mesmas junções e condições; marcador ausente não remove o filtro nem amplia a consulta. Resposta `no-store`.

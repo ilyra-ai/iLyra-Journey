@@ -1266,6 +1266,18 @@ export async function runUpdateQuery(options: {
     }
   }
   protectWriteColumns(table, session, payload, 'update');
+  if (
+    table === 'profiles' &&
+    !isAdmin(session) &&
+    !session.user.onboarding_completed &&
+    payload.onboarding_completed
+  ) {
+    throw new HttpError(
+      'Conclua sua configuração inicial pelo formulário para validar os dados e o consentimento.',
+      409
+    );
+  }
+
   // LGPD: em outras contas o administrador só altera as colunas liberadas
   // (ex.: papel e status do onboarding), nunca dados do titular.
   if (acessoEntreContas(table, options.filters, session)) {

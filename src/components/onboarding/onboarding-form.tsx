@@ -1,946 +1,846 @@
 'use client';
 
 import * as React from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, useWatch } from 'react-hook-form';
 import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { format, parseISO } from 'date-fns';
+import Link from 'next/link';
 import { toast } from 'sonner';
 import {
-  Carousel,
-  CarouselApi,
-  CarouselContent,
-  CarouselItem,
-} from '@/components/ui/carousel';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  MapPin,
+  ShieldCheck,
+  UserRound,
+} from 'lucide-react';
+import { useAuth } from '@/context/AuthContext';
+import { buscarJson } from '@/lib/http/transporte';
+import { apelidoSchema } from '@/lib/perfil/apelido';
+import { idadeDoNascimento } from '@/lib/perfil/conclusao-onboarding';
+import { ROTA_POLITICA_DE_PRIVACIDADE } from '@/lib/lgpd/documentos';
 import { Button } from '@/components/ui/button';
 import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from '@/components/ui/card';
+import {
   Form,
-  FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
+  FormDescription,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
-  SelectContent,
-  SelectItem,
   SelectTrigger,
   SelectValue,
+  SelectContent,
+  SelectItem,
 } from '@/components/ui/select';
-import { Slider } from '@/components/ui/slider';
-import { Checkbox } from '@/components/ui/checkbox';
-import { useAuth } from '@/context/AuthContext';
-import {
-  ArrowRight,
-  User,
-  ArrowLeft,
-  Calendar,
-  Clock,
-  MapPin,
-  Dumbbell,
-  ShieldCheck,
-  Scale,
-  Globe,
-  Sparkles,
-} from 'lucide-react';
-import {
-  OnboardingNavigationDots,
-  useEtapaAtual,
-} from './OnboardingNavigationDots';
-import { METAS_DO_PERFIL, NIVEL_DE_ATIVIDADE } from './opcoes-de-perfil';
-import Link from 'next/link';
-import { ROTA_POLITICA_DE_PRIVACIDADE } from '@/lib/lgpd/documentos';
-import { cn } from '@/lib/utils';
 import { DatePicker } from '@/components/ui/date-picker';
-import { differenceInYears, format } from 'date-fns';
 import { TimeInput } from '@/components/ui/time-input';
 import { SeletorDeCidade } from '@/components/geo/SeletorDeCidade';
-import { apelidoSchema } from '@/lib/perfil/apelido';
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from '@/components/ui/field';
+import { OnboardingNavigationDots } from './OnboardingNavigationDots';
 
-const onboardingSchema = z.object({
-  first_name: z.string().min(2, 'O nome deve ter pelo menos 2 caracteres.'),
-  last_name: z.string().min(2, 'O sobrenome deve ter pelo menos 2 caracteres.'),
-  nickname: apelidoSchema.optional(),
-  birth_date: z.date({
-    error: (issue) =>
-      issue.input === undefined
-        ? 'Data de nascimento é obrigatória.'
-        : undefined,
-  }),
+const cidade = z.object({
+  id: z.number().int().positive(),
+  rotulo: z.string().max(255),
+});
+const genero = z.enum(['male', 'female', 'other', 'prefer_not-to-say']);
+const schema = z.object({
+  first_name: z.string().trim().min(2, 'Informe seu nome.').max(120),
+  last_name: z.string().trim().min(2, 'Informe seu sobrenome.').max(120),
+  nickname: apelidoSchema,
+  birth_date: z
+    .date({ error: 'Informe sua data de nascimento.' })
+    .refine((v) => {
+      const idade = idadeDoNascimento(format(v, 'yyyy-MM-dd'));
+      return idade >= 13 && idade <= 120;
+    }, 'Informe uma data correspondente a uma idade entre 13 e 120 anos.'),
   birth_time: z
     .string()
-    .optional()
-    .or(z.literal(''))
-    .refine((val) => {
-      if (val === '' || val === undefined) return true;
-      return /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(val);
-    }, 'Formato de hora inválido (HH:MM).'),
-  // Cidades da base local: viram coordenadas e fuso no servidor (mapa védico).
-  birth_city: z
-    .object({ id: z.number().int().positive(), rotulo: z.string() })
+    .refine(
+      (v) => !v || /^([01]\d|2[0-3]):[0-5]\d$/.test(v),
+      'Use um horário entre 00:00 e 23:59.'
+    ),
+  birth_city: cidade
     .nullable()
-    .refine((cidade) => cidade !== null, {
-      message: 'Escolha a cidade de nascimento na lista.',
-    }),
-  residence_city: z
-    .object({ id: z.number().int().positive(), rotulo: z.string() })
-    .nullable(),
-  // O input type="number" entrega string no onChange; a coerção converte.
-  age: z.coerce
-    .number<number | string>()
-    .min(13, 'Você deve ter pelo menos 13 anos.')
-    .max(120, 'Idade inválida.'),
-  gender: z.enum(['male', 'female', 'other', 'prefer_not-to-say'], {
-    error: (issue) =>
-      issue.input === undefined ? 'Por favor, selecione um gênero.' : undefined,
-  }),
-  activity_level: z.number().min(1).max(5).optional(),
-  goals: z.array(z.string()).optional(),
-  consent: z.boolean().refine((val) => val === true, {
-    message: 'Você deve aceitar os termos.',
+    .refine((v) => v !== null, 'Escolha a cidade de nascimento na lista.'),
+  residence_city: cidade.nullable(),
+  gender: genero.optional(),
+  activity_level: z.number().int().min(1).max(5).optional(),
+  consent: z
+    .boolean()
+    .refine((v) => v, 'Confirme o consentimento para concluir.'),
+});
+type Valores = z.output<typeof schema>;
+type Entrada = z.input<typeof schema>;
+const grupos: Array<Array<keyof Valores>> = [
+  [
+    'first_name',
+    'last_name',
+    'nickname',
+    'birth_date',
+    'gender',
+    'activity_level',
+  ],
+  ['birth_city', 'birth_time', 'residence_city'],
+  ['consent'],
+];
+const rascunhoSchema = z.object({
+  version: z.literal(1),
+  expires: z.number(),
+  step: z.number().int().min(0).max(2),
+  data: z.object({
+    first_name: z.string().max(120),
+    last_name: z.string().max(120),
+    nickname: z.string().max(80),
+    birth_date: z.iso.date().nullable(),
+    birth_time: z.string().max(5),
+    birth_city: cidade.nullable(),
+    residence_city: cidade.nullable(),
+    gender: genero.nullable(),
+    activity_level: z.number().int().min(1).max(5).nullable(),
   }),
 });
-
-type OnboardingInput = z.input<typeof onboardingSchema>;
-type OnboardingValues = z.output<typeof onboardingSchema>;
-
-const TOTAL_STEPS = 5;
-
-// Cada etapa ocupa a largura toda (sem o respiro lateral padrão do
-// carrossel, que deixava o cartão desalinhado no celular). As etapas fora da
-// tela ficam `inert`: o Tab, o "próximo campo" do teclado do celular e o
-// leitor de tela não entram mais em campos escondidos de outra etapa.
-const OnboardingStep: React.FC<{
-  children: React.ReactNode;
-  ativa: boolean;
-  className?: string;
-}> = ({ children, ativa, className }) => (
-  <CarouselItem
-    className={cn('animate-fade-in pr-0', className)}
-    inert={!ativa}
-  >
-    <Card className="flex flex-col sm:min-h-[550px]">{children}</Card>
-  </CarouselItem>
-);
+const etapas = [
+  {
+    title: 'Vamos começar por você',
+    description:
+      'Só o essencial para preparar sua experiência. As preferências opcionais podem ficar para depois.',
+    icon: UserRound,
+  },
+  {
+    title: 'Seu lugar no mundo',
+    description:
+      'A cidade de nascimento dá contexto ao seu mapa. Informe o horário apenas se souber.',
+    icon: MapPin,
+  },
+  {
+    title: 'Tudo pronto para entrar',
+    description:
+      'Confira suas informações e escolha se autoriza o uso dos dados para personalizar seu cuidado.',
+    icon: ShieldCheck,
+  },
+];
 
 export function OnboardingForm() {
-  const [api, setApi] = React.useState<CarouselApi>();
-  const etapaAtual = useEtapaAtual(api);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const { db, session } = useAuth();
-  const titularId = session?.user.id;
-  const apelidoCarregado = React.useRef(false);
-  const apelidoEditado = React.useRef(false);
-
-  const form = useForm<OnboardingInput, unknown, OnboardingValues>({
-    resolver: zodResolver(onboardingSchema),
+  const titular = session?.user.id;
+  const [etapa, setEtapa] = React.useState(0),
+    [loadedFor, setLoadedFor] = React.useState<string | null>(null),
+    [falhaPerfil, setFalhaPerfil] = React.useState<string | null>(null),
+    [tentativa, setTentativa] = React.useState(0);
+  const [enviando, setEnviando] = React.useState(false),
+    [concluido, setConcluido] = React.useState(false),
+    [falhaEnvio, setFalhaEnvio] = React.useState<string | null>(null),
+    [rascunhoSalvo, setRascunhoSalvo] = React.useState(false);
+  const falhaRascunho = React.useRef(false);
+  const valoresOriginais = React.useRef<{
+    hora: string;
+    moradia: number | null;
+  }>({ hora: '', moradia: null });
+  const inicializado = React.useRef<string | null>(null),
+    stepRef = React.useRef(0),
+    titulo = React.useRef<HTMLHeadingElement>(null);
+  const form = useForm<Entrada, unknown, Valores>({
+    resolver: zodResolver(schema),
     defaultValues: {
       first_name: '',
       last_name: '',
       nickname: '',
-      // A idade vem da data de nascimento (efeito abaixo); sem valor
-      // inventado.
-      age: '',
-      gender: 'prefer_not-to-say',
-      activity_level: NIVEL_DE_ATIVIDADE.padrao,
-      goals: [],
-      consent: false,
-      // Sem hora pré-preenchida: um horário inventado daria um ascendente
-      // (Lagna) errado no mapa védico.
       birth_time: '',
       birth_city: null,
       residence_city: null,
-      birth_date: undefined,
+      consent: false,
     },
   });
-
-  // useWatch assina apenas este campo e é compatível com o React Compiler.
-  const birthDate = useWatch({ control: form.control, name: 'birth_date' });
-
+  const chave = titular ? `lyra:onboarding:v1:${titular}` : null;
+  const persistir = React.useCallback(() => {
+    if (!chave || inicializado.current !== titular) return;
+    const v = form.getValues();
+    try {
+      sessionStorage.setItem(
+        chave,
+        JSON.stringify({
+          version: 1,
+          expires: Date.now() + 86400000,
+          step: stepRef.current,
+          data: {
+            first_name: v.first_name,
+            last_name: v.last_name,
+            nickname: v.nickname,
+            birth_date:
+              v.birth_date && Number.isFinite(v.birth_date.getTime())
+                ? format(v.birth_date, 'yyyy-MM-dd')
+                : null,
+            birth_time: v.birth_time,
+            birth_city: v.birth_city,
+            residence_city: v.residence_city,
+            gender: v.gender ?? null,
+            activity_level: v.activity_level ?? null,
+          },
+        })
+      );
+    } catch {
+      if (!falhaRascunho.current) {
+        falhaRascunho.current = true;
+        toast.info(
+          'Não foi possível guardar o rascunho nesta aba. Mantenha a página aberta até concluir.'
+        );
+      }
+    }
+  }, [chave, form, titular]);
+  React.useEffect(
+    () =>
+      form.subscribe({
+        formState: { values: true },
+        callback: () => persistir(),
+      }),
+    [form, persistir]
+  );
   React.useEffect(() => {
-    if (!titularId) return;
-    let ativa = true;
-    apelidoCarregado.current = false;
-    apelidoEditado.current = false;
-    form.setValue('nickname', '');
-    async function carregarApelido() {
+    if (!titular || !chave) return;
+    let ativo = true;
+    inicializado.current = null;
+    async function carregar() {
       try {
         const { data, error } = await db
           .from('profiles')
-          .select('nickname')
-          .eq('id', titularId)
+          .select(
+            'first_name,last_name,nickname,birth_date,birth_time,birth_city_id,birth_location,residence_city_id,residence_location,gender,activity_level'
+          )
+          .eq('id', titular!)
           .maybeSingle();
-        if (!ativa) return;
+        if (!ativo) return;
         if (error) throw new Error(error.message);
-        if (!apelidoEditado.current) {
-          form.setValue('nickname', data?.nickname ?? '');
+        if (!data) throw new Error('Não foi possível recuperar seu perfil.');
+        setRascunhoSalvo(false);
+        falhaRascunho.current = false;
+        const perfil = data as {
+          first_name: string | null;
+          last_name: string | null;
+          nickname: string | null;
+          birth_date: string | null;
+          birth_time: string | null;
+          birth_city_id: number | null;
+          birth_location: string | null;
+          residence_city_id: number | null;
+          residence_location: string | null;
+          gender: string | null;
+          activity_level: number | string | null;
+        };
+        valoresOriginais.current = {
+          hora: perfil.birth_time?.slice(0, 5) ?? '',
+          moradia: perfil.residence_city_id,
+        };
+        const base: Partial<Entrada> = {
+          first_name:
+            perfil.first_name ?? session?.user.user_metadata.first_name ?? '',
+          last_name:
+            perfil.last_name ?? session?.user.user_metadata.last_name ?? '',
+          nickname: perfil.nickname ?? '',
+          birth_date:
+            perfil.birth_date &&
+            Number.isFinite(parseISO(perfil.birth_date).getTime())
+              ? parseISO(perfil.birth_date)
+              : undefined,
+          birth_time: perfil.birth_time?.slice(0, 5) ?? '',
+          birth_city: perfil.birth_city_id
+            ? { id: perfil.birth_city_id, rotulo: perfil.birth_location ?? '' }
+            : null,
+          residence_city: perfil.residence_city_id
+            ? {
+                id: perfil.residence_city_id,
+                rotulo: perfil.residence_location ?? '',
+              }
+            : null,
+          gender: genero.safeParse(perfil.gender).success
+            ? genero.parse(perfil.gender)
+            : undefined,
+          activity_level:
+            perfil.activity_level !== null &&
+            Number(perfil.activity_level) >= 1 &&
+            Number(perfil.activity_level) <= 5
+              ? Number(perfil.activity_level)
+              : undefined,
+          consent: false,
+        };
+        let voltar = 0;
+        try {
+          const raw = sessionStorage.getItem(chave!);
+          if (raw) {
+            const draft = rascunhoSchema.safeParse(JSON.parse(raw));
+            if (draft.success && draft.data.expires > Date.now()) {
+              const d = draft.data.data;
+              Object.assign(base, d, {
+                birth_date: d.birth_date ? parseISO(d.birth_date) : undefined,
+                gender: d.gender ?? undefined,
+                activity_level: d.activity_level ?? undefined,
+                consent: false,
+              });
+              voltar = draft.data.step;
+              setRascunhoSalvo(true);
+            } else sessionStorage.removeItem(chave!);
+          }
+        } catch {
+          try {
+            sessionStorage.removeItem(chave!);
+          } catch {
+            /* O formulário continua sem armazenamento local. */
+          }
         }
-        apelidoCarregado.current = true;
-      } catch {
-        if (ativa) {
-          toast.error('Não foi possível recuperar o apelido cadastrado.', {
-            description:
-              'Recarregue para tentar novamente ou informe o apelido. Sem edição, o valor anterior será preservado.',
-          });
-        }
+        if (
+          !schema
+            .pick({
+              first_name: true,
+              last_name: true,
+              nickname: true,
+              birth_date: true,
+              gender: true,
+              activity_level: true,
+            })
+            .safeParse(base).success
+        )
+          voltar = 0;
+        else if (
+          !schema
+            .pick({ birth_city: true, birth_time: true, residence_city: true })
+            .safeParse(base).success
+        )
+          voltar = Math.min(voltar, 1);
+        form.reset(base);
+        stepRef.current = voltar;
+        setEtapa(voltar);
+        inicializado.current = titular!;
+        setLoadedFor(titular!);
+        setFalhaPerfil(null);
+        // Preserva o estado do Next.js e permite retornar pelas etapas no navegador.
+        if (window.history.state?.lyraOnboardingOwner !== titular) {
+          window.history.replaceState(
+            {
+              ...window.history.state,
+              lyraOnboardingOwner: titular,
+              lyraOnboardingStep: 0,
+            },
+            ''
+          );
+          for (let i = 1; i <= voltar; i++)
+            window.history.pushState(
+              { ...window.history.state, lyraOnboardingStep: i },
+              ''
+            );
+        } else
+          window.history.replaceState(
+            { ...window.history.state, lyraOnboardingStep: voltar },
+            ''
+          );
+      } catch (e) {
+        if (ativo)
+          setFalhaPerfil(
+            e instanceof Error
+              ? e.message
+              : 'Não foi possível carregar seu perfil.'
+          );
       }
     }
-    void carregarApelido();
+    void carregar();
     return () => {
-      ativa = false;
+      ativo = false;
+      inicializado.current = null;
     };
-  }, [db, form, titularId]);
-
+  }, [
+    titular,
+    chave,
+    tentativa,
+    db,
+    form,
+    session?.user.user_metadata.first_name,
+    session?.user.user_metadata.last_name,
+  ]);
   React.useEffect(() => {
-    if (birthDate) {
-      const calculatedAge = differenceInYears(new Date(), birthDate);
-      form.setValue('age', calculatedAge, { shouldValidate: true });
-    }
-  }, [birthDate, form]);
-
-  React.useEffect(() => {
-    if (session?.user) {
-      const metadata = session.user.user_metadata;
-      const currentFirstName = form.getValues('first_name');
-      const currentLastName = form.getValues('last_name');
-
-      if (!currentFirstName && metadata?.first_name) {
-        form.setValue('first_name', metadata.first_name, {
-          shouldValidate: true,
-        });
-      }
-      if (!currentLastName && metadata?.last_name) {
-        form.setValue('last_name', metadata.last_name, {
-          shouldValidate: true,
-        });
-      }
-      if ((!currentFirstName || !currentLastName) && metadata?.full_name) {
-        const parts = metadata.full_name.split(' ');
-        if (!currentFirstName && parts.length > 0) {
-          form.setValue('first_name', parts[0], { shouldValidate: true });
-        }
-        if (!currentLastName && parts.length > 1) {
-          form.setValue('last_name', parts.slice(1).join(' '), {
-            shouldValidate: true,
-          });
-        }
+    function voltar(e: PopStateEvent) {
+      if (
+        location.pathname !== '/onboarding' ||
+        e.state?.lyraOnboardingOwner !== titular
+      )
+        return;
+      const n = Number(e.state.lyraOnboardingStep);
+      if (Number.isInteger(n) && n >= 0 && n <= 2) {
+        stepRef.current = n;
+        setEtapa(n);
+        persistir();
       }
     }
-  }, [session, form]);
-
+    window.addEventListener('popstate', voltar);
+    return () => window.removeEventListener('popstate', voltar);
+  }, [titular, persistir]);
   React.useEffect(() => {
-    if (!api) return;
-    const handleScrollToTop = () => {
+    titulo.current?.focus();
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches)
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
-    api.on('select', handleScrollToTop);
-    return () => {
-      api.off('select', handleScrollToTop);
-    };
-  }, [api]);
-
-  const handleNext = async (
-    fields: (keyof OnboardingValues)[] | keyof OnboardingValues
-  ) => {
-    const fieldsToValidate = Array.isArray(fields) ? fields : [fields];
-    const isValid = await form.trigger(fieldsToValidate);
-    if (isValid) {
-      api?.scrollNext();
-    } else {
-      toast.error(
-        'Por favor, preencha os campos obrigatórios corretamente antes de prosseguir.'
-      );
+  }, [etapa, loadedFor]);
+  function mudar(n: number) {
+    stepRef.current = n;
+    setEtapa(n);
+    window.history.pushState(
+      {
+        ...window.history.state,
+        lyraOnboardingOwner: titular,
+        lyraOnboardingStep: n,
+      },
+      ''
+    );
+    persistir();
+  }
+  function focarErro() {
+    requestAnimationFrame(() =>
+      document.querySelector<HTMLElement>('main [aria-invalid="true"]')?.focus()
+    );
+  }
+  async function continuar() {
+    if (await form.trigger(grupos[etapa], { shouldFocus: true }))
+      mudar(etapa + 1);
+    else {
+      focarErro();
+      toast.error('Confira o campo destacado para continuar.');
     }
-  };
-
-  const onSubmit = async (data: OnboardingValues) => {
-    if (!session?.user) {
-      toast.error('Erro de autenticação. Por favor, faça login novamente.');
-      return;
-    }
-    setIsSubmitting(true);
-
-    // LGPD, art. 11, I: o consentimento específico para dados de saúde é
-    // registrado (versão e data) antes de qualquer dado de saúde ser gravado.
+  }
+  async function gravar(v: Valores) {
+    if (!v.birth_city || !titular) return;
+    const moradiaId = v.residence_city?.id ?? null;
+    setEnviando(true);
+    setFalhaEnvio(null);
     try {
-      const consentimento = await fetch('/api/account/consents', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ types: ['health_data_processing'] }),
-      });
-      if (!consentimento.ok) {
-        throw new Error(`HTTP ${consentimento.status}`);
-      }
-    } catch (falha: unknown) {
-      setIsSubmitting(false);
-      console.error('Erro ao registrar o consentimento:', falha);
-      toast.error('Não foi possível registrar o seu consentimento agora.', {
-        description: 'Verifique a conexão e tente finalizar de novo.',
-      });
-      return;
-    }
-
-    const profileData = data;
-    // Data do calendário local (toISOString converteria para UTC e, em fusos
-    // a leste de Greenwich, gravaria o dia anterior).
-    const formattedBirthDate = profileData.birth_date
-      ? format(profileData.birth_date, 'yyyy-MM-dd')
-      : null;
-    const ageInt = Math.floor(profileData.age);
-    const formattedBirthTime =
-      profileData.birth_time === '' ? null : profileData.birth_time;
-
-    const updatePayload = {
-      first_name: profileData.first_name,
-      last_name: profileData.last_name,
-      ...(apelidoCarregado.current || apelidoEditado.current
-        ? { nickname: profileData.nickname?.trim() || null }
-        : {}),
-      age: ageInt,
-      gender: profileData.gender,
-      activity_level: profileData.activity_level,
-      goals:
-        profileData.goals && profileData.goals.length > 0
-          ? profileData.goals
-          : null,
-      birth_date: formattedBirthDate,
-      birth_time: formattedBirthTime,
-      onboarding_completed: true,
-    };
-
-    // Locais primeiro: o perfil só é dado como completo com a cidade de
-    // nascimento gravada (com coordenadas e fuso).
-    try {
-      const locais: Array<['nascimento' | 'moradia', number]> = [];
-      if (profileData.birth_city) {
-        locais.push(['nascimento', profileData.birth_city.id]);
-      }
-      if (profileData.residence_city) {
-        locais.push(['moradia', profileData.residence_city.id]);
-      }
-      for (const [tipo, cidadeId] of locais) {
-        const resposta = await fetch('/api/perfil/localizacao', {
-          method: 'PATCH',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tipo, cidadeId }),
+      if (!concluido) {
+        const body = {
+          first_name: v.first_name,
+          last_name: v.last_name,
+          nickname: v.nickname || null,
+          birth_date: format(v.birth_date, 'yyyy-MM-dd'),
+          birth_city_id: v.birth_city.id,
+          ...(v.birth_time || v.birth_time !== valoresOriginais.current.hora
+            ? { birth_time: v.birth_time || null }
+            : {}),
+          ...(v.residence_city || moradiaId !== valoresOriginais.current.moradia
+            ? { residence_city_id: moradiaId }
+            : {}),
+          ...(v.gender !== undefined ? { gender: v.gender } : {}),
+          ...(v.activity_level !== undefined
+            ? { activity_level: v.activity_level }
+            : {}),
+          consent: v.consent,
+        };
+        const r = await buscarJson('/api/onboarding', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(body),
         });
-        if (!resposta.ok) {
-          const corpo = (await resposta.json().catch(() => null)) as {
-            error?: string;
-          } | null;
-          throw new Error(corpo?.error ?? `HTTP ${resposta.status}`);
-        }
+        if (!r.ok) throw new Error(r.falha.message);
+        setConcluido(true);
+        inicializado.current = null;
+        if (chave)
+          try {
+            sessionStorage.removeItem(chave);
+          } catch {
+            /* Perfil já está salvo no servidor. */
+          }
       }
-    } catch (falha: unknown) {
-      setIsSubmitting(false);
-      console.error('Erro ao gravar os locais do perfil:', falha);
-      toast.error('Não foi possível salvar a cidade agora.', {
-        description: falha instanceof Error ? falha.message : undefined,
-      });
-      return;
-    }
-
-    const { error } = await db
-      .from('profiles')
-      .update(updatePayload)
-      .eq('id', session.user.id);
-
-    if (error) {
-      setIsSubmitting(false);
-      console.error('Erro ao atualizar perfil no MySQL:', error);
-      toast.error('Ocorreu um erro ao salvar seu perfil.', {
-        description: error.message,
-      });
-      return;
-    }
-
-    // A sessão traz o status do onboarding: relida do servidor, ela libera
-    // o app e o AuthProvider leva a pessoa ao painel.
-    try {
-      await db.auth.refreshSession();
-      toast.success('Perfil salvo com sucesso! Bem-vindo(a)!');
-    } catch (refreshError: unknown) {
-      setIsSubmitting(false);
-      console.error('Erro ao atualizar a sessão:', refreshError);
-      toast.error(
-        'Seu perfil foi salvo, mas não foi possível abrir o painel agora.',
-        { description: 'Recarregue a página para continuar.' }
+      const result = await db.auth.refreshSession();
+      if (result.error) throw new Error(result.error.message);
+      if (!result.data.session)
+        throw new Error('Entre novamente para continuar.');
+      toast.success('Seu espaço está pronto. Bem-vindo(a)!');
+    } catch (e) {
+      setFalhaEnvio(
+        e instanceof Error ? e.message : 'Não foi possível salvar agora.'
       );
+    } finally {
+      setEnviando(false);
     }
-  };
-
+  }
+  if (loadedFor !== titular)
+    return (
+      <Card className="w-full max-w-2xl">
+        <CardHeader>
+          <CardTitle>Preparando seu espaço</CardTitle>
+          <CardDescription>
+            Recuperando suas informações para você não precisar preenchê-las
+            outra vez.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {falhaPerfil ? (
+            <div role="alert" className="space-y-4">
+              <p>{falhaPerfil}</p>
+              <Button onClick={() => setTentativa((v) => v + 1)}>
+                Tentar novamente
+              </Button>
+            </div>
+          ) : (
+            <p role="status">Carregando seu perfil…</p>
+          )}
+        </CardContent>
+      </Card>
+    );
+  const atual = etapas[etapa],
+    Icone = atual.icon,
+    v = form.getValues();
   return (
     <Form {...form}>
       <form
-        onSubmit={(evento) => {
-          void form.handleSubmit(onSubmit)(evento);
+        className="w-full max-w-2xl space-y-5"
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (etapa < 2) void continuar();
+          else
+            void form.handleSubmit(gravar, (errors) => {
+              const n = grupos.findIndex((g) => g.some((k) => errors[k]));
+              if (n >= 0 && n !== etapa) mudar(n);
+              focarErro();
+            })(e);
         }}
-        className="w-full max-w-2xl"
       >
-        <Carousel
-          setApi={setApi}
-          className="w-full"
-          opts={{ watchDrag: false }}
-        >
-          <CarouselContent>
-            {/* Etapa 1: boas-vindas */}
-            <OnboardingStep ativa={etapaAtual === 0}>
-              <CardHeader className="space-y-2">
-                <CardTitle className="text-2xl font-display">
-                  Bem-vindo(a) à sua Jornada
-                </CardTitle>
-                <CardDescription>
-                  Vamos personalizar sua experiência. Responda algumas perguntas
-                  rápidas para começarmos.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-6 items-center p-6 overflow-y-auto">
-                <div className="md:col-span-2 space-y-4">
-                  <p className="text-base text-foreground leading-relaxed">
-                    O Lyra MetaCare usa inteligência artificial para criar um
-                    plano de longevidade exclusivo para você.
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    Clique em &ldquo;Começar&rdquo; para iniciar a configuração
-                    do seu perfil.
-                  </p>
-                </div>
-                <div className="flex justify-center items-center md:col-span-1">
-                  {/* IA: único destaque coral do fluxo */}
-                  <div className="rounded-xl bg-cosmic-light p-5">
-                    <Sparkles
-                      className="h-12 w-12 text-cosmic-strong md:h-16 md:w-16"
-                      aria-hidden
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <OnboardingNavigationDots current={etapa} count={3} />
+          <p className="text-xs text-muted-foreground" aria-live="polite">
+            {rascunhoSalvo
+              ? 'Rascunho recuperado nesta aba'
+              : 'Você pode revisar antes de concluir'}
+          </p>
+        </div>
+        <Card className="overflow-hidden">
+          <div className="h-1.5 bg-muted" aria-hidden="true">
+            <div
+              className="h-full bg-primary transition-[width] motion-reduce:transition-none"
+              style={{ width: `${((etapa + 1) / 3) * 100}%` }}
+            />
+          </div>
+          <CardHeader className="space-y-4 p-5 sm:p-7">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-sidebar-accent text-primary">
+                <Icone aria-hidden="true" className="h-5 w-5" />
+              </div>
+              <p className="text-sm font-medium text-primary">
+                {['Sobre você', 'Seu mapa', 'Conferir e entrar'][etapa]}
+              </p>
+            </div>
+            <CardTitle
+              as="h2"
+              ref={titulo}
+              tabIndex={-1}
+              className="text-2xl font-display outline-none sm:text-3xl"
+            >
+              {atual.title}
+            </CardTitle>
+            <CardDescription className="text-base leading-relaxed">
+              {atual.description}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-5 px-5 sm:px-7">
+            {etapa === 0 && (
+              <>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {(['first_name', 'last_name'] as const).map((name) => (
+                    <FormField
+                      key={name}
+                      control={form.control}
+                      name={name}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>
+                            {name === 'first_name' ? 'Nome' : 'Sobrenome'}
+                          </FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              maxLength={120}
+                              autoComplete={
+                                name === 'first_name'
+                                  ? 'given-name'
+                                  : 'family-name'
+                              }
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
                     />
-                  </div>
+                  ))}
                 </div>
-              </CardContent>
-              <CardFooter className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-                <OnboardingNavigationDots api={api} count={TOTAL_STEPS} />
-                <Button
-                  type="button"
-                  onClick={() => api?.scrollNext()}
-                  className="ml-auto"
-                >
-                  Começar <ArrowRight className="h-4 w-4" aria-hidden />
-                </Button>
-              </CardFooter>
-            </OnboardingStep>
-
-            {/* Etapa 2: dados pessoais */}
-            <OnboardingStep ativa={etapaAtual === 1}>
-              <CardHeader className="space-y-2">
-                <CardTitle className="font-display">
-                  Seus Dados Pessoais
-                </CardTitle>
-                <CardDescription>
-                  Nome, data de nascimento e gênero para personalização.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 p-6 space-y-6 overflow-y-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <FormField
-                    control={form.control}
-                    name="first_name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center text-sm font-medium">
-                          <User
-                            className="h-4 w-4 mr-1.5 text-primary"
-                            aria-hidden
-                          />{' '}
-                          Nome
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Seu nome"
-                            autoComplete="given-name"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="last_name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center text-sm font-medium">
-                          <User
-                            className="h-4 w-4 mr-1.5 text-primary"
-                            aria-hidden
-                          />{' '}
-                          Sobrenome
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Seu sobrenome"
-                            autoComplete="family-name"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FieldGroup>
-                  <FormField
-                    control={form.control}
-                    name="nickname"
-                    render={({ field, fieldState }) => (
-                      <Field data-invalid={Boolean(fieldState.error)}>
-                        <FieldLabel htmlFor="onboarding-nickname">
-                          Como Você Gostaria de Ser Chamado
-                        </FieldLabel>
+                <FormField
+                  control={form.control}
+                  name="nickname"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>
+                        Como Você Gostaria de Ser Chamado{' '}
+                        <span className="font-normal text-muted-foreground">
+                          (opcional)
+                        </span>
+                      </FormLabel>
+                      <FormControl>
                         <Input
                           {...field}
-                          value={field.value ?? ''}
-                          onChange={(evento) => {
-                            apelidoEditado.current = true;
-                            field.onChange(evento);
-                          }}
-                          id="onboarding-nickname"
                           autoComplete="nickname"
                           maxLength={80}
-                          aria-invalid={Boolean(fieldState.error)}
-                          aria-describedby="onboarding-nickname-description onboarding-nickname-error"
                         />
-                        <FieldDescription id="onboarding-nickname-description">
-                          Opcional. Se preferir este nome a xuxu ou xuxuzinho,
-                          peça à Lyra para usá-lo. Você pode alterá-lo no
-                          perfil.
-                        </FieldDescription>
-                        <FieldError
-                          id="onboarding-nickname-error"
-                          errors={[fieldState.error]}
+                      </FormControl>
+                      <FormDescription>
+                        Um nome que a Lyra pode usar ao conversar com você.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="birth_date"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col">
+                      <FormLabel>Data de nascimento</FormLabel>
+                      <FormControl>
+                        <DatePicker
+                          value={field.value}
+                          onChange={field.onChange}
+                          onBlur={field.onBlur}
+                          name={field.name}
+                          autoComplete="bday"
+                          placeholder="DD/MM/AAAA"
                         />
-                      </Field>
-                    )}
-                  />
-                </FieldGroup>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  <FormField
-                    control={form.control}
-                    name="birth_date"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-col">
-                        <FormLabel className="mb-2 flex items-center text-sm font-medium">
-                          <Calendar
-                            className="h-4 w-4 mr-1.5 text-primary"
-                            aria-hidden
-                          />{' '}
-                          Data de Nascimento
-                        </FormLabel>
-                        <FormControl>
-                          {/* Sem `id` próprio: o FormControl injeta o id do
-                              rótulo e o `aria-describedby` (tarefa 61). */}
-                          <DatePicker
-                            value={field.value}
-                            onChange={field.onChange}
-                            onBlur={field.onBlur}
-                            name={field.name}
-                            placeholder="DD/MM/AAAA"
-                            autoComplete="bday"
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="age"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center text-sm font-medium">
-                          <Scale
-                            className="h-4 w-4 mr-1.5 text-primary"
-                            aria-hidden
-                          />{' '}
-                          Idade
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="Idade"
-                            className={cn(
-                              !!birthDate && 'cursor-not-allowed bg-muted'
-                            )}
-                            {...field}
-                            disabled={!!birthDate}
-                          />
-                        </FormControl>
-                        <FormDescription className="text-xs">
-                          Calculada automaticamente.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="gender"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center text-sm font-medium">
-                          <Globe
-                            className="h-4 w-4 mr-1.5 text-primary"
-                            aria-hidden
-                          />{' '}
-                          Gênero
-                        </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
-                        >
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Selecione..." />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            <SelectItem value="male">Masculino</SelectItem>
-                            <SelectItem value="female">Feminino</SelectItem>
-                            <SelectItem value="other">Outro</SelectItem>
-                            <SelectItem value="prefer_not-to-say">
-                              Prefiro não dizer
-                            </SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <FormField
-                    control={form.control}
-                    name="birth_time"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center text-sm font-medium">
-                          <Clock
-                            className="h-4 w-4 mr-1.5 text-cosmic"
-                            aria-hidden
-                          />{' '}
-                          Hora Exata (HH:MM)
-                        </FormLabel>
-                        <FormControl>
-                          <TimeInput placeholder="Ex.: 14:35" {...field} />
-                        </FormControl>
-                        <FormDescription className="text-xs">
-                          Define o ascendente (Lagna) e as casas do seu mapa
-                          védico. Se não souber, deixe em branco.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="birth_city"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="flex items-center text-sm font-medium">
-                          <MapPin
-                            className="h-4 w-4 mr-1.5 text-cosmic"
-                            aria-hidden
-                          />{' '}
-                          Cidade de nascimento
-                        </FormLabel>
-                        <FormControl>
-                          <SeletorDeCidade
-                            valor={field.value ?? null}
-                            aoEscolher={field.onChange}
-                            textoVazio="Escolha na lista"
-                          />
-                        </FormControl>
-                        <FormDescription className="text-xs">
-                          Coordenadas e fuso da cidade calculam o seu mapa.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="residence_city"
-                    render={({ field }) => (
-                      <FormItem className="md:col-span-2">
-                        <FormLabel className="flex items-center text-sm font-medium">
-                          <MapPin
-                            className="h-4 w-4 mr-1.5 text-cosmic"
-                            aria-hidden
-                          />{' '}
-                          Cidade onde você mora hoje (opcional)
-                        </FormLabel>
-                        <FormControl>
-                          <SeletorDeCidade
-                            valor={field.value ?? null}
-                            aoEscolher={field.onChange}
-                            textoVazio="A mesma do nascimento"
-                            permitirLimpar
-                          />
-                        </FormControl>
-                        <FormDescription className="text-xs">
-                          O nascer do sol e os horários do seu dia são
-                          calculados para este lugar.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-                <OnboardingNavigationDots api={api} count={TOTAL_STEPS} />
-                <div className="ml-auto flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => api?.scrollPrev()}
-                  >
-                    <ArrowLeft className="h-4 w-4" aria-hidden /> Voltar
-                  </Button>
-                  <Button
-                    type="button"
-                    onClick={() =>
-                      handleNext([
-                        'first_name',
-                        'last_name',
-                        'nickname',
-                        'birth_date',
-                        'birth_time',
-                        'birth_city',
-                        'residence_city',
-                        'age',
-                        'gender',
-                      ])
-                    }
-                  >
-                    Próximo <ArrowRight className="h-4 w-4" aria-hidden />
-                  </Button>
-                </div>
-              </CardFooter>
-            </OnboardingStep>
-
-            {/* Etapa 3: nível de atividade */}
-            <OnboardingStep ativa={etapaAtual === 2}>
-              <CardHeader className="space-y-2">
-                <CardTitle className="font-display">
-                  Nível de Atividade
-                </CardTitle>
-                <CardDescription>
-                  Quão ativo(a) você é no seu dia a dia?
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col items-center justify-center p-6 space-y-8 overflow-y-auto">
-                <div className="rounded-xl bg-sidebar-accent p-5">
-                  <Dumbbell
-                    className="h-12 w-12 text-primary md:h-16 md:w-16"
-                    aria-hidden
-                  />
-                </div>
-
-                <div className="w-full max-w-md">
-                  <FormField
-                    control={form.control}
-                    name="activity_level"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-lg font-display font-semibold block text-center mb-4">
-                          Nível Atual:{' '}
-                          <span className="text-primary">{field.value}</span>
-                        </FormLabel>
-                        <FormControl>
-                          <Slider
-                            aria-label="Nível de atividade, de 1 (sedentário) a 5 (muito ativo)"
-                            min={NIVEL_DE_ATIVIDADE.minimo}
-                            max={NIVEL_DE_ATIVIDADE.maximo}
-                            step={1}
-                            value={[field.value || NIVEL_DE_ATIVIDADE.padrao]}
-                            onValueChange={(vals) => field.onChange(vals[0])}
-                          />
-                        </FormControl>
-                        <div className="flex justify-between text-xs text-muted-foreground mt-3">
-                          <span>{NIVEL_DE_ATIVIDADE.rotuloMinimo}</span>
-                          <span>{NIVEL_DE_ATIVIDADE.rotuloMaximo}</span>
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-                <OnboardingNavigationDots api={api} count={TOTAL_STEPS} />
-                <div className="ml-auto flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => api?.scrollPrev()}
-                  >
-                    <ArrowLeft className="h-4 w-4" aria-hidden /> Voltar
-                  </Button>
-                  <Button type="button" onClick={() => api?.scrollNext()}>
-                    Próximo <ArrowRight className="h-4 w-4" aria-hidden />
-                  </Button>
-                </div>
-              </CardFooter>
-            </OnboardingStep>
-
-            {/* Etapa 4: metas */}
-            <OnboardingStep ativa={etapaAtual === 3}>
-              <CardHeader className="space-y-2">
-                <CardTitle className="font-display">Seus Objetivos</CardTitle>
-                <CardDescription>
-                  O que você espera alcançar? (Opcional)
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col items-center p-6 overflow-y-auto">
-                <div className="w-full max-w-xl">
-                  <FormField
-                    control={form.control}
-                    name="goals"
-                    render={() => (
-                      // Grupo nomeado (tarefa 62): as caixas são lidas como
-                      // "Seus objetivos, grupo" em vez de soltas na página.
-                      <FormItem
-                        role="group"
-                        aria-label="Seus objetivos"
-                        className="grid grid-cols-1 sm:grid-cols-2 gap-3"
-                      >
-                        {METAS_DO_PERFIL.map((item) => {
-                          const GoalIcon = item.icon;
-                          return (
-                            <FormField
-                              key={item.id}
-                              control={form.control}
-                              name="goals"
-                              render={({ field }) => (
-                                // A linha inteira é o rótulo (alvo de toque de
-                                // 44px): antes só a caixinha de 20px e o texto
-                                // marcavam a meta, apesar do cursor de clique.
-                                <FormItem className="flex min-w-0 flex-row items-center gap-3 space-y-0 rounded-md border border-border bg-card px-3 transition-colors hover:bg-muted has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(item.id)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([
-                                              ...(field.value || []),
-                                              item.id,
-                                            ])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== item.id
-                                              )
-                                            );
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="flex min-h-11 min-w-0 flex-1 cursor-pointer items-center gap-2.5 py-2 text-sm font-medium">
-                                    <GoalIcon
-                                      className="h-4 w-4 shrink-0 text-primary"
-                                      aria-hidden
-                                    />
-                                    <span className="min-w-0">
-                                      {item.label}
-                                    </span>
-                                  </FormLabel>
-                                </FormItem>
-                              )}
-                            />
-                          );
-                        })}
-                        <FormMessage className="col-span-full" />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </CardContent>
-              <CardFooter className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-                <OnboardingNavigationDots api={api} count={TOTAL_STEPS} />
-                <div className="ml-auto flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => api?.scrollPrev()}
-                  >
-                    <ArrowLeft className="h-4 w-4" aria-hidden /> Voltar
-                  </Button>
-                  <Button type="button" onClick={() => api?.scrollNext()}>
-                    Próximo <ArrowRight className="h-4 w-4" aria-hidden />
-                  </Button>
-                </div>
-              </CardFooter>
-            </OnboardingStep>
-
-            {/* Etapa 5: consentimento e envio */}
-            <OnboardingStep ativa={etapaAtual === 4}>
-              <CardHeader className="space-y-2">
-                <CardTitle className="font-display">Quase lá!</CardTitle>
-                <CardDescription>
-                  Revise e confirme para finalizar.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col items-center justify-center p-6 space-y-6 overflow-y-auto">
-                <div className="rounded-xl bg-sidebar-accent p-5">
-                  <ShieldCheck
-                    className="h-12 w-12 text-primary md:h-16 md:w-16"
-                    aria-hidden
-                  />
-                </div>
+                      </FormControl>
+                      <FormDescription>
+                        Usada para calcular sua idade e personalizar o cuidado.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <details className="rounded-md border border-border p-4">
+                  <summary className="cursor-pointer text-sm font-medium text-primary">
+                    Outras preferências (opcional)
+                  </summary>
+                  <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                    <FormField
+                      control={form.control}
+                      name="gender"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Gênero (opcional)</FormLabel>
+                          <Select
+                            value={field.value ?? 'depois'}
+                            onValueChange={(value) =>
+                              field.onChange(
+                                value === 'depois' ? undefined : value
+                              )
+                            }
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="depois">
+                                Definir depois
+                              </SelectItem>
+                              <SelectItem value="male">Masculino</SelectItem>
+                              <SelectItem value="female">Feminino</SelectItem>
+                              <SelectItem value="other">Outro</SelectItem>
+                              <SelectItem value="prefer_not-to-say">
+                                Prefiro não dizer
+                              </SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="activity_level"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Atividade física (opcional)</FormLabel>
+                          <Select
+                            value={
+                              field.value === undefined
+                                ? 'depois'
+                                : String(field.value)
+                            }
+                            onValueChange={(value) =>
+                              field.onChange(
+                                value === 'depois' ? undefined : Number(value)
+                              )
+                            }
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="depois">
+                                Definir depois
+                              </SelectItem>
+                              {[
+                                'Sedentário',
+                                'Pouco ativo',
+                                'Moderadamente ativo',
+                                'Ativo',
+                                'Muito ativo',
+                              ].map((label, i) => (
+                                <SelectItem key={label} value={String(i + 1)}>
+                                  {label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <p className="mt-3 text-sm text-muted-foreground">
+                    Você também pode ajustar estas preferências no perfil.
+                  </p>
+                </details>
+              </>
+            )}
+            {etapa === 1 && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="birth_city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Cidade de nascimento</FormLabel>
+                      <FormControl>
+                        <SeletorDeCidade
+                          valor={field.value}
+                          aoEscolher={field.onChange}
+                          textoVazio="Buscar cidade de nascimento"
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Escolha a cidade na lista. O fuso e as coordenadas são
+                        encontrados para você.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="birth_time"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Hora de nascimento (opcional)</FormLabel>
+                      <FormControl>
+                        <TimeInput {...field} placeholder="HH:MM" />
+                      </FormControl>
+                      <FormDescription>
+                        O horário ajuda a detalhar o mapa. Se não souber, você
+                        pode definir depois no perfil.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="residence_city"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Onde você mora hoje (opcional)</FormLabel>
+                      <FormControl>
+                        <SeletorDeCidade
+                          valor={field.value}
+                          aoEscolher={field.onChange}
+                          textoVazio="Definir depois"
+                          permitirLimpar
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Ajuda a calcular o nascer do sol e os horários do seu
+                        dia.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
+            {etapa === 2 && (
+              <>
+                <dl className="grid gap-4 rounded-lg border border-border bg-background p-4 sm:grid-cols-2">
+                  <div>
+                    <dt className="text-xs text-muted-foreground">Seu nome</dt>
+                    <dd className="mt-1 break-words font-medium">
+                      {v.first_name} {v.last_name}
+                    </dd>
+                  </div>
+                  {v.nickname && (
+                    <div>
+                      <dt className="text-xs text-muted-foreground">
+                        Como prefere ser chamado
+                      </dt>
+                      <dd className="mt-1 break-words font-medium">
+                        {v.nickname}
+                      </dd>
+                    </div>
+                  )}
+                  <div>
+                    <dt className="text-xs text-muted-foreground">
+                      Nascimento
+                    </dt>
+                    <dd className="mt-1 font-medium">
+                      {v.birth_date ? format(v.birth_date, 'dd/MM/yyyy') : ''}
+                      {v.birth_time ? ` · ${v.birth_time}` : ''}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs text-muted-foreground">
+                      Cidade de nascimento
+                    </dt>
+                    <dd className="mt-1 break-words font-medium">
+                      {v.birth_city?.rotulo}
+                    </dd>
+                  </div>
+                </dl>
                 <FormField
                   control={form.control}
                   name="consent"
                   render={({ field }) => (
-                    <FormItem className="flex w-full max-w-md flex-row items-start space-x-3 space-y-0 rounded-md border border-border bg-background p-4">
+                    <FormItem className="flex items-start gap-3 rounded-lg border border-border p-4">
                       <FormControl>
                         <Checkbox
+                          ref={field.ref}
+                          onBlur={field.onBlur}
                           checked={field.value}
                           onCheckedChange={field.onChange}
                           aria-required="true"
                         />
                       </FormControl>
-                      <div className="space-y-1.5">
-                        <FormLabel className="cursor-pointer leading-snug">
-                          Autorizo a Lyra a tratar os meus dados de saúde e
+                      <div className="min-w-0 space-y-2">
+                        <FormLabel className="cursor-pointer leading-relaxed">
+                          Autorizo a Lyra a tratar meus dados de saúde e
                           bem-estar para calcular indicadores e gerar
                           orientações personalizadas.
                         </FormLabel>
-                        <FormDescription className="text-xs leading-5">
-                          Dados de saúde são sensíveis (LGPD, art. 11): só você
-                          os acessa. Você pode baixá-los ou excluir a conta a
-                          qualquer momento em Perfil → Privacidade e dados.
-                          Detalhes na{' '}
+                        <FormDescription>
+                          Você pode baixar seus dados ou excluir sua conta no
+                          perfil. Leia a{' '}
                           <Link
                             href={ROTA_POLITICA_DE_PRIVACIDADE}
                             target="_blank"
@@ -956,25 +856,50 @@ export function OnboardingForm() {
                     </FormItem>
                   )}
                 />
-              </CardContent>
-              <CardFooter className="flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-                <OnboardingNavigationDots api={api} count={TOTAL_STEPS} />
-                <div className="ml-auto flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => api?.scrollPrev()}
-                  >
-                    <ArrowLeft className="h-4 w-4" aria-hidden /> Voltar
-                  </Button>
-                  <Button type="submit" disabled={isSubmitting}>
-                    {isSubmitting ? 'Salvando...' : 'Finalizar'}
-                  </Button>
-                </div>
-              </CardFooter>
-            </OnboardingStep>
-          </CarouselContent>
-        </Carousel>
+              </>
+            )}
+            {falhaEnvio && (
+              <div
+                role="alert"
+                className="rounded-md border border-destructive/30 p-4 text-sm text-destructive"
+              >
+                {concluido ? 'Seu perfil foi salvo. ' : ''}
+                {falhaEnvio}{' '}
+                {concluido
+                  ? 'Tente abrir o app novamente.'
+                  : 'Suas respostas continuam no formulário para tentar de novo.'}
+              </div>
+            )}
+          </CardContent>
+          <CardFooter className="flex flex-wrap items-center justify-between gap-3 border-t border-border p-5 sm:px-7">
+            <Button
+              type="button"
+              variant="ghost"
+              disabled={etapa === 0 || enviando}
+              onClick={() => window.history.back()}
+            >
+              <ArrowLeft aria-hidden="true" className="mr-2 h-4 w-4" />
+              Voltar
+            </Button>
+            <Button type="submit" disabled={enviando}>
+              {enviando
+                ? 'Salvando…'
+                : etapa === 2
+                  ? concluido
+                    ? 'Abrir meu espaço'
+                    : 'Entrar no app'
+                  : 'Continuar'}
+              {etapa === 2 ? (
+                <Check aria-hidden="true" className="ml-2 h-4 w-4" />
+              ) : (
+                <ArrowRight aria-hidden="true" className="ml-2 h-4 w-4" />
+              )}
+            </Button>
+          </CardFooter>
+        </Card>
+        <p className="text-center text-xs leading-relaxed text-muted-foreground">
+          Você pode revisar suas informações depois no perfil.
+        </p>
       </form>
     </Form>
   );

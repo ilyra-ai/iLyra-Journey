@@ -24,9 +24,9 @@
 | Progresso          | `████████████████░░░░` **87%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 97                             |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 2                              |
-| ⚪ A iniciar       | 12                             |
+| ⚪ A iniciar       | 11                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-25                     |
 
@@ -51,7 +51,17 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 95 · Onboarding objetivo, rápido e visualmente inovador
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
+- **Pedido do usuário:** remover do **onboarding** os itens **“Objetivos”** que o usuário precisa selecionar, conforme anexo; tornar o percurso objetivo, assertivo e rápido, evitando cansaço no preenchimento. Criar uma experiência visual incrível, inovadora, surpreendente de forma positiva e que incentive entrar logo no app.
+- **Escopo e preservação:** conferir fluxo, validações e gravação existentes antes de implementar. Retirar a seleção de objetivos do onboarding sem remover os objetivos do perfil por inferência. Preservar os dados existentes, os consentimentos necessários e o campo opcional **“Como Você Gostaria de Ser Chamado”**, mantendo `nickname` no banco. Não marcar dados não fornecidos como preenchidos nem inventar escolhas do usuário.
+- **Design e implementação:** pesquisar profundamente referências e tendências atuais de 2026 antes de alterar o visual; seguir Lyra Clean e tema claro, com qualidade premium, mobile-first e desktop, acessibilidade, clareza, poucas etapas e controles simples. Corrigir causas de eventuais erros no backend antes da interface.
+- **Validação integral:** cadastro → onboarding → persistência → entrada no app, leitura e atualização dos dados, retorno e retomada, recarga e novo login sem repetição indevida do onboarding concluído. Conferir erros, campos opcionais, consentimento e isolamento, ausência da seleção de objetivos, responsividade em múltiplas larguras e CRUD real; executar gates e publicar commit e push próprios na main.
+
+- **Início em 2026-10-25:** inventário identificou cinco etapas, uma tela exclusiva de objetivos, escolhas iniciais de atividade e envio que zera objetivos não selecionados. Reutilizar os controles de nome/apelido, data/hora e cidade; reduzir o percurso, preservar objetivos existentes e não inventar gênero/atividade. Validar conclusão no servidor, manter consentimento explícito e retomar rascunho apenas na aba da própria conta. Referência oficial consultada: GOV.UK Question pages (fonte atual no repositório oficial), para perguntas necessárias, campos opcionais claros, navegação de retorno e grupos relacionados.
+
+- **Validação concluída em 2026-10-25; aguardando publicação individual:** três etapas sem seleção de objetivos, apelido e objetivos anteriores preservados, opcionais sem escolhas inventadas. Conclusão e consentimento transacionais pelo novo endpoint, validação canônica de cidade e proteção da conclusão genérica. Rascunho na aba por conta, consentimento não persistido, retorno nativo e retentativa. 528 unitários, 245 integrações, formato, lint, tipos e build aprovados. QA real cadastro → app, recarga/retorno, offline/retentativa, banco e novo login; 1440/390/320 px sem estouro e capturas conferidas. Conta temporária excluída. Detalhes em `docs/onboarding.md`.
 
 ### BLOQUEADAS
 
@@ -85,14 +95,6 @@ Nenhuma tarefa em andamento.
 ## Tópico 3 · Tarefas a Iniciar
 
 ---
-
-### 95 · Onboarding objetivo, rápido e visualmente inovador
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** remover do **onboarding** os itens **“Objetivos”** que o usuário precisa selecionar, conforme anexo; tornar o percurso objetivo, assertivo e rápido, evitando cansaço no preenchimento. Criar uma experiência visual incrível, inovadora, surpreendente de forma positiva e que incentive entrar logo no app.
-- **Escopo e preservação:** conferir fluxo, validações e gravação existentes antes de implementar. Retirar a seleção de objetivos do onboarding sem remover os objetivos do perfil por inferência. Preservar os dados existentes, os consentimentos necessários e o campo opcional **“Como Você Gostaria de Ser Chamado”**, mantendo `nickname` no banco. Não marcar dados não fornecidos como preenchidos nem inventar escolhas do usuário.
-- **Design e implementação:** pesquisar profundamente referências e tendências atuais de 2026 antes de alterar o visual; seguir Lyra Clean e tema claro, com qualidade premium, mobile-first e desktop, acessibilidade, clareza, poucas etapas e controles simples. Corrigir causas de eventuais erros no backend antes da interface.
-- **Validação integral:** cadastro → onboarding → persistência → entrada no app, leitura e atualização dos dados, retorno e retomada, recarga e novo login sem repetição indevida do onboarding concluído. Conferir erros, campos opcionais, consentimento e isolamento, ausência da seleção de objetivos, responsividade em múltiplas larguras e CRUD real; executar gates e publicar commit e push próprios na main.
 
 **Registro desta solicitação:** tarefas 89–95 acrescentadas em 2026-10-22 como **a iniciar**, sem declarar implementação ou validação funcional. A publicação imediata deste registro é documental; cada implementação seguirá com validação, atualização do painel, commit e push próprios na main, sem branches ou worktrees.
 

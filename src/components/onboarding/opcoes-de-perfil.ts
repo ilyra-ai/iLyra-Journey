@@ -16,10 +16,8 @@ import {
 } from 'lucide-react';
 
 /**
- * Opções compartilhadas entre o onboarding e o perfil: os dois formulários
- * gravam os mesmos campos de `profiles` e precisam oferecer exatamente as
- * mesmas escolhas (antes a lista de metas só existia no onboarding, e o
- * perfil não permitia revê-las).
+ * Catálogo de objetivos editáveis no perfil. O onboarding não solicita nem
+ * altera objetivos (tarefa 95); as escolhas existentes permanecem válidas.
  */
 
 export interface MetaDoPerfil {

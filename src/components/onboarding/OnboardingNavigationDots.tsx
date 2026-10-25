@@ -32,15 +32,18 @@ export function useEtapaAtual(api: CarouselApi | undefined): number {
 }
 
 interface OnboardingNavigationDotsProps {
-  api: CarouselApi | undefined;
+  api?: CarouselApi;
+  current?: number;
   count: number;
 }
 
 export function OnboardingNavigationDots({
   api,
   count,
+  current,
 }: OnboardingNavigationDotsProps) {
-  const atual = useEtapaAtual(api);
+  const selecionada = useEtapaAtual(api);
+  const atual = current ?? selecionada;
 
   // Os pontos são só visuais; o progresso é anunciado pelo texto "Etapa X
   // de N" (antes eram um `role="tablist"` sem abas, que não informava nada
