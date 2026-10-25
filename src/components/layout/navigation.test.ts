@@ -111,16 +111,23 @@ describe('navegação com configuração salva', () => {
   });
 });
 
-it('configurações antigas não reintroduzem o editor removido no menu ou na busca', () => {
+it.each([
+  '/admin/puck',
+  '/admin/page-builder',
+  '/admin/page-builder/',
+  '/admin/page-builder/antigo',
+  '/admin/page-builder?origem=antiga',
+  '/admin/page-builder#editor',
+])('configuração antiga não reintroduz %s no menu ou na busca', (href) => {
   const config = getDefaultPageConfig('app');
   config.sidebar.items.push({
-    href: '/admin/puck',
+    href,
     label: 'Editor antigo',
     description: 'Configuração histórica',
     visible: true,
   });
   const itens = getVisibleNavigation(true, config);
-  expect(itens.some((item) => item.href === '/admin/puck')).toBe(false);
+  expect(itens.some((item) => item.href === href)).toBe(false);
   expect(itens.some((item) => item.href === '/admin/content')).toBe(true);
-  expect(itens.some((item) => item.href === '/admin/page-builder')).toBe(true);
+  expect(itens.some((item) => item.href === '/admin/page-builder')).toBe(false);
 });

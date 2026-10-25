@@ -128,7 +128,7 @@ export const lyraCustomazeEditableSurfaceMap: Record<
     label: sitePageLabels.app,
     description:
       'Camada visual interna da plataforma com sidebar, header e módulos prioritários.',
-    route: '/admin/page-builder',
+    route: '/admin/content',
     scope: 'internal-page',
     adminOnly: true,
     zones: [

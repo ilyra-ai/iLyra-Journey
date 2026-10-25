@@ -37,3 +37,5 @@ runtime, conferir 404 das rotas removidas com sessão administrativa e ausência
 de links no menu. Validar leitura, rascunho e publicação do construtor em
 Conteúdo e páginas públicas e autenticadas em desktop/mobile. Relatar testes
 removidos com a funcionalidade separadamente de falhas ou testes ignorados.
+
+A tarefa 98 posteriormente aposentou também a entrada duplicada do construtor. O componente compartilhado e suas funções permanecem na aba Experiência Web de Conteúdo. Veja [a remoção da entrada duplicada](./remocao-construtor-duplicado.md); este relatório conserva as evidências da tarefa 89.

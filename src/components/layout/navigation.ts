@@ -1,3 +1,4 @@
+import { rotaDeEditorAposentada } from '@/lib/site-page-config/runtime';
 import type { LucideIcon } from 'lucide-react';
 import {
   BarChart3,
@@ -225,15 +226,6 @@ export const navigationItems: NavigationDefinition[] = [
     sectionKey: 'admin',
     adminOnly: true,
   },
-  {
-    href: '/admin/page-builder',
-    label: 'Construtor UI',
-    description: 'Textos, tamanhos e seções da landing, do login e do app.',
-    icon: LayoutDashboard,
-    section: 'Administração',
-    sectionKey: 'admin',
-    adminOnly: true,
-  },
 ];
 
 export const pageMetaByPath = Object.fromEntries(
@@ -289,13 +281,7 @@ function buildConfiguredNavigation(appConfig?: AppPageConfig) {
   );
 
   const configuredItems = appConfig.sidebar.items
-    .filter(
-      (item) =>
-        !item.href
-          .split(/[?#]/)[0]
-          .replace(/\/+$/, '')
-          .startsWith('/admin/puck')
-    )
+    .filter((item) => !rotaDeEditorAposentada(item.href))
     .map((item) => {
       const baseItem = baseItemsByHref.get(item.href);
       const sectionKey = baseItem?.sectionKey ?? 'principal';

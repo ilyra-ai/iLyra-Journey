@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import { getDefaultPageConfig } from './defaults';
+import { rotaDeEditorAposentada } from './runtime';
 
 const builderIconKeySchema = z.enum([
   'sparkles',
@@ -174,7 +175,7 @@ const appPageConfigSchema = z.object({
       .array(appNavigationItemSchema)
       .min(1)
       .transform((items) =>
-        items.filter((item) => !/^\/admin\/puck(?:\/|$)/.test(item.href))
+        items.filter((item) => !rotaDeEditorAposentada(item.href))
       ),
   }),
   header: z.object({

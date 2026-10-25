@@ -58,23 +58,29 @@ describe('destino dos botões da landing', () => {
   });
 });
 
-it('remove rota aposentada de configuração antiga sem perder personalização de Conteúdo', () => {
-  const config = getDefaultPageConfig('app');
-  const conteudo = config.sidebar.items.find(
-    (item) => item.href === '/admin/content'
-  )!;
-  conteudo.label = 'Meu Conteúdo';
-  config.sidebar.items.push({
-    href: '/admin/puck',
-    label: 'Editor antigo',
-    description: 'Histórico',
-    visible: true,
-  });
-  const lida = parsePageConfig('app', config);
-  expect(lida.sidebar.items.some((item) => item.href === '/admin/puck')).toBe(
-    false
-  );
-  expect(
-    lida.sidebar.items.find((item) => item.href === '/admin/content')?.label
-  ).toBe('Meu Conteúdo');
-});
+it.each([
+  '/admin/puck',
+  '/admin/page-builder',
+  '/admin/page-builder/',
+  '/admin/page-builder/antigo',
+])(
+  'remove %s de configuração antiga sem perder personalização de Conteúdo',
+  (href) => {
+    const config = getDefaultPageConfig('app');
+    const conteudo = config.sidebar.items.find(
+      (item) => item.href === '/admin/content'
+    )!;
+    conteudo.label = 'Meu Conteúdo';
+    config.sidebar.items.push({
+      href,
+      label: 'Editor antigo',
+      description: 'Histórico',
+      visible: true,
+    });
+    const lida = parsePageConfig('app', config);
+    expect(lida.sidebar.items.some((item) => item.href === href)).toBe(false);
+    expect(
+      lida.sidebar.items.find((item) => item.href === '/admin/content')?.label
+    ).toBe('Meu Conteúdo');
+  }
+);

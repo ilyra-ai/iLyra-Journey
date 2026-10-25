@@ -24,9 +24,9 @@
 | Progresso          | `██████████████████░░` **90%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 100                            |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 2                              |
-| ⚪ A iniciar       | 9                              |
+| ⚪ A iniciar       | 8                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-25                     |
 
@@ -51,7 +51,18 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 98 · Remoção integral da página administrativa duplicada /admin/page-builder
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
+- **Pedido do usuário:** remover `/admin/page-builder` por completo, na íntegra e em sua totalidade, com o mesmo rigor de remoção e validação solicitado para o Editor Puck na tarefa 89. Conferência prévia identificou que a página abre o mesmo `SiteExperienceBuilder` já oferecido na aba **“Experiência Web”** de `/admin/content`; esta continua reunindo também Hábitos Sugeridos e Dicas de IA.
+- **Escopo integral:** inventariar e remover a rota duplicada, página, componentes exclusivos, item **“Construtor UI”** do sidebar e menu móvel, resultados de busca, atalhos, registros de navegação e configuração, permissões exclusivas, imports, testes e documentação operacional que apontem para essa entrada. Remover dependências somente quando comprovadamente exclusivas e não utilizadas no restante do app. Verificar configurações antigas persistidas para que não reintroduzam links quebrados.
+- **Preservação obrigatória:** manter o editor compartilhado e suas dependências efetivamente usadas em `/admin/content`, incluindo leitura, edição, prévia, rascunho e publicação das configurações reais. Preservar Hábitos Sugeridos, Dicas de IA, dados e versões existentes. A remoção do Editor Puck permanece uma tarefa separada; não confundir o Puck com o construtor compartilhado nem apagar a funcionalidade de Conteúdo.
+- **Integridade e prova de remoção:** realizar busca verificável com `rg` após as remoções, investigar qualquer referência restante e registrar o tratamento explícito de histórico de auditoria e migrações já aplicadas, sem modificar checksums ou destruir dados silenciosamente. Confirmar que a antiga rota deixa de oferecer o editor duplicado e que não há navegação operacional para ela.
+- **Validação e entrega:** testar CRUD e publicação reais do editor em Conteúdo, hábitos e dicas, autenticação e autorização, sidebar desktop/mobile, busca, configurações antigas, demais páginas afetadas e ausência de regressões. Executar formatação, lint, tipos, testes unitários e de integração, build, runtime e QA em múltiplas larguras; corrigir causas reais, sem simulações, placeholders, hardcode para mascarar falhas ou cortes de código. Atualizar este painel e publicar commit e push próprios na main, sem branches ou worktrees. Este registro não declara a remoção implementada.
+
+- **Início em 2026-10-25:** comprovada duplicação do mesmo `SiteExperienceBuilder` em rota exclusiva e na aba Experiência Web de Conteúdo. Remover só os três arquivos exclusivos e as entradas de navegação/default/registro, tratar configurações antigas na leitura e manter componentes compartilhados, dependências, configurações e versões. Nenhuma migration aplicada será alterada.
+
+- **Validação concluída em 2026-10-25; aguardando publicação individual:** removidos página, layout e wrapper exclusivos, menu/defaults e entrada antiga do registro. Helper puro compartilhado filtra links históricos em schema/navegação sem perder personalização ou reescrever JSON na leitura; registro interno aponta para Conteúdo. Construtor compartilhado e dependências preservados; nenhuma migration alterada e nenhum dado removido. Busca de integridade deixa a URI apenas em guarda de rotas aposentadas, regressões e histórico/documentação. 539 unitários, 336 integrações, formato, lint, tipos e build aprovados. QA real confirmou 404 administrativo, proteção global de visitantes para login, menu/busca sem entrada, prévia/rascunho/publicação/recarga e CRUD de hábitos/dicas pela interface com comprovação no banco. Configuração restaurada integralmente e itens de QA inativos/excluídos; 1440/390/320 px sem overflow, Axe 4.14.0 sem violações (30 regras), sem exceções. Relatório em `docs/remocao-construtor-duplicado.md`.
 
 ### BLOQUEADAS
 
@@ -91,15 +102,6 @@ Nenhuma tarefa em andamento.
 ---
 
 ---
-
-### 98 · Remoção integral da página administrativa duplicada /admin/page-builder
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** remover `/admin/page-builder` por completo, na íntegra e em sua totalidade, com o mesmo rigor de remoção e validação solicitado para o Editor Puck na tarefa 89. Conferência prévia identificou que a página abre o mesmo `SiteExperienceBuilder` já oferecido na aba **“Experiência Web”** de `/admin/content`; esta continua reunindo também Hábitos Sugeridos e Dicas de IA.
-- **Escopo integral:** inventariar e remover a rota duplicada, página, componentes exclusivos, item **“Construtor UI”** do sidebar e menu móvel, resultados de busca, atalhos, registros de navegação e configuração, permissões exclusivas, imports, testes e documentação operacional que apontem para essa entrada. Remover dependências somente quando comprovadamente exclusivas e não utilizadas no restante do app. Verificar configurações antigas persistidas para que não reintroduzam links quebrados.
-- **Preservação obrigatória:** manter o editor compartilhado e suas dependências efetivamente usadas em `/admin/content`, incluindo leitura, edição, prévia, rascunho e publicação das configurações reais. Preservar Hábitos Sugeridos, Dicas de IA, dados e versões existentes. A remoção do Editor Puck permanece uma tarefa separada; não confundir o Puck com o construtor compartilhado nem apagar a funcionalidade de Conteúdo.
-- **Integridade e prova de remoção:** realizar busca verificável com `rg` após as remoções, investigar qualquer referência restante e registrar o tratamento explícito de histórico de auditoria e migrações já aplicadas, sem modificar checksums ou destruir dados silenciosamente. Confirmar que a antiga rota deixa de oferecer o editor duplicado e que não há navegação operacional para ela.
-- **Validação e entrega:** testar CRUD e publicação reais do editor em Conteúdo, hábitos e dicas, autenticação e autorização, sidebar desktop/mobile, busca, configurações antigas, demais páginas afetadas e ausência de regressões. Executar formatação, lint, tipos, testes unitários e de integração, build, runtime e QA em múltiplas larguras; corrigir causas reais, sem simulações, placeholders, hardcode para mascarar falhas ou cortes de código. Atualizar este painel e publicar commit e push próprios na main, sem branches ou worktrees. Este registro não declara a remoção implementada.
 
 ---
 

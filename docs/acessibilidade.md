@@ -3,7 +3,10 @@
 > Registro histórico: referências ao editor visual removido descrevem a
 > versão auditada anteriormente, não funcionalidades atuais. O runtime, as
 > APIs e as dependências daquele editor foram removidos pela tarefa 89.
-> Consulte [o tratamento da remoção](remocao-editor-visual.md).
+> Consulte [o tratamento da remoção](remocao-editor-visual.md). A entrada
+> duplicada `/admin/page-builder` também foi aposentada na tarefa 98; o
+> construtor compartilhado continua em Conteúdo → Experiência Web. As rotas
+> listadas abaixo descrevem a auditoria original.
 
 Auditoria feita com **axe-core** (regras `wcag2a`, `wcag2aa`, `wcag21a`,
 `wcag21aa`, `wcag22aa` e `best-practice`) sobre o build de produção

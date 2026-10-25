@@ -457,12 +457,6 @@ const defaultAppPageConfig: AppPageConfig = {
         description: 'Leituras analíticas e exportação executiva.',
         visible: true,
       },
-      {
-        href: '/admin/page-builder',
-        label: 'Construtor UI',
-        description: 'Textos, tamanhos e seções da landing, do login e do app.',
-        visible: true,
-      },
     ],
   },
   header: {

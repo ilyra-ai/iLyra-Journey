@@ -25,7 +25,7 @@
   min-height: 100vh;
   overflow: clip;
   isolation: isolate;
-  /* A landing também é renderizada na prévia do Construtor UI, numa coluna
+  /* A landing também é renderizada na prévia da Experiência Web de Conteúdo, numa coluna
    * estreita dentro de uma tela larga. Por isso as quebras de layout são
    * consultas de contêiner (@container jornada) e as medidas fluidas usam
    * cqi (largura da landing), não a largura da janela (vw/@media). Na página
