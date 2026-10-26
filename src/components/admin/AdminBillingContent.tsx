@@ -162,7 +162,7 @@ function DadosFatura({
       </p>
       {r.legado ? (
         <Button asChild variant="outline" size="sm">
-          <Link href="/admin/fiscal">Registros fiscais</Link>
+          <Link href="/admin/dashboard?aba=fiscal">Registros fiscais</Link>
         </Button>
       ) : (
         <Button
@@ -248,7 +248,7 @@ function ListaFaturas({
                 <TableCell>
                   {r.legado ? (
                     <Button asChild variant="outline" size="sm">
-                      <Link href="/admin/fiscal">Fiscal</Link>
+                      <Link href="/admin/dashboard?aba=fiscal">Fiscal</Link>
                     </Button>
                   ) : (
                     <Button

@@ -112,6 +112,8 @@ describe('navegação com configuração salva', () => {
 });
 
 it.each([
+  '/admin/fiscal',
+  '/admin/fiscal?origem=antiga',
   '/admin/puck',
   '/admin/page-builder',
   '/admin/page-builder/',

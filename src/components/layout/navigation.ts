@@ -1,4 +1,4 @@
-import { rotaDeEditorAposentada } from '@/lib/site-page-config/runtime';
+import { rotaForaDaNavegacao } from '@/lib/site-page-config/runtime';
 import type { LucideIcon } from 'lucide-react';
 import {
   BarChart3,
@@ -12,7 +12,6 @@ import {
   HeartPulse,
   LayoutDashboard,
   Radio,
-  Receipt,
   Settings2,
   ShieldCheck,
   Smartphone,
@@ -216,16 +215,6 @@ export const navigationItems: NavigationDefinition[] = [
     sectionKey: 'admin',
     adminOnly: true,
   },
-  {
-    href: '/admin/fiscal',
-    label: 'Registros fiscais',
-    description:
-      'Faturas pagas guardadas por obrigação legal (somente leitura).',
-    icon: Receipt,
-    section: 'Administração',
-    sectionKey: 'admin',
-    adminOnly: true,
-  },
 ];
 
 export const pageMetaByPath = Object.fromEntries(
@@ -281,7 +270,7 @@ function buildConfiguredNavigation(appConfig?: AppPageConfig) {
   );
 
   const configuredItems = appConfig.sidebar.items
-    .filter((item) => !rotaDeEditorAposentada(item.href))
+    .filter((item) => !rotaForaDaNavegacao(item.href))
     .map((item) => {
       const baseItem = baseItemsByHref.get(item.href);
       const sectionKey = baseItem?.sectionKey ?? 'principal';

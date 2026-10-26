@@ -14,10 +14,10 @@ export function scaleNumber(baseValue: number, scale: number) {
   return Number((baseValue * clampScale(scale)).toFixed(2));
 }
 
-/** Configurações históricas não reintroduzem entradas de editores aposentados. */
-export function rotaDeEditorAposentada(href: string) {
+/** Configurações históricas não reintroduzem páginas removidas ou transferidas. */
+export function rotaForaDaNavegacao(href: string) {
   const caminho = href.split(/[?#]/, 1)[0].replace(/\/+$/, '');
-  return ['/admin/puck', '/admin/page-builder'].some(
+  return ['/admin/puck', '/admin/page-builder', '/admin/fiscal'].some(
     (rota) => caminho === rota || caminho.startsWith(`${rota}/`)
   );
 }

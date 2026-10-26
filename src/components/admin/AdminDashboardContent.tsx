@@ -1,4 +1,5 @@
 'use client';
+import { AdminFiscalRecordsContent } from './AdminFiscalRecordsContent';
 import { AdminBillingContent } from './AdminBillingContent';
 import * as React from 'react';
 import Link from 'next/link';
@@ -308,6 +309,11 @@ export function AdminDashboardContent() {
             chave: 'faturamento',
             nome: 'Faturamento',
             conteudo: <AdminBillingContent />,
+          },
+          {
+            chave: 'fiscal',
+            nome: 'Fiscal',
+            conteudo: <AdminFiscalRecordsContent />,
           },
         ]}
       />
@@ -904,7 +910,7 @@ function VisaoGeral() {
                     texto: 'Consultar relatórios e exportações administrativas',
                   },
                   {
-                    href: '/admin/fiscal',
+                    href: '/admin/dashboard?aba=fiscal',
                     nome: 'Registros fiscais',
                     texto: 'Conferir faturas efetivamente pagas e retidas',
                   },

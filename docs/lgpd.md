@@ -4,14 +4,14 @@ Como a plataforma atende à Lei Geral de Proteção de Dados (Lei 13.709/2018) n
 
 ## Quem acessa o quê
 
-| Dado                                                                            | Titular                        | Administrador                              |
-| ------------------------------------------------------------------------------- | ------------------------------ | ------------------------------------------ |
-| Saúde e bem-estar (métricas, ciclo, avaliações, hábitos, metas, planos, agenda) | lê, altera e apaga             | não lê, não altera, não apaga              |
-| Perfil sensível (nascimento, gênero, idade, metas, atividade)                   | lê e altera                    | não lê                                     |
-| Identificação (nome, e-mail, papel, onboarding, foto)                           | lê e altera (e-mail com senha) | lê; altera só papel e onboarding           |
-| Métricas: quem registrou e quando (`id`, `user_id`, `date`, `created_at`)       | lê                             | lê (painel "Saúde dos dados"), sem valores |
-| Histórico de compras (`/api/account/purchases`)                                 | lê as próprias faturas         | não tem rota de histórico por pessoa       |
-| Registros fiscais (`fiscal_records`)                                            | vê as próprias compras         | lê todos (`/admin/fiscal`), só leitura     |
+| Dado                                                                            | Titular                        | Administrador                                        |
+| ------------------------------------------------------------------------------- | ------------------------------ | ---------------------------------------------------- |
+| Saúde e bem-estar (métricas, ciclo, avaliações, hábitos, metas, planos, agenda) | lê, altera e apaga             | não lê, não altera, não apaga                        |
+| Perfil sensível (nascimento, gênero, idade, metas, atividade)                   | lê e altera                    | não lê                                               |
+| Identificação (nome, e-mail, papel, onboarding, foto)                           | lê e altera (e-mail com senha) | lê; altera só papel e onboarding                     |
+| Métricas: quem registrou e quando (`id`, `user_id`, `date`, `created_at`)       | lê                             | lê (painel "Saúde dos dados"), sem valores           |
+| Histórico de compras (`/api/account/purchases`)                                 | lê as próprias faturas         | não tem rota de histórico por pessoa                 |
+| Registros fiscais (`fiscal_records`)                                            | vê as próprias compras         | lê todos (`/admin/dashboard?aba=fiscal`), só leitura |
 
 A regra está em `src/lib/mysql/table-config.ts` (`adminReadAll`, `adminReadColumns`, `adminWriteColumns`) e é aplicada em `src/lib/mysql/data-api.ts`:
 
@@ -59,7 +59,7 @@ A API de dados não apaga perfis (403): a exclusão é sempre da conta inteira.
   - fotografia do comprador: nome, e-mail, documento fiscal (CPF/CNPJ quando coletado pela Stripe) e endereço;
   - nenhum dado de saúde.
 - **Imutabilidade:** não existe rota de alteração ou exclusão, e a tabela não faz parte da API de dados. Os registros não são excluídos pela plataforma (CTN, art. 195, parágrafo único).
-- **Acesso:** administrador em `/admin/fiscal` (filtro por período e exportação CSV); titular em `/api/account/purchases`, só as próprias faturas.
+- **Acesso:** administrador na aba Fiscal em `/admin/dashboard?aba=fiscal` (filtro por período e exportação CSV); titular em `/api/account/purchases`, só as próprias faturas.
 
 Recomendação para produção: revogar `UPDATE` e `DELETE` em `fiscal_records` para o usuário da aplicação no MySQL. Gatilhos não foram usados porque, com o log binário ligado (padrão do MySQL), criá-los exige o privilégio `SUPER`.
 
