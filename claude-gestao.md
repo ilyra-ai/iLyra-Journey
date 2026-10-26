@@ -22,15 +22,15 @@
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
 | Progresso          | `███████████████████░` **95%** |
-| Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 105                            |
+| Tarefas totais     | 112                            |
+| 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
 | ⚪ A iniciar       | 3                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (105 ÷ 111 ≈ 95%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 112 ≈ 95%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -46,6 +46,8 @@
 **Ordem definida pelo usuário em 2026-10-21:** 82 → 78 → 81 (incluindo a correção de formatação da 80) → 83 → 84 → 86. Concluir, validar, fazer commit e push na main após cada entrega, sem branches ou worktrees. A 80 integra expressamente a modernização da 81 por orientação do usuário; seus requisitos e evidências continuam rastreados neste painel. Prevenir regressões com verificações reais, sem prometer ausência absoluta de erros futuros.
 
 ---
+
+**Ponto de parada em 2026-10-26:** tarefa 105 comprovada e documentada sobre a implementação existente, sem reaplicar arquivos antigos. Próxima ação: conferência prévia e correção dos avisos da 112; depois 106 (menu comercial Planos) e 107 (plano junto ao logo), sempre verificar primeiro o código atual. Tarefas 86, 90 e 100 mantidas bloqueadas pelas fronteiras externas já registradas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
@@ -112,13 +114,6 @@
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
 
-### 105 · Conteúdo acessível para todos os menus habilitados pelo plano
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** os menus do sidebar habilitados para os planos devem apresentar o conteúdo das páginas liberadas para esses menus.
-- **Investigação e implementação:** confrontar a matriz de entitlements, o plano efetivo da sessão, a visibilidade dos menus, as páginas e as autorizações das APIs. Corrigir divergências para que o usuário autorizado consiga visualizar e utilizar o conteúdo real da página correspondente, sem bloqueios contraditórios, preservando limites do plano, isolamento entre titulares e permissões administrativas. Reaproveitar a auditoria das tarefas 91 e 96 e a correção 104 para evitar retrabalho.
-- **Validação e entrega:** conferir cada menu liberado nos planos Free, Meta e Care e no acesso administrativo, em desktop e mobile; testar navegação direta, atualização da matriz, recarga, leitura, operações de escrita aplicáveis e persistência. Comprovar também a recusa real de páginas e APIs não autorizadas, sem placeholders ou permissões apenas visuais. Executar testes e gates, commit e push próprios na main e atualizar as evidências neste painel.
-
 ### 106 · Menu Planos para compra e upgrade dos usuários
 
 - **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
@@ -134,6 +129,13 @@
 - **Pedido do usuário:** após o acesso ao app, mostrar ao lado direito do logo Lyra MetaCare indicado no anexo uma identificação do tipo de plano do usuário, por texto, ícone ou emoji.
 - **Implementação:** inspecionar o componente compartilhado do logo e a fonte real da assinatura; apresentar o nome do plano vigente com tratamento visual coerente com o Lyra Clean. Caso seja utilizado ícone ou emoji, manter identificação textual acessível e inequívoca. Contemplar Free, Meta, Care e o plano Administrador quando implementado, sem inferir assinatura comercial apenas pelo papel da conta e sem exibir um plano fictício durante carregamento ou falha.
 - **Validação e entrega:** pesquisar referências atuais antes do ajuste visual; conferir desktop, mobile e estados expandido e recolhido do sidebar, sem cortar o logo ou prejudicar a navegação. Comprovar identificação correta em contas de planos diferentes e atualização após alteração ou upgrade confirmado, inclusive recarga e nova sessão. Executar testes pertinentes e gates, publicar commit e push próprios na main e registrar evidências neste painel. Este registro não representa implementação concluída.
+
+### 112 · Corrigir avisos novos na auditoria de dependências de 26/10/2026
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Prioridade:** corrigir antes de novas implementações comerciais.
+- **Evidência real:** `pnpm audit` na instalação congelada da `main` encontrou 15 avisos: 2 críticos, 4 altos, 6 moderados e 3 baixos. Pacotes envolvidos: Next.js, Vite, Zod, happy-dom e fast-uri. O resultado identifica dependências afetadas; não representa prova de exploração do app. Log local: `/tmp/lyra-baseline-audit.log`.
+- **Escopo:** verificar novamente se os pacotes já foram corrigidos na `main`; pesquisar os avisos e releases oficiais, atualizar versões corrigidas compatíveis e o lockfile sem desligar controles, adaptar apenas o necessário e conferir os impactos no projeto. Preservar as decisões de LTS, gerenciador e ausência de CI do usuário.
+- **Validação e entrega:** instalação congelada, auditoria, peers, lint, formato, tipos, 594 unitários e 384 integrações como baseline, build, runtime real e regressão das jornadas afetadas. Confirmar os números efetivamente executados, sem presumir que permanecerão iguais. Commit e publicação próprios na `main`, seguidos imediatamente da atualização deste painel com o SHA real. Nenhum pacote foi atualizado nesta conferência.
 
 ---
 
@@ -1802,6 +1804,18 @@
 - **Testes:** 577 unitários e 195 integrações aprovados. Integração real verifica persistência de nome e apelido em Free, Meta e Care e impossibilidade de ler ou alterar outro titular; testes existentes continuam comprovando a proteção do papel administrativo. Teste de navegação confirma perfil acessível com todos os recursos do plano desligados. Formatação, lint, tipos e build de produção aprovados.
 - **QA real:** conta comum descartável criada pela API, login pelo navegador, formulário Free disponível, nome e preferência de tratamento salvos e mantidos após recarga; persistência também confirmada pela API. Autopromoção recusada com 403 no runtime. Desktop e mobile de 390 px sem overflow horizontal e console sem erros ou avisos. Conta temporária excluída e credenciais locais removidas ao terminar.
 - **Evidências:** `.logs/qa104-{unit,integration,format,lint-fix,lint,format-check,types,producao}.log`, `.logs/qa104-runtime.json`, `.logs/qa104-perfil-desktop.png` e `.logs/qa104-perfil-mobile.png`. Launcher confirmou produção na porta 3000, banco saudável, 35 migrações, landing, login e autenticação administrativa. `@current_problems` indisponível neste ambiente; verificações executadas pelas ferramentas reais acima.
+
+### 105 · Conteúdo acessível para todos os menus habilitados pelo plano
+
+- **Status:** 🟢 finalizada por conferência e validação do código existente · **Registro:** 2026-10-22.
+- **Pedido do usuário:** os menus do sidebar habilitados para os planos devem apresentar o conteúdo das páginas liberadas para esses menus.
+- **Investigação e implementação:** confrontar a matriz de entitlements, o plano efetivo da sessão, a visibilidade dos menus, as páginas e as autorizações das APIs. Corrigir divergências para que o usuário autorizado consiga visualizar e utilizar o conteúdo real da página correspondente, sem bloqueios contraditórios, preservando limites do plano, isolamento entre titulares e permissões administrativas. Reaproveitar a auditoria das tarefas 91 e 96 e a correção 104 para evitar retrabalho.
+- **Validação e entrega:** conferir cada menu liberado nos planos Free, Meta e Care e no acesso administrativo, em desktop e mobile; testar navegação direta, atualização da matriz, recarga, leitura, operações de escrita aplicáveis e persistência. Comprovar também a recusa real de páginas e APIs não autorizadas, sem placeholders ou permissões apenas visuais. Executar testes e gates, commit e push próprios na main e atualizar as evidências neste painel.
+
+- **Conferência prévia em 2026-10-26:** código da `main` em `1182e6c` confrontado com as entregas 91/96/104. A navegação, os portões de páginas e as APIs já usam os mesmos direitos persistidos; não reaplicar a landing nem reconstruir a matriz. Nesta instância, instalação congelada, 594 unitários, lint, formato, tipos e build passaram. Revalidação com MySQL 9.7.2 e navegador em execução antes de declarar a tarefa concluída. Auditoria de dependências revelou 15 avisos novos, a serem tratados separadamente, sem alegar segurança aprovada.
+
+- **Resultado da validação:** nenhuma reconstrução de funcionalidade foi necessária. Reutilizadas as entregas 96/104; 594 unitários e 384 integrações aprovados, lint, formato, tipos e build aprovados. MySQL 9.7.2 real, saúde HTTP 200 com 46 migrações. QA dos três planos em 11 páginas, menus em 390/320, desktop 1440, bloqueio/reativação de Respiração com API 403/200, sete páginas administrativas e axe-core sem violações (28–30 regras). Capturas inspecionadas, matriz restaurada e contas temporárias excluídas. Limites e evidências em `docs/auditoria/2026-10-26-conferencia-de-pendencias.md`.
+- **Publicação das evidências:** commit `4536be69e8145d242f838da80b32b6b2b511905d`, confirmado como cabeça da `main` pelo GitHub conectado. Não houve criação de branch, worktree ou mudança do código funcional. A publicação foi feita pela API autenticada do GitHub; não se alega execução de `git push` pelo terminal, cuja autenticação não está disponível nesta instância.
 
 ### 108 · Corrigir orientações preexistentes de sono sem base individual
 
