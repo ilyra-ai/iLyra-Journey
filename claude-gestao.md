@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **82%** |
-| Tarefas totais     | 130                            |
+| Progresso          | `████████████████░░░░` **81%** |
+| Tarefas totais     | 131                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 21                             |
+| ⚪ A iniciar       | 22                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 130 ≈ 82%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 131 ≈ 81%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -309,6 +309,15 @@
 - **Escopo funcional:** permitir criar, editar, organizar, arquivar e excluir acompanhamentos com nome, escala, rótulos e frequência escolhidos pelo titular; registrar respostas datadas e consultar evolução. Manter compatibilidade das respostas antigas ao mudar uma escala, representar ausência corretamente e identificar avaliações como relatos pessoais, sem apresentá-las como medições clínicas. Integrar a seleção aos relatórios e à linha do tempo quando essas tarefas estiverem disponíveis.
 - **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
 - **Validação e entrega:** testar CRUD do acompanhamento e dos registros, escalas válidas, alteração de definição, datas, histórico, gráficos, dados ausentes, exportação, exclusão, limites do plano e isolamento por titular. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+### 131 · Linha do tempo pessoal unificada com filtros por assunto
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** escolher um dia e encontrar juntos registros, práticas, metas e acontecimentos pessoais, com filtros por assunto. Corresponde ao item 6 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar histórico de métricas, reflexões, práticas, metas e revisão semanal; a linha do tempo de períodos e janelas do dia não é um histórico unificado dessas atividades. Integrar acontecimentos da tarefa 120 conforme sua disponibilidade, sem inventar entradas.
+- **Escopo funcional:** apresentar eventos reais em ordem cronológica com data e horário corretos, origem identificada, filtros, período, paginação e acesso ao registro original. Respeitar limites do histórico, ocultar categorias indisponíveis e refletir edições e exclusões. Não duplicar registros ao agregar fontes nem expor conteúdo de conversas ou informações sensíveis desnecessariamente.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir ordenação e fuso, várias fontes no mesmo dia, filtros, paginação, datas sem registros, abertura da origem, atualizações, exclusões e recusa de dados de outras contas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
 
