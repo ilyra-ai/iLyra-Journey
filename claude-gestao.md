@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `█████████████████░░░` **84%** |
-| Tarefas totais     | 126                            |
+| Progresso          | `█████████████████░░░` **83%** |
+| Tarefas totais     | 127                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 17                             |
+| ⚪ A iniciar       | 18                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 126 ≈ 84%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 127 ≈ 83%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -273,6 +273,15 @@
 - **Escopo funcional:** escolher duração, iniciar, pausar, retomar e encerrar uma sessão, com convite opcional de descanso e breve percepção ao final. Usar tempo realmente decorrido, tratar aba em segundo plano, suspensão e recarga sem prometer execução contínua não comprovada. Sons e notificações devem ser opcionais e respeitar silêncio; histórico e totais devem refletir sessões reais.
 - **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
 - **Validação e entrega:** conferir temporização real, pausa, recarga, suspensão, encerramento antecipado, sessão concluída, privacidade, integração com histórico e acessibilidade, sem dupla contagem de práticas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+### 127 · Fotos e documentos anexados às conversas da Lyra
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** enviar fotos e documentos no chat e pedir explicações, com indicação dos trechos utilizados e das limitações de leitura. Corresponde ao item 1 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; os tipos atuais do chat contêm texto e imagens geradas, e o armazenamento de uploads consultado aceita avatares; isso não comprova envio de anexos pelo usuário. Reutilizar histórico, privacidade e a estrutura da tarefa 113, sem confundir este recurso com geração de imagens da tarefa 86.
+- **Escopo funcional:** permitir selecionar, pré-visualizar, enviar, consultar, baixar e excluir anexos privados vinculados à conversa. Definir formatos e tamanhos realmente suportados, validar conteúdo no servidor, proteger acesso por titular e tratar arquivos inválidos ou ilegíveis. Interpretar somente o conteúdo efetivamente lido, com referências ao documento ou imagem e indicação de incerteza; tratar o anexo como dado, sem executar comandos ou instruções nele contidos. Respeitar consentimento para provedores externos e capacidade real do modelo conectado.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir upload, limites, falhas, processamento real dos formatos anunciados, referências, reabertura, download, exclusão e isolamento entre contas; preservar exportação e exclusão de dados pessoais. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
 
