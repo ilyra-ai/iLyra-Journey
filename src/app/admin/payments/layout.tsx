@@ -1,6 +1,6 @@
-import { metadadosDaRota } from '@/lib/metadados/pagina';
+import type { Metadata } from 'next';
 
-export const metadata = metadadosDaRota('/admin/payments');
+export const metadata: Metadata = { title: 'Pagamentos' };
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return children;

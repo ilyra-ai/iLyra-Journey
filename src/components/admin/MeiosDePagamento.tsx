@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import type Stripe from 'stripe';
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group';
 import {
   CheckCircle2,
@@ -70,7 +71,18 @@ const EVENTOS_DO_WEBHOOK_STRIPE = [
   'customer.subscription.updated',
   'customer.subscription.deleted',
   'invoice.paid',
-];
+  'invoice.created',
+  'invoice.updated',
+  'invoice.deleted',
+  'invoice.finalized',
+  'invoice.voided',
+  'invoice.marked_uncollectible',
+  'invoice.sent',
+  'invoice.payment_failed',
+  'refund.created',
+  'refund.updated',
+  'refund.failed',
+] satisfies readonly Stripe.Event.Type[];
 
 const AMBIENTES: AmbienteDePagamento[] = ['test', 'live'];
 

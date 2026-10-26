@@ -160,3 +160,7 @@ As rotas `/api/admin/ui-config` e `/api/public/ui-config` foram removidas na tar
 ## Fiscal no dashboard (tarefa 101)
 
 A aba `/admin/dashboard?aba=fiscal` reutiliza `AdminFiscalRecordsContent` e a API fiscal de leitura existente, incluindo filtros por quitação, totais por moeda, paginação e exportação CSV. `/admin/fiscal` é uma rota de compatibilidade com redirecionamento do Next.js para a aba, protegida pela autorização administrativa global. A entrada anterior foi retirada da sidebar, menu móvel, busca e padrões; configurações antigas são filtradas na leitura sem modificar dados ou migrations. Não existe alteração/exclusão de registro fiscal. Acesso financeiro continua em Faturamento, com links para a mesma aba Fiscal.
+
+## Pagamentos no dashboard (tarefa 102)
+
+`/admin/dashboard?aba=pagamentos` reutiliza `MeiosDePagamento` e as mesmas APIs administrativas de credenciais, ambientes e teste. `/admin/payments` redireciona pelo Next.js para a aba; a entrada anterior não volta por configurações antigas. A lista de configuração do webhook inclui os eventos de faturas/cancelamentos/refunds usados pelo Faturamento, conferidos pelo tipo oficial `Stripe.Event.Type`. Isso orienta a configuração no provedor e não altera um webhook externo automaticamente. Nenhum segredo completo é devolvido; detalhes e validações em [abas-administrativas.md](./abas-administrativas.md).

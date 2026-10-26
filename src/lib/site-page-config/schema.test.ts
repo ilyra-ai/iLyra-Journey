@@ -59,6 +59,8 @@ describe('destino dos botões da landing', () => {
 });
 
 it.each([
+  '/admin/payments',
+  '/admin/payments/',
   '/admin/fiscal',
   '/admin/fiscal/',
   '/admin/puck',

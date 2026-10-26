@@ -1,4 +1,5 @@
 'use client';
+import { MeiosDePagamento } from './MeiosDePagamento';
 import { AdminFiscalRecordsContent } from './AdminFiscalRecordsContent';
 import { AdminBillingContent } from './AdminBillingContent';
 import * as React from 'react';
@@ -314,6 +315,11 @@ export function AdminDashboardContent() {
             chave: 'fiscal',
             nome: 'Fiscal',
             conteudo: <AdminFiscalRecordsContent />,
+          },
+          {
+            chave: 'pagamentos',
+            nome: 'Pagamentos',
+            conteudo: <MeiosDePagamento />,
           },
         ]}
       />
@@ -915,7 +921,7 @@ function VisaoGeral() {
                     texto: 'Conferir faturas efetivamente pagas e retidas',
                   },
                   {
-                    href: '/admin/payments',
+                    href: '/admin/dashboard?aba=pagamentos',
                     nome: 'Meios de pagamento',
                     texto: 'Configurar provedores e conferir suas conexões',
                   },

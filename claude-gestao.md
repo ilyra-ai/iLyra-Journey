@@ -21,12 +21,12 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **93%** |
+| Progresso          | `███████████████████░` **93%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 103                            |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 5                              |
+| ⚪ A iniciar       | 4                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
@@ -50,6 +50,15 @@
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
+
+### 102 · Transferir Pagamentos para a aba Pagamentos do dashboard
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
+- **Pedido do usuário:** transferir a página `http://localhost:3000/admin/payments` para uma nova aba **“Pagamentos”** no dashboard administrativo, igual ao padrão de abas solicitado na tarefa 100, e **remover o menu “Pagamentos” do sidebar**.
+- **Escopo e preservação:** conferir a página existente e integrar seus componentes e serviços reais ao dashboard, preservando todas as configurações, credenciais protegidas, provedores, testes de conexão e operações que já funcionam. Não duplicar configuração nem expor segredos na interface ou nos logs. Revisar sidebar desktop/mobile, busca e navegações persistidas e tratar explicitamente URLs e atalhos antigos sem criar versões divergentes da mesma função.
+- **Validação e entrega:** validar o CRUD real das configurações pela nova aba, leitura e persistência, uso pela cobrança, testes de conexão e erros dos provedores, controles administrativos e proteção das credenciais. Comprovar a ausência do item antigo nos menus com busca verificável, conferir integração com as outras abas, responsividade, acessibilidade e gates; commit e push próprios na main e registro de evidências.
+
+- **Início em 2026-10-26:** componente `MeiosDePagamento`, serviços cifrados e APIs existentes conferidos. Reutilizar na nova aba sem duplicar formulários ou configuração; tratar URL antiga, menus, busca e entradas persistidas. Testes de conexão oficiais continuam dependentes das credenciais, sem apresentar configuração salva como autorização externa comprovada.
 
 ### BLOQUEADAS
 
@@ -109,13 +118,6 @@
 ---
 
 ---
-
-### 102 · Transferir Pagamentos para a aba Pagamentos do dashboard
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** transferir a página `http://localhost:3000/admin/payments` para uma nova aba **“Pagamentos”** no dashboard administrativo, igual ao padrão de abas solicitado na tarefa 100, e **remover o menu “Pagamentos” do sidebar**.
-- **Escopo e preservação:** conferir a página existente e integrar seus componentes e serviços reais ao dashboard, preservando todas as configurações, credenciais protegidas, provedores, testes de conexão e operações que já funcionam. Não duplicar configuração nem expor segredos na interface ou nos logs. Revisar sidebar desktop/mobile, busca e navegações persistidas e tratar explicitamente URLs e atalhos antigos sem criar versões divergentes da mesma função.
-- **Validação e entrega:** validar o CRUD real das configurações pela nova aba, leitura e persistência, uso pela cobrança, testes de conexão e erros dos provedores, controles administrativos e proteção das credenciais. Comprovar a ausência do item antigo nos menus com busca verificável, conferir integração com as outras abas, responsividade, acessibilidade e gates; commit e push próprios na main e registro de evidências.
 
 ### 103 · Relatórios administrativos completos com KPIs e análise temporal
 

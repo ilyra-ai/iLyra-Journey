@@ -857,7 +857,9 @@ export function AdminBillingContent() {
                   </Button>
                 )}
                 <Button asChild variant="outline">
-                  <Link href="/admin/payments">Configurar pagamentos</Link>
+                  <Link href="/admin/dashboard?aba=pagamentos">
+                    Configurar pagamentos
+                  </Link>
                 </Button>
               </div>
               {progresso && (
