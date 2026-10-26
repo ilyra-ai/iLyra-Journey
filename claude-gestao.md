@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `███████████████████░` **93%** |
+| Progresso          | `███████████████████░` **94%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 103                            |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 104                            |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
 | ⚪ A iniciar       | 4                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (103 ÷ 111 ≈ 93%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (104 ÷ 111 ≈ 94%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -50,15 +50,6 @@
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 102 · Transferir Pagamentos para a aba Pagamentos do dashboard
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
-- **Pedido do usuário:** transferir a página `http://localhost:3000/admin/payments` para uma nova aba **“Pagamentos”** no dashboard administrativo, igual ao padrão de abas solicitado na tarefa 100, e **remover o menu “Pagamentos” do sidebar**.
-- **Escopo e preservação:** conferir a página existente e integrar seus componentes e serviços reais ao dashboard, preservando todas as configurações, credenciais protegidas, provedores, testes de conexão e operações que já funcionam. Não duplicar configuração nem expor segredos na interface ou nos logs. Revisar sidebar desktop/mobile, busca e navegações persistidas e tratar explicitamente URLs e atalhos antigos sem criar versões divergentes da mesma função.
-- **Validação e entrega:** validar o CRUD real das configurações pela nova aba, leitura e persistência, uso pela cobrança, testes de conexão e erros dos provedores, controles administrativos e proteção das credenciais. Comprovar a ausência do item antigo nos menus com busca verificável, conferir integração com as outras abas, responsividade, acessibilidade e gates; commit e push próprios na main e registro de evidências.
-
-- **Início em 2026-10-26:** componente `MeiosDePagamento`, serviços cifrados e APIs existentes conferidos. Reutilizar na nova aba sem duplicar formulários ou configuração; tratar URL antiga, menus, busca e entradas persistidas. Testes de conexão oficiais continuam dependentes das credenciais, sem apresentar configuração salva como autorização externa comprovada.
 
 ### BLOQUEADAS
 
@@ -1785,6 +1776,18 @@
 
 - **Entrega em 2026-10-26:** componente/API fiscais reutilizados integralmente na aba; URL anterior redireciona pelo Next.js, atalhos atualizados e entrada retirada de menus/defaults/busca, incluindo configurações históricas sem regravar banco. Imutabilidade e todos os registros preservados. 577 unitários, 378 integrações, formato, lint, tipos e build aprovados. QA em banco temporário migrado: 25 documentos sintéticos para paginação 20+5, filtro de seis e CSV correspondente, URL/recarga, troca de abas, falha de rede/recuperação, menus desktop/mobile, busca e personalização antiga preservada. 1440/390/320 sem overflow; axe 29 regras sem violações, sem exceções. Capturas inspecionadas, banco temporário removido e desenvolvimento sem fixtures fiscais. Relatório em `docs/abas-administrativas.md`; `/tmp/lyra101-*.log`.
 - **Publicação:** commit `170f45cefc1fc86d175a22afd464be881d4a2db3` · push `f691aad..170f45c main -> main`, confirmado por `git ls-remote`.
+
+### 102 · Transferir Pagamentos para a aba Pagamentos do dashboard
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22.
+- **Pedido do usuário:** transferir a página `http://localhost:3000/admin/payments` para uma nova aba **“Pagamentos”** no dashboard administrativo, igual ao padrão de abas solicitado na tarefa 100, e **remover o menu “Pagamentos” do sidebar**.
+- **Escopo e preservação:** conferir a página existente e integrar seus componentes e serviços reais ao dashboard, preservando todas as configurações, credenciais protegidas, provedores, testes de conexão e operações que já funcionam. Não duplicar configuração nem expor segredos na interface ou nos logs. Revisar sidebar desktop/mobile, busca e navegações persistidas e tratar explicitamente URLs e atalhos antigos sem criar versões divergentes da mesma função.
+- **Validação e entrega:** validar o CRUD real das configurações pela nova aba, leitura e persistência, uso pela cobrança, testes de conexão e erros dos provedores, controles administrativos e proteção das credenciais. Comprovar a ausência do item antigo nos menus com busca verificável, conferir integração com as outras abas, responsividade, acessibilidade e gates; commit e push próprios na main e registro de evidências.
+
+- **Início em 2026-10-26:** componente `MeiosDePagamento`, serviços cifrados e APIs existentes conferidos. Reutilizar na nova aba sem duplicar formulários ou configuração; tratar URL antiga, menus, busca e entradas persistidas. Testes de conexão oficiais continuam dependentes das credenciais, sem apresentar configuração salva como autorização externa comprovada.
+
+- **Entrega em 2026-10-26:** `MeiosDePagamento` e APIs existentes na aba; URL antiga redirecionada, atalhos atualizados e menus/defaults/busca sem entrada anterior, incluindo configurações persistidas. Credenciais/ambientes/preços/testes preservados; instrução do webhook ampliada para 16 eventos tipados da SDK usados pelo faturamento, sem alterar configuração externa. 581 unitários, 378 integrações MySQL, formato, lint, tipos e build aprovados. QA produção em banco temporário confirmou três provedores, CRUD de dado de webhook cifrado, valor completo ausente da resposta, recarga, formato inválido, rascunho entre abas, desativação, remoção em duas etapas, produção sem chave recusada 409 e falha/retentativa. Menus desktop/mobile e busca conferidos; visitante 401/paciente 403. 1440/390/320 sem overflow, axe 29 regras sem violações e nenhuma exceção. Capturas inspecionadas e banco temporário removido. Nenhuma cobrança ou conexão externa simulada; fronteira oficial com chaves reais preservada na tarefa 100. Relatório `docs/abas-administrativas.md`, evidências `/tmp/lyra102-*.log`.
+- **Publicação:** commit `06419b4e3c56392aed81429324876508f69022ee` · push `de8d14b..06419b4 main -> main`, confirmado por `git ls-remote`.
 
 ### 104 · Edição dos próprios dados para usuários de todos os planos
 
