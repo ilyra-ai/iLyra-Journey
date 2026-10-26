@@ -22,15 +22,15 @@
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
 | Progresso          | `██████████████████░░` **91%** |
-| Tarefas totais     | 116                            |
+| Tarefas totais     | 117                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 7                              |
+| ⚪ A iniciar       | 8                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 116 ≈ 91%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 117 ≈ 91%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -183,6 +183,15 @@
 - **Remoção do conteúdo técnico:** retirar do README referências a linguagens, frameworks, versões, stack, arquitetura, estrutura de pastas, dependências, comandos, código, infraestrutura, banco de dados, testes e explicações de instalação ou configuração. Remover seções, tabelas, badges e links cuja finalidade seja técnica. Preservar a documentação operacional necessária nos arquivos técnicos apropriados, sem recolocar os detalhes técnicos ou os passos de instalação no README voltado ao usuário.
 - **Fidelidade e apresentação:** manter o nome, o logo e a identidade visual oficial do app, os diferenciais reais e informações essenciais de privacidade e limites de bem-estar em linguagem breve e compreensível. Evitar jargões e títulos excessivos, blocos longos, conteúdo decorativo que atrapalhe a leitura ou mensagens que confundam autoconhecimento com diagnóstico. O arquivo deve funcionar como apresentação do produto para o usuário, sem exigir conhecimento de tecnologia.
 - **Validação e entrega:** conferir cada funcionalidade e benefício descrito contra o app real, revisar clareza, concisão, pt-BR, emoticons, links e renderização Markdown no desktop e celular. Comprovar a retirada do conteúdo técnico, de instalação e de configuração, sem apagar a documentação operacional do projeto ou inventar funcionalidades. Executar as verificações documentais pertinentes, revisar diff e status, publicar commit e push próprios na `main`, sem branches ou worktrees, e atualizar o painel com SHA e evidências reais. Este registro não representa reescrita iniciada ou concluída.
+
+### 117 · Lembretes personalizados com adiamento e período de silêncio
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** permitir escolher os horários e dias para check-in, respiração e hábitos, adiar um lembrete e definir um período de silêncio.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reaproveitar o sino de notificações, o agendador diário e os lembretes ICS existentes. Eles não constituem uma central de lembretes pessoais configuráveis; não recriar calendário nem notificações já entregues.
+- **Escopo funcional:** criar, consultar, editar, ativar, desativar e excluir lembretes por titular; configurar recorrência, fuso horário, adiamento, dias e silêncio. Definir e explicar os canais realmente suportados, permissões e limites de entrega com o app fechado; não prometer push sem infraestrutura e comprovação. Evitar duplicações e respeitar descanso e preferência de contato.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir persistência, recorrência, mudança de fuso, horário de verão quando aplicável, silêncio, adiamento, exclusão e entrega real em cada canal anunciado, com recusas de acesso entre contas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
 
