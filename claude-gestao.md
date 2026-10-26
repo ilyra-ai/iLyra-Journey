@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `█████████████████░░░` **86%** |
-| Tarefas totais     | 123                            |
+| Progresso          | `█████████████████░░░` **85%** |
+| Tarefas totais     | 124                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 14                             |
+| ⚪ A iniciar       | 15                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 123 ≈ 86%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 124 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -246,6 +246,15 @@
 - **Escopo funcional:** ativar e encerrar uma pausa com período opcional, explicar seus efeitos sobre lembretes e metas e oferecer retomada gradual escolhida pelo usuário. Preservar histórico e medições, distinguir dias pausados de metas cumpridas e não fabricar sequências ou resultados. Não interpretar o modo como pausa da assinatura comercial.
 - **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
 - **Validação e entrega:** testar início e fim programados e manuais, alteração do período, notificações, metas, sequências, recarga e retorno, sem apagar dados ou alterar cobrança do plano. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+### 124 · Check-in e reflexão sem internet com sincronização transparente
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** registrar o dia e escrever uma reflexão mesmo sem internet, com indicação clara de pendências e sincronização posterior.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar os formulários, APIs e manifesto do aplicativo já existentes; ter ícone instalável não comprova operação offline. Conferir primeiro armazenamento, autenticação e conflitos das gravações atuais.
+- **Escopo funcional:** definir o conteúdo disponível offline, salvar os registros pendentes com proteção adequada a dados sensíveis e sincronizar com idempotência quando houver conexão e sessão válida. Mostrar salvo no dispositivo, aguardando envio, conflito e sincronizado; resolver alterações concorrentes sem sobrescrever silenciosamente. Isolar contas e tratar logout, exclusão, limites de armazenamento e falha do dispositivo. Não prometer IA em nuvem offline.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar desconexão e reconexão reais, fechamento e reabertura, envio duplicado, conflito, sessão expirada, troca de conta e limpeza de dados, com consistência confirmada no servidor. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
 
