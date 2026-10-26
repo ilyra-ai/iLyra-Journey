@@ -24,9 +24,9 @@
 | Progresso          | `████████████████░░░░` **80%** |
 | Tarefas totais     | 133                            |
 | 🟢 Finalizadas     | 106                            |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 2                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 24                             |
+| ⚪ A iniciar       | 22                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
@@ -47,11 +47,33 @@
 
 ---
 
-**Ponto de parada em 2026-10-26:** tarefa 105 comprovada e documentada sobre a implementação existente, sem reaplicar arquivos antigos. Próxima ação: conferência prévia e correção dos avisos da 112; depois 106 (menu comercial Planos) e 107 (plano junto ao logo), sempre verificar primeiro o código atual. Tarefas 86, 90 e 100 mantidas bloqueadas pelas fronteiras externas já registradas.
+**Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
+
+**Ponto de parada em 2026-10-26:** retomada das tarefas não bloqueadas em ordem numérica. 106 e 107 em execução conjunta, pois menu, tela comercial e indicador do plano compartilham navegação e jornada de upgrade; depois 112. Bloqueadas 86, 90 e 100 fora do escopo desta retomada.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
+
+### 106 · Menu Planos para compra e upgrade dos usuários
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
+- **Pedido do usuário:** criar o menu **“Planos”** no sidebar para todos os planos e perfis não administrativos, permitindo comprar e fazer upgrade do próprio plano. O administrador não deve receber esse menu comercial, pois utiliza a gestão administrativa dos planos e usuários para realizar os upgrades correspondentes.
+- **Implementação:** inspecionar e reaproveitar a jornada comercial e os serviços de cobrança existentes antes de criar outra página. Oferecer comparação e seleção dos planos comercializáveis, identificação do plano atual e compra ou upgrade reais da própria conta, respeitando elegibilidade, estados da assinatura e provedores efetivamente configurados. Não oferecer o plano Administrador para compra nem confundir assinatura comercial com papel administrativo. Preservar a gestão administrativa de planos e usuários, incluindo seus fluxos autorizados de alteração de plano.
+- **Qualidade e validação:** pesquisar referências oficiais atuais antes dos ajustes visuais e seguir o Lyra Clean claro, acessível e responsivo. Conferir sidebar desktop/mobile, presença para usuários comuns, ausência para administradores, autorização no servidor, prevenção de alteração de outra conta e sincronização do plano após confirmação real do pagamento. Validar falhas e indisponibilidade de cobrança sem simular transações; executar testes e gates, publicar commit e push próprios na main e registrar evidências.
+
+**Registro adicional de 2026-10-22:** tarefas 104–106 registradas; a implementação ainda não foi concluída. A tarefa 104 registra o bloqueio de perfil informado imediatamente antes das novas solicitações 105 e 106.
+
+- **Retomada em 2026-10-26:** conferência prévia confirmou os serviços comerciais e a identificação de plano existentes, mas não encontrou o menu comercial nem o indicador clicável junto ao logo. Executar em conjunto com a tarefa 107 para reutilizar a mesma jornada. Nenhuma transação externa será alegada sem prova real.
+
+### 107 · Identificação do plano ao lado do logo na área autenticada
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
+- **Pedido do usuário:** após o acesso ao app, mostrar ao lado direito do logo Lyra MetaCare indicado no anexo uma identificação do tipo de plano do usuário, por texto, ícone ou emoji.
+- **Implementação:** inspecionar o componente compartilhado do logo e a fonte real da assinatura; apresentar o nome do plano vigente com tratamento visual coerente com o Lyra Clean. Caso seja utilizado ícone ou emoji, manter identificação textual acessível e inequívoca. Contemplar Free, Meta, Care e o plano Administrador quando implementado, sem inferir assinatura comercial apenas pelo papel da conta e sem exibir um plano fictício durante carregamento ou falha.
+- **Acesso ao upgrade (complemento de 2026-10-26):** ao clicar no ícone do plano exibido ao lado do logo, abrir a tela de upgrade de planos para o usuário conhecer as opções disponíveis e fazer upgrade para um plano melhor. Reutilizar a jornada comercial da tarefa 106 e preservar a separação entre usuários comuns e gestão administrativa. Validar clique, acesso por teclado e abertura da tela em desktop e mobile. Este acréscimo registra o requisito e não declara a funcionalidade implementada.
+- **Validação e entrega:** pesquisar referências atuais antes do ajuste visual; conferir desktop, mobile e estados expandido e recolhido do sidebar, sem cortar o logo ou prejudicar a navegação. Comprovar identificação correta em contas de planos diferentes e atualização após alteração ou upgrade confirmado, inclusive recarga e nova sessão. Executar testes pertinentes e gates, publicar commit e push próprios na main e registrar evidências neste painel. Este registro não representa implementação concluída.
+- **Retomada em 2026-10-26:** conferência prévia confirmou os serviços comerciais e a identificação de plano existentes, mas não encontrou o menu comercial nem o indicador clicável junto ao logo. Executar em conjunto com a tarefa 106 para reutilizar a mesma jornada. Nenhuma transação externa será alegada sem prova real.
 
 ### BLOQUEADAS
 
@@ -113,23 +135,6 @@
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 106 · Menu Planos para compra e upgrade dos usuários
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** criar o menu **“Planos”** no sidebar para todos os planos e perfis não administrativos, permitindo comprar e fazer upgrade do próprio plano. O administrador não deve receber esse menu comercial, pois utiliza a gestão administrativa dos planos e usuários para realizar os upgrades correspondentes.
-- **Implementação:** inspecionar e reaproveitar a jornada comercial e os serviços de cobrança existentes antes de criar outra página. Oferecer comparação e seleção dos planos comercializáveis, identificação do plano atual e compra ou upgrade reais da própria conta, respeitando elegibilidade, estados da assinatura e provedores efetivamente configurados. Não oferecer o plano Administrador para compra nem confundir assinatura comercial com papel administrativo. Preservar a gestão administrativa de planos e usuários, incluindo seus fluxos autorizados de alteração de plano.
-- **Qualidade e validação:** pesquisar referências oficiais atuais antes dos ajustes visuais e seguir o Lyra Clean claro, acessível e responsivo. Conferir sidebar desktop/mobile, presença para usuários comuns, ausência para administradores, autorização no servidor, prevenção de alteração de outra conta e sincronização do plano após confirmação real do pagamento. Validar falhas e indisponibilidade de cobrança sem simular transações; executar testes e gates, publicar commit e push próprios na main e registrar evidências.
-
-**Registro adicional de 2026-10-22:** tarefas 104–106 registradas; a implementação ainda não foi concluída. A tarefa 104 registra o bloqueio de perfil informado imediatamente antes das novas solicitações 105 e 106.
-
-### 107 · Identificação do plano ao lado do logo na área autenticada
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** após o acesso ao app, mostrar ao lado direito do logo Lyra MetaCare indicado no anexo uma identificação do tipo de plano do usuário, por texto, ícone ou emoji.
-- **Implementação:** inspecionar o componente compartilhado do logo e a fonte real da assinatura; apresentar o nome do plano vigente com tratamento visual coerente com o Lyra Clean. Caso seja utilizado ícone ou emoji, manter identificação textual acessível e inequívoca. Contemplar Free, Meta, Care e o plano Administrador quando implementado, sem inferir assinatura comercial apenas pelo papel da conta e sem exibir um plano fictício durante carregamento ou falha.
-- **Acesso ao upgrade (complemento de 2026-10-26):** ao clicar no ícone do plano exibido ao lado do logo, abrir a tela de upgrade de planos para o usuário conhecer as opções disponíveis e fazer upgrade para um plano melhor. Reutilizar a jornada comercial da tarefa 106 e preservar a separação entre usuários comuns e gestão administrativa. Validar clique, acesso por teclado e abertura da tela em desktop e mobile. Este acréscimo registra o requisito e não declara a funcionalidade implementada.
-- **Validação e entrega:** pesquisar referências atuais antes do ajuste visual; conferir desktop, mobile e estados expandido e recolhido do sidebar, sem cortar o logo ou prejudicar a navegação. Comprovar identificação correta em contas de planos diferentes e atualização após alteração ou upgrade confirmado, inclusive recarga e nova sessão. Executar testes pertinentes e gates, publicar commit e push próprios na main e registrar evidências neste painel. Este registro não representa implementação concluída.
 
 ### 112 · Corrigir avisos novos na auditoria de dependências de 26/10/2026
 
