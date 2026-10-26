@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **92%** |
-| Tarefas totais     | 115                            |
+| Progresso          | `██████████████████░░` **91%** |
+| Tarefas totais     | 116                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 6                              |
+| ⚪ A iniciar       | 7                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 115 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 116 ≈ 91%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -173,6 +173,16 @@
 - **Personalização e permissões:** respeitar identidade e forma de tratamento da Lyra, contexto real, preferências do titular, recursos do plano e separação de dados entre contas. Preservar o modo privado, consentimentos e restrições de envio a provedores em nuvem; não ampliar permissões ou transmitir dados sensíveis para cumprir o preenchimento. Conferir modelo ausente, incompatível ou indisponível e limites excedidos sem simular geração externa, alterar silenciosamente a ordem dos modelos ou esconder falhas.
 - **Integração com as novas interfaces:** manter a mesma informação e linguagem no resumo principal e nas abas da tarefa 114, usando componentes do chat e dos painéis da tarefa 113 quando disponíveis. Campos técnicos, prompts e detalhes de configuração não devem vazar para os textos destinados ao usuário. Preservar histórico, datas, unidades e rastreabilidade, indicando atualização ou indisponibilidade de forma compreensível; não criar listas de dados paralelas que divirjam das APIs e do banco.
 - **Validação e entrega:** comprovar a cobertura de todos os itens inventariados, gatilhos automáticos, chamada real ao modelo conectado, gravação e leitura coerentes no MySQL, atualização após novos dados, recarga e novo login. Conferir ausência de termos técnicos e referências a Lua e planetas nas descrições para leigos, preservação dos cálculos, dados medidos e registros sem informação, sem inferências clínicas indevidas. Testar falhas, retentativas, concorrência, cotas, privacidade, planos e isolamento entre contas, com QA do resumo e de todas as abas em desktop e mobile. Executar testes, integrações, gates e revisão do diff, publicar commit e push próprios na `main`, sem branches ou worktrees, e atualizar o painel com SHA e evidências reais. Se faltar provedor ou credencial indispensável para a prova externa, registrar precisamente a fronteira pendente. Este registro não representa implementação iniciada ou concluída.
+
+### 116 · README simples, objetivo e acolhedor para o usuário entender o app
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a reescrita.
+- **Pedido do usuário:** atualizar o `README.md` para ser o mais simples, objetivo, assertivo e rápido de ler, contendo emoticons e gatilhos emocionais. Retirar todas as referências técnicas e explicações de instalação e configuração. O objetivo é que uma pessoa leia o README e entenda o que o app faz.
+- **Conferência prévia obrigatória:** ler o README atual e confrontar a apresentação com as funcionalidades realmente implementadas e disponíveis. Reaproveitar os textos e diferenciais pertinentes, retirando conteúdo repetido, desatualizado ou sem utilidade para o usuário. Não apresentar tarefas pendentes, integrações não validadas ou a prévia de uma interface como recursos já entregues.
+- **Conteúdo e linguagem:** apresentar em pt-BR acessível o propósito da Lyra MetaCare, para quem ela é, o que a pessoa pode fazer e quais benefícios concretos encontra no uso diário. Usar frases curtas, organização fácil de percorrer, emoticons pertinentes e apelos emocionais de acolhimento, curiosidade e motivação, com naturalidade e sem exageros, promessas de resultado garantido ou afirmações sem sustentação. Priorizar clareza e entendimento imediato para leigos.
+- **Remoção do conteúdo técnico:** retirar do README referências a linguagens, frameworks, versões, stack, arquitetura, estrutura de pastas, dependências, comandos, código, infraestrutura, banco de dados, testes e explicações de instalação ou configuração. Remover seções, tabelas, badges e links cuja finalidade seja técnica. Preservar a documentação operacional necessária nos arquivos técnicos apropriados, sem recolocar os detalhes técnicos ou os passos de instalação no README voltado ao usuário.
+- **Fidelidade e apresentação:** manter o nome, o logo e a identidade visual oficial do app, os diferenciais reais e informações essenciais de privacidade e limites de bem-estar em linguagem breve e compreensível. Evitar jargões e títulos excessivos, blocos longos, conteúdo decorativo que atrapalhe a leitura ou mensagens que confundam autoconhecimento com diagnóstico. O arquivo deve funcionar como apresentação do produto para o usuário, sem exigir conhecimento de tecnologia.
+- **Validação e entrega:** conferir cada funcionalidade e benefício descrito contra o app real, revisar clareza, concisão, pt-BR, emoticons, links e renderização Markdown no desktop e celular. Comprovar a retirada do conteúdo técnico, de instalação e de configuração, sem apagar a documentação operacional do projeto ou inventar funcionalidades. Executar as verificações documentais pertinentes, revisar diff e status, publicar commit e push próprios na `main`, sem branches ou worktrees, e atualizar o painel com SHA e evidências reais. Este registro não representa reescrita iniciada ou concluída.
 
 ---
 
