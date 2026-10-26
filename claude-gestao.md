@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **89%** |
-| Tarefas totais     | 119                            |
+| Progresso          | `██████████████████░░` **88%** |
+| Tarefas totais     | 120                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 10                             |
+| ⚪ A iniciar       | 11                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 119 ≈ 89%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 120 ≈ 88%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -210,6 +210,15 @@
 - **Escopo funcional:** permitir criar, editar, ordenar, iniciar, pausar, retomar e excluir rotinas e seus passos, com duração opcional e frequência. Oferecer sugestões pertinentes sem impor atividades e permitir pular um passo. Integrar práticas existentes e apresentar conclusão e progresso verdadeiros, com regras claras para contagem em metas.
 - **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
 - **Validação e entrega:** testar CRUD, ordenação, execução parcial, recarga, retomada, passos pulados, concorrência e integração sem dupla contagem, em celular e desktop. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+### 120 · Acontecimentos pessoais e descoberta de associações nos registros
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** marcar acontecimentos como viagem, café tarde ou dia estressante e explorar possíveis associações com sono e disposição.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reaproveitar métricas, hábitos, reflexões e histórico; os marcadores administrativos de contas não são acontecimentos do cotidiano registrados pelo próprio usuário.
+- **Escopo funcional:** permitir cadastrar e editar marcadores e acontecimentos datados, com notas opcionais, e visualizar sua relação temporal com métricas reais. Exigir quantidade e qualidade adequadas de dados antes de exibir associações; explicar período, amostra e ausência de evidência em linguagem simples. Não confundir correlação com causa, usar astrologia como medição ou inventar conclusões.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar CRUD, datas e fusos, ausência e insuficiência de dados, resultados contraditórios, cálculo reproduzível, rastreabilidade e isolamento por titular; conferir gráficos e alternativas textuais acessíveis. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
 
