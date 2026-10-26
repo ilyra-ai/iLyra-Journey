@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `███████████████████░` **93%** |
-| Tarefas totais     | 114                            |
+| Progresso          | `██████████████████░░` **92%** |
+| Tarefas totais     | 115                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 5                              |
+| ⚪ A iniciar       | 6                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 114 ≈ 93%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 115 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -161,6 +161,18 @@
 - **Design e acessibilidade:** pesquisar referências oficiais atuais antes de implementar e seguir o Lyra Clean claro, o logo e os tokens existentes, com qualidade premium, leitura rápida e responsividade. Conferir abas no desktop e celular, navegação por teclado e leitor de tela, foco, contraste, zoom, rolagem e nomes acessíveis; não esconder métricas por cortes ou estouro horizontal.
 - **Dados e integração:** usar exclusivamente dados reais, autorizados e do próprio titular, preservando períodos, unidades, origem e estados sem registro. Respeitar os recursos do plano na visão resumida, em cada aba e nas APIs; abas não devem conceder permissões apenas por estarem visíveis. Coordenar os textos e o preenchimento automático com a tarefa 115 e reaproveitar os componentes visuais da tarefa 113 quando disponíveis, sem depender de funcionalidades ainda não implementadas.
 - **Validação e entrega:** validar a seleção do resumo, a cobertura de todas as métricas nas abas, alternância, filtros, ações e CRUD aplicável, atualização dos dados, persistência, recarga, novo login, falhas e isolamento entre contas. Conferir os planos Free, Meta, Care e acesso administrativo, em 320, 390, 768 e 1440 px, comparando fontes com as APIs e MySQL reais. Executar QA no navegador e gates pertinentes, revisar o diff e publicar commit e push próprios na `main`, sem branches ou worktrees, seguidos da atualização do painel com SHA e evidências reais. Este registro não representa implementação iniciada ou concluída.
+
+### 115 · Preenchimento automático das métricas e leituras por IA com linguagem natural para leigos
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** o modelo de IA deve preencher automaticamente todas as métricas e apresentar descrições naturais, objetivas e compreensíveis para uma pessoa leiga. Não trazer termos técnicos da leitura do mapa nem citar Lua, planetas e outras informações astrológicas que o usuário não entende nas descrições exibidas.
+- **Conferência prévia e cobertura integral:** inspecionar primeiro a implementação atual e inventariar todas as métricas, indicadores, cartões, leituras, cálculos, textos, fontes de dados e rotinas de atualização, sem limitar a análise ao recorte visível do painel. Reaproveitar a geração já existente e as entregas de linguagem simples, identidade e correção de inferências das tarefas 49, 50, 55, 56, 82, 108 e 109. Mapear para cada item a origem real, quem o preenche, quando é atualizado, o papel do modelo e a apresentação em cada aba da tarefa 114.
+- **Preenchimento automático real:** integrar o modelo de IA efetivamente conectado ao fluxo de preparação e atualização do painel e das suas abas, usando dados autorizados do titular e resultados dos cálculos existentes. Definir os gatilhos reais de atualização conforme a arquitetura do app, evitando que o usuário precise pedir manualmente o preenchimento de cada item. Validar saídas estruturadas, cobertura de todos os campos aplicáveis, persistência, atualização coerente e retentativa, com controle de concorrência, idempotência, limites de uso e invalidação de conteúdo antigo quando os dados mudarem. Não afirmar que houve chamada a um modelo conectado quando a resposta veio apenas do motor local.
+- **Integridade das métricas:** para cada campo, distinguir valor medido, resultado calculado e descrição interpretativa. Medições dependentes de sensor, exame, integração ou informação do titular só podem ser preenchidas quando a fonte real existir; não substituir ausência por zero nem inventar valores para completar todos os cartões. A IA não deve sobrescrever medições originais com texto ou números gerados. Quando faltarem dados ou conexão, apresentar a condição e orientar o próximo passo em linguagem simples, preservando registros existentes. Interpretações do mapa não comprovam medições fisiológicas, estado de saúde, causalidade ou diagnóstico; manter os limites já corrigidos no projeto.
+- **Linguagem de apresentação:** reescrever descrições, resumos, explicações, dicas e próximos passos em pt-BR natural, breve e objetivo, com significado prático para o dia da pessoa e sem depender de conhecimento técnico. Não mencionar Lua, planetas, signos, casas, nakshatras, dashas, sânscrito ou jargões da leitura do mapa nas descrições destinadas ao leigo. Preservar internamente os cálculos e fundamentos pertinentes e a transparência sobre a natureza interpretativa da leitura, sem apresentar simbolismo como evidência clínica nem apenas apagar termos e deixar frases sem sentido. Explicar unidades e conceitos indispensáveis com palavras comuns, evitando textos genéricos repetidos, contradições, números trocados ou promessas sem sustentação.
+- **Personalização e permissões:** respeitar identidade e forma de tratamento da Lyra, contexto real, preferências do titular, recursos do plano e separação de dados entre contas. Preservar o modo privado, consentimentos e restrições de envio a provedores em nuvem; não ampliar permissões ou transmitir dados sensíveis para cumprir o preenchimento. Conferir modelo ausente, incompatível ou indisponível e limites excedidos sem simular geração externa, alterar silenciosamente a ordem dos modelos ou esconder falhas.
+- **Integração com as novas interfaces:** manter a mesma informação e linguagem no resumo principal e nas abas da tarefa 114, usando componentes do chat e dos painéis da tarefa 113 quando disponíveis. Campos técnicos, prompts e detalhes de configuração não devem vazar para os textos destinados ao usuário. Preservar histórico, datas, unidades e rastreabilidade, indicando atualização ou indisponibilidade de forma compreensível; não criar listas de dados paralelas que divirjam das APIs e do banco.
+- **Validação e entrega:** comprovar a cobertura de todos os itens inventariados, gatilhos automáticos, chamada real ao modelo conectado, gravação e leitura coerentes no MySQL, atualização após novos dados, recarga e novo login. Conferir ausência de termos técnicos e referências a Lua e planetas nas descrições para leigos, preservação dos cálculos, dados medidos e registros sem informação, sem inferências clínicas indevidas. Testar falhas, retentativas, concorrência, cotas, privacidade, planos e isolamento entre contas, com QA do resumo e de todas as abas em desktop e mobile. Executar testes, integrações, gates e revisão do diff, publicar commit e push próprios na `main`, sem branches ou worktrees, e atualizar o painel com SHA e evidências reais. Se faltar provedor ou credencial indispensável para a prova externa, registrar precisamente a fronteira pendente. Este registro não representa implementação iniciada ou concluída.
 
 ---
 
