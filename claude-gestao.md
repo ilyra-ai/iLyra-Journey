@@ -24,9 +24,9 @@
 | Progresso          | `███████████████████░` **94%** |
 | Tarefas totais     | 111                            |
 | 🟢 Finalizadas     | 104                            |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 4                              |
+| ⚪ A iniciar       | 3                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
@@ -50,6 +50,15 @@
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
+
+### 103 · Relatórios administrativos completos com KPIs e análise temporal
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
+- **Pedido do usuário:** a página `http://localhost:3000/admin/reports` está muito pobre; acrescentar mais métricas e KPIs, linha temporal e gestão. Pesquisar na internet de forma profunda e exaustiva todas as possibilidades que permitam ao administrador gerir o app por completo, na íntegra e em sua totalidade, com referências e tendências de 2026.
+- **Investigação e implementação:** inventariar relatórios, dados e necessidades administrativas reais, pesquisar fontes oficiais atuais e registrar possibilidades, seleção justificada e definições verificáveis dos indicadores. Implementar consultas, filtros, períodos, comparações, evolução temporal, detalhamento e exportações pertinentes, reaproveitando as fontes do dashboard e do faturamento para impedir totais divergentes. Diferenciar a consulta analítica da visão geral e das operações transacionais, mantendo acesso claro aos detalhes e ações disponíveis.
+- **Qualidade e validação:** cada métrica deve ter fonte, fórmula, período e unidade conferíveis; não usar números fixos, gráficos simulados, placeholders ou cortes de código para aparentar completude. Validar consistência com banco e demais páginas, limites de datas e fusos, filtros combinados, exportações, estados vazios, falhas, autorização e privacidade, desempenho, acessibilidade e mobile/desktop. Executar CRUD aplicável, testes e gates, publicar commit e push próprios na main e atualizar este painel com evidências reais.
+
+- **Início em 2026-10-26:** inventário encontrou somente exportação genérica de perfis. Reutilizar consultas/definições dos 14 domínios do dashboard e fontes financeiras da tarefa 100; criar análise comparativa por período/plano ou ambiente/moeda, séries, detalhes paginados e exportações CSV/JSON verificáveis. Preservar a exportação administrativa de identificação, sem copiar dados clínicos ou inferir receita a partir de preços. Pesquisa e possibilidades em relatório próprio antes da interface.
 
 ### BLOQUEADAS
 
@@ -109,13 +118,6 @@
 ---
 
 ---
-
-### 103 · Relatórios administrativos completos com KPIs e análise temporal
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-22.
-- **Pedido do usuário:** a página `http://localhost:3000/admin/reports` está muito pobre; acrescentar mais métricas e KPIs, linha temporal e gestão. Pesquisar na internet de forma profunda e exaustiva todas as possibilidades que permitam ao administrador gerir o app por completo, na íntegra e em sua totalidade, com referências e tendências de 2026.
-- **Investigação e implementação:** inventariar relatórios, dados e necessidades administrativas reais, pesquisar fontes oficiais atuais e registrar possibilidades, seleção justificada e definições verificáveis dos indicadores. Implementar consultas, filtros, períodos, comparações, evolução temporal, detalhamento e exportações pertinentes, reaproveitando as fontes do dashboard e do faturamento para impedir totais divergentes. Diferenciar a consulta analítica da visão geral e das operações transacionais, mantendo acesso claro aos detalhes e ações disponíveis.
-- **Qualidade e validação:** cada métrica deve ter fonte, fórmula, período e unidade conferíveis; não usar números fixos, gráficos simulados, placeholders ou cortes de código para aparentar completude. Validar consistência com banco e demais páginas, limites de datas e fusos, filtros combinados, exportações, estados vazios, falhas, autorização e privacidade, desempenho, acessibilidade e mobile/desktop. Executar CRUD aplicável, testes e gates, publicar commit e push próprios na main e atualizar este painel com evidências reais.
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
 

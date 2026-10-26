@@ -27,7 +27,11 @@ function textoDoValor(valor: unknown): string {
 export function campoDoCsv(valor: unknown): string {
   let texto = textoDoValor(valor);
   // Números são dados, não fórmulas: "-3" continua número.
-  if (typeof valor !== 'number' && INICIO_DE_FORMULA.test(texto)) {
+  if (
+    typeof valor !== 'number' &&
+    typeof valor !== 'bigint' &&
+    INICIO_DE_FORMULA.test(texto)
+  ) {
     texto = `'${texto}`;
   }
   const precisaAspas =
