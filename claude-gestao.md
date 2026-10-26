@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `█████████████████░░░` **85%** |
-| Tarefas totais     | 125                            |
+| Progresso          | `█████████████████░░░` **84%** |
+| Tarefas totais     | 126                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 16                             |
+| ⚪ A iniciar       | 17                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 125 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 126 ≈ 84%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -264,6 +264,15 @@
 - **Escopo funcional:** oferecer orientação contextual sobre controles reais, com início opcional, avanço, voltar, pular e acesso posterior. Adaptar os passos ao plano e aos recursos disponíveis, sem bloquear tarefas ou usar dados de demonstração como se fossem pessoais. Explicar pedidos de informação e estados sem dados com linguagem acolhedora.
 - **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
 - **Validação e entrega:** testar primeira visita e retorno, retomada, dispensa, mudança de plano, elementos ausentes, navegação por teclado, leitor de tela, foco, zoom e celular, sem armadilhas nem cadastro duplicado. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+### 126 · Sessões de foco e pausa com temporizador e registro de percepção
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** iniciar um período de concentração com temporizador, receber uma pausa opcional e registrar como ficou ao terminar.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar componentes e acessibilidade da respiração guiada quando pertinentes. Foco e pausa devem complementar as práticas atuais, sem lançar automaticamente minutos de concentração como meditação.
+- **Escopo funcional:** escolher duração, iniciar, pausar, retomar e encerrar uma sessão, com convite opcional de descanso e breve percepção ao final. Usar tempo realmente decorrido, tratar aba em segundo plano, suspensão e recarga sem prometer execução contínua não comprovada. Sons e notificações devem ser opcionais e respeitar silêncio; histórico e totais devem refletir sessões reais.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir temporização real, pausa, recarga, suspensão, encerramento antecipado, sessão concluída, privacidade, integração com histórico e acessibilidade, sem dupla contagem de práticas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
 
