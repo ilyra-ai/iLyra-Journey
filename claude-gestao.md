@@ -22,15 +22,15 @@
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
 | Progresso          | `████████████████░░░░` **80%** |
-| Tarefas totais     | 132                            |
+| Tarefas totais     | 133                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 23                             |
+| ⚪ A iniciar       | 24                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 132 ≈ 80%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 133 ≈ 80%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -327,6 +327,15 @@
 - **Escopo funcional:** oferecer catálogo real de práticas em pt-BR, filtros por duração e finalidade, detalhes, narração, transcrição e controles de reprodução. Usar conteúdo próprio ou com direito de uso comprovado; não criar cards com mídia inexistente. Permitir retomar práticas e registrar apenas o tempo efetivamente realizado, com regras explícitas de integração às métricas e prevenção de dupla contagem.
 - **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
 - **Validação e entrega:** reproduzir os áudios reais, conferir transcrições, filtros, duração, pausa, retomada, interrupção, histórico, contagem, mídia indisponível, acessibilidade e direitos de uso do conteúdo. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+### 133 · Diário alimentar simples com registro por texto ou foto
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** registrar refeições por texto ou foto, horário e percepção pessoal, com estimativas identificadas e confirmáveis pelo usuário. Corresponde ao item 10 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar recomendações de alimentação e métricas existentes, distinguindo um diário de refeições de um plano alimentar ou total diário de proteína. Coordenar anexos com a tarefa 127 sem duplicar armazenamento ou consentimento.
+- **Escopo funcional:** permitir criar, consultar, editar e excluir refeições, lanches e bebidas com descrição, horário, foto opcional e percepção do titular. Caso exista interpretação da foto por modelo compatível, mostrar o que foi reconhecido para confirmação e correção; não declarar leitura por IA quando não ocorreu. Qualquer estimativa deve ter origem e limitações claras, sem tratar foto como pesagem ou inventar nutrientes. Integrar registros autorizados ao histórico e aos relatórios disponíveis.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir CRUD, datas e fusos, fotos, confirmação e correção de reconhecimento real quando oferecido, modelo ausente ou incompatível, estimativas, persistência, histórico, exportação, exclusão e privacidade. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
 
