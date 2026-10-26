@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **92%** |
+| Progresso          | `██████████████████░░` **93%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 102                            |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 103                            |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
 | ⚪ A iniciar       | 5                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (102 ÷ 111 ≈ 92%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (103 ÷ 111 ≈ 93%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -50,15 +50,6 @@
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 101 · Transferir Registros fiscais para a aba Fiscal do dashboard
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
-- **Pedido do usuário:** transferir a página `http://localhost:3000/admin/fiscal` para uma nova aba **“Fiscal”** no dashboard administrativo, com o mesmo padrão visual de abas solicitado na tarefa 100, e **remover o menu “Registros fiscais” do sidebar**.
-- **Escopo e preservação:** inventariar e reaproveitar os componentes, serviços, permissões e dados reais da página, preservando integralmente suas funções, consultas, filtros, detalhes, exportações e operações existentes. Integrar a aba ao dashboard, revisar sidebar desktop/mobile, busca e configurações de navegação antigas e definir explicitamente o tratamento das URLs e atalhos anteriores para evitar links quebrados ou uma página duplicada divergente.
-- **Validação e entrega:** comprovar acesso e operações reais pela aba, persistência, autorização administrativa e preservação dos registros, integração com Faturamento e ausência do item antigo nos menus. Executar busca com `rg` para provar a remoção das entradas operacionais, QA responsivo e acessível, testes e gates aplicáveis; commit e push próprios na main, com evidências neste painel.
-
-- **Início em 2026-10-26:** componente e API fiscais existentes conferidos: leitura imutável, filtros por quitação, totais por moeda, paginação e exportação. Reutilizar integralmente na nova aba, remover entrada operacional e tratar configurações antigas; URL anterior redirecionará para a aba. Nenhum registro fiscal será alterado.
 
 ### BLOQUEADAS
 
@@ -1780,6 +1771,18 @@
 - **Dados e privacidade:** intervalo UTC inclusivo de 1–366 dias, plano vigente, administradores excluídos da população, seleção única de assinatura e anomalias. Conclusão de perfil identificada como estado atual da coorte, sem inventar timestamp histórico. Chat efêmero e retenção/exclusões explicitados. Sem textos privados, valores clínicos, payloads ou segredos; zero denominador não vira percentual fictício. Migração 043 acrescenta índices temporais sem alterar migrations aplicadas. Definições, possibilidades avaliadas e pesquisa oficial em `docs/dashboard-administrativo.md`.
 - **Validação:** 554 unitários (70 arquivos), 350 integrações (41 arquivos), formatação, lint, tipos e build de produção aprovados. Novas suítes: 15 unitários e 14 integrações. MySQL real confirmou todas as fontes, limites UTC, agrupamentos DISTINCT, paginação, escolha de assinatura, privacidade e recusa administrativa. QA real de cadastro/onboarding/check-in, alteração de plano, bloqueio/exclusão, filtros, detalhes, recarga e falha de rede com retentativa. Atalhos HTTP 200; 1440/390/320 px sem overflow; gráfico visível e cartões mobile inspecionados. Axe 32–35 regras na página e 23–24 nos modais, zero violações e exceções JavaScript. Fixtures de turnos apenas para paginação, sem alegação de inferência externa; contas temporárias excluídas e base restaurada vazia. Dez consultas do recorte máximo em 25–40 ms na população pequena desta instância, sem alegar capacidade de carga maior. Evidências `/tmp/lyra99-*.log` e capturas.
 - **Publicação:** commit `23827172f352efcb056bbc50f2e5c2b2bc6c1af0` · push `bac9930..2382717 main -> main`, confirmado. Sem branch, worktree ou lote de tarefas.
+
+### 101 · Transferir Registros fiscais para a aba Fiscal do dashboard
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22.
+- **Pedido do usuário:** transferir a página `http://localhost:3000/admin/fiscal` para uma nova aba **“Fiscal”** no dashboard administrativo, com o mesmo padrão visual de abas solicitado na tarefa 100, e **remover o menu “Registros fiscais” do sidebar**.
+- **Escopo e preservação:** inventariar e reaproveitar os componentes, serviços, permissões e dados reais da página, preservando integralmente suas funções, consultas, filtros, detalhes, exportações e operações existentes. Integrar a aba ao dashboard, revisar sidebar desktop/mobile, busca e configurações de navegação antigas e definir explicitamente o tratamento das URLs e atalhos anteriores para evitar links quebrados ou uma página duplicada divergente.
+- **Validação e entrega:** comprovar acesso e operações reais pela aba, persistência, autorização administrativa e preservação dos registros, integração com Faturamento e ausência do item antigo nos menus. Executar busca com `rg` para provar a remoção das entradas operacionais, QA responsivo e acessível, testes e gates aplicáveis; commit e push próprios na main, com evidências neste painel.
+
+- **Início em 2026-10-26:** componente e API fiscais existentes conferidos: leitura imutável, filtros por quitação, totais por moeda, paginação e exportação. Reutilizar integralmente na nova aba, remover entrada operacional e tratar configurações antigas; URL anterior redirecionará para a aba. Nenhum registro fiscal será alterado.
+
+- **Entrega em 2026-10-26:** componente/API fiscais reutilizados integralmente na aba; URL anterior redireciona pelo Next.js, atalhos atualizados e entrada retirada de menus/defaults/busca, incluindo configurações históricas sem regravar banco. Imutabilidade e todos os registros preservados. 577 unitários, 378 integrações, formato, lint, tipos e build aprovados. QA em banco temporário migrado: 25 documentos sintéticos para paginação 20+5, filtro de seis e CSV correspondente, URL/recarga, troca de abas, falha de rede/recuperação, menus desktop/mobile, busca e personalização antiga preservada. 1440/390/320 sem overflow; axe 29 regras sem violações, sem exceções. Capturas inspecionadas, banco temporário removido e desenvolvimento sem fixtures fiscais. Relatório em `docs/abas-administrativas.md`; `/tmp/lyra101-*.log`.
+- **Publicação:** commit `170f45cefc1fc86d175a22afd464be881d4a2db3` · push `f691aad..170f45c main -> main`, confirmado por `git ls-remote`.
 
 ### 104 · Edição dos próprios dados para usuários de todos os planos
 
