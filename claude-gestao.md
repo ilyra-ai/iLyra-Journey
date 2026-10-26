@@ -22,15 +22,15 @@
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
 | Progresso          | `█████████████████░░░` **85%** |
-| Tarefas totais     | 124                            |
+| Tarefas totais     | 125                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 15                             |
+| ⚪ A iniciar       | 16                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 124 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 125 ≈ 85%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -255,6 +255,15 @@
 - **Escopo funcional:** definir o conteúdo disponível offline, salvar os registros pendentes com proteção adequada a dados sensíveis e sincronizar com idempotência quando houver conexão e sessão válida. Mostrar salvo no dispositivo, aguardando envio, conflito e sincronizado; resolver alterações concorrentes sem sobrescrever silenciosamente. Isolar contas e tratar logout, exclusão, limites de armazenamento e falha do dispositivo. Não prometer IA em nuvem offline.
 - **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
 - **Validação e entrega:** testar desconexão e reconexão reais, fechamento e reabertura, envio duplicado, conflito, sessão expirada, troca de conta e limpeza de dados, com consistência confirmada no servidor. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+### 125 · Primeiro uso acompanhado com apresentação curta e opcional
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** receber uma apresentação breve para registrar o dia, entender um resultado e conversar com a Lyra, podendo pular ou rever a ajuda.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; preservar o cadastro inicial de três etapas e as decisões já registradas sobre onboarding; a apresentação após o cadastro não deve voltar a exigir objetivos ou campos removidos por decisão do usuário.
+- **Escopo funcional:** oferecer orientação contextual sobre controles reais, com início opcional, avanço, voltar, pular e acesso posterior. Adaptar os passos ao plano e aos recursos disponíveis, sem bloquear tarefas ou usar dados de demonstração como se fossem pessoais. Explicar pedidos de informação e estados sem dados com linguagem acolhedora.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar primeira visita e retorno, retomada, dispensa, mudança de plano, elementos ausentes, navegação por teclado, leitor de tela, foco, zoom e celular, sem armadilhas nem cadastro duplicado. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
 
