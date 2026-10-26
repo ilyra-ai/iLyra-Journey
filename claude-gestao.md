@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `███████████████████░` **94%** |
+| Progresso          | `███████████████████░` **95%** |
 | Tarefas totais     | 111                            |
-| 🟢 Finalizadas     | 104                            |
-| 🔵 Em andamento    | 1                              |
+| 🟢 Finalizadas     | 105                            |
+| 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
 | ⚪ A iniciar       | 3                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (104 ÷ 111 ≈ 94%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (105 ÷ 111 ≈ 95%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -50,15 +50,6 @@
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 103 · Relatórios administrativos completos com KPIs e análise temporal
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
-- **Pedido do usuário:** a página `http://localhost:3000/admin/reports` está muito pobre; acrescentar mais métricas e KPIs, linha temporal e gestão. Pesquisar na internet de forma profunda e exaustiva todas as possibilidades que permitam ao administrador gerir o app por completo, na íntegra e em sua totalidade, com referências e tendências de 2026.
-- **Investigação e implementação:** inventariar relatórios, dados e necessidades administrativas reais, pesquisar fontes oficiais atuais e registrar possibilidades, seleção justificada e definições verificáveis dos indicadores. Implementar consultas, filtros, períodos, comparações, evolução temporal, detalhamento e exportações pertinentes, reaproveitando as fontes do dashboard e do faturamento para impedir totais divergentes. Diferenciar a consulta analítica da visão geral e das operações transacionais, mantendo acesso claro aos detalhes e ações disponíveis.
-- **Qualidade e validação:** cada métrica deve ter fonte, fórmula, período e unidade conferíveis; não usar números fixos, gráficos simulados, placeholders ou cortes de código para aparentar completude. Validar consistência com banco e demais páginas, limites de datas e fusos, filtros combinados, exportações, estados vazios, falhas, autorização e privacidade, desempenho, acessibilidade e mobile/desktop. Executar CRUD aplicável, testes e gates, publicar commit e push próprios na main e atualizar este painel com evidências reais.
-
-- **Início em 2026-10-26:** inventário encontrou somente exportação genérica de perfis. Reutilizar consultas/definições dos 14 domínios do dashboard e fontes financeiras da tarefa 100; criar análise comparativa por período/plano ou ambiente/moeda, séries, detalhes paginados e exportações CSV/JSON verificáveis. Preservar a exportação administrativa de identificação, sem copiar dados clínicos ou inferir receita a partir de preços. Pesquisa e possibilidades em relatório próprio antes da interface.
 
 ### BLOQUEADAS
 
@@ -1790,6 +1781,19 @@
 
 - **Entrega em 2026-10-26:** `MeiosDePagamento` e APIs existentes na aba; URL antiga redirecionada, atalhos atualizados e menus/defaults/busca sem entrada anterior, incluindo configurações persistidas. Credenciais/ambientes/preços/testes preservados; instrução do webhook ampliada para 16 eventos tipados da SDK usados pelo faturamento, sem alterar configuração externa. 581 unitários, 378 integrações MySQL, formato, lint, tipos e build aprovados. QA produção em banco temporário confirmou três provedores, CRUD de dado de webhook cifrado, valor completo ausente da resposta, recarga, formato inválido, rascunho entre abas, desativação, remoção em duas etapas, produção sem chave recusada 409 e falha/retentativa. Menus desktop/mobile e busca conferidos; visitante 401/paciente 403. 1440/390/320 sem overflow, axe 29 regras sem violações e nenhuma exceção. Capturas inspecionadas e banco temporário removido. Nenhuma cobrança ou conexão externa simulada; fronteira oficial com chaves reais preservada na tarefa 100. Relatório `docs/abas-administrativas.md`, evidências `/tmp/lyra102-*.log`.
 - **Publicação:** commit `06419b4e3c56392aed81429324876508f69022ee` · push `de8d14b..06419b4 main -> main`, confirmado por `git ls-remote`.
+
+### 103 · Relatórios administrativos completos com KPIs e análise temporal
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22.
+- **Pedido do usuário:** a página `http://localhost:3000/admin/reports` está muito pobre; acrescentar mais métricas e KPIs, linha temporal e gestão. Pesquisar na internet de forma profunda e exaustiva todas as possibilidades que permitam ao administrador gerir o app por completo, na íntegra e em sua totalidade, com referências e tendências de 2026.
+- **Investigação e implementação:** inventariar relatórios, dados e necessidades administrativas reais, pesquisar fontes oficiais atuais e registrar possibilidades, seleção justificada e definições verificáveis dos indicadores. Implementar consultas, filtros, períodos, comparações, evolução temporal, detalhamento e exportações pertinentes, reaproveitando as fontes do dashboard e do faturamento para impedir totais divergentes. Diferenciar a consulta analítica da visão geral e das operações transacionais, mantendo acesso claro aos detalhes e ações disponíveis.
+- **Qualidade e validação:** cada métrica deve ter fonte, fórmula, período e unidade conferíveis; não usar números fixos, gráficos simulados, placeholders ou cortes de código para aparentar completude. Validar consistência com banco e demais páginas, limites de datas e fusos, filtros combinados, exportações, estados vazios, falhas, autorização e privacidade, desempenho, acessibilidade e mobile/desktop. Executar CRUD aplicável, testes e gates, publicar commit e push próprios na main e atualizar este painel com evidências reais.
+
+- **Início em 2026-10-26:** inventário encontrou somente exportação genérica de perfis. Reutilizar consultas/definições dos 14 domínios do dashboard e fontes financeiras da tarefa 100; criar análise comparativa por período/plano ou ambiente/moeda, séries, detalhes paginados e exportações CSV/JSON verificáveis. Preservar a exportação administrativa de identificação, sem copiar dados clínicos ou inferir receita a partir de preços. Pesquisa e possibilidades em relatório próprio antes da interface.
+
+- **Entrega em 2026-10-26:** análises de uso e finanças com consultas canônicas, três KPIs, comparação por período, 14 domínios, base/catálogo, linha temporal, fontes paginadas e gráficos/tabelas. CSV/JSON do mesmo recorte com filtros/origem/unidade/limites e inteiros monetários exatos, sem conteúdo pessoal; exportação de identificação preservada e explicitamente sem saúde. Componentes de detalhes compartilhados com o dashboard, sem novo SQL de cálculo, coleta clínica ou migrations. 594 unitários (72 arquivos), 384 integrações (44), formato, lint, tipos e build aprovados; ajustes finais de texto/catálogo passaram por lint focado, build e QA.
+- **QA e evidências:** produção em banco temporário: filtros/plano/moeda/agrupamento, indicadores contra API, CSV/JSON, detalhes 25=20+5, paginações financeiras independentes, busca, erro de rede e retentativa, alternância preservando plano, exportação de identificação e regressão do dashboard. 1440/390/320 sem overflow, axe 30 regras nas análises/24 no modal sem violações nos estados estáveis, nenhuma exceção. Gráficos e capturas inspecionados; observação financeira única preservada como ponto. Fixtures isoladas não representam compras ou uso de produção; base temporária removida. Consultas de 366/3.653 dias em 36/22 ms na base pequena, sem alegação de escala maior. Produção principal confirmou APIs 200 e saúde MySQL com 46 migrations; visitante 401. Relatório `docs/relatorios-administrativos.md`, `/tmp/lyra103-*.log` e capturas. `@current_problems` indisponível.
+- **Publicação:** commit `212a3c447f558bcf4f3ed3e1c2e5f91173c9bb28` · push `9b095e8..212a3c4 main -> main`, confirmado por `git ls-remote`.
 
 ### 104 · Edição dos próprios dados para usuários de todos os planos
 
