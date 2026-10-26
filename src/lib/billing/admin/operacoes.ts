@@ -536,18 +536,34 @@ export async function executarOperacao(
     );
   }
 }
-export async function listarOperacoes(invoiceId: string) {
-  return queryRows<{
-    request_id: string;
-    action: string;
-    status: string;
-    parameters: OperacaoFinanceira;
-    result: ResultadoFinanceiro | null;
-    error_code: string | null;
-    created_at: string;
-    updated_at: string;
-  }>(
-    `SELECT request_id,action,status,parameters,result,error_code,created_at,updated_at FROM billing_admin_operations WHERE invoice_record_id=? ORDER BY created_at DESC,request_id DESC LIMIT 100`,
-    [invoiceId]
-  );
+export async function listarOperacoes(invoiceId: string, pagina = 1) {
+  const porPagina = 20;
+  return withTransaction(async (connection) => {
+    const [contagem] = await queryRows<{ total: number; pendentes: number }>(
+      `SELECT COUNT(*) total, COALESCE(SUM(status IN ('reserved','uncertain')),0) pendentes FROM billing_admin_operations WHERE invoice_record_id=?`,
+      [invoiceId],
+      connection
+    );
+    const itens = await queryRows<{
+      request_id: string;
+      action: string;
+      status: string;
+      parameters: OperacaoFinanceira;
+      result: ResultadoFinanceiro | null;
+      error_code: string | null;
+      created_at: string;
+      updated_at: string;
+    }>(
+      `SELECT request_id,action,status,parameters,result,error_code,created_at,updated_at FROM billing_admin_operations WHERE invoice_record_id=? ORDER BY created_at DESC,request_id DESC LIMIT ? OFFSET ?`,
+      [invoiceId, porPagina, (pagina - 1) * porPagina],
+      connection
+    );
+    return {
+      itens,
+      total: Number(contagem.total),
+      pendentes: Number(contagem.pendentes),
+      pagina,
+      porPagina,
+    };
+  });
 }

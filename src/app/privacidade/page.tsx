@@ -93,10 +93,11 @@ export default function PoliticaDePrivacidadePage() {
             privado não entram na memória, inclusive em importações futuras.
           </li>
           <li>
-            <strong>Assinatura e compras:</strong> plano, período e faturas
-            pagas (valores, datas, número da fatura e os dados do comprador
-            informados no pagamento). Os dados do cartão são tratados pela
-            Stripe e não chegam à Lyra.
+            <strong>Assinatura e compras:</strong> plano, período e faturas e
+            seus pagamentos, cancelamentos e reembolsos (valores, datas, estados
+            e identificadores). As faturas pagas também guardam os dados do
+            comprador informados no pagamento. Os dados do cartão são tratados
+            pela Stripe e não chegam à Lyra.
           </li>
           <li>
             <strong>Registros de consentimento:</strong> qual documento você
@@ -229,7 +230,7 @@ export default function PoliticaDePrivacidadePage() {
         <>
           <p>
             Os seus dados ficam guardados enquanto a sua conta existir. Ao
-            excluir a conta, todos os dados pessoais e de saúde são apagados
+            excluir a conta, os dados do perfil e de saúde são apagados
             imediatamente, junto com as fotos enviadas.
           </p>
           <p>
@@ -254,6 +255,13 @@ export default function PoliticaDePrivacidadePage() {
             (Código Tributário Nacional, art. 195, parágrafo único). Na exclusão
             da conta, esses registros deixam de ter qualquer ligação com o seu
             perfil e com os seus dados de saúde.
+          </p>
+          <p>
+            Também preservamos o histórico mínimo das operações financeiras para
+            conferir cobranças, cancelamentos e reembolsos: identificadores do
+            provedor, valores, estados e datas. Esses registros não contêm
+            cartão, conteúdo de conversas ou dados de saúde. A autoria de uma
+            operação deixa de apontar para a conta do administrador excluído.
           </p>
         </>
       ),
@@ -385,7 +393,7 @@ export default function PoliticaDePrivacidadePage() {
   return (
     <DocumentoLegal
       titulo="Política de privacidade"
-      resumo="Os seus dados de saúde são seus: só você os acessa, você pode baixá-los a qualquer momento e, ao excluir a conta, eles são apagados. Ficam guardados apenas os registros fiscais exigidos por lei, sem ligação com a sua saúde."
+      resumo="Os seus dados de saúde são seus: só você os acessa, você pode baixá-los a qualquer momento e, ao excluir a conta, eles são apagados. Permanecem os registros fiscais exigidos por lei e o histórico financeiro mínimo, sem ligação com a sua saúde."
       versao={VERSAO_POLITICA_DE_PRIVACIDADE}
       secoes={secoes}
     />

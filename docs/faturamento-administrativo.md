@@ -41,7 +41,7 @@ Este registro **não encerra a tarefa 100**. O usuário solicitou commit e push 
 - Webhooks de faturas e refunds são reconciliados com a API sob a trava do próprio registro. Leitura canônica evita interpretar IDs ou eventos do mesmo segundo como ordem cronológica. Evento de previsão `invoice.upcoming` não é registrado como fatura emitida. Rascunho excluído preserva a fotografia local.
 - Cancelamento de fatura, exclusão de rascunho, finalização sem cobrança automática, envio manual quando aplicável, marcação de inadimplência, reembolso parcial, cancelamento de refund `requires_action` e controle da próxima renovação usam os métodos reais da SDK. Cancelar/reembolsar fatura não cancela assinatura; alteração da renovação preserva o status real e grava o flag correspondente na assinatura local ativa quando vinculada.
 - Confirmação pelo ID da fatura, administrador validado no servidor, nonce estável no formulário e intenção persistida antes da chamada. Concorrência e novo pedido durante operação incerta são recusados. Reembolso ambíguo é recuperado também pelo metadado do pedido no provedor; pedido antigo não é reenviado com chave expirada. Retomada em outra conta é recusada. Pagamento compartilhado entre faturas exige revisão no provedor, sem alocação arbitrária.
-- Detalhes de faturas e movimentos são paginados, com cartões no mobile e tabelas acessíveis no desktop. O modal atualmente consulta os últimos **100** refunds e operações por fatura e declara esse limite; a paginação integral desse histórico está pendente antes da conclusão da tarefa.
+- Detalhes de faturas e movimentos são paginados, com cartões no mobile e tabelas acessíveis no desktop. O modal pagina todos os refunds e operações em blocos de 20, com contagem e controles independentes. A presença de pedido pendente é consultada em todo o histórico, inclusive fora da página exibida.
 
 ### APIs administrativas
 
@@ -51,7 +51,7 @@ Todas exigem administrador real; leituras respondem `Cache-Control: no-store`.
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `GET /api/admin/faturamento`                         | `inicio`, `fim`, `ambiente`, `provedor`, `moeda`, `agrupamento`, `estado`, `pagina`; lista de faturas, fontes, cobertura e execuções de sincronização. |
 | `GET /api/admin/faturamento/saldos`                  | Mesmos filtros de data, ambiente, provedor, moeda e agrupamento; estado de fatura não altera movimentos de saldo.                                      |
-| `GET /api/admin/faturamento/:invoiceId`              | Fotografia financeira, pagamentos vinculados e históricos limitados explicitamente.                                                                    |
+| `GET /api/admin/faturamento/:invoiceId`              | Fotografia financeira, pagamentos vinculados e históricos paginados por `paginaOperacoes` e `paginaReembolsos` (1–10.000), 20 itens por página.        |
 | `POST /api/admin/faturamento/:invoiceId/reconciliar` | Leitura atual da API e atualização dos espelhos, sem gerar cobrança.                                                                                   |
 | `POST /api/admin/faturamento/:invoiceId/acoes`       | Ação tipada, nonce UUID, confirmação, valor inteiro/identificador de pagamento quando aplicável e motivo fechado. Estado e saldo conferidos na Stripe. |
 | `POST /api/admin/faturamento/sincronizar`            | Ambiente e `runId` opcional; uma página por pedido, com continuidade e limites persistidos.                                                            |
@@ -69,6 +69,14 @@ Períodos UTC incluem o dia final. Até 366 dias na visão diária ou 3.660 dias
 
 1. Credenciais oficiais de teste da Stripe continuam ausentes tanto no processo quanto em `.env.local` e nas configurações do painel. Cancelamento, reembolso e sincronização externos reais **não estão comprovados**; contratos locais não substituem essa validação. Não utilizar transações de clientes de produção como QA.
 2. Validar a interface com os movimentos reais do ambiente oficial de teste, efeitos e reconciliação dos webhooks correspondentes, incluindo os detalhes e confirmações das operações.
-3. Completar o acesso paginado ao histórico de operações/refunds do modal além dos 100 atuais, revisar o percurso com dados reais e concluir a revisão da exportação LGPD dos novos espelhos vinculáveis ao titular. Os novos espelhos não armazenam comprador ou dados clínicos; o registro fiscal original continua preservado.
+   A paginação e a exportação foram concluídas em 26/10/2026. A tarefa permanece bloqueada somente nas verificações oficiais externas dos itens 1–2.
+
+## Complemento validado em 26/10/2026
+
+- Históricos paginados e pedidos pendentes globais; o retorno à primeira página após uma operação evita apresentar resultados antigos. Teste de integração percorre 125 operações e 125 refunds sem perda/duplicação nas sete páginas.
+- Exportação LGPD inclui faturas, pagamentos, refunds e estado/data das operações ligados ao titular. Usa registro fiscal ou assinatura/cliente comprovados no ambiente; não infere vínculo por nome/e-mail, não atribui legado ambíguo e não exporta autoria interna, parâmetros, resultados ou saldo global do comerciante. Valores em strings exatas de unidades mínimas. Retenção financeira e política de privacidade documentadas na versão 26/10/2026; migração 044 preservada.
+- **573 unitários e 378 integrações**, tipos, lint, formatação e build aprovados. Três novas integrações cobrem paginação, exportação/isolamento/retenção e fatura sem documento fiscal com ambiente comprovado. Agregado monetário ímpar acima de MAX_SAFE_INTEGER também validado, sem perda de unidade mínima.
+- QA do build de produção em banco temporário exclusivo, migrado do zero: 125 operações/125 refunds sintéticos para testar as sete páginas, pendência na última página e paginações independentes. Desktop 1440 e mobile 390/320 sem overflow da página ou modal, Escape funcionando, axe 27 regras sem violações e nenhuma exceção JavaScript. Capturas desktop/mobile inspecionadas. Banco temporário removido; a base financeira de desenvolvimento permaneceu vazia. Isso **não comprova transações oficiais Stripe**.
+- Evidências: `/tmp/lyra100-final-{unit,integration,types,lint,format,build,modal-qa}.log`, `/tmp/lyra100-modal-isolado-{1440,390,320}.png`.
 
 As tarefas 101–103 e 105–107 permanecem independentes e não são declaradas concluídas por este commit.

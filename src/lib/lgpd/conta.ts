@@ -1,3 +1,4 @@
+import { exportarFinanceiroDoTitular } from '@/lib/billing/admin/exportacao';
 import { travarAdministracao } from '@/lib/auth/bloqueio';
 import { rm } from 'node:fs/promises';
 
@@ -326,6 +327,7 @@ export async function exportarDadosDoTitular(userId: string) {
     compras: await listarComprasDoTitular(userId),
     assinaturas,
     clientes_de_cobranca: clientesDeCobranca,
+    financeiro: await exportarFinanceiroDoTitular(userId),
     agenda_no_calendario: agendaNoCalendario,
     imagens_do_chat: (
       await queryRows<RowDataPacket>(
@@ -348,9 +350,10 @@ export async function exportarDadosDoTitular(userId: string) {
 // ---------------------------------------------------------------------------
 
 /**
- * Exclui a conta e todos os dados pessoais dela. Ficam só os registros
- * fiscais (obrigação legal), desvinculados da conta pela FK
- * `ON DELETE SET NULL`, sem nenhum dado de saúde.
+ * Exclui a conta e seus dados de perfil e saúde. A fotografia fiscal do
+ * comprador permanece desvinculada pela FK ON DELETE SET NULL; os espelhos
+ * financeiros mínimos e a auditoria das operações também são preservados,
+ * sem perfil, saúde ou identificação do administrador excluído.
  *
  * Recusas:
  * - assinatura paga ativa e renovável: excluir a conta não cancela a

@@ -47,7 +47,7 @@ A exclusão:
 2. recusa a exclusão do último administrador (409);
 3. apaga `users`. Todos os dados pessoais e de saúde saem em cascata (perfil, métricas, metas, hábitos, planos, agenda, avaliações, assinaturas, consentimentos, contadores e cliente de cobrança);
 4. apaga as imagens enviadas (`<bucket>/<userId>`);
-5. mantém os registros fiscais, com `user_id = NULL` (FK `ON DELETE SET NULL`).
+5. mantém os registros fiscais, com `user_id = NULL` (FK `ON DELETE SET NULL`), os espelhos financeiros mínimos e o histórico de operações. A autoria das operações deixa de apontar para a conta administrativa excluída, sem preservar perfil ou saúde.
 
 A API de dados não apaga perfis (403): a exclusão é sempre da conta inteira.
 
@@ -71,3 +71,9 @@ Recomendação para produção: revogar `UPDATE` e `DELETE` em `fiscal_records` 
 ## Testes
 
 `src/app/api/lgpd.integration.test.ts` cobre consentimento, segregação (colunas, filtros, ordenação, alteração e exclusão), lista administrativa, fatura paga → registro fiscal (idempotência e acesso), exportação, exclusão completa com retenção fiscal e as recusas.
+
+## Espelhos financeiros (tarefa 100)
+
+A exportação inclui `financeiro`: faturas, pagamentos vinculados, reembolsos e estado/data das operações. Valores monetários são strings de unidades mínimas para preservar precisão. A ligação exige registro fiscal do titular ou assinatura externa e cliente de cobrança no mesmo ambiente. Legado sem ambiente só é ligado quando a referência não é ambígua e não existe mapeamento de cliente contraditório; nenhum vínculo é inferido por nome ou e-mail. Registros sem vínculo não são exportados para outra conta. Não inclui auditoria interna, identidade de funcionários, parâmetros/resultados operacionais, conta do provedor ou movimentos de saldo agregados do comerciante.
+
+Os seis espelhos/auditorias não contêm dados clínicos nem fotografia do comprador. São preservados para rastreabilidade financeira; o documento fiscal original continua separado e imutável. A política de privacidade de 26/10/2026 informa essa retenção e mantém os registros de consentimento anteriores intactos.

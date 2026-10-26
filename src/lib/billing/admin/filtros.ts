@@ -50,3 +50,10 @@ export function lerFiltrosFaturamento(params: URLSearchParams) {
     );
   return f;
 }
+
+export const paginasHistoricoFinanceiroSchema = z
+  .object({
+    paginaOperacoes: z.coerce.number().int().min(1).max(10000).default(1),
+    paginaReembolsos: z.coerce.number().int().min(1).max(10000).default(1),
+  })
+  .strict();

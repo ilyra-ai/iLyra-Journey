@@ -18,7 +18,7 @@ Todas as rotas ficam em `src/app/api/**/route.ts` e rodam no runtime Node.js. A 
 
 ## Faturamento administrativo em andamento
 
-A aba `/admin/dashboard?aba=faturamento` usa `GET /api/admin/faturamento` e `/saldos`, com filtros UTC, ambiente, provedor, moeda e agrupamento diário/mensal/anual. Detalhes, reconciliação, ações confirmadas e sincronização paginada ficam sob `/api/admin/faturamento`. Todas as rotas exigem administrador; os espelhos são separados dos registros fiscais originais. A tarefa 100 ainda está em andamento: operações reais no ambiente oficial Stripe não foram comprovadas sem credenciais, e existem pendências documentadas de histórico e exportação. Contratos, evidências e limites em [faturamento-administrativo.md](./faturamento-administrativo.md).
+A aba `/admin/dashboard?aba=faturamento` usa `GET /api/admin/faturamento` e `/saldos`, com filtros UTC, ambiente, provedor, moeda e agrupamento diário/mensal/anual. Detalhes, reconciliação, ações confirmadas e sincronização paginada ficam sob `/api/admin/faturamento`. Todas as rotas exigem administrador; os espelhos são separados dos registros fiscais originais. A tarefa 100 ainda está em andamento: operações reais no ambiente oficial Stripe não foram comprovadas sem credenciais, restando a validação oficial externa; históricos são paginados e a exportação LGPD inclui os espelhos vinculados ao titular. Contratos, evidências e limites em [faturamento-administrativo.md](./faturamento-administrativo.md).
 
 ## Dashboard administrativo
 

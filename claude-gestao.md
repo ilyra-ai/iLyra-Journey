@@ -64,6 +64,8 @@
 - **Evidências locais do progresso:** 573 unitários (71 arquivos), 375 integrações (43 arquivos), formatação, lint sem avisos, tipos e build aprovados. Novos testes: 19 de moeda/filtros, 11 de MySQL/espelhos e 14 por contrato HTTP local da SDK, sem alegar transações reais. QA de produção com base financeira vazia: APIs administrativas 200, visitante 401, paciente 403, sincronização sem chaves recusada 503 sem criar registros; URL da aba, teclado, recarga, preservação de rascunho entre abas, filtros e retentativa após falha de rede. 1440/390/320 px sem overflow; axe 28 regras aprovadas e nenhuma exceção JavaScript. Conta de QA removida; nenhum movimento financeiro fabricado no runtime. Evidências `/tmp/lyra100-*.log` e capturas.
 - **Pendências para encerrar:** chave e segredo oficial de teste da Stripe ausentes no processo, `.env.local` e painel; conferir cancelamento/reembolso/sincronização reais e seus webhooks no ambiente oficial, além da interface com esses movimentos. Completar paginação dos históricos de operações/refunds do modal além dos 100 atualmente informados e concluir revisão da exportação LGPD dos novos espelhos vinculáveis ao titular. Não declarar operações externas comprovadas usando os contratos locais. As tarefas 101–103 e 105–107 não integram esta publicação.
 
+- **Retomada em 2026-10-26:** concluir paginação integral dos históricos de fatura e exportação LGPD dos espelhos vinculados; reutilizar a implementação publicada, preservar migração 044 aplicada e validar em banco isolado. A fronteira oficial de teste continua dependente de credenciais reais.
+
 ### BLOQUEADAS
 
 ### 86 · Geração de imagens no chat com modelos conectados

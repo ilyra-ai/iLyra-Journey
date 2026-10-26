@@ -211,12 +211,30 @@ export async function carregarFaturamento(
     };
   });
 }
-export async function carregarDetalheFinanceiro(id: string) {
+export async function carregarDetalheFinanceiro(
+  id: string,
+  paginaOperacoes = 1,
+  paginaReembolsos = 1
+) {
   const fatura = await faturaLocal(id);
-  const reembolsos = await queryRows<ReembolsoFinanceiro>(
-    'SELECT id,environment,external_refund_id,invoice_record_id,payment_kind,external_payment_id,currency_code,amount,status,provider_created_at,source_event_created,source_event_id,needs_reconciliation,synced_at FROM billing_refund_records WHERE invoice_record_id=? ORDER BY provider_created_at DESC,id DESC LIMIT 100',
-    [id]
-  );
+  const reembolsos = await withTransaction(async (connection) => {
+    const [contagem] = await queryRows<{ total: number }>(
+      'SELECT COUNT(*) total FROM billing_refund_records WHERE invoice_record_id=?',
+      [id],
+      connection
+    );
+    const itens = await queryRows<ReembolsoFinanceiro>(
+      'SELECT id,environment,external_refund_id,invoice_record_id,payment_kind,external_payment_id,currency_code,amount,status,provider_created_at,source_event_created,source_event_id,needs_reconciliation,synced_at FROM billing_refund_records WHERE invoice_record_id=? ORDER BY provider_created_at DESC,id DESC LIMIT ? OFFSET ?',
+      [id, 20, (paginaReembolsos - 1) * 20],
+      connection
+    );
+    return {
+      itens,
+      total: Number(contagem.total),
+      pagina: paginaReembolsos,
+      porPagina: 20,
+    };
+  });
   const pagamentos = await queryRows<{
     payment_kind: string;
     external_payment_id: string;
@@ -230,6 +248,6 @@ export async function carregarDetalheFinanceiro(id: string) {
     fatura,
     reembolsos,
     pagamentos,
-    operacoes: await listarOperacoes(id),
+    operacoes: await listarOperacoes(id, paginaOperacoes),
   };
 }

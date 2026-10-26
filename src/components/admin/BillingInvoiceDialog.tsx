@@ -239,13 +239,16 @@ export function BillingInvoiceDialog({
   configurada: boolean;
   ambienteEmUso: string;
 }) {
+  const [paginaOperacoes, setPaginaOperacoes] = React.useState(1);
+  const [paginaReembolsos, setPaginaReembolsos] = React.useState(1);
   const url = '/api/admin/faturamento/' + id;
+  const consulta = `${url}?paginaOperacoes=${paginaOperacoes}&paginaReembolsos=${paginaReembolsos}`;
   const request = React.useCallback(
-    () => consultarFinanceiro<Detalhe>(url),
-    [url]
+    () => consultarFinanceiro<Detalhe>(consulta),
+    [consulta]
   );
   const { data, loading, refresh } = useKeyedResource(
-    url,
+    consulta,
     request,
     avisar,
     null
@@ -256,12 +259,18 @@ export function BillingInvoiceDialog({
       tipo: Acao;
       anterior?: OperacaoFinanceira;
     } | null>(null);
+  async function atualizarHistorico() {
+    if (paginaOperacoes !== 1 || paginaReembolsos !== 1) {
+      setPaginaOperacoes(1);
+      setPaginaReembolsos(1);
+    } else await refresh();
+  }
   async function conferir() {
     setBusy(true);
     setErro('');
     try {
       await consultarFinanceiro<Detalhe>(url + '/reconciliar', {});
-      await refresh();
+      await atualizarHistorico();
       alterado();
       toast.success('Fatura conferida no provedor.');
     } catch (e) {
@@ -284,7 +293,7 @@ export function BillingInvoiceDialog({
         `Pedido confirmado no provedor: ${ESTADOS_FINANCEIROS[r.providerStatus] ?? r.providerStatus}.`
       );
       setAcao(null);
-      await refresh();
+      await atualizarHistorico();
       alterado();
     } catch (e) {
       setAcao(null);
@@ -293,7 +302,7 @@ export function BillingInvoiceDialog({
           ? e.message
           : 'Não foi possível confirmar a operação.'
       );
-      await refresh();
+      await atualizarHistorico();
       alterado();
     } finally {
       setBusy(false);
@@ -306,9 +315,7 @@ export function BillingInvoiceDialog({
     f.environment === ambienteEmUso &&
     !f.needs_reconciliation
   );
-  const pendente = data?.operacoes.some((o) =>
-    ['reserved', 'uncertain'].includes(o.status)
-  );
+  const pendente = Boolean(data?.operacoes.pendentes);
   const acoes: Acao[] = f
     ? [
         ...(f.status === 'draft'
@@ -478,14 +485,14 @@ export function BillingInvoiceDialog({
                 <CardTitle>Reembolsos vinculados</CardTitle>
               </CardHeader>
               <CardContent>
-                {data.reembolsos.length === 0 ? (
+                {data.reembolsos.total === 0 ? (
                   <p className="text-sm text-muted-foreground">
                     Nenhum reembolso vinculado foi importado. A atualização
                     completa também mostra os registros ainda sem vínculo.
                   </p>
                 ) : (
                   <ul className="divide-y divide-border">
-                    {data.reembolsos.map((r) => (
+                    {data.reembolsos.itens.map((r) => (
                       <li key={r.id} className="space-y-2 py-3">
                         <p className="font-medium">
                           {formatarValorFinanceiro(r.amount, r.currency_code)} ·{' '}
@@ -520,6 +527,12 @@ export function BillingInvoiceDialog({
                     ))}
                   </ul>
                 )}
+                <PaginarHistorico
+                  nome="reembolsos"
+                  {...data.reembolsos}
+                  ocupado={busy}
+                  mudar={setPaginaReembolsos}
+                />
               </CardContent>
             </Card>
             <Card>
@@ -527,13 +540,13 @@ export function BillingInvoiceDialog({
                 <CardTitle>Histórico de operações</CardTitle>
               </CardHeader>
               <CardContent>
-                {data.operacoes.length === 0 ? (
+                {data.operacoes.total === 0 ? (
                   <p className="text-sm text-muted-foreground">
                     Nenhuma operação administrativa registrada nesta fatura.
                   </p>
                 ) : (
                   <ul className="divide-y divide-border">
-                    {data.operacoes.map((o) => (
+                    {data.operacoes.itens.map((o) => (
                       <li key={o.request_id} className="space-y-2 py-3">
                         <p className="font-medium">
                           {ACOES_FINANCEIRAS[o.action as Acao]?.nome ??
@@ -567,10 +580,12 @@ export function BillingInvoiceDialog({
                     ))}
                   </ul>
                 )}
-                <p className="mt-4 text-xs text-muted-foreground">
-                  Até 100 operações e reembolsos por fatura nesta consulta. O
-                  registro completo permanece preservado no servidor.
-                </p>
+                <PaginarHistorico
+                  nome="operações"
+                  {...data.operacoes}
+                  ocupado={busy}
+                  mudar={setPaginaOperacoes}
+                />
               </CardContent>
             </Card>
           </div>
@@ -587,5 +602,50 @@ export function BillingInvoiceDialog({
         )}
       </DialogContent>
     </Dialog>
+  );
+}
+
+function PaginarHistorico({
+  nome,
+  total,
+  pagina,
+  porPagina,
+  ocupado,
+  mudar,
+}: {
+  nome: string;
+  total: number;
+  pagina: number;
+  porPagina: number;
+  ocupado: boolean;
+  mudar: (pagina: number) => void;
+}) {
+  if (total <= porPagina && pagina === 1) return null;
+  const paginas = Math.max(1, Math.ceil(total / porPagina));
+  return (
+    <nav
+      aria-label={`Paginação de ${nome}`}
+      className="mt-4 flex flex-wrap items-center gap-2"
+    >
+      <p className="w-full text-sm text-muted-foreground" role="status">
+        {total} {nome} · Página {pagina} de {paginas}
+      </p>
+      <Button
+        variant="outline"
+        size="sm"
+        disabled={ocupado || pagina <= 1}
+        onClick={() => mudar(pagina - 1)}
+      >
+        Anteriores
+      </Button>
+      <Button
+        variant="outline"
+        size="sm"
+        disabled={ocupado || pagina >= paginas}
+        onClick={() => mudar(pagina + 1)}
+      >
+        Próximos
+      </Button>
+    </nav>
   );
 }

@@ -14,6 +14,9 @@ import {
   persistirMovimentoSaldo,
   type OrigemFinanceira,
 } from './espelhos';
+import { exportarFinanceiroDoTitular } from './exportacao';
+import { excluirConta } from '@/lib/lgpd/conta';
+import { GET as detalhe } from '@/app/api/admin/faturamento/[invoiceId]/route';
 import { carregarFaturamento } from './consultas';
 import { carregarSaldo } from './saldos';
 import { lerFiltrosFaturamento } from './filtros';
@@ -298,9 +301,9 @@ it('movimentos de saldo mantêm bruto/taxa/líquido e inteiros exatos acima da p
         id,
         source: 'ch_contrato',
         currency: 'brl',
-        amount: 9007199254740000,
+        amount: 9007199254740000 + n,
         fee: 10,
-        net: 9007199254739990,
+        net: 9007199254739990 + n,
         type: 'charge',
         reporting_category: 'charge',
         status: 'available',
@@ -313,9 +316,9 @@ it('movimentos de saldo mantêm bruto/taxa/líquido e inteiros exatos acima da p
   const d = await carregarSaldo(filtros());
   expect(d.total).toBe(2);
   expect(d.grupos[0]).toMatchObject({
-    bruto: '18014398509480000',
+    bruto: '18014398509480001',
     taxas: '20',
-    liquido: '18014398509479980',
+    liquido: '18014398509479981',
   });
 });
 it('rotas recusam visitante e paciente antes de ler ou reservar operação', async () => {
@@ -362,4 +365,207 @@ it('agregados não retornam comprador, conteúdo do webhook ou dados clínicos',
   expect(JSON.stringify(d.json)).not.toMatch(
     /privado@|Pessoa privada|texto privado|customer_email|customer_name|metadata/
   );
+});
+
+it('pagina todo o histórico e detecta pedido pendente fora da página atual', async () => {
+  const id = await salvar(invoice());
+  const operacoes: string[] = [],
+    reembolsos: string[] = [];
+  for (let n = 0; n < 125; n++) {
+    const requestId = randomUUID();
+    operacoes.push(requestId);
+    await executeStatement(
+      `INSERT INTO billing_admin_operations(request_id,invoice_record_id,actor_user_id,action,request_hash,parameters,status,created_at) VALUES(?,?,?,'void',REPEAT('a',64),JSON_OBJECT('requestId',?,'action','void'),?,?)`,
+      [
+        requestId,
+        id,
+        admin.id,
+        requestId,
+        n === 0 ? 'uncertain' : 'succeeded',
+        new Date(1706745600000 + n * 1000),
+      ]
+    );
+    const rid = await persistirReembolso(
+      refund('pi_paginacao', { created: 1706745600 + n }),
+      origem,
+      id
+    );
+    refundIds.push(rid.id);
+    reembolsos.push(rid.id);
+  }
+  const ler = (q = '') =>
+    chamar(detalhe, {
+      usuario: admin,
+      params: { invoiceId: id },
+      path: '/api/admin/faturamento/' + id + q,
+    });
+  const primeira = await ler();
+  expect(primeira.status).toBe(200);
+  expect(primeira.headers.get('cache-control')).toBe('no-store');
+  type Historico = {
+    operacoes: {
+      itens: { request_id: string }[];
+      total: number;
+      pendentes: number;
+    };
+    reembolsos: { itens: { id: string }[]; total: number };
+  };
+  const p1 = primeira.json as Historico;
+  expect(p1.operacoes).toMatchObject({ total: 125, pendentes: 1 });
+  expect(p1.operacoes.itens).toHaveLength(20);
+  expect(p1.operacoes.itens.some((o) => o.request_id === operacoes[0])).toBe(
+    false
+  );
+  const todasOperacoes = p1.operacoes.itens.map((o) => o.request_id);
+  const todosReembolsos = p1.reembolsos.itens.map((r) => r.id);
+  for (let pagina = 2; pagina <= 7; pagina++) {
+    const resposta = await ler(
+      `?paginaOperacoes=${pagina}&paginaReembolsos=${pagina}`
+    );
+    expect(resposta.status).toBe(200);
+    const p = resposta.json as Historico;
+    expect(p.operacoes.itens).toHaveLength(pagina === 7 ? 5 : 20);
+    expect(p.reembolsos.itens).toHaveLength(pagina === 7 ? 5 : 20);
+    expect(p.operacoes.pendentes).toBe(1);
+    todasOperacoes.push(...p.operacoes.itens.map((o) => o.request_id));
+    todosReembolsos.push(...p.reembolsos.itens.map((r) => r.id));
+  }
+  expect(new Set(todasOperacoes)).toEqual(new Set(operacoes));
+  expect(new Set(todosReembolsos)).toEqual(new Set(reembolsos));
+  expect(todasOperacoes).toHaveLength(125);
+  expect(todosReembolsos).toHaveLength(125);
+  for (const q of [
+    '?paginaOperacoes=0',
+    '?paginaReembolsos=1.5',
+    '?paginaOperacoes=10001',
+    '?outra=1',
+  ])
+    expect((await ler(q)).status).toBe(400);
+  expect(
+    (await chamar(detalhe, { usuario: pessoa, params: { invoiceId: id } }))
+      .status
+  ).toBe(403);
+});
+
+it('exporta somente os espelhos vinculados ao titular e preserva finanças ao excluir a conta', async () => {
+  const titular = await criarUsuario();
+  try {
+    const minha = invoice(),
+      outra = invoice();
+    const minhaId = await salvar(minha);
+    const outraId = await salvar(outra);
+    for (const [fatura, dono] of [
+      [minha, titular],
+      [outra, pessoa],
+    ] as const) {
+      const fiscalId = randomUUID();
+      fiscalIds.push(fiscalId);
+      await executeStatement(
+        `INSERT INTO fiscal_records(id,provider,external_invoice_id,user_id,currency_code,amount_subtotal,amount_total,paid_at) VALUES(?,'stripe',?,?,'BRL',10000,10000,'2024-02-01')`,
+        [fiscalId, fatura.id, dono.id]
+      );
+    }
+    await persistirVinculo(minhaId, payment(minha, 'pi_exportacao_' + minhaId));
+    const r = await persistirReembolso(
+      refund('pi_exportacao_' + minhaId),
+      origem,
+      minhaId
+    );
+    refundIds.push(r.id);
+    const requestId = randomUUID();
+    await executeStatement(
+      `INSERT INTO billing_admin_operations(request_id,invoice_record_id,actor_user_id,action,request_hash,parameters,status) VALUES(?,?,?,'refund',REPEAT('b',64),JSON_OBJECT('requestId',?),'succeeded')`,
+      [requestId, minhaId, titular.id, requestId]
+    );
+    const dados = await exportarFinanceiroDoTitular(titular.id);
+    expect(dados.faturas.map((f) => f.id)).toEqual([minhaId]);
+    expect(dados.faturas[0].amount_paid).toBe('10000');
+    expect(dados.pagamentos).toHaveLength(1);
+    expect(dados.reembolsos).toHaveLength(1);
+    expect(dados.operacoes).toHaveLength(1);
+    expect(JSON.stringify(dados)).not.toMatch(
+      /actor_user_id|request_hash|parameters|provider_account_id|buyer_email/
+    );
+    expect(
+      (await exportarFinanceiroDoTitular(pessoa.id)).faturas.map((f) => f.id)
+    ).toEqual([outraId]);
+    await excluirConta(titular.id);
+    expect(
+      (
+        await queryRows(
+          'SELECT actor_user_id FROM billing_admin_operations WHERE request_id=?',
+          [requestId]
+        )
+      )[0].actor_user_id
+    ).toBeNull();
+    expect(
+      (
+        await queryRows(
+          'SELECT user_id FROM fiscal_records WHERE external_invoice_id=?',
+          [minha.id]
+        )
+      )[0].user_id
+    ).toBeNull();
+    expect(
+      await queryRows('SELECT id FROM billing_invoice_records WHERE id=?', [
+        minhaId,
+      ])
+    ).toHaveLength(1);
+    expect(
+      (await exportarFinanceiroDoTitular(pessoa.id)).faturas.map((f) => f.id)
+    ).toEqual([outraId]);
+  } finally {
+    await executeStatement('DELETE FROM users WHERE id=?', [titular.id]);
+  }
+});
+it('exporta fatura ainda sem registro fiscal por assinatura e ambiente comprovados, recusando ambiguidade do legado', async () => {
+  const i = invoice(5000, {
+    status: 'open',
+    parent: {
+      subscription_details: { subscription: 'sub_exportacao_' + randomUUID() },
+    },
+  });
+  const id = await salvar(i);
+  const cid = 'cus_exportacao_' + randomUUID();
+  const subId = i.parent!.subscription_details!.subscription;
+  await executeStatement(
+    `INSERT INTO billing_customers(id,user_id,provider,environment,external_customer_id) VALUES(?,?,'stripe','test',?)`,
+    [randomUUID(), pessoa.id, cid]
+  );
+  await executeStatement(
+    `INSERT INTO user_subscriptions(id,user_id,plan_id,status,source,external_customer_id,external_subscription_id,current_period_end) SELECT ?,?,id,'active','stripe',?,?,'2027-01-01' FROM subscription_plans WHERE plan_key='free'`,
+    [randomUUID(), pessoa.id, cid, subId]
+  );
+  try {
+    expect(
+      (await exportarFinanceiroDoTitular(pessoa.id)).faturas.map((f) => f.id)
+    ).toContain(id);
+    const fiscalId = randomUUID();
+    fiscalIds.push(fiscalId);
+    await executeStatement(
+      `INSERT INTO fiscal_records(id,provider,external_invoice_id,user_id,currency_code,amount_subtotal,amount_total,paid_at) VALUES(?,'stripe',?,?,'BRL',10000,10000,'2024-02-01')`,
+      [fiscalId, i.id, admin.id]
+    );
+    const liveId = await salvar(
+      { ...i, livemode: true },
+      { ...origem, ambiente: 'live' }
+    );
+    expect((await exportarFinanceiroDoTitular(admin.id)).faturas).toHaveLength(
+      0
+    );
+    const minhas = (await exportarFinanceiroDoTitular(pessoa.id)).faturas.map(
+      (f) => f.id
+    );
+    expect(minhas).toContain(id);
+    expect(minhas).not.toContain(liveId);
+  } finally {
+    await executeStatement(
+      'DELETE FROM user_subscriptions WHERE external_subscription_id=?',
+      [subId]
+    );
+    await executeStatement(
+      'DELETE FROM billing_customers WHERE external_customer_id=?',
+      [cid]
+    );
+  }
 });
