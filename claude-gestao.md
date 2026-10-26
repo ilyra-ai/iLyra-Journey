@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `██████████████████░░` **91%** |
-| Tarefas totais     | 117                            |
+| Progresso          | `██████████████████░░` **90%** |
+| Tarefas totais     | 118                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 8                              |
+| ⚪ A iniciar       | 9                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 117 ≈ 91%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 118 ≈ 90%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -192,6 +192,15 @@
 - **Escopo funcional:** criar, consultar, editar, ativar, desativar e excluir lembretes por titular; configurar recorrência, fuso horário, adiamento, dias e silêncio. Definir e explicar os canais realmente suportados, permissões e limites de entrega com o app fechado; não prometer push sem infraestrutura e comprovação. Evitar duplicações e respeitar descanso e preferência de contato.
 - **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
 - **Validação e entrega:** conferir persistência, recorrência, mudança de fuso, horário de verão quando aplicável, silêncio, adiamento, exclusão e entrega real em cada canal anunciado, com recusas de acesso entre contas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+### 118 · Busca no conteúdo das conversas e respostas favoritas
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** encontrar orientações antigas por palavras e guardar respostas importantes da Lyra como favoritas.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar o histórico persistido e distinguir a busca atual de páginas e ações do app de uma busca no texto das conversas. Conferir antes se já existem favoritos em alguma entrega posterior.
+- **Escopo funcional:** buscar perguntas e respostas autorizadas do titular, apresentar trecho e data e abrir a mensagem original. Permitir favoritar, desfavoritar e listar respostas, com paginação e estados vazios claros. Preservar ordenação, histórico antigo, mensagens com imagens e futuros blocos da tarefa 113, sem expor o conteúdo de outras contas.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar termos com acentos, Unicode, ausência de resultado, reabertura da mensagem, paginação, favoritos persistidos, remoção de conversa e limites de histórico do plano. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
 
