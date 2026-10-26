@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `█████████████████░░░` **87%** |
-| Tarefas totais     | 122                            |
+| Progresso          | `█████████████████░░░` **86%** |
+| Tarefas totais     | 123                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 13                             |
+| ⚪ A iniciar       | 14                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 122 ≈ 87%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 123 ≈ 86%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -237,6 +237,15 @@
 - **Escopo funcional:** selecionar categorias e intervalo permitido pelo plano, pré-visualizar e gerar PDF legível com datas, unidades, origem, lacunas e resumo em pt-BR. Separar medições, relatos e interpretações. Excluir conversas e informações não selecionadas; compartilhamento deve partir do titular, sem envio automático nem link público de dados sensíveis.
 - **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
 - **Validação e entrega:** abrir o PDF real e conferir paginação, fontes, gráficos, recortes, acentos, períodos e consistência com o banco; testar seleção, dados ausentes, autorização, limites do plano e download em celular e desktop. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+### 123 · Modo descanso ou férias com pausa de cobranças e retorno gradual
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** pausar cobranças e adaptar metas durante um descanso ou férias, com retorno gradual e identificação transparente dos dias pausados.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar metas, hábitos, sequências e preferências de notificações, coordenando com a tarefa 117. Conferir critérios existentes antes de alterar cálculo de progresso.
+- **Escopo funcional:** ativar e encerrar uma pausa com período opcional, explicar seus efeitos sobre lembretes e metas e oferecer retomada gradual escolhida pelo usuário. Preservar histórico e medições, distinguir dias pausados de metas cumpridas e não fabricar sequências ou resultados. Não interpretar o modo como pausa da assinatura comercial.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar início e fim programados e manuais, alteração do período, notificações, metas, sequências, recarga e retorno, sem apagar dados ou alterar cobrança do plano. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
 
