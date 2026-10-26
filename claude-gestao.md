@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `███████████████████░` **94%** |
-| Tarefas totais     | 113                            |
+| Progresso          | `███████████████████░` **93%** |
+| Tarefas totais     | 114                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 4                              |
+| ⚪ A iniciar       | 5                              |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 113 ≈ 94%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 114 ≈ 93%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -150,6 +150,17 @@
 - **Resposta progressiva real:** substituir a dependência da revelação por caracteres depois da resposta completa por apresentação progressiva de texto e dados enviados pelo servidor, quando suportada pelo fluxo efetivo. Tratar Markdown parcial sem marcação quebrada, preservar movimento reduzido, foco, rolagem e leitura assistiva. Conferir ordem de modelos, continuidade após limite de tokens, falhas, retentativas, idempotência e limites de uso, sem perder conteúdo ou divulgar dados antes das verificações de acesso e privacidade.
 - **Persistência e preservação das funções atuais:** reabrir texto e painéis completos no histórico e manter o contexto pertinente, com esquema compatível com conversas antigas e migrations novas quando necessárias, sem alterar migrations já aplicadas. Preservar identidade e preferências da Lyra, Motor Lyra, provedores locais e em nuvem, cadeia de modelos, chave própria, memória, modo privado, consentimentos, entrada por voz, copiar/refazer, paginação, exportação e exclusão LGPD e entitlements. Modelos sem capacidade de saída estruturada devem continuar oferecendo texto válido; não alegar suporte universal a painéis por qualquer modelo sem teste. As fronteiras externas das tarefas 86 e 90 permanecem separadas; o redesenho não comprova inferência de imagem ou RLHF.
 - **Validação e entrega:** executar QA com navegador no app real e em produção, com conteúdos curtos e longos, respostas interrompidas, tabelas, código, links, dados ausentes, erros e painéis efetivamente interativos. Conferir 320, 390, 768 e 1440 px, teclado, zoom, leitores de tela, contraste, foco e rolagem, incluindo abrir/ampliar/fechar painéis, alternar abas, copiar, consultar fontes e executar ações reais. Validar persistência após recarga e novo login, histórico antigo, CRUD aplicável, isolamento entre contas e bloqueios por plano. Medir desempenho de respostas longas e carregamento dos componentes. Reexecutar os gates pertinentes de instalação congelada, formatação, lint, tipos, testes, integrações MySQL e build, revisar o diff, publicar commit e push próprios na `main`, sem branches ou worktrees, e atualizar imediatamente o painel com SHA e evidências reais. Este registro e a prévia visual não representam implementação iniciada ou concluída.
+
+### 114 · Painel principal do usuário com resumo essencial e métricas organizadas em abas
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** o painel do usuário reúne muitas métricas na mesma página, tornando a consulta cansativa e reduzindo o interesse. Deixar no painel principal somente o que é importante, com um resumo rápido, e criar abas na própria página para o usuário escolher as métricas que deseja consultar.
+- **Conferência prévia obrigatória:** inspecionar primeiro a implementação atual, os cartões, métricas, fontes, carregamento e permissões do painel autenticado. Reaproveitar componentes e recursos que já funcionam, incluindo a matriz de entitlements e as verificações da tarefa 105. Esta solicitação se refere ao painel do usuário; não transferir o escopo para o dashboard administrativo nem refazer entregas já comprovadas.
+- **Resumo principal:** selecionar e justificar as informações essenciais para uma visão rápida, com poucos cartões prioritários, linguagem clara e próximos passos pertinentes aos dados reais do titular. Retirar dessa visão inicial o excesso de detalhamento e repetições, mantendo acesso às informações completas pelas abas. Não excluir métricas, histórico, cálculos, ações ou recursos existentes para simplificar a tela.
+- **Abas e escolha do conteúdo:** organizar todas as métricas e seus detalhes em abas com nomes compreensíveis e agrupamentos coerentes com o conteúdo real do app. Permitir que o usuário abra o assunto e as métricas que deseja ver na mesma página, com indicação clara da aba ativa, carregamento, erro e ausência de dados. Conferir acesso direto e recarga sem destinos quebrados, preservando os filtros e ações pertinentes. Evitar consultas e cálculos desnecessários de conteúdo não exibido, sem prejudicar atualização ou persistência.
+- **Design e acessibilidade:** pesquisar referências oficiais atuais antes de implementar e seguir o Lyra Clean claro, o logo e os tokens existentes, com qualidade premium, leitura rápida e responsividade. Conferir abas no desktop e celular, navegação por teclado e leitor de tela, foco, contraste, zoom, rolagem e nomes acessíveis; não esconder métricas por cortes ou estouro horizontal.
+- **Dados e integração:** usar exclusivamente dados reais, autorizados e do próprio titular, preservando períodos, unidades, origem e estados sem registro. Respeitar os recursos do plano na visão resumida, em cada aba e nas APIs; abas não devem conceder permissões apenas por estarem visíveis. Coordenar os textos e o preenchimento automático com a tarefa 115 e reaproveitar os componentes visuais da tarefa 113 quando disponíveis, sem depender de funcionalidades ainda não implementadas.
+- **Validação e entrega:** validar a seleção do resumo, a cobertura de todas as métricas nas abas, alternância, filtros, ações e CRUD aplicável, atualização dos dados, persistência, recarga, novo login, falhas e isolamento entre contas. Conferir os planos Free, Meta, Care e acesso administrativo, em 320, 390, 768 e 1440 px, comparando fontes com as APIs e MySQL reais. Executar QA no navegador e gates pertinentes, revisar o diff e publicar commit e push próprios na `main`, sem branches ou worktrees, seguidos da atualização do painel com SHA e evidências reais. Este registro não representa implementação iniciada ou concluída.
 
 ---
 
