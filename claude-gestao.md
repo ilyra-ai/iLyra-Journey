@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                          |
 | ------------------ | ------------------------------ |
-| Progresso          | `█████████████████░░░` **83%** |
-| Tarefas totais     | 128                            |
+| Progresso          | `████████████████░░░░` **82%** |
+| Tarefas totais     | 129                            |
 | 🟢 Finalizadas     | 106                            |
 | 🔵 Em andamento    | 0                              |
 | 🔴 Bloqueadas      | 3                              |
-| ⚪ A iniciar       | 19                             |
+| ⚪ A iniciar       | 20                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 128 ≈ 83%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 129 ≈ 82%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -291,6 +291,15 @@
 - **Escopo funcional:** acrescentar reprodução por resposta com iniciar, pausar, retomar, parar e velocidade acessíveis. Usar voz em pt-BR quando disponível, explicar limitações de compatibilidade e selecionar texto adequado para leitura sem narrar sintaxe Markdown ou valores incorretos. Não iniciar áudio sem ação do usuário; evitar sobreposição de falas, cancelar ao sair ou trocar de conta e respeitar privacidade e consentimento se houver serviço externo.
 - **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
 - **Validação e entrega:** testar reprodução e controles reais nos navegadores anunciados, resposta longa, tabelas, números e unidades, mensagens incompletas, troca de conversa, recursos indisponíveis, teclado e celular. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+### 129 · Histórico de versões e desfazer alterações em registros manuais
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
+- **Pedido do usuário:** corrigir um preenchimento acidental e consultar ou recuperar valores anteriores de registros manuais quando aplicável. Corresponde ao item 4 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar o check-in e a gravação das métricas existentes; o fluxo consultado atualiza a linha do dia e recalcula resultados, sem comprovar histórico de versões recuperáveis para o próprio titular. Distinguir essa capacidade do histórico administrativo.
+- **Escopo funcional:** registrar alterações manuais com data, campo, valor anterior e novo, permitir consultar versões e desfazer alterações elegíveis com confirmação clara. Tratar concorrência para não sobrescrever gravações posteriores e recalcular resultados dependentes sem duplicar contagens. Preservar a origem dos dados e não converter uma correção manual em medição de sensor. Definir retenção e não restaurar dados eliminados definitivamente por solicitação de privacidade.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir alteração e desfazer reais, versões persistidas, concorrência, recarga, campos sem valor, zero, cálculos dependentes, autorização e exclusão definitiva. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
 
