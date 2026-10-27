@@ -1,5 +1,8 @@
 import { receberEventoFinanceiro } from '@/lib/billing/admin/provedor';
-import { contaAdministrativaDesignada } from '@/lib/plans/service';
+import {
+  contaAdministrativaDesignada,
+  getAccountSubscriptionSummary,
+} from '@/lib/plans/service';
 import Stripe from 'stripe';
 import type { PoolConnection, RowDataPacket } from 'mysql2/promise';
 
@@ -674,6 +677,11 @@ export async function createStripeCheckoutUrl(options: {
   billingInterval: 'monthly' | 'annual';
   origin?: string;
 }) {
+  if (options.session.user.role === 'admin')
+    throw new HttpError(
+      'Administradores usam a gestão interna de planos.',
+      403
+    );
   if (await contaAdministrativaDesignada(options.session.user.id))
     throw new HttpError(
       'A conta administrativa designada usa um plano interno e não realiza compra de assinatura.',
@@ -681,11 +689,6 @@ export async function createStripeCheckoutUrl(options: {
     );
   if (options.planKey === 'admin')
     throw new HttpError('O plano Administrador não pode ser comprado.', 403);
-  const credenciais = await exigirCobrancaConfigurada(
-    options.session,
-    options.origin
-  );
-
   if (options.planKey === 'free') {
     throw new HttpError(
       'O plano Free não usa checkout externo. Utilize downgrade administrativo ou cancelamento via portal.',
@@ -694,6 +697,29 @@ export async function createStripeCheckoutUrl(options: {
   }
 
   const plan = toPlanSummary(await getPlanByKey(options.planKey));
+  if (!plan.isActive || !plan.isPublic)
+    throw new HttpError(
+      'Este plano não está disponível para contratação.',
+      404
+    );
+  const assinatura = await getAccountSubscriptionSummary(
+    options.session.user.id,
+    options.session.user.role
+  );
+  if (plan.displayOrder < assinatura.plan.displayOrder)
+    throw new HttpError(
+      'Para reduzir o plano, utilize a gestão da assinatura.',
+      400
+    );
+  if (assinatura.source === 'stripe')
+    return createStripePortalUrl({
+      session: options.session,
+      origin: options.origin,
+    });
+  const credenciais = await exigirCobrancaConfigurada(
+    options.session,
+    options.origin
+  );
   const priceId = resolveStripePriceId(
     plan.key,
     (await mapaDePrecosDaStripe(credenciais.ambiente)).get(plan.id),

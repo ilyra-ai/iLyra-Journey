@@ -31,6 +31,7 @@ export type NavigationItem = {
   icon: LucideIcon;
   section: string;
   adminOnly?: boolean;
+  userOnly?: boolean;
   shortcut?: string;
 };
 
@@ -140,6 +141,15 @@ export const navigationItems: NavigationDefinition[] = [
     icon: UserRound,
     section: 'Pessoal',
     sectionKey: 'personal',
+  },
+  {
+    href: '/planos',
+    label: 'Planos',
+    description: 'Compare os planos e escolha o próximo passo para você.',
+    icon: Gem,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+    userOnly: true,
   },
   {
     href: '/admin/dashboard',
@@ -272,6 +282,7 @@ function buildConfiguredNavigation(appConfig?: AppPageConfig) {
         section: getSectionLabel(sectionKey, appConfig) ?? 'Principal',
         sectionKey,
         adminOnly: baseItem?.adminOnly ?? item.href.startsWith('/admin'),
+        userOnly: baseItem?.userOnly,
         shortcut: baseItem?.shortcut,
         visible: item.visible,
       } satisfies NavigationDefinition;
@@ -321,6 +332,7 @@ export function getVisibleNavigation(
     (item) =>
       item.visible !== false &&
       (!item.adminOnly || isAdmin) &&
+      (!item.userOnly || !isAdmin) &&
       (rotaLiberada ? rotaLiberada(item.href) : true)
   );
 }
@@ -338,7 +350,7 @@ export function groupNavigation(items: NavigationItem[]) {
 
 export function getPageMeta(pathname: string, appConfig?: AppPageConfig) {
   const configuredItem = appConfig
-    ? getVisibleNavigation(true, appConfig).find(
+    ? buildConfiguredNavigation(appConfig).find(
         (item) => item.href === pathname
       )
     : null;

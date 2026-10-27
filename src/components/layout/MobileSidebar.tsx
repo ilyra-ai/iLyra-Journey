@@ -4,6 +4,7 @@ import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 import React from 'react';
 import Link from 'next/link';
 import { Menu } from 'lucide-react';
+import { PlanoJuntoAoLogo } from '@/components/subscription/PlanoJuntoAoLogo';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { HistoricoDeConversas } from '@/components/chat/HistoricoDeConversas';
 import { Button } from '@/components/ui/button';
@@ -58,27 +59,30 @@ export function MobileSidebar() {
 
       <SheetContent side="left" className="gap-5">
         <SheetHeader className="space-y-0 pr-10">
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 rounded px-2.5 py-1"
-            onClick={() => setOpen(false)}
-          >
-            <MarcaLyra tamanho={scalePx(36, iconScale)} />
-            <span className="min-w-0 text-left">
-              <SheetTitle
-                className="font-display font-semibold lowercase leading-tight text-foreground"
-                style={{ fontSize: scaleRem(1.125, navLabelScale) }}
-              >
-                {appConfig.sidebar.brandTitle}
-              </SheetTitle>
-              <span
-                className="block truncate text-muted-foreground"
-                style={{ fontSize: scaleRem(0.75, navLabelScale) }}
-              >
-                {appConfig.sidebar.brandEyebrow}
+          <div className="flex flex-wrap items-center gap-1">
+            <Link
+              href="/"
+              className="flex items-center gap-2.5 rounded px-2.5 py-1"
+              onClick={() => setOpen(false)}
+            >
+              <MarcaLyra tamanho={scalePx(36, iconScale)} />
+              <span className="min-w-0 text-left">
+                <SheetTitle
+                  className="font-display font-semibold lowercase leading-tight text-foreground"
+                  style={{ fontSize: scaleRem(1.125, navLabelScale) }}
+                >
+                  {appConfig.sidebar.brandTitle}
+                </SheetTitle>
+                <span
+                  className="block truncate text-muted-foreground"
+                  style={{ fontSize: scaleRem(0.75, navLabelScale) }}
+                >
+                  {appConfig.sidebar.brandEyebrow}
+                </span>
               </span>
-            </span>
-          </Link>
+            </Link>
+            <PlanoJuntoAoLogo aoAbrir={() => setOpen(false)} />
+          </div>
         </SheetHeader>
 
         <div className="rounded-md border border-border bg-background px-3.5 py-3">

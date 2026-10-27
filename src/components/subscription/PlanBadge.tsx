@@ -36,14 +36,20 @@ const planVisuals: Record<
   },
 };
 
-export function PlanBadge({ planKey }: { planKey: PlanKey }) {
+export function PlanBadge({
+  planKey,
+  label,
+}: {
+  planKey: PlanKey;
+  label?: string;
+}) {
   const visual = planVisuals[planKey];
   const Icon = visual.icon;
 
   return (
-    <Badge variant="outline" className={cn(visual.className)}>
+    <Badge variant="outline" className={cn('max-w-32', visual.className)}>
       <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-      {visual.label}
+      <span className="truncate">{label ?? visual.label}</span>
     </Badge>
   );
 }

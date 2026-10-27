@@ -34,10 +34,12 @@ export function BillingActionPanel({
   currentPlanKey,
   compact = false,
   preferredPlanKey,
+  billingInterval,
 }: {
   currentPlanKey: PlanKey;
   compact?: boolean;
   preferredPlanKey?: PlanKey;
+  billingInterval?: 'monthly' | 'annual';
 }) {
   const { data, loading, refresh } = useAccountBilling();
   const [actionKey, setActionKey] = React.useState<string | null>(null);
@@ -71,7 +73,7 @@ export function BillingActionPanel({
 
         window.location.href = payload.url;
       } catch (error) {
-        toast.error('Falha ao iniciar o billing externo.', {
+        toast.error('Não foi possível abrir o pagamento.', {
           description:
             error instanceof Error ? error.message : 'Erro desconhecido.',
         });
@@ -95,17 +97,30 @@ export function BillingActionPanel({
   }
 
   if (!data) {
-    return null;
+    return (
+      <Alert>
+        <AlertTitle>
+          Não foi possível consultar as opções de pagamento
+        </AlertTitle>
+        <AlertDescription>
+          <Button variant="outline" onClick={() => void refresh()}>
+            Tentar novamente
+          </Button>
+        </AlertDescription>
+      </Alert>
+    );
   }
 
   if (!data.environment.configured) {
     return (
       <Alert className="rounded-md border-border bg-card shadow-none">
         <Settings2 className="h-4 w-4" aria-hidden="true" />
-        <AlertTitle>Billing externo ainda não configurado</AlertTitle>
+        <AlertTitle>Pagamentos online indisponíveis no momento</AlertTitle>
         <AlertDescription className="break-words">
-          O app já possui a camada Stripe pronta, mas este ambiente ainda não
-          recebeu: {data.environment.missingKeys.join(', ')}.
+          Você pode comparar os planos e tentar novamente mais tarde.
+          {data.environment.missingKeys.length > 0
+            ? ` Configuração administrativa pendente: ${data.environment.missingKeys.join(', ')}.`
+            : null}
         </AlertDescription>
       </Alert>
     );
@@ -115,6 +130,8 @@ export function BillingActionPanel({
     currentPlanKey !== 'free' && data.subscriptionSource !== 'stripe';
 
   const commercialPlans = data.plans.filter((plan) => {
+    // Uma assinatura já vinculada deve ser alterada pelo portal.
+    if (data.subscriptionSource === 'stripe') return false;
     if (!plan.purchaseEnabled) {
       return false;
     }
@@ -142,8 +159,8 @@ export function BillingActionPanel({
         <AlertTitle>Nenhuma ação comercial disponível agora</AlertTitle>
         <AlertDescription>
           {currentPlanKey === 'care'
-            ? 'Seu usuário já está no plano mais alto do catálogo publicado e ainda não existe cobrança Stripe vinculada para abrir o portal.'
-            : 'O catálogo comercial deste ambiente não expôs um checkout aplicável para o seu estado atual. Revise os price IDs do plano e a origem da assinatura para liberar a próxima ação.'}
+            ? 'Você já está no plano mais completo disponível.'
+            : 'Este plano não está disponível para contratação agora. Tente novamente mais tarde.'}
         </AlertDescription>
       </Alert>
     );
@@ -185,15 +202,15 @@ export function BillingActionPanel({
                 <p className="text-xs text-muted-foreground">{plan.tagline}</p>
                 {isCurrentPlanCheckout ? (
                   <p className="mt-2 text-xs text-muted-foreground">
-                    Seu entitlement já está neste plano. O checkout abaixo serve
-                    para ativar a cobrança externa real sem trocar o nível atual
-                    da assinatura.
+                    Você já tem acesso a este plano. Aqui poderá contratar a
+                    assinatura sem alterar o nível dos seus recursos.
                   </p>
                 ) : null}
               </div>
             ) : null}
             <div className="grid gap-2 sm:grid-cols-2">
-              {plan.availableIntervals.includes('monthly') ? (
+              {billingInterval !== 'annual' &&
+              plan.availableIntervals.includes('monthly') ? (
                 <Button
                   className="h-auto min-h-10 whitespace-normal"
                   onClick={() =>
@@ -225,7 +242,8 @@ export function BillingActionPanel({
                     : `Assinar ${plan.name} mensal`}
                 </Button>
               ) : null}
-              {plan.availableIntervals.includes('annual') ? (
+              {billingInterval !== 'monthly' &&
+              plan.availableIntervals.includes('annual') ? (
                 <Button
                   variant="outline"
                   className="h-auto min-h-10 whitespace-normal"
@@ -259,6 +277,12 @@ export function BillingActionPanel({
                 </Button>
               ) : null}
             </div>
+            {billingInterval &&
+            !plan.availableIntervals.includes(billingInterval) ? (
+              <p role="status" className="text-sm text-muted-foreground">
+                Este plano não está disponível no ciclo selecionado.
+              </p>
+            ) : null}
           </div>
         );
       })}

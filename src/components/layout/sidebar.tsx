@@ -4,6 +4,7 @@ import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 import Link from 'next/link';
 import React from 'react';
 import { Settings2 } from 'lucide-react';
+import { PlanoJuntoAoLogo } from '@/components/subscription/PlanoJuntoAoLogo';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { HistoricoDeConversas } from '@/components/chat/HistoricoDeConversas';
 import { useAuth } from '@/context/AuthContext';
@@ -73,26 +74,29 @@ export function Sidebar({
       }}
     >
       <div className="flex h-full flex-col gap-5 px-3.5 py-5">
-        <Link
-          href="/"
-          className="flex items-center gap-2.5 rounded px-2.5 py-1"
-        >
-          <MarcaLyra tamanho={scalePx(36, iconScale)} prioridade />
-          <span className="min-w-0">
-            <span
-              className="block font-display font-semibold lowercase leading-tight text-foreground"
-              style={{ fontSize: scaleRem(1.125, navLabelScale) }}
-            >
-              {appConfig.sidebar.brandTitle}
+        <div className="flex flex-wrap items-center gap-1">
+          <Link
+            href="/"
+            className="flex items-center gap-2.5 rounded px-2.5 py-1"
+          >
+            <MarcaLyra tamanho={scalePx(36, iconScale)} prioridade />
+            <span className="min-w-0">
+              <span
+                className="block font-display font-semibold lowercase leading-tight text-foreground"
+                style={{ fontSize: scaleRem(1.125, navLabelScale) }}
+              >
+                {appConfig.sidebar.brandTitle}
+              </span>
+              <span
+                className="block truncate text-muted-foreground"
+                style={{ fontSize: scaleRem(0.75, navLabelScale) }}
+              >
+                {appConfig.sidebar.brandEyebrow}
+              </span>
             </span>
-            <span
-              className="block truncate text-muted-foreground"
-              style={{ fontSize: scaleRem(0.75, navLabelScale) }}
-            >
-              {appConfig.sidebar.brandEyebrow}
-            </span>
-          </span>
-        </Link>
+          </Link>
+          {!previa ? <PlanoJuntoAoLogo /> : null}
+        </div>
 
         <nav
           aria-label="Navegação principal"

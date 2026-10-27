@@ -26,6 +26,37 @@ function semAsPaginas(hrefs: string[]): AppPageConfig {
 }
 
 describe('navegação com configuração salva', () => {
+  it('oferece Planos aos usuários comuns e preserva somente a gestão para administradores', () => {
+    const config = semAsPaginas(['/planos']);
+    expect(
+      getVisibleNavigation(false, config).some(
+        (item) => item.href === '/planos'
+      )
+    ).toBe(true);
+    expect(
+      getVisibleNavigation(true, config).some((item) => item.href === '/planos')
+    ).toBe(false);
+    expect(
+      getVisibleNavigation(true, config).some(
+        (item) => item.href === '/admin/plans'
+      )
+    ).toBe(true);
+    config.sidebar.items.push({
+      href: '/planos',
+      label: 'Minha assinatura',
+      description: 'Meus planos',
+      visible: true,
+    });
+    expect(
+      getVisibleNavigation(false, config).find(
+        (item) => item.href === '/planos'
+      )?.label
+    ).toBe('Minha assinatura');
+    expect(getPageMeta('/planos', config).title).toBe('Minha assinatura');
+    expect(
+      getVisibleNavigation(true, config).some((item) => item.href === '/planos')
+    ).toBe(false);
+  });
   it('atualiza nomes antigos da Lyra sem alterar destino, atalho ou permissões', () => {
     const config = getDefaultPageConfig('app');
     const chat = config.sidebar.items.find((item) => item.href === '/chat')!;
