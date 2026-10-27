@@ -24,9 +24,9 @@
 | Progresso          | `████████████████░░░░` **82%** |
 | Tarefas totais     | 133                            |
 | 🟢 Finalizadas     | 109                            |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 4                              |
-| ⚪ A iniciar       | 20                             |
+| ⚪ A iniciar       | 19                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
@@ -49,13 +49,24 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de parada em 2026-10-26:** 113 concluída e publicada em `cca2c8c4ad4bf0bc05239eeccbaddc356b00e329`. Próxima conferência: 114, avaliando integração com 115 para evitar retrabalho nas métricas e descrições. Não executar as bloqueadas 86, 90, 100 e 106 sem nova orientação.
+**Ponto de parada em 2026-10-26:** 113 concluída e publicada em `cca2c8c4ad4bf0bc05239eeccbaddc356b00e329`; 114 em andamento após conferência prévia. 115 seguirá com os contratos existentes, sem reconstrução das abas. Não executar as bloqueadas 86, 90, 100 e 106 sem nova orientação.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento neste fechamento.
+### 114 · Painel principal do usuário com resumo essencial e métricas organizadas em abas
+
+- **Status:** 🔵 em andamento · **Registro e início:** 2026-10-26.
+- **Pedido do usuário:** o painel do usuário reúne muitas métricas na mesma página, tornando a consulta cansativa e reduzindo o interesse. Deixar no painel principal somente o que é importante, com um resumo rápido, e criar abas na própria página para o usuário escolher as métricas que deseja consultar.
+- **Conferência prévia obrigatória:** inspecionar primeiro a implementação atual, os cartões, métricas, fontes, carregamento e permissões do painel autenticado. Reaproveitar componentes e recursos que já funcionam, incluindo a matriz de entitlements e as verificações da tarefa 105. Esta solicitação se refere ao painel do usuário; não transferir o escopo para o dashboard administrativo nem refazer entregas já comprovadas.
+- **Resumo principal:** selecionar e justificar as informações essenciais para uma visão rápida, com poucos cartões prioritários, linguagem clara e próximos passos pertinentes aos dados reais do titular. Retirar dessa visão inicial o excesso de detalhamento e repetições, mantendo acesso às informações completas pelas abas. Não excluir métricas, histórico, cálculos, ações ou recursos existentes para simplificar a tela.
+- **Abas e escolha do conteúdo:** organizar todas as métricas e seus detalhes em abas com nomes compreensíveis e agrupamentos coerentes com o conteúdo real do app. Permitir que o usuário abra o assunto e as métricas que deseja ver na mesma página, com indicação clara da aba ativa, carregamento, erro e ausência de dados. Conferir acesso direto e recarga sem destinos quebrados, preservando os filtros e ações pertinentes. Evitar consultas e cálculos desnecessários de conteúdo não exibido, sem prejudicar atualização ou persistência.
+- **Design e acessibilidade:** pesquisar referências oficiais atuais antes de implementar e seguir o Lyra Clean claro, o logo e os tokens existentes, com qualidade premium, leitura rápida e responsividade. Conferir abas no desktop e celular, navegação por teclado e leitor de tela, foco, contraste, zoom, rolagem e nomes acessíveis; não esconder métricas por cortes ou estouro horizontal.
+- **Dados e integração:** usar exclusivamente dados reais, autorizados e do próprio titular, preservando períodos, unidades, origem e estados sem registro. Respeitar os recursos do plano na visão resumida, em cada aba e nas APIs; abas não devem conceder permissões apenas por estarem visíveis. Coordenar os textos e o preenchimento automático com a tarefa 115 e reaproveitar os componentes visuais da tarefa 113 quando disponíveis, sem depender de funcionalidades ainda não implementadas.
+- **Validação e entrega:** validar a seleção do resumo, a cobertura de todas as métricas nas abas, alternância, filtros, ações e CRUD aplicável, atualização dos dados, persistência, recarga, novo login, falhas e isolamento entre contas. Conferir os planos Free, Meta, Care e acesso administrativo, em 320, 390, 768 e 1440 px, comparando fontes com as APIs e MySQL reais. Executar QA no navegador e gates pertinentes, revisar o diff e publicar commit e push próprios na `main`, sem branches ou worktrees, seguidos da atualização do painel com SHA e evidências reais. Este registro não representa implementação iniciada ou concluída.
+
+- **Conferência em 2026-10-26:** `Dashboard` ainda concentra sete grupos de métricas, gráficos, sono, leituras integrativas e avaliações na mesma visão; não há abas por assunto. A 113 já fornece o padrão visual de abas e permissões. A 114 organiza os componentes existentes e o carregamento por assunto; a 115 trata o contrato de geração e persistência das descrições no servidor. Manter entregas próprias, com encaixe dos componentes existentes, evita refazer a interface sem condicionar a organização do painel à prova externa de um provedor. Resumo proposto: sono, passos e disposição calculada, com registro e atualização; detalhes completos nas abas e seleção do grupo de registros. Pesquisa W3C APG consultada para ativação manual, foco e latência.
 
 ### BLOQUEADAS
 
@@ -131,17 +142,6 @@ Nenhuma tarefa em andamento neste fechamento.
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 114 · Painel principal do usuário com resumo essencial e métricas organizadas em abas
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** o painel do usuário reúne muitas métricas na mesma página, tornando a consulta cansativa e reduzindo o interesse. Deixar no painel principal somente o que é importante, com um resumo rápido, e criar abas na própria página para o usuário escolher as métricas que deseja consultar.
-- **Conferência prévia obrigatória:** inspecionar primeiro a implementação atual, os cartões, métricas, fontes, carregamento e permissões do painel autenticado. Reaproveitar componentes e recursos que já funcionam, incluindo a matriz de entitlements e as verificações da tarefa 105. Esta solicitação se refere ao painel do usuário; não transferir o escopo para o dashboard administrativo nem refazer entregas já comprovadas.
-- **Resumo principal:** selecionar e justificar as informações essenciais para uma visão rápida, com poucos cartões prioritários, linguagem clara e próximos passos pertinentes aos dados reais do titular. Retirar dessa visão inicial o excesso de detalhamento e repetições, mantendo acesso às informações completas pelas abas. Não excluir métricas, histórico, cálculos, ações ou recursos existentes para simplificar a tela.
-- **Abas e escolha do conteúdo:** organizar todas as métricas e seus detalhes em abas com nomes compreensíveis e agrupamentos coerentes com o conteúdo real do app. Permitir que o usuário abra o assunto e as métricas que deseja ver na mesma página, com indicação clara da aba ativa, carregamento, erro e ausência de dados. Conferir acesso direto e recarga sem destinos quebrados, preservando os filtros e ações pertinentes. Evitar consultas e cálculos desnecessários de conteúdo não exibido, sem prejudicar atualização ou persistência.
-- **Design e acessibilidade:** pesquisar referências oficiais atuais antes de implementar e seguir o Lyra Clean claro, o logo e os tokens existentes, com qualidade premium, leitura rápida e responsividade. Conferir abas no desktop e celular, navegação por teclado e leitor de tela, foco, contraste, zoom, rolagem e nomes acessíveis; não esconder métricas por cortes ou estouro horizontal.
-- **Dados e integração:** usar exclusivamente dados reais, autorizados e do próprio titular, preservando períodos, unidades, origem e estados sem registro. Respeitar os recursos do plano na visão resumida, em cada aba e nas APIs; abas não devem conceder permissões apenas por estarem visíveis. Coordenar os textos e o preenchimento automático com a tarefa 115 e reaproveitar os componentes visuais da tarefa 113 quando disponíveis, sem depender de funcionalidades ainda não implementadas.
-- **Validação e entrega:** validar a seleção do resumo, a cobertura de todas as métricas nas abas, alternância, filtros, ações e CRUD aplicável, atualização dos dados, persistência, recarga, novo login, falhas e isolamento entre contas. Conferir os planos Free, Meta, Care e acesso administrativo, em 320, 390, 768 e 1440 px, comparando fontes com as APIs e MySQL reais. Executar QA no navegador e gates pertinentes, revisar o diff e publicar commit e push próprios na `main`, sem branches ou worktrees, seguidos da atualização do painel com SHA e evidências reais. Este registro não representa implementação iniciada ou concluída.
 
 ### 115 · Preenchimento automático das métricas e leituras por IA com linguagem natural para leigos
 
