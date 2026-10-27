@@ -340,6 +340,14 @@ export async function exportarDadosDoTitular(userId: string) {
         ? image_data.toString('base64')
         : null,
     })),
+    descricoes_do_painel: await queryRows<RowDataPacket>(
+      'SELECT record_date,status,content,generated_at FROM dashboard_descriptions WHERE user_id=? ORDER BY record_date',
+      [userId]
+    ),
+    uso_das_descricoes_do_painel: await queryRows<RowDataPacket>(
+      'SELECT usage_date,attempts FROM dashboard_description_usage WHERE user_id=? ORDER BY usage_date',
+      [userId]
+    ),
     memoria_graphiti: await exportarMemorias(userId),
     ...tabelas,
   };

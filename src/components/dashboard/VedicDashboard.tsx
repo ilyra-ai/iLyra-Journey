@@ -5,10 +5,10 @@
  *
  * Painel dos motores integrativos:
  * - Dosha Ayurvédico Dinâmico
- * - Índice de Coerência Quântica
- * - Pancha Koshas (Vedanta)
+ * - Índice de Ritmo pessoal
+ * - Dimensões do bem-estar (Vedanta)
  * - Alinhamento de Chakras
- * - Índice Pránico (Energia Vital)
+ * - Índice de energia (Energia Vital)
  *
  * Cada índice só aparece com sinais suficientes medidos no dia (tarefa 57);
  * sem eles, o card diz o que falta e oferece o registro do dia.
@@ -51,6 +51,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { useVedicInsights } from '@/hooks/use-vedic-insights';
 import { resumoDoGrafico } from '@/lib/graficos/resumo';
 import { cn } from '@/lib/utils';
+import { descreverLeitura, type ChaveDaLeitura } from '@/lib/painel/catalogo';
+import {
+  CAMADAS_SIMPLES,
+  CENTROS_SIMPLES,
+  ENERGIA_SIMPLES,
+} from '@/lib/painel/leituras-simples';
+import { useExplicacoesDoPainel } from './ExplicacoesDoPainel';
 
 import {
   CoberturaDoIndice,
@@ -60,21 +67,21 @@ import {
 const DOSHA_CONFIG = {
   vata: {
     icon: Wind,
-    label: 'Vata',
+    label: 'Leveza',
     subtitle: 'Ar + Éter',
     textColor: 'text-info',
     bgColor: 'bg-info-light',
   },
   pitta: {
     icon: Flame,
-    label: 'Pitta',
+    label: 'Intensidade',
     subtitle: 'Fogo + Água',
     textColor: 'text-warning',
     bgColor: 'bg-warning-light',
   },
   kapha: {
     icon: Leaf,
-    label: 'Kapha',
+    label: 'Constância',
     subtitle: 'Terra + Água',
     textColor: 'text-success',
     bgColor: 'bg-success-light',
@@ -96,16 +103,16 @@ const PRANA_BADGE = {
 } as const;
 
 const ROTULO_DO_COMPONENTE: Record<string, string> = {
-  bioResonance: 'Bio-Ressonância',
-  cosmicAlignment: 'Alinhamento Cósmico',
-  consciousnessDepth: 'Profundidade',
-  rhythmicCoherence: 'Coerência Rítmica',
+  bioResonance: 'Sinais registrados',
+  cosmicAlignment: 'Componente simbólico',
+  consciousnessDepth: 'Reflexão',
+  rhythmicCoherence: 'Regularidade',
 };
 
 const CONFIG_DA_TENDENCIA = {
-  icq: { label: 'Coerência (ICQ)', color: 'hsl(var(--cosmic))' },
-  prana: { label: 'Prana', color: 'hsl(var(--success))' },
-  kosha: { label: 'Koshas', color: 'hsl(var(--chart-3))' },
+  icq: { label: 'Ritmo pessoal', color: 'hsl(var(--cosmic))' },
+  prana: { label: 'Energia', color: 'hsl(var(--success))' },
+  kosha: { label: 'Bem-estar', color: 'hsl(var(--chart-3))' },
 } satisfies ChartConfig;
 
 function LoadingVedicDashboard() {
@@ -173,6 +180,8 @@ interface VedicDashboardProps {
 }
 
 export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
+  const explicacoes = useExplicacoesDoPainel();
+  const explicar = (id: ChaveDaLeitura) => descreverLeitura(id, explicacoes);
   const { dosha, coherence, chakras, prana, koshas, history, loading } =
     useVedicInsights(featureEnabled);
 
@@ -194,13 +203,12 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
           id="indices-integrativos"
           className="font-display text-2xl font-semibold tracking-[-0.02em] text-foreground"
         >
-          Insights Védicos-Quânticos
+          Leituras de autoconhecimento
         </h2>
         <p className="max-w-3xl text-body leading-relaxed text-muted-foreground">
-          Leitura integrativa dos seus sinais do dia com a astrologia védica e o
-          ayurveda. Cada índice só aparece quando há sinais suficientes medidos;
-          os números são orientações de autoconhecimento, não avaliação de
-          saúde.
+          Leituras simbólicas construídas pelo método do app com os registros
+          disponíveis. Os índices apoiam a reflexão pessoal e não medem funções
+          do corpo nem estabelecem condições de saúde.
         </p>
       </div>
 
@@ -220,17 +228,17 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
             <ChartFigure
               resumo={resumoDoGrafico('Tendência dos índices em 7 dias', [
                 {
-                  nome: 'Coerência',
+                  nome: 'Ritmo pessoal',
                   valores: history.map((d) => d.icq),
                   unidade: '/100',
                 },
                 {
-                  nome: 'Prana',
+                  nome: 'Energia',
                   valores: history.map((d) => d.prana),
                   unidade: '/100',
                 },
                 {
-                  nome: 'Koshas',
+                  nome: 'Bem-estar',
                   valores: history.map((d) => d.kosha),
                   unidade: '/100',
                 },
@@ -307,22 +315,22 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
           <CabecalhoDoIndice
             selo={
               <Badge variant="cosmic" className="self-start">
-                Dosha dinâmico
+                Tendência pessoal
               </Badge>
             }
             titulo={`${doshaConfig.label} dominante`}
-            descricao={doshaConfig.subtitle}
+            descricao={explicar('leitura_tendencia')}
             icone={DoshaIcon}
             corDoIcone={cn(doshaConfig.bgColor, doshaConfig.textColor)}
           />
           <CardContent className="flex flex-col gap-4 px-5 pb-5">
             <p className="text-sm font-medium text-muted-foreground">
-              Prakriti atual: {dosha.resultado.prakritiLabel}
+              Tema do momento: {doshaConfig.label}
             </p>
             {dosha.base === 'lua' ? (
               <p className="rounded-lg border border-dashed border-border bg-muted/40 p-3 text-sm leading-6 text-muted-foreground">
-                Sem sinais suficientes do corpo hoje: a tendência vem só da Lua
-                do dia. Registre o seu dia para incluir os seus sinais.
+                Sem sinais suficientes do corpo hoje: esta é uma leitura apenas
+                simbólica. Registre seu dia para incluir seus sinais.
               </p>
             ) : (
               <CoberturaDoIndice cobertura={dosha.cobertura} />
@@ -354,16 +362,16 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
                     aria-hidden="true"
                     className="mt-1 size-3.5 shrink-0 text-cosmic"
                   />
-                  {dosha.resultado.astroInfluence}
+                  {explicar('leitura_reflexao')}
                 </p>
               </div>
             ) : null}
             <div className="rounded-md border border-border p-4">
               <p className="text-sm font-medium text-muted-foreground">
-                Nutrição recomendada
+                Sobre sua alimentação
               </p>
               <p className="mt-1.5 text-body leading-relaxed text-foreground/80">
-                {dosha.resultado.recommendations.nutrition}
+                {explicar('leitura_tendencia')}
               </p>
             </div>
           </CardContent>
@@ -379,12 +387,12 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
                     variant={COHERENCE_BADGE[coherence.resultado.level]}
                     className="self-start"
                   >
-                    Coerência Quântica
+                    Ritmo pessoal
                   </Badge>
                 }
                 titulo={
                   <>
-                    ICQ:{' '}
+                    Ritmo:{' '}
                     <span className="font-display text-4xl font-semibold tracking-[-0.03em]">
                       {coherence.resultado.index}
                     </span>
@@ -402,14 +410,14 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
               />
               <CardContent className="flex flex-col gap-4 px-5 pb-5">
                 <Progress
-                  aria-label={`Índice de Coerência Quântica: ${coherence.resultado.index} de 100`}
+                  aria-label={`Índice de Ritmo pessoal: ${coherence.resultado.index} de 100`}
                   value={coherence.resultado.index}
                   tone="astral"
                   className="h-1.5"
                 />
                 <CoberturaDoIndice cobertura={coherence.cobertura} />
                 <p className="text-body leading-relaxed text-foreground/80">
-                  {coherence.resultado.description}
+                  {explicar('leitura_coerencia')}
                 </p>
                 <dl className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2">
                   {Object.entries(coherence.resultado.components).map(
@@ -434,7 +442,7 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
                       aria-hidden="true"
                       className="mt-1 size-3.5 shrink-0"
                     />
-                    {coherence.resultado.recommendation}
+                    {explicar('leitura_reflexao')}
                   </p>
                 </div>
               </CardContent>
@@ -444,16 +452,16 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
               <CabecalhoDoIndice
                 selo={
                   <Badge variant="outline" className="self-start">
-                    Coerência Quântica
+                    Ritmo pessoal
                   </Badge>
                 }
-                titulo="ICQ: —"
+                titulo="Ritmo: —"
                 descricao="Aguardando os sinais de hoje"
                 icone={Atom}
               />
               <CardContent className="px-5 pb-5">
                 <SemSinaisSuficientes
-                  indice="o Índice de Coerência Quântica"
+                  indice="o Índice de Ritmo pessoal"
                   cobertura={coherence.cobertura}
                 />
               </CardContent>
@@ -461,7 +469,7 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
           )}
         </Card>
 
-        {/* Pancha Koshas */}
+        {/* Dimensões do bem-estar */}
         <Card className="min-w-0 xl:col-span-2">
           <CabecalhoDoIndice
             selo={
@@ -469,17 +477,17 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
                 variant={koshas.resultado ? 'cosmic' : 'outline'}
                 className="self-start"
               >
-                Vedanta e Dharma
+                Visão integrada
               </Badge>
             }
             titulo={
               koshas.resultado ? (
                 <>
-                  Pancha Koshas:{' '}
+                  Dimensões do bem-estar:{' '}
                   <SobreCem valor={koshas.resultado.overallScore} />
                 </>
               ) : (
-                'Pancha Koshas: —'
+                'Dimensões do bem-estar: —'
               )
             }
             descricao={
@@ -495,22 +503,19 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
                 <CoberturaDoIndice cobertura={koshas.cobertura} />
                 <div className="rounded-md border border-border bg-background p-4">
                   <p className="text-body leading-relaxed text-foreground/80">
-                    {koshas.resultado.dharmaAlignment}
+                    {explicar('leitura_camadas')}
                   </p>
                 </div>
                 <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                   {koshas.resultado.koshas.map((k) => (
                     <li
-                      key={k.name}
+                      key={CAMADAS_SIMPLES[k.name]?.nome ?? k.translation}
                       className="flex min-w-0 flex-col gap-2 rounded-md border border-border p-4"
                     >
                       <div className="flex items-start justify-between gap-2">
                         <div className="min-w-0">
                           <p className="text-sm font-semibold text-foreground">
-                            {k.name}
-                          </p>
-                          <p className="text-xs text-muted-foreground">
-                            {k.sanskrit}
+                            {CAMADAS_SIMPLES[k.name]?.nome ?? k.translation}
                           </p>
                         </div>
                         <span className="font-display text-xl font-semibold tabular-nums text-cosmic-strong">
@@ -518,17 +523,19 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
                         </span>
                       </div>
                       <Progress
-                        aria-label={`${k.name}: ${k.score} de 100`}
+                        aria-label={`${CAMADAS_SIMPLES[k.name]?.nome ?? k.translation}: ${k.score} de 100`}
                         value={k.score}
                         tone="astral"
                         className="h-1.5"
                       />
                       <p className="mt-1 text-xs font-medium text-muted-foreground">
-                        {k.translation}:{' '}
-                        <span className="text-foreground">{k.status}</span>
+                        {CAMADAS_SIMPLES[k.name]?.nome ?? k.translation}:{' '}
+                        <span className="text-foreground">
+                          {'Índice simbólico'}
+                        </span>
                       </p>
                       <p className="line-clamp-2 text-xs leading-5 text-muted-foreground">
-                        {k.insight}
+                        {CAMADAS_SIMPLES[k.name]?.descricao}
                       </p>
                     </li>
                   ))}
@@ -536,7 +543,7 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
               </>
             ) : (
               <SemSinaisSuficientes
-                indice="os Pancha Koshas"
+                indice="os Dimensões do bem-estar"
                 cobertura={koshas.cobertura}
                 comBotao={false}
               />
@@ -558,10 +565,11 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
             titulo={
               chakras.resultado ? (
                 <>
-                  Chakras: <SobreCem valor={chakras.resultado.overallScore} />
+                  Temas pessoais:{' '}
+                  <SobreCem valor={chakras.resultado.overallScore} />
                 </>
               ) : (
-                'Chakras: —'
+                'Temas pessoais: —'
               )
             }
             descricao={
@@ -578,7 +586,7 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
                 <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
                   {chakras.resultado.chakras.map((c) => (
                     <li
-                      key={c.name}
+                      key={CENTROS_SIMPLES[c.name]?.nome ?? 'Tema pessoal'}
                       className="flex min-w-0 flex-col items-center gap-2 rounded-md border border-border p-4 text-center"
                     >
                       {/* A cor de cada chakra vem do motor (dado), por isso
@@ -591,13 +599,13 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
                         {c.score}
                       </div>
                       <p className="text-sm font-semibold text-foreground">
-                        {c.name}
+                        {CENTROS_SIMPLES[c.name]?.nome ?? 'Tema pessoal'}
                       </p>
                       <p className="text-xs text-muted-foreground first-letter:uppercase">
-                        {c.status}
+                        {'Índice simbólico'}
                       </p>
                       <p className="text-xs leading-5 text-muted-foreground">
-                        {c.insight.split('.')[0]}.
+                        {CENTROS_SIMPLES[c.name]?.descricao}
                       </p>
                     </li>
                   ))}
@@ -605,7 +613,7 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
               </>
             ) : (
               <SemSinaisSuficientes
-                indice="o alinhamento dos chakras"
+                indice="os temas pessoais"
                 cobertura={chakras.cobertura}
                 comBotao={false}
               />
@@ -631,10 +639,10 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
             titulo={
               prana.resultado ? (
                 <>
-                  Índice Pránico: <SobreCem valor={prana.resultado.index} />
+                  Índice de energia: <SobreCem valor={prana.resultado.index} />
                 </>
               ) : (
-                'Índice Pránico: —'
+                'Índice de energia: —'
               )
             }
             descricao={
@@ -654,30 +662,30 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
               <>
                 <CoberturaDoIndice cobertura={prana.cobertura} />
                 <p className="text-body leading-relaxed text-foreground/80">
-                  {prana.resultado.description}
+                  {explicar('leitura_energia')}
                 </p>
                 <ul className="grid gap-3 sm:grid-cols-3 lg:grid-cols-5">
                   {prana.resultado.vayus.map((v) => (
                     <li
-                      key={v.name}
+                      key={ENERGIA_SIMPLES[v.name]?.nome ?? 'Tema da rotina'}
                       className="flex min-w-0 flex-col gap-2 rounded-md border border-border p-4"
                     >
                       <div className="flex items-center justify-between gap-2">
                         <p className="min-w-0 text-sm font-semibold text-foreground">
-                          {v.name}
+                          {ENERGIA_SIMPLES[v.name]?.nome ?? 'Tema da rotina'}
                         </p>
                         <span className="font-display text-xl font-semibold tabular-nums text-foreground">
                           {v.score}
                         </span>
                       </div>
                       <Progress
-                        aria-label={`${v.name}: ${v.score} de 100`}
+                        aria-label={`${ENERGIA_SIMPLES[v.name]?.nome ?? 'Tema da rotina'}: ${v.score} de 100`}
                         value={v.score}
                         tone="astral"
                         className="h-1.5"
                       />
                       <p className="text-xs text-muted-foreground">
-                        {v.domain}
+                        {ENERGIA_SIMPLES[v.name]?.descricao}
                       </p>
                     </li>
                   ))}
@@ -689,14 +697,14 @@ export function VedicDashboard({ featureEnabled = true }: VedicDashboardProps) {
                         aria-hidden="true"
                         className="mt-1 size-3.5 shrink-0 text-cosmic"
                       />
-                      {prana.resultado.lunarInfluence}
+                      {explicar('leitura_reflexao')}
                     </p>
                   </div>
                 ) : null}
               </>
             ) : (
               <SemSinaisSuficientes
-                indice="o Índice Pránico"
+                indice="o Índice de energia"
                 cobertura={prana.cobertura}
                 comBotao={false}
               />

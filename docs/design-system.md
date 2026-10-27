@@ -202,6 +202,19 @@ frio (matiz 346) justamente para não se confundir com o coral de destaque.
   assinatura. A URL não altera permissões. Falhas de leitura têm aviso e
   retentativa, sem apresentar erro como um dia sem registros.
 
+## Explicações do painel (tarefa 115)
+
+O resumo, os grupos de registros e as orientações compartilham o catálogo de
+explicações. O aviso de origem distingue modelo conectado, catálogo, modo
+privado, atualização, limite e falha. Falha não oculta os valores registrados.
+As descrições para leigos não trazem nomes astrológicos técnicos; os
+fundamentos permanecem em detalhes recolhidos e identificados.
+
+Ausência de registro não é zero. Sem medição, o campo mantém seu estado vazio
+e usa a definição do catálogo. As pontuações interpretativas são apresentadas
+como reflexões, sem classificação clínica por um valor isolado. O cartão de
+mudanças aguarda histórico antes de anunciar estabilidade.
+
 ## Referências históricas
 
 - Proposta aprovada: sistema visual, login, dashboard e metas, publicados como

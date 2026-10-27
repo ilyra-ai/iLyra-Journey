@@ -56,7 +56,7 @@ export const navigationItems: NavigationDefinition[] = [
   {
     href: '/',
     label: 'Painel',
-    description: 'Seu dia em um olhar: energia, sono e o céu de hoje.',
+    description: 'Seu dia em um olhar: sono, movimento e reflexões.',
     icon: LayoutDashboard,
     section: 'Principal',
     sectionKey: 'principal',

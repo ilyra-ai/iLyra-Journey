@@ -1,5 +1,7 @@
 'use client';
 
+import { descreverLeitura } from '@/lib/painel/catalogo';
+import { useExplicacoesDoPainel } from './ExplicacoesDoPainel';
 import { Waves } from 'lucide-react';
 
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
@@ -23,6 +25,7 @@ export function HarmoniaAtualCard({ appConfig }: { appConfig: AppPageConfig }) {
   const habilitado = isPlanFeatureEnabled(subscription, 'dashboard_access');
   const { coherence, loading } = useVedicInsights(habilitado);
   const dashboardConfig = appConfig.dashboard;
+  const explicacoes = useExplicacoesDoPainel();
 
   const carregando = subscriptionLoading || (habilitado && loading);
   // Só com sinais suficientes medidos hoje (tarefa 57); antes, sem nenhum
@@ -34,7 +37,7 @@ export function HarmoniaAtualCard({ appConfig }: { appConfig: AppPageConfig }) {
     : !habilitado
       ? 'Disponível com o acesso ao painel do seu plano.'
       : resultado
-        ? `Coerência: ${resultado.level}. ${dashboardConfig.harmonyNote}`
+        ? descreverLeitura('leitura_harmonia', explicacoes)
         : `Sem sinais suficientes hoje (${resumoDaCobertura(coherence.cobertura)}). Registre o seu dia para calcular.`;
 
   return (

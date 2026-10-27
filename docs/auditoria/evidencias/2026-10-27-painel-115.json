@@ -1,0 +1,142 @@
+{
+  "evidencias": [
+    {
+      "tela": "painel115-resumo-1440",
+      "regras": 28,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-resumo-390",
+      "regras": 24,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-resumo-320",
+      "regras": 24,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-sono-1440",
+      "regras": 31,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-sono-320",
+      "regras": 27,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-recuperacao-1440",
+      "regras": 30,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-recuperacao-320",
+      "regras": 26,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-movimento-1440",
+      "regras": 30,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-movimento-320",
+      "regras": 26,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-glicose-1440",
+      "regras": 30,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-glicose-320",
+      "regras": 26,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-alimentacao-1440",
+      "regras": 30,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-alimentacao-320",
+      "regras": 26,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-mente-1440",
+      "regras": 30,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-mente-320",
+      "regras": 26,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-corpo-1440",
+      "regras": 30,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-corpo-320",
+      "regras": 26,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-orientacoes-1440",
+      "regras": 30,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-orientacoes-390",
+      "regras": 28,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-orientacoes-320",
+      "regras": 28,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-evolucao-1440",
+      "regras": 28,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-evolucao-390",
+      "regras": 24,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-evolucao-320",
+      "regras": 24,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-avaliacoes-1440",
+      "regras": 28,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-avaliacoes-390",
+      "regras": 24,
+      "violacoes": 0
+    },
+    {
+      "tela": "painel115-avaliacoes-320",
+      "regras": 24,
+      "violacoes": 0
+    },
+    {
+      "contrato": "HTTP de QA identificado; não é inferência de um modelo real",
+      "campos": 53,
+      "geracoes": 2,
+      "persistencia": "cache, recarga, novo login, edição, exportação e modo privado conferidos",
+      "valoresOriginais": "passos e sono preservados no MySQL"
+    }
+  ],
+  "excecoes": []
+}

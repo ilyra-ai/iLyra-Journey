@@ -77,3 +77,18 @@ Recomendação para produção: revogar `UPDATE` e `DELETE` em `fiscal_records` 
 A exportação inclui `financeiro`: faturas, pagamentos vinculados, reembolsos e estado/data das operações. Valores monetários são strings de unidades mínimas para preservar precisão. A ligação exige registro fiscal do titular ou assinatura externa e cliente de cobrança no mesmo ambiente. Legado sem ambiente só é ligado quando a referência não é ambígua e não existe mapeamento de cliente contraditório; nenhum vínculo é inferido por nome ou e-mail. Registros sem vínculo não são exportados para outra conta. Não inclui auditoria interna, identidade de funcionários, parâmetros/resultados operacionais, conta do provedor ou movimentos de saldo agregados do comerciante.
 
 Os seis espelhos/auditorias não contêm dados clínicos nem fotografia do comprador. São preservados para rastreabilidade financeira; o documento fiscal original continua separado e imutável. A política de privacidade de 26/10/2026 informa essa retenção e mantém os registros de consentimento anteriores intactos.
+
+## Explicações do painel (tarefa 115)
+
+Os textos derivados são separados das medições. A exportação inclui
+`descricoes_do_painel` (dia, estado, conteúdo e data da geração) e
+`uso_das_descricoes_do_painel` (dia UTC da chamada e tentativas). Ambos
+são removidos com a conta por chave estrangeira em cascade. Nenhuma
+medição original é substituída por uma saída de modelo.
+
+No modo privado, as explicações vêm do catálogo sem chamada a modelo.
+Fora desse modo, provedores externos continuam condicionados à autorização
+de nuvem existente; a ausência de autorização restringe a cadeia aos locais.
+Nome, e-mail, identificador da conta, nascimento bruto e segredos não integram
+o pedido. O modelo pode receber as colunas autorizadas do registro e fatos
+interpretativos já calculados, conforme os recursos do plano.

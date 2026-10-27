@@ -4,6 +4,11 @@ import {
   type GrupoDoPainel,
 } from '@/hooks/use-abas-do-painel';
 
+import {
+  descreverMetrica,
+  type DescricoesDasMetricas,
+} from '@/lib/painel/catalogo';
+
 import type { ElementType } from 'react';
 import {
   Activity,
@@ -86,7 +91,6 @@ const hasMetricValue = (value: number | null | undefined): value is number =>
 // Métrica não registrada: valor "—" e status "sem registro" (antes o valor
 // ausente virava 0 e ganhava rótulos como "Ótimo", "Seguro" ou "Saudável").
 const SEM_VALOR = '—';
-const SEM_REGISTRO = 'sem registro hoje';
 
 const formatNumber = (
   value: number | null | undefined,
@@ -99,16 +103,6 @@ const formatMinutesToHours = (minutes: number | null | undefined) =>
     const mins = Math.round(input % 60);
     return `${hours}h ${mins}m`;
   });
-
-/** Status que já é uma frase completa (ou "Sem registro hoje."). */
-const comoFrase = (status: string) =>
-  status === SEM_REGISTRO ? 'Sem registro hoje.' : status;
-
-/** Status só quando a métrica foi medida. */
-const statusDe = (
-  value: number | null | undefined,
-  regra: (input: number) => string
-) => (hasMetricValue(value) ? regra(value) : SEM_REGISTRO);
 
 const formatInteger = (value: number | null | undefined) =>
   formatNumber(value, (input) => Math.round(input).toLocaleString('pt-BR'));
@@ -192,112 +186,13 @@ function PillarCard({ pillar }: { pillar: PillarConfig }) {
 interface MetricGridProps {
   metrics: DailyMetric;
   grupo?: GrupoDoPainel;
+  descricoes?: DescricoesDasMetricas;
 }
 
-export function MetricGrid({ metrics, grupo }: MetricGridProps) {
-  const sleepQuality = statusDe(metrics.sleep_duration_minutes, (v) =>
-    v >= 450 ? 'excelente' : v >= 360 ? 'boa' : 'abaixo da meta'
-  );
-
-  const hrvStatus = statusDe(metrics.hrv_ms, (v) =>
-    v >= 50 ? 'ótima' : v >= 30 ? 'boa' : 'baixa'
-  );
-
+export function MetricGrid({ metrics, grupo, descricoes }: MetricGridProps) {
   const readinessScore = metrics.readiness_score ?? metrics.recovery_score;
-  const recoveryStatus = statusDe(readinessScore, (v) =>
-    v >= 75
-      ? 'Pronto para o dia.'
-      : v >= 55
-        ? 'Ritmo moderado.'
-        : 'Priorize o descanso.'
-  );
-
-  const moodStatus = statusDe(metrics.mood_score, (v) =>
-    v >= 5 ? 'excelente' : v >= 3 ? 'neutro' : 'baixo'
-  );
-
-  const hrrStatus = statusDe(metrics.hrr_1min_bpm, (v) =>
-    v >= 30 ? 'excelente' : 'atenção'
-  );
-  const spo2Status = statusDe(metrics.spo2_average, (v) =>
-    v >= 95 ? 'normal' : 'monitorar'
-  );
-
-  // OMS: 150 min/semana de atividade moderada a vigorosa ≈ 22 min por dia.
-  const activeMinutesStatus = statusDe(metrics.active_minutes, (v) =>
-    v >= 22
-      ? 'Dentro da média diária da meta de 150 min/semana.'
-      : 'Abaixo dos 22 min/dia da meta semanal.'
-  );
-  const stepsStatus = statusDe(metrics.steps, (v) =>
-    v >= 8000 ? 'Meta de 8 mil passos alcançada.' : 'Continue se movendo.'
-  );
-  const sedentaryStatus = statusDe(metrics.sedentary_hours, (v) =>
-    v < 8 ? 'baixo' : 'alto'
-  );
-
-  const tirStatus = statusDe(metrics.time_in_range_percent, (v) =>
-    v >= 70 ? 'meta alcançada' : 'aumentar TIR'
-  );
-  const cvStatus = statusDe(metrics.glycemic_variability_cv, (v) =>
-    v <= 36 ? 'estável' : 'alta variabilidade'
-  );
-  const gmiStatus = statusDe(metrics.gmi_percent, (v) =>
-    v <= 6.5 ? 'ótima' : 'monitorar'
-  );
-  const peakStatus = statusDe(metrics.post_prandial_peak_mgdl, (v) =>
-    v <= 140 ? 'Normal.' : 'Pico elevado.'
-  );
-  const tbrStatus = statusDe(metrics.time_below_range_percent, (v) =>
-    v <= 4 ? 'Seguro.' : 'Risco de hipoglicemia.'
-  );
-
   const sistolica = metrics.blood_pressure_systolic;
   const diastolica = metrics.blood_pressure_diastolic;
-  const bpStatus =
-    hasMetricValue(sistolica) && hasMetricValue(diastolica)
-      ? sistolica < 120 && diastolica < 80
-        ? 'ótima'
-        : 'atenção'
-      : SEM_REGISTRO;
-
-  const whtrStatus = statusDe(metrics.whtr_ratio, (v) =>
-    v <= 0.5 ? 'saudável' : 'atenção'
-  );
-  const proteinStatus = statusDe(metrics.protein_g_per_kg, (v) =>
-    v >= 1.0 ? 'adequado' : 'aumentar'
-  );
-  const fiberStatus = statusDe(metrics.dietary_fiber_grams, (v) =>
-    v >= 25 ? 'adequada' : 'aumentar'
-  );
-  const eatingWindowStatus = statusDe(metrics.eating_window_hours, (v) =>
-    v <= 10 ? 'restrita' : 'normal'
-  );
-  const naKStatus = statusDe(metrics.sodium_potassium_ratio, (v) =>
-    v <= 1.0 ? 'ideal' : 'atenção'
-  );
-  const hydrationStatus = statusDe(metrics.hydration_ml_per_kg, (v) =>
-    v >= 30 ? 'adequada' : 'aumentar'
-  );
-
-  const pvtStatus = statusDe(metrics.reaction_time_pvt_ms, (v) =>
-    v < 300 ? 'excelente' : 'monitorar'
-  );
-  const lapsesStatus = statusDe(metrics.pvt_lapses_count, (v) =>
-    v === 0 ? 'Nenhum lapso.' : 'Atenção à fadiga.'
-  );
-  const cognitiveStatus = statusDe(metrics.cognitive_test_score, (v) =>
-    v >= 0.5 ? 'alta' : 'monitorar'
-  );
-  const hrvStressStatus = statusDe(metrics.hrv_stress_index, (v) =>
-    v < 10 ? 'baixa' : 'elevada'
-  );
-  const edaStatus = statusDe(metrics.eda_tonic_microsiemens, (v) =>
-    v < 0.5 ? 'normal' : 'pico de estresse'
-  );
-  const afibStatus = statusDe(metrics.afib_history_percent, (v) =>
-    v === 0 ? 'Nenhuma FA detectada.' : 'Monitorar.'
-  );
 
   const pillars: PillarConfig[] = [
     {
@@ -310,32 +205,40 @@ export function MetricGrid({ metrics, grupo }: MetricGridProps) {
         {
           title: 'HRV (rMSSD)',
           value: formatDecimal(metrics.hrv_ms, 0, 'ms'),
-          description: `Resiliência atual: ${hrvStatus}.`,
+          description: descreverMetrica('hrv_ms', metrics, descricoes),
         },
         {
           title: 'Prontidão',
           value: formatScore(readinessScore, 100, 0),
-          description: comoFrase(recoveryStatus),
+          description: descreverMetrica('readiness_score', metrics, descricoes),
         },
         {
           title: 'FC repouso',
           value: formatDecimal(metrics.resting_heart_rate, 0, 'bpm'),
-          description: 'Média da noite e recuperação basal.',
+          description: descreverMetrica(
+            'resting_heart_rate',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Recuperação FC',
           value: formatDecimal(metrics.hrr_1min_bpm, 0, 'bpm'),
-          description: `Aptidão cardiovascular: ${hrrStatus}.`,
+          description: descreverMetrica('hrr_1min_bpm', metrics, descricoes),
         },
         {
           title: 'Temperatura',
           value: formatDecimal(metrics.body_temperature_celsius, 1, '°C'),
-          description: 'Desvio da linha de base noturna.',
+          description: descreverMetrica(
+            'body_temperature_celsius',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'SpO₂ noturna',
           value: formatPercent(metrics.spo2_average, 1),
-          description: `Oxigenação: ${spo2Status}.`,
+          description: descreverMetrica('spo2_average', metrics, descricoes),
         },
       ],
     },
@@ -349,32 +252,36 @@ export function MetricGrid({ metrics, grupo }: MetricGridProps) {
         {
           title: 'VO₂max',
           value: formatDecimal(metrics.vo2_max, 1, 'mL/kg/min'),
-          description: 'Principal indicador de aptidão aeróbica.',
+          description: descreverMetrica('vo2_max', metrics, descricoes),
         },
         {
           title: 'Min. mod/vigorosa',
           value: formatDecimal(metrics.active_minutes, 0, 'min'),
-          description: comoFrase(activeMinutesStatus),
+          description: descreverMetrica('active_minutes', metrics, descricoes),
         },
         {
           title: 'Passos',
           value: formatInteger(metrics.steps),
-          description: comoFrase(stepsStatus),
+          description: descreverMetrica('steps', metrics, descricoes),
         },
         {
           title: 'Carga (EPOC)',
           value: formatDecimal(metrics.training_load_epoc, 0, 'UA'),
-          description: 'Estresse fisiológico acumulado.',
+          description: descreverMetrica(
+            'training_load_epoc',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Strain diário',
           value: formatScore(metrics.daily_strain, 21, 1),
-          description: 'Intensidade total da jornada.',
+          description: descreverMetrica('daily_strain', metrics, descricoes),
         },
         {
           title: 'Sedentarismo',
           value: formatDecimal(metrics.sedentary_hours, 1, 'h'),
-          description: `Nível de inatividade: ${sedentaryStatus}.`,
+          description: descreverMetrica('sedentary_hours', metrics, descricoes),
         },
       ],
     },
@@ -388,32 +295,56 @@ export function MetricGrid({ metrics, grupo }: MetricGridProps) {
         {
           title: 'Duração',
           value: formatMinutesToHours(metrics.sleep_duration_minutes),
-          description: `Qualidade percebida: ${sleepQuality}.`,
+          description: descreverMetrica(
+            'sleep_duration_minutes',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Eficiência',
           value: formatPercent(metrics.sleep_efficiency, 0),
-          description: 'Relação entre sono efetivo e tempo na cama.',
+          description: descreverMetrica(
+            'sleep_efficiency',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Regularidade (SRI)',
           value: formatScore(metrics.sleep_regularity_index, 100, 0),
-          description: 'Consistência dos horários.',
+          description: descreverMetrica(
+            'sleep_regularity_index',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Social jetlag',
           value: formatDecimal(metrics.social_jetlag_hours, 1, 'h'),
-          description: 'Diferença entre rotina da semana e do fim de semana.',
+          description: descreverMetrica(
+            'social_jetlag_hours',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Sono REM',
           value: formatMinutesToHours(metrics.rem_sleep_minutes),
-          description: 'Memória, humor e integração emocional.',
+          description: descreverMetrica(
+            'rem_sleep_minutes',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Sono profundo',
           value: formatMinutesToHours(metrics.deep_sleep_minutes),
-          description: 'Recuperação física e restauração neural.',
+          description: descreverMetrica(
+            'deep_sleep_minutes',
+            metrics,
+            descricoes
+          ),
         },
       ],
     },
@@ -427,32 +358,52 @@ export function MetricGrid({ metrics, grupo }: MetricGridProps) {
         {
           title: 'Tempo em faixa',
           value: formatPercent(metrics.time_in_range_percent, 1),
-          description: `Meta > 70%: ${tirStatus}.`,
+          description: descreverMetrica(
+            'time_in_range_percent',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Variabilidade (CV)',
           value: formatPercent(metrics.glycemic_variability_cv, 1),
-          description: `Meta < 36%: ${cvStatus}.`,
+          description: descreverMetrica(
+            'glycemic_variability_cv',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'GMI (A1c)',
           value: formatPercent(metrics.gmi_percent, 1),
-          description: `Leitura média: ${gmiStatus}.`,
+          description: descreverMetrica('gmi_percent', metrics, descricoes),
         },
         {
           title: 'Pico pós-prandial',
           value: formatDecimal(metrics.post_prandial_peak_mgdl, 0, 'mg/dL'),
-          description: comoFrase(peakStatus),
+          description: descreverMetrica(
+            'post_prandial_peak_mgdl',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Abaixo da faixa',
           value: formatPercent(metrics.time_below_range_percent, 1),
-          description: comoFrase(tbrStatus),
+          description: descreverMetrica(
+            'time_below_range_percent',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'iAUC/refeição',
           value: formatDecimal(metrics.iauc_per_meal_mgdl_h, 1),
-          description: 'Resposta glicêmica por refeição.',
+          description: descreverMetrica(
+            'iauc_per_meal_mgdl_h',
+            metrics,
+            descricoes
+          ),
         },
       ],
     },
@@ -468,36 +419,56 @@ export function MetricGrid({ metrics, grupo }: MetricGridProps) {
           value: formatNumber(metrics.whtr_ratio, (input) =>
             decimalPtBr(input, 2)
           ),
-          description: `Adiposidade central: ${whtrStatus}.`,
+          description: descreverMetrica('whtr_ratio', metrics, descricoes),
         },
         {
           title: 'Proteína (g/kg)',
           value: formatNumber(metrics.protein_g_per_kg, (input) =>
             decimalPtBr(input, 2)
           ),
-          description: `Consumo proteico: ${proteinStatus}.`,
+          description: descreverMetrica(
+            'protein_g_per_kg',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Fibras',
           value: formatDecimal(metrics.dietary_fiber_grams, 0, 'g'),
-          description: `Meta > 25 g: ${fiberStatus}.`,
+          description: descreverMetrica(
+            'dietary_fiber_grams',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Janela alimentar',
           value: formatDecimal(metrics.eating_window_hours, 1, 'h'),
-          description: `Perfil atual: ${eatingWindowStatus}.`,
+          description: descreverMetrica(
+            'eating_window_hours',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Na:K',
           value: formatNumber(metrics.sodium_potassium_ratio, (input) =>
             decimalPtBr(input, 2)
           ),
-          description: `Equilíbrio mineral: ${naKStatus}.`,
+          description: descreverMetrica(
+            'sodium_potassium_ratio',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Hidratação',
           value: formatDecimal(metrics.hydration_ml_per_kg, 0, 'mL/kg'),
-          description: `Estado hídrico: ${hydrationStatus}.`,
+          description: descreverMetrica(
+            'hydration_ml_per_kg',
+            metrics,
+            descricoes
+          ),
         },
       ],
     },
@@ -511,46 +482,74 @@ export function MetricGrid({ metrics, grupo }: MetricGridProps) {
         {
           title: 'Reação (PVT)',
           value: formatDecimal(metrics.reaction_time_pvt_ms, 0, 'ms'),
-          description: `Velocidade cognitiva: ${pvtStatus}.`,
+          description: descreverMetrica(
+            'reaction_time_pvt_ms',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Lapsos PVT',
           value: formatInteger(metrics.pvt_lapses_count),
-          description: comoFrase(lapsesStatus),
+          description: descreverMetrica(
+            'pvt_lapses_count',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Pontuação cognitiva',
           value: formatNumber(metrics.cognitive_test_score, (input) =>
             decimalPtBr(input, 2)
           ),
-          description: `Performance atual: ${cognitiveStatus}.`,
+          description: descreverMetrica(
+            'cognitive_test_score',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Estresse (HRV)',
           value: formatNumber(metrics.hrv_stress_index, (input) =>
             decimalPtBr(input, 1)
           ),
-          description: `Carga de estresse: ${hrvStressStatus}.`,
+          description: descreverMetrica(
+            'hrv_stress_index',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'EDA tônica',
           value: formatDecimal(metrics.eda_tonic_microsiemens, 2, 'µS'),
-          description: `Sinal autonômico: ${edaStatus}.`,
+          description: descreverMetrica(
+            'eda_tonic_microsiemens',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'FA',
           value: formatPercent(metrics.afib_history_percent, 1),
-          description: comoFrase(afibStatus),
+          description: descreverMetrica(
+            'afib_history_percent',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Humor',
           value: formatScore(metrics.mood_score, 5, 0),
-          description: `Estado emocional: ${moodStatus}.`,
+          description: descreverMetrica('mood_score', metrics, descricoes),
         },
         {
           title: 'Meditação',
           value: formatDecimal(metrics.meditation_minutes, 0, 'min'),
-          description: 'Espaço de regulação e presença.',
+          description: descreverMetrica(
+            'meditation_minutes',
+            metrics,
+            descricoes
+          ),
         },
       ],
     },
@@ -567,27 +566,35 @@ export function MetricGrid({ metrics, grupo }: MetricGridProps) {
             hasMetricValue(sistolica) && hasMetricValue(diastolica)
               ? `${sistolica}/${diastolica} mmHg`
               : SEM_VALOR,
-          description: `Leitura de pressão: ${bpStatus}.`,
+          description: descreverMetrica(
+            'blood_pressure_systolic',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Peso',
           value: formatDecimal(metrics.weight_kg, 1, 'kg'),
-          description: 'Acompanhamento contínuo do corpo.',
+          description: descreverMetrica('weight_kg', metrics, descricoes),
         },
         {
           title: 'Hidratação',
           value: formatDecimal(metrics.water_liters, 1, 'L'),
-          description: 'Meta-base sugerida: 2,5 L.',
+          description: descreverMetrica('water_liters', metrics, descricoes),
         },
         {
           title: 'Calorias treino',
           value: formatDecimal(metrics.workout_calories, 0, 'kcal'),
-          description: 'Gasto de exercício realizado.',
+          description: descreverMetrica(
+            'workout_calories',
+            metrics,
+            descricoes
+          ),
         },
         {
           title: 'Calorias totais',
           value: formatDecimal(metrics.calories_burned, 0, 'kcal'),
-          description: 'Energia total gasta no dia.',
+          description: descreverMetrica('calories_burned', metrics, descricoes),
         },
       ],
     },

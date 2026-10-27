@@ -468,33 +468,35 @@ const defaultAppPageConfig: AppPageConfig = {
   dashboard: {
     heroEyebrow: 'Seu bem-estar hoje',
     heroDescription:
-      'Sono, energia, ritmo e o céu do seu mapa reunidos em uma leitura clara do seu dia.',
+      'Seus registros e reflexões em um só lugar para acompanhar o seu dia.',
     harmonyEyebrow: 'Harmonia atual',
-    harmonyNote: 'Seus sinais de hoje em relação ao céu do momento.',
+    harmonyNote:
+      'Índice interpretativo construído com os registros disponíveis.',
     pulseBadge: 'Pulso do dia',
-    pulseTitle: 'Como o seu corpo está hoje',
+    pulseTitle: 'Seus registros de hoje',
     pulseDescription:
-      'O que merece a sua energia agora, a partir dos seus sinais e do céu do dia.',
+      'Veja o que você registrou e escolha quais detalhes quer acompanhar.',
     syncButtonLabel: 'Reavaliar agora',
     syncStatusLoading: 'Atualizando',
     syncStatusPartial: 'Parcial',
     syncStatusReady: 'Em sintonia',
-    astroBadge: 'Céu do momento',
-    astroCardFallbackTitle: 'Céu do momento',
+    astroBadge: 'Sua reflexão',
+    astroCardFallbackTitle: 'Sua reflexão',
     astroCardFallbackDescription:
-      'O céu de hoje aparece aqui assim que o cálculo terminar.',
+      'Uma reflexão aparece aqui quando houver informações para prepará-la.',
     astroInsightLabel: 'Para você hoje',
     astroInsightFallback:
-      'Assim que o cálculo terminar, aqui aparece um resumo prático do céu para o seu corpo e a sua rotina.',
-    sleepBadge: 'Sono restaurador',
-    sleepDescription: 'O quanto o seu descanso sustentou a energia de hoje.',
+      'Esta leitura apoia o autoconhecimento e não mede o seu corpo.',
+    sleepBadge: 'Sono registrado',
+    sleepDescription:
+      'Tempo e fases do sono, conforme os registros disponíveis.',
     sleepEmptyDescription:
       'Registre como dormiu ou conecte um dispositivo para ver esta leitura.',
-    sleepGoalLabel: 'Meta sugerida',
+    sleepGoalLabel: 'Sua meta',
     deepSleepLabel: 'Sono profundo',
     remSleepLabel: 'Sono REM',
     sleepInsightFallback:
-      'Aqui você vê a duração e a profundidade do seu sono, com uma sugestão de ritmo para hoje.',
+      'Confira a duração e as fases do sono registradas, sem deduzir sua recuperação.',
     weeklyBadge: 'Trajetória semanal',
     weeklyTitle: 'Como sua prontidão desenhou a semana',
     weeklyDescription:
@@ -504,10 +506,10 @@ const defaultAppPageConfig: AppPageConfig = {
     aiUnlockedNo: 'não',
     currentReadinessLabel: 'Prontidão atual',
     longevityLabel: 'Score de longevidade',
-    liveContextLabel: 'Céu de agora',
+    liveContextLabel: 'Detalhes da leitura',
     liveContextFallback:
-      'O céu de agora aparece aqui assim que o cálculo terminar.',
-    pillarsTitle: 'Pilares profundos da sua saúde',
+      'Os fundamentos da leitura ficam disponíveis após o cálculo.',
+    pillarsTitle: 'Seus registros por assunto',
     pillarsDescription:
       'As métricas mais detalhadas do seu dia, organizadas em blocos fáceis de ler.',
     emptyMetricsTitle: 'As métricas do dia ainda não chegaram',

@@ -1,6 +1,8 @@
 'use client';
 
-import type { ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
+import { descreverLeitura } from '@/lib/painel/catalogo';
+import { useExplicacoesDoPainel } from '@/components/dashboard/ExplicacoesDoPainel';
 import Link from 'next/link';
 import {
   ArrowRight,
@@ -161,7 +163,41 @@ export function EstadoSemDia({
  * 24 h com o "Agora" ao vivo, o período atual e os três focos do dia, cada um
  * com o "Por quê?".
  */
-export function SeuDiaCard() {
+export function SeuDiaCard({ noPainel = false }: { noPainel?: boolean } = {}) {
+  const explicacoes = useExplicacoesDoPainel();
+  const [detalhes, setDetalhes] = useState(false);
+  if (!noPainel) return <SeuDiaCardCompleto />;
+  return (
+    <section className="space-y-3 rounded-xl border border-border bg-card p-5">
+      <h3 className="font-display text-xl font-semibold">
+        Sua reflexão para hoje
+      </h3>
+      <p className="text-sm leading-6 text-muted-foreground">
+        {descreverLeitura('leitura_reflexao', explicacoes)}
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <Button
+          variant="outline"
+          aria-expanded={detalhes}
+          aria-controls="detalhes-da-leitura-do-dia"
+          onClick={() => setDetalhes((v) => !v)}
+        >
+          {detalhes
+            ? 'Recolher detalhes'
+            : 'Explorar horários e detalhes do dia'}
+        </Button>
+        <Button asChild variant="outline">
+          <Link href="/dia">Abrir Meu dia</Link>
+        </Button>
+      </div>
+      <div id="detalhes-da-leitura-do-dia">
+        {detalhes && <SeuDiaCardCompleto />}
+      </div>
+    </section>
+  );
+}
+
+function SeuDiaCardCompleto() {
   const { estado, carregando, agora } = useCoachDoDia();
   const idDoTitulo = 'titulo-seu-dia';
 

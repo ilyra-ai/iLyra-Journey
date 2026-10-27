@@ -1,6 +1,8 @@
 'use client';
 
 import * as React from 'react';
+import { descreverLeitura } from '@/lib/painel/catalogo';
+import { useExplicacoesDoPainel } from './ExplicacoesDoPainel';
 import {
   Activity,
   AlertTriangle,
@@ -218,7 +220,7 @@ function ProactiveActionsCard({ actions }: { actions: AgentAction[] }) {
   );
 }
 
-/* ============================ Cartão: Idade biológica (M3) =================== */
+/* ============================ Cartão: Estimativa comparativa (M3) =================== */
 function BiologicalAgeCard({
   result,
   semIdade,
@@ -227,20 +229,20 @@ function BiologicalAgeCard({
   /** Sem data de nascimento no perfil (a idade cronológica não existe). */
   semIdade: boolean;
 }) {
+  const explicacoes = useExplicacoesDoPainel();
+
   if (!result) {
     return (
       <Card className="flex h-full min-w-0 flex-col">
         <CardHeader className="gap-2">
           <Badge variant="default" className="w-fit">
-            Idade biológica
+            Estimativa comparativa
           </Badge>
           <CardTitle>
             {semIdade ? 'Aguardando a data de nascimento' : 'Aguardando sinais'}
           </CardTitle>
           <CardDescription>
-            {semIdade
-              ? 'Informe a sua data de nascimento no perfil para estimar a sua idade biológica.'
-              : `A estimativa usa pelo menos ${MINIMO_DE_MARCADORES_DA_IDADE} marcadores medidos hoje (VFC, frequência em repouso, VO₂ máx., sono, eficiência do sono, glicose, SpO₂ ou minutos ativos).`}
+            {descreverLeitura('leitura_idade', explicacoes)}
           </CardDescription>
         </CardHeader>
         <CardContent className="mt-auto">
@@ -264,7 +266,7 @@ function BiologicalAgeCard({
       <CardHeader className="gap-2">
         <div className="flex items-center justify-between gap-3">
           <Badge variant="default" className="w-fit">
-            Idade biológica
+            Estimativa comparativa
           </Badge>
           <Hourglass aria-hidden="true" className="h-5 w-5 text-primary" />
         </div>
@@ -355,6 +357,8 @@ function BiologicalAgeCard({
 
 /* ============================ Cartão: Detecção precoce (M2) ================== */
 function EarlyWarningCard({ result }: { result: EarlyWarningResult }) {
+  const explicacoes = useExplicacoesDoPainel();
+
   const severityStyle: Record<string, string> = {
     alerta: 'border-destructive/30 bg-destructive-light',
     atencao: 'border-warning/30 bg-warning-light',
@@ -366,30 +370,37 @@ function EarlyWarningCard({ result }: { result: EarlyWarningResult }) {
       <CardHeader className="gap-2">
         <div className="flex items-center justify-between gap-3">
           <Badge
-            variant={result.overall === 'estavel' ? 'success' : 'warning'}
+            variant={
+              !result.hasBaseline
+                ? 'outline'
+                : result.overall === 'estavel'
+                  ? 'success'
+                  : 'warning'
+            }
             className="w-fit"
           >
-            Detecção precoce
+            Mudanças nos registros
           </Badge>
           <HeartPulse aria-hidden="true" className="h-5 w-5 text-primary" />
         </div>
         <CardTitle>
-          {result.overall === 'estavel'
-            ? 'Sinais estáveis'
-            : result.overall === 'observar'
-              ? 'Vale observar'
-              : 'Requer atenção'}
+          {!result.hasBaseline
+            ? 'Aguardando seus registros'
+            : result.overall === 'estavel'
+              ? 'Sinais estáveis'
+              : result.overall === 'observar'
+                ? 'Vale observar'
+                : 'Requer atenção'}
         </CardTitle>
         <CardDescription>
-          Cruzamento de HRV, FC, temperatura, SpO₂ e respiração vs. sua linha de
-          base.
+          {descreverLeitura('leitura_sinais', explicacoes)}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-3">
         {!result.hasBaseline ? (
           <p className="text-sm text-muted-foreground">
-            Coletando sua linha de base ({result.baselineDays}/3 dias). Em breve
-            os sinais precoces estarão ativos.
+            Reunindo registros para comparação ({result.baselineDays}/3 dias).
+            Ainda não há histórico suficiente para comparar os sinais.
           </p>
         ) : result.signals.length === 0 ? (
           <div className="flex flex-1 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border bg-background p-5 text-center">
@@ -439,6 +450,8 @@ function EarlyWarningCard({ result }: { result: EarlyWarningResult }) {
 
 /* ============================ Cartão: Ciclo / Saúde da mulher (M4) =========== */
 function CycleCard({ result }: { result: MenstrualCycleResult }) {
+  const explicacoes = useExplicacoesDoPainel();
+
   return (
     <Card className="flex h-full min-w-0 flex-col">
       <CardHeader className="gap-2">
@@ -452,9 +465,7 @@ function CycleCard({ result }: { result: MenstrualCycleResult }) {
           {result.trackable ? result.phaseLabel : 'Ciclo & vitalidade'}
         </CardTitle>
         <CardDescription>
-          {result.trackable
-            ? result.summary
-            : (result.note ?? 'Configure seu ciclo para ativar este painel.')}
+          {descreverLeitura('leitura_ciclo', explicacoes)}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-1 flex-col gap-4">
@@ -544,8 +555,8 @@ function PrivacyCard({
             </p>
             <p className="text-xs text-muted-foreground">
               {privacyMode
-                ? 'Ativo: conversas atendidas apenas pelo motor local.'
-                : 'Inativo: o chat pode usar um modelo externo via BYOK.'}
+                ? 'Ativo: conversas pelo motor local e explicações do catálogo, sem envio dos registros a modelos.'
+                : 'Inativo: modelos autorizados podem preparar explicações; o envio à nuvem depende da sua permissão.'}
             </p>
           </div>
           <Switch
@@ -560,7 +571,7 @@ function PrivacyCard({
               aria-hidden="true"
               className="mt-0.5 h-4 w-4 shrink-0 text-success"
             />
-            Idade biológica, detecção precoce, ciclo e ações: 100% on-device.
+            Estimativa comparativa, mudanças, ciclo e ações: 100% on-device.
           </li>
           <li className="flex items-start gap-2">
             <Lock
@@ -662,11 +673,11 @@ export function LyraIntelligence2026({
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex min-w-0 flex-col gap-1">
           <h2 className="font-display text-2xl font-semibold tracking-[-0.02em] text-foreground">
-            Inteligência Lyra 2026
+            Seus registros em perspectiva
           </h2>
           <p className="max-w-2xl text-body leading-relaxed text-muted-foreground">
-            Assistente proativo, idade biológica, detecção precoce e saúde da
-            mulher — calculados no seu dispositivo a partir de dados reais.
+            Sugestões, comparações e calendário do ciclo a partir dos seus
+            registros. Os cálculos desta seção acontecem no seu dispositivo.
           </p>
         </div>
         <div className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2">
