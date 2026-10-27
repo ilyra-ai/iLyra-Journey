@@ -28,7 +28,7 @@
 | 🔴 Bloqueadas      | 5                              |
 | ⚪ A iniciar       | 19                             |
 | Branch de trabalho | `main` (única permitida)       |
-| Última atualização | 2026-10-26                     |
+| Última atualização | 2026-10-27                     |
 
 > Cálculo: tarefas finalizadas ÷ tarefas totais (109 ÷ 133 ≈ 82%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
