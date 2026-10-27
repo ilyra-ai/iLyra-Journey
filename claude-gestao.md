@@ -23,14 +23,14 @@
 | ------------------ | ------------------------------ |
 | Progresso          | `████████████████░░░░` **80%** |
 | Tarefas totais     | 133                            |
-| 🟢 Finalizadas     | 106                            |
-| 🔵 Em andamento    | 2                              |
-| 🔴 Bloqueadas      | 3                              |
+| 🟢 Finalizadas     | 107                            |
+| 🔵 Em andamento    | 0                              |
+| 🔴 Bloqueadas      | 4                              |
 | ⚪ A iniciar       | 22                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (106 ÷ 133 ≈ 80%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (107 ÷ 133 ≈ 80%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,45 +49,11 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de parada em 2026-10-26:** retomada das tarefas não bloqueadas em ordem numérica. 106 e 107 em execução conjunta, pois menu, tela comercial e indicador do plano compartilham navegação e jornada de upgrade; depois 112. Bloqueadas 86, 90 e 100 fora do escopo desta retomada.
-
-**Checkpoint de recuperação das tarefas 106/107 (2026-10-26):** alterações funcionais recompostas após reinicialização da instância e preservadas como objetos Git do repositório para evitar perda entre sessões. Ainda aguardam validação e publicação dos arquivos na `main`; este checkpoint documental não conclui as tarefas.
-
-- `src/app/planos/layout.tsx` → blob `ca4f8a9b80c4ae75689ab125024ab6c2a355a691`.
-- `src/app/planos/page.tsx` → blob `1c5efdb3b2c5a7554056c4458651249710c70482`.
-- `src/components/subscription/PlanoJuntoAoLogo.tsx` → blob `de677e0a99b5e549c4c23b07026a908230dbf1f3`.
-- `src/components/subscription/PlanBadge.tsx` → blob `88aac7ae6e312f3822d4b13ac1de84f1e23eae79`.
-- `src/components/subscription/BillingActionPanel.tsx` → blob `5ebfb9413d719755f7bcc3cb0fdeedd60ce3ce29`.
-- `src/components/layout/navigation.ts` → blob `24d05960dfa5e151e6e8133635a866de148a5f75`.
-- `src/components/layout/navigation.test.ts` → blob `300fbb0ac2f365614cc684672b022ce65686a264`.
-- `src/components/layout/sidebar.tsx` → blob `2b51ba8c831c8211bb03eb9eead71869c357545b`.
-- `src/components/layout/MobileSidebar.tsx` → blob `9ac333b516dc18f334c7fee01b0c40f66a59eaa2`.
-- `src/lib/billing/service.ts` → blob `af5171c7d5616c81e3784fe2f53f934c3a638ae7`.
-- `src/app/api/planos-comerciais.integration.test.ts` → blob `007cf1719afee0aa372e06191017fdf10d6d23b9`.
+**Ponto de parada em 2026-10-26:** código de 106/107 publicado em `2974026eed85995cf79b44614624497c8c7b6452`; 107 finalizada e 106 bloqueada apenas na comprovação externa de compra/upgrade. Próxima tarefa não bloqueada: 112. Não executar as bloqueadas 86, 90, 100 e 106 sem nova orientação.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 106 · Menu Planos para compra e upgrade dos usuários
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
-- **Pedido do usuário:** criar o menu **“Planos”** no sidebar para todos os planos e perfis não administrativos, permitindo comprar e fazer upgrade do próprio plano. O administrador não deve receber esse menu comercial, pois utiliza a gestão administrativa dos planos e usuários para realizar os upgrades correspondentes.
-- **Implementação:** inspecionar e reaproveitar a jornada comercial e os serviços de cobrança existentes antes de criar outra página. Oferecer comparação e seleção dos planos comercializáveis, identificação do plano atual e compra ou upgrade reais da própria conta, respeitando elegibilidade, estados da assinatura e provedores efetivamente configurados. Não oferecer o plano Administrador para compra nem confundir assinatura comercial com papel administrativo. Preservar a gestão administrativa de planos e usuários, incluindo seus fluxos autorizados de alteração de plano.
-- **Qualidade e validação:** pesquisar referências oficiais atuais antes dos ajustes visuais e seguir o Lyra Clean claro, acessível e responsivo. Conferir sidebar desktop/mobile, presença para usuários comuns, ausência para administradores, autorização no servidor, prevenção de alteração de outra conta e sincronização do plano após confirmação real do pagamento. Validar falhas e indisponibilidade de cobrança sem simular transações; executar testes e gates, publicar commit e push próprios na main e registrar evidências.
-
-**Registro adicional de 2026-10-22:** tarefas 104–106 registradas; a implementação ainda não foi concluída. A tarefa 104 registra o bloqueio de perfil informado imediatamente antes das novas solicitações 105 e 106.
-
-- **Retomada em 2026-10-26:** conferência prévia confirmou os serviços comerciais e a identificação de plano existentes, mas não encontrou o menu comercial nem o indicador clicável junto ao logo. Executar em conjunto com a tarefa 107 para reutilizar a mesma jornada. Nenhuma transação externa será alegada sem prova real.
-
-### 107 · Identificação do plano ao lado do logo na área autenticada
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-22.
-- **Pedido do usuário:** após o acesso ao app, mostrar ao lado direito do logo Lyra MetaCare indicado no anexo uma identificação do tipo de plano do usuário, por texto, ícone ou emoji.
-- **Implementação:** inspecionar o componente compartilhado do logo e a fonte real da assinatura; apresentar o nome do plano vigente com tratamento visual coerente com o Lyra Clean. Caso seja utilizado ícone ou emoji, manter identificação textual acessível e inequívoca. Contemplar Free, Meta, Care e o plano Administrador quando implementado, sem inferir assinatura comercial apenas pelo papel da conta e sem exibir um plano fictício durante carregamento ou falha.
-- **Acesso ao upgrade (complemento de 2026-10-26):** ao clicar no ícone do plano exibido ao lado do logo, abrir a tela de upgrade de planos para o usuário conhecer as opções disponíveis e fazer upgrade para um plano melhor. Reutilizar a jornada comercial da tarefa 106 e preservar a separação entre usuários comuns e gestão administrativa. Validar clique, acesso por teclado e abertura da tela em desktop e mobile. Este acréscimo registra o requisito e não declara a funcionalidade implementada.
-- **Validação e entrega:** pesquisar referências atuais antes do ajuste visual; conferir desktop, mobile e estados expandido e recolhido do sidebar, sem cortar o logo ou prejudicar a navegação. Comprovar identificação correta em contas de planos diferentes e atualização após alteração ou upgrade confirmado, inclusive recarga e nova sessão. Executar testes pertinentes e gates, publicar commit e push próprios na main e registrar evidências neste painel. Este registro não representa implementação concluída.
-- **Retomada em 2026-10-26:** conferência prévia confirmou os serviços comerciais e a identificação de plano existentes, mas não encontrou o menu comercial nem o indicador clicável junto ao logo. Executar em conjunto com a tarefa 106 para reutilizar a mesma jornada. Nenhuma transação externa será alegada sem prova real.
 
 ### BLOQUEADAS
 
@@ -133,6 +99,20 @@
 
 - **Complemento publicado em 2026-10-26:** commit `84ed4d0dc254cc7dd2fe95d3b72ada3604183250` · push `b20a049..84ed4d0 main -> main`, confirmado por `git ls-remote`. Históricos em páginas de 20, pendências verificadas globalmente; exportação LGPD por vínculo comprovado e valores exatos, sem autoria interna. Política de privacidade atualizada, migração 044 intacta. 573 unitários, 378 integrações, formato, lint, tipos e build aprovados. QA em banco temporário com 125 operações/125 refunds: sete páginas, isolamento da base de desenvolvimento, 1440/390/320 sem overflow, axe 27 regras sem violações e nenhuma exceção. Base temporária removida. QA do estado vazio repetido em produção: APIs, permissões, filtros e falha/retentativa aprovados; axe 28 regras. Evidências `/tmp/lyra100-final-*.log` e capturas; `@current_problems` não disponível.
 - **Bloqueio atual comprovado:** chaves oficiais de teste e segredo de webhook continuam ausentes no processo/configuração local e painel (HTTP 200, Stripe inativa, dois ambientes não configurados em `/tmp/lyra100-final-readiness.log`). Restam somente cancelamento/reembolso/sincronização oficiais e QA com esses movimentos/webhooks. Contratos locais e fixtures isoladas não substituem essa prova. As pendências anteriores de paginação/exportação foram resolvidas; continuar as tarefas independentes.
+
+### 106 · Menu Planos para compra e upgrade dos usuários
+
+- **Status:** 🔴 bloqueada somente na validação oficial de compra/upgrade · **Registro:** 2026-10-22.
+- **Pedido do usuário:** criar o menu **“Planos”** no sidebar para todos os planos e perfis não administrativos, permitindo comprar e fazer upgrade do próprio plano. O administrador não deve receber esse menu comercial, pois utiliza a gestão administrativa dos planos e usuários para realizar os upgrades correspondentes.
+- **Implementação:** inspecionar e reaproveitar a jornada comercial e os serviços de cobrança existentes antes de criar outra página. Oferecer comparação e seleção dos planos comercializáveis, identificação do plano atual e compra ou upgrade reais da própria conta, respeitando elegibilidade, estados da assinatura e provedores efetivamente configurados. Não oferecer o plano Administrador para compra nem confundir assinatura comercial com papel administrativo. Preservar a gestão administrativa de planos e usuários, incluindo seus fluxos autorizados de alteração de plano.
+- **Qualidade e validação:** pesquisar referências oficiais atuais antes dos ajustes visuais e seguir o Lyra Clean claro, acessível e responsivo. Conferir sidebar desktop/mobile, presença para usuários comuns, ausência para administradores, autorização no servidor, prevenção de alteração de outra conta e sincronização do plano após confirmação real do pagamento. Validar falhas e indisponibilidade de cobrança sem simular transações; executar testes e gates, publicar commit e push próprios na main e registrar evidências.
+
+**Registro adicional de 2026-10-22:** tarefas 104–106 registradas; a implementação ainda não foi concluída. A tarefa 104 registra o bloqueio de perfil informado imediatamente antes das novas solicitações 105 e 106.
+
+- **Retomada em 2026-10-26:** conferência prévia confirmou os serviços comerciais e a identificação de plano existentes, mas não encontrou o menu comercial nem o indicador clicável junto ao logo. Executar em conjunto com a tarefa 107 para reutilizar a mesma jornada. Nenhuma transação externa será alegada sem prova real.
+
+- **Implementação publicada em 2026-10-26:** menu comercial e página `/planos`, comparação de preços e recursos reais por ciclo, integração aos serviços existentes, restrições administrativas e recusa de planos privados/inativos ou redução pelo checkout. Assinaturas Stripe existentes são encaminhadas ao portal. **Commit:** `2974026eed85995cf79b44614624497c8c7b6452`, confirmado na `main` pela API autenticada do GitHub, sem branches ou worktrees.
+- **Validação e fronteira:** 595 unitários, 389 integrações MySQL, lint, formato, tipos, build e QA dos três planos em 1440/390/320 aprovados. Sem configuração de pagamento nesta instância, a contratação elegível retorna 503 sem alterar o plano; nenhuma compra externa foi executada. Falta somente comprovar compra/upgrade e confirmação oficial do pagamento. Não executar esta fronteira bloqueada sem nova orientação. Evidências em `docs/auditoria/2026-10-26-planos-106-107.md`.
 
 ---
 
@@ -2035,6 +2015,18 @@
 
 - **Resultado da validação:** nenhuma reconstrução de funcionalidade foi necessária. Reutilizadas as entregas 96/104; 594 unitários e 384 integrações aprovados, lint, formato, tipos e build aprovados. MySQL 9.7.2 real, saúde HTTP 200 com 46 migrações. QA dos três planos em 11 páginas, menus em 390/320, desktop 1440, bloqueio/reativação de Respiração com API 403/200, sete páginas administrativas e axe-core sem violações (28–30 regras). Capturas inspecionadas, matriz restaurada e contas temporárias excluídas. Limites e evidências em `docs/auditoria/2026-10-26-conferencia-de-pendencias.md`.
 - **Publicação das evidências:** commit `4536be69e8145d242f838da80b32b6b2b511905d`, confirmado como cabeça da `main` pelo GitHub conectado. Não houve criação de branch, worktree ou mudança do código funcional. A publicação foi feita pela API autenticada do GitHub; não se alega execução de `git push` pelo terminal, cuja autenticação não está disponível nesta instância.
+
+### 107 · Identificação do plano ao lado do logo na área autenticada
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22.
+- **Pedido do usuário:** após o acesso ao app, mostrar ao lado direito do logo Lyra MetaCare indicado no anexo uma identificação do tipo de plano do usuário, por texto, ícone ou emoji.
+- **Implementação:** inspecionar o componente compartilhado do logo e a fonte real da assinatura; apresentar o nome do plano vigente com tratamento visual coerente com o Lyra Clean. Caso seja utilizado ícone ou emoji, manter identificação textual acessível e inequívoca. Contemplar Free, Meta, Care e o plano Administrador quando implementado, sem inferir assinatura comercial apenas pelo papel da conta e sem exibir um plano fictício durante carregamento ou falha.
+- **Acesso ao upgrade (complemento de 2026-10-26):** ao clicar no ícone do plano exibido ao lado do logo, abrir a tela de upgrade de planos para o usuário conhecer as opções disponíveis e fazer upgrade para um plano melhor. Reutilizar a jornada comercial da tarefa 106 e preservar a separação entre usuários comuns e gestão administrativa. Validar clique, acesso por teclado e abertura da tela em desktop e mobile. Este acréscimo registra o requisito e não declara a funcionalidade implementada.
+- **Validação e entrega:** pesquisar referências atuais antes do ajuste visual; conferir desktop, mobile e estados expandido e recolhido do sidebar, sem cortar o logo ou prejudicar a navegação. Comprovar identificação correta em contas de planos diferentes e atualização após alteração ou upgrade confirmado, inclusive recarga e nova sessão. Executar testes pertinentes e gates, publicar commit e push próprios na main e registrar evidências neste painel. Este registro não representa implementação concluída.
+- **Retomada em 2026-10-26:** conferência prévia confirmou os serviços comerciais e a identificação de plano existentes, mas não encontrou o menu comercial nem o indicador clicável junto ao logo. Executar em conjunto com a tarefa 106 para reutilizar a mesma jornada. Nenhuma transação externa será alegada sem prova real.
+
+- **Entrega e publicação em 2026-10-26:** indicador com nome da assinatura efetiva ao lado do logo nos menus desktop/móvel; usuários abrem a comparação e o upgrade, administradores abrem a gestão. Estados de carregamento/falha sem plano fictício e nomes acessíveis. **Commit:** `2974026eed85995cf79b44614624497c8c7b6452`, confirmado na `main` pela API autenticada do GitHub.
+- **Validação real:** 595 unitários e 389 integrações; lint, formato, tipos e build aprovados. QA de produção em Free, Meta e Care, 1440/390/320, acesso por indicador e menu, atualização após alteração administrativa e erro de rede recuperado; nove conferências axe-core 4.14.0 sem violações, sem estouro horizontal ou exceção JavaScript. Capturas inspecionadas; contas e banco temporários removidos. Pagamento externo não foi executado e permanece na fronteira da 106. Evidências em `docs/auditoria/2026-10-26-planos-106-107.md`.
 
 ### 108 · Corrigir orientações preexistentes de sono sem base individual
 
