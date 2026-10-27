@@ -24,9 +24,9 @@
 | Progresso          | `████████████████░░░░` **80%** |
 | Tarefas totais     | 133                            |
 | 🟢 Finalizadas     | 107                            |
-| 🔵 Em andamento    | 0                              |
+| 🔵 Em andamento    | 1                              |
 | 🔴 Bloqueadas      | 4                              |
-| ⚪ A iniciar       | 22                             |
+| ⚪ A iniciar       | 21                             |
 | Branch de trabalho | `main` (única permitida)       |
 | Última atualização | 2026-10-26                     |
 
@@ -49,11 +49,19 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de parada em 2026-10-26:** código de 106/107 publicado em `2974026eed85995cf79b44614624497c8c7b6452`; 107 finalizada e 106 bloqueada apenas na comprovação externa de compra/upgrade. Próxima tarefa não bloqueada: 112. Não executar as bloqueadas 86, 90, 100 e 106 sem nova orientação.
+**Ponto de parada em 2026-10-26:** código de 106/107 publicado em `2974026eed85995cf79b44614624497c8c7b6452`; 107 finalizada e 106 bloqueada apenas na comprovação externa de compra/upgrade. Tarefa 112 em andamento após conferência prévia. Não executar as bloqueadas 86, 90, 100 e 106 sem nova orientação.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
+
+### 112 · Corrigir avisos novos na auditoria de dependências de 26/10/2026
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Prioridade:** corrigir antes de novas implementações comerciais.
+- **Evidência real:** `pnpm audit` na instalação congelada da `main` encontrou 15 avisos: 2 críticos, 4 altos, 6 moderados e 3 baixos. Pacotes envolvidos: Next.js, Vite, Zod, happy-dom e fast-uri. O resultado identifica dependências afetadas; não representa prova de exploração do app. Log local: `/tmp/lyra-baseline-audit.log`.
+- **Escopo:** verificar novamente se os pacotes já foram corrigidos na `main`; pesquisar os avisos e releases oficiais, atualizar versões corrigidas compatíveis e o lockfile sem desligar controles, adaptar apenas o necessário e conferir os impactos no projeto. Preservar as decisões de LTS, gerenciador e ausência de CI do usuário.
+- **Validação e entrega:** instalação congelada, auditoria, peers, lint, formato, tipos, 594 unitários e 384 integrações como baseline, build, runtime real e regressão das jornadas afetadas. Confirmar os números efetivamente executados, sem presumir que permanecerão iguais. Commit e publicação próprios na `main`, seguidos imediatamente da atualização deste painel com o SHA real. Nenhum pacote foi atualizado nesta conferência.
+- **Retomada em 2026-10-26:** 107 publicada e 106 bloqueada somente na comprovação externa. Repetir auditoria da instalação atual antes de alterar versões e corrigir somente os pacotes afetados com releases estáveis compatíveis; bloqueadas fora desta execução.
 
 ### BLOQUEADAS
 
@@ -129,13 +137,6 @@
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 112 · Corrigir avisos novos na auditoria de dependências de 26/10/2026
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Prioridade:** corrigir antes de novas implementações comerciais.
-- **Evidência real:** `pnpm audit` na instalação congelada da `main` encontrou 15 avisos: 2 críticos, 4 altos, 6 moderados e 3 baixos. Pacotes envolvidos: Next.js, Vite, Zod, happy-dom e fast-uri. O resultado identifica dependências afetadas; não representa prova de exploração do app. Log local: `/tmp/lyra-baseline-audit.log`.
-- **Escopo:** verificar novamente se os pacotes já foram corrigidos na `main`; pesquisar os avisos e releases oficiais, atualizar versões corrigidas compatíveis e o lockfile sem desligar controles, adaptar apenas o necessário e conferir os impactos no projeto. Preservar as decisões de LTS, gerenciador e ausência de CI do usuário.
-- **Validação e entrega:** instalação congelada, auditoria, peers, lint, formato, tipos, 594 unitários e 384 integrações como baseline, build, runtime real e regressão das jornadas afetadas. Confirmar os números efetivamente executados, sem presumir que permanecerão iguais. Commit e publicação próprios na `main`, seguidos imediatamente da atualização deste painel com o SHA real. Nenhum pacote foi atualizado nesta conferência.
 
 ### 113 · Modernização do chat da Lyra com respostas estruturadas e dashboards interativos
 
