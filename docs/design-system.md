@@ -180,6 +180,28 @@ frio (matiz 346) justamente para não se confundir com o coral de destaque.
   [posicionamento automático do Grid](https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Grid_layout/Auto-placement)
   e [ResizeObserver](https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver).
 
+## Painel pessoal por assunto (2026-10-27)
+
+- **Resumo** abre com sono registrado, passos e disposição calculada, esta
+  última somente quando permitida pelo plano. Os botões levam ao grupo de
+  registros correspondente. Ausência continua sendo ausência, inclusive
+  quando existe registro de outra métrica no mesmo dia.
+- **Registros** reúne sono, recuperação, movimento, glicose, alimentação,
+  mente e corpo. Cada grupo ocupa a largura disponível, com os cartões
+  originais preservados. **Evolução** reúne as séries e o histórico;
+  **Orientações**, as leituras e dicas; **Como me sinto**, as avaliações.
+- As abas usam ativação manual: setas movem o foco; Enter ou Espaço abre o
+  assunto. No celular, os controles se distribuem em linhas, sem esconder
+  destinos. Aba e grupo ficam na URL, que contém somente escolhas de
+  apresentação. Valores desconhecidos voltam ao resumo e ao grupo Sono.
+- Componentes com consultas e cálculos próprios montam ao abrir o assunto.
+  Conteúdo carregado sob demanda informa seu carregamento. Atualizações
+  dos registros usam estado ocupado e preservam a árvore das avaliações e
+  formulários; não substituem a tela inteira por um esqueleto de carregamento.
+- As abas disponíveis e os indicadores seguem os recursos efetivos da
+  assinatura. A URL não altera permissões. Falhas de leitura têm aviso e
+  retentativa, sem apresentar erro como um dia sem registros.
+
 ## Referências históricas
 
 - Proposta aprovada: sistema visual, login, dashboard e metas, publicados como

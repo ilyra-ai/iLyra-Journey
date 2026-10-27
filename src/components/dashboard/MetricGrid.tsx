@@ -1,4 +1,8 @@
 'use client';
+import {
+  GRUPOS_DO_PAINEL,
+  type GrupoDoPainel,
+} from '@/hooks/use-abas-do-painel';
 
 import type { ElementType } from 'react';
 import {
@@ -187,9 +191,10 @@ function PillarCard({ pillar }: { pillar: PillarConfig }) {
 
 interface MetricGridProps {
   metrics: DailyMetric;
+  grupo?: GrupoDoPainel;
 }
 
-export function MetricGrid({ metrics }: MetricGridProps) {
+export function MetricGrid({ metrics, grupo }: MetricGridProps) {
   const sleepQuality = statusDe(metrics.sleep_duration_minutes, (v) =>
     v >= 450 ? 'excelente' : v >= 360 ? 'boa' : 'abaixo da meta'
   );
@@ -589,10 +594,19 @@ export function MetricGrid({ metrics }: MetricGridProps) {
   ];
 
   return (
-    <div className="grid gap-4 xl:grid-cols-2 2xl:grid-cols-3">
-      {pillars.map((pillar) => (
-        <PillarCard key={pillar.title} pillar={pillar} />
-      ))}
+    <div
+      className={cn('grid gap-4', !grupo && 'xl:grid-cols-2 2xl:grid-cols-3')}
+    >
+      {pillars
+        .filter(
+          (pilar) =>
+            !grupo ||
+            pilar.title ===
+              GRUPOS_DO_PAINEL.find((item) => item.id === grupo)?.titulo
+        )
+        .map((pillar) => (
+          <PillarCard key={pillar.title} pillar={pillar} />
+        ))}
     </div>
   );
 }

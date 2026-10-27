@@ -1,5 +1,4 @@
 'use client';
-import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import { useEffect, useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
@@ -26,12 +25,6 @@ const LandingPage = dynamic(
 const Dashboard = dynamic(() =>
   import('@/components/dashboard/dashboard').then((modulo) => modulo.Dashboard)
 );
-const HarmoniaAtualCard = dynamic(() =>
-  import('@/components/dashboard/HarmoniaAtualCard').then(
-    (modulo) => modulo.HarmoniaAtualCard
-  )
-);
-
 type UserProfile = {
   first_name: string | null;
 };
@@ -161,10 +154,6 @@ export default function Home() {
                 {dashboardConfig.heroDescription}
               </p>
             </div>
-
-            <PlanFeatureGate features={['vedic_insights']} ocultar>
-              <HarmoniaAtualCard appConfig={appConfig} />
-            </PlanFeatureGate>
           </section>
 
           <Dashboard />

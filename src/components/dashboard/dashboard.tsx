@@ -2,6 +2,13 @@
 import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import * as React from 'react';
+import dynamic from 'next/dynamic';
+import {
+  ABAS_DO_PAINEL,
+  GRUPOS_DO_PAINEL,
+  useAbasDoPainel,
+} from '@/hooks/use-abas-do-painel';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import {
   Activity,
@@ -31,11 +38,7 @@ import { isPlanFeatureEnabled } from '@/lib/plans/access';
 import { scaleRem } from '@/lib/site-page-config/runtime';
 import { cn } from '@/lib/utils';
 import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
-import { AITipsCard } from './AITipsCard';
 import { MetricGrid } from './MetricGrid';
-import { LyraIntelligence2026 } from './LyraIntelligence2026';
-import { VedicDashboard } from './VedicDashboard';
-import { AssessmentCard } from './AssessmentCard';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -56,6 +59,34 @@ import { SeuDiaCard } from '@/components/coach/SeuDiaCard';
 import { BotaoRegistroDoDia } from '@/components/metricas/RegistroDoDia';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
+
+function CarregandoAssunto() {
+  return (
+    <p role="status" className="py-4 text-sm text-muted-foreground">
+      Carregando este assunto...
+    </p>
+  );
+}
+
+const AITipsCard = dynamic(
+  () => import('./AITipsCard').then((modulo) => modulo.AITipsCard),
+  { loading: CarregandoAssunto }
+);
+const LyraIntelligence2026 = dynamic(
+  () =>
+    import('./LyraIntelligence2026').then(
+      (modulo) => modulo.LyraIntelligence2026
+    ),
+  { loading: CarregandoAssunto }
+);
+const VedicDashboard = dynamic(
+  () => import('./VedicDashboard').then((modulo) => modulo.VedicDashboard),
+  { loading: CarregandoAssunto }
+);
+const AssessmentCard = dynamic(
+  () => import('./AssessmentCard').then((modulo) => modulo.AssessmentCard),
+  { loading: CarregandoAssunto }
+);
 
 const weeklyChartConfig = {
   prontidao: {
@@ -238,7 +269,14 @@ function MiniMetricCard({
   );
 }
 
+const HarmoniaAtualCard = dynamic(
+  () =>
+    import('./HarmoniaAtualCard').then((modulo) => modulo.HarmoniaAtualCard),
+  { loading: CarregandoAssunto }
+);
+
 export function Dashboard() {
+  const { aba: solicitada, grupo, selecionar } = useAbasDoPainel();
   const { config: appConfig } = usePublicSitePageConfig('app');
   const { data: subscription, loading: subscriptionLoading } =
     useAccountSubscription();
@@ -268,13 +306,20 @@ export function Dashboard() {
     metrics,
     todayMetrics,
     loading: metricsLoading,
+    error: erroMetricas,
+    refresh: relerMetricas,
   } = useDailyMetrics(7, dashboardEnabled && comHistorico);
-  const { scores, loading: scoresLoading } = useAIScores(aiScoresEnabled);
+  const {
+    scores,
+    loading: scoresLoading,
+    error: erroEscores,
+    refresh: relerEscores,
+  } = useAIScores(aiScoresEnabled);
   const {
     profile: intelligenceProfile,
     chronologicalAge,
     isFemale,
-  } = useProfile(dashboardEnabled);
+  } = useProfile(dashboardEnabled && solicitada === 'orientacoes');
 
   const { meta: metaDeSono } = useMetaDeSono();
 
@@ -448,10 +493,10 @@ export function Dashboard() {
     : appConfig.dashboard.astroCardFallbackDescription;
 
   const handleSyncNow = async () => {
-    await triggerManualSync();
+    await Promise.all([triggerManualSync(), relerMetricas(), relerEscores()]);
   };
 
-  if (loading) {
+  if (subscriptionLoading) {
     return <LoadingDashboard />;
   }
 
@@ -465,556 +510,731 @@ export function Dashboard() {
     );
   }
 
-  return (
-    // `pb-24`: espaço no fim da página para o botão flutuante "Ações rápidas"
-    // (QuickScanFAB) não cobrir o último cartão, sobretudo no celular.
-    <div className="flex flex-col gap-6 pb-24">
-      <div className="w-full relative z-20"></div>
-
-      {/* Coach diário (tarefa 42): o feed de dicas de IA do plano. */}
-      <PlanFeatureGate
-        features={['ai_tips_feed', 'vedic_insights', 'ai_scores']}
-        ocultar
-      >
-        <SeuDiaCard />
-      </PlanFeatureGate>
-
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        <Card className="min-w-0 md:col-span-2">
-          <CardHeader className="gap-5">
-            <div className="flex flex-wrap items-start justify-between gap-4">
-              <div className="flex min-w-0 flex-col gap-3">
-                <Badge variant="default" className="self-start">
-                  {appConfig.dashboard.pulseBadge}
-                </Badge>
-                <div className="flex flex-col gap-1">
-                  <CardTitle
-                    className="md:text-3xl"
-                    style={{
-                      fontSize: scaleRem(1.5, appConfig.typography.pageTitle),
-                    }}
-                  >
-                    {appConfig.dashboard.pulseTitle}
-                  </CardTitle>
-                  <CardDescription
-                    className="max-w-2xl"
-                    style={{
-                      fontSize: scaleRem(0.95, appConfig.typography.pageBody),
-                    }}
-                  >
-                    {appConfig.dashboard.pulseDescription}
-                  </CardDescription>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-2">
-                <BotaoRegistroDoDia />
-                <Button
-                  variant="outline"
-                  className={cn(
-                    isBluetoothConnected && 'border-primary text-primary'
-                  )}
-                  onClick={() =>
-                    isBluetoothConnected
-                      ? bluetoothDisconnect()
-                      : bluetoothConnect()
-                  }
-                >
-                  {isBluetoothConnected ? (
-                    <BluetoothConnected aria-hidden="true" />
-                  ) : (
-                    <Bluetooth aria-hidden="true" />
-                  )}
-                  {isBluetoothConnected ? 'Cinta conectada' : 'Conectar cinta'}
-                </Button>
-                {/* Rótulo editável no construtor de UI
-                    (app.dashboard.syncButtonLabel); antes o botão só tinha
-                    ícone e um texto fixo para leitores de tela. */}
-                <Button
-                  variant="secondary"
-                  onClick={() => void handleSyncNow()}
-                  disabled={isSyncing}
-                  aria-busy={isSyncing}
-                >
-                  <TimerReset aria-hidden="true" />
-                  {isSyncing
-                    ? 'Atualizando...'
-                    : appConfig.dashboard.syncButtonLabel}
-                </Button>
-              </div>
-            </div>
-          </CardHeader>
-
-          <CardContent className="flex flex-col gap-5">
-            <div className="flex flex-col gap-2">
-              <p className="text-sm font-medium text-muted-foreground">
-                {pulseLabel}
-              </p>
-              <p className="font-display text-4xl font-semibold tracking-[-0.03em] text-foreground">
-                {pulseValue !== null ? Math.round(pulseValue) : '—'}
-                {pulseValue !== null ? (
-                  <span className="ml-1 text-base font-medium text-muted-foreground">
-                    {pulseUnit}
-                  </span>
-                ) : null}
-              </p>
-              {pulseValue === null ? (
-                <p className="text-caption text-muted-foreground">
-                  Sem VFC nem prontidão hoje: faça o check-in ou conecte a
-                  pulseira.
-                </p>
-              ) : null}
-              {pulseValue !== null && pulseUnit === '/100' ? (
-                <Progress
-                  aria-label="Prontidão geral de 0 a 100"
-                  value={Math.min(100, Math.round(pulseValue))}
-                  className="h-1.5"
-                />
-              ) : null}
-            </div>
-
-            <div className="flex flex-wrap gap-2">
-              <div className="rounded-full border border-border bg-background px-3 py-1.5 text-caption text-foreground">
-                FC repouso:{' '}
-                <span className="font-semibold">
-                  {todayMetrics?.resting_heart_rate
-                    ? `${todayMetrics.resting_heart_rate} bpm`
-                    : vitals?.heartRate
-                      ? `${Math.round(vitals.heartRate)} bpm`
-                      : 'Sem leitura'}
-                </span>
-              </div>
-              {aiScoresEnabled ? (
-                <div className="rounded-full border border-border bg-background px-3 py-1.5 text-caption text-foreground">
-                  Longevidade:{' '}
-                  <span className="font-semibold">{rotuloDaLongevidade}</span>
-                </div>
-              ) : null}
-            </div>
-
-            <div className="flex flex-col gap-2 rounded-md border border-border bg-background p-4">
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div className="flex items-center gap-2">
-                  <HeartPulse
-                    aria-hidden="true"
-                    className="size-4 text-primary"
-                  />
-                  <span className="text-sm font-semibold text-foreground">
-                    Estado atual
-                  </span>
-                </div>
-                <Badge variant={syncBadgeVariant}>{syncBadgeLabel}</Badge>
-              </div>
-              <p className="text-sm leading-6 text-muted-foreground">
-                {syncSummary}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="flex min-w-0 flex-col md:col-span-2">
-          <CardHeader className="gap-1">
-            <CardTitle>Trajetória recente</CardTitle>
-            <CardDescription>
-              {serieDaTrajetoria.rotulo} nos últimos 7 dias (
-              {serieDaTrajetoria.unidade === 'ms' ? 'em ms' : 'de 0 a 100'}).
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="flex flex-1 flex-col">
-            {temTrajetoria ? (
-              <ChartFigure
-                resumo={resumoDoGrafico('Trajetória dos últimos 7 dias', [
-                  {
-                    nome: serieDaTrajetoria.rotulo,
-                    valores: pulseTrendData.map((ponto) => ponto.pulso),
-                    unidade: serieDaTrajetoria.unidade,
-                  },
-                ])}
-              >
-                <ChartContainer
-                  config={configDaTrajetoria}
-                  className="aspect-auto h-64 w-full border-none bg-transparent p-0"
-                >
-                  <AreaChart
-                    data={pulseTrendData}
-                    margin={{ top: 8, right: 8, left: -8, bottom: 0 }}
-                  >
-                    <CartesianGrid vertical={false} />
-                    <XAxis
-                      dataKey="dia"
-                      tickLine={false}
-                      axisLine={false}
-                      tickMargin={12}
-                    />
-                    <YAxis
-                      tickLine={false}
-                      axisLine={false}
-                      width={40}
-                      allowDecimals={false}
-                      domain={
-                        serieDaTrajetoria.unidade === '/100'
-                          ? [0, 100]
-                          : ['auto', 'auto']
-                      }
-                      unit={serieDaTrajetoria.unidade === 'ms' ? ' ms' : ''}
-                    />
-                    <ChartTooltip
-                      cursor={false}
-                      content={<ChartTooltipContent />}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="pulso"
-                      stroke="var(--color-pulso)"
-                      fill="var(--color-pulso)"
-                      fillOpacity={0.1}
-                      strokeWidth={2}
-                    />
-                  </AreaChart>
-                </ChartContainer>
-              </ChartFigure>
-            ) : (
-              <div className="flex min-h-48 flex-1 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border bg-background p-6 text-center">
-                <Activity
-                  aria-hidden="true"
-                  className="size-6 text-muted-foreground"
-                />
-                <p className="text-sm text-muted-foreground">
-                  Ainda não há leituras suficientes para desenhar a trajetória.
-                </p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <Card className="min-w-0 xl:col-span-2">
-          <CardHeader className="gap-4">
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex min-w-0 items-center gap-2">
-                <MoonStar
-                  aria-hidden="true"
-                  className="size-5 shrink-0 text-cosmic"
-                />
-                <Badge variant="cosmic">{appConfig.dashboard.astroBadge}</Badge>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <CardTitle className="text-2xl">{astroTitle}</CardTitle>
-              <p className="text-body leading-relaxed text-foreground/80">
-                {astroDetail}
-              </p>
-            </div>
-          </CardHeader>
-
-          <CardContent className="flex flex-col gap-4">
-            {astrology?.nakshatra || astrology?.paksha || astrology?.tithi ? (
-              <div className="flex flex-wrap gap-2">
-                {[astrology?.nakshatra, astrology?.paksha, astrology?.tithi]
-                  .filter((chip): chip is string => Boolean(chip))
-                  .map((chip, index) => (
-                    <span
-                      key={`${index}-${chip}`}
-                      className="rounded-full bg-cosmic-light px-2.5 py-1 text-caption font-medium text-cosmic-strong"
-                    >
-                      {chip}
-                    </span>
-                  ))}
-              </div>
-            ) : null}
-
-            <div className="rounded-md border border-border bg-background p-4">
-              <p className="text-sm font-medium text-muted-foreground">
-                {appConfig.dashboard.astroInsightLabel}
-              </p>
-              <p className="mt-2 text-body leading-relaxed text-foreground/80">
-                {astrology?.impactOnHealth.stress ??
-                  appConfig.dashboard.astroInsightFallback}
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="min-w-0 xl:col-span-2">
-          <CardHeader className="gap-4">
-            <div className="flex items-center justify-between gap-3">
-              <Badge variant="info">{appConfig.dashboard.sleepBadge}</Badge>
-              <div
-                aria-hidden="true"
-                className="flex size-9 items-center justify-center rounded-full bg-info-light text-info"
-              >
-                <BedDouble className="size-4" />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <CardTitle className="text-4xl tracking-[-0.03em]">
-                {sleepMinutes !== null
-                  ? formatMinutes(sleepMinutes)
-                  : 'Sem dados'}
-              </CardTitle>
-              <CardDescription>
-                {sleepMinutes !== null
-                  ? appConfig.dashboard.sleepDescription
-                  : appConfig.dashboard.sleepEmptyDescription}
-              </CardDescription>
-            </div>
-          </CardHeader>
-
-          <CardContent className="flex flex-col gap-5">
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
-                <span className="text-muted-foreground">
-                  {appConfig.dashboard.sleepGoalLabel}
-                </span>
-                <span className="font-medium text-foreground">
-                  {rotuloDaMetaDeSono}
-                </span>
-              </div>
-              <Progress
-                aria-label={`Sono em relação à meta de ${formatarHoras(sleepGoalMinutes)}`}
-                value={sleepProgress}
-              />
-              {metaDeSono.origem === 'sugestao' ? (
-                <p className="text-caption leading-5 text-muted-foreground">
-                  Crie a meta “Sono por noite” em Metas para usar o seu alvo.
-                </p>
-              ) : null}
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="rounded-md border border-border bg-background p-4">
-                <p className="text-sm font-medium text-muted-foreground">
-                  {appConfig.dashboard.deepSleepLabel}
-                </p>
-                <p className="mt-1 font-display text-2xl font-semibold tracking-[-0.03em] text-foreground">
-                  {deepSleepMinutes !== null
-                    ? formatMinutes(deepSleepMinutes)
-                    : '—'}
-                </p>
-              </div>
-              <div className="rounded-md border border-border bg-background p-4">
-                <p className="text-sm font-medium text-muted-foreground">
-                  {appConfig.dashboard.remSleepLabel}
-                </p>
-                <p className="mt-1 font-display text-2xl font-semibold tracking-[-0.03em] text-foreground">
-                  {remSleepMinutes !== null
-                    ? formatMinutes(remSleepMinutes)
-                    : '—'}
-                </p>
-              </div>
-            </div>
-
-            <p className="text-caption leading-5 text-muted-foreground">
-              {astrology?.impactOnHealth.sleep ??
-                appConfig.dashboard.sleepInsightFallback}
-            </p>
-          </CardContent>
-        </Card>
-
-        {aiTipsEnabled ? (
-          <div className="md:col-span-2 xl:col-span-4">
-            <AITipsCard
-              className="h-full"
-              featureEnabled={aiTipsEnabled}
-              currentPlanKey={subscription.plan.key}
-            />
-          </div>
-        ) : null}
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        {miniMetrics.map((metric) => (
-          <MiniMetricCard key={metric.title} {...metric} />
-        ))}
-      </div>
-
-      <Card className="min-w-0">
-        <CardHeader className="gap-3">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="flex min-w-0 flex-col gap-2">
-              <Badge variant="secondary" className="self-start">
-                {appConfig.dashboard.weeklyBadge}
-              </Badge>
-              <CardTitle className="text-2xl">
-                {appConfig.dashboard.weeklyTitle}
-              </CardTitle>
-              <CardDescription>
-                {appConfig.dashboard.weeklyDescription}
-              </CardDescription>
-            </div>
-            {/* Só aparece quando o plano inclui os scores de IA. */}
-            {aiScoresEnabled ? (
-              <div className="flex flex-wrap items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-caption text-muted-foreground">
-                <Bot aria-hidden="true" className="size-4 text-accent" />
-                {appConfig.dashboard.aiUnlockedLabel}:{' '}
-                <span className="font-semibold text-foreground">
-                  {appConfig.dashboard.aiUnlockedYes}
-                </span>
-              </div>
-            ) : null}
-          </div>
+  const comOrientacoes =
+    aiTipsEnabled ||
+    isPlanFeatureEnabled(subscription, 'health_intelligence') ||
+    isPlanFeatureEnabled(subscription, 'vedic_insights');
+  const comAvaliacoes = isPlanFeatureEnabled(
+    subscription,
+    'wellbeing_assessments'
+  );
+  const abas = ABAS_DO_PAINEL.filter(
+    (item) =>
+      (item.id !== 'orientacoes' || comOrientacoes) &&
+      (item.id !== 'avaliacoes' || comAvaliacoes)
+  );
+  const aba = abas.some((item) => item.id === solicitada)
+    ? solicitada
+    : 'resumo';
+  const avisoDeFalha =
+    erroMetricas || erroEscores ? (
+      <Card role="alert">
+        <CardHeader>
+          <CardTitle>Não foi possível carregar seu painel</CardTitle>
+          <CardDescription>
+            Seus registros continuam salvos. Tente carregar novamente para
+            consultar os valores.
+          </CardDescription>
         </CardHeader>
-
-        <CardContent className="flex flex-col gap-6">
-          {temSemana ? (
-            <ChartFigure
-              resumo={resumoDoGrafico('Prontidão nos últimos 7 dias', [
-                {
-                  nome: 'Prontidão',
-                  valores: weeklyFlowData.map((ponto) => ponto.prontidao),
-                  unidade: '/100',
-                },
-              ])}
-            >
-              <ChartContainer
-                config={weeklyChartConfig}
-                className="aspect-auto h-72 w-full border-none bg-transparent p-0 md:h-80"
-              >
-                <AreaChart
-                  data={weeklyFlowData}
-                  margin={{ top: 8, right: 8, left: -8, bottom: 0 }}
-                >
-                  <CartesianGrid vertical={false} />
-                  <XAxis
-                    dataKey="dia"
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={12}
-                  />
-                  <YAxis
-                    tickLine={false}
-                    axisLine={false}
-                    width={36}
-                    domain={[0, 100]}
-                    ticks={[0, 50, 100]}
-                  />
-                  <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent />}
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="prontidao"
-                    stroke="var(--color-prontidao)"
-                    fill="var(--color-prontidao)"
-                    fillOpacity={0.1}
-                    strokeWidth={2}
-                  />
-                </AreaChart>
-              </ChartContainer>
-            </ChartFigure>
-          ) : (
-            <div className="flex min-h-48 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border bg-background p-6 text-center">
-              <Activity
-                aria-hidden="true"
-                className="size-6 text-muted-foreground"
-              />
-              <p className="text-sm text-muted-foreground">
-                Ainda não há leituras da semana para exibir a prontidão.
-              </p>
-            </div>
-          )}
-
-          <div className="grid gap-4 md:grid-cols-3">
-            <div className="flex flex-col gap-2 rounded-md border border-border p-4">
-              <p className="text-sm font-medium text-muted-foreground">
-                {appConfig.dashboard.currentReadinessLabel}
-              </p>
-              <p className="font-display text-4xl font-semibold tracking-[-0.03em] text-foreground">
-                {readinessScore !== null ? Math.round(readinessScore) : '—'}
-                {readinessScore !== null ? (
-                  <span className="ml-1 text-base font-medium text-muted-foreground">
-                    /100
-                  </span>
-                ) : null}
-              </p>
-              {readinessScore === null ? (
-                <p className="text-caption text-muted-foreground">
-                  Registre ao menos dois sinais hoje (sono, energia, humor,
-                  estresse ou a pulseira).
-                </p>
-              ) : null}
-              {readinessScore !== null ? (
-                <Progress
-                  aria-label="Prontidão atual de 0 a 100"
-                  value={Math.min(100, Math.round(readinessScore))}
-                  className="h-1.5"
-                />
-              ) : null}
-            </div>
-            {aiScoresEnabled ? (
-              <div className="flex flex-col gap-2 rounded-md border border-border p-4">
-                <p className="text-sm font-medium text-muted-foreground">
-                  {appConfig.dashboard.longevityLabel}
-                </p>
-                <p className="font-display text-4xl font-semibold tracking-[-0.03em] text-foreground">
-                  {rotuloDaLongevidade}
-                </p>
-                <p className="text-caption text-muted-foreground">
-                  {detalheDaLongevidade}
-                </p>
-              </div>
-            ) : null}
-            <div className="flex flex-col gap-2 rounded-md border border-border p-4">
-              <p className="text-sm font-medium text-muted-foreground">
-                {appConfig.dashboard.liveContextLabel}
-              </p>
-              <p className="text-body leading-relaxed text-foreground/80">
-                {astrology?.impactOnHealth.energy ??
-                  appConfig.dashboard.liveContextFallback}
-              </p>
-            </div>
-          </div>
+        <CardContent>
+          <Button onClick={() => void handleSyncNow()}>Tentar novamente</Button>
         </CardContent>
       </Card>
-
-      <PlanFeatureGate features={['health_intelligence']} ocultar>
-        {' '}
-        <LyraIntelligence2026
-          metrics={metrics}
-          todayMetrics={todayMetrics}
-          profile={intelligenceProfile}
-          chronologicalAge={chronologicalAge}
-          isFemale={isFemale}
-          readinessScore={readinessScore}
-        />
-      </PlanFeatureGate>
-
-      {/* `todayMetrics` sempre existe (linha do dia com `registrado: false`):
-          sem testar o registro, o estado vazio nunca aparecia. */}
-      {todayMetrics?.registrado ? (
-        <section className="flex flex-col gap-5">
-          <div className="flex flex-col gap-2">
-            <h2 className="font-display text-2xl font-semibold tracking-[-0.02em] text-foreground">
-              {appConfig.dashboard.pillarsTitle}
-            </h2>
-            <p className="max-w-3xl text-body leading-relaxed text-muted-foreground">
-              {appConfig.dashboard.pillarsDescription}
+    ) : null;
+  const resumo: Array<MiniMetricCardProps & { grupo: string }> = [
+    {
+      title: 'Seu sono',
+      value: sleepMinutes === null ? '—' : formatMinutes(sleepMinutes),
+      description:
+        sleepMinutes === null
+          ? 'Ainda sem registro de sono hoje.'
+          : 'Tempo de sono registrado hoje.',
+      tone: 'info',
+      icon: BedDouble,
+      delta: null,
+      grupo: 'sono',
+    },
+    {
+      title: 'Seu movimento',
+      value: passosHoje === null ? '—' : passosHoje.toLocaleString('pt-BR'),
+      description:
+        passosHoje === null
+          ? 'Ainda sem registro de passos hoje.'
+          : 'Passos registrados hoje.',
+      tone: 'primary',
+      icon: Activity,
+      delta: stepsDelta,
+      grupo: 'movimento',
+    },
+    {
+      title: 'Sua disposição',
+      value: readinessScore === null ? '—' : String(Math.round(readinessScore)),
+      description:
+        readinessScore === null
+          ? 'Registre seus sinais para calcular.'
+          : 'Índice calculado com seus sinais, de 0 a 100.',
+      tone: 'success',
+      icon: HeartPulse,
+      delta: null,
+      grupo: 'recuperacao',
+    },
+  ];
+  return (
+    <div className="flex min-w-0 flex-col gap-5 pb-24" aria-busy={loading}>
+      {avisoDeFalha}
+      {loading && (
+        <p role="status" className="text-sm text-muted-foreground">
+          Atualizando seus registros e índices...
+        </p>
+      )}
+      <Tabs
+        value={aba}
+        onValueChange={selecionar}
+        activationMode="manual"
+        className="min-w-0"
+        hidden={metricsLoading && metrics.length === 0}
+      >
+        <TabsList
+          aria-label="Assuntos do seu painel"
+          className="flex h-auto w-full flex-wrap justify-start gap-1 p-1"
+        >
+          {abas.map((item) => (
+            <TabsTrigger
+              key={item.id}
+              value={item.id}
+              className="min-h-11 flex-1"
+            >
+              {item.nome}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="min-w-0">
+            <Badge variant={syncBadgeVariant}>{syncBadgeLabel}</Badge>
+            <p className="mt-2 text-xs leading-5 text-muted-foreground">
+              {syncSummary}
             </p>
           </div>
-          <MetricGrid metrics={todayMetrics} />
-        </section>
-      ) : (
-        <Card className="border-dashed">
-          <CardHeader className="gap-3">
-            <CardTitle className="text-2xl">
-              {appConfig.dashboard.emptyMetricsTitle}
-            </CardTitle>
-            <CardDescription>
-              {appConfig.dashboard.emptyMetricsDescription}
-            </CardDescription>
-          </CardHeader>
-        </Card>
-      )}
+          <div className="flex flex-wrap gap-2">
+            <BotaoRegistroDoDia />
+            <PlanFeatureGate
+              features={['wearable_bluetooth_connection']}
+              ocultar
+            >
+              <Button
+                variant="outline"
+                onClick={() =>
+                  isBluetoothConnected
+                    ? bluetoothDisconnect()
+                    : void bluetoothConnect()
+                }
+              >
+                {isBluetoothConnected ? (
+                  <BluetoothConnected aria-hidden="true" />
+                ) : (
+                  <Bluetooth aria-hidden="true" />
+                )}
+                {isBluetoothConnected ? 'Cinta conectada' : 'Conectar cinta'}
+              </Button>
+            </PlanFeatureGate>
+            <Button
+              variant="secondary"
+              onClick={() => void handleSyncNow()}
+              disabled={isSyncing}
+              aria-busy={isSyncing}
+            >
+              <TimerReset aria-hidden="true" />
+              {isSyncing
+                ? 'Atualizando...'
+                : appConfig.dashboard.syncButtonLabel}
+            </Button>
+          </div>
+        </div>
+        <TabsContent value="resumo" className="space-y-5">
+          <div>
+            <h2 className="font-display text-xl font-semibold">
+              Seu dia em um olhar
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              O essencial para começar. Escolha um assunto nas abas para ver os
+              detalhes.
+            </p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3">
+            {resumo
+              .filter(
+                (metric) => metric.grupo !== 'recuperacao' || aiScoresEnabled
+              )
+              .map(({ grupo: destino, ...metric }) => (
+                <div key={metric.title} className="flex min-w-0 flex-col gap-2">
+                  <MiniMetricCard {...metric} />
+                  <Button
+                    variant="outline"
+                    className="min-h-11"
+                    onClick={() => selecionar('registros', destino)}
+                  >
+                    Ver {destino === 'recuperacao' ? 'recuperação' : destino}
+                  </Button>
+                </div>
+              ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="registros" className="space-y-5">
+          <div className="max-w-sm space-y-2">
+            <label htmlFor="grupo-das-metricas" className="text-sm font-medium">
+              Quais registros você quer ver?
+            </label>
+            <select
+              id="grupo-das-metricas"
+              value={grupo}
+              onChange={(evento) =>
+                selecionar('registros', evento.target.value)
+              }
+              className="min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-2 focus-visible:outline-ring"
+            >
+              {GRUPOS_DO_PAINEL.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.nome}
+                </option>
+              ))}
+            </select>
+          </div>
+          {grupo === 'recuperacao' && (
+            <Card className="min-w-0 md:col-span-2">
+              <CardHeader className="gap-5">
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div className="flex min-w-0 flex-col gap-3">
+                    <Badge variant="default" className="self-start">
+                      {appConfig.dashboard.pulseBadge}
+                    </Badge>
+                    <div className="flex flex-col gap-1">
+                      <CardTitle
+                        className="md:text-3xl"
+                        style={{
+                          fontSize: scaleRem(
+                            1.5,
+                            appConfig.typography.pageTitle
+                          ),
+                        }}
+                      >
+                        {appConfig.dashboard.pulseTitle}
+                      </CardTitle>
+                      <CardDescription
+                        className="max-w-2xl"
+                        style={{
+                          fontSize: scaleRem(
+                            0.95,
+                            appConfig.typography.pageBody
+                          ),
+                        }}
+                      >
+                        {appConfig.dashboard.pulseDescription}
+                      </CardDescription>
+                    </div>
+                  </div>
+                </div>
+              </CardHeader>
 
-      <section className="flex flex-col gap-5">
-        <PlanFeatureGate features={['wellbeing_assessments']} ocultar>
-          <AssessmentCard />
-        </PlanFeatureGate>
-      </section>
+              <CardContent className="flex flex-col gap-5">
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    {pulseLabel}
+                  </p>
+                  <p className="font-display text-4xl font-semibold tracking-[-0.03em] text-foreground">
+                    {pulseValue !== null ? Math.round(pulseValue) : '—'}
+                    {pulseValue !== null ? (
+                      <span className="ml-1 text-base font-medium text-muted-foreground">
+                        {pulseUnit}
+                      </span>
+                    ) : null}
+                  </p>
+                  {pulseValue === null ? (
+                    <p className="text-caption text-muted-foreground">
+                      Sem VFC nem prontidão hoje: faça o check-in ou conecte a
+                      pulseira.
+                    </p>
+                  ) : null}
+                  {pulseValue !== null && pulseUnit === '/100' ? (
+                    <Progress
+                      aria-label="Prontidão geral de 0 a 100"
+                      value={Math.min(100, Math.round(pulseValue))}
+                      className="h-1.5"
+                    />
+                  ) : null}
+                </div>
 
-      <PlanFeatureGate features={['vedic_insights']} ocultar>
-        <VedicDashboard featureEnabled={dashboardEnabled} />
-      </PlanFeatureGate>
+                <div className="flex flex-wrap gap-2">
+                  <div className="rounded-full border border-border bg-background px-3 py-1.5 text-caption text-foreground">
+                    FC repouso:{' '}
+                    <span className="font-semibold">
+                      {todayMetrics?.resting_heart_rate
+                        ? `${todayMetrics.resting_heart_rate} bpm`
+                        : vitals?.heartRate
+                          ? `${Math.round(vitals.heartRate)} bpm`
+                          : 'Sem leitura'}
+                    </span>
+                  </div>
+                  {aiScoresEnabled ? (
+                    <div className="rounded-full border border-border bg-background px-3 py-1.5 text-caption text-foreground">
+                      Longevidade:{' '}
+                      <span className="font-semibold">
+                        {rotuloDaLongevidade}
+                      </span>
+                    </div>
+                  ) : null}
+                </div>
+
+                <div className="flex flex-col gap-2 rounded-md border border-border bg-background p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <HeartPulse
+                        aria-hidden="true"
+                        className="size-4 text-primary"
+                      />
+                      <span className="text-sm font-semibold text-foreground">
+                        Estado atual
+                      </span>
+                    </div>
+                    <Badge variant={syncBadgeVariant}>{syncBadgeLabel}</Badge>
+                  </div>
+                  <p className="text-sm leading-6 text-muted-foreground">
+                    {syncSummary}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          {grupo === 'sono' && (
+            <Card className="min-w-0 xl:col-span-2">
+              <CardHeader className="gap-4">
+                <div className="flex items-center justify-between gap-3">
+                  <Badge variant="info">{appConfig.dashboard.sleepBadge}</Badge>
+                  <div
+                    aria-hidden="true"
+                    className="flex size-9 items-center justify-center rounded-full bg-info-light text-info"
+                  >
+                    <BedDouble className="size-4" />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <CardTitle className="text-4xl tracking-[-0.03em]">
+                    {sleepMinutes !== null
+                      ? formatMinutes(sleepMinutes)
+                      : 'Sem dados'}
+                  </CardTitle>
+                  <CardDescription>
+                    {sleepMinutes !== null
+                      ? appConfig.dashboard.sleepDescription
+                      : appConfig.dashboard.sleepEmptyDescription}
+                  </CardDescription>
+                </div>
+              </CardHeader>
+
+              <CardContent className="flex flex-col gap-5">
+                <div className="flex flex-col gap-2">
+                  <div className="flex flex-wrap items-center justify-between gap-3 text-sm">
+                    <span className="text-muted-foreground">
+                      {appConfig.dashboard.sleepGoalLabel}
+                    </span>
+                    <span className="font-medium text-foreground">
+                      {rotuloDaMetaDeSono}
+                    </span>
+                  </div>
+                  <Progress
+                    aria-label={`Sono em relação à meta de ${formatarHoras(sleepGoalMinutes)}`}
+                    value={sleepProgress}
+                  />
+                  {metaDeSono.origem === 'sugestao' ? (
+                    <p className="text-caption leading-5 text-muted-foreground">
+                      Crie a meta “Sono por noite” em Metas para usar o seu
+                      alvo.
+                    </p>
+                  ) : null}
+                </div>
+
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-md border border-border bg-background p-4">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      {appConfig.dashboard.deepSleepLabel}
+                    </p>
+                    <p className="mt-1 font-display text-2xl font-semibold tracking-[-0.03em] text-foreground">
+                      {deepSleepMinutes !== null
+                        ? formatMinutes(deepSleepMinutes)
+                        : '—'}
+                    </p>
+                  </div>
+                  <div className="rounded-md border border-border bg-background p-4">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      {appConfig.dashboard.remSleepLabel}
+                    </p>
+                    <p className="mt-1 font-display text-2xl font-semibold tracking-[-0.03em] text-foreground">
+                      {remSleepMinutes !== null
+                        ? formatMinutes(remSleepMinutes)
+                        : '—'}
+                    </p>
+                  </div>
+                </div>
+
+                <p className="text-caption leading-5 text-muted-foreground">
+                  {astrology?.impactOnHealth.sleep ??
+                    appConfig.dashboard.sleepInsightFallback}
+                </p>
+              </CardContent>
+            </Card>
+          )}
+          <div className="grid gap-4 md:grid-cols-2">
+            {miniMetrics
+              .filter(
+                (_, indice) =>
+                  ({ movimento: 0, alimentacao: 1, mente: 2, glicose: 3 })[
+                    grupo as 'movimento' | 'alimentacao' | 'mente' | 'glicose'
+                  ] === indice
+              )
+              .map((metric) => (
+                <MiniMetricCard key={metric.title} {...metric} />
+              ))}
+          </div>
+          {todayMetrics?.registrado ? (
+            <section className="flex flex-col gap-5">
+              <div className="flex flex-col gap-2">
+                <h2 className="font-display text-2xl font-semibold tracking-[-0.02em] text-foreground">
+                  {appConfig.dashboard.pillarsTitle}
+                </h2>
+                <p className="max-w-3xl text-body leading-relaxed text-muted-foreground">
+                  {appConfig.dashboard.pillarsDescription}
+                </p>
+              </div>
+              <MetricGrid metrics={todayMetrics} grupo={grupo} />
+            </section>
+          ) : (
+            <Card className="border-dashed">
+              <CardHeader className="gap-3">
+                <CardTitle className="text-2xl">
+                  {appConfig.dashboard.emptyMetricsTitle}
+                </CardTitle>
+                <CardDescription>
+                  {appConfig.dashboard.emptyMetricsDescription}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          )}
+        </TabsContent>
+        <TabsContent value="evolucao" className="space-y-5">
+          <Card className="flex min-w-0 flex-col md:col-span-2">
+            <CardHeader className="gap-1">
+              <CardTitle>Trajetória recente</CardTitle>
+              <CardDescription>
+                {serieDaTrajetoria.rotulo} nos últimos 7 dias (
+                {serieDaTrajetoria.unidade === 'ms' ? 'em ms' : 'de 0 a 100'}).
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-1 flex-col">
+              {temTrajetoria ? (
+                <ChartFigure
+                  resumo={resumoDoGrafico('Trajetória dos últimos 7 dias', [
+                    {
+                      nome: serieDaTrajetoria.rotulo,
+                      valores: pulseTrendData.map((ponto) => ponto.pulso),
+                      unidade: serieDaTrajetoria.unidade,
+                    },
+                  ])}
+                >
+                  <ChartContainer
+                    config={configDaTrajetoria}
+                    className="aspect-auto h-64 w-full border-none bg-transparent p-0"
+                  >
+                    <AreaChart
+                      data={pulseTrendData}
+                      margin={{ top: 8, right: 8, left: -8, bottom: 0 }}
+                    >
+                      <CartesianGrid vertical={false} />
+                      <XAxis
+                        dataKey="dia"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={12}
+                      />
+                      <YAxis
+                        tickLine={false}
+                        axisLine={false}
+                        width={40}
+                        allowDecimals={false}
+                        domain={
+                          serieDaTrajetoria.unidade === '/100'
+                            ? [0, 100]
+                            : ['auto', 'auto']
+                        }
+                        unit={serieDaTrajetoria.unidade === 'ms' ? ' ms' : ''}
+                      />
+                      <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent />}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="pulso"
+                        stroke="var(--color-pulso)"
+                        fill="var(--color-pulso)"
+                        fillOpacity={0.1}
+                        strokeWidth={2}
+                      />
+                    </AreaChart>
+                  </ChartContainer>
+                </ChartFigure>
+              ) : (
+                <div className="flex min-h-48 flex-1 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border bg-background p-6 text-center">
+                  <Activity
+                    aria-hidden="true"
+                    className="size-6 text-muted-foreground"
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Ainda não há leituras suficientes para desenhar a
+                    trajetória.
+                  </p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          <Card className="min-w-0">
+            <CardHeader className="gap-3">
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div className="flex min-w-0 flex-col gap-2">
+                  <Badge variant="secondary" className="self-start">
+                    {appConfig.dashboard.weeklyBadge}
+                  </Badge>
+                  <CardTitle className="text-2xl">
+                    {appConfig.dashboard.weeklyTitle}
+                  </CardTitle>
+                  <CardDescription>
+                    {appConfig.dashboard.weeklyDescription}
+                  </CardDescription>
+                </div>
+                {/* Só aparece quando o plano inclui os scores de IA. */}
+                {aiScoresEnabled ? (
+                  <div className="flex flex-wrap items-center gap-2 rounded-full border border-border bg-background px-3 py-1.5 text-caption text-muted-foreground">
+                    <Bot aria-hidden="true" className="size-4 text-accent" />
+                    {appConfig.dashboard.aiUnlockedLabel}:{' '}
+                    <span className="font-semibold text-foreground">
+                      {appConfig.dashboard.aiUnlockedYes}
+                    </span>
+                  </div>
+                ) : null}
+              </div>
+            </CardHeader>
+
+            <CardContent className="flex flex-col gap-6">
+              {temSemana ? (
+                <ChartFigure
+                  resumo={resumoDoGrafico('Prontidão nos últimos 7 dias', [
+                    {
+                      nome: 'Prontidão',
+                      valores: weeklyFlowData.map((ponto) => ponto.prontidao),
+                      unidade: '/100',
+                    },
+                  ])}
+                >
+                  <ChartContainer
+                    config={weeklyChartConfig}
+                    className="aspect-auto h-72 w-full border-none bg-transparent p-0 md:h-80"
+                  >
+                    <AreaChart
+                      data={weeklyFlowData}
+                      margin={{ top: 8, right: 8, left: -8, bottom: 0 }}
+                    >
+                      <CartesianGrid vertical={false} />
+                      <XAxis
+                        dataKey="dia"
+                        tickLine={false}
+                        axisLine={false}
+                        tickMargin={12}
+                      />
+                      <YAxis
+                        tickLine={false}
+                        axisLine={false}
+                        width={36}
+                        domain={[0, 100]}
+                        ticks={[0, 50, 100]}
+                      />
+                      <ChartTooltip
+                        cursor={false}
+                        content={<ChartTooltipContent />}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="prontidao"
+                        stroke="var(--color-prontidao)"
+                        fill="var(--color-prontidao)"
+                        fillOpacity={0.1}
+                        strokeWidth={2}
+                      />
+                    </AreaChart>
+                  </ChartContainer>
+                </ChartFigure>
+              ) : (
+                <div className="flex min-h-48 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border bg-background p-6 text-center">
+                  <Activity
+                    aria-hidden="true"
+                    className="size-6 text-muted-foreground"
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Ainda não há leituras da semana para exibir a prontidão.
+                  </p>
+                </div>
+              )}
+
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="flex flex-col gap-2 rounded-md border border-border p-4">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    {appConfig.dashboard.currentReadinessLabel}
+                  </p>
+                  <p className="font-display text-4xl font-semibold tracking-[-0.03em] text-foreground">
+                    {readinessScore !== null ? Math.round(readinessScore) : '—'}
+                    {readinessScore !== null ? (
+                      <span className="ml-1 text-base font-medium text-muted-foreground">
+                        /100
+                      </span>
+                    ) : null}
+                  </p>
+                  {readinessScore === null ? (
+                    <p className="text-caption text-muted-foreground">
+                      Registre ao menos dois sinais hoje (sono, energia, humor,
+                      estresse ou a pulseira).
+                    </p>
+                  ) : null}
+                  {readinessScore !== null ? (
+                    <Progress
+                      aria-label="Prontidão atual de 0 a 100"
+                      value={Math.min(100, Math.round(readinessScore))}
+                      className="h-1.5"
+                    />
+                  ) : null}
+                </div>
+                {aiScoresEnabled ? (
+                  <div className="flex flex-col gap-2 rounded-md border border-border p-4">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      {appConfig.dashboard.longevityLabel}
+                    </p>
+                    <p className="font-display text-4xl font-semibold tracking-[-0.03em] text-foreground">
+                      {rotuloDaLongevidade}
+                    </p>
+                    <p className="text-caption text-muted-foreground">
+                      {detalheDaLongevidade}
+                    </p>
+                  </div>
+                ) : null}
+                <div className="flex flex-col gap-2 rounded-md border border-border p-4">
+                  <p className="text-sm font-medium text-muted-foreground">
+                    {appConfig.dashboard.liveContextLabel}
+                  </p>
+                  <p className="text-body leading-relaxed text-foreground/80">
+                    {astrology?.impactOnHealth.energy ??
+                      appConfig.dashboard.liveContextFallback}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        {comOrientacoes && (
+          <TabsContent value="orientacoes" className="space-y-5">
+            <PlanFeatureGate
+              features={['ai_tips_feed', 'vedic_insights', 'ai_scores']}
+              ocultar
+            >
+              <SeuDiaCard />
+            </PlanFeatureGate>
+            <PlanFeatureGate features={['vedic_insights']} ocultar>
+              <HarmoniaAtualCard appConfig={appConfig} />
+              <Card className="min-w-0 xl:col-span-2">
+                <CardHeader className="gap-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-2">
+                      <MoonStar
+                        aria-hidden="true"
+                        className="size-5 shrink-0 text-cosmic"
+                      />
+                      <Badge variant="cosmic">
+                        {appConfig.dashboard.astroBadge}
+                      </Badge>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <CardTitle className="text-2xl">{astroTitle}</CardTitle>
+                    <p className="text-body leading-relaxed text-foreground/80">
+                      {astroDetail}
+                    </p>
+                  </div>
+                </CardHeader>
+
+                <CardContent className="flex flex-col gap-4">
+                  {astrology?.nakshatra ||
+                  astrology?.paksha ||
+                  astrology?.tithi ? (
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        astrology?.nakshatra,
+                        astrology?.paksha,
+                        astrology?.tithi,
+                      ]
+                        .filter((chip): chip is string => Boolean(chip))
+                        .map((chip, index) => (
+                          <span
+                            key={`${index}-${chip}`}
+                            className="rounded-full bg-cosmic-light px-2.5 py-1 text-caption font-medium text-cosmic-strong"
+                          >
+                            {chip}
+                          </span>
+                        ))}
+                    </div>
+                  ) : null}
+
+                  <div className="rounded-md border border-border bg-background p-4">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      {appConfig.dashboard.astroInsightLabel}
+                    </p>
+                    <p className="mt-2 text-body leading-relaxed text-foreground/80">
+                      {astrology?.impactOnHealth.stress ??
+                        appConfig.dashboard.astroInsightFallback}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            </PlanFeatureGate>
+            {aiTipsEnabled ? (
+              <div className="md:col-span-2 xl:col-span-4">
+                <AITipsCard
+                  className="h-full"
+                  featureEnabled={aiTipsEnabled}
+                  currentPlanKey={subscription.plan.key}
+                />
+              </div>
+            ) : null}
+            <PlanFeatureGate features={['health_intelligence']} ocultar>
+              {' '}
+              <LyraIntelligence2026
+                metrics={metrics}
+                todayMetrics={todayMetrics}
+                profile={intelligenceProfile}
+                chronologicalAge={chronologicalAge}
+                isFemale={isFemale}
+                readinessScore={readinessScore}
+              />
+            </PlanFeatureGate>
+            <PlanFeatureGate features={['vedic_insights']} ocultar>
+              <VedicDashboard featureEnabled={dashboardEnabled} />
+            </PlanFeatureGate>
+          </TabsContent>
+        )}
+        {comAvaliacoes && (
+          <TabsContent value="avaliacoes" className="space-y-5">
+            <section className="flex flex-col gap-5">
+              <PlanFeatureGate features={['wellbeing_assessments']} ocultar>
+                <AssessmentCard />
+              </PlanFeatureGate>
+            </section>
+          </TabsContent>
+        )}
+      </Tabs>
     </div>
   );
 }

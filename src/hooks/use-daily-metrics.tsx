@@ -99,6 +99,7 @@ interface UseDailyMetricsResult {
   metrics: DailyMetric[];
   todayMetrics: DailyMetric | null;
   loading: boolean;
+  error: unknown | null;
   refresh: () => Promise<void>;
 }
 
@@ -271,6 +272,7 @@ export function useDailyMetrics(
   const {
     data: metrics,
     loading,
+    error,
     refresh,
   } = useKeyedResource<DailyMetric[]>(
     requestKey,
@@ -289,5 +291,5 @@ export function useDailyMetrics(
     });
   }, [refresh, requestKey]);
 
-  return { metrics, todayMetrics, loading, refresh };
+  return { metrics, todayMetrics, loading, error, refresh };
 }

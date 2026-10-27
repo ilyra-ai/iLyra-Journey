@@ -7,6 +7,7 @@ import { paginaSaindo } from '@/lib/navegador/saida-da-pagina';
 export interface KeyedResource<T> {
   data: T;
   loading: boolean;
+  error: unknown | null;
   refresh: () => Promise<void>;
 }
 
@@ -37,7 +38,11 @@ export function useKeyedResource<T>(
   initialRequest: () => Promise<T> = request,
   preservarAoAtualizarComFalha = false
 ): KeyedResource<T> {
-  const [loaded, setLoaded] = useState<{ key: string; data: T } | null>(null);
+  const [loaded, setLoaded] = useState<{
+    key: string;
+    data: T;
+    error: unknown | null;
+  } | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
@@ -48,13 +53,13 @@ export function useKeyedResource<T>(
     let active = true;
     initialRequest()
       .then((data) => {
-        if (active) setLoaded({ key, data });
+        if (active) setLoaded({ key, data, error: null });
       })
       .catch((error: unknown) => {
         // Página saindo: o navegador cancelou a busca (não é falha).
         if (!active || paginaSaindo()) return;
         onError(error);
-        setLoaded({ key, data: fallback });
+        setLoaded({ key, data: fallback, error });
       });
 
     return () => {
@@ -69,11 +74,18 @@ export function useKeyedResource<T>(
 
     setRefreshing(true);
     await request()
-      .then((data) => setLoaded({ key, data }))
+      .then((data) => setLoaded({ key, data, error: null }))
       .catch((error: unknown) => {
         if (paginaSaindo()) return;
         onError(error);
-        if (!preservarAoAtualizarComFalha) setLoaded({ key, data: fallback });
+        setLoaded((atual) => ({
+          key,
+          data:
+            preservarAoAtualizarComFalha && atual?.key === key
+              ? atual.data
+              : fallback,
+          error,
+        }));
       })
       .finally(() => setRefreshing(false));
   }, [fallback, key, onError, request, preservarAoAtualizarComFalha]);
@@ -82,6 +94,7 @@ export function useKeyedResource<T>(
 
   return {
     data: isCurrent ? loaded.data : fallback,
+    error: isCurrent ? loaded.error : null,
     loading: key !== null && (!isCurrent || refreshing),
     refresh,
   };

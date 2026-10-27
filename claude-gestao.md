@@ -72,8 +72,9 @@
 - **Alterações locais a recuperar e conferir antes de retomar:** `src/app/page.tsx`, `src/components/dashboard/dashboard.tsx`, `src/components/dashboard/MetricGrid.tsx`, `src/hooks/use-abas-do-painel.ts`, `src/hooks/use-keyed-resource.ts`, `src/hooks/use-daily-metrics.tsx` e `src/hooks/use-ai-scores.tsx`. Há organização preliminar em Resumo/Registros/Evolução/Orientações/Como me sinto, seleção dos sete grupos, URL para aba/grupo, montagem sob demanda e distinção de erro de leitura. Essas alterações não foram publicadas e sua permanência no ambiente indisponível não foi comprovada. Conferir primeiro o estado real do workspace e da main, sem presumir recuperação ou reaplicar mudanças já presentes.
 - **Próxima etapa quando houver ambiente utilizável:** concluir a revisão, conferir cobertura das métricas e permissões, executar os gates completos e QA com planos/abas/erro/retentativa/recarga/novo login, publicar a entrega da 114 e atualizar este painel. Nenhuma tarefa bloqueada externa foi executada. A indisponibilidade também impede continuar com segurança as próximas implementações que dependem de execução e validação.
 
-
 - **Retomada em 2026-10-27:** ambiente disponível, rascunho recuperado e conferido contra a main `f35e9ef`. Reexecutar os gates e o QA antes da publicação; a interrupção anterior não é mais um bloqueio. Código ainda não concluído.
+
+- **Implementação e validação em 2026-10-27:** os sete arquivos do rascunho foram recuperados e reaproveitados. Resumo essencial, cinco abas, sete grupos e 43 cartões preservados; URL, carregamento sob demanda, erro e retentativa. O QA identificou e corrigiu a desmontagem das avaliações durante a atualização das métricas. Passaram instalação congelada sem rede, formato, lint, tipos, 613 unitários, 394 integrações MySQL e build limpo de produção. Navegador: quatro perfis, 320/390/768/1440, zoom 200%, 45 verificações axe sem violações, formulário e banco, humor e abas internas, recarga/novo login, falha 503/retentativa, matriz com recursos desativados e isolamento. Nenhuma exceção JavaScript. Banco temporário e processos encerrados. Relatório em `docs/auditoria/2026-10-27-painel-114.md`. Publicação desta entrega ainda pendente; não registrar como finalizada antes da confirmação remota.
 
 ### BLOQUEADAS
 
@@ -135,7 +136,6 @@
 - **Validação e fronteira:** 595 unitários, 389 integrações MySQL, lint, formato, tipos, build e QA dos três planos em 1440/390/320 aprovados. Sem configuração de pagamento nesta instância, a contratação elegível retorna 503 sem alterar o plano; nenhuma compra externa foi executada. Falta somente comprovar compra/upgrade e confirmação oficial do pagamento. Não executar esta fronteira bloqueada sem nova orientação. Evidências em `docs/auditoria/2026-10-26-planos-106-107.md`.
 
 ---
-
 
 ## Tópico 3 · Tarefas a Iniciar
 

@@ -13,6 +13,7 @@ import { ouvirMetricasAtualizadas } from '@/lib/metricas/evento-de-atualizacao';
 interface UseAIScoresResult {
   scores: EscoresDoDia | null;
   loading: boolean;
+  error: unknown | null;
   refresh: () => Promise<void>;
 }
 
@@ -53,12 +54,13 @@ export function useAIScores(enabled = true): UseAIScoresResult {
     });
   }, []);
 
-  const { data, loading, refresh } = useKeyedResource<EscoresDoDia | null>(
-    userId && dia ? `${userId}:${dia}:${versao}` : null,
-    requestScores,
-    notifyError,
-    null
-  );
+  const { data, loading, error, refresh } =
+    useKeyedResource<EscoresDoDia | null>(
+      userId && dia ? `${userId}:${dia}:${versao}` : null,
+      requestScores,
+      notifyError,
+      null
+    );
 
-  return { scores: data, loading, refresh };
+  return { scores: data, loading, error, refresh };
 }
