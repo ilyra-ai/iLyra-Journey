@@ -19,18 +19,18 @@
 
 ## Tópico 1 · Andamento Geral
 
-| Indicador          | Valor                          |
-| ------------------ | ------------------------------ |
-| Progresso          | `████████████████░░░░` **82%** |
-| Tarefas totais     | 133                            |
-| 🟢 Finalizadas     | 109                            |
-| 🔵 Em andamento    | 1                              |
-| 🔴 Bloqueadas      | 4                              |
-| ⚪ A iniciar       | 19                             |
-| Branch de trabalho | `main` (única permitida)       |
-| Última atualização | 2026-10-27                     |
+| Indicador          | Valor                            |
+| ------------------ | -------------------------------- |
+| Progresso          | `█████████████████░░░` **82,7%** |
+| Tarefas totais     | 133                              |
+| 🟢 Finalizadas     | 110                              |
+| 🔵 Em andamento    | 0                                |
+| 🔴 Bloqueadas      | 4                                |
+| ⚪ A iniciar       | 19                               |
+| Branch de trabalho | `main` (única permitida)         |
+| Última atualização | 2026-10-27                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (109 ÷ 133 ≈ 82%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (110 ÷ 133 ≈ 82,7%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,32 +49,13 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de retomada em 2026-10-27:** 113 concluída e publicada; 114 retomada com ambiente disponível e rascunho recuperado. Validar antes de publicar. Bloqueadas 86, 90, 100 e 106 preservadas.
+**Ponto de parada em 2026-10-27:** 114 concluída e publicada em `c2b14e828e672daacc554fc633e09e202f913441`; próxima tarefa não bloqueada: 115. Bloqueadas 86, 90, 100 e 106 preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
 
-### 114 · Painel principal do usuário com resumo essencial e métricas organizadas em abas
-
-- **Status:** 🔵 em andamento · **Registro e início:** 2026-10-26 · **Retomada:** 2026-10-27.
-- **Pedido do usuário:** o painel do usuário reúne muitas métricas na mesma página, tornando a consulta cansativa e reduzindo o interesse. Deixar no painel principal somente o que é importante, com um resumo rápido, e criar abas na própria página para o usuário escolher as métricas que deseja consultar.
-- **Conferência prévia obrigatória:** inspecionar primeiro a implementação atual, os cartões, métricas, fontes, carregamento e permissões do painel autenticado. Reaproveitar componentes e recursos que já funcionam, incluindo a matriz de entitlements e as verificações da tarefa 105. Esta solicitação se refere ao painel do usuário; não transferir o escopo para o dashboard administrativo nem refazer entregas já comprovadas.
-- **Resumo principal:** selecionar e justificar as informações essenciais para uma visão rápida, com poucos cartões prioritários, linguagem clara e próximos passos pertinentes aos dados reais do titular. Retirar dessa visão inicial o excesso de detalhamento e repetições, mantendo acesso às informações completas pelas abas. Não excluir métricas, histórico, cálculos, ações ou recursos existentes para simplificar a tela.
-- **Abas e escolha do conteúdo:** organizar todas as métricas e seus detalhes em abas com nomes compreensíveis e agrupamentos coerentes com o conteúdo real do app. Permitir que o usuário abra o assunto e as métricas que deseja ver na mesma página, com indicação clara da aba ativa, carregamento, erro e ausência de dados. Conferir acesso direto e recarga sem destinos quebrados, preservando os filtros e ações pertinentes. Evitar consultas e cálculos desnecessários de conteúdo não exibido, sem prejudicar atualização ou persistência.
-- **Design e acessibilidade:** pesquisar referências oficiais atuais antes de implementar e seguir o Lyra Clean claro, o logo e os tokens existentes, com qualidade premium, leitura rápida e responsividade. Conferir abas no desktop e celular, navegação por teclado e leitor de tela, foco, contraste, zoom, rolagem e nomes acessíveis; não esconder métricas por cortes ou estouro horizontal.
-- **Dados e integração:** usar exclusivamente dados reais, autorizados e do próprio titular, preservando períodos, unidades, origem e estados sem registro. Respeitar os recursos do plano na visão resumida, em cada aba e nas APIs; abas não devem conceder permissões apenas por estarem visíveis. Coordenar os textos e o preenchimento automático com a tarefa 115 e reaproveitar os componentes visuais da tarefa 113 quando disponíveis, sem depender de funcionalidades ainda não implementadas.
-- **Validação e entrega:** validar a seleção do resumo, a cobertura de todas as métricas nas abas, alternância, filtros, ações e CRUD aplicável, atualização dos dados, persistência, recarga, novo login, falhas e isolamento entre contas. Conferir os planos Free, Meta, Care e acesso administrativo, em 320, 390, 768 e 1440 px, comparando fontes com as APIs e MySQL reais. Executar QA no navegador e gates pertinentes, revisar o diff e publicar commit e push próprios na `main`, sem branches ou worktrees, seguidos da atualização do painel com SHA e evidências reais. Este registro não representa implementação iniciada ou concluída.
-
-- **Conferência em 2026-10-26:** `Dashboard` ainda concentra sete grupos de métricas, gráficos, sono, leituras integrativas e avaliações na mesma visão; não há abas por assunto. A 113 já fornece o padrão visual de abas e permissões. A 114 organiza os componentes existentes e o carregamento por assunto; a 115 trata o contrato de geração e persistência das descrições no servidor. Manter entregas próprias, com encaixe dos componentes existentes, evita refazer a interface sem condicionar a organização do painel à prova externa de um provedor. Resumo proposto: sono, passos e disposição calculada, com registro e atualização; detalhes completos nas abas e seleção do grupo de registros. Pesquisa W3C APG consultada para ativação manual, foco e latência.
-
-- **Interrupção real do ambiente:** a sessão informou ambiente de execução `unavailable` durante os gates finais. A tipagem da primeira implementação passou, mas não foi possível obter os resultados finais de build, lint, testes e integração nem executar QA da 114 no navegador. Não declarar conclusão, commit de código ou funcionamento validado desta tarefa. O código publicado da 113 permanece íntegro na `main`.
-- **Alterações locais a recuperar e conferir antes de retomar:** `src/app/page.tsx`, `src/components/dashboard/dashboard.tsx`, `src/components/dashboard/MetricGrid.tsx`, `src/hooks/use-abas-do-painel.ts`, `src/hooks/use-keyed-resource.ts`, `src/hooks/use-daily-metrics.tsx` e `src/hooks/use-ai-scores.tsx`. Há organização preliminar em Resumo/Registros/Evolução/Orientações/Como me sinto, seleção dos sete grupos, URL para aba/grupo, montagem sob demanda e distinção de erro de leitura. Essas alterações não foram publicadas e sua permanência no ambiente indisponível não foi comprovada. Conferir primeiro o estado real do workspace e da main, sem presumir recuperação ou reaplicar mudanças já presentes.
-- **Próxima etapa quando houver ambiente utilizável:** concluir a revisão, conferir cobertura das métricas e permissões, executar os gates completos e QA com planos/abas/erro/retentativa/recarga/novo login, publicar a entrega da 114 e atualizar este painel. Nenhuma tarefa bloqueada externa foi executada. A indisponibilidade também impede continuar com segurança as próximas implementações que dependem de execução e validação.
-
-- **Retomada em 2026-10-27:** ambiente disponível, rascunho recuperado e conferido contra a main `f35e9ef`. Reexecutar os gates e o QA antes da publicação; a interrupção anterior não é mais um bloqueio. Código ainda não concluído.
-
-- **Implementação e validação em 2026-10-27:** os sete arquivos do rascunho foram recuperados e reaproveitados. Resumo essencial, cinco abas, sete grupos e 43 cartões preservados; URL, carregamento sob demanda, erro e retentativa. O QA identificou e corrigiu a desmontagem das avaliações durante a atualização das métricas. Passaram instalação congelada sem rede, formato, lint, tipos, 613 unitários, 394 integrações MySQL e build limpo de produção. Navegador: quatro perfis, 320/390/768/1440, zoom 200%, 45 verificações axe sem violações, formulário e banco, humor e abas internas, recarga/novo login, falha 503/retentativa, matriz com recursos desativados e isolamento. Nenhuma exceção JavaScript. Banco temporário e processos encerrados. Relatório em `docs/auditoria/2026-10-27-painel-114.md`. Publicação desta entrega ainda pendente; não registrar como finalizada antes da confirmação remota.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -2076,3 +2057,24 @@
 
 - **Resultado e publicação em 2026-10-26:** painéis versionados e persistentes, abas Resumo/Evolução/Dados, gráficos com seletor, ampliação e fontes reais, ações existentes e permissões vigentes. Streamdown 2.7.1 com proteção de HTML, protocolos e imagens externas. Substituída a digitação simulada por SSE real quando o provedor suporta; mantidos JSON, Motor Lyra, identidade, cadeia, consentimentos, BYOK e memória. Cancelamento encerra a geração HTTP e permite refazer sem duplicação. **Commit:** `cca2c8c4ad4bf0bc05239eeccbaddc356b00e329`, confirmado na `main` pelo GitHub conectado, sem branches ou worktrees.
 - **Validação:** instalação congelada, peers, auditoria com zero avisos, formato, lint, tipos, 611 unitários, 394 integrações MySQL e build aprovados. Estouro do balão reproduzido antes e corrigido; 320/390/768/1440 px e zoom 200%, nove verificações axe sem violações, sem texto fora da tela ou exceções JavaScript. Abas, seletor, modal, foco, clipboard, refazer, recarga e novo login conferidos no app em produção local. Transmissão e cancelamento verificados com servidor de contrato HTTP; não representam inferência externa paga. Histórico antigo, LGPD, isolamento e alterações de permissões cobertos. Detalhes, medições e limites em `docs/auditoria/2026-10-26-chat-113.md`. Bloqueadas não executadas.
+
+### 114 · Painel principal do usuário com resumo essencial e métricas organizadas em abas
+
+- **Status:** 🟢 finalizada · **Registro e início:** 2026-10-26 · **Conclusão:** 2026-10-27.
+- **Pedido do usuário:** o painel do usuário reúne muitas métricas na mesma página, tornando a consulta cansativa e reduzindo o interesse. Deixar no painel principal somente o que é importante, com um resumo rápido, e criar abas na própria página para o usuário escolher as métricas que deseja consultar.
+- **Conferência prévia obrigatória:** inspecionar primeiro a implementação atual, os cartões, métricas, fontes, carregamento e permissões do painel autenticado. Reaproveitar componentes e recursos que já funcionam, incluindo a matriz de entitlements e as verificações da tarefa 105. Esta solicitação se refere ao painel do usuário; não transferir o escopo para o dashboard administrativo nem refazer entregas já comprovadas.
+- **Resumo principal:** selecionar e justificar as informações essenciais para uma visão rápida, com poucos cartões prioritários, linguagem clara e próximos passos pertinentes aos dados reais do titular. Retirar dessa visão inicial o excesso de detalhamento e repetições, mantendo acesso às informações completas pelas abas. Não excluir métricas, histórico, cálculos, ações ou recursos existentes para simplificar a tela.
+- **Abas e escolha do conteúdo:** organizar todas as métricas e seus detalhes em abas com nomes compreensíveis e agrupamentos coerentes com o conteúdo real do app. Permitir que o usuário abra o assunto e as métricas que deseja ver na mesma página, com indicação clara da aba ativa, carregamento, erro e ausência de dados. Conferir acesso direto e recarga sem destinos quebrados, preservando os filtros e ações pertinentes. Evitar consultas e cálculos desnecessários de conteúdo não exibido, sem prejudicar atualização ou persistência.
+- **Design e acessibilidade:** pesquisar referências oficiais atuais antes de implementar e seguir o Lyra Clean claro, o logo e os tokens existentes, com qualidade premium, leitura rápida e responsividade. Conferir abas no desktop e celular, navegação por teclado e leitor de tela, foco, contraste, zoom, rolagem e nomes acessíveis; não esconder métricas por cortes ou estouro horizontal.
+- **Dados e integração:** usar exclusivamente dados reais, autorizados e do próprio titular, preservando períodos, unidades, origem e estados sem registro. Respeitar os recursos do plano na visão resumida, em cada aba e nas APIs; abas não devem conceder permissões apenas por estarem visíveis. Coordenar os textos e o preenchimento automático com a tarefa 115 e reaproveitar os componentes visuais da tarefa 113 quando disponíveis, sem depender de funcionalidades ainda não implementadas.
+- **Validação e entrega:** validar a seleção do resumo, a cobertura de todas as métricas nas abas, alternância, filtros, ações e CRUD aplicável, atualização dos dados, persistência, recarga, novo login, falhas e isolamento entre contas. Conferir os planos Free, Meta, Care e acesso administrativo, em 320, 390, 768 e 1440 px, comparando fontes com as APIs e MySQL reais. Executar QA no navegador e gates pertinentes, revisar o diff e publicar commit e push próprios na `main`, sem branches ou worktrees, seguidos da atualização do painel com SHA e evidências reais. A implementação e a validação executadas estão registradas abaixo.
+
+- **Conferência em 2026-10-26:** `Dashboard` ainda concentra sete grupos de métricas, gráficos, sono, leituras integrativas e avaliações na mesma visão; não há abas por assunto. A 113 já fornece o padrão visual de abas e permissões. A 114 organiza os componentes existentes e o carregamento por assunto; a 115 trata o contrato de geração e persistência das descrições no servidor. Manter entregas próprias, com encaixe dos componentes existentes, evita refazer a interface sem condicionar a organização do painel à prova externa de um provedor. Resumo proposto: sono, passos e disposição calculada, com registro e atualização; detalhes completos nas abas e seleção do grupo de registros. Pesquisa W3C APG consultada para ativação manual, foco e latência.
+
+- **Histórico da interrupção anterior:** a sessão informou ambiente de execução `unavailable` durante os gates finais. A tipagem da primeira implementação passou, mas não foi possível obter os resultados finais de build, lint, testes e integração nem executar QA da 114 no navegador. Não declarar conclusão, commit de código ou funcionamento validado desta tarefa. O código publicado da 113 permanece íntegro na `main`.
+- **Alterações locais a recuperar e conferir antes de retomar:** `src/app/page.tsx`, `src/components/dashboard/dashboard.tsx`, `src/components/dashboard/MetricGrid.tsx`, `src/hooks/use-abas-do-painel.ts`, `src/hooks/use-keyed-resource.ts`, `src/hooks/use-daily-metrics.tsx` e `src/hooks/use-ai-scores.tsx`. Há organização preliminar em Resumo/Registros/Evolução/Orientações/Como me sinto, seleção dos sete grupos, URL para aba/grupo, montagem sob demanda e distinção de erro de leitura. Essas alterações não foram publicadas e sua permanência no ambiente indisponível não foi comprovada. Conferir primeiro o estado real do workspace e da main, sem presumir recuperação ou reaplicar mudanças já presentes.
+- **Próxima etapa quando houver ambiente utilizável:** concluir a revisão, conferir cobertura das métricas e permissões, executar os gates completos e QA com planos/abas/erro/retentativa/recarga/novo login, publicar a entrega da 114 e atualizar este painel. Nenhuma tarefa bloqueada externa foi executada. A indisponibilidade também impede continuar com segurança as próximas implementações que dependem de execução e validação.
+
+- **Retomada em 2026-10-27:** ambiente disponível, rascunho recuperado e conferido contra a main `f35e9ef`. Reexecutar os gates e o QA antes da publicação; a interrupção anterior não é mais um bloqueio. Código ainda não concluído.
+
+- **Implementação e validação em 2026-10-27:** os sete arquivos do rascunho foram recuperados e reaproveitados. Resumo essencial, cinco abas, sete grupos e 43 cartões preservados; URL, carregamento sob demanda, erro e retentativa. O QA identificou e corrigiu a desmontagem das avaliações durante a atualização das métricas. Passaram instalação congelada sem rede, formato, lint, tipos, 613 unitários, 394 integrações MySQL e build limpo de produção. Navegador: quatro perfis, 320/390/768/1440, zoom 200%, 45 verificações axe sem violações, formulário e banco, humor e abas internas, recarga/novo login, falha 503/retentativa, matriz com recursos desativados e isolamento. Nenhuma exceção JavaScript. Banco temporário e processos encerrados. Relatório em `docs/auditoria/2026-10-27-painel-114.md`. **Commit:** `c2b14e828e672daacc554fc633e09e202f913441` · **Publicação:** confirmada na `main` pela API autenticada do GitHub, com verificação do SHA remoto e sincronização local; nenhuma branch ou worktree criada.
