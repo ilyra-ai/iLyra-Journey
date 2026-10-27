@@ -51,6 +51,20 @@
 
 **Ponto de parada em 2026-10-26:** retomada das tarefas não bloqueadas em ordem numérica. 106 e 107 em execução conjunta, pois menu, tela comercial e indicador do plano compartilham navegação e jornada de upgrade; depois 112. Bloqueadas 86, 90 e 100 fora do escopo desta retomada.
 
+**Checkpoint de recuperação das tarefas 106/107 (2026-10-26):** alterações funcionais recompostas após reinicialização da instância e preservadas como objetos Git do repositório para evitar perda entre sessões. Ainda aguardam validação e publicação dos arquivos na `main`; este checkpoint documental não conclui as tarefas.
+
+- `src/app/planos/layout.tsx` → blob `ca4f8a9b80c4ae75689ab125024ab6c2a355a691`.
+- `src/app/planos/page.tsx` → blob `1c5efdb3b2c5a7554056c4458651249710c70482`.
+- `src/components/subscription/PlanoJuntoAoLogo.tsx` → blob `de677e0a99b5e549c4c23b07026a908230dbf1f3`.
+- `src/components/subscription/PlanBadge.tsx` → blob `88aac7ae6e312f3822d4b13ac1de84f1e23eae79`.
+- `src/components/subscription/BillingActionPanel.tsx` → blob `5ebfb9413d719755f7bcc3cb0fdeedd60ce3ce29`.
+- `src/components/layout/navigation.ts` → blob `24d05960dfa5e151e6e8133635a866de148a5f75`.
+- `src/components/layout/navigation.test.ts` → blob `300fbb0ac2f365614cc684672b022ce65686a264`.
+- `src/components/layout/sidebar.tsx` → blob `2b51ba8c831c8211bb03eb9eead71869c357545b`.
+- `src/components/layout/MobileSidebar.tsx` → blob `9ac333b516dc18f334c7fee01b0c40f66a59eaa2`.
+- `src/lib/billing/service.ts` → blob `af5171c7d5616c81e3784fe2f53f934c3a638ae7`.
+- `src/app/api/planos-comerciais.integration.test.ts` → blob `007cf1719afee0aa372e06191017fdf10d6d23b9`.
+
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
