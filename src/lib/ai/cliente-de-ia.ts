@@ -1,3 +1,4 @@
+import { lerFluxoDoProvedor } from './fluxo-de-texto';
 import type { TipoDeProvedor } from './provedores-catalogo';
 import { buscarComAcessoLocal } from './transporte-local-wsl';
 
@@ -63,7 +64,8 @@ async function requisitar(
   conexao: ConexaoDeIa,
   url: string,
   init: RequestInit,
-  buscar: typeof fetch
+  buscar: typeof fetch,
+  fluxo?: Pick<PedidoDeTexto, 'aoTexto' | 'cancelamento'>
 ): Promise<unknown> {
   let resposta: Response;
   try {
@@ -72,11 +74,15 @@ async function requisitar(
       {
         ...init,
         cache: 'no-store',
-        signal: AbortSignal.timeout(conexao.tempoMaximoSegundos * 1000),
+        signal: AbortSignal.any([
+          AbortSignal.timeout(conexao.tempoMaximoSegundos * 1000),
+          ...(fluxo?.cancelamento ? [fluxo.cancelamento] : []),
+        ]),
       },
       buscar
     );
   } catch (erro) {
+    fluxo?.cancelamento?.throwIfAborted();
     const nome = erro instanceof Error ? erro.name : '';
     if (nome === 'TimeoutError' || nome === 'AbortError') {
       throw new ErroDoProvedor(
@@ -93,7 +99,31 @@ async function requisitar(
       `Não foi possível conectar: ${ocultarChave(causa, conexao.chave)}.`
     );
   }
+  if (
+    resposta.ok &&
+    fluxo?.aoTexto &&
+    resposta.body &&
+    resposta.headers.get('content-type')?.includes('text/event-stream')
+  ) {
+    return lerFluxoDoProvedor(
+      resposta.body,
+      conexao.tipo,
+      fluxo.aoTexto,
+      fluxo.cancelamento
+    );
+  }
   const texto = await resposta.text();
+  // O transporte de compatibilidade com loopback do Windows já recebe o
+  // corpo inteiro e não conserva cabeçalhos. Decodificar sem publicar deltas
+  // nesse caso mantém a resposta válida, sem fingir transmissão progressiva.
+  if (resposta.ok && fluxo?.aoTexto && /^\s*(?:data:|event:|:)/.test(texto)) {
+    return lerFluxoDoProvedor(
+      new Response(texto).body!,
+      conexao.tipo,
+      () => undefined,
+      fluxo.cancelamento
+    );
+  }
   let corpo: unknown = null;
   try {
     corpo = texto ? JSON.parse(texto) : null;
@@ -219,6 +249,9 @@ export interface PedidoDeTexto {
   esquemaJson?: Record<string, unknown>;
   nomeDoEsquema?: string;
   maximoDeTokens?: number;
+  /** Trechos reais recebidos do provedor; sem animação artificial. */
+  aoTexto?: (texto: string) => void;
+  cancelamento?: AbortSignal;
 }
 
 /**
@@ -321,7 +354,7 @@ export async function gerarTextoDetalhado(
             body: JSON.stringify({
               model: conexao.modelo,
               temperature: conexao.temperatura,
-              stream: false,
+              stream: Boolean(pedido.aoTexto),
               messages: [
                 { role: 'system', content: pedido.sistema },
                 { role: 'user', content: pedido.usuario },
@@ -332,7 +365,8 @@ export async function gerarTextoDetalhado(
               ...(formato ? { response_format: formato } : {}),
             }),
           },
-          buscar
+          buscar,
+          pedido
         )) as typeof corpo;
         break;
       } catch (erro) {
@@ -356,7 +390,7 @@ export async function gerarTextoDetalhado(
       try {
         corpo = (await requisitar(
           conexao,
-          `${URL_DO_GEMINI}/models/${encodeURIComponent(conexao.modelo)}:generateContent`,
+          `${URL_DO_GEMINI}/models/${encodeURIComponent(conexao.modelo)}:${pedido.aoTexto ? 'streamGenerateContent?alt=sse' : 'generateContent'}`,
           {
             method: 'POST',
             headers: {
@@ -381,7 +415,8 @@ export async function gerarTextoDetalhado(
               },
             }),
           },
-          buscar
+          buscar,
+          pedido
         )) as typeof corpo;
         break;
       } catch (erro) {
@@ -407,6 +442,7 @@ export async function gerarTextoDetalhado(
         },
         body: JSON.stringify({
           model: conexao.modelo,
+          ...(pedido.aoTexto ? { stream: true } : {}),
           max_tokens: pedido.maximoDeTokens ?? 4096,
           // A API Messages aceita temperatura de 0 a 1.
           temperature: Math.min(1, conexao.temperatura),
@@ -414,7 +450,8 @@ export async function gerarTextoDetalhado(
           messages: [{ role: 'user', content: pedido.usuario }],
         }),
       },
-      buscar
+      buscar,
+      pedido
     )) as {
       content?: Array<{ type?: unknown; text?: unknown }>;
       stop_reason?: unknown;

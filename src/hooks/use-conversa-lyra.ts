@@ -1,12 +1,11 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { enviarAoChat } from '@/lib/chat/transporte';
 import { usePrivacyMode } from '@/hooks/use-privacy-mode';
 import {
   EVENTO_DO_HISTORICO,
   type PaginaDaConversa,
-  type RespostaDoChat,
   type TurnoDaConversa,
 } from '@/lib/chat/tipos';
 import { buscarJson } from '@/lib/http/transporte';
@@ -16,14 +15,13 @@ export function useConversaLyra(
   aoAbrir?: (id: string | null) => void,
   salvarHistorico = true
 ) {
-  const { db } = useAuth();
   const { privacyMode } = usePrivacyMode();
   const [turnos, setTurnos] = useState<TurnoDaConversa[]>([]);
   const [carregando, setCarregando] = useState(Boolean(conversaInicial));
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [antes, setAntes] = useState<number | null>(null);
-  const [animarTurno, setAnimarTurno] = useState<string | null>(null);
+  const cancelamento = useRef<AbortController | null>(null);
   const conversa = useRef(conversaInicial);
   const ocupado = useRef(false);
   const montado = useRef(false);
@@ -33,6 +31,7 @@ export function useConversaLyra(
     montado.current = true;
     return () => {
       montado.current = false;
+      cancelamento.current?.abort();
     };
   }, []);
 
@@ -82,7 +81,8 @@ export function useConversaLyra(
   const enviar = async (
     texto: string,
     chave: string,
-    refazer?: TurnoDaConversa
+    refazer?: TurnoDaConversa,
+    painel = false
   ) => {
     if (ocupado.current || carregando || !texto.trim()) return;
     ocupado.current = true;
@@ -105,22 +105,44 @@ export function useConversaLyra(
         },
       ]);
     }
+    const controle = new AbortController();
+    cancelamento.current = controle;
+    if (refazer)
+      setTurnos((atuais) =>
+        atuais.map((turno) =>
+          turno.id === idTurno
+            ? {
+                ...turno,
+                estado: 'processando',
+                resposta: null,
+                partes: [],
+                erro: null,
+              }
+            : turno
+        )
+      );
     try {
-      const { data, error } = await db.functions.invoke<RespostaDoChat>(
-        'ask-ai-assistant',
+      const data = await enviarAoChat(
         {
-          body: {
-            query: texto.trim(),
-            userApiKey: chave,
-            ...(salvarHistorico
-              ? { conversationId: idConversa, turnId: idTurno }
-              : {}),
-            regenerate: refazer?.estado === 'concluido',
-            privacyMode,
-          },
+          query: texto.trim(),
+          userApiKey: chave,
+          ...(salvarHistorico
+            ? { conversationId: idConversa, turnId: idTurno }
+            : {}),
+          regenerate: refazer?.estado === 'concluido',
+          privacyMode,
+          painel: painel || Boolean(refazer?.partes?.length),
+        },
+        controle.signal,
+        (resposta) => {
+          if (montado.current)
+            setTurnos((atuais) =>
+              atuais.map((turno) =>
+                turno.id === idTurno ? { ...turno, resposta } : turno
+              )
+            );
         }
       );
-      if (error) throw new Error(error.message);
       if (montado.current) {
         setTurnos((atuais) =>
           atuais.map((turno) =>
@@ -129,19 +151,20 @@ export function useConversaLyra(
                   ...turno,
                   resposta: data.response,
                   imagem: data.imagem,
+                  partes: data.partes,
                   estado: 'concluido',
                   erro: null,
                 }
               : turno
           )
         );
-        setAnimarTurno(idTurno);
         if (salvarHistorico) aoAbrir?.(idConversa);
       }
     } catch (falha) {
       if (montado.current) {
-        const mensagem =
-          falha instanceof Error
+        const mensagem = controle.signal.aborted
+          ? 'Resposta interrompida. Você pode tentar novamente.'
+          : falha instanceof Error && falha.name === 'Error'
             ? falha.message
             : 'Não foi possível concluir a resposta.';
         setErro(mensagem);
@@ -155,6 +178,7 @@ export function useConversaLyra(
       }
     } finally {
       if (salvarHistorico) window.dispatchEvent(new Event(EVENTO_DO_HISTORICO));
+      cancelamento.current = null;
       ocupado.current = false;
       if (montado.current) setEnviando(false);
     }
@@ -166,7 +190,6 @@ export function useConversaLyra(
     setTurnos([]);
     setAntes(null);
     setErro(null);
-    setAnimarTurno(null);
     aoAbrir?.(null);
   };
 
@@ -176,7 +199,7 @@ export function useConversaLyra(
     enviando,
     erro,
     antes,
-    animarTurno,
+    interromper: () => cancelamento.current?.abort(),
     enviar,
     novaConversa,
     carregarAnteriores,

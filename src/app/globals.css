@@ -1,3 +1,4 @@
+@source "../../node_modules/streamdown/dist/*.js";
 /*
   Tailwind CSS 4 (configuração CSS-first), com `tw-animate-css` para as
   animações de entrada e saída dos componentes shadcn/Radix. O CSS do

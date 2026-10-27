@@ -1,3 +1,4 @@
+import type { ParteDoChat } from './partes';
 export type EstadoDoTurno = 'processando' | 'concluido' | 'erro';
 
 export interface ImagemDoTurno {
@@ -35,6 +36,7 @@ export interface TurnoDaConversa {
   erro: string | null;
   criadaEm: string;
   imagem?: ImagemDoTurno | null;
+  partes?: ParteDoChat[];
 }
 
 export interface PaginaDaConversa {
@@ -52,6 +54,7 @@ export interface PedidoComHistorico {
 
 export interface RespostaDoChat {
   imagem?: ImagemDoTurno | null;
+  partes?: ParteDoChat[];
   response: string;
   conversationId?: string;
   turnId?: string;

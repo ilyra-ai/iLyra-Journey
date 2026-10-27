@@ -1,3 +1,5 @@
+import { partesDoBanco, partesDoChatSchema, type ParteDoChat } from './partes';
+import { filtrarPaineisDoChat } from './painel';
 import { metadadosDaImagem } from './imagens';
 import type { PedidoDeImagemDoTurno } from './tipos';
 import { randomUUID } from 'node:crypto';
@@ -32,6 +34,7 @@ interface TurnoNoBanco extends RowDataPacket {
   user_id: string;
   question: string;
   answer: string | null;
+  response_parts: unknown;
   status: EstadoDoTurno;
   error_message: string | null;
   created_at: string;
@@ -100,7 +103,7 @@ export async function lerConversa(
   );
   if (!conversa) throw new HttpError('Conversa não encontrada.', 404);
   const linhas = await queryRows<TurnoNoBanco>(
-    `SELECT id, sequence_number, question, answer, status, error_message, created_at
+    `SELECT id, sequence_number, question, answer, response_parts, status, error_message, created_at
        FROM chat_turns WHERE conversation_id = ? AND user_id = ?
        ${antes === null ? '' : 'AND sequence_number < ?'}
        ORDER BY sequence_number DESC LIMIT 41`,
@@ -119,16 +122,22 @@ export async function lerConversa(
   );
   return {
     conversa: resumo(conversa),
-    turnos: pagina.map((linha) => ({
-      id: linha.id,
-      imagem: imagens.get(linha.id) ?? null,
-      sequencia: Number(linha.sequence_number),
-      pergunta: linha.question,
-      resposta: linha.answer,
-      estado: linha.status,
-      erro: linha.error_message,
-      criadaEm: `${linha.created_at.replace(' ', 'T')}Z`,
-    })),
+    turnos: await Promise.all(
+      pagina.map(async (linha) => ({
+        partes: await filtrarPaineisDoChat(
+          userId,
+          partesDoBanco(linha.response_parts)
+        ),
+        id: linha.id,
+        imagem: imagens.get(linha.id) ?? null,
+        sequencia: Number(linha.sequence_number),
+        pergunta: linha.question,
+        resposta: linha.answer,
+        estado: linha.status,
+        erro: linha.error_message,
+        criadaEm: `${linha.created_at.replace(' ', 'T')}Z`,
+      }))
+    ),
     antes: linhas.length > 40 ? Number(pagina[0].sequence_number) : null,
   };
 }
@@ -278,14 +287,22 @@ export async function concluirTurno(
   resposta: string,
   memoriaPrivada = false,
   imagem: PedidoDeImagemDoTurno | null = null,
-  memoriaPermitida = true
+  memoriaPermitida = true,
+  partes: ParteDoChat[] = []
 ) {
   await withTransaction(async (conexao) => {
     const [resultado] = await conexao.execute<ResultSetHeader>(
-      `UPDATE chat_turns SET answer = ?, status = 'concluido', error_message = NULL,
+      `UPDATE chat_turns SET answer = ?, response_parts = ?, status = 'concluido', error_message = NULL,
           memory_excluded = memory_excluded OR ?, updated_at = UTC_TIMESTAMP(3)
        WHERE id = ? AND user_id = ? AND attempt_id = ?`,
-      [resposta, memoriaPrivada, turno.turnId, userId, turno.attemptId]
+      [
+        resposta,
+        JSON.stringify(partesDoChatSchema.parse(partes)),
+        memoriaPrivada,
+        turno.turnId,
+        userId,
+        turno.attemptId,
+      ]
     );
     if (resultado.affectedRows !== 1) {
       throw new HttpError(
@@ -327,4 +344,13 @@ export async function registrarFalhaDoTurno(
      WHERE id = ? AND user_id = ? AND attempt_id = ?`,
     [mensagem.slice(0, 500), turno.turnId, userId, turno.attemptId]
   );
+}
+
+/** Metadados da repetição idempotente, sempre limitados ao titular. */
+export async function partesJaGravadas(userId: string, turnId: string) {
+  const [linha] = await queryRows<{ response_parts: unknown }>(
+    'SELECT response_parts FROM chat_turns WHERE id = ? AND user_id = ?',
+    [turnId, userId]
+  );
+  return filtrarPaineisDoChat(userId, partesDoBanco(linha?.response_parts));
 }

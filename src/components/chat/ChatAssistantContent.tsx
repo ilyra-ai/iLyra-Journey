@@ -37,9 +37,16 @@ import { usePrivacyMode } from '@/hooks/use-privacy-mode';
 import { useLocalStorageValue } from '@/hooks/use-local-storage-value';
 import { scaleRem } from '@/lib/site-page-config/runtime';
 import { ChatBubble } from './ChatBubble';
+import dynamic from 'next/dynamic';
+import type { ParteDoChat } from '@/lib/chat/partes';
 import { ChatInput } from './ChatInput';
 import { TypingIndicator } from './TypingIndicator';
 import { MemoriaDaLyra } from './MemoriaDaLyra';
+
+const PainelDaConversa = dynamic(
+  () => import('./PainelDaConversa').then((modulo) => modulo.PainelDaConversa),
+  { loading: () => <p role="status">Abrindo seus registros…</p> }
+);
 
 /**
  * Chat com a Lyra: uma coluna que aproveita a área disponível do app, no
@@ -57,6 +64,9 @@ export interface Message {
   sender: 'user' | 'ai';
   turnoId?: string;
   imagem?: ImagemDoTurno | null;
+  partes?: ParteDoChat[];
+  emFluxo?: boolean;
+  incompleta?: boolean;
 }
 
 const WELCOME_MESSAGE_ID = 'boas-vindas';
@@ -239,6 +249,9 @@ export function ChatAssistantContent({
                 sender: 'ai' as const,
                 turnoId: turno.id,
                 imagem: turno.imagem,
+                partes: turno.partes,
+                emFluxo: turno.estado === 'processando',
+                incompleta: turno.estado === 'erro',
               },
             ]
           : []),
@@ -541,9 +554,7 @@ export function ChatAssistantContent({
                 <ChatBubble
                   message={msg.text}
                   isUser={msg.sender === 'user'}
-                  animate={Boolean(
-                    msg.turnoId && msg.turnoId === historico.animarTurno
-                  )}
+                  emFluxo={msg.emFluxo}
                   onRegenerate={
                     msg.sender === 'ai' &&
                     index > 0 &&
@@ -553,6 +564,14 @@ export function ChatAssistantContent({
                       : undefined
                   }
                 />
+                {msg.incompleta && (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    Resposta incompleta. Tente novamente para concluir.
+                  </p>
+                )}
+                {msg.partes?.map((parte, indice) => (
+                  <PainelDaConversa key={indice} painel={parte} />
+                ))}
                 {msg.imagem ? (
                   <PlanFeatureGate features={['chat_images']} ocultar>
                     {' '}
@@ -584,6 +603,35 @@ export function ChatAssistantContent({
             <ArrowDown className="h-4 w-4" aria-hidden="true" />
           </button>
         ) : null}
+        <div className="mb-2 flex flex-wrap items-center gap-2">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={isTyping || historico.carregando}
+            onClick={() => {
+              setIsNearBottom(true);
+              void historico.enviar(
+                'Mostre meu painel com os registros recentes.',
+                privacyMode ? '' : userApiKey,
+                undefined,
+                true
+              );
+            }}
+          >
+            Ver meus dados no chat
+          </Button>
+          {isTyping && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={historico.interromper}
+            >
+              Interromper resposta
+            </Button>
+          )}
+        </div>
         <ChatInput
           onSendMessage={handleSendMessage}
           disabled={

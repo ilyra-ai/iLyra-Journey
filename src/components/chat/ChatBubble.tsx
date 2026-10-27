@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Check, Copy, RotateCw } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -10,14 +10,9 @@ import { RespostaMarkdown } from './RespostaMarkdown';
 interface ChatBubbleProps {
   message: string;
   isUser: boolean;
-  animate?: boolean;
+  emFluxo?: boolean;
   onRegenerate?: () => void;
 }
-
-// Revelação da resposta: alguns caracteres por quadro, para respostas longas
-// não demorarem (antes: 1 caractere a cada 20 ms).
-const CARACTERES_POR_PASSO = 4;
-const INTERVALO_MS = 16;
 
 /**
  * Mensagem do chat (redesenho da tarefa 52): a pergunta da pessoa num balão
@@ -29,44 +24,9 @@ export function ChatBubble({
   message,
   isUser,
   onRegenerate,
-  animate = true,
+  emFluxo = false,
 }: ChatBubbleProps) {
   const [isCopied, setIsCopied] = useState(false);
-  // Quantos caracteres da resposta já apareceram. Quando o texto muda, a
-  // contagem recomeça durante a renderização (estado derivado).
-  const [revealedCount, setRevealedCount] = useState(0);
-  const [typedMessage, setTypedMessage] = useState(message);
-  if (typedMessage !== message) {
-    setTypedMessage(message);
-    setRevealedCount(0);
-  }
-  const displayedText =
-    isUser || !animate ? message : message.slice(0, revealedCount);
-  const isTyping = !isUser && animate && revealedCount < message.length;
-
-  useEffect(() => {
-    if (isUser || !animate || !message) {
-      return;
-    }
-    // Movimento reduzido: a resposta aparece inteira.
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      const imediato = setTimeout(() => setRevealedCount(message.length), 0);
-      return () => clearTimeout(imediato);
-    }
-
-    const typingInterval = setInterval(() => {
-      setRevealedCount((current) => {
-        if (current >= message.length) {
-          clearInterval(typingInterval);
-          return current;
-        }
-        return Math.min(message.length, current + CARACTERES_POR_PASSO);
-      });
-    }, INTERVALO_MS);
-
-    return () => clearInterval(typingInterval);
-  }, [message, isUser, animate]);
-
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(message);
@@ -81,8 +41,8 @@ export function ChatBubble({
     // 40 px de altura no toque (antes 32 px) e foco no padrão dos controles.
     'inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring md:min-h-8 md:px-2.5';
 
-  const acoes = !isTyping ? (
-    <div className="flex items-center gap-0.5 opacity-0 transition-opacity focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
+  const acoes = !emFluxo ? (
+    <div className="flex items-center gap-0.5 opacity-0 focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
       <button
         type="button"
         onClick={() => void handleCopy()}
@@ -123,10 +83,10 @@ export function ChatBubble({
 
   if (isUser) {
     return (
-      <div className="group ml-auto flex max-w-[min(36rem,88%)] flex-col items-end gap-1">
+      <div className="group ml-auto flex min-w-0 max-w-[min(36rem,88%)] flex-col items-end gap-1">
         <p className="sr-only">Você disse:</p>
-        <div className="rounded-3xl rounded-br-lg bg-primary px-4 py-2.5 text-primary-foreground">
-          <p className="whitespace-pre-wrap break-words text-sm leading-relaxed">
+        <div className="min-w-0 max-w-full rounded-3xl rounded-br-lg bg-primary px-4 py-2.5 text-primary-foreground">
+          <p className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-sm leading-relaxed">
             {message}
           </p>
         </div>
@@ -144,14 +104,14 @@ export function ChatBubble({
             oculto para a tecnologia assistiva e a resposta inteira entra uma
             vez só, ao terminar, como acréscimo do registro da conversa. */}
         <div
-          key={isTyping ? 'revelando' : 'resposta-completa'}
-          aria-hidden={isTyping || undefined}
+          key={emFluxo ? 'revelando' : 'resposta-completa'}
+          aria-hidden={emFluxo || undefined}
         >
-          {isTyping ? null : <p className="sr-only">A Lyra disse:</p>}
-          <RespostaMarkdown texto={displayedText} />
-          {isTyping ? (
+          {emFluxo ? null : <p className="sr-only">A Lyra disse:</p>}
+          <RespostaMarkdown texto={message} emFluxo={emFluxo} />
+          {emFluxo ? (
             <span
-              className="ml-0.5 inline-block h-4 w-1 animate-pulse rounded-full bg-primary align-middle"
+              className="ml-0.5 inline-block h-4 w-1 animate-pulse motion-reduce:animate-none rounded-full bg-primary align-middle"
               aria-hidden="true"
             />
           ) : null}

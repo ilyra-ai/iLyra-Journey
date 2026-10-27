@@ -55,13 +55,13 @@ apresenta em 2026 o foco no contexto e no objetivo da pessoa.
 
 Aplicação no Lyra Clean: acesso direto às conversas recentes, expansão sob
 demanda, títulos vindos da primeira pergunta, controles com foco visível e
-alvos de toque de pelo menos 44 px. Mensagens antigas aparecem completas,
-sem repetir a animação de uma resposta nova. Carregar mensagens anteriores
+alvos de toque de pelo menos 44 px. Mensagens antigas aparecem completas. Respostas novas recebem os trechos
+reais do provedor, sem simulação de digitação após o recebimento. Carregar mensagens anteriores
 preserva a posição de leitura.
 
 ## Formatação e área de conversa
 
-As respostas passam pelo `react-markdown` 10.1.0 com `remark-gfm` 4.0.1:
+As respostas passam pelo `streamdown` 2.7.1 com `remark-gfm` 4.0.1:
 negrito, ênfase, listas, citações, código e tabelas são elementos semânticos.
 O histórico e o botão Copiar continuam usando o texto original, inclusive a
 marcação. Perguntas da pessoa permanecem como texto literal. HTML do modelo
@@ -99,3 +99,46 @@ refazer, falhas, tentativas vencidas e exportação/exclusão.
 texto escapado, código inerte, HTML, protocolos inseguros, links seguros,
 ausência de carregamento automático de imagens, tabelas e títulos sem outro
 `h1` na página. Testes de renderização não substituem a validação no navegador.
+
+## Painéis e transmissão progressiva (tarefa 113)
+
+**Ver meus dados no chat** solicita um retrato dos registros autorizados dos últimos
+sete dias. O servidor monta e valida um painel versionado, com abas Resumo,
+Evolução e Dados, gráfico com seleção de métrica e ampliação em diálogo. As ações
+abrem o check-in ou páginas reais disponíveis no plano. Datas, unidades e origem
+acompanham os números; uma ausência aparece como **Sem registro**. Disposição é
+identificada como cálculo, não como medição. O painel é um retrato datado: peça
+outro para incluir atualizações posteriores dos registros.
+
+A migration `045_partes_do_chat.sql` acrescenta `response_parts` ao turno. Texto e
+partes são concluídos na mesma transação e protegidos pelo identificador da
+tentativa. Histórico antigo com NULL continua textual; a leitura dos painéis
+reaplica os recursos e o período permitido pelo plano vigente. A exportação LGPD
+inclui o campo, e a exclusão da conta remove os turnos por cascata. Não há HTML,
+JavaScript ou componentes escolhidos livremente pelo modelo no contrato.
+
+O POST mantém JSON para clientes existentes e repetições concluídas. Com
+`Accept: text/event-stream`, usa o protocolo de dados do AI SDK 7 instalado,
+com eventos transitórios de progresso/texto e resultado autoritativo. Sessão,
+recursos, histórico, cota e início do turno são verificados antes de abrir o fluxo.
+O texto parcial só aparece quando chega da API compatível, Gemini ou Anthropic;
+raciocínio interno não é publicado. Os modelos continuam recebendo identidade,
+preferências e consentimentos pelas regras já existentes da Lyra.
+
+**Interromper resposta** cancela a requisição e a geração HTTP; o turno pode ser
+refeito. Somente o resultado final validado é gravado como concluído. Falhas e
+fluxos truncados mantêm estado de erro; não viram respostas completas. A cadeia
+mantém continuação no limite de tokens, recusa de identidade e fallback para o
+Motor Lyra. O Motor é determinístico e devolve seu resultado inteiro, sem inventar
+uma transmissão por tokens. Servidores que respondem JSON e o transporte
+compatível de loopback do Windows, que recebe o corpo inteiro, também apresentam
+o resultado completo. Essa compatibilidade não comprova transmissão incremental
+pelo curl do Windows, nem executa a tarefa bloqueada 100.
+
+A apresentação mantém títulos semânticos, Markdown parcial, rolagem própria
+focável para tabelas/código, links restritos e imagens externas inertes. O
+rascunho progressivo fica fora dos anúncios assistivos; a conclusão é anunciada
+uma vez. Os gráficos só são carregados quando há painel para mostrar.
+
+Consulte [a auditoria da tarefa 113](./auditoria/2026-10-26-chat-113.md) para os
+resultados executados e os limites da comprovação.

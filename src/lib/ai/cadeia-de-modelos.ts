@@ -179,6 +179,8 @@ export async function gerarNaCadeia(
     buscar?: typeof fetch;
     /** Nome da função que chamou, para o log de trocas. */
     rotulo?: string;
+    aoTexto?: (texto: string) => void;
+    cancelamento?: AbortSignal;
   } = {}
 ): Promise<ResultadoDaCadeia> {
   const tentativas: TentativaNaCadeia[] = [];
@@ -186,13 +188,25 @@ export async function gerarNaCadeia(
   let autoresDaParcial: AutorDoModelo[] = [];
 
   for (const elo of cadeia) {
+    opcoes.cancelamento?.throwIfAborted();
     if (elo.tipo === 'lyra') break;
     const inicio = Date.now();
     const pedidoDaVez = parcial ? pedidoDeContinuacao(pedido, parcial) : pedido;
     try {
       const gerado = await gerarTextoDetalhado(
         elo.conexao,
-        pedidoDaVez,
+        {
+          ...pedidoDaVez,
+          cancelamento: opcoes.cancelamento,
+          aoTexto: opcoes.aoTexto
+            ? (trecho) => {
+                const texto = parcial
+                  ? juntarContinuacao(parcial, trecho)
+                  : trecho;
+                if (!opcoes.validar?.(texto)) opcoes.aoTexto?.(texto);
+              }
+            : undefined,
+        },
         opcoes.buscar
       );
       const texto = parcial
@@ -223,6 +237,7 @@ export async function gerarNaCadeia(
         // Resposta completa e recusada: o próximo começa do zero.
         parcial = '';
         autoresDaParcial = [];
+        opcoes.aoTexto?.('');
         continue;
       }
       tentativas.push({
@@ -240,6 +255,8 @@ export async function gerarNaCadeia(
         tentativas,
       };
     } catch (erro) {
+      opcoes.cancelamento?.throwIfAborted();
+      opcoes.aoTexto?.(parcial);
       tentativas.push({
         provedor: elo.autor.provedor,
         modelo: elo.autor.modelo,
