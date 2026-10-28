@@ -81,11 +81,11 @@
   "tarefa": 123,
   "data": "2026-10-28",
   "unitarios": {
-    "testes": 684,
-    "arquivos": 83
+    "testes": 686,
+    "arquivos": 84
   },
   "integracao_mysql": {
-    "testes": 504,
+    "testes": 506,
     "arquivos": 54
   },
   "ambiente": {
@@ -94,5 +94,24 @@
     "pnpm": "11.28.4"
   },
   "relogio_real_no_navegador": true,
-  "observacao": "Históricos de QA são fixtures locais identificadas. Agendamentos de dias e DST foram verificados com datas controladas nos testes; o retorno no navegador aguardou o minuto real."
+  "observacao": "Históricos de QA são fixtures locais identificadas. Agendamentos de dias e DST foram verificados com datas controladas nos testes; o retorno no navegador aguardou o minuto real.",
+  "correcao_alertas_sensor": {
+    "verificacoes": [
+      "Descanso dispensa o convite e preserva alerta anterior do sensor como não lido",
+      "Handler real do sensor emite alerta durante a pausa; nenhuma medição física é alegada"
+    ],
+    "axe": [
+      {
+        "rotulo": "descanso com alertas protegidos",
+        "aprovadas": 22,
+        "violacoes": []
+      },
+      {
+        "rotulo": "alertas protegidos desktop",
+        "aprovadas": 26,
+        "violacoes": []
+      }
+    ],
+    "excecoes": []
+  }
 }

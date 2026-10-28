@@ -279,10 +279,11 @@ export function CentralDoDescanso() {
                 : 'Ao encerrar, volta o ritmo habitual de avisos, sem recuperar os dispensados.'}
             </p>
             <p>
-              Consultas e avisos da assinatura continuam disponíveis. Hábitos,
-              medições, metas e seus alvos permanecem guardados. Durante a pausa
-              e o retorno, os dias não contam como cumpridos nem quebram a
-              continuidade dos dias realmente registrados.
+              Alertas do sensor, consultas e avisos da assinatura continuam
+              disponíveis. Hábitos, medições, metas e seus alvos permanecem
+              guardados. Durante a pausa e o retorno, os dias não contam como
+              cumpridos nem quebram a continuidade dos dias realmente
+              registrados.
             </p>
             <div className="flex flex-wrap gap-3">
               {(atual.estado === 'ativa' || atual.estado === 'agendada') && (

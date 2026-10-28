@@ -41,8 +41,11 @@ atravessou a pausa é identificado antes da criação e fica dispensado. Horári
 de uma etapa restritiva não são ressuscitados ao encerrar o retorno. Fusos
 distintos da pausa e da recorrência não permitem recuperar o dia local anterior.
 
-Consultas e avisos da assinatura continuam sendo apresentados pelas suas
-fontes existentes. A pausa não afeta cobranças comerciais. Leituras e práticas
+Alertas do sensor, consultas e avisos da assinatura continuam sendo apresentados pelas suas
+fontes existentes. O canal genérico `coach_alerta` também recebe alertas do
+sensor: somente as sugestões identificadas do coach (`alerta:`) são pausáveis;
+alertas `fc-alta:` e origens desconhecidas são preservados, inclusive como
+não lidos. A pausa não afeta cobranças comerciais. Leituras e práticas
 que a pessoa abre voluntariamente continuam disponíveis conforme o plano.
 O modo não promete push, e-mail ou aviso com o app fechado: os lembretes do
 aplicativo continuam dependendo da consulta pelo app aberto e visível.

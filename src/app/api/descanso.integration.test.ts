@@ -1,3 +1,4 @@
+import * as sensor from './metricas/sensor/route';
 import { randomUUID } from 'node:crypto';
 import { describe, it, expect } from 'vitest';
 import { criarUsuario, contar } from '../../../tests/integration/fixtures';
@@ -669,5 +670,85 @@ describe('descanso real, avisos, metas e dias neutros no MySQL', () => {
     );
     expect(await processarLembretes(u.id, quando('20', '12:00'))).toBe(0);
     expect(await processarLembretes(u.id, quando('21', '09:00'))).toBe(1);
+  });
+  it('preserva alertas anteriores do sensor como não lidos ao pausar e durante o retorno', async () => {
+    const u = await criarUsuario();
+    await criarNotificacao(
+      {
+        userId: u.id,
+        tipo: 'coach_alerta',
+        titulo: 'Alerta do sensor',
+        corpo: 'Registro do sensor',
+        link: '/monitoring',
+        chave: 'fc-alta:2026-10-20',
+      },
+      quando('20', '11:00')
+    );
+    await criarNotificacao(
+      {
+        userId: u.id,
+        tipo: 'coach_alerta',
+        titulo: 'Convite do coach',
+        corpo: 'Sugestão do dia',
+        link: '/dia',
+        chave: 'alerta:2026-10-20:contexto',
+      },
+      quando('20', '11:01')
+    );
+    const { id } = await criarPeriodo(
+      u.session,
+      { ...proposta(), retornoDias: 3 },
+      base
+    );
+    let lista = await listarNotificacoes(u.id, 30, quando('20', '13:00'));
+    expect(lista.naoLidas).toBe(1);
+    expect(
+      lista.notificacoes.find((n) => n.titulo === 'Alerta do sensor')?.lida
+    ).toBe(false);
+    expect(
+      lista.notificacoes.find((n) => n.titulo === 'Convite do coach')?.lida
+    ).toBe(true);
+    await agirNoPeriodo(u.id, id, 'encerrar', 1, quando('20', '14:00'));
+    lista = await listarNotificacoes(u.id, 30, quando('20', '14:01'));
+    expect(lista.naoLidas).toBe(1);
+  });
+  it('continua emitindo o alerta real da rota do sensor durante o descanso', async () => {
+    const u = await criarUsuario();
+    const [plano] = await queryRows<{ id: string }>(
+      "SELECT id FROM subscription_plans WHERE plan_key='care'"
+    );
+    await executeStatement(
+      "INSERT INTO user_subscriptions(id,user_id,plan_id,current_period_end,source) VALUES(?,?,?,UTC_TIMESTAMP()+INTERVAL 1 MONTH,'teste-descanso')",
+      [randomUUID(), u.id, plano.id]
+    );
+    await executeStatement('UPDATE profiles SET age=40 WHERE id=?', [u.id]);
+    const hoje = new Date().toISOString().slice(0, 10);
+    await criarPeriodo(u.session, { ...proposta(), inicio: hoje }, new Date());
+    const r = await chamar(sensor.POST, {
+      usuario: u,
+      method: 'POST',
+      body: {
+        data: hoje,
+        minutos: 10,
+        amostras: 600,
+        fcMinima: 60,
+        fcMaxima: 180,
+        fcMedia: 100,
+        fcRepousoEstimada: 65,
+        rmssd: 35,
+      },
+    });
+    expect(r.status).toBe(200);
+    const avisos = await queryRows<{
+      kind: string;
+      read_at: string | null;
+      dedupe_key: string;
+    }>(
+      "SELECT kind,read_at,dedupe_key FROM user_notifications WHERE user_id=? AND dedupe_key LIKE 'fc-alta:%'",
+      [u.id]
+    );
+    expect(avisos).toHaveLength(1);
+    expect(avisos[0]).toMatchObject({ kind: 'coach_alerta', read_at: null });
+    expect((await listarNotificacoes(u.id)).naoLidas).toBe(1);
   });
 });

@@ -1,3 +1,4 @@
+import { convitePodeSerPausado } from './classificacao';
 import {
   travarConta,
   politicaDeAvisos,
@@ -55,7 +56,9 @@ export async function criarNotificacao(
   if (!(await contaTemRecurso(nova.userId, 'personal_notifications'))) return;
   return withTransaction(async (c) => {
     await travarConta(nova.userId, c);
-    if (await politicaDeAvisos(nova.userId, agora, c)) return false;
+    const pausavel = convitePodeSerPausado(nova.tipo, nova.chave);
+    if (pausavel && (await politicaDeAvisos(nova.userId, agora, c)))
+      return false;
     const resultado = await executeStatement(
       `INSERT IGNORE INTO user_notifications
        (id, user_id, kind, title, body, link, dedupe_key, created_at)

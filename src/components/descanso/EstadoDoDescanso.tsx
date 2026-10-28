@@ -65,7 +65,7 @@ export function EstadoDoDescanso() {
             ? `Começa em ${dataBreve(p.inicio)} (${p.fuso}).`
             : p.estado === 'retorno'
               ? `Até ${dataBreve(p.fimRetorno!)} (${p.fuso}), ${p.atividade ? 'no máximo um lembrete diário da atividade escolhida' : 'retorno sem lembretes automáticos'}.`
-              : 'Os convites de bem-estar estão pausados. Seus registros e a assinatura comercial continuam preservados.'}
+              : 'Os convites de bem-estar estão pausados. Alertas do sensor continuam disponíveis; seus registros e a assinatura comercial permanecem preservados.'}
         </p>
         <Button asChild variant="link">
           <Link href="/descanso">Ver período e efeitos</Link>

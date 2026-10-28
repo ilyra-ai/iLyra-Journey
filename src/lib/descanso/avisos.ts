@@ -1,3 +1,4 @@
+import { convitePodeSerPausado } from '@/lib/notificacoes/classificacao';
 import type { PeriodoDeDescanso } from './esquema';
 import type { PoolConnection } from 'mysql2/promise';
 import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
@@ -69,12 +70,14 @@ export async function prepararAvisosDoDescanso(
       kind: string;
       created_at: string;
       activity: string | null;
+      dedupe_key: string;
     }>(
-      "SELECT n.id,n.kind,n.created_at,r.activity FROM user_notifications n LEFT JOIN reminder_occurrences o ON o.notification_id=n.id AND o.user_id=n.user_id LEFT JOIN personal_reminders r ON r.id=o.reminder_id AND r.user_id=o.user_id WHERE n.user_id=? AND n.read_at IS NULL AND n.kind IN ('coach_dia','coach_alerta','lembrete_pessoal')",
+      "SELECT n.id,n.kind,n.created_at,n.dedupe_key,r.activity FROM user_notifications n LEFT JOIN reminder_occurrences o ON o.notification_id=n.id AND o.user_id=n.user_id LEFT JOIN personal_reminders r ON r.id=o.reminder_id AND r.user_id=o.user_id WHERE n.user_id=? AND n.read_at IS NULL AND n.kind IN ('coach_dia','coach_alerta','lembrete_pessoal')",
       [userId],
       c
     );
     for (const n of avisos) {
+      if (!convitePodeSerPausado(n.kind, n.dedupe_key)) continue;
       if (
         politica.estado === 'ativa' ||
         n.kind !== 'lembrete_pessoal' ||
