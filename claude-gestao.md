@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `█████████████████░░░` **84,3%** |
+| Progresso          | `█████████████████░░░` **85,1%** |
 | Tarefas totais     | 134                              |
-| 🟢 Finalizadas     | 113                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 114                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 5                                |
 | ⚪ A iniciar       | 15                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-28                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (113 ÷ 134 ≈ 84,3%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (114 ÷ 134 ≈ 85,1%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,22 +49,11 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-28:** 118 concluída e publicada em `d5920dbe657f0faf9b470818a5bf198a90136c0b`; 119 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-28:** 119 concluída e publicada em `aa0a146b36d5520d379f4f3f3fe15fa2ade567af`; próxima tarefa não bloqueada: 120. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 119 · Rotinas pessoais guiadas com sequência de passos
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação da 118 e atualização imediata do painel, conforme retomada autorizada.
-- **Pedido do usuário:** abrir uma rotina como Minha manhã ou Preparar para dormir, seguir poucos passos e marcar cada conclusão.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar hábitos, metas, plano diário, respiração e registros reais. O agendador técnico do coach não é uma rotina pessoal com sequência interativa; evitar duplicar pontuação ou minutos já registrados.
-- **Escopo funcional:** permitir criar, editar, ordenar, iniciar, pausar, retomar e excluir rotinas e seus passos, com duração opcional e frequência. Oferecer sugestões pertinentes sem impor atividades e permitir pular um passo. Integrar práticas existentes e apresentar conclusão e progresso verdadeiros, com regras claras para contagem em metas.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar CRUD, ordenação, execução parcial, recarga, retomada, passos pulados, concorrência e integração sem dupla contagem, em celular e desktop. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Conferência inicial:** `main` em `2a8fc8b3d4526dac2f44776f23244ac5d0f4319d`; hábitos, metas, plano diário e respiração existem, mas não há sequências pessoais interativas. Reutilizar as práticas por seus destinos autorizados. Concluir um passo não somará minutos, pontuação nem progresso de metas; os registros reais continuam nas práticas existentes. Execuções guardarão uma cópia dos passos e versões para retomada e concorrência.
 
 ### BLOQUEADAS
 
@@ -2110,3 +2099,18 @@
 - **Conclusão em 2026-10-28:** busca literal nas perguntas e respostas próprias, trechos e data, abertura com foco na mensagem original e navegação bidirecional no histórico; favoritos persistidos, listagem, filtro, paginação e remoção. Refazer conserva a referência à resposta atual. Migração 048, autorização por titular e `chat_history`, exportação e exclusão em cascata.
 - **Validação:** formato, lint sem avisos, tipos, 636 unitários em 78 arquivos, 425 integrações MySQL reais em 49 arquivos e build limpo aprovados. Roteiro de produção com Free/Meta/Care, 95 mensagens por conversa, persistência após novo login, resposta nova/refeita do Motor Lyra local, revogação/restauração, falha real e retentativa. 12 verificações funcionais e 14 execuções axe sem violações nos percursos; 320/390/768/1440 e zoom 200%, sem sobreposição e com abertura após rolagem. Dois timeouts sob carga foram resolvidos com suíte sequencial sem mudar limites. Relatório: `docs/auditoria/2026-10-28-pesquisa-118.md`.
 - **Commit e publicação:** `d5920dbe657f0faf9b470818a5bf198a90136c0b`, confirmado na `main` pela API autenticada do GitHub, com conteúdo idêntico à revisão local, sem branches ou worktrees.
+
+### 119 · Rotinas pessoais guiadas com sequência de passos
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação da 118 e atualização imediata do painel, conforme retomada autorizada.
+- **Pedido do usuário:** abrir uma rotina como Minha manhã ou Preparar para dormir, seguir poucos passos e marcar cada conclusão.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar hábitos, metas, plano diário, respiração e registros reais. O agendador técnico do coach não é uma rotina pessoal com sequência interativa; evitar duplicar pontuação ou minutos já registrados.
+- **Escopo funcional:** permitir criar, editar, ordenar, iniciar, pausar, retomar e excluir rotinas e seus passos, com duração opcional e frequência. Oferecer sugestões pertinentes sem impor atividades e permitir pular um passo. Integrar práticas existentes e apresentar conclusão e progresso verdadeiros, com regras claras para contagem em metas.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar CRUD, ordenação, execução parcial, recarga, retomada, passos pulados, concorrência e integração sem dupla contagem, em celular e desktop. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência inicial:** `main` em `2a8fc8b3d4526dac2f44776f23244ac5d0f4319d`; hábitos, metas, plano diário e respiração existem, mas não há sequências pessoais interativas. Reutilizar as práticas por seus destinos autorizados. Concluir um passo não somará minutos, pontuação nem progresso de metas; os registros reais continuam nas práticas existentes. Execuções guardarão uma cópia dos passos e versões para retomada e concorrência.
+
+- **Conclusão em 2026-10-28:** CRUD de rotinas pessoais, dias sugeridos, duração prevista, reordenação acessível, hábitos ativos e destinos de práticas autorizadas. Execuções persistidas com pausa, retomada, conclusão e pulo distintos, snapshot preservado após edição, início idempotente e versões contra concorrência. Migração 049, isolamento, `personal_habits`, exportação e cascata. A conclusão de passos não gera minutos, pontos ou progresso de metas.
+- **Validação:** formato, lint sem avisos, tipos, 643 unitários em 79 arquivos, 438 integrações MySQL reais em 50 arquivos e build limpo aprovados. Nove verificações funcionais e 16 execuções axe sem violações nos percursos finais, em 320/390/768/1440 e zoom 200%; capturas de editor e execução inspecionadas. Retomada após novo login, edição durante pausa, passos pulados, revogação/restauração da matriz, falha real e retentativa, exclusão e limite de 30 com foco preservado. Corrigidos bloqueio entre conexões na permissão da prática e metadados extras ao editar. Relatório: `docs/auditoria/2026-10-28-rotinas-119.md`.
+- **Commit e publicação:** `aa0a146b36d5520d379f4f3f3fe15fa2ade567af`, confirmado na `main` pela API autenticada do GitHub, com conteúdo idêntico à revisão local, sem branches ou worktrees.
