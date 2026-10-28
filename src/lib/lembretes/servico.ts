@@ -1,3 +1,11 @@
+import { avisoAtravessouPausa } from '@/lib/descanso/calendario';
+import { periodosRelevantes } from '@/lib/descanso/repositorio';
+import {
+  travarConta,
+  prepararAvisosDoDescanso,
+  politicaDeAvisos,
+  jaRecebeuNoRetorno,
+} from '@/lib/descanso/avisos';
 import { randomUUID } from 'node:crypto';
 import type { PoolConnection } from 'mysql2/promise';
 
@@ -76,38 +84,47 @@ async function lerPreferencias(userId: string, connection?: PoolConnection) {
 export async function listarCentral(
   userId: string
 ): Promise<CentralDeLembretes> {
-  const p = await lerPreferencias(userId);
-  const linhas = await queryRows<LembreteDoBanco>(
-    'SELECT * FROM personal_reminders WHERE user_id=? ORDER BY local_time,id',
-    [userId]
-  );
-  const avisos = await queryRows<{
-    id: string;
-    title: string;
-    activity: DadosDoLembrete['atividade'];
-    next_delivery_at: string;
-    state: 'pending' | 'delivered';
-    version: number;
-  }>(
-    `SELECT o.id,r.title,r.activity,o.next_delivery_at,o.state,o.version
+  return withTransaction(async (c) => {
+    await travarConta(userId, c);
+    const politica = await prepararAvisosDoDescanso(userId, new Date(), c);
+    const p = await lerPreferencias(userId, c);
+    const linhas = await queryRows<LembreteDoBanco>(
+      'SELECT * FROM personal_reminders WHERE user_id=? ORDER BY local_time,id',
+      [userId],
+      c
+    );
+    const avisos = await queryRows<{
+      id: string;
+      title: string;
+      activity: DadosDoLembrete['atividade'];
+      next_delivery_at: string;
+      state: 'pending' | 'delivered';
+      version: number;
+    }>(
+      `SELECT o.id,r.title,r.activity,o.next_delivery_at,o.state,o.version
      FROM reminder_occurrences o JOIN personal_reminders r ON r.id=o.reminder_id
      WHERE o.user_id=? AND r.enabled=TRUE AND o.state IN ('pending','delivered')
        AND o.next_delivery_at >= UTC_TIMESTAMP() - INTERVAL 1 DAY
      ORDER BY o.next_delivery_at DESC,o.id LIMIT 100`,
-    [userId]
-  );
-  return {
-    preferencias: preferencias(p),
-    lembretes: linhas.map(lembrete),
-    avisos: avisos.map((a): AvisoDeLembrete => ({
-      id: a.id,
-      titulo: a.title,
-      atividade: a.activity,
-      previstoEm: instante(a.next_delivery_at).toISOString(),
-      estado: a.state,
-      versao: a.version,
-    })),
-  };
+      [userId],
+      c
+    );
+    return {
+      descanso: politica
+        ? { estado: politica.estado, atividade: politica.atividade }
+        : null,
+      preferencias: preferencias(p),
+      lembretes: linhas.map(lembrete),
+      avisos: avisos.map((a): AvisoDeLembrete => ({
+        id: a.id,
+        titulo: a.title,
+        atividade: a.activity,
+        previstoEm: instante(a.next_delivery_at).toISOString(),
+        estado: a.state,
+        versao: a.version,
+      })),
+    };
+  });
 }
 
 async function conferirAtividade(userId: string, dados: DadosDoLembrete) {
@@ -129,6 +146,7 @@ export async function criarLembrete(
 ) {
   await conferirAtividade(userId, dados);
   return withTransaction(async (c) => {
+    await travarConta(userId, c);
     await lerPreferencias(userId, c);
     const [total] = await queryRows<{ total: number }>(
       'SELECT COUNT(*) AS total FROM personal_reminders WHERE user_id=?',
@@ -178,6 +196,7 @@ export async function editarLembrete(
 ) {
   await conferirAtividade(userId, dados);
   await withTransaction(async (c) => {
+    await travarConta(userId, c);
     await lerPreferencias(userId, c);
     const r = await encontrar(userId, id, c);
     if (r.version !== dados.versao)
@@ -219,6 +238,7 @@ export async function excluirLembrete(
   versao: number
 ) {
   await withTransaction(async (c) => {
+    await travarConta(userId, c);
     await lerPreferencias(userId, c);
     const r = await encontrar(userId, id, c);
     if (r.version !== versao)
@@ -244,6 +264,7 @@ export async function salvarPreferencias(
   dados: PreferenciasDeLembretes
 ) {
   await withTransaction(async (c) => {
+    await travarConta(userId, c);
     const p = await lerPreferencias(userId, c);
     if (p.version !== dados.versao)
       throw new HttpError(
@@ -284,15 +305,45 @@ export async function processarLembretes(userId: string, agora = new Date()) {
   );
   const permitidas = new Map(atividades);
   return withTransaction(async (c) => {
+    await travarConta(userId, c);
     const p = await lerPreferencias(userId, c);
     const config = preferencias(p);
+    await executeStatement(
+      "UPDATE reminder_occurrences SET state='dismissed',version=version+1 WHERE user_id=? AND state='pending' AND next_delivery_at < ? - INTERVAL 1 DAY",
+      [userId, sqlData(agora)],
+      c
+    );
+    await executeStatement(
+      'DELETE FROM reminder_occurrences WHERE user_id=? AND updated_at < ? - INTERVAL 90 DAY',
+      [userId, sqlData(agora)],
+      c
+    );
+    const descanso = await prepararAvisosDoDescanso(userId, agora, c);
+    if (
+      descanso?.estado === 'ativa' ||
+      (descanso?.estado === 'retorno' &&
+        (!descanso.atividade ||
+          (await jaRecebeuNoRetorno(userId, descanso, agora, c))))
+    ) {
+      await executeStatement(
+        "UPDATE reminder_occurrences SET state='dismissed',version=version+1 WHERE user_id=? AND state='pending'",
+        [userId],
+        c
+      );
+      return 0;
+    }
+    const periodos = await periodosRelevantes(userId, agora, c);
     const linhas = await queryRows<LembreteDoBanco>(
       'SELECT * FROM personal_reminders WHERE user_id=? AND enabled=TRUE',
       [userId],
       c
     );
     for (const r of linhas) {
-      if (!permitidas.get(r.activity)) continue;
+      if (
+        !permitidas.get(r.activity) ||
+        (descanso?.estado === 'retorno' && r.activity !== descanso.atividade)
+      )
+        continue;
       const aPartirDe = new Date(
         Math.max(
           instante(r.updated_at).getTime(),
@@ -306,9 +357,15 @@ export async function processarLembretes(userId: string, agora = new Date()) {
         aPartirDe
       );
       if (!ocorrencia) continue;
+      const dispensar = avisoAtravessouPausa(
+        periodos,
+        ocorrencia.instante,
+        agora,
+        r.activity
+      );
       await executeStatement(
-        `INSERT INTO reminder_occurrences (id,user_id,reminder_id,occurrence_date,scheduled_at,next_delivery_at)
-         VALUES (?,?,?,?,?,?) ON DUPLICATE KEY UPDATE id=id`,
+        `INSERT INTO reminder_occurrences (id,user_id,reminder_id,occurrence_date,scheduled_at,next_delivery_at,state)
+         VALUES (?,?,?,?,?,?,?) ON DUPLICATE KEY UPDATE id=id`,
         [
           randomUUID(),
           userId,
@@ -316,20 +373,11 @@ export async function processarLembretes(userId: string, agora = new Date()) {
           ocorrencia.data,
           sqlData(ocorrencia.instante),
           sqlData(ocorrencia.instante),
+          dispensar ? 'dismissed' : 'pending',
         ],
         c
       );
     }
-    await executeStatement(
-      "UPDATE reminder_occurrences SET state='dismissed',version=version+1 WHERE user_id=? AND state='pending' AND next_delivery_at < ? - INTERVAL 1 DAY",
-      [userId, sqlData(agora)],
-      c
-    );
-    await executeStatement(
-      'DELETE FROM reminder_occurrences WHERE user_id=? AND updated_at < ? - INTERVAL 90 DAY',
-      [userId, sqlData(agora)],
-      c
-    );
     if (estaEmSilencio(agora, config)) return 0;
     const devidos = await queryRows<{
       id: string;
@@ -347,6 +395,17 @@ export async function processarLembretes(userId: string, agora = new Date()) {
     let emitidos = 0;
     for (const a of devidos) {
       if (!permitidas.get(a.activity)) continue;
+      if (
+        descanso?.estado === 'retorno' &&
+        (a.activity !== descanso.atividade || emitidos > 0)
+      ) {
+        await executeStatement(
+          "UPDATE reminder_occurrences SET state='dismissed',version=version+1 WHERE id=? AND user_id=?",
+          [a.id, userId],
+          c
+        );
+        continue;
+      }
       const id = randomUUID();
       await executeStatement(
         `INSERT INTO user_notifications (id,user_id,kind,title,body,link,dedupe_key,created_at)
@@ -379,7 +438,14 @@ export async function agirSobreAviso(
   agora = new Date()
 ) {
   await withTransaction(async (c) => {
+    await travarConta(userId, c);
     await lerPreferencias(userId, c);
+    const descanso = await politicaDeAvisos(userId, agora, c);
+    if (acao.acao === 'adiar' && descanso)
+      throw new HttpError(
+        'Durante o descanso ou retorno gradual, não há novos adiamentos. Você pode abrir a prática voluntariamente ou dispensar o aviso.',
+        409
+      );
     const [a] = await queryRows<{
       version: number;
       state: string;

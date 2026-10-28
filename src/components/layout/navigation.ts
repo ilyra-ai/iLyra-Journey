@@ -12,6 +12,7 @@ import {
   Gem,
   HeartPulse,
   LayoutDashboard,
+  Moon,
   Radio,
   Settings2,
   ShieldCheck,
@@ -143,6 +144,14 @@ export const navigationItems: NavigationDefinition[] = [
     description:
       'Seu contexto cotidiano e a relação com registros de sono e energia.',
     icon: ClipboardList,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+  },
+  {
+    href: '/descanso',
+    label: 'Modo descanso',
+    description: 'Pause convites, preserve sua rotina e escolha como retomar.',
+    icon: Moon,
     section: 'Pessoal',
     sectionKey: 'personal',
   },

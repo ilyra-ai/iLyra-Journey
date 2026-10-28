@@ -537,6 +537,21 @@ export function CentralDeLembretes() {
           preparados ficam pendentes por até 24 horas, respeitando o silêncio.
         </AlertDescription>
       </Alert>
+      {data?.descanso && (
+        <Alert>
+          <AlertTitle>
+            {data.descanso.estado === 'ativa'
+              ? 'Modo descanso ativo'
+              : 'Retorno gradual ativo'}
+          </AlertTitle>
+          <AlertDescription>
+            {data.descanso.estado === 'ativa'
+              ? 'Lembretes pausados. Avisos pendentes foram dispensados; seus horários e registros continuam guardados.'
+              : 'No máximo um lembrete por dia da atividade escolhida, sem adiamentos ou recuperação dos avisos dispensados. As práticas continuam disponíveis por sua escolha.'}{' '}
+            <Link href="/descanso">Ver período e efeitos</Link>
+          </AlertDescription>
+        </Alert>
+      )}
       {error && (
         <Alert variant="destructive">
           <AlertTitle>Não foi possível atualizar</AlertTitle>
@@ -711,7 +726,7 @@ export function CentralDeLembretes() {
                         <Button
                           key={minutos}
                           variant="outline"
-                          disabled={ocupado}
+                          disabled={ocupado || Boolean(data.descanso)}
                           onClick={() =>
                             void executar(
                               () =>

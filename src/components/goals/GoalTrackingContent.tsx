@@ -1,4 +1,6 @@
 'use client';
+import type { AdaptacaoDaMeta, ResumoDoDescanso } from '@/lib/descanso/esquema';
+import { EVENTO_DESCANSO } from '@/lib/descanso/evento';
 
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -63,6 +65,9 @@ interface Sequencia {
 }
 
 interface Sincronizacao {
+  descanso?: ResumoDoDescanso;
+  adaptacoes?: AdaptacaoDaMeta[];
+  diasNeutros?: string[];
   sequencias: Sequencia[];
   aderencia: { score: number; level: string };
 }
@@ -161,6 +166,9 @@ function LoadingGoals() {
 
 function Sequencias({ dados }: { dados: Sincronizacao }) {
   const porTipo = new Map(dados.sequencias.map((s) => [s.tipo, s]));
+  const emPausa = ['ativa', 'retorno'].includes(
+    dados.descanso?.atual?.estado ?? ''
+  );
   return (
     <section
       aria-labelledby="titulo-sequencias"
@@ -174,9 +182,19 @@ function Sequencias({ dados }: { dados: Sincronizacao }) {
           Suas sequências
         </h3>
         <p className="text-sm text-muted-foreground">
-          Aderência {dados.aderencia.score}% · {dados.aderencia.level}
+          {emPausa
+            ? 'Aderência em pausa · sem cobrança de continuidade hoje'
+            : `Aderência ${dados.aderencia.score}% · ${dados.aderencia.level}`}
         </p>
       </div>
+      {Boolean(dados.diasNeutros?.length) && (
+        <p className="text-sm text-muted-foreground">
+          {dados.diasNeutros!.length} dias de descanso ou retorno gradual
+          identificados na janela. Eles não contam como cumpridos nem
+          interrompem a continuidade dos dias realmente registrados. Você pode
+          consultar as datas em Modo descanso.
+        </p>
+      )}
       <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         {TIPOS_DE_SEQUENCIA.map((tipo) => {
           const sequencia = porTipo.get(tipo);
@@ -286,6 +304,14 @@ export function GoalTrackingContent() {
     };
   }, [aplicar, carregar, userId]);
 
+  useEffect(() => {
+    const atualizar = () => {
+      void fetchGoals();
+    };
+    window.addEventListener(EVENTO_DESCANSO, atualizar);
+    return () => window.removeEventListener(EVENTO_DESCANSO, atualizar);
+  }, [fetchGoals]);
+
   const excluir = async (goal: Goal) => {
     const { error } = await db.from('goals').delete().eq('id', goal.id);
     if (error) {
@@ -377,6 +403,10 @@ export function GoalTrackingContent() {
           const progressPercentage = clampProgress(goal);
           const automatica = goal.metric_key !== null;
           const semDados = automatica && !goal.auto_sample_days;
+          const adaptacao = sincronizacao?.adaptacoes?.find(
+            (a) => a.id === goal.id
+          );
+          const emDescanso = adaptacao?.emDescanso ?? false;
 
           return (
             <article
@@ -386,6 +416,9 @@ export function GoalTrackingContent() {
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge>{goal.category || 'Geral'}</Badge>
+                  {emDescanso && (
+                    <Badge variant="secondary">Ritmo pausado</Badge>
+                  )}
                   {automatica ? (
                     <Badge variant="cosmic">
                       <Sparkles className="h-3 w-3" aria-hidden="true" />
@@ -415,7 +448,9 @@ export function GoalTrackingContent() {
                 {goal.deadline ? (
                   <p className="mt-2 flex items-center gap-1.5 text-xs text-muted-foreground">
                     <CalendarClock className="h-3.5 w-3.5" aria-hidden="true" />
-                    Prazo: {dataBr(goal.deadline)}
+                    {adaptacao && adaptacao.diasNeutros > 0
+                      ? `Prazo adaptado: ${dataBr(adaptacao.prazoEfetivo)} · original ${dataBr(goal.deadline)} · ${adaptacao.diasNeutros} ${adaptacao.diasNeutros === 1 ? 'dia neutro' : 'dias neutros'}`
+                      : `Prazo: ${dataBr(goal.deadline)}`}
                   </p>
                 ) : null}
               </div>
@@ -439,7 +474,9 @@ export function GoalTrackingContent() {
                 {automatica ? (
                   <p className="text-xs text-muted-foreground">
                     {semDados
-                      ? 'Faça o check-in do dia: a meta se atualiza sozinha.'
+                      ? emDescanso
+                        ? 'Sem registros nesta janela. Você pode descansar; nenhum progresso será inventado.'
+                        : 'Faça o check-in do dia: a meta se atualiza sozinha.'
                       : `Calculada com ${goal.auto_sample_days} ${goal.auto_sample_days === 1 ? 'dia' : 'dias'} de registro · atualiza sozinha.`}
                   </p>
                 ) : null}

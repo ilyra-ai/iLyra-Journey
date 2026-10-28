@@ -1,3 +1,7 @@
+import type { PoolConnection } from 'mysql2/promise';
+import { withTransaction } from '@/lib/mysql/pool';
+import { travarConta } from '@/lib/descanso/avisos';
+import { adaptacoesDasMetas } from '@/lib/descanso/repositorio';
 import { executeStatement, queryRows } from '@/lib/mysql/pool';
 
 import {
@@ -34,12 +38,23 @@ function numero(valor: unknown) {
  * Recalcula as metas automáticas da pessoa e o prazo das manuais.
  * Devolve quantas metas mudaram de valor ou de status.
  */
-export async function recalcularMetas(userId: string, hoje: string) {
+export async function recalcularMetas(
+  userId: string,
+  hoje: string,
+  agora = new Date(),
+  c?: PoolConnection
+): Promise<number> {
+  if (!c)
+    return withTransaction(async (conexao) => {
+      await travarConta(userId, conexao);
+      return recalcularMetas(userId, hoje, agora, conexao);
+    });
   const metas = await queryRows<LinhaDaMeta>(
     `SELECT id, metric_key, metric_direction, target_value, current_value,
             deadline, status
        FROM goals WHERE user_id = ?`,
-    [userId]
+    [userId],
+    c
   );
   if (metas.length === 0) return 0;
 
@@ -51,13 +66,22 @@ export async function recalcularMetas(userId: string, hoje: string) {
     ? await queryRows<Record<string, unknown>>(
         `SELECT date, ${colunas.join(', ')} FROM daily_metrics
           WHERE user_id = ? AND date BETWEEN ? AND ?`,
-        [userId, diasAntes(hoje, 29), hoje]
+        [userId, diasAntes(hoje, 29), hoje],
+        c
       )
     : [];
 
+  const adaptacoes = new Map(
+    (await adaptacoesDasMetas(userId, hoje, agora, c)).map((a) => [
+      a.id,
+      a.prazoEfetivo,
+    ])
+  );
   let alteradas = 0;
   for (const meta of metas) {
-    const prazo = meta.deadline ? String(meta.deadline).slice(0, 10) : null;
+    const prazo =
+      adaptacoes.get(meta.id) ??
+      (meta.deadline ? String(meta.deadline).slice(0, 10) : null);
     const alvo = numero(meta.target_value);
     const direcao = meta.metric_direction === 'down' ? 'down' : 'up';
 
@@ -83,7 +107,8 @@ export async function recalcularMetas(userId: string, hoje: string) {
             SET current_value = ?, status = ?, auto_sample_days = ?,
                 auto_updated_at = UTC_TIMESTAMP()
           WHERE id = ? AND user_id = ?`,
-        [atual, status, dias, meta.id, userId]
+        [atual, status, dias, meta.id, userId],
+        c
       );
       continue;
     }
@@ -101,7 +126,8 @@ export async function recalcularMetas(userId: string, hoje: string) {
     if (status !== meta.status) {
       await executeStatement(
         'UPDATE goals SET status = ? WHERE id = ? AND user_id = ?',
-        [status, meta.id, userId]
+        [status, meta.id, userId],
+        c
       );
       alteradas += 1;
     }

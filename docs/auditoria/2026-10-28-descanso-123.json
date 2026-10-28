@@ -1,0 +1,98 @@
+{
+  "verificacoes": [
+    "Criação no navegador, meta selecionada, fuso e foco preservado",
+    "Relógio real: aviso anterior dispensado e nenhuma entrega na pausa, recorrência preservada",
+    "Meta mostra prazo efetivo, mantém original e não fabrica conclusão ou progresso",
+    "Registro real continua disponível e não transforma dia pausado em sequência cumprida",
+    "Edição e encerramento reais com retorno gradual escolhido e data atual",
+    "Retorno concluído antes do fim, sem apagar o dia neutro ou o histórico",
+    "Assinatura comercial e registros originais preservados",
+    "Plano Meta, agendamento/cancelamento e isolamento entre titulares",
+    "Plano Care: retorno libera uma entrega real da atividade escolhida e bloqueia adiamentos"
+  ],
+  "axe": [
+    {
+      "rotulo": "estado inicial móvel",
+      "aprovadas": 22,
+      "violacoes": []
+    },
+    {
+      "rotulo": "formulário móvel",
+      "aprovadas": 24,
+      "violacoes": []
+    },
+    {
+      "rotulo": "metas e dias neutros",
+      "aprovadas": 25,
+      "violacoes": []
+    },
+    {
+      "rotulo": "chat com banner de descanso",
+      "aprovadas": 28,
+      "violacoes": []
+    },
+    {
+      "rotulo": "período alterado",
+      "aprovadas": 22,
+      "violacoes": []
+    },
+    {
+      "rotulo": "confirmação de encerramento",
+      "aprovadas": 21,
+      "violacoes": []
+    },
+    {
+      "rotulo": "retorno gradual móvel",
+      "aprovadas": 22,
+      "violacoes": []
+    },
+    {
+      "rotulo": "descanso 320px",
+      "aprovadas": 22,
+      "violacoes": []
+    },
+    {
+      "rotulo": "descanso desktop",
+      "aprovadas": 26,
+      "violacoes": []
+    },
+    {
+      "rotulo": "descanso zoom 200%",
+      "aprovadas": 26,
+      "violacoes": []
+    },
+    {
+      "rotulo": "confirmação zoom 200%",
+      "aprovadas": 21,
+      "violacoes": []
+    },
+    {
+      "rotulo": "agendamento plano Meta",
+      "aprovadas": 22,
+      "violacoes": []
+    },
+    {
+      "rotulo": "retorno plano Care e lembretes",
+      "aprovadas": 23,
+      "violacoes": []
+    }
+  ],
+  "excecoes": [],
+  "tarefa": 123,
+  "data": "2026-10-28",
+  "unitarios": {
+    "testes": 684,
+    "arquivos": 83
+  },
+  "integracao_mysql": {
+    "testes": 504,
+    "arquivos": 54
+  },
+  "ambiente": {
+    "mysql": "9.7.2",
+    "chrome": "151.0.7922.34",
+    "pnpm": "11.28.4"
+  },
+  "relogio_real_no_navegador": true,
+  "observacao": "Históricos de QA são fixtures locais identificadas. Agendamentos de dias e DST foram verificados com datas controladas nos testes; o retorno no navegador aguardou o minuto real."
+}

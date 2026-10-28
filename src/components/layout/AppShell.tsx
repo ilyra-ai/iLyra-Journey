@@ -1,4 +1,5 @@
 'use client';
+import { EstadoDoDescanso } from '@/components/descanso/EstadoDoDescanso';
 
 import type { CSSProperties, ReactNode } from 'react';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
@@ -74,6 +75,7 @@ export function AppShell({
               contentClassName
             )}
           >
+            <EstadoDoDescanso />
             <PlanFeatureGate features={recursosDaRota(pathname)}>
               {children}
             </PlanFeatureGate>

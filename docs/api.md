@@ -230,3 +230,18 @@ notas e devolve a prévia selecionada e seu digest.
 e conteúdo e entrega PDF como anexo privado sem cache; conteúdo alterado
 responde 409. Contratos, origem, lacunas, limites e geração em
 [Relatório pessoal](./relatorio-pessoal.md).
+
+## Modo descanso (tarefa 123)
+
+`GET/POST /api/descanso`, `PUT/POST /api/descanso/[id]` e o resumo privado
+`GET /api/descanso?resumo=1` controlam o período do próprio titular.
+O histórico usa cursor próprio `antes`; períodos e ações exigem versões.
+Metas e atividade escolhidas são validadas no plano. Lembretes, convites
+do coach, prazos efetivos e dias neutros são integrados no servidor.
+Assinatura e consultas não são pausadas. Contratos e relógio em
+[Modo descanso](./modo-descanso.md).
+
+A sincronização de metas mantém seus campos anteriores e acrescenta
+`descanso`, `adaptacoes` e `diasNeutros`. A central de lembretes informa
+`descanso` quando há restrição ativa; o servidor impede adiamento nessa
+etapa. Os mesmos contratos de atividade, sessão e plano continuam válidos.

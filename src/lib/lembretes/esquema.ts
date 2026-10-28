@@ -90,6 +90,10 @@ export interface AvisoDeLembrete {
   versao: number;
 }
 export interface CentralDeLembretes {
+  descanso?: {
+    estado: 'ativa' | 'retorno';
+    atividade: DadosDoLembrete['atividade'] | null;
+  } | null;
   preferencias: PreferenciasDeLembretes;
   lembretes: Lembrete[];
   avisos: AvisoDeLembrete[];

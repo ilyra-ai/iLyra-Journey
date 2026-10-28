@@ -1,3 +1,5 @@
+import { withTransaction } from '@/lib/mysql/pool';
+import { travarConta } from '@/lib/descanso/avisos';
 import { lerPerfilAstrologico } from '@/lib/astrology/perfil-astrologico';
 import { dataLocal } from '@/lib/astrology/tempo';
 import { recalcularSequencias } from '@/lib/kpi/streak-repository';
@@ -20,7 +22,10 @@ export async function atualizarMetasESequencias(
   agora = new Date()
 ) {
   const hoje = await hojeDaPessoa(userId, agora);
-  const metasAlteradas = await recalcularMetas(userId, hoje);
-  await recalcularSequencias(userId, hoje);
-  return { hoje, metasAlteradas };
+  return withTransaction(async (c) => {
+    await travarConta(userId, c);
+    const metasAlteradas = await recalcularMetas(userId, hoje, agora, c);
+    await recalcularSequencias(userId, hoje, c);
+    return { hoje, metasAlteradas };
+  });
 }

@@ -299,3 +299,18 @@ unidades, lacunas e notas e use **Baixar PDF revisado**. Se os registros
 mudarem, prepare outra prévia. O aplicativo não envia o arquivo: você
 decide onde guardar e com quem compartilhar. O relatório descreve seus
 registros e não é diagnóstico. Veja [os detalhes](./relatorio-pessoal.md).
+
+## Descanso e retorno gradual
+
+Abra **Modo descanso**, escolha início e fim opcional e marque quais metas
+deseja adaptar. Seus alvos e prazos originais não são reescritos. Ao
+confirmar, convites de bem-estar ficam pausados e pendências são dispensadas,
+sem recuperação em lote. Você pode continuar registrando seu dia por vontade
+própria. Dias tocados pela pausa ficam neutros, sem contar como cumpridos.
+
+Ao encerrar, escolha previamente ritmo habitual ou retorno gradual por
+3/7/14 dias, sem avisos ou com até um lembrete diário de uma atividade
+autorizada e já cadastrada. Você pode concluir o retorno antes. Consulte
+o histórico e os prazos efetivos em **Modo descanso** e **Metas**. A pausa
+não muda cobrança da assinatura ou consultas. Veja
+[os efeitos completos](./modo-descanso.md).

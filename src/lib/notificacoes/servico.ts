@@ -1,7 +1,12 @@
+import {
+  travarConta,
+  politicaDeAvisos,
+  normalizarAvisosDoDescanso,
+} from '@/lib/descanso/avisos';
 import { contaTemRecurso } from '@/lib/plans/service';
 import { randomUUID } from 'node:crypto';
 
-import { executeStatement, queryRows } from '@/lib/mysql/pool';
+import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
 
 /**
  * Notificações do sino, gravadas no servidor (tarefa 42). A rotina diária do
@@ -43,23 +48,32 @@ function limitar(texto: string, maximo: number) {
 }
 
 /** Cria a notificação; `false` quando a mesma chave já existia. */
-export async function criarNotificacao(nova: NovaNotificacao) {
+export async function criarNotificacao(
+  nova: NovaNotificacao,
+  agora = new Date()
+) {
   if (!(await contaTemRecurso(nova.userId, 'personal_notifications'))) return;
-  const resultado = await executeStatement(
-    `INSERT IGNORE INTO user_notifications
-       (id, user_id, kind, title, body, link, dedupe_key)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`,
-    [
-      randomUUID(),
-      nova.userId,
-      nova.tipo,
-      limitar(nova.titulo, 160),
-      limitar(nova.corpo, 500),
-      nova.link,
-      limitar(nova.chave, 120),
-    ]
-  );
-  return resultado.affectedRows === 1;
+  return withTransaction(async (c) => {
+    await travarConta(nova.userId, c);
+    if (await politicaDeAvisos(nova.userId, agora, c)) return false;
+    const resultado = await executeStatement(
+      `INSERT IGNORE INTO user_notifications
+       (id, user_id, kind, title, body, link, dedupe_key, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [
+        randomUUID(),
+        nova.userId,
+        nova.tipo,
+        limitar(nova.titulo, 160),
+        limitar(nova.corpo, 500),
+        nova.link,
+        limitar(nova.chave, 120),
+        agora,
+      ],
+      c
+    );
+    return resultado.affectedRows === 1;
+  });
 }
 
 interface LinhaDaNotificacao {
@@ -74,8 +88,10 @@ interface LinhaDaNotificacao {
 
 export async function listarNotificacoes(
   userId: string,
-  limite = 30
+  limite = 30,
+  agora = new Date()
 ): Promise<{ notificacoes: Notificacao[]; naoLidas: number }> {
+  await normalizarAvisosDoDescanso(userId, agora);
   const linhas = await queryRows<LinhaDaNotificacao>(
     `SELECT id, kind, title, body, link, created_at, read_at
        FROM user_notifications

@@ -1,3 +1,9 @@
+import type { PoolConnection } from 'mysql2/promise';
+import { withTransaction } from '@/lib/mysql/pool';
+import { travarConta } from '@/lib/descanso/avisos';
+import { datasNeutras } from '@/lib/descanso/calendario';
+import { periodosParaSequencias } from '@/lib/descanso/repositorio';
+import { somarDias } from '@/lib/acontecimentos/analise';
 import {
   CRITERIOS_DAS_SEQUENCIAS,
   type TipoDeSequencia,
@@ -51,22 +57,39 @@ function diaAnterior(data: string) {
  * Sequência atual (terminando hoje, ou ontem se hoje ainda não foi
  * cumprido), a mais longa da janela e o último dia cumprido.
  */
-export function calcularSequencia(dias: ReadonlySet<string>, hoje: string) {
-  const ordenados = [...dias].filter((d) => d <= hoje).sort();
+export function calcularSequencia(
+  dias: ReadonlySet<string>,
+  hoje: string,
+  neutros: ReadonlySet<string> = new Set()
+) {
+  const ordenados = [...dias]
+    .filter((d) => d <= hoje && !neutros.has(d))
+    .sort();
   if (ordenados.length === 0) {
     return { atual: 0, maisLonga: 0, ultimo: null as string | null };
   }
 
+  const anteriorAtivo = (data: string) => {
+    let cursor = diaAnterior(data);
+    while (neutros.has(cursor)) cursor = diaAnterior(cursor);
+    return cursor;
+  };
   let maisLonga = 1;
   let corrida = 1;
   for (let i = 1; i < ordenados.length; i++) {
-    corrida = diaAnterior(ordenados[i]) === ordenados[i - 1] ? corrida + 1 : 1;
+    corrida =
+      anteriorAtivo(ordenados[i]) === ordenados[i - 1] ? corrida + 1 : 1;
     maisLonga = Math.max(maisLonga, corrida);
   }
 
-  let cursor = dias.has(hoje) ? hoje : diaAnterior(hoje);
+  let cursor = dias.has(hoje) || neutros.has(hoje) ? hoje : diaAnterior(hoje);
   let atual = 0;
-  while (dias.has(cursor)) {
+  while (true) {
+    if (neutros.has(cursor)) {
+      cursor = diaAnterior(cursor);
+      continue;
+    }
+    if (!dias.has(cursor)) break;
     atual += 1;
     cursor = diaAnterior(cursor);
   }
@@ -74,13 +97,29 @@ export function calcularSequencia(dias: ReadonlySet<string>, hoje: string) {
   return { atual, maisLonga, ultimo: ordenados[ordenados.length - 1] };
 }
 
-export async function recalcularSequencias(userId: string, hoje: string) {
+export async function recalcularSequencias(
+  userId: string,
+  hoje: string,
+  c?: PoolConnection
+): Promise<void> {
+  if (!c)
+    return withTransaction(async (conexao) => {
+      await travarConta(userId, conexao);
+      await recalcularSequencias(userId, hoje, conexao);
+    });
   const linhas = await queryRows<LinhaDoDia>(
     `SELECT date, sleep_duration_minutes, steps, active_minutes,
             meditation_minutes, water_liters
        FROM daily_metrics
       WHERE user_id = ? AND date BETWEEN ? - INTERVAL 400 DAY AND ?`,
-    [userId, hoje, hoje]
+    [userId, hoje, hoje],
+    c
+  );
+
+  const neutros = datasNeutras(
+    await periodosParaSequencias(userId, hoje, c),
+    somarDias(hoje, -400),
+    hoje
   );
 
   for (const tipo of Object.keys(CUMPRE) as TipoDeSequencia[]) {
@@ -89,11 +128,12 @@ export async function recalcularSequencias(userId: string, hoje: string) {
         .filter((linha) => CUMPRE[tipo](linha))
         .map((linha) => String(linha.date).slice(0, 10))
     );
-    const { atual, maisLonga, ultimo } = calcularSequencia(dias, hoje);
+    const { atual, maisLonga, ultimo } = calcularSequencia(dias, hoje, neutros);
     if (!ultimo) {
       await executeStatement(
         'DELETE FROM user_streaks WHERE user_id = ? AND streak_type = ?',
-        [userId, tipo]
+        [userId, tipo],
+        c
       );
       continue;
     }
@@ -108,7 +148,8 @@ export async function recalcularSequencias(userId: string, hoje: string) {
          longest_streak = novo.longest_streak,
          last_activity_date = novo.last_activity_date,
          updated_at = novo.updated_at`,
-      [userId, tipo, atual, maisLonga, ultimo]
+      [userId, tipo, atual, maisLonga, ultimo],
+      c
     );
   }
 }

@@ -1,3 +1,10 @@
+import {
+  adaptacoesDasMetas,
+  periodosParaSequencias,
+  resumoDoDescanso,
+} from '@/lib/descanso/repositorio';
+import { datasNeutras } from '@/lib/descanso/calendario';
+import { somarDias } from '@/lib/acontecimentos/analise';
 import { NextResponse } from 'next/server';
 
 import { respostaDeErro } from '@/lib/http/api';
@@ -28,6 +35,15 @@ export async function POST() {
     return NextResponse.json(
       {
         hoje,
+        descanso: await resumoDoDescanso(session.user.id),
+        adaptacoes: await adaptacoesDasMetas(session.user.id, hoje),
+        diasNeutros: [
+          ...datasNeutras(
+            await periodosParaSequencias(session.user.id, hoje),
+            somarDias(hoje, -400),
+            hoje
+          ),
+        ].sort(),
         metasAlteradas,
         sequencias: sequencias.map((s) => ({
           tipo: s.streak_type,

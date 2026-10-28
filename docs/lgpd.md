@@ -153,3 +153,15 @@ Permissões e histórico são revalidados antes do download; a prévia
 fica inválida quando os dados selecionados mudam. A exportação LGPD
 em JSON permanece disponível e tem finalidade diferente.
 Detalhes em [Relatório pessoal](./relatorio-pessoal.md).
+
+## Modo descanso (tarefa 123)
+
+`rest_periods` e `rest_goal_links` pertencem ao titular autenticado, entram
+na portabilidade e são removidos em cascata na exclusão da conta. O modo
+não exige justificativa de saúde nem envia seu histórico a modelos.
+Registros diários e hábitos não são apagados; dias neutros não se tornam
+dias cumpridos. Metas relacionadas são próprias e têm prazo original
+preservado. Avisos dispensados permanecem em seu histórico existente,
+seguindo a retenção desse recurso. O histórico de descanso é paginado
+sem truncamento silencioso. Leituras são privadas e sem cache.
+Detalhes em [Modo descanso](./modo-descanso.md).
