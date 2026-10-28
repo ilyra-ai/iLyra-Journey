@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `█████████████████░░░` **82,8%** |
+| Progresso          | `█████████████████░░░` **83,6%** |
 | Tarefas totais     | 134                              |
-| 🟢 Finalizadas     | 111                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 112                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 5                                |
 | ⚪ A iniciar       | 17                               |
 | Branch de trabalho | `main` (única permitida)         |
-| Última atualização | 2026-10-27                       |
+| Última atualização | 2026-10-28                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (111 ÷ 134 ≈ 82,8%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (112 ÷ 134 ≈ 83,6%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,22 +49,11 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-27:** 116 concluída e publicada em `a64912b654e739f0f9dd0d5a7f06599bf868f795`; 117 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-28:** 117 concluída e publicada em `8a6fe003396201b1fb0cefbbd595fd6fd446eabe`; próxima tarefa não bloqueada: 118. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 117 · Lembretes personalizados com adiamento e período de silêncio
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-27, conforme retomada permanente autorizada.
-- **Pedido do usuário:** permitir escolher os horários e dias para check-in, respiração e hábitos, adiar um lembrete e definir um período de silêncio.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reaproveitar o sino de notificações, o agendador diário e os lembretes ICS existentes. Eles não constituem uma central de lembretes pessoais configuráveis; não recriar calendário nem notificações já entregues.
-- **Escopo funcional:** criar, consultar, editar, ativar, desativar e excluir lembretes por titular; configurar recorrência, fuso horário, adiamento, dias e silêncio. Definir e explicar os canais realmente suportados, permissões e limites de entrega com o app fechado; não prometer push sem infraestrutura e comprovação. Evitar duplicações e respeitar descanso e preferência de contato.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** conferir persistência, recorrência, mudança de fuso, horário de verão quando aplicável, silêncio, adiamento, exclusão e entrega real em cada canal anunciado, com recusas de acesso entre contas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Conferência inicial:** o sino já persiste notificações do coach com deduplicação e retenção; o agendador prepara a leitura diária, e a agenda ICS mantém suas janelas. Não há central de lembretes pessoais com CRUD, recorrência, fuso, adiamento e silêncio. A implementação reutilizará o sino e as funções de conversão de fuso existentes. O canal anunciado será o aviso dentro do app aberto, com retomada dos lembretes pendentes de hoje; não se prometerá push com o app fechado.
 
 ### BLOQUEADAS
 
@@ -2098,3 +2087,18 @@
 - **Conclusão em 2026-10-27:** README com 235 palavras, logo oficial, emojis e seis usos comprovados; limites e privacidade em linguagem simples. Conteúdo técnico preservado em `docs/guia-operacional.md`, com links ajustados. Nenhuma tarefa ainda pendente foi anunciada como entregue.
 - **Validação:** três prévias locais Markdown/GFM em 1280/390/320 px, logo e emojis carregados, ausência de estouro horizontal e zero violações nas regras axe executadas. 23 links locais conferidos. Instalação congelada, pnpm 11.28.4 via Corepack, formato, lint, tipos, 621 unitários, 400 integrações MySQL 9.7.2, build e saúde de produção HTTP 200 aprovados. Auditoria em `docs/auditoria/2026-10-27-readme-116.md`.
 - **Commit e publicação:** `a64912b654e739f0f9dd0d5a7f06599bf868f795`, confirmado na `main` pela API autenticada do GitHub, sem branches ou worktrees.
+
+### 117 · Lembretes personalizados com adiamento e período de silêncio
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-27, conforme retomada permanente autorizada.
+- **Pedido do usuário:** permitir escolher os horários e dias para check-in, respiração e hábitos, adiar um lembrete e definir um período de silêncio.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reaproveitar o sino de notificações, o agendador diário e os lembretes ICS existentes. Eles não constituem uma central de lembretes pessoais configuráveis; não recriar calendário nem notificações já entregues.
+- **Escopo funcional:** criar, consultar, editar, ativar, desativar e excluir lembretes por titular; configurar recorrência, fuso horário, adiamento, dias e silêncio. Definir e explicar os canais realmente suportados, permissões e limites de entrega com o app fechado; não prometer push sem infraestrutura e comprovação. Evitar duplicações e respeitar descanso e preferência de contato.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir persistência, recorrência, mudança de fuso, horário de verão quando aplicável, silêncio, adiamento, exclusão e entrega real em cada canal anunciado, com recusas de acesso entre contas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência inicial:** o sino já persiste notificações do coach com deduplicação e retenção; o agendador prepara a leitura diária, e a agenda ICS mantém suas janelas. Não há central de lembretes pessoais com CRUD, recorrência, fuso, adiamento e silêncio. A implementação reutilizará o sino e as funções de conversão de fuso existentes. O canal anunciado será o aviso dentro do app aberto, com retomada dos lembretes pendentes de hoje; não se prometerá push com o app fechado.
+
+- **Conclusão em 2026-10-28:** central com CRUD por titular, dias, horário, fuso, silêncio, ativação/desativação, adiamento de 10/30/60 minutos e dispensa, reutilizando o sino. Transações e versões impedem duplicação e sobrescrita; direitos do plano, exportação e exclusão preservados. Canal real: aviso no app aberto e visível; sem promessa de push ou entrega com o app fechado.
+- **Validação:** instalação congelada, formato, lint, tipos, 629 unitários, 413 integrações MySQL 9.7.2 e build limpo aprovados. Entrega no sino com horário corrente, silêncio, adiamento conferido no banco, CRUD, quatro perfis, 320/390/768/1440, zoom 200%, novo login, falha real/retentativa e revogação/restauração da matriz. 27 verificações axe sem violações; foco e limite de 50 conferidos. Corrigidos deadlock, estouro no zoom e retorno de foco. Sem exceções JavaScript nos percursos aprovados. Relatório: `docs/auditoria/2026-10-28-lembretes-117.md`.
+- **Commit e publicação:** `8a6fe003396201b1fb0cefbbd595fd6fd446eabe`, confirmado na `main` pela API autenticada do GitHub, com árvore idêntica à revisão local. Nenhuma branch ou worktree criada. As bloqueadas permanecem preservadas.
