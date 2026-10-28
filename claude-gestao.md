@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `█████████████████░░░` **83,5%** |
-| Tarefas totais     | 133                              |
+| Progresso          | `█████████████████░░░` **82,8%** |
+| Tarefas totais     | 134                              |
 | 🟢 Finalizadas     | 111                              |
 | 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 5                                |
-| ⚪ A iniciar       | 16                               |
+| ⚪ A iniciar       | 17                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-27                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (111 ÷ 133 ≈ 83,5%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (111 ÷ 134 ≈ 82,8%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -302,6 +302,16 @@
 - **Validação e entrega:** conferir CRUD, datas e fusos, fotos, confirmação e correção de reconhecimento real quando oferecido, modelo ausente ou incompatível, estimativas, persistência, histórico, exportação, exclusão e privacidade. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ---
+
+### 134 · Agendamentos exclusivo do administrador por padrão, com ativação global para usuários
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-27 · **Execução:** segue a retomada autorizada e a ordem numérica das tarefas não bloqueadas.
+- **Pedido do usuário:** desativar o menu Agendamentos do sidebar e do app para que, inicialmente, somente o administrador possa visualizar e usar esse recurso. Dar ao administrador a opção de ativar ou desativar Agendamentos por completo para os usuários.
+- **Conferência prévia obrigatória:** inventariar a página, menus, sidebar desktop e celular, busca, atalhos, ações rápidas, botões, notificações de consultas, APIs e integrações vinculadas a agendamentos e profissionais. Reaproveitar a matriz de recursos dos planos, a autorização administrativa e os controles existentes; não confundir a ocultação de um item com o bloqueio funcional do recurso.
+- **Controle administrativo real:** criar uma configuração global persistida, desativada para usuários por padrão, que somente o administrador possa consultar e alterar nos controles administrativos apropriados. O administrador mantém seu próprio acesso para gerir o recurso. Ao ativar para os usuários, continuar exigindo os direitos do plano e demais autorizações aplicáveis; a configuração não pode conceder permissões administrativas nem ampliar recursos do plano.
+- **Desativação integral:** quando desligado para usuários, retirar todos os pontos de entrada do app e recusar também acesso direto e operações nas APIs correspondentes, inclusive leitura, criação, edição, exclusão e consultas auxiliares vinculadas à funcionalidade. Impedir atalhos pela URL, manipulação do navegador ou chamadas manuais. Não fazer consultas que sabidamente retornarão 403 para montar menus ou notificações. Conferir canais e calendários ligados a consultas, preservando funcionalidades independentes como as janelas pessoais de autoconhecimento.
+- **Persistência e integridade:** manter agendamentos, profissionais e histórico já registrados; desativar não significa apagar ou cancelar consultas reais. Reativar deve recuperar o acesso aos dados autorizados de cada titular. Aplicar a configuração após recarga, novo login e mudança de papel ou plano, evitando estado antigo conceder acesso indevido. Registrar alterações administrativas com responsável, data e estado anterior e novo, sem expor dados pessoais de consultas.
+- **Experiência e validação:** apresentar o controle em pt-BR, com estado claro, operação acessível e feedback de sucesso ou falha. Testar desligado por padrão, administrador, usuários dos planos, ativação/desativação, persistência, acesso direto, todas as operações pertinentes, isolamento e tentativas de alteração por não administradores. Validar menus e notificações em desktop e celular, regressões, gates e revisão do diff. Publicar commit e push próprios na `main`, sem branches ou worktrees, e atualizar este painel com o SHA real. Este registro não declara o recurso já desativado ou a implementação concluída.
 
 ## Tópico 4 · Histórico das Tarefas Finalizadas
 
