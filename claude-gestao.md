@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `█████████████████░░░` **82,7%** |
+| Progresso          | `█████████████████░░░` **83,5%** |
 | Tarefas totais     | 133                              |
-| 🟢 Finalizadas     | 110                              |
+| 🟢 Finalizadas     | 111                              |
 | 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 5                                |
-| ⚪ A iniciar       | 17                               |
+| ⚪ A iniciar       | 16                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-27                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (110 ÷ 133 ≈ 82,7%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (111 ÷ 133 ≈ 83,5%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,23 +49,22 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-27:** 114 concluída; implementação local da 115 publicada, bloqueada somente na inferência com modelo real acessível; 116 em andamento. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-27:** 116 concluída e publicada em `a64912b654e739f0f9dd0d5a7f06599bf868f795`; 117 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
 
-### 116 · README simples, objetivo e acolhedor para o usuário entender o app
+### 117 · Lembretes personalizados com adiamento e período de silêncio
 
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-27; retomada permanente autorizada pelo usuário.
-- **Pedido do usuário:** atualizar o `README.md` para ser o mais simples, objetivo, assertivo e rápido de ler, contendo emoticons e gatilhos emocionais. Retirar todas as referências técnicas e explicações de instalação e configuração. O objetivo é que uma pessoa leia o README e entenda o que o app faz.
-- **Conferência prévia obrigatória:** ler o README atual e confrontar a apresentação com as funcionalidades realmente implementadas e disponíveis. Reaproveitar os textos e diferenciais pertinentes, retirando conteúdo repetido, desatualizado ou sem utilidade para o usuário. Não apresentar tarefas pendentes, integrações não validadas ou a prévia de uma interface como recursos já entregues.
-- **Conteúdo e linguagem:** apresentar em pt-BR acessível o propósito da Lyra MetaCare, para quem ela é, o que a pessoa pode fazer e quais benefícios concretos encontra no uso diário. Usar frases curtas, organização fácil de percorrer, emoticons pertinentes e apelos emocionais de acolhimento, curiosidade e motivação, com naturalidade e sem exageros, promessas de resultado garantido ou afirmações sem sustentação. Priorizar clareza e entendimento imediato para leigos.
-- **Remoção do conteúdo técnico:** retirar do README referências a linguagens, frameworks, versões, stack, arquitetura, estrutura de pastas, dependências, comandos, código, infraestrutura, banco de dados, testes e explicações de instalação ou configuração. Remover seções, tabelas, badges e links cuja finalidade seja técnica. Preservar a documentação operacional necessária nos arquivos técnicos apropriados, sem recolocar os detalhes técnicos ou os passos de instalação no README voltado ao usuário.
-- **Fidelidade e apresentação:** manter o nome, o logo e a identidade visual oficial do app, os diferenciais reais e informações essenciais de privacidade e limites de bem-estar em linguagem breve e compreensível. Evitar jargões e títulos excessivos, blocos longos, conteúdo decorativo que atrapalhe a leitura ou mensagens que confundam autoconhecimento com diagnóstico. O arquivo deve funcionar como apresentação do produto para o usuário, sem exigir conhecimento de tecnologia.
-- **Validação e entrega:** conferir cada funcionalidade e benefício descrito contra o app real, revisar clareza, concisão, pt-BR, emoticons, links e renderização Markdown no desktop e celular. Comprovar a retirada do conteúdo técnico, de instalação e de configuração, sem apagar a documentação operacional do projeto ou inventar funcionalidades. Executar as verificações documentais pertinentes, revisar diff e status, publicar commit e push próprios na `main`, sem branches ou worktrees, e atualizar o painel com SHA e evidências reais. Este registro não representa reescrita iniciada ou concluída.
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-27, conforme retomada permanente autorizada.
+- **Pedido do usuário:** permitir escolher os horários e dias para check-in, respiração e hábitos, adiar um lembrete e definir um período de silêncio.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reaproveitar o sino de notificações, o agendador diário e os lembretes ICS existentes. Eles não constituem uma central de lembretes pessoais configuráveis; não recriar calendário nem notificações já entregues.
+- **Escopo funcional:** criar, consultar, editar, ativar, desativar e excluir lembretes por titular; configurar recorrência, fuso horário, adiamento, dias e silêncio. Definir e explicar os canais realmente suportados, permissões e limites de entrega com o app fechado; não prometer push sem infraestrutura e comprovação. Evitar duplicações e respeitar descanso e preferência de contato.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir persistência, recorrência, mudança de fuso, horário de verão quando aplicável, silêncio, adiamento, exclusão e entrega real em cada canal anunciado, com recusas de acesso entre contas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
-- **Conferência em 2026-10-27:** o README ainda apresenta stack, instalação, configuração, arquitetura e contagens antigas. A reescrita preservará a documentação operacional em arquivo próprio e apresentará apenas recursos entregues, com logo oficial, limites e privacidade em linguagem simples.
+- **Conferência inicial:** o sino já persiste notificações do coach com deduplicação e retenção; o agendador prepara a leitura diária, e a agenda ICS mantém suas janelas. Não há central de lembretes pessoais com CRUD, recorrência, fuso, adiamento e silêncio. A implementação reutilizará o sino e as funções de conversão de fuso existentes. O canal anunciado será o aviso dentro do app aberto, com retomada dos lembretes pendentes de hoje; não se prometerá push com o app fechado.
 
 ### BLOQUEADAS
 
@@ -157,15 +156,6 @@
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 117 · Lembretes personalizados com adiamento e período de silêncio
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** permitir escolher os horários e dias para check-in, respiração e hábitos, adiar um lembrete e definir um período de silêncio.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reaproveitar o sino de notificações, o agendador diário e os lembretes ICS existentes. Eles não constituem uma central de lembretes pessoais configuráveis; não recriar calendário nem notificações já entregues.
-- **Escopo funcional:** criar, consultar, editar, ativar, desativar e excluir lembretes por titular; configurar recorrência, fuso horário, adiamento, dias e silêncio. Definir e explicar os canais realmente suportados, permissões e limites de entrega com o app fechado; não prometer push sem infraestrutura e comprovação. Evitar duplicações e respeitar descanso e preferência de contato.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** conferir persistência, recorrência, mudança de fuso, horário de verão quando aplicável, silêncio, adiamento, exclusão e entrega real em cada canal anunciado, com recusas de acesso entre contas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ### 118 · Busca no conteúdo das conversas e respostas favoritas
 
@@ -2082,3 +2072,19 @@
 - **Retomada em 2026-10-27:** ambiente disponível, rascunho recuperado e conferido contra a main `f35e9ef`. Reexecutar os gates e o QA antes da publicação; a interrupção anterior não é mais um bloqueio. Código ainda não concluído.
 
 - **Implementação e validação em 2026-10-27:** os sete arquivos do rascunho foram recuperados e reaproveitados. Resumo essencial, cinco abas, sete grupos e 43 cartões preservados; URL, carregamento sob demanda, erro e retentativa. O QA identificou e corrigiu a desmontagem das avaliações durante a atualização das métricas. Passaram instalação congelada sem rede, formato, lint, tipos, 613 unitários, 394 integrações MySQL e build limpo de produção. Navegador: quatro perfis, 320/390/768/1440, zoom 200%, 45 verificações axe sem violações, formulário e banco, humor e abas internas, recarga/novo login, falha 503/retentativa, matriz com recursos desativados e isolamento. Nenhuma exceção JavaScript. Banco temporário e processos encerrados. Relatório em `docs/auditoria/2026-10-27-painel-114.md`. **Commit:** `c2b14e828e672daacc554fc633e09e202f913441` · **Publicação:** confirmada na `main` pela API autenticada do GitHub, com verificação do SHA remoto e sincronização local; nenhuma branch ou worktree criada.
+
+### 116 · README simples, objetivo e acolhedor para o usuário entender o app
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-27; retomada permanente autorizada pelo usuário.
+- **Pedido do usuário:** atualizar o `README.md` para ser o mais simples, objetivo, assertivo e rápido de ler, contendo emoticons e gatilhos emocionais. Retirar todas as referências técnicas e explicações de instalação e configuração. O objetivo é que uma pessoa leia o README e entenda o que o app faz.
+- **Conferência prévia obrigatória:** ler o README atual e confrontar a apresentação com as funcionalidades realmente implementadas e disponíveis. Reaproveitar os textos e diferenciais pertinentes, retirando conteúdo repetido, desatualizado ou sem utilidade para o usuário. Não apresentar tarefas pendentes, integrações não validadas ou a prévia de uma interface como recursos já entregues.
+- **Conteúdo e linguagem:** apresentar em pt-BR acessível o propósito da Lyra MetaCare, para quem ela é, o que a pessoa pode fazer e quais benefícios concretos encontra no uso diário. Usar frases curtas, organização fácil de percorrer, emoticons pertinentes e apelos emocionais de acolhimento, curiosidade e motivação, com naturalidade e sem exageros, promessas de resultado garantido ou afirmações sem sustentação. Priorizar clareza e entendimento imediato para leigos.
+- **Remoção do conteúdo técnico:** retirar do README referências a linguagens, frameworks, versões, stack, arquitetura, estrutura de pastas, dependências, comandos, código, infraestrutura, banco de dados, testes e explicações de instalação ou configuração. Remover seções, tabelas, badges e links cuja finalidade seja técnica. Preservar a documentação operacional necessária nos arquivos técnicos apropriados, sem recolocar os detalhes técnicos ou os passos de instalação no README voltado ao usuário.
+- **Fidelidade e apresentação:** manter o nome, o logo e a identidade visual oficial do app, os diferenciais reais e informações essenciais de privacidade e limites de bem-estar em linguagem breve e compreensível. Evitar jargões e títulos excessivos, blocos longos, conteúdo decorativo que atrapalhe a leitura ou mensagens que confundam autoconhecimento com diagnóstico. O arquivo deve funcionar como apresentação do produto para o usuário, sem exigir conhecimento de tecnologia.
+- **Validação e entrega:** conferir cada funcionalidade e benefício descrito contra o app real, revisar clareza, concisão, pt-BR, emoticons, links e renderização Markdown no desktop e celular. Comprovar a retirada do conteúdo técnico, de instalação e de configuração, sem apagar a documentação operacional do projeto ou inventar funcionalidades. Executar as verificações documentais pertinentes, revisar diff e status, publicar commit e push próprios na `main`, sem branches ou worktrees, e atualizar o painel com SHA e evidências reais. Este registro não representa reescrita iniciada ou concluída.
+
+- **Conferência em 2026-10-27:** o README ainda apresenta stack, instalação, configuração, arquitetura e contagens antigas. A reescrita preservará a documentação operacional em arquivo próprio e apresentará apenas recursos entregues, com logo oficial, limites e privacidade em linguagem simples.
+
+- **Conclusão em 2026-10-27:** README com 235 palavras, logo oficial, emojis e seis usos comprovados; limites e privacidade em linguagem simples. Conteúdo técnico preservado em `docs/guia-operacional.md`, com links ajustados. Nenhuma tarefa ainda pendente foi anunciada como entregue.
+- **Validação:** três prévias locais Markdown/GFM em 1280/390/320 px, logo e emojis carregados, ausência de estouro horizontal e zero violações nas regras axe executadas. 23 links locais conferidos. Instalação congelada, pnpm 11.28.4 via Corepack, formato, lint, tipos, 621 unitários, 400 integrações MySQL 9.7.2, build e saúde de produção HTTP 200 aprovados. Auditoria em `docs/auditoria/2026-10-27-readme-116.md`.
+- **Commit e publicação:** `a64912b654e739f0f9dd0d5a7f06599bf868f795`, confirmado na `main` pela API autenticada do GitHub, sem branches ou worktrees.
