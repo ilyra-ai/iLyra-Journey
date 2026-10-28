@@ -211,3 +211,12 @@ existentes do titular, com pares e lacunas rastreáveis e critérios explícitos
 Dias não registrados não são ausência; excluir marcador invalida os dias
 afetados até revisão. Contratos e interpretação em
 [Acontecimentos pessoais](./acontecimentos-pessoais.md).
+
+## Experiências pessoais acompanhadas (tarefa 121)
+
+`GET/POST /api/experiencias`, `GET/POST/DELETE /api/experiencias/[id]` e
+`PUT/DELETE /api/experiencias/[id]/relatos/[data]` exigem sessão, hábitos
+pessoais e histórico autorizado. Proposta idempotente, versões, pausas reais,
+encerramento explícito e revisão local usam dados do titular. Leituras não
+podem ser armazenadas em cache. Contratos, códigos e limites em
+[Experiências pessoais](./experiencias-pessoais.md).

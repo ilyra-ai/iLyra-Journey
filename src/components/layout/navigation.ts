@@ -146,6 +146,15 @@ export const navigationItems: NavigationDefinition[] = [
     sectionKey: 'personal',
   },
   {
+    href: '/experiencias',
+    label: 'Minhas experiências',
+    description:
+      'Acompanhe pequenas mudanças escolhidas por você e revise seus registros.',
+    icon: ClipboardList,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+  },
+  {
     href: '/monitoring',
     label: 'Monitoramento',
     description: 'Seus sinais em tempo real, com alertas e leitura por voz.',

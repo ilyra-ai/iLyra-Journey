@@ -278,3 +278,14 @@ A central e o sino compartilham avisos persistidos, com dias, horário, fuso,
 silêncio e adiamento. A entrega depende do app aberto e visível; não existe
 push ou e-mail. Contratos, recorrência, concorrência, retenção e testes estão
 em [Lembretes pessoais](./lembretes-pessoais.md).
+
+## Experiências pessoais acompanhadas
+
+Em **Minhas experiências**, defina objetivo, pequena mudança, duração e
+referência anterior. Confira o alinhamento do sono antes de iniciar: a
+proposta permanece preservada. Registre apenas o que observou em cada dia;
+um dia sem relato fica desconhecido. Pausar não aumenta o prazo e exclui
+os dias tocados pela pausa das medianas. Encerre quando desejar revisar;
+o encerramento não pode ser revertido. A comparação é descritiva e não
+comprova efeito da mudança. Saiba mais em
+[Experiências pessoais](./experiencias-pessoais.md).

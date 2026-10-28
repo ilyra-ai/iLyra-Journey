@@ -130,3 +130,13 @@ de nuvem existente; a ausência de autorização restringe a cadeia aos locais.
 Nome, e-mail, identificador da conta, nascimento bruto e segredos não integram
 o pedido. O modelo pode receber as colunas autorizadas do registro e fatos
 interpretativos já calculados, conforme os recursos do plano.
+
+## Experiências pessoais (tarefa 121)
+
+Propostas, relatos e pausas pertencem ao titular autenticado e são incluídos
+na exportação (`personal_experiments`, `personal_experiment_notes`,
+`personal_experiment_pauses`). Excluir proposta remove seu acompanhamento,
+preservando métricas e práticas; excluir conta remove todos esses dados.
+A revisão é local e não envia relatos a modelo externo. O histórico atual
+do plano continua limitando cada leitura. Consulte os
+[contratos e limites](./experiencias-pessoais.md).

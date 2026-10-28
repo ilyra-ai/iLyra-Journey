@@ -24,9 +24,9 @@
 | Progresso          | `█████████████████░░░` **85,8%** |
 | Tarefas totais     | 134                              |
 | 🟢 Finalizadas     | 115                              |
-| 🔵 Em andamento    | 0                                |
+| 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 5                                |
-| ⚪ A iniciar       | 14                               |
+| ⚪ A iniciar       | 13                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-28                       |
 
@@ -49,11 +49,22 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-28:** 120 concluída e publicada em `149b0bf2dd720365f1bfba85812a17cbbe656157`; próxima tarefa não bloqueada: 121. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-28:** 120 concluída e publicada em `149b0bf2dd720365f1bfba85812a17cbbe656157`; 121 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
+
+### 121 · Experiências pessoais acompanhadas para pequenas mudanças de rotina
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação da 120 e atualização imediata do painel, conforme retomada autorizada.
+- **Pedido do usuário:** escolher uma pequena mudança de rotina por alguns dias e revisar com a Lyra como se sentiu e o que mudou nos registros.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar metas, check-in, hábitos e resumo semanal. Distinguir a experiência acompanhada de uma meta comum e da observação retrospectiva de associações prevista na tarefa 120.
+- **Escopo funcional:** definir objetivo, mudança escolhida, período de referência, duração e registros de acompanhamento; permitir pausar, encerrar e excluir. Ao final, comparar dados disponíveis e relatos pessoais e apresentar limites e possíveis outros fatores. Não tratar a experiência como ensaio clínico, prometer causalidade ou propor alteração de tratamento.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir criação, datas, acompanhamento, interrupção, comparação com dados reais e casos sem referência suficiente, faltas de registro e mudança simultânea de hábitos, preservando privacidade e clareza. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência inicial:** `main` em `a513ec216b1fea65a0d92396aa84c35ecaeb4b33`; metas, hábitos, check-in e semana existem, mas não há experiência pessoal com proposta, referência, duração, pausa e revisão. Reutilizar os registros diários e os cálculos descritivos da 120 sem tratar observação como causalidade. Proposta e períodos serão preservados; acompanhamento e pausas serão reais, sem preencher dias ausentes nem somar metas/minutos. A revisão será identificada como análise local dos dados disponíveis, sem afirmar chamada a modelo externo.
 
 ### BLOQUEADAS
 
@@ -145,15 +156,6 @@
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 121 · Experiências pessoais acompanhadas para pequenas mudanças de rotina
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** escolher uma pequena mudança de rotina por alguns dias e revisar com a Lyra como se sentiu e o que mudou nos registros.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar metas, check-in, hábitos e resumo semanal. Distinguir a experiência acompanhada de uma meta comum e da observação retrospectiva de associações prevista na tarefa 120.
-- **Escopo funcional:** definir objetivo, mudança escolhida, período de referência, duração e registros de acompanhamento; permitir pausar, encerrar e excluir. Ao final, comparar dados disponíveis e relatos pessoais e apresentar limites e possíveis outros fatores. Não tratar a experiência como ensaio clínico, prometer causalidade ou propor alteração de tratamento.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** conferir criação, datas, acompanhamento, interrupção, comparação com dados reais e casos sem referência suficiente, faltas de registro e mudança simultânea de hábitos, preservando privacidade e clareza. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ### 122 · Relatório pessoal visual em PDF com seleção de período e conteúdo
 

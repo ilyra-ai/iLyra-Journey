@@ -1,0 +1,114 @@
+{
+  "verificacoes": [
+    "Criação real no navegador, período, alinhamento e URL persistidos",
+    "Relato opcional, validação vazia, persistência e texto escapado",
+    "Pausa e retomada com relógio real, dia excluído e prazo preservado",
+    "Encerramento explícito real preserva relatos e impede retomada",
+    "Referência real no banco, retrospectiva explícita, sobreposição e sono futuro ausente",
+    "Tabela com rolagem horizontal pelo teclado",
+    "Disponibilidade Free, Meta e Care e isolamento entre contas",
+    "Exclusão definitiva preserva métricas de origem",
+    "Correção e exclusão de relato encerrado pela interface",
+    "Falha real de leitura e recuperação sem perder propostas"
+  ],
+  "axe": [
+    {
+      "rotulo": "lista vazia móvel",
+      "aprovadas": 22,
+      "violacoes": []
+    },
+    {
+      "rotulo": "formulário móvel",
+      "aprovadas": 24,
+      "violacoes": []
+    },
+    {
+      "rotulo": "detalhe móvel sem dados",
+      "aprovadas": 27,
+      "violacoes": []
+    },
+    {
+      "rotulo": "relato móvel",
+      "aprovadas": 24,
+      "violacoes": []
+    },
+    {
+      "rotulo": "confirmação encerrar",
+      "aprovadas": 21,
+      "violacoes": []
+    },
+    {
+      "rotulo": "comparação móvel",
+      "aprovadas": 29,
+      "violacoes": []
+    },
+    {
+      "rotulo": "comparação desktop",
+      "aprovadas": 31,
+      "violacoes": []
+    },
+    {
+      "rotulo": "comparação janela reduzida",
+      "aprovadas": 29,
+      "violacoes": []
+    },
+    {
+      "rotulo": "relato janela reduzida",
+      "aprovadas": 24,
+      "violacoes": []
+    },
+    {
+      "rotulo": "lista plano meta",
+      "aprovadas": 22,
+      "violacoes": []
+    },
+    {
+      "rotulo": "lista plano care",
+      "aprovadas": 22,
+      "violacoes": []
+    },
+    {
+      "rotulo": "confirmação excluir",
+      "aprovadas": 21,
+      "violacoes": []
+    },
+    {
+      "rotulo": "detalhe 320px",
+      "aprovadas": 29,
+      "violacoes": []
+    },
+    {
+      "rotulo": "zoom 200%",
+      "aprovadas": 30,
+      "violacoes": []
+    },
+    {
+      "rotulo": "relato zoom 200%",
+      "aprovadas": 26,
+      "violacoes": []
+    },
+    {
+      "rotulo": "falha de leitura real",
+      "aprovadas": 25,
+      "violacoes": []
+    }
+  ],
+  "excecoes": [],
+  "tarefa": 121,
+  "data": "2026-10-28",
+  "unitarios": {
+    "testes": 665,
+    "arquivos": 81
+  },
+  "integracao_mysql": {
+    "testes": 468,
+    "arquivos": 52
+  },
+  "modelo_externo_chamado": false,
+  "ambiente": {
+    "mysql": "9.7.2",
+    "chrome": "151.0.7922.34",
+    "pnpm": "11.28.4"
+  },
+  "observacao": "Históricos usados no QA são fixtures locais identificadas. Pausa e encerramento no navegador usaram relógio real."
+}
