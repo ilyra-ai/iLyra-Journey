@@ -1,0 +1,136 @@
+{
+  "tarefa": 120,
+  "data": "2026-10-28",
+  "baseMain": "2cf4e4912d20c5d3d76951215a6e80df69951b2c",
+  "ambiente": {
+    "node": "24.22.1",
+    "pnpm": "11.28.4",
+    "mysql": "9.7.2",
+    "chrome": "151.0.7922.34",
+    "dockerExecutado": false
+  },
+  "unitarios": {
+    "aprovados": 655,
+    "arquivos": 80,
+    "novosCasos": 12,
+    "trabalhadores": 1,
+    "timeoutAlterado": false
+  },
+  "integracoes": {
+    "aprovadas": 453,
+    "arquivos": 51,
+    "novosCasos": 15,
+    "bancoReal": true,
+    "repeticaoAposReforcarDependencia": true
+  },
+  "gates": {
+    "formato": true,
+    "lintSemAvisos": true,
+    "tipos": true,
+    "buildProducaoLimpo": true,
+    "migracao050": true
+  },
+  "criteriosDeApresentacao": {
+    "pares": 14,
+    "porGrupo": 5,
+    "coberturaMinima": 0.7,
+    "amplitudeMinimaDiasCalendario": 14,
+    "criterioClinico": false
+  },
+  "navegador": {
+    "verificacoes": [
+      "marcador Unicode, confirmação explícita, nota literal e seleção persistidos por formulário",
+      "novo login, edição de nome e dia confirmado sem marcador sem inferir dados ausentes",
+      "ausência de evidência clara e exclusão do contexto sem apagar métrica real",
+      "medianas reproduzidas com pares e IDs reais, gráfico, lacunas, tabela e rolagem por teclado",
+      "métrica e alinhamento explícitos, dados contraditórios e ausência de alegação causal",
+      "exclusão de marcador invalida dias, limpa resultado antigo e exige nova confirmação",
+      "isolamento real de notas, dias e marcadores entre Free, Meta e Care",
+      "direitos da página, APIs e histórico revogados/restaurados sem apagar os registros",
+      "falha real de leitura e retentativa após restauração da tabela de QA",
+      "limite real de trinta marcadores e foco preservado"
+    ],
+    "axe": [
+      {
+        "rotulo": "diario-vazio-390",
+        "aprovadas": 24,
+        "violacoes": []
+      },
+      {
+        "rotulo": "dia-editor-320",
+        "aprovadas": 25,
+        "violacoes": []
+      },
+      {
+        "rotulo": "dia-editor-390",
+        "aprovadas": 25,
+        "violacoes": []
+      },
+      {
+        "rotulo": "dia-editor-768",
+        "aprovadas": 25,
+        "violacoes": []
+      },
+      {
+        "rotulo": "dia-editor-1440",
+        "aprovadas": 25,
+        "violacoes": []
+      },
+      {
+        "rotulo": "dia-editor-zoom",
+        "aprovadas": 26,
+        "violacoes": []
+      },
+      {
+        "rotulo": "comparacao-sem-dados-1440",
+        "aprovadas": 28,
+        "violacoes": []
+      },
+      {
+        "rotulo": "comparacao-320",
+        "aprovadas": 29,
+        "violacoes": []
+      },
+      {
+        "rotulo": "comparacao-390",
+        "aprovadas": 29,
+        "violacoes": []
+      },
+      {
+        "rotulo": "comparacao-768",
+        "aprovadas": 29,
+        "violacoes": []
+      },
+      {
+        "rotulo": "comparacao-1440",
+        "aprovadas": 29,
+        "violacoes": []
+      },
+      {
+        "rotulo": "tabela-dados-390",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "comparacao-zoom-200",
+        "aprovadas": 30,
+        "violacoes": []
+      },
+      {
+        "rotulo": "exclusao-marcador-1440",
+        "aprovadas": 21,
+        "violacoes": []
+      }
+    ],
+    "excecoes": [],
+    "sucesso": true
+  },
+  "limites": [
+    "Histórico de 16 dias preparado exclusivamente no banco de QA para validar os cálculos; não é acompanhamento de pessoa real.",
+    "Dados de fusos e calendário controlados nos testes são distintos do relógio real do navegador.",
+    "Não há inferência causal, teste de significância, imputação ou envio a modelos neste recurso.",
+    "O check-in depende do histórico na matriz existente; revogar o histórico bloqueia também o diário.",
+    "Axe cobre somente as regras e percursos executados.",
+    "Logs e capturas locais são temporários."
+  ]
+}

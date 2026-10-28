@@ -24,9 +24,9 @@
 | Progresso          | `█████████████████░░░` **85,1%** |
 | Tarefas totais     | 134                              |
 | 🟢 Finalizadas     | 114                              |
-| 🔵 Em andamento    | 0                                |
+| 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 5                                |
-| ⚪ A iniciar       | 15                               |
+| ⚪ A iniciar       | 14                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-28                       |
 
@@ -49,11 +49,22 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-28:** 119 concluída e publicada em `aa0a146b36d5520d379f4f3f3fe15fa2ade567af`; próxima tarefa não bloqueada: 120. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-28:** 119 concluída e publicada em `aa0a146b36d5520d379f4f3f3fe15fa2ade567af`; 120 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
+
+### 120 · Acontecimentos pessoais e descoberta de associações nos registros
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação da 119 e atualização imediata do painel, conforme retomada autorizada.
+- **Pedido do usuário:** marcar acontecimentos como viagem, café tarde ou dia estressante e explorar possíveis associações com sono e disposição.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reaproveitar métricas, hábitos, reflexões e histórico; os marcadores administrativos de contas não são acontecimentos do cotidiano registrados pelo próprio usuário.
+- **Escopo funcional:** permitir cadastrar e editar marcadores e acontecimentos datados, com notas opcionais, e visualizar sua relação temporal com métricas reais. Exigir quantidade e qualidade adequadas de dados antes de exibir associações; explicar período, amostra e ausência de evidência em linguagem simples. Não confundir correlação com causa, usar astrologia como medição ou inventar conclusões.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar CRUD, datas e fusos, ausência e insuficiência de dados, resultados contraditórios, cálculo reproduzível, rastreabilidade e isolamento por titular; conferir gráficos e alternativas textuais acessíveis. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência inicial:** `main` em `2cf4e4912d20c5d3d76951215a6e80df69951b2c`; métricas diárias, check-in, hábitos e reflexões existem; os marcadores administrativos não serão reaproveitados como acontecimentos pessoais. Os dias terão confirmação explícita, inclusive sem marcador, para não tratar ausência de registro como ausência de acontecimento. A análise usará somente sono e energia reais, com período e pares rastreáveis, limites de histórico e amostra mínima declarada, sem causalidade ou inferência de dados ausentes.
 
 ### BLOQUEADAS
 
@@ -145,15 +156,6 @@
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 120 · Acontecimentos pessoais e descoberta de associações nos registros
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** marcar acontecimentos como viagem, café tarde ou dia estressante e explorar possíveis associações com sono e disposição.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reaproveitar métricas, hábitos, reflexões e histórico; os marcadores administrativos de contas não são acontecimentos do cotidiano registrados pelo próprio usuário.
-- **Escopo funcional:** permitir cadastrar e editar marcadores e acontecimentos datados, com notas opcionais, e visualizar sua relação temporal com métricas reais. Exigir quantidade e qualidade adequadas de dados antes de exibir associações; explicar período, amostra e ausência de evidência em linguagem simples. Não confundir correlação com causa, usar astrologia como medição ou inventar conclusões.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar CRUD, datas e fusos, ausência e insuficiência de dados, resultados contraditórios, cálculo reproduzível, rastreabilidade e isolamento por titular; conferir gráficos e alternativas textuais acessíveis. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ### 121 · Experiências pessoais acompanhadas para pequenas mudanças de rotina
 

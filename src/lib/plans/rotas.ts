@@ -23,6 +23,7 @@ export const RECURSOS_DA_ROTA: Readonly<
   '/respiracao': ['guided_breathing'],
   '/lembretes': ['personal_notifications'],
   '/rotinas': ['personal_habits'],
+  '/acontecimentos': ['daily_checkin'],
   '/plan': ['ai_plan_generations'],
   '/goals': ['goal_progress_tracking'],
   // Toda consulta pertence a um profissional cadastrado na mesma página.

@@ -200,3 +200,14 @@ Definições e transições usam versões; início usa um identificador idempote
 As práticas associadas conservam as permissões próprias. Leituras privadas
 sem cache. Conclusão e pulo são distintos e não somam métricas ou metas.
 Contratos, limites e persistência em [Rotinas pessoais](./rotinas-pessoais.md).
+
+## Acontecimentos pessoais (tarefa 120)
+
+`GET /api/acontecimentos`, CRUD em `/api/acontecimentos/marcadores` e
+`/api/acontecimentos/marcadores/[id]`, e `GET/PUT/DELETE` em
+`/api/acontecimentos/dias/[data]` exigem `daily_checkin`. `POST /api/acontecimentos/comparar` exige também histórico de métricas autorizado.
+As consultas são privadas sem cache; a comparação usa somente registros
+existentes do titular, com pares e lacunas rastreáveis e critérios explícitos.
+Dias não registrados não são ausência; excluir marcador invalida os dias
+afetados até revisão. Contratos e interpretação em
+[Acontecimentos pessoais](./acontecimentos-pessoais.md).

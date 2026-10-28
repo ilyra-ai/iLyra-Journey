@@ -137,6 +137,15 @@ export const navigationItems: NavigationDefinition[] = [
     sectionKey: 'personal',
   },
   {
+    href: '/acontecimentos',
+    label: 'Acontecimentos',
+    description:
+      'Seu contexto cotidiano e a relação com registros de sono e energia.',
+    icon: ClipboardList,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+  },
+  {
     href: '/monitoring',
     label: 'Monitoramento',
     description: 'Seus sinais em tempo real, com alertas e leitura por voz.',

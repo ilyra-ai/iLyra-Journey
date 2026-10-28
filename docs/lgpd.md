@@ -91,6 +91,16 @@ As APIs exigem `personal_habits`; as práticas associadas mantêm seus direitos
 próprios. Não há envio a modelos externos nem geração de métricas a partir
 da simples conclusão de passos.
 
+## Acontecimentos pessoais (tarefa 120)
+
+Marcadores, notas, confirmação dos dias e vínculos são relatos privados do
+titular. `personal_event_markers`, `personal_event_days` e
+`personal_event_day_markers` integram a exportação e são removidas em cascata
+com a conta. Excluir contexto não apaga métricas; excluir marcador exige nova
+revisão dos dias afetados. A comparação filtra a conta, respeita a janela do
+plano e não envia dados a modelos externos. Ausência de registro não é tratada
+como ausência de acontecimento ou valor zero.
+
 ## Fronteiras externas
 
 - **Stripe:** sem credencial real no ambiente de desenvolvimento, o `invoice.paid` foi validado com eventos assinados localmente pela SDK oficial (`src/app/api/lgpd.integration.test.ts`).
