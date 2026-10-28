@@ -128,6 +128,15 @@ export const navigationItems: NavigationDefinition[] = [
     sectionKey: 'personal',
   },
   {
+    href: '/rotinas',
+    label: 'Minhas rotinas',
+    description:
+      'Sequências pessoais para começar o dia ou preparar o descanso.',
+    icon: ClipboardList,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+  },
+  {
     href: '/monitoring',
     label: 'Monitoramento',
     description: 'Seus sinais em tempo real, com alertas e leitura por voz.',

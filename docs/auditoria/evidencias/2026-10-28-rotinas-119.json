@@ -1,0 +1,144 @@
+{
+  "tarefa": 119,
+  "data": "2026-10-28",
+  "baseMain": "2a8fc8b3d4526dac2f44776f23244ac5d0f4319d",
+  "ambiente": {
+    "node": "24.22.1",
+    "pnpm": "11.28.4",
+    "mysql": "9.7.2",
+    "chrome": "151.0.7922.34",
+    "dockerExecutado": false
+  },
+  "unitarios": {
+    "aprovados": 643,
+    "arquivos": 79,
+    "trabalhadores": 1,
+    "timeoutAlterado": false
+  },
+  "integracoes": {
+    "aprovadas": 438,
+    "arquivos": 50,
+    "novosCasos": 13,
+    "bancoReal": true
+  },
+  "gates": {
+    "formato": true,
+    "lintSemAvisos": true,
+    "tipos": true,
+    "buildProducaoLimpo": true,
+    "migracao049": true
+  },
+  "navegador": {
+    "verificacoes": [
+      "criação real, frequência, duração prevista, hábito autorizado e ordenação por teclado/botões",
+      "conclusão parcial, pausa, recarga, novo login e snapshot preservado após edição",
+      "conclusão e pulo distintos, término verdadeiro e nenhuma soma artificial de metas/minutos",
+      "nova execução independente após término",
+      "isolamento entre contas reais Free/Care em leitura e mutação",
+      "revogação real da matriz oculta rota/menu e recusa API, com restauração",
+      "falha real de leitura e retentativa após restaurar tabela de QA",
+      "exclusão com confirmação, cascata real, hábito preservado e retorno de foco",
+      "limite de trinta rotinas e foco preservado quando criação fica desabilitada"
+    ],
+    "axe": [
+      {
+        "rotulo": "rotinas-vazio-390",
+        "aprovadas": 22,
+        "violacoes": []
+      },
+      {
+        "rotulo": "editor-320",
+        "aprovadas": 26,
+        "violacoes": []
+      },
+      {
+        "rotulo": "editor-390",
+        "aprovadas": 26,
+        "violacoes": []
+      },
+      {
+        "rotulo": "editor-768",
+        "aprovadas": 26,
+        "violacoes": []
+      },
+      {
+        "rotulo": "editor-1440",
+        "aprovadas": 26,
+        "violacoes": []
+      },
+      {
+        "rotulo": "editor-zoom-200",
+        "aprovadas": 26,
+        "violacoes": []
+      },
+      {
+        "rotulo": "execucao-320",
+        "aprovadas": 25,
+        "violacoes": []
+      },
+      {
+        "rotulo": "execucao-390",
+        "aprovadas": 25,
+        "violacoes": []
+      },
+      {
+        "rotulo": "execucao-768",
+        "aprovadas": 26,
+        "violacoes": []
+      },
+      {
+        "rotulo": "execucao-1440",
+        "aprovadas": 26,
+        "violacoes": []
+      },
+      {
+        "rotulo": "meta-vazio-390",
+        "aprovadas": 22,
+        "violacoes": []
+      },
+      {
+        "rotulo": "exclusao-390",
+        "aprovadas": 21,
+        "violacoes": []
+      }
+    ],
+    "excecoes": [],
+    "sucesso": true
+  },
+  "conferenciaVisual": {
+    "verificacoes": [
+      "prática associada, progresso e ações em celular, desktop e zoom"
+    ],
+    "axe": [
+      {
+        "rotulo": "execucao-visual-320",
+        "aprovadas": 25,
+        "violacoes": []
+      },
+      {
+        "rotulo": "execucao-visual-390",
+        "aprovadas": 25,
+        "violacoes": []
+      },
+      {
+        "rotulo": "execucao-visual-1440",
+        "aprovadas": 26,
+        "violacoes": []
+      },
+      {
+        "rotulo": "execucao-visual-zoom",
+        "aprovadas": 26,
+        "violacoes": []
+      }
+    ],
+    "excecoes": [],
+    "sucesso": true
+  },
+  "limites": [
+    "Minutos são previsão; conclusão não registra métrica, sessão de prática nem progresso de meta.",
+    "Dias indicam frequência sugerida; não há início automático.",
+    "Roteiro funcional completo no Free; Meta e Care também conferidos para disponibilidade e isolamento.",
+    "Axe cobre somente as regras e percursos executados.",
+    "Logs e capturas locais são temporários."
+  ]
+}

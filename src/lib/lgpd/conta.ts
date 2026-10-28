@@ -239,6 +239,8 @@ const TABELAS_DO_TITULAR = [
   ['chat_conversations', 'user_id'],
   ['chat_turns', 'user_id'],
   ['chat_favorites', 'user_id'],
+  ['personal_routines', 'user_id'],
+  ['personal_routine_runs', 'user_id'],
   ['lyra_address_preferences', 'user_id'],
   ['memory_preferences', 'user_id'],
   ['memory_episodes', 'user_id'],

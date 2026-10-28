@@ -190,3 +190,13 @@ idempotente. Todas exigem sessão e `chat_history`. O termo fica no corpo do
 pedido e a leitura é privada sem cache. A abertura original usa `alvo` em
 `/api/chat/conversas/[id]`; `depois` complementa a paginação `antes` existente.
 Regras, erros e limites em [Busca e favoritos](./pesquisa-e-favoritos.md).
+
+## Rotinas pessoais (tarefa 119)
+
+`GET/POST /api/rotinas`, `PUT/DELETE /api/rotinas/[id]`,
+`POST /api/rotinas/[id]/iniciar` e
+`POST /api/rotinas/execucoes/[id]` exigem sessão e `personal_habits`.
+Definições e transições usam versões; início usa um identificador idempotente.
+As práticas associadas conservam as permissões próprias. Leituras privadas
+sem cache. Conclusão e pulo são distintos e não somam métricas ou metas.
+Contratos, limites e persistência em [Rotinas pessoais](./rotinas-pessoais.md).

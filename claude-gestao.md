@@ -24,9 +24,9 @@
 | Progresso          | `█████████████████░░░` **84,3%** |
 | Tarefas totais     | 134                              |
 | 🟢 Finalizadas     | 113                              |
-| 🔵 Em andamento    | 0                                |
+| 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 5                                |
-| ⚪ A iniciar       | 16                               |
+| ⚪ A iniciar       | 15                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-28                       |
 
@@ -49,11 +49,22 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-28:** 118 concluída e publicada em `d5920dbe657f0faf9b470818a5bf198a90136c0b`; próxima tarefa não bloqueada: 119. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-28:** 118 concluída e publicada em `d5920dbe657f0faf9b470818a5bf198a90136c0b`; 119 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
+
+### 119 · Rotinas pessoais guiadas com sequência de passos
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação da 118 e atualização imediata do painel, conforme retomada autorizada.
+- **Pedido do usuário:** abrir uma rotina como Minha manhã ou Preparar para dormir, seguir poucos passos e marcar cada conclusão.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar hábitos, metas, plano diário, respiração e registros reais. O agendador técnico do coach não é uma rotina pessoal com sequência interativa; evitar duplicar pontuação ou minutos já registrados.
+- **Escopo funcional:** permitir criar, editar, ordenar, iniciar, pausar, retomar e excluir rotinas e seus passos, com duração opcional e frequência. Oferecer sugestões pertinentes sem impor atividades e permitir pular um passo. Integrar práticas existentes e apresentar conclusão e progresso verdadeiros, com regras claras para contagem em metas.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar CRUD, ordenação, execução parcial, recarga, retomada, passos pulados, concorrência e integração sem dupla contagem, em celular e desktop. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência inicial:** `main` em `2a8fc8b3d4526dac2f44776f23244ac5d0f4319d`; hábitos, metas, plano diário e respiração existem, mas não há sequências pessoais interativas. Reutilizar as práticas por seus destinos autorizados. Concluir um passo não somará minutos, pontuação nem progresso de metas; os registros reais continuam nas práticas existentes. Execuções guardarão uma cópia dos passos e versões para retomada e concorrência.
 
 ### BLOQUEADAS
 
@@ -145,15 +156,6 @@
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 119 · Rotinas pessoais guiadas com sequência de passos
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** abrir uma rotina como Minha manhã ou Preparar para dormir, seguir poucos passos e marcar cada conclusão.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar hábitos, metas, plano diário, respiração e registros reais. O agendador técnico do coach não é uma rotina pessoal com sequência interativa; evitar duplicar pontuação ou minutos já registrados.
-- **Escopo funcional:** permitir criar, editar, ordenar, iniciar, pausar, retomar e excluir rotinas e seus passos, com duração opcional e frequência. Oferecer sugestões pertinentes sem impor atividades e permitir pular um passo. Integrar práticas existentes e apresentar conclusão e progresso verdadeiros, com regras claras para contagem em metas.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar CRUD, ordenação, execução parcial, recarga, retomada, passos pulados, concorrência e integração sem dupla contagem, em celular e desktop. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ### 120 · Acontecimentos pessoais e descoberta de associações nos registros
 

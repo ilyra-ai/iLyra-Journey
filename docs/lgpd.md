@@ -81,6 +81,16 @@ original filtram o titular e respeitam `chat_history`. A consulta não envia
 texto a modelos; o termo fica no corpo do pedido, fora da URL. A retirada da
 permissão recusa a consulta e as mutações sem apagar o histórico.
 
+## Rotinas pessoais (tarefa 119)
+
+`personal_routines` e `personal_routine_runs` guardam definições e execuções do
+titular, incluindo os passos preservados no início e seus estados declarados.
+Ambas integram a exportação e são removidas com a conta. Excluir a rotina
+remove suas execuções e preserva os hábitos, metas e práticas existentes.
+As APIs exigem `personal_habits`; as práticas associadas mantêm seus direitos
+próprios. Não há envio a modelos externos nem geração de métricas a partir
+da simples conclusão de passos.
+
 ## Fronteiras externas
 
 - **Stripe:** sem credencial real no ambiente de desenvolvimento, o `invoice.paid` foi validado com eventos assinados localmente pela SDK oficial (`src/app/api/lgpd.integration.test.ts`).
