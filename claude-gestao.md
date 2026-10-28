@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `█████████████████░░░` **85,1%** |
+| Progresso          | `█████████████████░░░` **85,8%** |
 | Tarefas totais     | 134                              |
-| 🟢 Finalizadas     | 114                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 115                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 5                                |
 | ⚪ A iniciar       | 14                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-28                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (114 ÷ 134 ≈ 85,1%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (115 ÷ 134 ≈ 85,8%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,22 +49,11 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-28:** 119 concluída e publicada em `aa0a146b36d5520d379f4f3f3fe15fa2ade567af`; 120 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-28:** 120 concluída e publicada em `149b0bf2dd720365f1bfba85812a17cbbe656157`; próxima tarefa não bloqueada: 121. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 120 · Acontecimentos pessoais e descoberta de associações nos registros
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação da 119 e atualização imediata do painel, conforme retomada autorizada.
-- **Pedido do usuário:** marcar acontecimentos como viagem, café tarde ou dia estressante e explorar possíveis associações com sono e disposição.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reaproveitar métricas, hábitos, reflexões e histórico; os marcadores administrativos de contas não são acontecimentos do cotidiano registrados pelo próprio usuário.
-- **Escopo funcional:** permitir cadastrar e editar marcadores e acontecimentos datados, com notas opcionais, e visualizar sua relação temporal com métricas reais. Exigir quantidade e qualidade adequadas de dados antes de exibir associações; explicar período, amostra e ausência de evidência em linguagem simples. Não confundir correlação com causa, usar astrologia como medição ou inventar conclusões.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar CRUD, datas e fusos, ausência e insuficiência de dados, resultados contraditórios, cálculo reproduzível, rastreabilidade e isolamento por titular; conferir gráficos e alternativas textuais acessíveis. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Conferência inicial:** `main` em `2cf4e4912d20c5d3d76951215a6e80df69951b2c`; métricas diárias, check-in, hábitos e reflexões existem; os marcadores administrativos não serão reaproveitados como acontecimentos pessoais. Os dias terão confirmação explícita, inclusive sem marcador, para não tratar ausência de registro como ausência de acontecimento. A análise usará somente sono e energia reais, com período e pares rastreáveis, limites de histórico e amostra mínima declarada, sem causalidade ou inferência de dados ausentes.
 
 ### BLOQUEADAS
 
@@ -2116,3 +2105,18 @@
 - **Conclusão em 2026-10-28:** CRUD de rotinas pessoais, dias sugeridos, duração prevista, reordenação acessível, hábitos ativos e destinos de práticas autorizadas. Execuções persistidas com pausa, retomada, conclusão e pulo distintos, snapshot preservado após edição, início idempotente e versões contra concorrência. Migração 049, isolamento, `personal_habits`, exportação e cascata. A conclusão de passos não gera minutos, pontos ou progresso de metas.
 - **Validação:** formato, lint sem avisos, tipos, 643 unitários em 79 arquivos, 438 integrações MySQL reais em 50 arquivos e build limpo aprovados. Nove verificações funcionais e 16 execuções axe sem violações nos percursos finais, em 320/390/768/1440 e zoom 200%; capturas de editor e execução inspecionadas. Retomada após novo login, edição durante pausa, passos pulados, revogação/restauração da matriz, falha real e retentativa, exclusão e limite de 30 com foco preservado. Corrigidos bloqueio entre conexões na permissão da prática e metadados extras ao editar. Relatório: `docs/auditoria/2026-10-28-rotinas-119.md`.
 - **Commit e publicação:** `aa0a146b36d5520d379f4f3f3fe15fa2ade567af`, confirmado na `main` pela API autenticada do GitHub, com conteúdo idêntico à revisão local, sem branches ou worktrees.
+
+### 120 · Acontecimentos pessoais e descoberta de associações nos registros
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação da 119 e atualização imediata do painel, conforme retomada autorizada.
+- **Pedido do usuário:** marcar acontecimentos como viagem, café tarde ou dia estressante e explorar possíveis associações com sono e disposição.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reaproveitar métricas, hábitos, reflexões e histórico; os marcadores administrativos de contas não são acontecimentos do cotidiano registrados pelo próprio usuário.
+- **Escopo funcional:** permitir cadastrar e editar marcadores e acontecimentos datados, com notas opcionais, e visualizar sua relação temporal com métricas reais. Exigir quantidade e qualidade adequadas de dados antes de exibir associações; explicar período, amostra e ausência de evidência em linguagem simples. Não confundir correlação com causa, usar astrologia como medição ou inventar conclusões.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar CRUD, datas e fusos, ausência e insuficiência de dados, resultados contraditórios, cálculo reproduzível, rastreabilidade e isolamento por titular; conferir gráficos e alternativas textuais acessíveis. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência inicial:** `main` em `2cf4e4912d20c5d3d76951215a6e80df69951b2c`; métricas diárias, check-in, hábitos e reflexões existem; os marcadores administrativos não serão reaproveitados como acontecimentos pessoais. Os dias terão confirmação explícita, inclusive sem marcador, para não tratar ausência de registro como ausência de acontecimento. A análise usará somente sono e energia reais, com período e pares rastreáveis, limites de histórico e amostra mínima declarada, sem causalidade ou inferência de dados ausentes.
+
+- **Conclusão em 2026-10-28:** marcadores e dias pessoais com confirmação explícita, notas, edição, exclusão e versões. Excluir marcador invalida os dias afetados até nova revisão, sem convertê-los em ausência. Comparação descritiva de sono/energia reais, alinhamento temporal escolhido, pares e lacunas rastreáveis, critérios mínimos declarados, contradições e fatores concomitantes explícitos. Gráfico com formas distintas e tabela acessível por teclado. Migração 050, direito de check-in e dependência do histórico preservados, isolamento também no MySQL, exportação e cascata. Sem imputação, astrologia como medição, causalidade ou envio a modelos.
+- **Validação:** formato, lint sem avisos, tipos, 655 unitários em 80 arquivos, 453 integrações MySQL reais em 51 arquivos e build limpo aprovados. Dez verificações funcionais e 14 execuções axe sem violações nos percursos finais, em 320/390/768/1440 e zoom 200%; capturas e cores computadas inspecionadas. Novo login, nota literal, amostra insuficiente, medianas e IDs de origem, contradições, revisão invalidada/reconfirmada, três planos, revogação/restauração, falha real/retentativa e limite de 30 com foco preservado. Corrigidos exportação sem data de criação, região de rolagem da tabela, tokens HSL do SVG e aviso de confirmação antigo. Históricos de QA são fixtures identificadas, não acompanhamento clínico de pessoas. Relatório: `docs/auditoria/2026-10-28-acontecimentos-120.md`.
+- **Commit e publicação:** `149b0bf2dd720365f1bfba85812a17cbbe656157`, confirmado na `main` pela API autenticada do GitHub, com conteúdo idêntico à revisão local, sem branches ou worktrees.
