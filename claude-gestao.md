@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `█████████████████░░░` **83,6%** |
+| Progresso          | `█████████████████░░░` **84,3%** |
 | Tarefas totais     | 134                              |
-| 🟢 Finalizadas     | 112                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 113                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 5                                |
 | ⚪ A iniciar       | 16                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-28                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (112 ÷ 134 ≈ 83,6%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (113 ÷ 134 ≈ 84,3%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,22 +49,11 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-28:** 117 concluída e publicada em `8a6fe003396201b1fb0cefbbd595fd6fd446eabe`; 118 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-28:** 118 concluída e publicada em `d5920dbe657f0faf9b470818a5bf198a90136c0b`; próxima tarefa não bloqueada: 119. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 118 · Busca no conteúdo das conversas e respostas favoritas
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação e atualização do painel da 117, conforme retomada autorizada.
-- **Pedido do usuário:** encontrar orientações antigas por palavras e guardar respostas importantes da Lyra como favoritas.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar o histórico persistido e distinguir a busca atual de páginas e ações do app de uma busca no texto das conversas. Conferir antes se já existem favoritos em alguma entrega posterior.
-- **Escopo funcional:** buscar perguntas e respostas autorizadas do titular, apresentar trecho e data e abrir a mensagem original. Permitir favoritar, desfavoritar e listar respostas, com paginação e estados vazios claros. Preservar ordenação, histórico antigo, mensagens com imagens e futuros blocos da tarefa 113, sem expor o conteúdo de outras contas.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar termos com acentos, Unicode, ausência de resultado, reabertura da mensagem, paginação, favoritos persistidos, remoção de conversa e limites de histórico do plano. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Conferência em 2026-10-28:** `main` em `99c921f2b4d1ed635a488d1016f0a0295431eb8d`; histórico e paginação existem, mas a busca no texto e favoritos não foram encontrados. Reutilizar `chat_conversations`, `chat_turns`, imagens e partes estruturadas. A abertura de um resultado antigo precisa carregar o trecho original e manter acesso às mensagens anteriores e seguintes, sem recriar a conversa.
 
 ### BLOQUEADAS
 
@@ -2104,3 +2093,18 @@
 - **Conclusão em 2026-10-28:** central com CRUD por titular, dias, horário, fuso, silêncio, ativação/desativação, adiamento de 10/30/60 minutos e dispensa, reutilizando o sino. Transações e versões impedem duplicação e sobrescrita; direitos do plano, exportação e exclusão preservados. Canal real: aviso no app aberto e visível; sem promessa de push ou entrega com o app fechado.
 - **Validação:** instalação congelada, formato, lint, tipos, 629 unitários, 413 integrações MySQL 9.7.2 e build limpo aprovados. Entrega no sino com horário corrente, silêncio, adiamento conferido no banco, CRUD, quatro perfis, 320/390/768/1440, zoom 200%, novo login, falha real/retentativa e revogação/restauração da matriz. 27 verificações axe sem violações; foco e limite de 50 conferidos. Corrigidos deadlock, estouro no zoom e retorno de foco. Sem exceções JavaScript nos percursos aprovados. Relatório: `docs/auditoria/2026-10-28-lembretes-117.md`.
 - **Commit e publicação:** `8a6fe003396201b1fb0cefbbd595fd6fd446eabe`, confirmado na `main` pela API autenticada do GitHub, com árvore idêntica à revisão local. Nenhuma branch ou worktree criada. As bloqueadas permanecem preservadas.
+
+### 118 · Busca no conteúdo das conversas e respostas favoritas
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação e atualização do painel da 117, conforme retomada autorizada.
+- **Pedido do usuário:** encontrar orientações antigas por palavras e guardar respostas importantes da Lyra como favoritas.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar o histórico persistido e distinguir a busca atual de páginas e ações do app de uma busca no texto das conversas. Conferir antes se já existem favoritos em alguma entrega posterior.
+- **Escopo funcional:** buscar perguntas e respostas autorizadas do titular, apresentar trecho e data e abrir a mensagem original. Permitir favoritar, desfavoritar e listar respostas, com paginação e estados vazios claros. Preservar ordenação, histórico antigo, mensagens com imagens e futuros blocos da tarefa 113, sem expor o conteúdo de outras contas.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar termos com acentos, Unicode, ausência de resultado, reabertura da mensagem, paginação, favoritos persistidos, remoção de conversa e limites de histórico do plano. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência em 2026-10-28:** `main` em `99c921f2b4d1ed635a488d1016f0a0295431eb8d`; histórico e paginação existem, mas a busca no texto e favoritos não foram encontrados. Reutilizar `chat_conversations`, `chat_turns`, imagens e partes estruturadas. A abertura de um resultado antigo precisa carregar o trecho original e manter acesso às mensagens anteriores e seguintes, sem recriar a conversa.
+
+- **Conclusão em 2026-10-28:** busca literal nas perguntas e respostas próprias, trechos e data, abertura com foco na mensagem original e navegação bidirecional no histórico; favoritos persistidos, listagem, filtro, paginação e remoção. Refazer conserva a referência à resposta atual. Migração 048, autorização por titular e `chat_history`, exportação e exclusão em cascata.
+- **Validação:** formato, lint sem avisos, tipos, 636 unitários em 78 arquivos, 425 integrações MySQL reais em 49 arquivos e build limpo aprovados. Roteiro de produção com Free/Meta/Care, 95 mensagens por conversa, persistência após novo login, resposta nova/refeita do Motor Lyra local, revogação/restauração, falha real e retentativa. 12 verificações funcionais e 14 execuções axe sem violações nos percursos; 320/390/768/1440 e zoom 200%, sem sobreposição e com abertura após rolagem. Dois timeouts sob carga foram resolvidos com suíte sequencial sem mudar limites. Relatório: `docs/auditoria/2026-10-28-pesquisa-118.md`.
+- **Commit e publicação:** `d5920dbe657f0faf9b470818a5bf198a90136c0b`, confirmado na `main` pela API autenticada do GitHub, com conteúdo idêntico à revisão local, sem branches ou worktrees.
