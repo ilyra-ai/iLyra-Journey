@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `█████████████████░░░` **87,3%** |
+| Progresso          | `█████████████████░░░` **88,1%** |
 | Tarefas totais     | 134                              |
-| 🟢 Finalizadas     | 117                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 118                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 5                                |
 | ⚪ A iniciar       | 11                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-28                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (117 ÷ 134 ≈ 87,3%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (118 ÷ 134 ≈ 88,1%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,28 +49,11 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-28:** 123 concluída e publicada em `7d8dfabf47d7484267be9da90df58534e896ae38`; 123 reaberta para preservar alertas do sensor antes da 124. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-28:** 123 concluída e publicada, incluindo correção dos alertas do sensor em `7d09e92b5654685e66d0bcc0564b1fa69dfa6f56`; próxima tarefa não bloqueada: 124. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 123 · Modo descanso ou férias com pausa de cobranças e retorno gradual
-
-- **Status:** 🔵 reaberta para correção de integração · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação da 122 e atualização imediata do painel, conforme autorização permanente.
-- **Pedido do usuário:** pausar cobranças e adaptar metas durante um descanso ou férias, com retorno gradual e identificação transparente dos dias pausados.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar metas, hábitos, sequências e preferências de notificações, coordenando com a tarefa 117. Conferir critérios existentes antes de alterar cálculo de progresso.
-- **Escopo funcional:** ativar e encerrar uma pausa com período opcional, explicar seus efeitos sobre lembretes e metas e oferecer retomada gradual escolhida pelo usuário. Preservar histórico e medições, distinguir dias pausados de metas cumpridas e não fabricar sequências ou resultados. Não interpretar o modo como pausa da assinatura comercial.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar início e fim programados e manuais, alteração do período, notificações, metas, sequências, recarga e retorno, sem apagar dados ou alterar cobrança do plano. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Conferência inicial:** `main` em `3d32cc5b4cd9e2ef47588e65c00cbf5227cf68e0`; silêncio, lembretes, metas e sequências já existem, mas não pausa pessoal com histórico, dias neutros e retorno escolhido. Reutilizadas recorrências, faixas, critérios e registros; prazos originais e alvos não serão reescritos. Não haverá pausa de assinatura comercial nem dias cumpridos fictícios.
-
-- **Entrega real em 2026-10-28:** modo descanso com início/fim opcionais programados, encerramento real, fuso preservado, histórico paginado e retorno escolhido de 3/7/14 dias. Dias neutros não somam cumprimento nem quebram continuidade de registros reais. Prazos efetivos de metas escolhidas, originais e alvos preservados. Avisos de bem-estar pausados, pendências dispensadas sem recuperação tardia, retorno com até uma entrega diária da atividade escolhida e sem adiamentos. Consultas, registros e assinatura comercial preservados. Migração 052, propriedade, versões, trava compartilhada e LGPD completas.
-- **Validação:** formato, lint sem avisos, tipos, 684 unitários em 83 arquivos, 504 integrações MySQL reais em 54 arquivos e build limpo aprovados. Nove verificações funcionais e 13 execuções axe sem violações, 320/390/1280/1440 e zoom 200%, Tab contido e foco de retorno. Três planos e isolamento; check-in real sem sequência fictícia; entrega no minuto real do retorno sem repetição. Datas programadas e DST com relógio controlado explicitamente. Corrigidos semântica modal e criação tardia de horários vencidos durante pausa, inclusive entre fusos. Fixtures locais identificadas. Relatório: `docs/auditoria/2026-10-28-descanso-123.md`.
-- **Commit e publicação:** `7d8dfabf47d7484267be9da90df58534e896ae38`, confirmado na `main` pela API autenticada do GitHub, com conteúdo idêntico à revisão local, sem branches ou worktrees.
-
-- **Reabertura em 2026-10-28:** conferência do código de métricas encontrou alertas de frequência cardíaca no mesmo `coach_alerta` dos convites do coach. Restringir a pausa aos convites identificados, preservando a emissão e a leitura dos alertas do sensor; validar e publicar correção própria antes de iniciar a 124.
 
 ### BLOQUEADAS
 
@@ -2140,3 +2123,23 @@
 - **Entrega real em 2026-10-28:** relatório pessoal com seleção explícita de campos numéricos, reflexões, acontecimentos e notas; prévia privada e PDF A4 1.7 real, com fontes incorporadas, gráficos, datas, unidades, origem e lacunas. Revalidação de sessão, categorias, janela do plano e digest do conteúdo antes de baixar; alterações exigem nova prévia. Sem conversas, envio automático, link público ou retenção de PDFs pessoais no servidor.
 - **Validação:** formato, lint sem avisos, tipos, 671 unitários em 82 arquivos, 481 integrações MySQL reais em 53 arquivos e build limpo aprovados. Sete verificações funcionais e nove execuções axe sem violações, celular/desktop e zoom 200%, três planos e isolamento. PDFs de QA com 3/5/2/64 páginas abertos e renderizados; notas longas, 90 dias, acentos, Unicode estrutural, numeração, cabeçalhos/rodapés e limites de todas as palavras conferidos. Corrigidos incorporação WOFF2 por TTF oficial, páginas extras de rodapé, alvo de checkbox e preservação da CSP privada. Fixtures locais identificadas, sem prontuários de pacientes. Relatório: `docs/auditoria/2026-10-28-relatorio-122.md`.
 - **Commit e publicação:** `f90defba583afccfb272a2fc6b5c6f87290de0bc`, confirmado na `main` pela API autenticada do GitHub, com conteúdo idêntico à revisão local, sem branches ou worktrees.
+
+### 123 · Modo descanso ou férias com pausa de cobranças e retorno gradual
+
+- **Status:** 🟢 finalizada, incluindo correção dos alertas do sensor · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação da 122 e atualização imediata do painel, conforme autorização permanente.
+- **Pedido do usuário:** pausar cobranças e adaptar metas durante um descanso ou férias, com retorno gradual e identificação transparente dos dias pausados.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar metas, hábitos, sequências e preferências de notificações, coordenando com a tarefa 117. Conferir critérios existentes antes de alterar cálculo de progresso.
+- **Escopo funcional:** ativar e encerrar uma pausa com período opcional, explicar seus efeitos sobre lembretes e metas e oferecer retomada gradual escolhida pelo usuário. Preservar histórico e medições, distinguir dias pausados de metas cumpridas e não fabricar sequências ou resultados. Não interpretar o modo como pausa da assinatura comercial.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar início e fim programados e manuais, alteração do período, notificações, metas, sequências, recarga e retorno, sem apagar dados ou alterar cobrança do plano. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência inicial:** `main` em `3d32cc5b4cd9e2ef47588e65c00cbf5227cf68e0`; silêncio, lembretes, metas e sequências já existem, mas não pausa pessoal com histórico, dias neutros e retorno escolhido. Reutilizadas recorrências, faixas, critérios e registros; prazos originais e alvos não serão reescritos. Não haverá pausa de assinatura comercial nem dias cumpridos fictícios.
+
+- **Entrega real em 2026-10-28:** modo descanso com início/fim opcionais programados, encerramento real, fuso preservado, histórico paginado e retorno escolhido de 3/7/14 dias. Dias neutros não somam cumprimento nem quebram continuidade de registros reais. Prazos efetivos de metas escolhidas, originais e alvos preservados. Avisos de bem-estar pausados, pendências dispensadas sem recuperação tardia, retorno com até uma entrega diária da atividade escolhida e sem adiamentos. Consultas, registros e assinatura comercial preservados. Migração 052, propriedade, versões, trava compartilhada e LGPD completas.
+- **Validação:** formato, lint sem avisos, tipos, 684 unitários em 83 arquivos, 504 integrações MySQL reais em 54 arquivos e build limpo aprovados. Nove verificações funcionais e 13 execuções axe sem violações, 320/390/1280/1440 e zoom 200%, Tab contido e foco de retorno. Três planos e isolamento; check-in real sem sequência fictícia; entrega no minuto real do retorno sem repetição. Datas programadas e DST com relógio controlado explicitamente. Corrigidos semântica modal e criação tardia de horários vencidos durante pausa, inclusive entre fusos. Fixtures locais identificadas. Relatório: `docs/auditoria/2026-10-28-descanso-123.md`.
+- **Commit e publicação:** `7d8dfabf47d7484267be9da90df58534e896ae38`, confirmado na `main` pela API autenticada do GitHub, com conteúdo idêntico à revisão local, sem branches ou worktrees.
+
+- **Reabertura em 2026-10-28:** conferência do código de métricas encontrou alertas de frequência cardíaca no mesmo `coach_alerta` dos convites do coach. Restringir a pausa aos convites identificados, preservando a emissão e a leitura dos alertas do sensor; validar e publicar correção própria antes de iniciar a 124.
+
+- **Correção adicional validada em 2026-10-28:** o canal genérico também recebe alertas do sensor. A pausa agora usa classificação conservadora de convites conhecidos na emissão e na marcação de leitura; alertas `fc-alta:` e origens desconhecidas são preservados. Nenhum limiar de saúde foi alterado. 686 unitários em 84 arquivos, 506 integrações MySQL em 54 arquivos, formato, lint, tipos e build aprovados. Duas verificações funcionais e duas execuções axe adicionais no navegador confirmaram alerta anterior não lido e novo alerta da rota do sensor durante descanso, com dados de QA e sem alegar medição física.
+- **Commit da correção e publicação:** `7d09e92b5654685e66d0bcc0564b1fa69dfa6f56`, confirmado na `main` pela API autenticada do GitHub, sem branches ou worktrees.
