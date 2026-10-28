@@ -71,10 +71,12 @@ export default function PoliticaDePrivacidadePage() {
             métricas, a sua resposta a &quot;isso te ajudou?&quot;, a reflexão
             da noite, as sessões de respiração guiada, o link privado da agenda
             no calendário (guardado como resumo criptográfico e cifrado) e as
-            notificações do sino. Horários e recomendações são calculados nos
-            motores da própria Lyra; a leitura védica do dia pode ser escrita
-            pelo modelo de IA escolhido pela Lyra, só com dados astrológicos
-            (veja &quot;Com quem compartilhamos&quot;).
+            notificações do sino, os lembretes pessoais, seus dias, horários,
+            fuso, silêncio e adiamentos. Esses lembretes ficam na sua conta e
+            não são enviados por e-mail ou push. Horários e recomendações são
+            calculados nos motores da própria Lyra; a leitura védica do dia pode
+            ser escrita pelo modelo de IA escolhido pela Lyra, só com dados
+            astrológicos (veja &quot;Com quem compartilhamos&quot;).
           </li>
           <li>
             <strong>Dados de saúde e bem-estar (dados sensíveis):</strong>{' '}

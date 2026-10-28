@@ -21,6 +21,10 @@ import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { useKeyedResource } from '@/hooks/use-keyed-resource';
 import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { ouvirCoachAtualizado } from '@/lib/coach/evento-do-coach';
+import {
+  EVENTO_LEMBRETES,
+  avisarLembretesAtualizados,
+} from '@/lib/lembretes/eventos';
 import { scalePx } from '@/lib/site-page-config/runtime';
 import { cn } from '@/lib/utils';
 
@@ -29,14 +33,19 @@ interface Notificacao {
   titulo: string;
   detalhe: string;
   href: string;
-  tipo: 'consulta' | 'assinatura' | 'coach_dia' | 'coach_alerta';
+  tipo:
+    | 'consulta'
+    | 'assinatura'
+    | 'coach_dia'
+    | 'coach_alerta'
+    | 'lembrete_pessoal';
   /** Notificação do coach ainda não lida (consultas e avisos: sempre false). */
   nova: boolean;
 }
 
 interface NotificacaoDoServidor {
   id: string;
-  tipo: 'coach_dia' | 'coach_alerta';
+  tipo: 'coach_dia' | 'coach_alerta' | 'lembrete_pessoal';
   titulo: string;
   corpo: string;
   link: string | null;
@@ -73,6 +82,7 @@ const ICONE_DO_TIPO = {
   assinatura: CreditCard,
   coach_dia: Sunrise,
   coach_alerta: TriangleAlert,
+  lembrete_pessoal: Bell,
 } as const;
 
 function quando(iso: string) {
@@ -127,6 +137,7 @@ export function NotificationsMenu({ iconScale }: { iconScale: number }) {
   const userId = session?.user.id ?? null;
   const [versao, setVersao] = React.useState(0);
   const [lidasAoAbrir, setLidasAoAbrir] = React.useState(false);
+  const [falhaNosLembretes, setFalhaNosLembretes] = React.useState(false);
 
   React.useEffect(
     () => ouvirCoachAtualizado(() => setVersao((v) => v + 1)),
@@ -138,6 +149,53 @@ export function NotificationsMenu({ iconScale }: { iconScale: number }) {
     avisarFalha,
     SEM_NOTIFICACOES
   );
+
+  React.useEffect(() => {
+    if (!userId) return;
+    let ativo = true;
+    let verificando = false;
+    const abortador = new AbortController();
+    const verificar = async () => {
+      if (document.visibilityState !== 'visible' || verificando) return;
+      verificando = true;
+      try {
+        const r = await fetch('/api/lembretes/verificar', {
+          method: 'POST',
+          credentials: 'include',
+          signal: abortador.signal,
+        });
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const dados: { emitidos: number } = await r.json();
+        if (!ativo) return;
+        setFalhaNosLembretes(false);
+        await refresh();
+        if (dados.emitidos > 0) avisarLembretesAtualizados();
+      } catch {
+        if (ativo && !abortador.signal.aborted) setFalhaNosLembretes(true);
+      } finally {
+        verificando = false;
+      }
+    };
+    const aoVoltar = () => {
+      void verificar();
+    };
+    const aoAlterar = () => {
+      void refresh();
+    };
+    void verificar();
+    const intervalo = window.setInterval(aoVoltar, 60_000);
+    window.addEventListener('focus', aoVoltar);
+    document.addEventListener('visibilitychange', aoVoltar);
+    window.addEventListener(EVENTO_LEMBRETES, aoAlterar);
+    return () => {
+      ativo = false;
+      abortador.abort();
+      window.clearInterval(intervalo);
+      window.removeEventListener('focus', aoVoltar);
+      document.removeEventListener('visibilitychange', aoVoltar);
+      window.removeEventListener(EVENTO_LEMBRETES, aoAlterar);
+    };
+  }, [userId, refresh]);
 
   const aoAbrirOuFechar = (aberto: boolean) => {
     if (aberto && doServidor.naoLidas > 0) {
@@ -285,9 +343,21 @@ export function NotificationsMenu({ iconScale }: { iconScale: number }) {
             Notificações
           </p>
           <p className="text-xs text-muted-foreground">
-            Seu dia e alertas do coach, consultas dos próximos{' '}
-            {DIAS_DE_ANTECEDENCIA} dias e avisos da assinatura.
+            Lembretes pessoais, seu dia e alertas do coach, consultas dos
+            próximos {DIAS_DE_ANTECEDENCIA} dias e avisos da assinatura.
           </p>
+          <Link
+            href="/lembretes"
+            className="text-sm font-medium text-primary underline underline-offset-4"
+          >
+            Gerenciar lembretes
+          </Link>
+          {falhaNosLembretes && (
+            <p role="status" className="mt-2 text-xs text-destructive">
+              Não foi possível verificar os lembretes. Tentaremos novamente ao
+              voltar para o app ou em um minuto.
+            </p>
+          )}
         </div>
         {notificacoes.length === 0 ? (
           <p className="px-4 py-6 text-center text-sm text-muted-foreground">

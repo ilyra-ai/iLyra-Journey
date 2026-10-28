@@ -1,0 +1,180 @@
+{
+  "data": "2026-10-28",
+  "tarefa": 117,
+  "base": "e89b41f02634ee6744895dd932de324cc0b8afd6",
+  "unitarios": 629,
+  "integracoes_mysql": 413,
+  "migracoes": 47,
+  "qa": [
+    {
+      "verificacoes": [
+        "produção com MySQL e 47 migrations, saúde HTTP 200",
+        "free: página, plano efetivo e quatro larguras sem overflow ou violações axe",
+        "meta: página, plano efetivo e quatro larguras sem overflow ou violações axe",
+        "care: página, plano efetivo e quatro larguras sem overflow ou violações axe",
+        "CRUD pela interface grava título, atividade, horário e sete dias reais no MySQL",
+        "horário real atingido: silêncio impede entrega no sino",
+        "entrega real ao terminar silêncio, sino e link da mensagem, sem relógio simulado",
+        "adiamento na interface persiste dez minutos à frente no relógio do servidor",
+        "edição, desativação e reativação reais",
+        "exclusão confirmada remove lembrete, ocorrências e notificações",
+        "falha real de leitura em banco isolado e retentativa após restauração",
+        "matriz revoga página, menu e APIs e é restaurada",
+        "administrador acessa a central em desktop e celular",
+        "novo login preserva preferências"
+      ],
+      "axe": [
+        {
+          "label": "free-320-vazio",
+          "passes": 22,
+          "violations": []
+        },
+        {
+          "label": "free-390-vazio",
+          "passes": 22,
+          "violations": []
+        },
+        {
+          "label": "free-768-vazio",
+          "passes": 23,
+          "violations": []
+        },
+        {
+          "label": "free-1440-vazio",
+          "passes": 25,
+          "violations": []
+        },
+        {
+          "label": "meta-320-vazio",
+          "passes": 22,
+          "violations": []
+        },
+        {
+          "label": "meta-390-vazio",
+          "passes": 22,
+          "violations": []
+        },
+        {
+          "label": "meta-768-vazio",
+          "passes": 23,
+          "violations": []
+        },
+        {
+          "label": "meta-1440-vazio",
+          "passes": 25,
+          "violations": []
+        },
+        {
+          "label": "care-320-vazio",
+          "passes": 22,
+          "violations": []
+        },
+        {
+          "label": "care-390-vazio",
+          "passes": 22,
+          "violations": []
+        },
+        {
+          "label": "care-768-vazio",
+          "passes": 23,
+          "violations": []
+        },
+        {
+          "label": "care-1440-vazio",
+          "passes": 25,
+          "violations": []
+        },
+        {
+          "label": "free-390-formulario",
+          "passes": 27,
+          "violations": []
+        },
+        {
+          "label": "free-320-com-lembrete",
+          "passes": 24,
+          "violations": []
+        },
+        {
+          "label": "free-390-com-lembrete",
+          "passes": 24,
+          "violations": []
+        },
+        {
+          "label": "free-768-com-lembrete",
+          "passes": 25,
+          "violations": []
+        },
+        {
+          "label": "free-1440-com-lembrete",
+          "passes": 27,
+          "violations": []
+        },
+        {
+          "label": "free-zoom-200",
+          "passes": 27,
+          "violations": []
+        },
+        {
+          "label": "free-sino-entrega-real",
+          "passes": 25,
+          "violations": []
+        },
+        {
+          "label": "confirmacao-exclusao",
+          "passes": 23,
+          "violations": []
+        },
+        {
+          "label": "administrador-1440",
+          "passes": 26,
+          "violations": []
+        },
+        {
+          "label": "administrador-320",
+          "passes": 22,
+          "violations": []
+        }
+      ],
+      "excecoes_javascript": []
+    },
+    {
+      "verificacoes": [
+        "produção com MySQL e 47 migrations, saúde HTTP 200",
+        "validação acessível dos dias, Escape e retorno de foco",
+        "silêncio inválido é identificado e a preferência pode ser corrigida",
+        "ao alcançar 50 lembretes, o foco retorna à lista e a criação fica indisponível",
+        "cabeçalho preservado no painel, Perfil, chat e respiração em celular, desktop e zoom"
+      ],
+      "axe": [
+        {
+          "label": "visual-320",
+          "passes": 22,
+          "violations": []
+        },
+        {
+          "label": "visual-390",
+          "passes": 22,
+          "violations": []
+        },
+        {
+          "label": "visual-768",
+          "passes": 23,
+          "violations": []
+        },
+        {
+          "label": "visual-1440",
+          "passes": 25,
+          "violations": []
+        },
+        {
+          "label": "visual-zoom-200",
+          "passes": 25,
+          "violations": []
+        }
+      ],
+      "excecoes_javascript": []
+    }
+  ],
+  "entrega": "sino dentro do app aberto; prova com horário corrente",
+  "adiamento": "gravação real conferida no MySQL; nova entrega coberta por datas controladas nas integrações"
+}

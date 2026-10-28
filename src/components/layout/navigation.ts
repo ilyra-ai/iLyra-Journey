@@ -2,6 +2,7 @@ import { rotaForaDaNavegacao } from '@/lib/site-page-config/runtime';
 import type { LucideIcon } from 'lucide-react';
 import {
   BarChart3,
+  Bell,
   BrainCircuit,
   CalendarDays,
   CalendarRange,
@@ -116,6 +117,15 @@ export const navigationItems: NavigationDefinition[] = [
     section: 'Fluxo guiado',
     sectionKey: 'guidedFlow',
     shortcut: 'G A',
+  },
+  {
+    href: '/lembretes',
+    label: 'Lembretes',
+    description:
+      'Horários e dias para check-in, respiração e hábitos, com adiamento e silêncio.',
+    icon: Bell,
+    section: 'Pessoal',
+    sectionKey: 'personal',
   },
   {
     href: '/monitoring',

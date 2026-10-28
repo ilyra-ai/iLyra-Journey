@@ -409,6 +409,13 @@ const defaultAppPageConfig: AppPageConfig = {
         visible: true,
       },
       {
+        href: '/lembretes',
+        label: 'Lembretes',
+        description:
+          'Horários e dias para check-in, respiração e hábitos, com adiamento e silêncio.',
+        visible: true,
+      },
+      {
         href: '/profile',
         label: 'Perfil',
         description: 'Dados pessoais, hábitos, preferências e avatar.',

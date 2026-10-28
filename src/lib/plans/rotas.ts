@@ -21,6 +21,7 @@ export const RECURSOS_DA_ROTA: Readonly<
   '/dia': ['ai_tips_feed', 'vedic_insights', 'ai_scores'],
   '/semana': ['weekly_review', 'vedic_insights'],
   '/respiracao': ['guided_breathing'],
+  '/lembretes': ['personal_notifications'],
   '/plan': ['ai_plan_generations'],
   '/goals': ['goal_progress_tracking'],
   // Toda consulta pertence a um profissional cadastrado na mesma página.

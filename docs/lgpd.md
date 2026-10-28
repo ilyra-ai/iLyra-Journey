@@ -63,6 +63,15 @@ A API de dados não apaga perfis (403): a exclusão é sempre da conta inteira.
 
 Recomendação para produção: revogar `UPDATE` e `DELETE` em `fiscal_records` para o usuário da aplicação no MySQL. Gatilhos não foram usados porque, com o log binário ligado (padrão do MySQL), criá-los exige o privilégio `SUPER`.
 
+## Lembretes pessoais (tarefa 117)
+
+Preferências de fuso e silêncio, lembretes e ocorrências pertencem ao titular.
+`reminder_preferences`, `personal_reminders` e `reminder_occurrences` integram a
+exportação e têm exclusão em cascata com a conta. Excluir um lembrete também
+remove suas ocorrências e notificações, preservando hábitos e registros de
+bem-estar. O processamento limpa ocorrências com mais de 90 dias. O canal é
+somente o sino do app aberto, sem enviar esses dados a terceiros.
+
 ## Fronteiras externas
 
 - **Stripe:** sem credencial real no ambiente de desenvolvimento, o `invoice.paid` foi validado com eventos assinados localmente pela SDK oficial (`src/app/api/lgpd.integration.test.ts`).

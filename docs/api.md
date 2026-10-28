@@ -170,3 +170,13 @@ A aba `/admin/dashboard?aba=fiscal` reutiliza `AdminFiscalRecordsContent` e a AP
 `GET /api/admin/reports` exige administrador real e responde `Cache-Control: private, no-store`. `tipo=uso`: `inicio`, `fim`, `plano`, `agrupamento=dia|semana|mes`, `paginaEventos`; reutiliza o dashboard (1–366 dias). `tipo=financeiro`: mesmos filtros canônicos de Faturamento e `paginaSaldos` independente de `pagina` das faturas (1–10.000); séries por dia/mês/ano, até 366 dias no diário ou 3.660 nas outras visões. Campos desconhecidos/combinações inválidas respondem 400, sem aceitar um filtro de plano financeiro inexistente.
 
 O envelope inclui o relatório e `exportacao`: filtros, período anterior da mesma duração, início/fim da leitura e todas as linhas de indicadores com origem, unidade e limites. CSV/JSON baixados do mesmo objeto, sem consultar novamente nem limitar os indicadores às páginas visíveis. CSV mantém unidades mínimas como inteiros exatos, inclusive valores negativos acima de MAX_SAFE_INTEGER; JSON mantém strings monetárias. Exportações de indicadores não incluem e-mails ou textos pessoais. Detalhes do uso reutilizam a API administrativa existente, com metadados paginados; finanças incluem 20 faturas e 20 movimentos por página. Gestão transacional fica no dashboard. Não foi criada coleta de valores clínicos, visitas ou inferência de receita a partir de preços. Ver [relatorios-administrativos.md](./relatorios-administrativos.md).
+
+## Lembretes pessoais (tarefa 117)
+
+A central exige sessão e `personal_notifications`; criação e entrega também
+respeitam o recurso da atividade. CRUD em `/api/lembretes` e
+`/api/lembretes/[id]`, preferências em `/api/lembretes/preferencias`, verificação
+por POST em `/api/lembretes/verificar` e adiamento/dispensa em
+`/api/lembretes/avisos/[id]`. Leituras privadas sem cache, titular derivado da
+sessão e versões para concorrência. Contratos, limites, horário de verão,
+silêncio e canal de entrega em [Lembretes pessoais](./lembretes-pessoais.md).

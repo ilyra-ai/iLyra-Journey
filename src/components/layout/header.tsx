@@ -144,7 +144,7 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-border bg-card">
+      <header className="@container/cabecalho sticky top-0 z-40 border-b border-border bg-card">
         <div className="flex min-h-16 items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
           <MobileSidebar />
 
@@ -170,7 +170,7 @@ export function Header() {
           <button
             type="button"
             onClick={() => setCommandOpen(true)}
-            className="command-surface hidden w-[280px] shrink-0 transition-colors hover:border-input md:flex"
+            className="command-surface hidden w-[280px] min-w-0 shrink transition-colors hover:border-input @2xl/cabecalho:flex"
             aria-keyshortcuts="Control+K"
           >
             <Search
@@ -195,7 +195,7 @@ export function Header() {
               type="button"
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="@2xl/cabecalho:hidden"
               onClick={() => setCommandOpen(true)}
               aria-label={appConfig.header.commandPlaceholder}
             >
@@ -210,7 +210,7 @@ export function Header() {
               <Button
                 type="button"
                 variant="secondary"
-                className="hidden md:inline-flex"
+                className="hidden @2xl/cabecalho:inline-flex"
                 onClick={() => router.push('/chat')}
                 style={{
                   fontSize: scaleRem(0.875, appConfig.typography.buttonLabel),

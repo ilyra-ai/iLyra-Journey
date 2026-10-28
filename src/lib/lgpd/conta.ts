@@ -249,6 +249,9 @@ const TABELAS_DO_TITULAR = [
   ['daily_reflections', 'user_id'],
   ['breathing_sessions', 'user_id'],
   ['user_notifications', 'user_id'],
+  ['personal_reminders', 'user_id'],
+  ['reminder_preferences', 'user_id'],
+  ['reminder_occurrences', 'user_id'],
   ['feature_usage_counters', 'user_id'],
   ['subscription_audit_events', 'user_id'],
 ] as const;
@@ -267,7 +270,10 @@ export async function exportarDadosDoTitular(userId: string) {
     [userId]
   );
 
-  const tabelas: Record<string, RowDataPacket[]> = {};
+  const tabelas = {} as Record<
+    (typeof TABELAS_DO_TITULAR)[number][0],
+    RowDataPacket[]
+  >;
   for (const [tabela, coluna] of TABELAS_DO_TITULAR) {
     tabelas[tabela] = await queryRows<RowDataPacket>(
       `SELECT * FROM ${tabela} WHERE ${coluna} = ? ORDER BY created_at ASC`,

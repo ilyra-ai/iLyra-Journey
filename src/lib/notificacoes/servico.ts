@@ -9,7 +9,11 @@ import { executeStatement, queryRows } from '@/lib/mysql/pool';
  * duplicar a mesma notificação (índice único por pessoa e chave).
  */
 
-export const TIPOS_DE_NOTIFICACAO = ['coach_dia', 'coach_alerta'] as const;
+export const TIPOS_DE_NOTIFICACAO = [
+  'coach_dia',
+  'coach_alerta',
+  'lembrete_pessoal',
+] as const;
 export type TipoDeNotificacao = (typeof TIPOS_DE_NOTIFICACAO)[number];
 
 export interface NovaNotificacao {

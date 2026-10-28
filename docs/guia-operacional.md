@@ -228,7 +228,7 @@ tui-webnova.sh         # Painel TUI-WEBNOVA (WSL2): orquestrador independente co
 
 ## 🧪 Testes & Qualidade
 
-- **621 testes unitários** (motores de domínio, mapa védico, coach e leitura, linguagem simples das leituras, leitura da semana, cliente de IA, cifra, autenticação, segurança, configuração, contraste WCAG dos temas, iCalendar, respiração guiada, reflexão, retrospectiva da semana e detecção da saída da página) e **400 testes de integração** contra um MySQL real isolado (API de dados, rotas administrativas, coach, modelos de IA, metas, métricas, reflexão, respiração, agenda no calendário, semana, LGPD, planos, billing e webhook da Stripe), além de **30 testes dos launchers** (`pnpm test:launchers`). As integrações de IA usam contratos HTTP controlados compatíveis com a OpenAI (`tests/support`); elas não comprovam inferência de um modelo externo.
+- **629 testes unitários** (motores de domínio, mapa védico, coach e leitura, linguagem simples das leituras, leitura da semana, cliente de IA, cifra, autenticação, segurança, configuração, contraste WCAG dos temas, iCalendar, respiração guiada, reflexão, retrospectiva da semana e detecção da saída da página) e **413 testes de integração** contra um MySQL real isolado (API de dados, rotas administrativas, coach, modelos de IA, metas, métricas, reflexão, respiração, agenda no calendário, semana, LGPD, planos, billing e webhook da Stripe), além de **30 testes dos launchers** (`pnpm test:launchers`). As integrações de IA usam contratos HTTP controlados compatíveis com a OpenAI (`tests/support`); elas não comprovam inferência de um modelo externo.
 - Portões de qualidade obrigatórios antes de cada entrega:
 
 ```bash
@@ -271,3 +271,10 @@ Política de engenharia: correção sempre pela **causa raiz**, sem placeholders
 Distribuído sob a licença **MIT**. Consulte o arquivo [LICENSE](../LICENSE) para os termos completos.
 
 ---
+
+## Lembretes pessoais
+
+A central e o sino compartilham avisos persistidos, com dias, horário, fuso,
+silêncio e adiamento. A entrega depende do app aberto e visível; não existe
+push ou e-mail. Contratos, recorrência, concorrência, retenção e testes estão
+em [Lembretes pessoais](./lembretes-pessoais.md).
