@@ -8,6 +8,7 @@ import {
   CalendarRange,
   ClipboardList,
   Compass,
+  FileText,
   Gem,
   HeartPulse,
   LayoutDashboard,
@@ -142,6 +143,14 @@ export const navigationItems: NavigationDefinition[] = [
     description:
       'Seu contexto cotidiano e a relação com registros de sono e energia.',
     icon: ClipboardList,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+  },
+  {
+    href: '/relatorio-pessoal',
+    label: 'Meu relatório pessoal',
+    description: 'Selecione registros, revise e baixe seu PDF pessoal.',
+    icon: FileText,
     section: 'Pessoal',
     sectionKey: 'personal',
   },

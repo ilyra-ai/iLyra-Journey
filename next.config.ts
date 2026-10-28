@@ -74,12 +74,22 @@ const semLogsEmArquivo = process.env.WEBNOVA_SEM_LOGS === '1';
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  serverExternalPackages: ['pdfkit', 'fontkit'],
+  outputFileTracingIncludes: {
+    '/api/relatorio-pessoal/pdf': [
+      './src/assets/fonts/source-sans-3/SourceSans3-Regular.ttf',
+      './src/assets/fonts/source-sans-3/SourceSans3-Semibold.ttf',
+    ],
+  },
   env: { LYRA_LANDING_COM_ARTE: landingComArte ? '1' : '0' },
   ...(semLogsEmArquivo ? { experimental: { mcpServer: false } } : {}),
   async headers() {
     return [
       { source: '/:path*', headers: cabecalhosDeSeguranca },
-      { source: '/:path((?!api/storage/).*)', headers: [cspDasPaginas] },
+      {
+        source: '/:path((?!api/storage/|api/relatorio-pessoal/pdf$).*)',
+        headers: [cspDasPaginas],
+      },
     ];
   },
   ...(habilitarTaggerDyad

@@ -220,3 +220,13 @@ pessoais e histórico autorizado. Proposta idempotente, versões, pausas reais,
 encerramento explícito e revisão local usam dados do titular. Leituras não
 podem ser armazenadas em cache. Contratos, códigos e limites em
 [Experiências pessoais](./experiencias-pessoais.md).
+
+## Relatório pessoal em PDF (tarefa 122)
+
+`GET /api/relatorio-pessoal` fornece opções autorizadas.
+`POST /api/relatorio-pessoal` recebe datas, métricas e escolhas de relatos e
+notas e devolve a prévia selecionada e seu digest.
+`POST /api/relatorio-pessoal/pdf` exige `selecao` e `revisao`, revalida plano
+e conteúdo e entrega PDF como anexo privado sem cache; conteúdo alterado
+responde 409. Contratos, origem, lacunas, limites e geração em
+[Relatório pessoal](./relatorio-pessoal.md).

@@ -289,3 +289,13 @@ os dias tocados pela pausa das medianas. Encerre quando desejar revisar;
 o encerramento não pode ser revertido. A comparação é descritiva e não
 comprova efeito da mudança. Saiba mais em
 [Experiências pessoais](./experiencias-pessoais.md).
+
+## Meu relatório pessoal em PDF
+
+Abra **Meu relatório pessoal**, escolha até 90 dias dentro do histórico do
+plano e marque individualmente os registros e relatos desejados. Notas
+não entram por padrão. Clique em **Preparar prévia**, confira período,
+unidades, lacunas e notas e use **Baixar PDF revisado**. Se os registros
+mudarem, prepare outra prévia. O aplicativo não envia o arquivo: você
+decide onde guardar e com quem compartilhar. O relatório descreve seus
+registros e não é diagnóstico. Veja [os detalhes](./relatorio-pessoal.md).

@@ -140,3 +140,16 @@ preservando métricas e práticas; excluir conta remove todos esses dados.
 A revisão é local e não envia relatos a modelo externo. O histórico atual
 do plano continua limitando cada leitura. Consulte os
 [contratos e limites](./experiencias-pessoais.md).
+
+## Relatório pessoal em PDF (tarefa 122)
+
+A prévia e o PDF consultam somente as categorias selecionadas do titular
+autenticado. Notas exigem escolha separada; conversas e cadastros de
+terceiros não são consultados. O arquivo é gerado em memória e entregue
+como anexo privado sem cache, sem URL pública ou envio automático.
+Não há nova tabela ou retenção de relatórios. A exclusão posterior da
+conta não apaga cópias que o titular já baixou em seus dispositivos.
+Permissões e histórico são revalidados antes do download; a prévia
+fica inválida quando os dados selecionados mudam. A exportação LGPD
+em JSON permanece disponível e tem finalidade diferente.
+Detalhes em [Relatório pessoal](./relatorio-pessoal.md).

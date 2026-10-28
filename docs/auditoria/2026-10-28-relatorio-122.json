@@ -1,0 +1,118 @@
+{
+  "verificacoes": [
+    "Seleção vazia por padrão, métricas explícitas, mediana 240, zero e lacunas sem peso ou notas",
+    "Download PDF real a partir da prévia revisada no celular",
+    "Mudança de seleção invalida prévia e notas só entram por escolha explícita",
+    "Alteração real no banco impede baixar dados diferentes dos revisados",
+    "Plano Meta e isolamento: dados de outra conta não entram no recorte",
+    "PDF sem dados de origem mantém lacunas e não fabrica reflexões",
+    "Plano Care: 90 dias reais no banco, notas longas e PDF multipágina baixado"
+  ],
+  "axe": [
+    {
+      "rotulo": "seleção vazia móvel",
+      "aprovadas": 24,
+      "violacoes": []
+    },
+    {
+      "rotulo": "prévia de métricas móvel",
+      "aprovadas": 27,
+      "violacoes": []
+    },
+    {
+      "rotulo": "prévia com notas móvel",
+      "aprovadas": 27,
+      "violacoes": []
+    },
+    {
+      "rotulo": "prévia desatualizada",
+      "aprovadas": 24,
+      "violacoes": []
+    },
+    {
+      "rotulo": "prévia 320px",
+      "aprovadas": 28,
+      "violacoes": []
+    },
+    {
+      "rotulo": "prévia desktop",
+      "aprovadas": 30,
+      "violacoes": []
+    },
+    {
+      "rotulo": "prévia zoom 200%",
+      "aprovadas": 31,
+      "violacoes": []
+    },
+    {
+      "rotulo": "plano Meta sem dados",
+      "aprovadas": 24,
+      "violacoes": []
+    },
+    {
+      "rotulo": "plano Care 90 dias",
+      "aprovadas": 27,
+      "violacoes": []
+    }
+  ],
+  "excecoes": [],
+  "tarefa": 122,
+  "data": "2026-10-28",
+  "unitarios": {
+    "testes": 671,
+    "arquivos": 82
+  },
+  "integracao_mysql": {
+    "testes": 481,
+    "arquivos": 53
+  },
+  "ambiente": {
+    "pdfkit": "0.20.2",
+    "fontkit": "2.0.4",
+    "mysql": "9.7.2",
+    "chrome": "151.0.7922.34"
+  },
+  "observacao": "Dados dos PDFs de QA são fixtures locais identificadas, não prontuários de pacientes.",
+  "pdfs": [
+    {
+      "arquivo_qa": "metricas",
+      "versao": "%PDF-1.7",
+      "paginas": 3,
+      "bytes": 34450,
+      "rodapes_corretos": true,
+      "sem_paginas_vazias": true,
+      "limites_geometricos": true,
+      "estrutura_textual": true
+    },
+    {
+      "arquivo_qa": "notas",
+      "versao": "%PDF-1.7",
+      "paginas": 5,
+      "bytes": 44779,
+      "rodapes_corretos": true,
+      "sem_paginas_vazias": true,
+      "limites_geometricos": true,
+      "estrutura_textual": true
+    },
+    {
+      "arquivo_qa": "sem-dados",
+      "versao": "%PDF-1.7",
+      "paginas": 2,
+      "bytes": 30410,
+      "rodapes_corretos": true,
+      "sem_paginas_vazias": true,
+      "limites_geometricos": true,
+      "estrutura_textual": true
+    },
+    {
+      "arquivo_qa": "longo",
+      "versao": "%PDF-1.7",
+      "paginas": 64,
+      "bytes": 417873,
+      "rodapes_corretos": true,
+      "sem_paginas_vazias": true,
+      "limites_geometricos": true,
+      "estrutura_textual": true
+    }
+  ]
+}

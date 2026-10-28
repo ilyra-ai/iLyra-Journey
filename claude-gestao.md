@@ -24,9 +24,9 @@
 | Progresso          | `█████████████████░░░` **86,6%** |
 | Tarefas totais     | 134                              |
 | 🟢 Finalizadas     | 116                              |
-| 🔵 Em andamento    | 0                                |
+| 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 5                                |
-| ⚪ A iniciar       | 13                               |
+| ⚪ A iniciar       | 12                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-28                       |
 
@@ -49,11 +49,22 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-28:** 121 concluída e publicada em `dbf54fb894522a267c262f79ba7512bb7f905bef`; próxima tarefa não bloqueada: 122. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-28:** 121 concluída e publicada em `dbf54fb894522a267c262f79ba7512bb7f905bef`; 122 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
+
+### 122 · Relatório pessoal visual em PDF com seleção de período e conteúdo
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação individual da 121 e atualização do painel, conforme autorização permanente.
+- **Pedido do usuário:** selecionar período e informações, revisar um resumo visual e baixar em PDF para compartilhar voluntariamente, inclusive numa consulta.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar os registros e a exportação pessoal já existentes; JSON de portabilidade e relatórios administrativos ou fiscais não atendem ao resumo pessoal visual solicitado.
+- **Escopo funcional:** selecionar categorias e intervalo permitido pelo plano, pré-visualizar e gerar PDF legível com datas, unidades, origem, lacunas e resumo em pt-BR. Separar medições, relatos e interpretações. Excluir conversas e informações não selecionadas; compartilhamento deve partir do titular, sem envio automático nem link público de dados sensíveis.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** abrir o PDF real e conferir paginação, fontes, gráficos, recortes, acentos, períodos e consistência com o banco; testar seleção, dados ausentes, autorização, limites do plano e download em celular e desktop. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência inicial:** `main` em `a2d4aac398cfa103d45f0d3db5a2e853bf7d1131`; existem portabilidade JSON e registros consolidados, mas não relatório pessoal visual em PDF. Reutilizados campos, faixas, unidades, datas locais e histórico, reflexões e acontecimentos. Seleção explícita e prévia privada, com revalidação do conteúdo antes do download; nenhuma conversa ou categoria não selecionada é consultada.
 
 ### BLOQUEADAS
 
@@ -145,15 +156,6 @@
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 122 · Relatório pessoal visual em PDF com seleção de período e conteúdo
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** selecionar período e informações, revisar um resumo visual e baixar em PDF para compartilhar voluntariamente, inclusive numa consulta.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar os registros e a exportação pessoal já existentes; JSON de portabilidade e relatórios administrativos ou fiscais não atendem ao resumo pessoal visual solicitado.
-- **Escopo funcional:** selecionar categorias e intervalo permitido pelo plano, pré-visualizar e gerar PDF legível com datas, unidades, origem, lacunas e resumo em pt-BR. Separar medições, relatos e interpretações. Excluir conversas e informações não selecionadas; compartilhamento deve partir do titular, sem envio automático nem link público de dados sensíveis.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** abrir o PDF real e conferir paginação, fontes, gráficos, recortes, acentos, períodos e consistência com o banco; testar seleção, dados ausentes, autorização, limites do plano e download em celular e desktop. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ### 123 · Modo descanso ou férias com pausa de cobranças e retorno gradual
 

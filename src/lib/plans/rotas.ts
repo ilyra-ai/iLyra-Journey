@@ -24,6 +24,7 @@ export const RECURSOS_DA_ROTA: Readonly<
   '/lembretes': ['personal_notifications'],
   '/rotinas': ['personal_habits'],
   '/acontecimentos': ['daily_checkin'],
+  '/relatorio-pessoal': ['metrics_history_days'],
   '/experiencias': ['personal_habits', 'metrics_history_days'],
   '/plan': ['ai_plan_generations'],
   '/goals': ['goal_progress_tracking'],
