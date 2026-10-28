@@ -180,3 +180,13 @@ por POST em `/api/lembretes/verificar` e adiamento/dispensa em
 `/api/lembretes/avisos/[id]`. Leituras privadas sem cache, titular derivado da
 sessão e versões para concorrência. Contratos, limites, horário de verão,
 silêncio e canal de entrega em [Lembretes pessoais](./lembretes-pessoais.md).
+
+## Busca e respostas favoritas (tarefa 118)
+
+`POST /api/chat/pesquisa` consulta perguntas e respostas do titular, com termo,
+filtro de favoritos e cursor, até 20 resultados por página. `PUT` e `DELETE`
+em `/api/chat/favoritos/[id]` salvam e removem a referência de forma
+idempotente. Todas exigem sessão e `chat_history`. O termo fica no corpo do
+pedido e a leitura é privada sem cache. A abertura original usa `alvo` em
+`/api/chat/conversas/[id]`; `depois` complementa a paginação `antes` existente.
+Regras, erros e limites em [Busca e favoritos](./pesquisa-e-favoritos.md).

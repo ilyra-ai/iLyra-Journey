@@ -228,7 +228,7 @@ tui-webnova.sh         # Painel TUI-WEBNOVA (WSL2): orquestrador independente co
 
 ## 🧪 Testes & Qualidade
 
-- **629 testes unitários** (motores de domínio, mapa védico, coach e leitura, linguagem simples das leituras, leitura da semana, cliente de IA, cifra, autenticação, segurança, configuração, contraste WCAG dos temas, iCalendar, respiração guiada, reflexão, retrospectiva da semana e detecção da saída da página) e **413 testes de integração** contra um MySQL real isolado (API de dados, rotas administrativas, coach, modelos de IA, metas, métricas, reflexão, respiração, agenda no calendário, semana, LGPD, planos, billing e webhook da Stripe), além de **30 testes dos launchers** (`pnpm test:launchers`). As integrações de IA usam contratos HTTP controlados compatíveis com a OpenAI (`tests/support`); elas não comprovam inferência de um modelo externo.
+- **636 testes unitários** (motores de domínio, mapa védico, coach e leitura, linguagem simples das leituras, leitura da semana, cliente de IA, cifra, autenticação, segurança, configuração, contraste WCAG dos temas, iCalendar, respiração guiada, reflexão, retrospectiva da semana e detecção da saída da página) e **425 testes de integração** contra um MySQL real isolado (API de dados, rotas administrativas, coach, modelos de IA, metas, métricas, reflexão, respiração, agenda no calendário, semana, lembretes pessoais, busca nas conversas, favoritos, LGPD, planos, billing e webhook da Stripe), além de **30 testes dos launchers** (`pnpm test:launchers`). As integrações de IA usam contratos HTTP controlados compatíveis com a OpenAI (`tests/support`); elas não comprovam inferência de um modelo externo.
 - Portões de qualidade obrigatórios antes de cada entrega:
 
 ```bash

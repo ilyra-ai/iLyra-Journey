@@ -13,7 +13,8 @@ import { buscarJson } from '@/lib/http/transporte';
 export function useConversaLyra(
   conversaInicial: string | null,
   aoAbrir?: (id: string | null) => void,
-  salvarHistorico = true
+  salvarHistorico = true,
+  mensagemInicial: string | null = null
 ) {
   const { privacyMode } = usePrivacyMode();
   const [turnos, setTurnos] = useState<TurnoDaConversa[]>([]);
@@ -21,6 +22,8 @@ export function useConversaLyra(
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
   const [antes, setAntes] = useState<number | null>(null);
+  const [depois, setDepois] = useState<number | null>(null);
+  const alvo = useRef(mensagemInicial);
   const cancelamento = useRef<AbortController | null>(null);
   const conversa = useRef(conversaInicial);
   const ocupado = useRef(false);
@@ -39,15 +42,19 @@ export function useConversaLyra(
     const id = conversa.current;
     if (!id || ocupado.current) return;
     const controle = new AbortController();
-    void buscarJson(`/api/chat/conversas/${encodeURIComponent(id)}`, {
-      signal: controle.signal,
-      cache: 'no-store',
-    }).then((resultado) => {
+    void buscarJson(
+      `/api/chat/conversas/${encodeURIComponent(id)}${alvo.current ? `?alvo=${encodeURIComponent(alvo.current)}` : ''}`,
+      {
+        signal: controle.signal,
+        cache: 'no-store',
+      }
+    ).then((resultado) => {
       if (controle.signal.aborted) return;
       if (resultado.ok) {
         const pagina = resultado.corpo as PaginaDaConversa;
         setTurnos(pagina.turnos);
         setAntes(pagina.antes);
+        setDepois(pagina.depois ?? null);
         setErro(
           pagina.turnos.findLast((turno) => turno.estado === 'erro')?.erro ??
             null
@@ -84,7 +91,13 @@ export function useConversaLyra(
     refazer?: TurnoDaConversa,
     painel = false
   ) => {
-    if (ocupado.current || carregando || !texto.trim()) return;
+    if (
+      ocupado.current ||
+      carregando ||
+      (depois !== null && !refazer) ||
+      !texto.trim()
+    )
+      return;
     ocupado.current = true;
     setEnviando(true);
     setErro(null);
@@ -158,7 +171,8 @@ export function useConversaLyra(
               : turno
           )
         );
-        if (salvarHistorico) aoAbrir?.(idConversa);
+        if (salvarHistorico && (!refazer || !alvo.current))
+          aoAbrir?.(idConversa);
       }
     } catch (falha) {
       if (montado.current) {
@@ -189,6 +203,8 @@ export function useConversaLyra(
     conversa.current = null;
     setTurnos([]);
     setAntes(null);
+    setDepois(null);
+    alvo.current = null;
     setErro(null);
     aoAbrir?.(null);
   };
@@ -199,6 +215,46 @@ export function useConversaLyra(
     enviando,
     erro,
     antes,
+    depois,
+    carregarSeguintes: async () => {
+      if (!conversa.current || depois === null || ocupado.current) return;
+      ocupado.current = true;
+      setCarregando(true);
+      const resultado = await buscarJson(
+        `/api/chat/conversas/${conversa.current}?depois=${depois}`,
+        { cache: 'no-store' }
+      );
+      if (montado.current) {
+        if (resultado.ok) {
+          const pagina = resultado.corpo as PaginaDaConversa;
+          setTurnos((atuais) => [
+            ...atuais,
+            ...pagina.turnos.filter((n) => !atuais.some((a) => a.id === n.id)),
+          ]);
+          setDepois(pagina.depois ?? null);
+          setErro(null);
+        } else setErro(resultado.falha.message);
+        setCarregando(false);
+      }
+      ocupado.current = false;
+    },
+    irParaRecentes: () => {
+      alvo.current = null;
+      setCarregando(true);
+      setRecarregar((v) => v + 1);
+      aoAbrir?.(conversa.current);
+    },
+    definirFavorita: async (turnoId: string, favorita: boolean) => {
+      const resultado = await buscarJson(
+        `/api/chat/favoritos/${encodeURIComponent(turnoId)}`,
+        { method: favorita ? 'PUT' : 'DELETE' }
+      );
+      if (!resultado.ok) throw new Error(resultado.falha.message);
+      if (montado.current)
+        setTurnos((atuais) =>
+          atuais.map((t) => (t.id === turnoId ? { ...t, favorita } : t))
+        );
+    },
     interromper: () => cancelamento.current?.abort(),
     enviar,
     novaConversa,

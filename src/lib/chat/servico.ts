@@ -28,6 +28,7 @@ interface ConversaNoBanco extends RowDataPacket {
 }
 
 interface TurnoNoBanco extends RowDataPacket {
+  favorita: number;
   id: string;
   sequence_number: number;
   conversation_id: string;
@@ -95,21 +96,49 @@ export async function listarConversas(
 export async function lerConversa(
   userId: string,
   id: string,
-  antes: number | null = null
+  antes: number | null = null,
+  depois: number | null = null,
+  alvo: string | null = null
 ): Promise<PaginaDaConversa> {
   const [conversa] = await queryRows<ConversaNoBanco>(
     'SELECT id, user_id, title, updated_at FROM chat_conversations WHERE id = ? AND user_id = ?',
     [id, userId]
   );
   if (!conversa) throw new HttpError('Conversa não encontrada.', 404);
+  let sequenciaAlvo: number | null = null;
+  if (alvo) {
+    const [mensagem] = await queryRows<{ sequence_number: number }>(
+      'SELECT sequence_number FROM chat_turns WHERE id=? AND conversation_id=? AND user_id=?',
+      [alvo, id, userId]
+    );
+    if (!mensagem)
+      throw new HttpError('Mensagem não encontrada nesta conversa.', 404);
+    sequenciaAlvo = Number(mensagem.sequence_number);
+  }
+  const sequencia = antes ?? depois ?? sequenciaAlvo;
+  const comparacao = antes !== null ? '<' : depois !== null ? '>' : '<=';
   const linhas = await queryRows<TurnoNoBanco>(
-    `SELECT id, sequence_number, question, answer, response_parts, status, error_message, created_at
+    `SELECT id, sequence_number, question, answer, response_parts, status, error_message, created_at,
+       EXISTS(SELECT 1 FROM chat_favorites f WHERE f.turn_id=chat_turns.id AND f.user_id=chat_turns.user_id) AS favorita
        FROM chat_turns WHERE conversation_id = ? AND user_id = ?
-       ${antes === null ? '' : 'AND sequence_number < ?'}
-       ORDER BY sequence_number DESC LIMIT 41`,
-    antes === null ? [id, userId] : [id, userId, antes]
+       ${sequencia === null ? '' : `AND sequence_number ${comparacao} ?`}
+       ORDER BY sequence_number ${depois !== null ? 'ASC' : 'DESC'} LIMIT 41`,
+    sequencia === null ? [id, userId] : [id, userId, sequencia]
   );
-  const pagina = linhas.slice(0, 40).reverse();
+  const pagina = linhas.slice(0, 40);
+  if (depois === null) pagina.reverse();
+  let proximoDepois: number | null =
+    depois !== null && linhas.length > 40
+      ? Number(pagina.at(-1)?.sequence_number)
+      : null;
+  if (alvo && pagina.length) {
+    const ultima = Number(pagina.at(-1)?.sequence_number);
+    const posteriores = await queryRows<{ sequence_number: number }>(
+      'SELECT sequence_number FROM chat_turns WHERE conversation_id=? AND user_id=? AND sequence_number>? LIMIT 1',
+      [id, userId, ultima]
+    );
+    if (posteriores.length) proximoDepois = ultima;
+  }
   const imagens = new Map(
     (pagina.length
       ? await queryRows<Parameters<typeof metadadosDaImagem>[0]>(
@@ -129,6 +158,7 @@ export async function lerConversa(
           partesDoBanco(linha.response_parts)
         ),
         id: linha.id,
+        favorita: Boolean(linha.favorita),
         imagem: imagens.get(linha.id) ?? null,
         sequencia: Number(linha.sequence_number),
         pergunta: linha.question,
@@ -138,7 +168,11 @@ export async function lerConversa(
         criadaEm: `${linha.created_at.replace(' ', 'T')}Z`,
       }))
     ),
-    antes: linhas.length > 40 ? Number(pagina[0].sequence_number) : null,
+    antes:
+      depois === null && linhas.length > 40
+        ? Number(pagina[0].sequence_number)
+        : null,
+    depois: proximoDepois,
   };
 }
 

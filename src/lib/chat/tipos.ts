@@ -28,6 +28,7 @@ export interface PaginaDeConversas {
 }
 
 export interface TurnoDaConversa {
+  favorita?: boolean;
   id: string;
   sequencia: number;
   pergunta: string;
@@ -43,6 +44,22 @@ export interface PaginaDaConversa {
   conversa: ResumoDaConversa;
   turnos: TurnoDaConversa[];
   antes: number | null;
+  depois?: number | null;
+}
+
+export interface ResultadoDaPesquisa {
+  turnoId: string;
+  conversaId: string;
+  titulo: string;
+  pergunta: string;
+  resposta: string | null;
+  criadaEm: string;
+  favorita: boolean;
+  salvaEm: string | null;
+}
+export interface PaginaDaPesquisa {
+  resultados: ResultadoDaPesquisa[];
+  proximoCursor: string | null;
 }
 
 export interface PedidoComHistorico {

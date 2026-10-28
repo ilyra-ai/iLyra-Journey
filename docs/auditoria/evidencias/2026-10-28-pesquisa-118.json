@@ -1,0 +1,130 @@
+{
+  "tarefa": 118,
+  "data": "2026-10-28",
+  "baseMain": "99c921f2b4d1ed635a488d1016f0a0295431eb8d",
+  "ambiente": {
+    "node": "24.22.1",
+    "pnpm": "11.28.4",
+    "mysql": "9.7.2",
+    "chrome": "151.0.7922.34",
+    "dockerExecutado": false,
+    "inferênciaExternaComprovada": false
+  },
+  "unitarios": {
+    "aprovados": 636,
+    "arquivos": 78,
+    "trabalhadores": 1,
+    "timeoutAlterado": false
+  },
+  "integracao": {
+    "aprovados": 425,
+    "arquivos": 49,
+    "novosCasos": 12,
+    "bancoReal": true
+  },
+  "gates": {
+    "formatacao": true,
+    "lintSemAvisos": true,
+    "tipos": true,
+    "buildProducao": true,
+    "migracao048": true
+  },
+  "navegador": {
+    "verificacoes": [
+      "produção saudável com MySQL real e migração 048",
+      "free: busca com acento, mensagem original, favorito persistido e navegação bidirecional",
+      "meta: busca com acento, mensagem original, favorito persistido e navegação bidirecional",
+      "care: busca com acento, mensagem original, favorito persistido e navegação bidirecional",
+      "listagem, remoção, estado vazio e retorno de foco das favoritas",
+      "paginação real da pesquisa por palavras",
+      "resposta nova do Motor Lyra local pode ser favoritada sem recarregar",
+      "novo login preserva favoritas",
+      "revogação do histórico retira busca/favoritos e recusa APIs sem apagar dados",
+      "falha real de leitura e retentativa após restauração do banco isolado",
+      "isolamento real entre contas na busca e no destino original",
+      "zoom 200% sem sobreposição, com rolagem e abertura do resultado"
+    ],
+    "axe": [
+      {
+        "rotulo": "free-320-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "free-390-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "free-768-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "free-1440-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "meta-320-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "meta-390-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "meta-768-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "meta-1440-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "care-320-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "care-390-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "care-768-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "care-1440-busca",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "favoritas-390",
+        "aprovadas": 31,
+        "violacoes": []
+      },
+      {
+        "rotulo": "busca-zoom-200",
+        "aprovadas": 31,
+        "violacoes": []
+      }
+    ],
+    "excecoes": [],
+    "sucesso": true
+  },
+  "limites": [
+    "As integrações anteriores de IA usam contratos HTTP controlados.",
+    "Respostas novas/refeitas no navegador usaram Motor Lyra local.",
+    "Axe cobre somente as regras e os percursos executados.",
+    "A inspeção visual e a asserção geométrica confirmaram a correção da sobreposição no zoom.",
+    "Dois timeouts unitários sob carga foram resolvidos repetindo a suíte sequencialmente, sem alterar testes ou limites.",
+    "Logs e capturas em /tmp são temporários."
+  ]
+}

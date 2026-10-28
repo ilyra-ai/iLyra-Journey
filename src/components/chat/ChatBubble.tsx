@@ -1,10 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, Copy, RotateCw } from 'lucide-react';
+import { Check, Copy, RotateCw, Star } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
+import { cn } from '@/lib/utils';
 import { RespostaMarkdown } from './RespostaMarkdown';
 
 interface ChatBubbleProps {
@@ -12,6 +13,8 @@ interface ChatBubbleProps {
   isUser: boolean;
   emFluxo?: boolean;
   onRegenerate?: () => void;
+  favorita?: boolean;
+  aoFavoritar?: (favorita: boolean) => Promise<void>;
 }
 
 /**
@@ -25,8 +28,11 @@ export function ChatBubble({
   isUser,
   onRegenerate,
   emFluxo = false,
+  favorita = false,
+  aoFavoritar,
 }: ChatBubbleProps) {
   const [isCopied, setIsCopied] = useState(false);
+  const [salvandoFavorita, setSalvandoFavorita] = useState(false);
   const handleCopy = async () => {
     try {
       await navigator.clipboard.writeText(message);
@@ -42,7 +48,7 @@ export function ChatBubble({
     'inline-flex min-h-10 items-center gap-1.5 rounded-full px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring md:min-h-8 md:px-2.5';
 
   const acoes = !emFluxo ? (
-    <div className="flex items-center gap-0.5 opacity-0 focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
+    <div className="flex flex-wrap items-center gap-0.5 opacity-0 focus-within:opacity-100 group-hover:opacity-100 [@media(hover:none)]:opacity-100">
       <button
         type="button"
         onClick={() => void handleCopy()}
@@ -75,6 +81,44 @@ export function ChatBubble({
           <RotateCw className="h-3.5 w-3.5" aria-hidden="true" />
           <span>
             Refazer<span className="sr-only"> a resposta da Lyra</span>
+          </span>
+        </button>
+      ) : null}
+      {!isUser && aoFavoritar ? (
+        <button
+          type="button"
+          className={actionClassName}
+          aria-pressed={favorita}
+          aria-label={
+            favorita
+              ? 'Remover resposta da Lyra dos favoritos'
+              : 'Favoritar resposta da Lyra'
+          }
+          disabled={salvandoFavorita}
+          aria-busy={salvandoFavorita}
+          onClick={() => {
+            setSalvandoFavorita(true);
+            void aoFavoritar(!favorita)
+              .catch((e) =>
+                toast.error(
+                  e instanceof Error
+                    ? e.message
+                    : 'Não foi possível salvar a resposta.'
+                )
+              )
+              .finally(() => setSalvandoFavorita(false));
+          }}
+        >
+          <Star
+            className={cn('h-3.5 w-3.5', favorita && 'fill-current')}
+            aria-hidden="true"
+          />
+          <span>
+            {salvandoFavorita
+              ? 'Salvando…'
+              : favorita
+                ? 'Favorita'
+                : 'Favoritar'}
           </span>
         </button>
       ) : null}

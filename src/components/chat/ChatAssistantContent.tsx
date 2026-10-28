@@ -42,6 +42,7 @@ import type { ParteDoChat } from '@/lib/chat/partes';
 import { ChatInput } from './ChatInput';
 import { TypingIndicator } from './TypingIndicator';
 import { MemoriaDaLyra } from './MemoriaDaLyra';
+import { PesquisaDeConversas } from './PesquisaDeConversas';
 
 const PainelDaConversa = dynamic(
   () => import('./PainelDaConversa').then((modulo) => modulo.PainelDaConversa),
@@ -67,6 +68,7 @@ export interface Message {
   partes?: ParteDoChat[];
   emFluxo?: boolean;
   incompleta?: boolean;
+  favorita?: boolean;
 }
 
 const WELCOME_MESSAGE_ID = 'boas-vindas';
@@ -216,15 +218,18 @@ export function ChatAssistantContent({
   conversaId = null,
   aoAbrirConversa,
   salvarHistorico = true,
+  mensagemId = null,
 }: {
   salvarHistorico?: boolean;
   conversaId?: string | null;
+  mensagemId?: string | null;
   aoAbrirConversa?: (id: string | null) => void;
 } = {}) {
   const historico = useConversaLyra(
     conversaId,
     aoAbrirConversa,
-    salvarHistorico
+    salvarHistorico,
+    mensagemId
   );
   const { config: appConfig } = usePublicSitePageConfig('app');
   const { privacyMode } = usePrivacyMode();
@@ -252,6 +257,7 @@ export function ChatAssistantContent({
                 partes: turno.partes,
                 emFluxo: turno.estado === 'processando',
                 incompleta: turno.estado === 'erro',
+                favorita: turno.favorita,
               },
             ]
           : []),
@@ -268,6 +274,7 @@ export function ChatAssistantContent({
   const userApiKey = storedApiKey ?? '';
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const posicaoAnterior = useRef<{ altura: number; topo: number } | null>(null);
+  const alvoEncontrado = useRef(false);
 
   const quickReplies = useMemo(
     () =>
@@ -288,10 +295,23 @@ export function ChatAssistantContent({
   };
 
   useEffect(() => {
+    if (mensagemId && !alvoEncontrado.current) return;
     if (isNearBottom) {
       scrollToBottom();
     }
-  }, [isNearBottom, isTyping, messages]);
+  }, [mensagemId, isNearBottom, isTyping, messages]);
+
+  useEffect(() => {
+    if (!mensagemId || alvoEncontrado.current || historico.carregando) return;
+    const elemento =
+      document.getElementById(`resposta-${mensagemId}`) ??
+      document.getElementById(`pergunta-${mensagemId}`);
+    if (elemento) {
+      alvoEncontrado.current = true;
+      elemento.scrollIntoView({ block: 'center', behavior: 'instant' });
+      elemento.focus({ preventScroll: true });
+    }
+  }, [mensagemId, messages, historico.carregando]);
 
   useLayoutEffect(() => {
     const container = messagesContainerRef.current;
@@ -373,7 +393,10 @@ export function ChatAssistantContent({
             </p>
           </div>
         </div>
-        <div className="flex shrink-0 items-center gap-1">
+        <div className="flex min-w-0 flex-wrap items-center justify-end gap-1">
+          {salvarHistorico ? (
+            <PesquisaDeConversas aoAlterarFavorito={historico.atualizar} />
+          ) : null}
           <PlanFeatureGate features={['lyra_memory']} ocultar>
             <MemoriaDaLyra />
           </PlanFeatureGate>
@@ -549,12 +572,29 @@ export function ChatAssistantContent({
             {messages.map((msg, index) => (
               <div
                 key={msg.id}
-                className="animate-in fade-in-50 slide-in-from-bottom-2 motion-reduce:animate-none"
+                id={
+                  msg.turnoId
+                    ? `${msg.sender === 'ai' ? 'resposta' : 'pergunta'}-${msg.turnoId}`
+                    : undefined
+                }
+                tabIndex={msg.turnoId === mensagemId ? -1 : undefined}
+                className="animate-in fade-in-50 slide-in-from-bottom-2 motion-reduce:animate-none focus-visible:rounded-md focus-visible:outline-2 focus-visible:outline-ring"
               >
                 <ChatBubble
                   message={msg.text}
                   isUser={msg.sender === 'user'}
                   emFluxo={msg.emFluxo}
+                  favorita={msg.favorita}
+                  aoFavoritar={
+                    salvarHistorico &&
+                    msg.sender === 'ai' &&
+                    msg.turnoId &&
+                    !msg.emFluxo &&
+                    !msg.incompleta
+                      ? (valor) =>
+                          historico.definirFavorita(msg.turnoId!, valor)
+                      : undefined
+                  }
                   onRegenerate={
                     msg.sender === 'ai' &&
                     index > 0 &&
@@ -590,6 +630,35 @@ export function ChatAssistantContent({
       </div>
 
       <div className="relative shrink-0 border-t border-border bg-background pb-1 pt-3">
+        {historico.depois !== null ? (
+          <div className="mb-3 flex flex-wrap items-center gap-2">
+            <p className="text-sm text-muted-foreground">
+              Você abriu um trecho antigo da conversa.
+            </p>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={historico.carregando}
+              onClick={() => {
+                setIsNearBottom(false);
+                void historico.carregarSeguintes();
+              }}
+            >
+              Carregar mensagens seguintes
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled={historico.carregando}
+              onClick={() => {
+                historico.irParaRecentes();
+                setIsNearBottom(true);
+              }}
+            >
+              Ir às mais recentes
+            </Button>
+          </div>
+        ) : null}
         {showScrollButton ? (
           <button
             onClick={() => {
@@ -608,7 +677,9 @@ export function ChatAssistantContent({
             type="button"
             variant="outline"
             size="sm"
-            disabled={isTyping || historico.carregando}
+            disabled={
+              isTyping || historico.carregando || historico.depois !== null
+            }
             onClick={() => {
               setIsNearBottom(true);
               void historico.enviar(
@@ -637,6 +708,7 @@ export function ChatAssistantContent({
           disabled={
             isTyping ||
             historico.carregando ||
+            historico.depois !== null ||
             Boolean(historico.erro && semConversa)
           }
           maxLength={LIMITE_DA_PERGUNTA}

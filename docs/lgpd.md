@@ -72,6 +72,15 @@ remove suas ocorrências e notificações, preservando hábitos e registros de
 bem-estar. O processamento limpa ocorrências com mais de 90 dias. O canal é
 somente o sino do app aberto, sem enviar esses dados a terceiros.
 
+## Respostas favoritas (tarefa 118)
+
+`chat_favorites` guarda a referência à mensagem e a data em que o titular a
+salvou, sem duplicar seu conteúdo. A tabela integra a exportação da conta;
+excluir a conversa ou a conta remove os vínculos em cascata. Busca e destino
+original filtram o titular e respeitam `chat_history`. A consulta não envia
+texto a modelos; o termo fica no corpo do pedido, fora da URL. A retirada da
+permissão recusa a consulta e as mutações sem apagar o histórico.
+
 ## Fronteiras externas
 
 - **Stripe:** sem credencial real no ambiente de desenvolvimento, o `invoice.paid` foi validado com eventos assinados localmente pela SDK oficial (`src/app/api/lgpd.integration.test.ts`).

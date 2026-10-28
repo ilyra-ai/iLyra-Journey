@@ -24,9 +24,9 @@
 | Progresso          | `█████████████████░░░` **83,6%** |
 | Tarefas totais     | 134                              |
 | 🟢 Finalizadas     | 112                              |
-| 🔵 Em andamento    | 0                                |
+| 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 5                                |
-| ⚪ A iniciar       | 17                               |
+| ⚪ A iniciar       | 16                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-28                       |
 
@@ -49,11 +49,22 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-28:** 117 concluída e publicada em `8a6fe003396201b1fb0cefbbd595fd6fd446eabe`; próxima tarefa não bloqueada: 118. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-28:** 117 concluída e publicada em `8a6fe003396201b1fb0cefbbd595fd6fd446eabe`; 118 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
+
+### 118 · Busca no conteúdo das conversas e respostas favoritas
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação e atualização do painel da 117, conforme retomada autorizada.
+- **Pedido do usuário:** encontrar orientações antigas por palavras e guardar respostas importantes da Lyra como favoritas.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar o histórico persistido e distinguir a busca atual de páginas e ações do app de uma busca no texto das conversas. Conferir antes se já existem favoritos em alguma entrega posterior.
+- **Escopo funcional:** buscar perguntas e respostas autorizadas do titular, apresentar trecho e data e abrir a mensagem original. Permitir favoritar, desfavoritar e listar respostas, com paginação e estados vazios claros. Preservar ordenação, histórico antigo, mensagens com imagens e futuros blocos da tarefa 113, sem expor o conteúdo de outras contas.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar termos com acentos, Unicode, ausência de resultado, reabertura da mensagem, paginação, favoritos persistidos, remoção de conversa e limites de histórico do plano. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência em 2026-10-28:** `main` em `99c921f2b4d1ed635a488d1016f0a0295431eb8d`; histórico e paginação existem, mas a busca no texto e favoritos não foram encontrados. Reutilizar `chat_conversations`, `chat_turns`, imagens e partes estruturadas. A abertura de um resultado antigo precisa carregar o trecho original e manter acesso às mensagens anteriores e seguintes, sem recriar a conversa.
 
 ### BLOQUEADAS
 
@@ -145,15 +156,6 @@
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 118 · Busca no conteúdo das conversas e respostas favoritas
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** encontrar orientações antigas por palavras e guardar respostas importantes da Lyra como favoritas.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar o histórico persistido e distinguir a busca atual de páginas e ações do app de uma busca no texto das conversas. Conferir antes se já existem favoritos em alguma entrega posterior.
-- **Escopo funcional:** buscar perguntas e respostas autorizadas do titular, apresentar trecho e data e abrir a mensagem original. Permitir favoritar, desfavoritar e listar respostas, com paginação e estados vazios claros. Preservar ordenação, histórico antigo, mensagens com imagens e futuros blocos da tarefa 113, sem expor o conteúdo de outras contas.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar termos com acentos, Unicode, ausência de resultado, reabertura da mensagem, paginação, favoritos persistidos, remoção de conversa e limites de histórico do plano. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ### 119 · Rotinas pessoais guiadas com sequência de passos
 

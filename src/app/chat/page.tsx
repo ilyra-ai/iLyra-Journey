@@ -18,14 +18,16 @@ function ConversaSelecionada() {
   const { data: subscription, loading } = useAccountSubscription();
   const salvarHistorico = isPlanFeatureEnabled(subscription, 'chat_history');
   const id = salvarHistorico ? busca.get('conversa') : null;
+  const mensagem = salvarHistorico ? busca.get('mensagem') : null;
   if (loading) return <p role="status">Carregando conversa…</p>;
   return (
     <ChatAssistantContent
-      key={`${session?.user.id ?? 'visitante'}:${id ?? 'nova'}:${salvarHistorico}`}
+      key={`${session?.user.id ?? 'visitante'}:${id ?? 'nova'}:${mensagem ?? ''}:${salvarHistorico}`}
       salvarHistorico={salvarHistorico}
       conversaId={id}
+      mensagemId={mensagem}
       aoAbrirConversa={(conversa) => {
-        if (conversa !== id)
+        if (conversa !== id || mensagem)
           router.replace(
             conversa
               ? `/chat?conversa=${encodeURIComponent(conversa)}`
