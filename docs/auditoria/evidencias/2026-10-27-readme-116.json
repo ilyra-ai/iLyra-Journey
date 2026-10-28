@@ -1,0 +1,26 @@
+{
+  "palavras": 235,
+  "evidencias": [
+    {
+      "largura": 1280,
+      "violacoes": 0,
+      "regras": 10,
+      "logo": "oficial, carregado",
+      "estouroHorizontal": false
+    },
+    {
+      "largura": 390,
+      "violacoes": 0,
+      "regras": 10,
+      "logo": "oficial, carregado",
+      "estouroHorizontal": false
+    },
+    {
+      "largura": 320,
+      "violacoes": 0,
+      "regras": 10,
+      "logo": "oficial, carregado",
+      "estouroHorizontal": false
+    }
+  ]
+}
