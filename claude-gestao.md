@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `█████████████████░░░` **86,6%** |
+| Progresso          | `█████████████████░░░` **87,3%** |
 | Tarefas totais     | 134                              |
-| 🟢 Finalizadas     | 116                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 117                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 5                                |
 | ⚪ A iniciar       | 12                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-28                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (116 ÷ 134 ≈ 86,6%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (117 ÷ 134 ≈ 87,3%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,22 +49,11 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-28:** 121 concluída e publicada em `dbf54fb894522a267c262f79ba7512bb7f905bef`; 122 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-28:** 122 concluída e publicada em `f90defba583afccfb272a2fc6b5c6f87290de0bc`; próxima tarefa não bloqueada: 123. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 122 · Relatório pessoal visual em PDF com seleção de período e conteúdo
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação individual da 121 e atualização do painel, conforme autorização permanente.
-- **Pedido do usuário:** selecionar período e informações, revisar um resumo visual e baixar em PDF para compartilhar voluntariamente, inclusive numa consulta.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar os registros e a exportação pessoal já existentes; JSON de portabilidade e relatórios administrativos ou fiscais não atendem ao resumo pessoal visual solicitado.
-- **Escopo funcional:** selecionar categorias e intervalo permitido pelo plano, pré-visualizar e gerar PDF legível com datas, unidades, origem, lacunas e resumo em pt-BR. Separar medições, relatos e interpretações. Excluir conversas e informações não selecionadas; compartilhamento deve partir do titular, sem envio automático nem link público de dados sensíveis.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** abrir o PDF real e conferir paginação, fontes, gráficos, recortes, acentos, períodos e consistência com o banco; testar seleção, dados ausentes, autorização, limites do plano e download em celular e desktop. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Conferência inicial:** `main` em `a2d4aac398cfa103d45f0d3db5a2e853bf7d1131`; existem portabilidade JSON e registros consolidados, mas não relatório pessoal visual em PDF. Reutilizados campos, faixas, unidades, datas locais e histórico, reflexões e acontecimentos. Seleção explícita e prévia privada, com revalidação do conteúdo antes do download; nenhuma conversa ou categoria não selecionada é consultada.
 
 ### BLOQUEADAS
 
@@ -2128,3 +2117,18 @@
 - **Entrega real em 2026-10-28:** proposta preservada com referência, duração, fuso e alinhamento do sono; relatos opcionais corrigíveis, pausas e encerramento reais, revisão local de sono e energia com lacunas explícitas. Histórico e permissões atuais, isolamento, idempotência, versões, limite concorrente de 30, exportação e exclusão LGPD na migração 051. Metas, hábitos e práticas não recebem progresso fabricado. A revisão não chama modelo externo nem conclui causalidade.
 - **Validação:** formato, lint sem avisos, tipos, 665 unitários em 81 arquivos, 468 integrações MySQL reais em 52 arquivos e build de produção aprovados. Dez verificações funcionais e 16 execuções axe sem violações nos percursos finais; 320/390/640/1280/1440 px e zoom 200%, recarga, texto literal, edição e exclusão de relato encerrado, três planos, isolamento, pausa/retomada/encerramento com relógio real, métricas preservadas e falha real com recuperação. Históricos de QA são fixtures identificadas. Relatório: `docs/auditoria/2026-10-28-experiencias-121.md`.
 - **Commit e publicação:** `dbf54fb894522a267c262f79ba7512bb7f905bef`, confirmado na `main` pela API autenticada do GitHub, com conteúdo idêntico à revisão local, sem branches ou worktrees.
+
+### 122 · Relatório pessoal visual em PDF com seleção de período e conteúdo
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação individual da 121 e atualização do painel, conforme autorização permanente.
+- **Pedido do usuário:** selecionar período e informações, revisar um resumo visual e baixar em PDF para compartilhar voluntariamente, inclusive numa consulta.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar os registros e a exportação pessoal já existentes; JSON de portabilidade e relatórios administrativos ou fiscais não atendem ao resumo pessoal visual solicitado.
+- **Escopo funcional:** selecionar categorias e intervalo permitido pelo plano, pré-visualizar e gerar PDF legível com datas, unidades, origem, lacunas e resumo em pt-BR. Separar medições, relatos e interpretações. Excluir conversas e informações não selecionadas; compartilhamento deve partir do titular, sem envio automático nem link público de dados sensíveis.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** abrir o PDF real e conferir paginação, fontes, gráficos, recortes, acentos, períodos e consistência com o banco; testar seleção, dados ausentes, autorização, limites do plano e download em celular e desktop. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência inicial:** `main` em `a2d4aac398cfa103d45f0d3db5a2e853bf7d1131`; existem portabilidade JSON e registros consolidados, mas não relatório pessoal visual em PDF. Reutilizados campos, faixas, unidades, datas locais e histórico, reflexões e acontecimentos. Seleção explícita e prévia privada, com revalidação do conteúdo antes do download; nenhuma conversa ou categoria não selecionada é consultada.
+
+- **Entrega real em 2026-10-28:** relatório pessoal com seleção explícita de campos numéricos, reflexões, acontecimentos e notas; prévia privada e PDF A4 1.7 real, com fontes incorporadas, gráficos, datas, unidades, origem e lacunas. Revalidação de sessão, categorias, janela do plano e digest do conteúdo antes de baixar; alterações exigem nova prévia. Sem conversas, envio automático, link público ou retenção de PDFs pessoais no servidor.
+- **Validação:** formato, lint sem avisos, tipos, 671 unitários em 82 arquivos, 481 integrações MySQL reais em 53 arquivos e build limpo aprovados. Sete verificações funcionais e nove execuções axe sem violações, celular/desktop e zoom 200%, três planos e isolamento. PDFs de QA com 3/5/2/64 páginas abertos e renderizados; notas longas, 90 dias, acentos, Unicode estrutural, numeração, cabeçalhos/rodapés e limites de todas as palavras conferidos. Corrigidos incorporação WOFF2 por TTF oficial, páginas extras de rodapé, alvo de checkbox e preservação da CSP privada. Fixtures locais identificadas, sem prontuários de pacientes. Relatório: `docs/auditoria/2026-10-28-relatorio-122.md`.
+- **Commit e publicação:** `f90defba583afccfb272a2fc6b5c6f87290de0bc`, confirmado na `main` pela API autenticada do GitHub, com conteúdo idêntico à revisão local, sem branches ou worktrees.
