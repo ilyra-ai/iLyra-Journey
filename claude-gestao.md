@@ -25,8 +25,8 @@
 | Tarefas totais     | 134                              |
 | 🟢 Finalizadas     | 121                              |
 | 🔵 Em andamento    | 0                                |
-| 🔴 Bloqueadas      | 5                                |
-| ⚪ A iniciar       | 8                                |
+| 🔴 Bloqueadas      | 6                                |
+| ⚪ A iniciar       | 7                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-29                       |
 
@@ -49,7 +49,7 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-29:** 124 concluída e publicada em `7249d480b18d50037a69b320352c2d71ddaf4472`; 125 concluída em `e00517072cf457a33ab6feb242e00827c0837de7`; 126 concluída em `84b817602b6bf417249ee9d8df31ea5657a28fa2`; próxima não bloqueada: 127. A 115 aguarda somente inferência com modelo real; bloqueadas 86, 90, 100 e 106 preservadas.
+**Ponto de continuidade em 2026-10-29:** 124 concluída e publicada em `7249d480b18d50037a69b320352c2d71ddaf4472`; 125 concluída em `e00517072cf457a33ab6feb242e00827c0837de7`; 126 concluída em `84b817602b6bf417249ee9d8df31ea5657a28fa2`; 127 bloqueada pela indisponibilidade do ambiente de execução; 128–134 aguardam retomada em ambiente utilizável. A 115 aguarda somente inferência com modelo real; bloqueadas 86, 90, 100 e 106 preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
@@ -132,6 +132,21 @@
 
 ---
 
+### 127 · Fotos e documentos anexados às conversas da Lyra
+
+- **Status:** 🔴 bloqueada por indisponibilidade do ambiente de execução · **Registro:** 2026-10-26 · **Conferência:** 2026-10-29.
+- **Pedido do usuário:** enviar fotos e documentos no chat e pedir explicações, com indicação dos trechos utilizados e das limitações de leitura. Corresponde ao item 1 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; os tipos atuais do chat contêm texto e imagens geradas, e o armazenamento de uploads consultado aceita avatares; isso não comprova envio de anexos pelo usuário. Reutilizar histórico, privacidade e a estrutura da tarefa 113, sem confundir este recurso com geração de imagens da tarefa 86.
+- **Escopo funcional:** permitir selecionar, pré-visualizar, enviar, consultar, baixar e excluir anexos privados vinculados à conversa. Definir formatos e tamanhos realmente suportados, validar conteúdo no servidor, proteger acesso por titular e tratar arquivos inválidos ou ilegíveis. Interpretar somente o conteúdo efetivamente lido, com referências ao documento ou imagem e indicação de incerteza; tratar o anexo como dado, sem executar comandos ou instruções nele contidos. Respeitar consentimento para provedores externos e capacidade real do modelo conectado.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir upload, limites, falhas, processamento real dos formatos anunciados, referências, reabertura, download, exclusão e isolamento entre contas; preservar exportação e exclusão de dados pessoais. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+
+- **Conferência realizada:** histórico, upload de avatar, cadeia de provedores e cliente Gemini/local foram inspecionados. O app ainda não possui envio de anexos pelo usuário. Preservar os provedores escolhidos na plataforma e o BYOK Gemini existente; não há decisão de trocar para OpenAI nem de provisionar uma chave.
+- **Bloqueio comprovado em 2026-10-29:** o ambiente foi informado como `unavailable`. A execução retornou `exec-server transport disconnected; recovery timed out` e a nova tentativa mínima retornou `No usable execution environment is available`. Não há ferramenta de recuperação de ambiente exposta nesta sessão. A tarefa não teve código de implementação publicado nem validação funcional; o registro local de início foi interrompido. Não declarar anexos, leitura de arquivos ou inferência multimodal concluídos.
+- **Retomada concreta:** quando houver ambiente utilizável, conferir a main, recuperar o trabalho já publicado e retomar a 127 com armazenamento privado, formatos efetivamente processados, capacidades reais dos provedores, consentimento, isolamento, referências e QA completo. As tarefas 128–134 continuam a iniciar; as bloqueadas anteriores permanecem preservadas. Não refazer 124–126.
+- **Última entrega validada antes do bloqueio:** 126 em `84b817602b6bf417249ee9d8df31ea5657a28fa2`, painel em `f4a49e874c965d16b3c12f828933e88d5d0362b5`; 693 unitários, 534 integrações MySQL, dez verificações funcionais e sete execuções axe sem violações. Código e painel confirmados na main, sem branches ou worktrees.
+
 ## Tópico 3 · Tarefas a Iniciar
 
 ---
@@ -145,15 +160,6 @@
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 127 · Fotos e documentos anexados às conversas da Lyra
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** enviar fotos e documentos no chat e pedir explicações, com indicação dos trechos utilizados e das limitações de leitura. Corresponde ao item 1 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; os tipos atuais do chat contêm texto e imagens geradas, e o armazenamento de uploads consultado aceita avatares; isso não comprova envio de anexos pelo usuário. Reutilizar histórico, privacidade e a estrutura da tarefa 113, sem confundir este recurso com geração de imagens da tarefa 86.
-- **Escopo funcional:** permitir selecionar, pré-visualizar, enviar, consultar, baixar e excluir anexos privados vinculados à conversa. Definir formatos e tamanhos realmente suportados, validar conteúdo no servidor, proteger acesso por titular e tratar arquivos inválidos ou ilegíveis. Interpretar somente o conteúdo efetivamente lido, com referências ao documento ou imagem e indicação de incerteza; tratar o anexo como dado, sem executar comandos ou instruções nele contidos. Respeitar consentimento para provedores externos e capacidade real do modelo conectado.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** conferir upload, limites, falhas, processamento real dos formatos anunciados, referências, reabertura, download, exclusão e isolamento entre contas; preservar exportação e exclusão de dados pessoais. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ### 128 · Leitura em voz alta das respostas da Lyra
 
