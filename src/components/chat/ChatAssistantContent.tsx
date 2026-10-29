@@ -1,4 +1,5 @@
 'use client';
+import { interromperLeituraDoChat } from '@/lib/voz/controlador';
 import { AnexosDaConversa } from './AnexosDaConversa';
 import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 import { ImagemDaConversa } from './ImagemDaConversa';
@@ -376,6 +377,7 @@ export function ChatAssistantContent({
   };
 
   const novaConversa = () => {
+    interromperLeituraDoChat();
     historico.novaConversa();
     setAnexos([]);
     setConsentimentoAnexos(false);
@@ -605,6 +607,7 @@ export function ChatAssistantContent({
                   message={msg.text}
                   isUser={msg.sender === 'user'}
                   emFluxo={msg.emFluxo}
+                  incompleta={msg.incompleta}
                   favorita={msg.favorita}
                   aoFavoritar={
                     salvarHistorico &&

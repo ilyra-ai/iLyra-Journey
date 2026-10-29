@@ -9,7 +9,7 @@ a perceber a própria rotina e escolher pequenos passos de autocuidado.
 
 ## O que você pode fazer
 
-- 💬 **Conversar com a Lyra:** tirar dúvidas, refletir e retomar conversas anteriores.
+- 💬 **Conversar com a Lyra:** tirar dúvidas, refletir, retomar conversas e ouvir respostas com uma voz local em português, quando disponível no dispositivo.
 - ⭐ **Encontrar orientações:** buscar no texto das suas conversas e guardar respostas favoritas para consultar depois.
 - 📊 **Acompanhar seu dia:** registrar sono, humor, água e movimento e consultar o que mudou.
 - 🌱 **Cuidar dos seus hábitos:** organizar metas e acompanhar seu progresso.

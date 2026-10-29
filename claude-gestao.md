@@ -24,9 +24,9 @@
 | Progresso          | `█████████████████░░░` **90,3%** |
 | Tarefas totais     | 134                              |
 | 🟢 Finalizadas     | 121                              |
-| 🔵 Em andamento    | 0                                |
+| 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 6                                |
-| ⚪ A iniciar       | 7                                |
+| ⚪ A iniciar       | 6                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-29                       |
 
@@ -54,6 +54,20 @@
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
+
+### 128 · Leitura em voz alta das respostas da Lyra
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-29, conforme retomada autorizada e ordem numérica.
+- **Pedido do usuário:** ouvir respostas do chat, pausar, retomar e ajustar a velocidade de leitura. Corresponde ao item 2 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; o chat já oferece ditado por voz, e respiração e monitoramento possuem recursos de fala. Reaproveitar as capacidades existentes, distinguindo entrada por voz de leitura das respostas; o componente de resposta consultado não oferece esse controle.
+- **Escopo funcional:** acrescentar reprodução por resposta com iniciar, pausar, retomar, parar e velocidade acessíveis. Usar voz em pt-BR quando disponível, explicar limitações de compatibilidade e selecionar texto adequado para leitura sem narrar sintaxe Markdown ou valores incorretos. Não iniciar áudio sem ação do usuário; evitar sobreposição de falas, cancelar ao sair ou trocar de conta e respeitar privacidade e consentimento se houver serviço externo.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar reprodução e controles reais nos navegadores anunciados, resposta longa, tabelas, números e unidades, mensagens incompletas, troca de conversa, recursos indisponíveis, teclado e celular. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência inicial:** 127 publicada, com prova externa preservada. O chat oferece cópia, favoritos e refazer, mas não leitura de respostas. Reutilizar a Web Speech API e a detecção de recursos, somente com voz local em português; sem envio a serviço externo. Navegador de QA informou API presente e nenhuma voz instalada. Preparar e conferir sintetizador real de sistema para validar reprodução, sem substituir a API por uma implementação de teste.
+
+- **Validação concluída em 2026-10-29, aguardando publicação desta tarefa:** leitura das respostas concluídas com controles reais, voz local em português e preferência por pt-BR. Fonte semântica do Markdown, tabelas com cabeçalhos/valores, preservação de zero e unidades, código e URLs explicitamente fora da narração. Trechos sem corte de números, pausa/retomada com repetição informada do trecho atual, velocidade, cancelamento entre respostas/abas, navegação, nova conversa, sessão e troca de conta. Controles ausentes em respostas incompletas. Sem serviço de voz externo, cota de IA adicional ou áudio persistido pelo app.
+- **Evidências:** 703 unitários em 88 arquivos, 547 integrações MySQL em 58 arquivos, instalação congelada offline, formato, lint sem avisos, tipos e build limpo aprovados; três unitários focados, lint, tipos e novo build após os ajustes. Produção: 14 verificações funcionais e 11 execuções axe sem violações, 320/390/1280/1440, zoom 200%, foco/Tab/Escape, toque emulado, planos Free/Meta/Care, leitura completa em 25 trechos nativos terminados, ausência de voz e API realmente desativada. Captura WAV real: 118.769 amostras, 237.582 bytes, eventos nativos start/end; não é teste de alto-falante físico. Nenhuma exceção JavaScript. Corrigidos posicionamento da janela ancorada em zoom, substituída pelo diálogo central, e tratamento de sessão sem API. Documentação e auditoria em `docs/leitura-em-voz-alta.md` e `docs/auditoria/2026-10-29-leitura-128.md`. Os testes não certificam outros sistemas operacionais ou a pronúncia de toda voz instalada.
 
 ### BLOQUEADAS
 
@@ -166,15 +180,6 @@
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 128 · Leitura em voz alta das respostas da Lyra
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** ouvir respostas do chat, pausar, retomar e ajustar a velocidade de leitura. Corresponde ao item 2 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; o chat já oferece ditado por voz, e respiração e monitoramento possuem recursos de fala. Reaproveitar as capacidades existentes, distinguindo entrada por voz de leitura das respostas; o componente de resposta consultado não oferece esse controle.
-- **Escopo funcional:** acrescentar reprodução por resposta com iniciar, pausar, retomar, parar e velocidade acessíveis. Usar voz em pt-BR quando disponível, explicar limitações de compatibilidade e selecionar texto adequado para leitura sem narrar sintaxe Markdown ou valores incorretos. Não iniciar áudio sem ação do usuário; evitar sobreposição de falas, cancelar ao sair ou trocar de conta e respeitar privacidade e consentimento se houver serviço externo.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar reprodução e controles reais nos navegadores anunciados, resposta longa, tabelas, números e unidades, mensagens incompletas, troca de conversa, recursos indisponíveis, teclado e celular. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ### 129 · Histórico de versões e desfazer alterações em registros manuais
 

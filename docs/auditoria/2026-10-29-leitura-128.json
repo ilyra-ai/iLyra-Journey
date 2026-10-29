@@ -1,0 +1,183 @@
+{
+  "tarefa": 128,
+  "data": "2026-10-29",
+  "principal": {
+    "verificacoes": [
+      "Abrir controles não inicia áudio e resposta incompleta não oferece leitura",
+      "Pausa real cancela a fala nativa e mantém o trecho sem enfileirar áudio",
+      "Retomada real reinicia o trecho pausado e aplica a velocidade escolhida",
+      "Resposta extensa percorre todos os trechos com eventos nativos reais, tabela, zero, unidades e código omitido explicitamente",
+      "Começar outra resposta interrompe a primeira; parar cancela a fila sem continuar trechos antigos",
+      "Navegação real para outro recurso encerra a fala e limpa o texto pendente",
+      "Início em outra aba envia somente comando de parada e encerra a leitura anterior",
+      "Logout real em outra aba cancela áudio e impede recomeçar a leitura da conta anterior sem atualizar a página",
+      "Conta Free usa sua própria resposta e voz local sem novas chamadas a modelo ou alteração de métricas",
+      "Toque em contexto móvel emulado inicia e pausa a voz real com controles acessíveis"
+    ],
+    "axe": [
+      {
+        "rotulo": "controles de voz mobile",
+        "aprovadas": 30,
+        "violacoes": []
+      },
+      {
+        "rotulo": "leitura 320px",
+        "aprovadas": 30,
+        "violacoes": []
+      },
+      {
+        "rotulo": "leitura 390px",
+        "aprovadas": 30,
+        "violacoes": []
+      },
+      {
+        "rotulo": "leitura 1280px",
+        "aprovadas": 30,
+        "violacoes": []
+      },
+      {
+        "rotulo": "leitura 1440px",
+        "aprovadas": 30,
+        "violacoes": []
+      },
+      {
+        "rotulo": "leitura zoom 200%",
+        "aprovadas": 30,
+        "violacoes": []
+      },
+      {
+        "rotulo": "controles por toque em viewport móvel",
+        "aprovadas": 25,
+        "violacoes": []
+      },
+      {
+        "rotulo": "voz bloqueada após saída mobile",
+        "aprovadas": 30,
+        "violacoes": []
+      },
+      {
+        "rotulo": "voz bloqueada após saída desktop",
+        "aprovadas": 30,
+        "violacoes": []
+      }
+    ],
+    "excecoes": [],
+    "fala": {
+      "quantidade": 26,
+      "trechosConcluidos": 25,
+      "voz": "Portuguese (Brazil) espeak-ng",
+      "idioma": "pt-BR",
+      "velocidade": 2,
+      "textoInstruido": "Resposta de QA Texto de fixture para conferir leitura, sem representar dados de uma pessoa. Tabela. Linha 1. Registro: Percepção; Valor: 0. Linha 2. Registro: Água; Valor: 250 mililitros. Linha 3. Registro: Frequência informada; Valor: 72 batimentos por minuto. Linha 4. Registro: Sem registro; Valor: não informado. Fim da tabela. Escolha um momento tranquilo e confira os números no texto antes de tomar decisões. Esta é uma frase do percurso de leitura em voz alta. Escolha um momento tranquilo e confira os números no texto antes de tomar decisões. Esta é uma frase do percurso de leitura em voz alta. Escolha um momento tranquilo e confira os números no texto antes de tomar decisões. Esta é uma frase do percurso de leitura em voz alta. Escolha um momento tranquilo e confira os números no texto antes de tomar decisões. Esta é uma frase do percurso de leitura em voz alta. Item: Revise seu relato.. Item: Faça uma pausa quando precisar.. Trecho de código: consulte o texto da resposta. Repositório link indicado na resposta"
+    }
+  },
+  "sem_voz": {
+    "verificacoes": [
+      "Navegador real sem vozes instaladas informa ausência e impede iniciar áudio",
+      "Logout real continua funcionando após abrir controles sem recurso de voz"
+    ],
+    "axe": [
+      {
+        "rotulo": "vozes ausentes 320px",
+        "aprovadas": 25,
+        "violacoes": []
+      }
+    ],
+    "excecoes": []
+  },
+  "sem_api": {
+    "verificacoes": [
+      "Navegador com Web Speech desativado pela flag real informa indisponibilidade sem exceção",
+      "Logout real continua funcionando após abrir controles sem recurso de voz"
+    ],
+    "axe": [
+      {
+        "rotulo": "API ausente 320px",
+        "aprovadas": 25,
+        "violacoes": []
+      }
+    ],
+    "excecoes": []
+  },
+  "audio_pcm_real": {
+    "eventos": [
+      {
+        "evento": "start",
+        "t": 1646.5
+      },
+      {
+        "evento": "end",
+        "t": 6907.600000000093
+      }
+    ],
+    "bytes": 237582,
+    "amostras": 118769,
+    "pico": 25808,
+    "voz": "pt-BR local, eSpeak NG real"
+  },
+  "totais": {
+    "verificacoes": 14,
+    "axe": 11,
+    "unitarios": 703,
+    "arquivos_unitarios": 88,
+    "integracoes_mysql": 547,
+    "arquivos_integracoes": 58
+  },
+  "gates": [
+    {
+      "comando": ["corepack", "pnpm", "fix:format"],
+      "exit_code": 0,
+      "log": "128-format.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "fix:lint"],
+      "exit_code": 0,
+      "log": "128-fixlint.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:lint"],
+      "exit_code": 0,
+      "log": "128-lint.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:format"],
+      "exit_code": 0,
+      "log": "128-checkformat.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:types"],
+      "exit_code": 0,
+      "log": "128-types.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "test", "--maxWorkers=1"],
+      "exit_code": 0,
+      "log": "128-unit.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "build"],
+      "exit_code": 0,
+      "log": "128-build.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:lint"],
+      "exit_code": 0,
+      "log": "128-lint-qa.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:types"],
+      "exit_code": 0,
+      "log": "128-types-qa.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "test", "src/lib/voz/texto.test.ts"],
+      "exit_code": 0,
+      "log": "128-unit-qa.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "build"],
+      "exit_code": 0,
+      "log": "128-build-qa.log"
+    }
+  ]
+}

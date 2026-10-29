@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { LeituraDaResposta } from './LeituraDaResposta';
 import { Check, Copy, RotateCw, Star } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -12,6 +13,7 @@ interface ChatBubbleProps {
   message: string;
   isUser: boolean;
   emFluxo?: boolean;
+  incompleta?: boolean;
   onRegenerate?: () => void;
   favorita?: boolean;
   aoFavoritar?: (favorita: boolean) => Promise<void>;
@@ -28,9 +30,11 @@ export function ChatBubble({
   isUser,
   onRegenerate,
   emFluxo = false,
+  incompleta = false,
   favorita = false,
   aoFavoritar,
 }: ChatBubbleProps) {
+  const conteudoRef = useRef<HTMLDivElement>(null);
   const [isCopied, setIsCopied] = useState(false);
   const [salvandoFavorita, setSalvandoFavorita] = useState(false);
   const handleCopy = async () => {
@@ -72,6 +76,9 @@ export function ChatBubble({
           </>
         )}
       </button>
+      {!isUser && !incompleta ? (
+        <LeituraDaResposta conteudo={conteudoRef} className={actionClassName} />
+      ) : null}
       {!isUser && onRegenerate ? (
         <button
           type="button"
@@ -148,6 +155,7 @@ export function ChatBubble({
             oculto para a tecnologia assistiva e a resposta inteira entra uma
             vez só, ao terminar, como acréscimo do registro da conversa. */}
         <div
+          ref={conteudoRef}
           key={emFluxo ? 'revelando' : 'resposta-completa'}
           aria-hidden={emFluxo || undefined}
         >

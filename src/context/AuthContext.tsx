@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 import { db } from '@/integrations/mysql/client';
 import { destinoObrigatorio } from '@/lib/auth/destino-de-acesso';
+import { interromperLeituraDoChat } from '@/lib/voz/controlador';
 import { bloquearCofresAbertos } from '@/lib/offline/cofre';
 import { paginaSaindo } from '@/lib/navegador/saida-da-pagina';
 import { AppSession } from '@/types/app-session';
@@ -37,8 +38,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let recebeuEvento = false;
 
     const { data: authListener } = db.auth.onAuthStateChange(
-      (_event, novaSessao) => {
+      (evento, novaSessao) => {
         bloquearCofresAbertos();
+        interromperLeituraDoChat(
+          evento === 'SIGNED_IN' || evento === 'SIGNED_OUT'
+        );
         recebeuEvento = true;
         setSession(novaSessao);
         setLoading(false);
