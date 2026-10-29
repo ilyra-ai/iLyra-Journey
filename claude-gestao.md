@@ -151,6 +151,8 @@
 - **Evidências locais:** 700 unitários em 87 arquivos, 547 integrações MySQL em 58 arquivos, 13 integrações e sete unitários focados após a revisão, instalação congelada offline, formato, lint sem avisos, tipos e build limpo aprovados. Produção: 12 verificações funcionais e nove execuções axe sem violações, 320/390/1280/1440, zoom 200%, foco, Tab, recarga, download, conteúdo hostil literal, rede real e isolamento Free/Care. Corrigido o crescimento da coluna do modal com nome longo usando trilha minmax(0,1fr), sem ocultar o conteúdo. Nenhuma exceção JavaScript; dados de QA identificados e removidos. Documentação e relatório em `docs/anexos-do-chat.md` e `docs/auditoria/2026-10-29-anexos-127.md`.
 - **Fronteira externa preservada:** testes HTTP e contratos de serialização não são um modelo generativo. O envio real no QA retornou ausência de modelo autorizado, guardou a pergunta e os IDs, sem salvar resposta. Falta comprovar inferência e qualidade das referências para TXT e fotos legíveis/ilegíveis com conexão real autorizada nesta instância. O antigo bloqueio de ambiente foi resolvido. A 127 não é transferida para finalizadas; continuar as tarefas independentes sem insistir nas bloqueadas anteriores.
 
+- **Commit e publicação da implementação local:** `2ab166554c20f60826349659c83dc1acc0e23585`, confirmado na `main` pela API autenticada do GitHub, com árvore idêntica à revisão local e atualização sem force. Nenhuma branch ou worktree criada. A 127 continua bloqueada somente na prova externa descrita acima; a publicação não a declara concluída.
+
 ## Tópico 3 · Tarefas a Iniciar
 
 ---
