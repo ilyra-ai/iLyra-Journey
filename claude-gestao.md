@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `█████████████████░░░` **89,6%** |
+| Progresso          | `█████████████████░░░` **90,3%** |
 | Tarefas totais     | 134                              |
-| 🟢 Finalizadas     | 120                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 121                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 5                                |
 | ⚪ A iniciar       | 8                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-29                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (120 ÷ 134 ≈ 89,6%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (121 ÷ 134 ≈ 90,3%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,23 +49,11 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-29:** 124 concluída e publicada em `7249d480b18d50037a69b320352c2d71ddaf4472`; 125 concluída em `e00517072cf457a33ab6feb242e00827c0837de7`; 126 em andamento. A 115 aguarda somente inferência com modelo real; bloqueadas 86, 90, 100 e 106 preservadas.
+**Ponto de continuidade em 2026-10-29:** 124 concluída e publicada em `7249d480b18d50037a69b320352c2d71ddaf4472`; 125 concluída em `e00517072cf457a33ab6feb242e00827c0837de7`; 126 concluída em `84b817602b6bf417249ee9d8df31ea5657a28fa2`; próxima não bloqueada: 127. A 115 aguarda somente inferência com modelo real; bloqueadas 86, 90, 100 e 106 preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 126 · Sessões de foco e pausa com temporizador e registro de percepção
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-29, após confirmar a main em `ff9497fbe7dad8ee2d091ef4b8eae6ab52eab1a0`. Respiração e rotinas conferidas; nenhuma sessão de foco persistida encontrada. Não haverá lançamento em meditação.
-- **Pedido do usuário:** iniciar um período de concentração com temporizador, receber uma pausa opcional e registrar como ficou ao terminar.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar componentes e acessibilidade da respiração guiada quando pertinentes. Foco e pausa devem complementar as práticas atuais, sem lançar automaticamente minutos de concentração como meditação.
-- **Escopo funcional:** escolher duração, iniciar, pausar, retomar e encerrar uma sessão, com convite opcional de descanso e breve percepção ao final. Usar tempo realmente decorrido, tratar aba em segundo plano, suspensão e recarga sem prometer execução contínua não comprovada. Sons e notificações devem ser opcionais e respeitar silêncio; histórico e totais devem refletir sessões reais.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** conferir temporização real, pausa, recarga, suspensão, encerramento antecipado, sessão concluída, privacidade, integração com histórico e acessibilidade, sem dupla contagem de práticas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Entrega validada, publicação em preparação:** central de foco e pausa com intervalos escolhidos, início idempotente, uma sessão aberta por titular, pausa/retomada e confirmação real de encerramento. Tempo civil limitado ao alvo, sem medir atenção nem lançar meditação. Histórico paginado, totais separados, percepção opcional editável e remoção confirmada, migração 055 e LGPD. Som local desligado por padrão, gesto explícito e decisão única por sessão com silêncio/descanso; nenhum alarme garantido fora da página.
-- **Evidências:** 693 unitários em 86 arquivos, 534 integrações MySQL em 57 arquivos, formato, lint sem avisos, tipos e build aprovados. Dez verificações funcionais e sete execuções axe sem violações, 320/390/1280/1440 e zoom 200%, teclado, foco, CRUD e isolamento. Um minuto ativo aguardado no relógio real, recarga e suspensão real controlada da página, Web Audio observado pelo CDP, desconexão/reconexão reais com erro em pt-BR. Não se alega alto-falante físico, suspensão de hardware nem atenção contínua. Relatórios `docs/foco-e-pausa.md` e `docs/auditoria/2026-10-29-foco-126.md`. A tarefa segue em andamento até confirmação da publicação.
 
 ### BLOQUEADAS
 
@@ -2156,3 +2144,17 @@
 - **Evidências:** 690 unitários, 524 integrações MySQL em 56 arquivos, formato, lint sem avisos, tipos e build aprovados. Oito verificações funcionais e seis execuções axe sem violações, teclado, foco, recarga, planos, 320/390/1280/1440 e zoom 200%; sem exceções JavaScript. Corrigidos SQL de versão ambígua e limites/ações do modal em zoom e celular. Diretório órfão apenas do banco temporário de teste foi preservado fora do datadir antes da suíte integral aprovada. Relatórios `docs/apresentacao-opcional.md` e `docs/auditoria/2026-10-29-apresentacao-125.md`. Publicação confirmada na `main` pela API autenticada do GitHub.
 
 - **Commit e publicação:** `e00517072cf457a33ab6feb242e00827c0837de7`, conteúdo conferido por SHA e main atualizada com verificação do commit anterior, sem force, branches ou worktrees.
+
+### 126 · Sessões de foco e pausa com temporizador e registro de percepção
+
+- **Status:** 🟢 finalizada · **Publicação:** 2026-10-29 · **Registro:** 2026-10-26 · **Início:** 2026-10-29, após confirmar a main em `ff9497fbe7dad8ee2d091ef4b8eae6ab52eab1a0`. Respiração e rotinas conferidas; nenhuma sessão de foco persistida encontrada. Não haverá lançamento em meditação.
+- **Pedido do usuário:** iniciar um período de concentração com temporizador, receber uma pausa opcional e registrar como ficou ao terminar.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar componentes e acessibilidade da respiração guiada quando pertinentes. Foco e pausa devem complementar as práticas atuais, sem lançar automaticamente minutos de concentração como meditação.
+- **Escopo funcional:** escolher duração, iniciar, pausar, retomar e encerrar uma sessão, com convite opcional de descanso e breve percepção ao final. Usar tempo realmente decorrido, tratar aba em segundo plano, suspensão e recarga sem prometer execução contínua não comprovada. Sons e notificações devem ser opcionais e respeitar silêncio; histórico e totais devem refletir sessões reais.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir temporização real, pausa, recarga, suspensão, encerramento antecipado, sessão concluída, privacidade, integração com histórico e acessibilidade, sem dupla contagem de práticas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Entrega validada, publicação em preparação:** central de foco e pausa com intervalos escolhidos, início idempotente, uma sessão aberta por titular, pausa/retomada e confirmação real de encerramento. Tempo civil limitado ao alvo, sem medir atenção nem lançar meditação. Histórico paginado, totais separados, percepção opcional editável e remoção confirmada, migração 055 e LGPD. Som local desligado por padrão, gesto explícito e decisão única por sessão com silêncio/descanso; nenhum alarme garantido fora da página.
+- **Evidências:** 693 unitários em 86 arquivos, 534 integrações MySQL em 57 arquivos, formato, lint sem avisos, tipos e build aprovados. Dez verificações funcionais e sete execuções axe sem violações, 320/390/1280/1440 e zoom 200%, teclado, foco, CRUD e isolamento. Um minuto ativo aguardado no relógio real, recarga e suspensão real controlada da página, Web Audio observado pelo CDP, desconexão/reconexão reais com erro em pt-BR. Não se alega alto-falante físico, suspensão de hardware nem atenção contínua. Relatórios `docs/foco-e-pausa.md` e `docs/auditoria/2026-10-29-foco-126.md`. Publicação confirmada na `main` pela API autenticada do GitHub.
+
+- **Commit e publicação:** `84b817602b6bf417249ee9d8df31ea5657a28fa2`, conteúdo conferido por SHA e main atualizada com verificação do commit anterior, sem force, branches ou worktrees.
