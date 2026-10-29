@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import { MoonStar, ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -432,6 +433,21 @@ export function ReflexaoDaNoite({
             Feche o ciclo com as mesmas três dimensões da leitura de hoje. As
             notas entram na retrospectiva da sua semana.
           </p>
+          <Link
+            href="/offline"
+            prefetch={false}
+            onClick={(e) => {
+              e.preventDefault();
+              // Navegação de documento necessária para o fallback do service worker.
+
+              window.location.assign(
+                new URL('/offline', window.location.origin)
+              );
+            }}
+            className="text-sm text-primary underline underline-offset-4"
+          >
+            Preparar registros para usar sem internet
+          </Link>
         </div>
         {hoje && ontem ? (
           <ToggleGroup

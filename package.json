@@ -6,7 +6,7 @@
     "predev": "node scripts/verificar-banco.mjs",
     "dev": "next dev",
     "dev:webpack": "next dev --webpack",
-    "build": "next build",
+    "build": "next build && node scripts/gerar-offline-assets.mjs",
     "start": "next start",
     "lint": "eslint .",
     "test": "vitest run --project unit",

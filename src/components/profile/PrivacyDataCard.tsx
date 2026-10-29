@@ -32,6 +32,7 @@ import {
   ROTULO_DO_CONSENTIMENTO,
   type TipoDeConsentimento,
 } from '@/lib/lgpd/documentos';
+import { removerCofreDoTitular } from '@/lib/offline/cofre';
 import { paginaSaindo } from '@/lib/navegador/saida-da-pagina';
 
 interface Consentimento {
@@ -54,7 +55,7 @@ function dataBr(valor: string) {
  * cópia de todos os dados (portabilidade) e exclusão da conta.
  */
 export function PrivacyDataCard() {
-  const { db } = useAuth();
+  const { db, session } = useAuth();
   const [consentimentos, setConsentimentos] = React.useState<
     Consentimento[] | null
   >(null);
@@ -179,6 +180,13 @@ export function PrivacyDataCard() {
         return;
       }
       toast.success('Sua conta e os seus dados foram excluídos.');
+      try {
+        if (session) await removerCofreDoTitular(session.user.id);
+      } catch {
+        toast.warning(
+          'A conta foi excluída. Remova o cofre local em /offline ou nas configurações do navegador.'
+        );
+      }
       setDialogoAberto(false);
       // A sessão já foi encerrada no servidor; o app volta para a entrada.
       await db.auth.signOut({ jaEncerrada: true });

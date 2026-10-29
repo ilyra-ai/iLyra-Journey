@@ -1,3 +1,4 @@
+import type { PoolConnection } from 'mysql2/promise';
 import { contaTemRecurso } from '@/lib/plans/service';
 import { randomUUID } from 'node:crypto';
 
@@ -12,7 +13,7 @@ import { recalcularEscoresDesde } from './escores-do-dia';
  * O que a IA faz sozinha depois de cada gravação: prontidão e recuperação do
  * dia (e dos 7 seguintes), metas automáticas, prazos e sequências.
  */
-async function depoisDeGravar(userId: string, data: string) {
+export async function depoisDeGravarRegistro(userId: string, data: string) {
   if (await contaTemRecurso(userId, 'ai_scores'))
     await recalcularEscoresDesde(userId, data);
   if (await contaTemRecurso(userId, 'goal_progress_tracking'))
@@ -92,6 +93,18 @@ export async function gravarRegistroDoDia(
   userId: string,
   registro: RegistroDoDia
 ): Promise<LinhaDoRegistro | null> {
+  await persistirRegistroDoDia(userId, registro);
+  await depoisDeGravarRegistro(userId, registro.data);
+
+  return lerRegistroDoDia(userId, registro.data);
+}
+
+/** Escrita compartilhada, sem executar consultas derivadas dentro da transação do recibo. */
+export async function persistirRegistroDoDia(
+  userId: string,
+  registro: RegistroDoDia,
+  c?: PoolConnection
+): Promise<void> {
   const informados = NOMES_DOS_CAMPOS.filter(
     (campo) => registro.valores[campo] !== undefined
   );
@@ -105,11 +118,9 @@ export async function gravarRegistroDoDia(
      ON DUPLICATE KEY UPDATE
        ${colunas.map((coluna) => `${coluna} = novo.${coluna}`).join(',\n       ')},
        metrics_updated_at = novo.metrics_updated_at`,
-    [randomUUID(), userId, registro.data, ...valores]
+    [randomUUID(), userId, registro.data, ...valores],
+    c
   );
-  await depoisDeGravar(userId, registro.data);
-
-  return lerRegistroDoDia(userId, registro.data);
 }
 
 /**
@@ -136,7 +147,7 @@ export async function somarMinutosDeMeditacao(
        metrics_updated_at = novo.metrics_updated_at`,
     [randomUUID(), userId, data, minutos, maximo, maximo]
   );
-  await depoisDeGravar(userId, data);
+  await depoisDeGravarRegistro(userId, data);
   return lerRegistroDoDia(userId, data);
 }
 
@@ -199,7 +210,7 @@ export async function gravarSessaoDoSensor(
       sessao.rmssd === null ? null : Math.round(sessao.rmssd * 10) / 10,
     ]
   );
-  await depoisDeGravar(userId, sessao.data);
+  await depoisDeGravarRegistro(userId, sessao.data);
   await avisarFrequenciaAlta(userId, sessao);
 
   return lerRegistroDoDia(userId, sessao.data);

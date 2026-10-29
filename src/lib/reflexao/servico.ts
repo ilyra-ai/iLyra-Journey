@@ -1,3 +1,4 @@
+import type { PoolConnection } from 'mysql2/promise';
 import { randomUUID } from 'node:crypto';
 
 import { HttpError } from '@/lib/http-error';
@@ -103,6 +104,17 @@ export async function salvarReflexao(
   agora = new Date()
 ): Promise<EstadoDaReflexao> {
   const conferida = await dataConferida(userId, entrada.data, agora);
+  await persistirReflexao(userId, conferida.data, entrada);
+  return lerEstadoDaReflexao(userId, conferida.data, agora);
+}
+
+/** Escrita comum ao formulário e à sincronização, depois de validar data e titular. */
+export async function persistirReflexao(
+  userId: string,
+  data: string,
+  entrada: ReflexaoValidada,
+  c?: PoolConnection
+): Promise<void> {
   await executeStatement(
     `INSERT INTO daily_reflections
        (id, user_id, reflection_date, emotional_score, body_score,
@@ -117,14 +129,14 @@ export async function salvarReflexao(
     [
       randomUUID(),
       userId,
-      conferida.data,
+      data,
       entrada.emocional,
       entrada.corpo,
       entrada.espiritual,
       entrada.frase ?? null,
-    ]
+    ],
+    c
   );
-  return lerEstadoDaReflexao(userId, conferida.data, agora);
 }
 
 /** Apaga a reflexão da data (404 quando não existe). */

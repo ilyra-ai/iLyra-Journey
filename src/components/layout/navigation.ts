@@ -156,6 +156,15 @@ export const navigationItems: NavigationDefinition[] = [
     sectionKey: 'personal',
   },
   {
+    href: '/offline',
+    label: 'Sem internet',
+    description:
+      'Prepare registros protegidos neste dispositivo e acompanhe o envio.',
+    icon: Smartphone,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+  },
+  {
     href: '/relatorio-pessoal',
     label: 'Meu relatório pessoal',
     description: 'Selecione registros, revise e baixe seu PDF pessoal.',

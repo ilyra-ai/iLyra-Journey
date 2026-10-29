@@ -2,6 +2,7 @@
 import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import * as React from 'react';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { ClipboardCheck, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -131,6 +132,21 @@ export function RegistroDoDiaDialog({
             Leva menos de um minuto. Preencha só o que souber: campos vazios não
             apagam o que já foi registrado hoje.
           </DialogDescription>
+          <Link
+            href="/offline"
+            prefetch={false}
+            onClick={(e) => {
+              e.preventDefault();
+              // Navegação de documento necessária para o fallback do service worker.
+
+              window.location.assign(
+                new URL('/offline', window.location.origin)
+              );
+            }}
+            className="text-sm text-primary underline underline-offset-4"
+          >
+            Preparar registros para usar sem internet
+          </Link>
         </DialogHeader>
         {/* O conteúdo só monta com o diálogo aberto: cada abertura lê o
             registro atual do dia e começa sem erros antigos. */}

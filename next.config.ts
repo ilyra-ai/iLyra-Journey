@@ -87,6 +87,23 @@ const nextConfig: NextConfig = {
     return [
       { source: '/:path*', headers: cabecalhosDeSeguranca },
       {
+        source: '/offline-sw.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-cache, no-store, must-revalidate',
+          },
+          {
+            key: 'Content-Type',
+            value: 'application/javascript; charset=utf-8',
+          },
+        ],
+      },
+      {
+        source: '/offline-assets.json',
+        headers: [{ key: 'Cache-Control', value: 'no-store' }],
+      },
+      {
         source: '/:path((?!api/storage/|api/relatorio-pessoal/pdf$).*)',
         headers: [cspDasPaginas],
       },

@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 import { db } from '@/integrations/mysql/client';
 import { destinoObrigatorio } from '@/lib/auth/destino-de-acesso';
+import { bloquearCofresAbertos } from '@/lib/offline/cofre';
 import { paginaSaindo } from '@/lib/navegador/saida-da-pagina';
 import { AppSession } from '@/types/app-session';
 
@@ -37,6 +38,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const { data: authListener } = db.auth.onAuthStateChange(
       (_event, novaSessao) => {
+        bloquearCofresAbertos();
         recebeuEvento = true;
         setSession(novaSessao);
         setLoading(false);
@@ -49,6 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     // quem estava logado ver a landing sem explicação.
     const esperas = [1000, 3000];
     const lerSessao = async (tentativa: number): Promise<void> => {
+      if (window.location.pathname === '/offline' && !navigator.onLine) return;
       const { data, error } = await db.auth.getSession();
       if (!ativo || recebeuEvento) return;
       if (!error) {

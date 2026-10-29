@@ -353,12 +353,38 @@ export default function PoliticaDePrivacidadePage() {
       id: 'navegador',
       titulo: 'Cookies e armazenamento no navegador',
       conteudo: (
-        <p>
-          Usamos só um cookie essencial, o da sessão de login. No próprio
-          navegador ficam apenas preferências suas: o modo privacidade e, se
-          você informar, a sua chave de IA, que nunca é gravada nos nossos
-          servidores. Não usamos cookies de publicidade nem de rastreamento.
-        </p>
+        <div className="space-y-3">
+          <p>
+            Usamos um cookie essencial para a sessão de login. No navegador
+            também ficam preferências suas, como o modo privacidade e, se você
+            informar, a chave pessoal de IA. Não usamos cookies de publicidade
+            nem de rastreamento.
+          </p>
+          <p>
+            Em “Sem internet”, somente após sua escolha e autorização, o
+            navegador pode manter uma cópia criptografada de check-ins e
+            reflexões e seus envios pendentes. Uma frase local, que não chega
+            aos servidores e não pode ser recuperada pela Lyra, protege essa
+            cópia. A chave fica na memória enquanto o cofre está aberto. A
+            página pública e arquivos do aplicativo podem ser armazenados sem
+            dados pessoais para abrir a interface sem rede.
+          </p>
+          <p>
+            Sair da conta bloqueia o cofre e preserva os rascunhos cifrados.
+            Você pode removê-los na página “Sem internet”. Excluir a conta
+            remove também seu cofre no navegador atual quando o armazenamento
+            permite; se falhar, avisamos. Outros dispositivos precisam ser
+            limpos separadamente. Limpeza do navegador, perda do dispositivo ou
+            frase esquecida podem tornar os rascunhos irrecuperáveis. Dados
+            ainda não enviados não estão na exportação do servidor.
+          </p>
+          <p>
+            A sincronização exige conexão, sessão válida da conta original e
+            direitos atuais do plano. Alterações concorrentes exigem sua
+            revisão, sem sobrescrita silenciosa. Os recibos de confirmação
+            integram sua exportação e são removidos com a conta.
+          </p>
+        </div>
       ),
     },
     {

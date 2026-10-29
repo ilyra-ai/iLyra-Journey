@@ -64,3 +64,6 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Manifesto público gerado a cada build; não contém dados pessoais.
+/public/offline-assets.json

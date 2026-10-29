@@ -1,0 +1,115 @@
+{
+  "verificacoes": [
+    "Abertura transfere foco ao título do cofre e Tab alcança a confirmação sem armadilha",
+    "Consentimento explícito, cofre AES-GCM e instalação real do service worker em build de produção",
+    "CacheStorage contém somente documento público e arquivos estáticos, sem APIs ou páginas privadas",
+    "Navegação offline para página privada redireciona ao documento público preparado, sem cache privado",
+    "Aborto controlado da transação IndexedDB não declara salvamento e preserva o formulário",
+    "Check-in salvo com rede realmente desconectada; nenhuma gravação no servidor e somente envelope cifrado no IndexedDB",
+    "Fechamento completo e reabertura do navegador offline preservam o rascunho cifrado; frase incorreta não abre o cofre",
+    "Reconexão detecta conflito real com edição online; escolha explícita grava 1234 e repetição do mesmo pedido não duplica recibo",
+    "Sessão invalidada no servidor impede sincronização e conserva a reflexão local",
+    "Reautenticação na conta original confirma a reflexão integral no MySQL",
+    "Logout real pelo menu do app bloqueia o cofre em outra aba e preserva o envelope cifrado",
+    "Troca real da conta conectada bloqueia o cofre e impede envio para outro titular",
+    "Exclusão real de outra conta preserva o cofre cifrado do titular original no mesmo navegador",
+    "Remoção explícita apaga o cofre local sem apagar gravações remotas",
+    "Exclusão real da conta titular remove seu cofre local e recibos remotos, com isolamento por etiqueta opaca",
+    "Percurso final sem exceções JavaScript, com escuta de erros em todas as páginas do navegador persistente"
+  ],
+  "axe": [
+    {
+      "rotulo": "offline antes de consentir mobile",
+      "aprovadas": 26,
+      "violacoes": []
+    },
+    {
+      "rotulo": "check-in offline pendente mobile",
+      "aprovadas": 26,
+      "violacoes": []
+    },
+    {
+      "rotulo": "conflito exige escolha mobile",
+      "aprovadas": 26,
+      "violacoes": []
+    },
+    {
+      "rotulo": "confirmações desktop",
+      "aprovadas": 26,
+      "violacoes": []
+    },
+    {
+      "rotulo": "cofre zoom 200%",
+      "aprovadas": 26,
+      "violacoes": []
+    },
+    {
+      "rotulo": "cofre 320px",
+      "aprovadas": 26,
+      "violacoes": []
+    },
+    {
+      "rotulo": "cofre removido",
+      "aprovadas": 26,
+      "violacoes": []
+    }
+  ],
+  "excecoes": [],
+  "tarefa": 124,
+  "data_local": "2026-10-28",
+  "fuso_do_relatorio": "America/Sao_Paulo",
+  "unitarios": {
+    "testes": 690,
+    "arquivos": 85
+  },
+  "integracao_mysql": {
+    "testes": 516,
+    "arquivos": 55
+  },
+  "revalidacao_focada_permissao": 10,
+  "gates": [
+    {
+      "comando": "corepack pnpm fix:format",
+      "exit_code": 0
+    },
+    {
+      "comando": "corepack pnpm fix:lint",
+      "exit_code": 0
+    },
+    {
+      "comando": "corepack pnpm check:lint",
+      "exit_code": 0
+    },
+    {
+      "comando": "corepack pnpm check:format",
+      "exit_code": 0
+    },
+    {
+      "comando": "corepack pnpm check:types",
+      "exit_code": 0
+    },
+    {
+      "comando": "corepack pnpm test --maxWorkers=1",
+      "exit_code": 0
+    },
+    {
+      "comando": "corepack pnpm build",
+      "exit_code": 0
+    }
+  ],
+  "ambiente": {
+    "node": "24.22.1",
+    "pnpm": "11.28.4",
+    "mysql": "9.7.2",
+    "chrome": "156.0.8078.73",
+    "axe": "4.14.0"
+  },
+  "observacoes": [
+    "Desconexão de transporte real pelo contexto do navegador, sem interceptar respostas de APIs.",
+    "Persistência após encerramento completo e reabertura do navegador com mesmo perfil.",
+    "Aborto IndexedDB induzido explicitamente para verificar falha local; não representa esgotamento físico da cota.",
+    "Sessão invalidada de verdade por incremento de session_version no banco.",
+    "Fixtures locais de QA, sem informações de pacientes.",
+    "@current_problems e Docker não disponíveis; não se declara validação nesses ambientes."
+  ]
+}

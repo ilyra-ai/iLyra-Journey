@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { criarUsuario, contar } from '../../../tests/integration/fixtures';
 import { chamar } from '../../../tests/integration/http';
 import { executeStatement, queryRows } from '@/lib/mysql/pool';
@@ -64,6 +64,12 @@ async function recurso(chave: string, enabled: boolean) {
   );
 }
 describe('relatório pessoal e PDF com registros reais no MySQL', () => {
+  // As rotas usam o relógio atual: fixar apenas Date mantém as datas das fixtures estáveis após a virada do dia.
+  beforeEach(() => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(agora);
+  });
+  afterEach(() => vi.useRealTimers());
   it('exige sessão nas opções, prévia e PDF', async () => {
     for (const [h, m] of [
       [central.GET, 'GET'],

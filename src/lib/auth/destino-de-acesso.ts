@@ -10,6 +10,7 @@ export const ROTA_INICIAL = '/';
 export const ROTAS_SEMPRE_LIBERADAS: ReadonlySet<string> = new Set([
   '/privacidade',
   '/termos',
+  '/offline',
 ]);
 
 /**
