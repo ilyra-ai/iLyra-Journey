@@ -1,0 +1,98 @@
+{
+  "verificacoes": [
+    "Primeira visita não abre modal nem cria progresso ou cadastro extra",
+    "Dispensa explícita persiste após recarga e não bloqueia o chat",
+    "Avanço, Escape, retorno de foco e retomada preservam a etapa real no servidor",
+    "A apresentação abre o formulário existente e grava somente o valor realmente informado no check-in",
+    "Ações de resultado e conversa navegam às páginas reais sem criar mensagens ou resultados de demonstração",
+    "Conclusão e revisão desde o início persistem, com Tab contido e interface acessível em celular e zoom",
+    "Mudança real de direitos remove etapas ausentes e a API recusa acesso manual ao passo revogado",
+    "Conta de outro plano mantém progresso isolado e recebe convite próprio"
+  ],
+  "axe": [
+    {
+      "rotulo": "convite mobile",
+      "aprovadas": 28,
+      "violacoes": []
+    },
+    {
+      "rotulo": "primeiro passo mobile",
+      "aprovadas": 21,
+      "violacoes": []
+    },
+    {
+      "rotulo": "formulário real aberto pela ajuda",
+      "aprovadas": 27,
+      "violacoes": []
+    },
+    {
+      "rotulo": "apresentação zoom 200%",
+      "aprovadas": 23,
+      "violacoes": []
+    },
+    {
+      "rotulo": "apresentação 320px",
+      "aprovadas": 22,
+      "violacoes": []
+    },
+    {
+      "rotulo": "etapa disponível desktop",
+      "aprovadas": 22,
+      "violacoes": []
+    }
+  ],
+  "excecoes": [],
+  "tarefa": 125,
+  "data": "2026-10-29",
+  "unitarios": {
+    "testes": 690,
+    "arquivos": 85
+  },
+  "integracao_mysql": {
+    "testes": 524,
+    "arquivos": 56
+  },
+  "gates": [
+    {
+      "comando": ["corepack", "pnpm", "fix:format"],
+      "exit_code": 0,
+      "log": "../repo-transfer/125-format.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "fix:lint"],
+      "exit_code": 0,
+      "log": "../repo-transfer/125-fixlint.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:lint"],
+      "exit_code": 0,
+      "log": "../repo-transfer/125-lint.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:format"],
+      "exit_code": 0,
+      "log": "../repo-transfer/125-checkformat.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:types"],
+      "exit_code": 0,
+      "log": "../repo-transfer/125-types.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "test", "--maxWorkers=1"],
+      "exit_code": 0,
+      "log": "../repo-transfer/125-unit.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "build"],
+      "exit_code": 0,
+      "log": "../repo-transfer/125-build.log"
+    }
+  ],
+  "observacoes": [
+    "Fixtures locais de QA removidas; nenhum dado de demonstração no produto.",
+    "Acessibilidade por DOM, foco, teclado, axe e inspeção visual; não se declara teste com NVDA ou VoiceOver físico.",
+    "MySQL real 9.7.2 e Chrome Headless Shell 156.0.8078.73.",
+    "@current_problems e Docker não estão disponíveis."
+  ]
+}

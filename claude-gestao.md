@@ -24,9 +24,9 @@
 | Progresso          | `█████████████████░░░` **88,8%** |
 | Tarefas totais     | 134                              |
 | 🟢 Finalizadas     | 119                              |
-| 🔵 Em andamento    | 0                                |
+| 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 5                                |
-| ⚪ A iniciar       | 10                               |
+| ⚪ A iniciar       | 9                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-29                       |
 
@@ -49,11 +49,23 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-29:** 124 concluída e publicada em `7249d480b18d50037a69b320352c2d71ddaf4472`; próxima não bloqueada: 125. A 115 aguarda somente inferência com modelo real; bloqueadas 86, 90, 100 e 106 preservadas.
+**Ponto de continuidade em 2026-10-29:** 124 concluída e publicada em `7249d480b18d50037a69b320352c2d71ddaf4472`; 125 em andamento. A 115 aguarda somente inferência com modelo real; bloqueadas 86, 90, 100 e 106 preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
+
+### 125 · Primeiro uso acompanhado com apresentação curta e opcional
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-29, após confirmar a main em `040e858fbdd9fb43f42b599facb4d32dc41cb788`. Cadastro existente preservado; nenhuma apresentação pós-cadastro encontrada no código.
+- **Pedido do usuário:** receber uma apresentação breve para registrar o dia, entender um resultado e conversar com a Lyra, podendo pular ou rever a ajuda.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; preservar o cadastro inicial de três etapas e as decisões já registradas sobre onboarding; a apresentação após o cadastro não deve voltar a exigir objetivos ou campos removidos por decisão do usuário.
+- **Escopo funcional:** oferecer orientação contextual sobre controles reais, com início opcional, avanço, voltar, pular e acesso posterior. Adaptar os passos ao plano e aos recursos disponíveis, sem bloquear tarefas ou usar dados de demonstração como se fossem pessoais. Explicar pedidos de informação e estados sem dados com linguagem acolhedora.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar primeira visita e retorno, retomada, dispensa, mudança de plano, elementos ausentes, navegação por teclado, leitor de tela, foco, zoom e celular, sem armadilhas nem cadastro duplicado. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Entrega validada, publicação em preparação:** apresentação explicitamente opcional, sem modal automático nem alteração do cadastro. Estado por titular, retomada, dispensa, conclusão e revisão, controle de versão e migração 054. Etapas adaptadas aos direitos atuais; formulário real do check-in, links reais de painel/chat/perfil, nenhum registro ou resultado fictício. Exportação e cascade LGPD.
+- **Evidências:** 690 unitários, 524 integrações MySQL em 56 arquivos, formato, lint sem avisos, tipos e build aprovados. Oito verificações funcionais e seis execuções axe sem violações, teclado, foco, recarga, planos, 320/390/1280/1440 e zoom 200%; sem exceções JavaScript. Corrigidos SQL de versão ambígua e limites/ações do modal em zoom e celular. Diretório órfão apenas do banco temporário de teste foi preservado fora do datadir antes da suíte integral aprovada. Relatórios `docs/apresentacao-opcional.md` e `docs/auditoria/2026-10-29-apresentacao-125.md`. A tarefa segue em andamento até confirmação da publicação.
 
 ### BLOQUEADAS
 
@@ -145,15 +157,6 @@
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 125 · Primeiro uso acompanhado com apresentação curta e opcional
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** receber uma apresentação breve para registrar o dia, entender um resultado e conversar com a Lyra, podendo pular ou rever a ajuda.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; preservar o cadastro inicial de três etapas e as decisões já registradas sobre onboarding; a apresentação após o cadastro não deve voltar a exigir objetivos ou campos removidos por decisão do usuário.
-- **Escopo funcional:** oferecer orientação contextual sobre controles reais, com início opcional, avanço, voltar, pular e acesso posterior. Adaptar os passos ao plano e aos recursos disponíveis, sem bloquear tarefas ou usar dados de demonstração como se fossem pessoais. Explicar pedidos de informação e estados sem dados com linguagem acolhedora.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar primeira visita e retorno, retomada, dispensa, mudança de plano, elementos ausentes, navegação por teclado, leitor de tela, foco, zoom e celular, sem armadilhas nem cadastro duplicado. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ### 126 · Sessões de foco e pausa com temporizador e registro de percepção
 

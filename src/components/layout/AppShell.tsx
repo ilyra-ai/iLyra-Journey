@@ -1,4 +1,5 @@
 'use client';
+import { ApresentacaoOpcional } from '@/components/apresentacao/ApresentacaoOpcional';
 import { EstadoDoDescanso } from '@/components/descanso/EstadoDoDescanso';
 
 import type { CSSProperties, ReactNode } from 'react';
@@ -75,6 +76,7 @@ export function AppShell({
               contentClassName
             )}
           >
+            <ApresentacaoOpcional />
             <EstadoDoDescanso />
             <PlanFeatureGate features={recursosDaRota(pathname)}>
               {children}

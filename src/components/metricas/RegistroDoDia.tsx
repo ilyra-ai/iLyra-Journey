@@ -119,7 +119,10 @@ export function RegistroDoDiaDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-h-[min(92dvh,52rem)] flex-col gap-0 p-0 sm:max-w-2xl">
+      <DialogContent
+        aria-modal="true"
+        className="flex max-h-[min(92dvh,52rem)] flex-col gap-0 p-0 sm:max-w-2xl"
+      >
         <DialogHeader className="border-b border-border px-5 pb-4 pt-5 sm:px-6">
           <DialogTitle className="flex items-center gap-2">
             <ClipboardCheck
