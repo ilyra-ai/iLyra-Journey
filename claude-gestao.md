@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `█████████████████░░░` **88,1%** |
+| Progresso          | `█████████████████░░░` **88,8%** |
 | Tarefas totais     | 134                              |
-| 🟢 Finalizadas     | 118                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 119                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 5                                |
 | ⚪ A iniciar       | 10                               |
 | Branch de trabalho | `main` (única permitida)         |
-| Última atualização | 2026-10-28                       |
+| Última atualização | 2026-10-29                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (118 ÷ 134 ≈ 88,1%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (119 ÷ 134 ≈ 88,8%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -49,23 +49,11 @@
 
 **Orientação permanente do usuário em 2026-10-26:** antes de implementar, conferir se a tarefa já foi entregue e avaliar execução conjunta quando houver dependências ou arquivos compartilhados que possam causar retrabalho. Seguir a ordem numérica das tarefas não bloqueadas; a execução conjunta é permitida quando justificada e rastreada. Não executar as tarefas bloqueadas 86, 90 e 100 nesta retomada. Após cada entrega validada, atualizar o painel e publicar na `main`, sem branches ou worktrees. A orientação atual substitui a espera de instruções registrada nas tarefas a iniciar; a autorização não declara implementação concluída.
 
-**Ponto de continuidade em 2026-10-28:** 123 concluída e publicada, incluindo correção dos alertas do sensor em `7d09e92b5654685e66d0bcc0564b1fa69dfa6f56`; 124 em andamento. A implementação local da 115 está publicada e aguarda somente a inferência com modelo real acessível. As bloqueadas 86, 90, 100 e 106 permanecem preservadas.
+**Ponto de continuidade em 2026-10-29:** 124 concluída e publicada em `7249d480b18d50037a69b320352c2d71ddaf4472`; próxima não bloqueada: 125. A 115 aguarda somente inferência com modelo real; bloqueadas 86, 90, 100 e 106 preservadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
-
-### 124 · Check-in e reflexão sem internet com sincronização transparente
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação da correção final da 123 e atualização imediata do painel, conforme autorização permanente.
-- **Pedido do usuário:** registrar o dia e escrever uma reflexão mesmo sem internet, com indicação clara de pendências e sincronização posterior.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar os formulários, APIs e manifesto do aplicativo já existentes; ter ícone instalável não comprova operação offline. Conferir primeiro armazenamento, autenticação e conflitos das gravações atuais.
-- **Escopo funcional:** definir o conteúdo disponível offline, salvar os registros pendentes com proteção adequada a dados sensíveis e sincronizar com idempotência quando houver conexão e sessão válida. Mostrar salvo no dispositivo, aguardando envio, conflito e sincronizado; resolver alterações concorrentes sem sobrescrever silenciosamente. Isolar contas e tratar logout, exclusão, limites de armazenamento e falha do dispositivo. Não prometer IA em nuvem offline.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar desconexão e reconexão reais, fechamento e reabertura, envio duplicado, conflito, sessão expirada, troca de conta e limpeza de dados, com consistência confirmada no servidor. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Validação concluída em 2026-10-28, publicação em preparação:** página pública `/offline`, consentimento por categoria, cofre AES-GCM com frase local, IndexedDB com comparação atômica de versão e fila protegida. Service worker armazena somente documento público e arquivos do build. Mesma validação e escrita do check-in/reflexão, sessão e plano atuais, recibo transacional idempotente e conflito com escolha explícita. Logout bloqueia sem eliminar pendências; exclusão limpa somente o cofre do titular no navegador atual. Migração 053 e exportação LGPD; política atualizada.
-- **Evidências:** 690 unitários em 85 arquivos, 516 integrações MySQL em 55 arquivos, dez verificações focadas adicionais da permissão, formato, lint sem avisos, tipos e build aprovados. Dezesseis verificações funcionais de produção e sete execuções axe sem violações: desconexão e reconexão reais, navegador fechado e reaberto, conflito, repetição, sessão invalidada, logout entre abas, troca de conta e exclusão de ambas as contas com isolamento. 320/390/1280/1440, zoom 200%, teclado e foco; sem exceções JavaScript. Aborto local induzido explicitamente, sem alegar falha física do dispositivo. Corrigidos autorrecebimento do BroadcastChannel e relógio das fixtures do PDF após virada de data. Relatórios `docs/offline.md` e `docs/auditoria/2026-10-28-offline-124.md`. A tarefa continua em andamento até confirmação da publicação na `main`.
 
 ### BLOQUEADAS
 
@@ -2146,3 +2134,17 @@
 
 - **Correção adicional validada em 2026-10-28:** o canal genérico também recebe alertas do sensor. A pausa agora usa classificação conservadora de convites conhecidos na emissão e na marcação de leitura; alertas `fc-alta:` e origens desconhecidas são preservados. Nenhum limiar de saúde foi alterado. 686 unitários em 84 arquivos, 506 integrações MySQL em 54 arquivos, formato, lint, tipos e build aprovados. Duas verificações funcionais e duas execuções axe adicionais no navegador confirmaram alerta anterior não lido e novo alerta da rota do sensor durante descanso, com dados de QA e sem alegar medição física.
 - **Commit da correção e publicação:** `7d09e92b5654685e66d0bcc0564b1fa69dfa6f56`, confirmado na `main` pela API autenticada do GitHub, sem branches ou worktrees.
+
+### 124 · Check-in e reflexão sem internet com sincronização transparente
+
+- **Status:** 🟢 finalizada · **Publicação:** 2026-10-29 · **Registro:** 2026-10-26 · **Início:** 2026-10-28, após publicação da correção final da 123 e atualização imediata do painel, conforme autorização permanente.
+- **Pedido do usuário:** registrar o dia e escrever uma reflexão mesmo sem internet, com indicação clara de pendências e sincronização posterior.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar os formulários, APIs e manifesto do aplicativo já existentes; ter ícone instalável não comprova operação offline. Conferir primeiro armazenamento, autenticação e conflitos das gravações atuais.
+- **Escopo funcional:** definir o conteúdo disponível offline, salvar os registros pendentes com proteção adequada a dados sensíveis e sincronizar com idempotência quando houver conexão e sessão válida. Mostrar salvo no dispositivo, aguardando envio, conflito e sincronizado; resolver alterações concorrentes sem sobrescrever silenciosamente. Isolar contas e tratar logout, exclusão, limites de armazenamento e falha do dispositivo. Não prometer IA em nuvem offline.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro e pt-BR acessível, com responsividade, teclado, foco, estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência, validação no servidor e direitos do plano, preservando isolamento por titular, consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar desconexão e reconexão reais, fechamento e reabertura, envio duplicado, conflito, sessão expirada, troca de conta e limpeza de dados, com consistência confirmada no servidor. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Validação concluída em 2026-10-28, publicação em preparação:** página pública `/offline`, consentimento por categoria, cofre AES-GCM com frase local, IndexedDB com comparação atômica de versão e fila protegida. Service worker armazena somente documento público e arquivos do build. Mesma validação e escrita do check-in/reflexão, sessão e plano atuais, recibo transacional idempotente e conflito com escolha explícita. Logout bloqueia sem eliminar pendências; exclusão limpa somente o cofre do titular no navegador atual. Migração 053 e exportação LGPD; política atualizada.
+- **Evidências:** 690 unitários em 85 arquivos, 516 integrações MySQL em 55 arquivos, dez verificações focadas adicionais da permissão, formato, lint sem avisos, tipos e build aprovados. Dezesseis verificações funcionais de produção e sete execuções axe sem violações: desconexão e reconexão reais, navegador fechado e reaberto, conflito, repetição, sessão invalidada, logout entre abas, troca de conta e exclusão de ambas as contas com isolamento. 320/390/1280/1440, zoom 200%, teclado e foco; sem exceções JavaScript. Aborto local induzido explicitamente, sem alegar falha física do dispositivo. Corrigidos autorrecebimento do BroadcastChannel e relógio das fixtures do PDF após virada de data. Relatórios `docs/offline.md` e `docs/auditoria/2026-10-28-offline-124.md`. Publicação confirmada na `main` pela API autenticada do GitHub.
+
+- **Commit e publicação:** `7249d480b18d50037a69b320352c2d71ddaf4472`, conteúdo conferido por SHA, atualização da `main` com verificação do commit anterior e sem force, branches ou worktrees.
