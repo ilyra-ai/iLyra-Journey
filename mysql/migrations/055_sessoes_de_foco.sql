@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS focus_sessions (
+ id CHAR(36) PRIMARY KEY,
+ user_id CHAR(36) NOT NULL,
+ kind VARCHAR(8) NOT NULL,
+ target_seconds INT UNSIGNED NOT NULL,
+ state VARCHAR(16) NOT NULL DEFAULT 'running',
+ elapsed_ms BIGINT UNSIGNED NOT NULL DEFAULT 0,
+ running_since DATETIME(3) NULL,
+ started_at DATETIME(3) NOT NULL,
+ created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+ ended_at DATETIME(3) NULL,
+ perception TINYINT UNSIGNED NULL,
+ note VARCHAR(280) NULL,
+ alert_claimed_at DATETIME(3) NULL,
+ version INT UNSIGNED NOT NULL DEFAULT 1,
+ CONSTRAINT fk_focus_user FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+ CONSTRAINT ck_focus_kind CHECK(kind IN ('foco','pausa')),
+ CONSTRAINT ck_focus_state CHECK(state IN ('running','paused','completed','ended')),
+ CONSTRAINT ck_focus_perception CHECK(perception IS NULL OR perception BETWEEN 1 AND 5),
+ CONSTRAINT ck_focus_target CHECK(target_seconds BETWEEN 60 AND 10800),
+ INDEX idx_focus_user_history(user_id,started_at,id),
+ INDEX idx_focus_user_state(user_id,state)
+) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

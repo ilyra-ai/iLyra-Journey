@@ -130,6 +130,14 @@ export const navigationItems: NavigationDefinition[] = [
     sectionKey: 'personal',
   },
   {
+    href: '/foco',
+    label: 'Foco e pausa',
+    description: 'Intervalos escolhidos, temporizador e percepção pessoal.',
+    icon: ClipboardList,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+  },
+  {
     href: '/rotinas',
     label: 'Minhas rotinas',
     description:

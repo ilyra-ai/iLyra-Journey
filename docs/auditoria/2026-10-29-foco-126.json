@@ -1,0 +1,108 @@
+{
+  "verificacoes": [
+    "Início de um minuto real, pausa sem incremento e recarga preservam o registro e o restante",
+    "Suspensão real da página pelo protocolo do navegador e retomada reconciliam o intervalo pelo servidor, sem contar ticks",
+    "Som optado por gesto real criou oscilador Web Audio após autorização de silêncio; não se alega saída em alto-falante físico",
+    "Relógio aguardou um minuto ativo real; alvo não encerra sozinho, confirmação salva percepção e não lança meditação",
+    "Pausa opcional começa por ação explícita e pode encerrar antes, sem alterar os totais de foco",
+    "Percepção editável, remoção confirmada e recarga preservam totais exatos sem dupla contagem",
+    "Histórico, percepção, teclado, zoom 200%, desktop e celular sem overflow",
+    "Plano Free acessa a própria central e não alcança a sessão da outra conta",
+    "Falha real de rede informa erro em pt-BR e não confirma pausa",
+    "Reconexão confere sessão real e permite pausar sem duplicar início ou apagar tempo"
+  ],
+  "axe": [
+    {
+      "rotulo": "foco sem histórico mobile",
+      "aprovadas": 24,
+      "violacoes": []
+    },
+    {
+      "rotulo": "sessão pausada mobile",
+      "aprovadas": 22,
+      "violacoes": []
+    },
+    {
+      "rotulo": "percepção de sessão concluída",
+      "aprovadas": 23,
+      "violacoes": []
+    },
+    {
+      "rotulo": "foco e histórico desktop",
+      "aprovadas": 28,
+      "violacoes": []
+    },
+    {
+      "rotulo": "foco 320px",
+      "aprovadas": 24,
+      "violacoes": []
+    },
+    {
+      "rotulo": "percepção zoom 200%",
+      "aprovadas": 23,
+      "violacoes": []
+    },
+    {
+      "rotulo": "erro de rede recuperado mobile",
+      "aprovadas": 22,
+      "violacoes": []
+    }
+  ],
+  "excecoes": [],
+  "tarefa": 126,
+  "data": "2026-10-29",
+  "unitarios": {
+    "testes": 693,
+    "arquivos": 86
+  },
+  "integracao_mysql": {
+    "testes": 534,
+    "arquivos": 57
+  },
+  "gates": [
+    {
+      "comando": ["corepack", "pnpm", "fix:format"],
+      "exit_code": 0,
+      "log": "../repo-transfer/126-format.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "fix:lint"],
+      "exit_code": 0,
+      "log": "../repo-transfer/126-fixlint.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:lint"],
+      "exit_code": 0,
+      "log": "../repo-transfer/126-lint.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:format"],
+      "exit_code": 0,
+      "log": "../repo-transfer/126-checkformat.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:types"],
+      "exit_code": 0,
+      "log": "../repo-transfer/126-types.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "test", "--maxWorkers=1"],
+      "exit_code": 0,
+      "log": "../repo-transfer/126-unit.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "build"],
+      "exit_code": 0,
+      "log": "../repo-transfer/126-build.log"
+    }
+  ],
+  "observacoes": [
+    "Um minuto ativo foi aguardado no relógio real, sem alterar Date ou interceptar APIs no QA de temporização.",
+    "Suspensão controlada real da página pelo CDP, sem alegar suspensão física do aparelho.",
+    "Oscilador Web Audio observado pelo CDP após gesto explícito; saída física de alto-falante não comprovada.",
+    "Desconexão real do navegador confirmou erro e recuperação em pt-BR.",
+    "Silêncio, descanso, limite do alvo e datas prolongadas também foram testados com relógio controlado nos testes de integração.",
+    "Banco temporário por rodada, MySQL 9.7.2 real. Fixtures removidas.",
+    "@current_problems, NVDA/VoiceOver físico, Windows/WSL e Docker não disponíveis."
+  ]
+}
