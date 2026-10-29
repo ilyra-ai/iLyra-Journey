@@ -1,3 +1,5 @@
+import { selecionarAnexos } from '@/lib/anexos/servico';
+import { listaDeTextos } from '@/lib/json-values';
 import { partesDoBanco, partesDoChatSchema, type ParteDoChat } from './partes';
 import { filtrarPaineisDoChat } from './painel';
 import { metadadosDaImagem } from './imagens';
@@ -36,6 +38,7 @@ interface TurnoNoBanco extends RowDataPacket {
   question: string;
   answer: string | null;
   response_parts: unknown;
+  attachment_ids: unknown;
   status: EstadoDoTurno;
   error_message: string | null;
   created_at: string;
@@ -118,7 +121,7 @@ export async function lerConversa(
   const sequencia = antes ?? depois ?? sequenciaAlvo;
   const comparacao = antes !== null ? '<' : depois !== null ? '>' : '<=';
   const linhas = await queryRows<TurnoNoBanco>(
-    `SELECT id, sequence_number, question, answer, response_parts, status, error_message, created_at,
+    `SELECT id, sequence_number, question, answer, response_parts, attachment_ids, status, error_message, created_at,
        EXISTS(SELECT 1 FROM chat_favorites f WHERE f.turn_id=chat_turns.id AND f.user_id=chat_turns.user_id) AS favorita
        FROM chat_turns WHERE conversation_id = ? AND user_id = ?
        ${sequencia === null ? '' : `AND sequence_number ${comparacao} ?`}
@@ -157,6 +160,7 @@ export async function lerConversa(
           userId,
           partesDoBanco(linha.response_parts)
         ),
+        anexos: listaDeTextos(linha.attachment_ids),
         id: linha.id,
         favorita: Boolean(linha.favorita),
         imagem: imagens.get(linha.id) ?? null,
@@ -183,11 +187,16 @@ export async function respostaJaGravada(
 ) {
   if (pedido.regenerate) return null;
   const [turno] = await queryRows<TurnoNoBanco>(
-    `SELECT question, answer, status FROM chat_turns
+    `SELECT question, answer, status, attachment_ids FROM chat_turns
       WHERE id = ? AND conversation_id = ? AND user_id = ?`,
     [pedido.turnId, pedido.conversationId, userId]
   );
-  if (turno && turno.question !== pedido.query) {
+  if (
+    turno &&
+    (turno.question !== pedido.query ||
+      JSON.stringify(listaDeTextos(turno.attachment_ids)) !==
+        JSON.stringify(pedido.anexos ?? []))
+  ) {
     throw new HttpError('Esta mensagem já corresponde a outra pergunta.', 409);
   }
   return turno?.status === 'concluido' ? turno.answer : null;
@@ -226,7 +235,7 @@ export async function iniciarTurno(
       );
     }
     const [existentes] = await conexao.query<TurnoNoBanco[]>(
-      `SELECT id, conversation_id, user_id, question, status,
+      `SELECT id, conversation_id, user_id, question, status, attachment_ids,
               updated_at > UTC_TIMESTAMP(3) - INTERVAL 30 MINUTE AS em_execucao
          FROM chat_turns WHERE id = ? FOR UPDATE`,
       [pedido.turnId]
@@ -239,7 +248,12 @@ export async function iniciarTurno(
     ) {
       throw new HttpError('Mensagem não encontrada.', 404);
     }
-    if (existente && existente.question !== pedido.query) {
+    if (
+      existente &&
+      (existente.question !== pedido.query ||
+        JSON.stringify(listaDeTextos(existente.attachment_ids)) !==
+          JSON.stringify(pedido.anexos ?? []))
+    ) {
       throw new HttpError(
         'Esta mensagem já corresponde a outra pergunta.',
         409
@@ -256,6 +270,12 @@ export async function iniciarTurno(
     }
     if (pedido.regenerate && !existente)
       throw new HttpError('Mensagem não encontrada.', 404);
+    await selecionarAnexos(
+      userId,
+      pedido.conversationId,
+      pedido.anexos ?? [],
+      conexao
+    );
     const attemptId = randomUUID();
     if (existente) {
       await conexao.execute(
@@ -265,9 +285,16 @@ export async function iniciarTurno(
       );
     } else {
       await conexao.execute(
-        `INSERT INTO chat_turns (id, conversation_id, user_id, question, status, attempt_id)
-         VALUES (?, ?, ?, ?, 'processando', ?)`,
-        [pedido.turnId, pedido.conversationId, userId, pedido.query, attemptId]
+        `INSERT INTO chat_turns (id, conversation_id, user_id, question, status, attempt_id, attachment_ids)
+         VALUES (?, ?, ?, ?, 'processando', ?, ?)`,
+        [
+          pedido.turnId,
+          pedido.conversationId,
+          userId,
+          pedido.query,
+          attemptId,
+          JSON.stringify(pedido.anexos ?? []),
+        ]
       );
     }
     await conexao.execute(
@@ -280,7 +307,7 @@ export async function iniciarTurno(
       `SELECT question, answer FROM chat_turns
        WHERE conversation_id = ? AND user_id = ? AND id <> ?
          AND sequence_number < (SELECT sequence_number FROM chat_turns WHERE id = ?)
-         AND answer IS NOT NULL
+         AND answer IS NOT NULL AND COALESCE(JSON_LENGTH(attachment_ids),0)=0
        ORDER BY sequence_number DESC LIMIT 8`,
       [pedido.conversationId, userId, pedido.turnId, pedido.turnId]
     );
@@ -325,6 +352,17 @@ export async function concluirTurno(
   partes: ParteDoChat[] = []
 ) {
   await withTransaction(async (conexao) => {
+    const [fonte] = await queryRows<{ attachment_ids: unknown }>(
+      'SELECT attachment_ids FROM chat_turns WHERE id=? AND user_id=? FOR UPDATE',
+      [turno.turnId, userId],
+      conexao
+    );
+    await selecionarAnexos(
+      userId,
+      turno.conversationId,
+      listaDeTextos(fonte?.attachment_ids),
+      conexao
+    );
     const [resultado] = await conexao.execute<ResultSetHeader>(
       `UPDATE chat_turns SET answer = ?, response_parts = ?, status = 'concluido', error_message = NULL,
           memory_excluded = memory_excluded OR ?, updated_at = UTC_TIMESTAMP(3)

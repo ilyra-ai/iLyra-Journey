@@ -1,3 +1,9 @@
+import {
+  autorizarAnexos,
+  idsAnexosSchema,
+  selecionarAnexos,
+} from '@/lib/anexos/servico';
+import { lerComModelo } from '@/lib/anexos/leitura';
 import { createUIMessageStream, createUIMessageStreamResponse } from 'ai';
 import { montarPainelDoChat } from '@/lib/chat/painel';
 import { corteDoHistorico } from '@/lib/plans/historico';
@@ -85,6 +91,8 @@ const perguntaSchema = z
     regenerate: z.boolean().optional(),
     privacyMode: z.boolean().default(false),
     painel: z.boolean().default(false),
+    anexos: idsAnexosSchema.default([]),
+    consentimentoAnexos: z.boolean().default(false),
   })
   .refine(
     (pedido) =>
@@ -109,11 +117,13 @@ export async function POST(request: Request) {
       regenerate,
       privacyMode,
       painel,
+      anexos,
+      consentimentoAnexos,
     } = await lerJson(request, perguntaSchema);
     usuarioId = session.user.id;
     const historico =
       conversationId && turnId
-        ? { conversationId, turnId, query, regenerate }
+        ? { conversationId, turnId, query, regenerate, anexos }
         : null;
     if (solicitouCriacaoDeImagem(query) && !historico)
       throw new HttpError(
@@ -121,6 +131,18 @@ export async function POST(request: Request) {
         400
       );
     if (historico) await requireFeatureEnabled(session, 'chat_history');
+    if (
+      anexos.length &&
+      (!historico ||
+        privacyMode ||
+        !consentimentoAnexos ||
+        painel ||
+        solicitouCriacaoDeImagem(query))
+    )
+      throw new HttpError(
+        'Para ler anexos, use uma conversa salva, desative o Modo Privacidade e confirme o envio dos arquivos selecionados. Envie pedidos de painel ou criação de imagem separadamente.',
+        400
+      );
     if (solicitouCriacaoDeImagem(query))
       await requireFeatureEnabled(session, 'chat_images');
     const comVedico = await recursoHabilitado(
@@ -160,6 +182,12 @@ export async function POST(request: Request) {
         });
       }
     }
+
+    if (anexos.length) await autorizarAnexos(session);
+    const arquivos =
+      anexos.length && historico
+        ? await selecionarAnexos(usuarioId, historico.conversationId, anexos)
+        : [];
 
     // A cota é consumida antes de qualquer processamento: quem já atingiu o
     // limite não aciona banco nem LLM (antes, o consumo acontecia só no fim).
@@ -266,7 +294,8 @@ export async function POST(request: Request) {
           )
         : [];
       const memoriaPrivada =
-        privacyMode || Boolean(opcoesDoTurno?.memory_excluded);
+        privacyMode ||
+        (Boolean(opcoesDoTurno?.memory_excluded) && !arquivos.length);
       const preferencias = await preferenciasDaMemoria(session.user.id);
       const lembrancas = comMemoria
         ? await recuperarMemorias(
@@ -373,29 +402,35 @@ export async function POST(request: Request) {
             : preferencias?.allow_cloud
               ? cadeiaDaPlataforma
               : somenteLocais(cadeiaDaPlataforma);
-      const resultado = await gerarNaCadeia(cadeia, pedido, {
-        rotulo: userApiKey ? 'chat-byok' : 'chat',
-        aoTexto,
-        cancelamento: request.signal,
-        validar: (texto) =>
-          conferirVozDaLyra(texto) ??
-          (!tratamento.carinhoso && /\bxuxu(?:zinho)?\b/iu.test(texto)
-            ? 'o modelo desrespeitou a forma de tratamento escolhida pelo titular'
-            : null),
-      });
+      const leitura = arquivos.length
+        ? await lerComModelo(cadeia, pedido, arquivos, request.signal)
+        : null;
+      const resultado = leitura
+        ? null
+        : await gerarNaCadeia(cadeia, pedido, {
+            rotulo: userApiKey ? 'chat-byok' : 'chat',
+            aoTexto,
+            cancelamento: request.signal,
+            validar: (texto) =>
+              conferirVozDaLyra(texto) ??
+              (!tratamento.carinhoso && /\bxuxu(?:zinho)?\b/iu.test(texto)
+                ? 'o modelo desrespeitou a forma de tratamento escolhida pelo titular'
+                : null),
+          });
 
       const pedidoDeImagem = comImagens
         ? pedidoDeImagemParaConversa(query, mapaNatal)
         : null;
       const response =
-        pedidoDeImagem?.tipo === 'solicitada'
+        leitura ??
+        (pedidoDeImagem?.tipo === 'solicitada'
           ? 'Pedido de imagem registrado. Confira o resultado abaixo.'
           : expressarComoLyra(
-              resultado.origem === 'modelo'
+              resultado?.origem === 'modelo'
                 ? resultado.texto
                 : fallbackResponse,
               query
-            );
+            ));
       request.signal.throwIfAborted();
       const partes = painel ? await montarPainelDoChat(session.user.id) : [];
       let imagem = null;
@@ -404,9 +439,9 @@ export async function POST(request: Request) {
           session.user.id,
           turno,
           response,
-          memoriaPrivada,
+          memoriaPrivada || arquivos.length > 0,
           pedidoDeImagem,
-          comMemoria,
+          comMemoria && !arquivos.length,
           partes
         );
         if (pedidoDeImagem)
@@ -463,7 +498,10 @@ export async function POST(request: Request) {
             if (!request.signal.aborted)
               writer.write({
                 type: 'data-falha',
-                data: 'Não foi possível concluir a resposta. Tente novamente.',
+                data:
+                  erro instanceof HttpError
+                    ? erro.message
+                    : 'Não foi possível concluir a resposta. Tente novamente.',
                 transient: true,
               });
             registrarErroInterno('chat: transmissão', erro);

@@ -243,6 +243,8 @@ export async function listarModelos(
 export interface PedidoDeTexto {
   sistema: string;
   usuario: string;
+  /** Bytes validados no servidor; nunca URLs fornecidas pelo usuário. */
+  imagens?: Array<{ tipo: 'image/png'; base64: string }>;
   /** Pede JSON ao provedor quando a API tem esse modo (Gemini). */
   json?: boolean;
   /** JSON Schema da resposta, para saída estruturada (ver `formatosDeSaida`). */
@@ -357,7 +359,20 @@ export async function gerarTextoDetalhado(
               stream: Boolean(pedido.aoTexto),
               messages: [
                 { role: 'system', content: pedido.sistema },
-                { role: 'user', content: pedido.usuario },
+                {
+                  role: 'user',
+                  content: pedido.imagens?.length
+                    ? [
+                        ...pedido.imagens.map((i) => ({
+                          type: 'image_url',
+                          image_url: {
+                            url: `data:${i.tipo};base64,${i.base64}`,
+                          },
+                        })),
+                        { type: 'text', text: pedido.usuario },
+                      ]
+                    : pedido.usuario,
+                },
               ],
               ...(pedido.maximoDeTokens
                 ? { max_tokens: pedido.maximoDeTokens }
@@ -400,7 +415,17 @@ export async function gerarTextoDetalhado(
             },
             body: JSON.stringify({
               systemInstruction: { parts: [{ text: pedido.sistema }] },
-              contents: [{ role: 'user', parts: [{ text: pedido.usuario }] }],
+              contents: [
+                {
+                  role: 'user',
+                  parts: [
+                    ...(pedido.imagens ?? []).map((i) => ({
+                      inlineData: { mimeType: i.tipo, data: i.base64 },
+                    })),
+                    { text: pedido.usuario },
+                  ],
+                },
+              ],
               generationConfig: {
                 temperature: conexao.temperatura,
                 ...(pedido.maximoDeTokens
@@ -447,7 +472,24 @@ export async function gerarTextoDetalhado(
           // A API Messages aceita temperatura de 0 a 1.
           temperature: Math.min(1, conexao.temperatura),
           system: pedido.sistema,
-          messages: [{ role: 'user', content: pedido.usuario }],
+          messages: [
+            {
+              role: 'user',
+              content: pedido.imagens?.length
+                ? [
+                    ...pedido.imagens.map((i) => ({
+                      type: 'image',
+                      source: {
+                        type: 'base64',
+                        media_type: i.tipo,
+                        data: i.base64,
+                      },
+                    })),
+                    { type: 'text', text: pedido.usuario },
+                  ]
+                : pedido.usuario,
+            },
+          ],
         }),
       },
       buscar,

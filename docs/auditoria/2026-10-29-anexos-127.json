@@ -1,0 +1,139 @@
+{
+  "verificacoes": [
+    "Upload TXT real grava bytes exatos no MySQL e não cria pergunta nem aciona modelo",
+    "Prévia numerada mantém zero e Unicode e apresenta conteúdo hostil literalmente",
+    "Download real autenticado preserva nome e bytes do TXT",
+    "JPEG real é decodificado, orientado e guardado em PNG sem EXIF; prévia carrega os pixels",
+    "Layout, foco, Escape e Tab conferidos em celular, desktop e zoom",
+    "Reabertura da conversa recupera arquivos privados sem reutilizar a autorização",
+    "Segunda conta Free não lista, baixa ou exclui arquivos da conta Care",
+    "Imagem disfarçada é recusada pelo servidor sem gravação",
+    "Desconexão real informa falha em pt-BR e reconexão recupera lista sem confirmação falsa",
+    "Sem modelo autorizado, envio real guarda pergunta e referências, mostra erro e não confirma inferência",
+    "Cancelar exclusão preserva o arquivo; confirmação apaga somente a foto escolhida",
+    "Nome de arquivo longo e Unicode permanece acessível sem estouro de layout"
+  ],
+  "axe": [
+    {
+      "rotulo": "anexos vazios 390px",
+      "aprovadas": 25,
+      "violacoes": []
+    },
+    {
+      "rotulo": "anexos com foto 320px",
+      "aprovadas": 28,
+      "violacoes": []
+    },
+    {
+      "rotulo": "anexos com foto 390px",
+      "aprovadas": 28,
+      "violacoes": []
+    },
+    {
+      "rotulo": "anexos com foto 1280px",
+      "aprovadas": 28,
+      "violacoes": []
+    },
+    {
+      "rotulo": "anexos com foto 1440px",
+      "aprovadas": 28,
+      "violacoes": []
+    },
+    {
+      "rotulo": "anexos zoom 200%",
+      "aprovadas": 28,
+      "violacoes": []
+    },
+    {
+      "rotulo": "nome longo Unicode 320px",
+      "aprovadas": 28,
+      "violacoes": []
+    },
+    {
+      "rotulo": "exclusão após erro de modelo mobile",
+      "aprovadas": 28,
+      "violacoes": []
+    },
+    {
+      "rotulo": "anexos desktop final",
+      "aprovadas": 27,
+      "violacoes": []
+    }
+  ],
+  "excecoes": [],
+  "tarefa": 127,
+  "data": "2026-10-29",
+  "inferência_com_modelo_real": "não executada; modelo real autorizado não acessível nesta instância de QA",
+  "unitarios": {
+    "arquivos": 87,
+    "testes": 700,
+    "exit_code": 0
+  },
+  "integracoes_mysql": {
+    "arquivos": 58,
+    "testes": 547,
+    "exit_code": 0
+  },
+  "focadas_pos_qa": {
+    "integracoes": 13,
+    "unitarios": 7,
+    "exit_code": 0
+  },
+  "gates": [
+    {
+      "comando": ["corepack", "pnpm", "fix:format"],
+      "exit_code": 0,
+      "log": "127-format.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "fix:lint"],
+      "exit_code": 0,
+      "log": "127-fixlint.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:lint"],
+      "exit_code": 0,
+      "log": "127-lint.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:format"],
+      "exit_code": 0,
+      "log": "127-checkformat.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:types"],
+      "exit_code": 0,
+      "log": "127-types.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "test", "--maxWorkers=1"],
+      "exit_code": 0,
+      "log": "127-unit.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "build"],
+      "exit_code": 0,
+      "log": "127-build.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:lint"],
+      "exit_code": 0,
+      "log": "127-lint-final.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "check:types"],
+      "exit_code": 0,
+      "log": "127-types-final.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "test", "src/lib/anexos/servico.test.ts"],
+      "exit_code": 0,
+      "log": "127-unit-anexos-final.log"
+    },
+    {
+      "comando": ["corepack", "pnpm", "build"],
+      "exit_code": 0,
+      "log": "127-build-final.log"
+    }
+  ]
+}

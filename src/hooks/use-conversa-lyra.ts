@@ -89,7 +89,9 @@ export function useConversaLyra(
     texto: string,
     chave: string,
     refazer?: TurnoDaConversa,
-    painel = false
+    painel = false,
+    anexos: string[] = [],
+    consentimentoAnexos = false
   ) => {
     if (
       ocupado.current ||
@@ -98,6 +100,17 @@ export function useConversaLyra(
       !texto.trim()
     )
       return;
+    const arquivos = refazer?.anexos ?? anexos;
+    if (
+      arquivos.length &&
+      (!consentimentoAnexos ||
+        JSON.stringify(arquivos) !== JSON.stringify(anexos))
+    ) {
+      setErro(
+        'Abra Anexos, selecione os mesmos arquivos da pergunta e autorize a leitura para tentar novamente.'
+      );
+      return;
+    }
     ocupado.current = true;
     setEnviando(true);
     setErro(null);
@@ -108,6 +121,7 @@ export function useConversaLyra(
       setTurnos((atuais) => [
         ...atuais,
         {
+          anexos: arquivos,
           id: idTurno,
           sequencia: 0,
           pergunta: texto.trim(),
@@ -138,6 +152,8 @@ export function useConversaLyra(
       const data = await enviarAoChat(
         {
           query: texto.trim(),
+          anexos: arquivos,
+          consentimentoAnexos,
           userApiKey: chave,
           ...(salvarHistorico
             ? { conversationId: idConversa, turnId: idTurno }
@@ -174,6 +190,7 @@ export function useConversaLyra(
         if (salvarHistorico && (!refazer || !alvo.current))
           aoAbrir?.(idConversa);
       }
+      return true;
     } catch (falha) {
       if (montado.current) {
         const mensagem = controle.signal.aborted
@@ -190,6 +207,7 @@ export function useConversaLyra(
           )
         );
       }
+      return false;
     } finally {
       if (salvarHistorico) window.dispatchEvent(new Event(EVENTO_DO_HISTORICO));
       cancelamento.current = null;
@@ -210,6 +228,11 @@ export function useConversaLyra(
   };
 
   return {
+    obterConversa: () => {
+      conversa.current ??= crypto.randomUUID();
+      return conversa.current;
+    },
+    conversaAtual: () => conversa.current,
     turnos,
     carregando,
     enviando,

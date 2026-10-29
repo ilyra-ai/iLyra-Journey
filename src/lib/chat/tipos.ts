@@ -28,6 +28,7 @@ export interface PaginaDeConversas {
 }
 
 export interface TurnoDaConversa {
+  anexos?: string[];
   favorita?: boolean;
   id: string;
   sequencia: number;
@@ -63,6 +64,7 @@ export interface PaginaDaPesquisa {
 }
 
 export interface PedidoComHistorico {
+  anexos?: string[];
   conversationId: string;
   turnId: string;
   query: string;

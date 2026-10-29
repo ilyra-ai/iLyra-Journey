@@ -238,6 +238,7 @@ const TABELAS_DO_TITULAR = [
   ['ai_plans', 'user_id'],
   ['chat_conversations', 'user_id'],
   ['chat_turns', 'user_id'],
+  ['chat_attachment_ids', 'user_id'],
   ['chat_favorites', 'user_id'],
   ['personal_routines', 'user_id'],
   ['personal_routine_runs', 'user_id'],
@@ -349,6 +350,17 @@ export async function exportarDadosDoTitular(userId: string) {
     clientes_de_cobranca: clientesDeCobranca,
     financeiro: await exportarFinanceiroDoTitular(userId),
     agenda_no_calendario: agendaNoCalendario,
+    anexos_do_chat: (
+      await queryRows<RowDataPacket>(
+        'SELECT id,conversation_id,file_name,mime_type,byte_size,sha256,file_data,text_content,created_at FROM chat_attachments WHERE user_id=? ORDER BY created_at,id',
+        [userId]
+      )
+    ).map(({ file_data, ...a }) => ({
+      ...a,
+      arquivo_base64: Buffer.isBuffer(file_data)
+        ? file_data.toString('base64')
+        : null,
+    })),
     imagens_do_chat: (
       await queryRows<RowDataPacket>(
         `SELECT i.turn_id, i.request_kind, i.status, i.prompt, i.provider_preset, i.model_name, i.image_data, i.mime_type, i.width, i.height, i.error_message, i.created_at, i.updated_at FROM chat_generated_images i JOIN chat_turns t ON t.id = i.turn_id WHERE t.user_id = ?`,

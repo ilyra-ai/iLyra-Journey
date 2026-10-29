@@ -122,6 +122,7 @@ export function pedidoDeContinuacao(
 ): PedidoDeTexto {
   return {
     sistema: pedido.sistema,
+    imagens: pedido.imagens,
     usuario: `${pedido.usuario}
 
 A resposta abaixo foi interrompida no meio. Continue exatamente do ponto em que ela parou: escreva só o restante, sem repetir nada do que já foi escrito, sem comentários e mantendo o mesmo formato.
@@ -179,6 +180,8 @@ export async function gerarNaCadeia(
     buscar?: typeof fetch;
     /** Nome da função que chamou, para o log de trocas. */
     rotulo?: string;
+    /** Respostas de erro do provedor podem repetir dados de anexos. */
+    ocultarMotivosNoLog?: boolean;
     aoTexto?: (texto: string) => void;
     cancelamento?: AbortSignal;
   } = {}
@@ -246,7 +249,12 @@ export async function gerarNaCadeia(
         resultado: 'ok',
         milissegundos,
       });
-      registrarTrocas(opcoes.rotulo, tentativas);
+      registrarTrocas(
+        opcoes.rotulo,
+        opcoes.ocultarMotivosNoLog
+          ? tentativas.map((t) => ({ ...t, motivo: undefined }))
+          : tentativas
+      );
       return {
         origem: 'modelo',
         texto,
@@ -273,7 +281,12 @@ export async function gerarNaCadeia(
     }
   }
 
-  registrarTrocas(opcoes.rotulo, tentativas);
+  registrarTrocas(
+    opcoes.rotulo,
+    opcoes.ocultarMotivosNoLog
+      ? tentativas.map((t) => ({ ...t, motivo: undefined }))
+      : tentativas
+  );
   return { origem: 'lyra', tentativas };
 }
 

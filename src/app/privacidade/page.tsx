@@ -236,6 +236,18 @@ export default function PoliticaDePrivacidadePage() {
             imediatamente, junto com as fotos enviadas.
           </p>
           <p>
+            Anexos do chat são privados e vinculados à conversa. TXT UTF-8 e
+            imagens estáticas PNG, JPEG e WebP podem ser guardados; imagens são
+            convertidas em PNG sem metadados. Só os arquivos selecionados são
+            enviados a modelos autorizados após sua confirmação em cada
+            pergunta. Respostas podem guardar trechos citados. Excluir apenas o
+            arquivo não apaga esses trechos: exclua também a conversa quando
+            desejar removê-los. A exclusão da conta remove os anexos, e a
+            exportação inclui seus arquivos em base64. Eles não entram no cache
+            offline nem em leituras futuras sem nova seleção.
+          </p>
+
+          <p>
             O &quot;Seu dia&quot; do coach e as notificações do sino ficam
             guardados por 90 dias e são apagados automaticamente depois disso.
           </p>

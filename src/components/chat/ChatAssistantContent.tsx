@@ -1,4 +1,5 @@
 'use client';
+import { AnexosDaConversa } from './AnexosDaConversa';
 import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 import { ImagemDaConversa } from './ImagemDaConversa';
 import type { ImagemDoTurno } from '@/lib/chat/tipos';
@@ -64,6 +65,7 @@ export interface Message {
   text: string;
   sender: 'user' | 'ai';
   turnoId?: string;
+  anexos?: string[];
   imagem?: ImagemDoTurno | null;
   partes?: ParteDoChat[];
   emFluxo?: boolean;
@@ -225,6 +227,8 @@ export function ChatAssistantContent({
   mensagemId?: string | null;
   aoAbrirConversa?: (id: string | null) => void;
 } = {}) {
+  const [anexos, setAnexos] = useState<string[]>([]);
+  const [consentimentoAnexos, setConsentimentoAnexos] = useState(false);
   const historico = useConversaLyra(
     conversaId,
     aoAbrirConversa,
@@ -244,6 +248,7 @@ export function ChatAssistantContent({
           id: `${turno.id}:pergunta`,
           text: turno.pergunta,
           sender: 'user',
+          anexos: turno.anexos,
           turnoId: turno.id,
         },
         ...(turno.resposta
@@ -343,7 +348,16 @@ export function ChatAssistantContent({
 
   const handleSendMessage = async (text: string) => {
     setIsNearBottom(true);
-    await historico.enviar(text, privacyMode ? '' : userApiKey);
+    const concluido = await historico.enviar(
+      text,
+      privacyMode ? '' : userApiKey,
+      undefined,
+      false,
+      anexos,
+      consentimentoAnexos
+    );
+    setConsentimentoAnexos(false);
+    if (concluido) setAnexos([]);
   };
 
   const handleRegenerate = async (turnoId?: string) => {
@@ -352,12 +366,19 @@ export function ChatAssistantContent({
       await historico.enviar(
         turno.pergunta,
         privacyMode ? '' : userApiKey,
-        turno
+        turno,
+        false,
+        anexos,
+        consentimentoAnexos
       );
+    setConsentimentoAnexos(false);
+    setAnexos([]);
   };
 
   const novaConversa = () => {
     historico.novaConversa();
+    setAnexos([]);
+    setConsentimentoAnexos(false);
     setIsNearBottom(true);
   };
 
@@ -604,6 +625,21 @@ export function ChatAssistantContent({
                       : undefined
                   }
                 />
+                {msg.anexos?.length ? (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    className="mt-2"
+                    disabled={isTyping}
+                    onClick={() => {
+                      setAnexos(msg.anexos ?? []);
+                      setConsentimentoAnexos(false);
+                    }}
+                  >
+                    Selecionar os {msg.anexos.length} anexos deste envio
+                  </Button>
+                ) : null}
                 {msg.incompleta && (
                   <p className="mt-2 text-xs text-muted-foreground">
                     Resposta incompleta. Tente novamente para concluir.
@@ -703,12 +739,52 @@ export function ChatAssistantContent({
             </Button>
           )}
         </div>
+        {salvarHistorico ? (
+          <div className="mb-2 flex flex-col gap-2">
+            <AnexosDaConversa
+              obterConversa={historico.obterConversa}
+              conversaAtual={historico.conversaAtual}
+              desabilitado={
+                isTyping ||
+                historico.carregando ||
+                privacyMode ||
+                historico.depois !== null
+              }
+              selecionados={anexos}
+              aoSelecionar={setAnexos}
+              consentimento={consentimentoAnexos}
+              aoConsentir={setConsentimentoAnexos}
+            />
+            {anexos.length ? (
+              <>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setAnexos([]);
+                    setConsentimentoAnexos(false);
+                  }}
+                >
+                  Limpar seleção de anexos
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  {anexos.length} arquivo(s) selecionado(s).{' '}
+                  {consentimentoAnexos
+                    ? 'Leitura autorizada para esta pergunta.'
+                    : 'Abra Anexos e autorize a leitura antes de enviar.'}
+                </p>
+              </>
+            ) : null}
+          </div>
+        ) : null}
         <ChatInput
           onSendMessage={handleSendMessage}
           disabled={
             isTyping ||
             historico.carregando ||
             historico.depois !== null ||
+            (anexos.length > 0 && (!consentimentoAnexos || privacyMode)) ||
             Boolean(historico.erro && semConversa)
           }
           maxLength={LIMITE_DA_PERGUNTA}
