@@ -2254,7 +2254,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 136 · Organização de `/dia` em abas por categoria, com “Meu Dia” como primeira aba
 
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `6a6779c7` · **Push confirmado:** `60a2e66..6a6779c main -> main`.
 - **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). Esta solicitação é específica dessa página; as abas do painel principal entregues na tarefa 114 não substituem este escopo.
 - **Pedido do usuário:** organizar todas as métricas, cards e demais seções da página por categoria e assunto, de forma harmoniosa, em tópicos distribuídos por abas, com organização adequada de UI/UX.
 - **Primeira aba obrigatória:** chamar exatamente **“Meu Dia”** e reunir as seções `titulo-alertas`, `titulo-meu-dia` e `titulo-leitura`. Conferir os componentes e identificadores reais antes de alterar a estrutura, preservando sua função e relações de acessibilidade.
