@@ -2258,7 +2258,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 135 · Diário pessoal por voz em `/dia`, com análise do dia, memória individual e calendário
 
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `689f36f9` · **Push confirmado:** `0933314..689f36f main -> main`.
 - **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). O diário deve fazer parte dessa página, coordenado com a organização em abas solicitada pelo usuário.
 - **Pedido do usuário:** implementar a solicitação transcrita do áudio e revisada neste chat: permitir que cada pessoa conte por voz como foi o seu dia, receba o texto organizado e uma análise personalizada e consulte o diário em formato de agenda, enquanto a Lyra desenvolve uma compreensão contextualizada de sua trajetória.
 - **Relato por voz e organização do texto:** transcrever o relato e corrigir ortografia e pontuação, preservando o sentido, os acontecimentos e a forma de expressão do usuário. Não acrescentar fatos à fala nem apresentar uma transcrição que não tenha sido realmente processada.
