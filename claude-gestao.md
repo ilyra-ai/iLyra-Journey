@@ -2252,7 +2252,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 134 · Agendamentos exclusivo do administrador por padrão, com ativação global para usuários
 
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-27 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-27 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `91d0ec71` · **Push confirmado:** `6b04e2d..91d0ec7 main -> main`.
 - **Pedido do usuário:** desativar o menu Agendamentos do sidebar e do app para que, inicialmente, somente o administrador possa visualizar e usar esse recurso. Dar ao administrador a opção de ativar ou desativar Agendamentos por completo para os usuários.
 - **Conferência prévia obrigatória:** inventariar a página, menus, sidebar desktop e celular, busca, atalhos, ações rápidas, botões, notificações de consultas, APIs e integrações vinculadas a agendamentos e profissionais. Reaproveitar a matriz de recursos dos planos, a autorização administrativa e os controles existentes; não confundir a ocultação de um item com o bloqueio funcional do recurso.
 - **Controle administrativo real:** criar uma configuração global persistida, desativada para usuários por padrão, que somente o administrador possa consultar e alterar nos controles administrativos apropriados. O administrador mantém seu próprio acesso para gerir o recurso. Ao ativar para os usuários, continuar exigindo os direitos do plano e demais autorizações aplicáveis; a configuração não pode conceder permissões administrativas nem ampliar recursos do plano.
