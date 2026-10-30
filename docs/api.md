@@ -240,6 +240,13 @@ filtros por assunto, paginação de 40 itens e horário local do perfil. Notas e
 conversas não são incluídas. Detalhes em
 [Linha do tempo pessoal](./linha-do-tempo.md).
 
+## Meditações guiadas (tarefa 132)
+
+`GET/POST /api/meditacoes` e `POST /api/meditacoes/[id]` exigem sessão e
+`guided_breathing`. Início idempotente por UUID, uma prática aberta por
+conta, tempo medido pelo servidor e soma única dos minutos inteiros à
+meditação do dia. Detalhes em [Meditações guiadas](./meditacoes-guiadas.md).
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 `GET /api/relatorio-pessoal` fornece opções autorizadas.

@@ -160,6 +160,12 @@ sem nova tabela, cópia ou envio externo. Cada origem respeita os recursos do
 plano da sua página e o corte do histórico. Notas pessoais e conversas não
 são exibidas. Exportação e exclusão continuam pelas tabelas de origem.
 
+## Meditações guiadas (tarefa 132)
+
+`meditation_sessions` guarda prática, versão do roteiro, tempo e minutos
+somados do titular; entra na exportação e é removida com a conta. A narração
+é local no dispositivo; nenhum texto ou áudio é enviado a serviço externo.
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 A prévia e o PDF consultam somente as categorias selecionadas do titular

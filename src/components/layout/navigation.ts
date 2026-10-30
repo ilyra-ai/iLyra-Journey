@@ -10,6 +10,7 @@ import {
   Compass,
   FileText,
   Gem,
+  Headphones,
   HeartPulse,
   History,
   LayoutDashboard,
@@ -95,6 +96,7 @@ export const navigationItems: NavigationDefinition[] = [
     section: 'Principal',
     sectionKey: 'principal',
   },
+
   {
     href: '/plan',
     label: 'Plano de IA',
@@ -136,6 +138,15 @@ export const navigationItems: NavigationDefinition[] = [
     label: 'Foco e pausa',
     description: 'Intervalos escolhidos, temporizador e percepção pessoal.',
     icon: ClipboardList,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+  },
+  {
+    href: '/meditacoes',
+    label: 'Meditações guiadas',
+    description:
+      'Práticas por duração e objetivo, com narração local e transcrição.',
+    icon: Headphones,
     section: 'Pessoal',
     sectionKey: 'personal',
   },

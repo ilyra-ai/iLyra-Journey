@@ -21,6 +21,7 @@ a perceber a própria rotina e escolher pequenos passos de autocuidado.
 - 🎚️ **Meus acompanhamentos:** criar acompanhamentos como concentração ou motivação, com escala, rótulos e frequência escolhidos por você, e ver a evolução das respostas. Veja [o funcionamento](docs/acompanhamentos-pessoais.md).
 - 🧭 **Acompanhar experiências pessoais:** definir uma pequena mudança, registrar percepções e revisar dados disponíveis, sem concluir causalidade. Veja [o funcionamento](docs/experiencias-pessoais.md).
 - 🗓️ **Anotar acontecimentos:** guardar o contexto do dia e observar seus registros de sono e energia, com limites e lacunas claros.
+- 🎧 **Meditações guiadas:** escolher práticas por duração e objetivo, ouvir a narração pela voz do seu dispositivo ou seguir a transcrição, e registrar só o tempo praticado. Veja [os detalhes](docs/meditacoes-guiadas.md).
 - 🌬️ **Fazer uma pausa:** seguir práticas de respiração guiada no seu ritmo.
 - 🔔 **Organizar lembretes:** escolher dias e horários para check-in, respiração e hábitos, com silêncio e adiamento dentro do app.
 - 📝 **Olhar para sua semana:** rever registros e anotar como se sentiu ao fim do dia.

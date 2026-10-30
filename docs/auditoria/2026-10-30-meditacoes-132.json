@@ -1,0 +1,183 @@
+{
+  "data": "2026-10-30",
+  "tarefa": 132,
+  "ambiente": {
+    "node": "24.21.0",
+    "pnpm": "11.28.4",
+    "axe": "4.14.0",
+    "voz": "Speech Dispatcher + eSpeak NG (pacotes Ubuntu, somente no ambiente de QA), voz Portuguese (Brazil) espeak-ng, pt-BR, localService",
+    "audio": "PulseAudio, captura do monitor da saída nula",
+    "modo": "pnpm build + pnpm start"
+  },
+  "conta": "conta temporária de QA removida",
+  "resultados": [
+    {
+      "etapa": "catalogo-8",
+      "passou": true
+    },
+    {
+      "etapa": "menu",
+      "passou": true
+    },
+    {
+      "etapa": "axe-biblioteca-1280",
+      "axe": 0,
+      "regras": 27,
+      "violacoes": []
+    },
+    {
+      "etapa": "filtros",
+      "passou": true,
+      "curtas": 5,
+      "sono": 2
+    },
+    {
+      "etapa": "teclado-filtro",
+      "passou": true,
+      "foc": "Até 5 min"
+    },
+    {
+      "etapa": "voz-local",
+      "passou": true,
+      "vozTexto": "Voz local do dispositivo: Portuguese (Brazil) espeak-ng (pt-BR)."
+    },
+    {
+      "etapa": "transcricao-7-passos",
+      "passou": true
+    },
+    {
+      "etapa": "axe-reprodutor-1280",
+      "axe": 0,
+      "regras": 28,
+      "violacoes": []
+    },
+    {
+      "etapa": "narracao-real",
+      "passou": true,
+      "falas": 1,
+      "voz": "Portuguese (Brazil) espeak-ng",
+      "falando": true,
+      "rms": 4987.3,
+      "amostras": 132336
+    },
+    {
+      "etapa": "passo-atual-marcado",
+      "passou": true
+    },
+    {
+      "etapa": "pausa-persistida",
+      "passou": true,
+      "e1": 6042,
+      "e2": 6042,
+      "parou": true
+    },
+    {
+      "etapa": "retomada-com-narracao",
+      "passou": true,
+      "falasAposRecarga": 1
+    },
+    {
+      "etapa": "narracao-desligada",
+      "passou": true
+    },
+    {
+      "etapa": "duracao-alcancada",
+      "passou": true
+    },
+    {
+      "etapa": "minutos-somados",
+      "passou": true,
+      "med": "3"
+    },
+    {
+      "etapa": "interrupcao-sem-minutos",
+      "passou": true,
+      "med2": "3"
+    },
+    {
+      "etapa": "na-linha-do-tempo",
+      "passou": true
+    },
+    {
+      "etapa": "sem-overflow-biblioteca-768",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "axe-biblioteca-768",
+      "axe": 0,
+      "regras": 25,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-reprodutor-768",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "axe-reprodutor-768",
+      "axe": 0,
+      "regras": 26,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-biblioteca-390",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-biblioteca-390",
+      "axe": 0,
+      "regras": 24,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-reprodutor-390",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-reprodutor-390",
+      "axe": 0,
+      "regras": 25,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-biblioteca-320",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "axe-biblioteca-320",
+      "axe": 0,
+      "regras": 24,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-reprodutor-320",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "axe-reprodutor-320",
+      "axe": 0,
+      "regras": 25,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-sessao-401",
+      "passou": true
+    },
+    {
+      "etapa": "erros-js",
+      "total": 0,
+      "erros": []
+    }
+  ]
+}

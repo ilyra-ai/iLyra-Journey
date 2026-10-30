@@ -14,6 +14,7 @@ onde o registro original pode ser consultado ou corrigido.
 | Registros pessoais | Avaliação de bem-estar        | `user_assessments`                                  | `wellbeing_assessments`                    |
 | Registros pessoais | Acompanhamento pessoal (130)  | `personal_tracker_entries`                          | `wellbeing_assessments`                    |
 | Práticas           | Respiração guiada             | `breathing_sessions`                                | `guided_breathing`                         |
+| Práticas           | Prática guiada (132)          | `meditation_sessions`                               | `guided_breathing`                         |
 | Práticas           | Foco e pausa                  | `focus_sessions`                                    | sessão (como a página `/foco`)             |
 | Práticas           | Rotina                        | `personal_routine_runs`                             | `personal_habits`                          |
 | Metas              | Meta criada e prazo da meta   | `goals`                                             | `goal_progress_tracking`                   |

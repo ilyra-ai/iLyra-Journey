@@ -245,6 +245,13 @@ export default function PoliticaDePrivacidadePage() {
             envia os valores a um serviço externo para desfazer uma alteração.
           </p>
           <p>
+            As meditações guiadas guardam a prática escolhida, a versão do
+            roteiro, o tempo realizado e os minutos somados à sua meditação do
+            dia. A narração é feita pela voz do seu próprio dispositivo: nenhum
+            texto ou áudio é enviado a serviços externos. Esses registros entram
+            na exportação dos seus dados e são apagados com a conta.
+          </p>
+          <p>
             Acompanhamentos pessoais (nome, descrição, escalas, frequência,
             respostas e notas) pertencem à sua conta e são relatos pessoais, não
             medições clínicas. Mudar a escala guarda uma nova versão sem

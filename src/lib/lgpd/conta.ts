@@ -250,6 +250,7 @@ const TABELAS_DO_TITULAR = [
   ['offline_operation_receipts', 'user_id'],
   ['app_intro_progress', 'user_id'],
   ['focus_sessions', 'user_id'],
+  ['meditation_sessions', 'user_id'],
   ['rest_periods', 'user_id'],
   ['rest_goal_links', 'user_id'],
   ['personal_experiments', 'user_id'],

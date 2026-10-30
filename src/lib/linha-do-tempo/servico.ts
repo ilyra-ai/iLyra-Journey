@@ -15,6 +15,7 @@ import {
   valorDoRelatorio,
 } from '@/lib/relatorio-pessoal/esquema';
 import { DEFINICOES, type Tecnica } from '@/lib/respiracao/tecnicas';
+import { praticaPorId } from '@/lib/meditacoes/catalogo';
 import { escalaDoBanco } from '@/lib/acompanhamentos/servico';
 import { faixaDaEscala, rotuloDoValor } from '@/lib/acompanhamentos/esquema';
 import {
@@ -244,6 +245,52 @@ const coletores: Record<Origem, Coletor> = {
         `Respiração ${DEFINICOES[r.technique]?.nome ?? r.technique}`,
         `${r.cycles} ${Number(r.cycles) === 1 ? 'ciclo' : 'ciclos'} · ${Math.round(Number(r.duration_seconds) / 60)} min de prática`,
         [{ rotulo: 'Minutos registrados', valor: `${r.minutes_logged} min` }]
+      );
+    });
+  },
+  async meditacao(userId, j, c) {
+    const rs = await queryRows<{
+      id: string;
+      practice_id: string;
+      target_seconds: number;
+      state: string;
+      elapsed_ms: number;
+      started_at: string;
+      local_date: string;
+      minutes_logged: number | null;
+    }>(
+      'SELECT id,practice_id,target_seconds,state,elapsed_ms,started_at,local_date,minutes_logged FROM meditation_sessions WHERE user_id=? AND local_date BETWEEN ? AND ?',
+      [userId, j.inicio, j.fim],
+      c
+    );
+    const estados: Record<string, string> = {
+      running: 'Em andamento',
+      paused: 'Pausada',
+      completed: 'Concluída',
+      ended: 'Interrompida',
+    };
+    return rs.map((r) => {
+      const l = local(r.started_at, j.fuso),
+        feitos = Math.floor(Number(r.elapsed_ms) / 60000),
+        registrados =
+          r.minutes_logged === null
+            ? null
+            : Number(r.minutes_logged) === 0
+              ? 'nenhum minuto somado'
+              : `${r.minutes_logged} min somados à meditação do dia`;
+      return item(
+        'meditacao',
+        r.id,
+        r.local_date,
+        l.data === r.local_date ? l.hora : null,
+        praticaPorId(r.practice_id)?.titulo ?? 'Prática guiada',
+        [
+          estados[r.state] ?? r.state,
+          `${feitos} de ${Math.round(Number(r.target_seconds) / 60)} min`,
+          registrados,
+        ]
+          .filter(Boolean)
+          .join(' · ')
       );
     });
   },

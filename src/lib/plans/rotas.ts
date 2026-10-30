@@ -21,6 +21,7 @@ export const RECURSOS_DA_ROTA: Readonly<
   '/dia': ['ai_tips_feed', 'vedic_insights', 'ai_scores'],
   '/semana': ['weekly_review', 'vedic_insights'],
   '/respiracao': ['guided_breathing'],
+  '/meditacoes': ['guided_breathing'],
   '/lembretes': ['personal_notifications'],
   '/rotinas': ['personal_habits'],
   '/acontecimentos': ['daily_checkin'],

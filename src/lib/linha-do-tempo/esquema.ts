@@ -52,6 +52,12 @@ export const ORIGENS = {
     recursos: ['guided_breathing'],
     destino: '/respiracao',
   },
+  meditacao: {
+    nome: 'Prática guiada',
+    assunto: 'praticas',
+    recursos: ['guided_breathing'],
+    destino: '/meditacoes',
+  },
   foco: {
     nome: 'Foco e pausa',
     assunto: 'praticas',

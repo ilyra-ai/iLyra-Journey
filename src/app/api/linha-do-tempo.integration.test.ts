@@ -336,7 +336,11 @@ describe('linha do tempo pessoal unificada com MySQL real', () => {
     await recurso(false, 'goal_progress_tracking');
     try {
       const r = await lerLinhaDoTempo(u.session, consulta(), agora);
-      expect(r.origensIndisponiveis.sort()).toEqual(['meta', 'respiracao']);
+      expect(r.origensIndisponiveis.sort()).toEqual([
+        'meditacao',
+        'meta',
+        'respiracao',
+      ]);
       expect(
         r.itens.some((i) => ['meta', 'respiracao'].includes(i.origem))
       ).toBe(false);
