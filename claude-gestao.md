@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `██████████████████░░` **90,4%** |
+| Progresso          | `██████████████████░░` **91,2%** |
 | Tarefas totais     | 136                              |
-| 🟢 Finalizadas     | 123                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 124                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 0                                |
 | ⚪ A iniciar       | 12                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (123 ÷ 136 ≈ 90,4%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (124 ÷ 136 ≈ 91,2%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -61,20 +61,13 @@
 
 **Decisão do usuário em 2026-10-30 (reclassificação):** as tarefas 90, 100, 106, 115 e 127 saíram de **BLOQUEADAS** e foram movidas para o Tópico 3 · Tarefas a Iniciar, para execução posterior na ordem numérica. Na sequência, também por decisão do usuário em 2026-10-30, a 86 foi movida para a iniciar; não há tarefas bloqueadas. Esta decisão substitui, para essas cinco tarefas, a orientação anterior de não executá-las; o histórico e as fronteiras pendentes de cada uma continuam registrados em seus tópicos, sem declarar comprovação externa.
 
+**Tarefa 130 concluída em 2026-10-30:** implementação, validação integral e QA publicados na `main`. Próximas tarefas na ordem numérica das não bloqueadas; as tarefas 86, 90, 100, 106, 115 e 127 foram movidas para a iniciar para execução posterior, conforme decisão do usuário.
+
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
 
-### 130 · Acompanhamentos pessoais com campos e escalas definidos pelo usuário
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início autorizado:** 2026-10-30, após fechamento publicado da 129 em `95ad6908` e painel em `c6dd00fc`.
-- **Pedido do usuário:** criar acompanhamentos como concentração ou motivação, escolhendo uma escala simples e compreensível. Corresponde ao item 5 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar avaliações, hábitos e registros existentes; métricas fixas e metas manuais não equivalem a campos de acompanhamento criados pelo usuário. Conferir o catálogo e o esquema atuais antes de ampliar a estrutura.
-- **Escopo funcional:** permitir criar, editar, organizar, arquivar e excluir acompanhamentos com nome, escala, rótulos e frequência escolhidos pelo titular; registrar respostas datadas e consultar evolução. Manter compatibilidade das respostas antigas ao mudar uma escala, representar ausência corretamente e identificar avaliações como relatos pessoais, sem apresentá-las como medições clínicas. Integrar a seleção aos relatórios e à linha do tempo quando essas tarefas estiverem disponíveis.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar CRUD do acompanhamento e dos registros, escalas válidas, alteração de definição, datas, histórico, gráficos, dados ausentes, exportação, exclusão, limites do plano e isolamento por titular. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Conferência prévia em 2026-10-30:** main limpa e sincronizada. Busca em código, esquema e documentação encontrou avaliações fixas, hábitos e experiências pessoais, mas nenhuma definição de acompanhamento com escala criada pelo titular. Reutilizar sessão, permissões de registros manuais, histórico do plano, apresentação Lyra Clean, componentes existentes e exportação. O relatório pessoal já existe e receberá a seleção correspondente; a integração à linha do tempo será feita quando a 131 existir. Preservar respostas antigas ao mudar a escala, sem recalcular ou converter percepções em medições. Nenhuma bloqueada será executada.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -2238,3 +2231,17 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Progresso local em 2026-10-30:** migration 057 aplicada no MySQL real; captura transacional de alterações na gravação compartilhada, revisões de concorrência, API privada de histórico/desfazer, consulta paginada e confirmação no check-in implementadas localmente. Dezesseis integrações da tarefa e regressões de métricas/offline passaram juntas (42 testes em três arquivos), incluindo recálculo real de escores, consulta antiga sem ampliação da janela de edição, isolamento, concorrência, zero/NULL, retenção, exportação, cascatas e idempotência offline. Política de privacidade atualizada e versionada. Em validação global e QA de produção; nenhuma conclusão ou publicação da implementação alegada.
 
 - **Entrega validada em 2026-10-30:** histórico privado paginado, campos/valores anteriores e novos, confirmação e restauração da última revisão intacta, proteção contra concorrência e gravações de sensor/prática, zero/NULL, recálculos e ausência de duplicação. Escrita compartilhada com avaliações e offline; retenção consultável de 90 dias, portabilidade e cascatas com registro/conta. Política de privacidade atualizada. Verificação global aprovada: instalação congelada offline, fix:format, fix:lint, check:lint, check:format, tipos, 959 unitários, 563 integrações MySQL, 30 testes dos launchers e build. Quinze verificações de produção, sete execuções axe sem violações nas regras avaliadas, zero exceções JavaScript, 320/390/1280 e zoom CSS 200%. Corrigidos texto de erro de rede, altura do check-in em zoom e distinção da revisão técnica no inventário de métricas. Relatório e resultados em `docs/auditoria/2026-10-30-versoes-129.md` e `.json`. Nenhuma bloqueada executada.
+
+### 130 · Acompanhamentos pessoais com campos e escalas definidos pelo usuário
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Pedido do usuário:** criar acompanhamentos como concentração ou motivação, escolhendo uma escala simples e compreensível. Corresponde ao item 5 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar avaliações, hábitos e registros existentes; métricas fixas e metas manuais não equivalem a campos de acompanhamento criados pelo usuário. Conferir o catálogo e o esquema atuais antes de ampliar a estrutura.
+- **Escopo funcional:** permitir criar, editar, organizar, arquivar e excluir acompanhamentos com nome, escala, rótulos e frequência escolhidos pelo titular; registrar respostas datadas e consultar evolução. Manter compatibilidade das respostas antigas ao mudar uma escala, representar ausência corretamente e identificar avaliações como relatos pessoais, sem apresentá-las como medições clínicas. Integrar a seleção aos relatórios e à linha do tempo quando essas tarefas estiverem disponíveis.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar CRUD do acompanhamento e dos registros, escalas válidas, alteração de definição, datas, histórico, gráficos, dados ausentes, exportação, exclusão, limites do plano e isolamento por titular. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência prévia em 2026-10-30:** main limpa e sincronizada. Busca em código, esquema e documentação encontrou avaliações fixas, hábitos e experiências pessoais, mas nenhuma definição de acompanhamento com escala criada pelo titular. Reutilizar sessão, permissões de registros manuais, histórico do plano, apresentação Lyra Clean, componentes existentes e exportação. O relatório pessoal já existe e receberá a seleção correspondente; a integração à linha do tempo será feita quando a 131 existir. Preservar respostas antigas ao mudar a escala, sem recalcular ou converter percepções em medições. Nenhuma bloqueada será executada.
+
+- **Implementação em 2026-10-30:** migração 058 (`personal_trackers`, `personal_tracker_definitions`, `personal_tracker_entries`) com propriedade composta, cascatas e restrições. CRUD completo de acompanhamentos (criação idempotente, edição, ordem persistida, arquivar/restaurar, exclusão) e de respostas datadas pelo fuso do perfil, com versões contra sobrescrita. Escala de 2 a 11 pontos (início 0 ou 1, rótulos obrigatórios nos extremos) e frequência diária ou semanal; mudar escala ou frequência cria nova definição sem converter respostas antigas. Ausência representada como “sem registro”, nunca zero. Página `/acompanhamentos`, menu **Meus acompanhamentos**, direitos `wellbeing_assessments` + `metrics_history_days` e corte do histórico do plano. Relatório pessoal com seleção explícita por acompanhamento (prévia, digest e PDF). Exportação LGPD, exclusão, política de privacidade, README e `docs/acompanhamentos-pessoais.md`. A integração com a linha do tempo fica para a 131, ainda inexistente.
+- **Evidências:** fix:format, fix:lint, check:lint, check:format e check:types aprovados; 965 unitários (90 arquivos); 571 integrações com MySQL real (60 arquivos, 8 novas da tarefa); build de produção sem avisos. QA em produção (`pnpm start`): 52 verificações aprovadas, 15 execuções axe WCAG 2.0/2.1/2.2 A/AA sem violações, zero exceções JavaScript, 1280/768/390/320 sem estouro. Corrigidos na causa raiz durante o QA: seletor Radix zerando o maior ponto ao trocar de modelo, mensagens de validação em inglês, classe `sr-only` anulada no item da escala e gráfico móvel abrindo longe das respostas recentes. Contas de QA removidas (0 restantes). Relatório em `docs/auditoria/2026-10-30-acompanhamentos-130.md` e resultados em `.json`. `@current_problems` não está exposto nesta sessão. Nenhuma branch ou worktree criada.

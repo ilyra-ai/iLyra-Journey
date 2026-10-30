@@ -26,6 +26,7 @@ export const RECURSOS_DA_ROTA: Readonly<
   '/acontecimentos': ['daily_checkin'],
   '/relatorio-pessoal': ['metrics_history_days'],
   '/experiencias': ['personal_habits', 'metrics_history_days'],
+  '/acompanhamentos': ['wellbeing_assessments', 'metrics_history_days'],
   '/plan': ['ai_plan_generations'],
   '/goals': ['goal_progress_tracking'],
   // Toda consulta pertence a um profissional cadastrado na mesma página.

@@ -105,6 +105,7 @@ export async function gerarPdfPessoal(r: RelatorioPessoal): Promise<Buffer> {
       ...r.resumos.map((s) => s.nome),
       ...(r.selecao.reflexoes ? ['Reflexões pessoais'] : []),
       ...(r.selecao.acontecimentos ? ['Acontecimentos pessoais'] : []),
+      ...r.acompanhamentos.map((a) => `Acompanhamento: ${a.nome}`),
     ].join('; ') + '.'
   );
   texto(
@@ -218,6 +219,23 @@ export async function gerarPdfPessoal(r: RelatorioPessoal): Promise<Buffer> {
       );
       if (a && r.selecao.notas)
         texto(a.nota ? `Nota pessoal: ${a.nota}` : 'Sem nota pessoal.');
+    }
+  }
+  for (const a of r.acompanhamentos) {
+    pagina(`Acompanhamento: ${a.nome}`);
+    texto(
+      `Fonte: acompanhamento pessoal criado por você${a.arquivado ? ' (arquivado)' : ''}. Cada resposta mantém o rótulo e a escala em que foi dada, sem conversão entre escalas. Relatos pessoais, não medições clínicas. Períodos sem resposta não aparecem e não significam zero.`
+    );
+    texto(
+      `${a.respostas.length} ${a.respostas.length === 1 ? 'resposta' : 'respostas'} no período.`
+    );
+    for (const x of a.respostas) {
+      espaco(20);
+      texto(
+        `${x.frequencia === 'semanal' ? `Semana de ${data(x.data)}` : data(x.data)} | ${x.rotulo} | escala ${x.escala}`
+      );
+      if (r.selecao.notas)
+        texto(x.nota ? `Nota pessoal: ${x.nota}` : 'Sem nota pessoal.');
     }
   }
   const pages = doc.bufferedPageRange();

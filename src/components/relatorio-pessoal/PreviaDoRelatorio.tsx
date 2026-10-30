@@ -223,6 +223,72 @@ export function PreviaDoRelatorio({
           </CardContent>
         </Card>
       )}
+      {r.acompanhamentos.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Acompanhamentos pessoais</CardTitle>
+            <CardDescription>
+              Respostas dadas por você, cada uma com o rótulo e a escala em que
+              foi respondida. Relatos pessoais, não medições clínicas. Períodos
+              sem resposta não aparecem e não significam zero.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-5">
+            {r.acompanhamentos.map((a) => (
+              <section
+                key={a.id}
+                aria-labelledby={`${id}-${a.id}`}
+                className="flex min-w-0 flex-col gap-2"
+              >
+                <h3
+                  id={`${id}-${a.id}`}
+                  className="font-semibold break-words [overflow-wrap:anywhere]"
+                >
+                  {a.nome}
+                  {a.arquivado ? ' (arquivado)' : ''} · {a.respostas.length}{' '}
+                  {a.respostas.length === 1 ? 'resposta' : 'respostas'}
+                </h3>
+                {a.respostas.length ? (
+                  <Table scrollLabel={`Respostas de ${a.nome}`}>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Período</TableHead>
+                        <TableHead>Resposta</TableHead>
+                        <TableHead>Escala</TableHead>
+                        {r.selecao.notas && <TableHead>Nota</TableHead>}
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {a.respostas.map((x) => (
+                        <TableRow key={x.data}>
+                          <TableCell className="whitespace-nowrap">
+                            {x.frequencia === 'semanal'
+                              ? `Semana de ${dataBreve(x.data)}`
+                              : dataBreve(x.data)}
+                          </TableCell>
+                          <TableCell>{x.rotulo}</TableCell>
+                          <TableCell className="whitespace-nowrap">
+                            {x.escala}
+                          </TableCell>
+                          {r.selecao.notas && (
+                            <TableCell className="whitespace-pre-wrap [overflow-wrap:anywhere]">
+                              {x.nota || 'Sem nota.'}
+                            </TableCell>
+                          )}
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    Nenhuma resposta neste período.
+                  </p>
+                )}
+              </section>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </section>
   );
 }

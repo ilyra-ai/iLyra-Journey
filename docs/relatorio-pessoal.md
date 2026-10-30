@@ -9,7 +9,8 @@ Datas dos registros consolidados não são deslocadas para sugerir associação.
 ## Seleção e origem
 
 É possível selecionar individualmente os 15 campos do registro manual do dia,
-as reflexões da noite e os acontecimentos pessoais. A opção de notas é separada
+as reflexões da noite, os acontecimentos pessoais e cada acompanhamento
+pessoal (tarefa 130), ativo ou arquivado. A opção de notas é separada
 e desmarcada por padrão; só inclui notas das categorias também selecionadas.
 Conversas, anexos, cadastros de terceiros, prontidão calculada e interpretações
 astrológicas não são consultados por esse relatório.
@@ -35,6 +36,10 @@ não é avaliação clínica, diagnóstico ou interpretação por modelo de IA.
 - `inicio` e `fim`: datas civis ISO, intervalo inclusivo de até 90 dias;
 - `metricas`: nomes únicos do contrato em `src/lib/metricas/registro-do-dia.ts`;
 - `reflexoes`, `acontecimentos`, `notas`: escolhas booleanas explícitas.
+- `acompanhamentos`: lista opcional de IDs únicos de acompanhamentos do
+  próprio titular (padrão vazio); ID de outra conta responde 404.
+  Cada resposta mantém o rótulo e a escala em que foi dada; períodos sem
+  resposta não aparecem e não são zero. Exige `wellbeing_assessments`.
 
 A prévia contém apenas valores e relatos escolhidos, dias, unidades, resumo,
 fuso, horário de extração e um digest SHA-256 do conteúdo selecionado. Não há

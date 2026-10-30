@@ -18,6 +18,7 @@ const selecao = (): Selecao => ({
   metricas: ['sono', 'energia'],
   reflexoes: false,
   acontecimentos: false,
+  acompanhamentos: [],
   notas: false,
 });
 async function preparar() {

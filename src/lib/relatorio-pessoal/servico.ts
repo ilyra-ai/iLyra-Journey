@@ -13,18 +13,26 @@ import {
   type RelatorioPessoal,
   type Selecao,
   type DiaDoRelatorio,
+  type AcompanhamentoDoRelatorio,
 } from './esquema';
+import {
+  acompanhamentosDoRelatorio,
+  escalaDoBanco,
+} from '@/lib/acompanhamentos/servico';
+import { faixaDaEscala, rotuloDoValor } from '@/lib/acompanhamentos/esquema';
 export async function opcoesDoRelatorio(
   s: AppSession,
   agora = new Date()
 ): Promise<OpcoesDoRelatorio> {
   await requireFeatureEnabled(s, 'metrics_history_days');
-  const [ctx, metricas, reflexoes, acontecimentos] = await Promise.all([
-    contextoDoDiario(s.user.id, agora),
-    contaTemRecurso(s.user.id, 'daily_checkin'),
-    contaTemRecurso(s.user.id, 'evening_reflection'),
-    contaTemRecurso(s.user.id, 'daily_checkin'),
-  ]);
+  const [ctx, metricas, reflexoes, acontecimentos, avaliacoes] =
+    await Promise.all([
+      contextoDoDiario(s.user.id, agora),
+      contaTemRecurso(s.user.id, 'daily_checkin'),
+      contaTemRecurso(s.user.id, 'evening_reflection'),
+      contaTemRecurso(s.user.id, 'daily_checkin'),
+      contaTemRecurso(s.user.id, 'wellbeing_assessments'),
+    ]);
   return {
     hoje: ctx.hoje,
     corte: ctx.corte,
@@ -32,6 +40,13 @@ export async function opcoesDoRelatorio(
     metricas,
     reflexoes,
     acontecimentos,
+    acompanhamentos: avaliacoes
+      ? (await acompanhamentosDoRelatorio(s.user.id)).map((a) => ({
+          id: a.id,
+          nome: a.name,
+          arquivado: a.archived_at !== null,
+        }))
+      : [],
   };
 }
 export async function montarRelatorio(
@@ -50,13 +65,19 @@ export async function montarRelatorio(
   if (
     (p.metricas.length && !ctx.metricas) ||
     (p.reflexoes && !ctx.reflexoes) ||
-    (p.acontecimentos && !ctx.acontecimentos)
+    (p.acontecimentos && !ctx.acontecimentos) ||
+    (p.acompanhamentos.length > 0 &&
+      !(await contaTemRecurso(s.user.id, 'wellbeing_assessments')))
   )
     throw new HttpError(
       'Uma categoria selecionada não está disponível no seu plano.',
       403
     );
-  const selecao = { ...p, metricas: [...p.metricas].sort() };
+  const selecao = {
+    ...p,
+    metricas: [...p.metricas].sort(),
+    acompanhamentos: [...p.acompanhamentos].sort(),
+  };
   return withTransaction(async (c) => {
     const rows = p.metricas.length
       ? await queryRows<Record<string, unknown>>(
@@ -153,7 +174,61 @@ export async function montarRelatorio(
         maximo: vs.length ? Math.max(...vs) : null,
       };
     });
-    const dados = { selecao, fuso: ctx.fuso, dias, resumos };
+    const acompanhamentos: AcompanhamentoDoRelatorio[] = [];
+    if (selecao.acompanhamentos.length) {
+      const marcas = selecao.acompanhamentos.map(() => '?').join(',');
+      const donos = await queryRows<{
+        id: string;
+        name: string;
+        archived_at: string | null;
+      }>(
+        `SELECT id,name,archived_at FROM personal_trackers WHERE user_id=? AND id IN (${marcas}) ORDER BY archived_at IS NOT NULL,position,created_at,id`,
+        [s.user.id, ...selecao.acompanhamentos],
+        c
+      );
+      if (donos.length !== selecao.acompanhamentos.length)
+        throw new HttpError('Acompanhamento não encontrado.', 404);
+      const respostas = await queryRows<{
+        tracker_id: string;
+        entry_date: string;
+        value: number;
+        note?: string;
+        frequency: 'diaria' | 'semanal';
+        scale_min: number;
+        scale_max: number;
+        labels: unknown;
+      }>(
+        `SELECT e.tracker_id,e.entry_date,e.value${p.notas ? ',e.note' : ''},d.frequency,d.scale_min,d.scale_max,d.labels FROM personal_tracker_entries e JOIN personal_tracker_definitions d ON d.id=e.definition_id AND d.tracker_id=e.tracker_id AND d.user_id=e.user_id WHERE e.user_id=? AND e.tracker_id IN (${marcas}) AND e.entry_date BETWEEN ? AND ? ORDER BY e.entry_date`,
+        [s.user.id, ...selecao.acompanhamentos, p.inicio, p.fim],
+        c
+      );
+      for (const a of donos)
+        acompanhamentos.push({
+          id: a.id,
+          nome: a.name,
+          arquivado: a.archived_at !== null,
+          respostas: respostas
+            .filter((r) => r.tracker_id === a.id)
+            .map((r) => {
+              const escala = escalaDoBanco(r);
+              return {
+                data: r.entry_date,
+                frequencia: r.frequency,
+                valor: Number(r.value),
+                rotulo: rotuloDoValor(escala, Number(r.value)),
+                escala: faixaDaEscala(escala),
+                ...(p.notas ? { nota: r.note ?? '' } : {}),
+              };
+            }),
+        });
+    }
+    const dados = {
+      selecao,
+      fuso: ctx.fuso,
+      dias,
+      resumos,
+      acompanhamentos,
+    };
     return {
       ...dados,
       extraidoEm: agora.toISOString(),

@@ -4,6 +4,7 @@ import {
   CAMPOS_DO_REGISTRO,
   type CampoDoRegistro,
 } from '@/lib/metricas/registro-do-dia';
+import { LIMITE_DE_ACOMPANHAMENTOS } from '@/lib/acompanhamentos/esquema';
 export { CAMPOS_DO_REGISTRO, NOMES_DOS_CAMPOS };
 export const selecaoSchema = z
   .object({
@@ -18,6 +19,15 @@ export const selecaoSchema = z
       ),
     reflexoes: z.boolean(),
     acontecimentos: z.boolean(),
+    /** Acompanhamentos pessoais do titular (tarefa 130); opcional. */
+    acompanhamentos: z
+      .array(z.uuid())
+      .max(LIMITE_DE_ACOMPANHAMENTOS)
+      .refine(
+        (a) => new Set(a).size === a.length,
+        'Selecione cada acompanhamento uma vez.'
+      )
+      .default([]),
     notas: z.boolean(),
   })
   .strict()
@@ -27,7 +37,11 @@ export const selecaoSchema = z
     'Escolha até 90 dias por relatório.'
   )
   .refine(
-    (p) => p.metricas.length > 0 || p.reflexoes || p.acontecimentos,
+    (p) =>
+      p.metricas.length > 0 ||
+      p.reflexoes ||
+      p.acontecimentos ||
+      p.acompanhamentos.length > 0,
     'Selecione ao menos uma categoria.'
   );
 export const downloadSchema = z
@@ -44,6 +58,22 @@ export interface OpcoesDoRelatorio {
   reflexoes: boolean;
   acontecimentos: boolean;
   metricas: boolean;
+  /** Acompanhamentos do titular, ativos ou arquivados; vazio sem o recurso. */
+  acompanhamentos: Array<{ id: string; nome: string; arquivado: boolean }>;
+}
+export interface AcompanhamentoDoRelatorio {
+  id: string;
+  nome: string;
+  arquivado: boolean;
+  respostas: Array<{
+    data: string;
+    /** "diaria" ou "semanal", conforme a definição usada na resposta. */
+    frequencia: 'diaria' | 'semanal';
+    valor: number;
+    rotulo: string;
+    escala: string;
+    nota?: string;
+  }>;
 }
 export interface DiaDoRelatorio {
   data: string;
@@ -67,6 +97,7 @@ export interface RelatorioPessoal {
   fuso: string;
   extraidoEm: string;
   dias: DiaDoRelatorio[];
+  acompanhamentos: AcompanhamentoDoRelatorio[];
   revisao: string;
   resumos: {
     campo: CampoDoRegistro;

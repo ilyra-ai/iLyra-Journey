@@ -15,6 +15,7 @@ import {
   Moon,
   Radio,
   Settings2,
+  SlidersHorizontal,
   ShieldCheck,
   Smartphone,
   Sparkles,
@@ -186,6 +187,15 @@ export const navigationItems: NavigationDefinition[] = [
     description:
       'Acompanhe pequenas mudanças escolhidas por você e revise seus registros.',
     icon: ClipboardList,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+  },
+  {
+    href: '/acompanhamentos',
+    label: 'Meus acompanhamentos',
+    description:
+      'Crie acompanhamentos como concentração ou motivação, com sua própria escala.',
+    icon: SlidersHorizontal,
     section: 'Pessoal',
     sectionKey: 'personal',
   },

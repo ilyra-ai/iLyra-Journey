@@ -1,0 +1,298 @@
+{
+  "data": "2026-10-30",
+  "tarefa": 130,
+  "ambiente": {
+    "node": "24.21.0",
+    "pnpm": "11.28.4",
+    "navegador": "Chromium (Playwright pré-instalado)",
+    "axe": "4.14.0",
+    "modo": "pnpm build + pnpm start"
+  },
+  "conta": "conta temporária de QA removida após a execução",
+  "resultados": [
+    {
+      "etapa": "lista-vazia",
+      "passou": true
+    },
+    {
+      "etapa": "menu-presente",
+      "passou": true,
+      "links": 1
+    },
+    {
+      "etapa": "axe-lista-vazia-1280",
+      "axe": 0,
+      "regras": 27,
+      "violacoes": []
+    },
+    {
+      "etapa": "axe-editor-criacao-1280",
+      "axe": 0,
+      "regras": 25,
+      "violacoes": []
+    },
+    {
+      "etapa": "validacao-rotulo-extremo",
+      "passou": true
+    },
+    {
+      "etapa": "criacao-ui",
+      "passou": true,
+      "id": "15257518-131f-4656-85d2-cdd342ba90a2"
+    },
+    {
+      "etapa": "axe-detalhe-vazio-1280",
+      "axe": 0,
+      "regras": 33,
+      "violacoes": []
+    },
+    {
+      "etapa": "teclado-setas",
+      "passou": true,
+      "marcado": "4"
+    },
+    {
+      "etapa": "resposta-hoje",
+      "passou": true
+    },
+    {
+      "etapa": "resposta-ontem",
+      "passou": true,
+      "ontem": "2026-10-29"
+    },
+    {
+      "etapa": "grafico",
+      "passou": true,
+      "titulo": "Concentração QA: respostas de 01/10/2026 a 30/10/2026"
+    },
+    {
+      "etapa": "axe-detalhe-com-respostas-1280",
+      "axe": 0,
+      "regras": 34,
+      "violacoes": []
+    },
+    {
+      "etapa": "falha-de-rede",
+      "passou": true,
+      "mensagem": "Não foi possível falar com o servidor. Verifique a sua conexão."
+    },
+    {
+      "etapa": "retentativa-apos-rede",
+      "passou": true
+    },
+    {
+      "etapa": "aviso-mudanca-escala",
+      "passou": true
+    },
+    {
+      "etapa": "escala-anterior-preservada",
+      "passou": true,
+      "anteriores": 2
+    },
+    {
+      "etapa": "grafico-sem-converter",
+      "passou": true
+    },
+    {
+      "etapa": "exclusao-resposta-retroativa",
+      "passou": true,
+      "linhas": 2
+    },
+    {
+      "etapa": "ausencia-sem-registro",
+      "passou": true,
+      "semRegistro": "1"
+    },
+    {
+      "etapa": "arquivar",
+      "passou": true
+    },
+    {
+      "etapa": "arquivado-apos-recarga",
+      "passou": true
+    },
+    {
+      "etapa": "restaurar",
+      "passou": true
+    },
+    {
+      "etapa": "modelo-sim-nao-mantem-pontos",
+      "passou": true,
+      "menor": "0",
+      "maior": "1"
+    },
+    {
+      "etapa": "semanal-sim-nao",
+      "passou": true
+    },
+    {
+      "etapa": "ordem-persistida",
+      "passou": true,
+      "foco": "Mover Motivação QA para baixo",
+      "ordem": ["Motivação QA", "Concentração QA"]
+    },
+    {
+      "etapa": "axe-lista-1280",
+      "axe": 0,
+      "regras": 27,
+      "violacoes": []
+    },
+    {
+      "etapa": "relatorio-previa",
+      "passou": true
+    },
+    {
+      "etapa": "axe-relatorio-previa-1280",
+      "axe": 0,
+      "regras": 31,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-lista-768",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "axe-lista-768",
+      "axe": 0,
+      "regras": 23,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-detalhe-768",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "axe-detalhe-768",
+      "axe": 0,
+      "regras": 32,
+      "violacoes": []
+    },
+    {
+      "etapa": "grafico-no-trecho-recente-768",
+      "passou": true,
+      "esq": 0,
+      "max": 0
+    },
+    {
+      "etapa": "dialogo-dentro-da-tela-768",
+      "passou": true,
+      "x": 48,
+      "y": 16,
+      "width": 672,
+      "height": 992
+    },
+    {
+      "etapa": "axe-editor-768",
+      "axe": 0,
+      "regras": 25,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-lista-390",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-lista-390",
+      "axe": 0,
+      "regras": 22,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-detalhe-390",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-detalhe-390",
+      "axe": 0,
+      "regras": 32,
+      "violacoes": []
+    },
+    {
+      "etapa": "grafico-no-trecho-recente-390",
+      "passou": true,
+      "esq": 294,
+      "max": 294
+    },
+    {
+      "etapa": "dialogo-dentro-da-tela-390",
+      "passou": true,
+      "x": 16,
+      "y": 16,
+      "width": 358,
+      "height": 812
+    },
+    {
+      "etapa": "axe-editor-390",
+      "axe": 0,
+      "regras": 25,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-lista-320",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "axe-lista-320",
+      "axe": 0,
+      "regras": 22,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-detalhe-320",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "axe-detalhe-320",
+      "axe": 0,
+      "regras": 32,
+      "violacoes": []
+    },
+    {
+      "etapa": "grafico-no-trecho-recente-320",
+      "passou": true,
+      "esq": 364,
+      "max": 364
+    },
+    {
+      "etapa": "dialogo-dentro-da-tela-320",
+      "passou": true,
+      "x": 16,
+      "y": 16,
+      "width": 288,
+      "height": 608
+    },
+    {
+      "etapa": "axe-editor-320",
+      "axe": 0,
+      "regras": 25,
+      "violacoes": []
+    },
+    {
+      "etapa": "exclusao-acompanhamento",
+      "passou": true,
+      "restantes": 1
+    },
+    {
+      "etapa": "sem-sessao-401",
+      "passou": true
+    },
+    {
+      "etapa": "erros-js",
+      "total": 0,
+      "erros": [],
+      "ignorados": 2
+    }
+  ]
+}

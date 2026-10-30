@@ -141,6 +141,18 @@ A revisão é local e não envia relatos a modelo externo. O histórico atual
 do plano continua limitando cada leitura. Consulte os
 [contratos e limites](./experiencias-pessoais.md).
 
+## Acompanhamentos pessoais (tarefa 130)
+
+Acompanhamentos, definições de escala/frequência e respostas pertencem ao
+titular autenticado e entram na exportação (`personal_trackers`,
+`personal_tracker_definitions`, `personal_tracker_entries`). Mudar a escala
+cria uma nova definição sem converter respostas anteriores. Arquivar preserva
+as respostas; excluir o acompanhamento remove definições e respostas por
+cascata, preservando métricas, metas e práticas; excluir a conta remove as
+três tabelas. Não há envio a provedor externo. O histórico vigente do plano
+limita leitura e gravação. Detalhes em
+[Acompanhamentos pessoais](./acompanhamentos-pessoais.md).
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 A prévia e o PDF consultam somente as categorias selecionadas do titular

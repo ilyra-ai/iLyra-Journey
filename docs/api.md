@@ -221,6 +221,17 @@ encerramento explícito e revisão local usam dados do titular. Leituras não
 podem ser armazenadas em cache. Contratos, códigos e limites em
 [Experiências pessoais](./experiencias-pessoais.md).
 
+## Acompanhamentos pessoais (tarefa 130)
+
+`GET/POST /api/acompanhamentos`, `PUT /api/acompanhamentos/ordem`,
+`GET/PATCH/POST/DELETE /api/acompanhamentos/[id]` e
+`PUT/DELETE /api/acompanhamentos/[id]/registros/[data]` exigem sessão,
+avaliações de bem-estar e histórico autorizado. Criação idempotente por
+`pedidoId`, versões contra sobrescrita, definição de escala versionada,
+arquivamento, ordem completa dos ativos e respostas datadas pelo fuso do
+perfil. Leituras são privadas sem cache. Contratos, códigos e limites em
+[Acompanhamentos pessoais](./acompanhamentos-pessoais.md).
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 `GET /api/relatorio-pessoal` fornece opções autorizadas.

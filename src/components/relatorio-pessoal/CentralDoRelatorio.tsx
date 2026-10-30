@@ -40,6 +40,7 @@ function Editor({ opcoes: o }: { opcoes: OpcoesDoRelatorio }) {
       metricas: [],
       reflexoes: false,
       acontecimentos: false,
+      acompanhamentos: [],
       notas: false,
     })),
     [r, setR] = useState<RelatorioPessoal | null>(null),
@@ -244,6 +245,42 @@ function Editor({ opcoes: o }: { opcoes: OpcoesDoRelatorio }) {
                         Acontecimentos e marcadores pessoais
                       </FieldLabel>
                     </Field>
+                  )}
+                  {o.acompanhamentos.length > 0 && (
+                    <fieldset className="flex min-w-0 flex-col gap-3">
+                      <legend className="mb-2 text-sm font-medium">
+                        Acompanhamentos pessoais
+                      </legend>
+                      <div className="grid min-w-0 gap-3 @lg/relatorio:grid-cols-2">
+                        {o.acompanhamentos.map((a) => (
+                          <Field key={a.id} orientation="horizontal">
+                            <Checkbox
+                              className="size-6 after:-inset-1"
+                              id={'relatorio-acompanhamento-' + a.id}
+                              checked={p.acompanhamentos.includes(a.id)}
+                              onCheckedChange={(v) =>
+                                alterar({
+                                  ...p,
+                                  acompanhamentos:
+                                    v === true
+                                      ? [...p.acompanhamentos, a.id]
+                                      : p.acompanhamentos.filter(
+                                          (x) => x !== a.id
+                                        ),
+                                })
+                              }
+                            />
+                            <FieldLabel
+                              htmlFor={'relatorio-acompanhamento-' + a.id}
+                              className="break-words [overflow-wrap:anywhere]"
+                            >
+                              {a.nome}
+                              {a.arquivado ? ' (arquivado)' : ''}
+                            </FieldLabel>
+                          </Field>
+                        ))}
+                      </div>
+                    </fieldset>
                   )}
                   <Field orientation="horizontal">
                     <Checkbox

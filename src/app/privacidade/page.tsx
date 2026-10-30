@@ -245,6 +245,16 @@ export default function PoliticaDePrivacidadePage() {
             envia os valores a um serviço externo para desfazer uma alteração.
           </p>
           <p>
+            Acompanhamentos pessoais (nome, descrição, escalas, frequência,
+            respostas e notas) pertencem à sua conta e são relatos pessoais, não
+            medições clínicas. Mudar a escala guarda uma nova versão sem
+            converter respostas anteriores. Arquivar preserva as respostas;
+            excluir o acompanhamento remove todas as suas versões e respostas, e
+            excluir a conta remove tudo. Eles entram na exportação dos seus
+            dados e no relatório pessoal somente quando você os seleciona, e não
+            são enviados a serviços externos.
+          </p>
+          <p>
             Anexos do chat são privados e vinculados à conversa. TXT UTF-8 e
             imagens estáticas PNG, JPEG e WebP podem ser guardados; imagens são
             convertidas em PNG sem metadados. Só os arquivos selecionados são
