@@ -2246,7 +2246,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 132 · Biblioteca de meditações e relaxamentos guiados em áudio
 
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `35507b9b` · **Push confirmado:** `b709276..35507b9 main -> main`.
 - **Pedido do usuário:** escolher meditações e relaxamentos por duração e objetivo, com narração e transcrição. Corresponde ao item 7 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
 - **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar respiração guiada, histórico de práticas e componentes de áudio disponíveis, sem registrar a biblioteca como se já estivesse entregue. Complementar a respiração e as sessões de foco da tarefa 126, sem reconstruí-las.
 - **Escopo funcional:** oferecer catálogo real de práticas em pt-BR, filtros por duração e finalidade, detalhes, narração, transcrição e controles de reprodução. Usar conteúdo próprio ou com direito de uso comprovado; não criar cards com mídia inexistente. Permitir retomar práticas e registrar apenas o tempo efetivamente realizado, com regras explícitas de integração às métricas e prevenção de dupla contagem.
