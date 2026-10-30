@@ -252,6 +252,7 @@ const TABELAS_DO_TITULAR = [
   ['focus_sessions', 'user_id'],
   ['meditation_sessions', 'user_id'],
   ['meal_entries', 'user_id'],
+  ['personal_diary_entries', 'user_id'],
   ['platform_feature_switch_events', 'actor_id'],
   ['rest_periods', 'user_id'],
   ['rest_goal_links', 'user_id'],

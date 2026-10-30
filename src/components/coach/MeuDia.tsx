@@ -43,6 +43,7 @@ import {
   saudacao,
   TOM,
 } from './partes';
+import { DiarioPessoal } from '@/components/diario-pessoal/DiarioPessoal';
 import { AbasDoDia, type AbaDoDia } from './AbasDoDia';
 import { AlertasDoDia } from './AlertasDoDia';
 import { LeituraDoDia } from './LeituraDoDia';
@@ -288,6 +289,12 @@ export function MeuDia() {
                   </PlanFeatureGate>
                   <PlanFeatureGate features={['evening_reflection']} ocultar>
                     <Button asChild size="sm" variant="outline">
+                      <a href="#diario">
+                        <BookHeart aria-hidden="true" />
+                        Contar o meu dia
+                      </a>
+                    </Button>
+                    <Button asChild size="sm" variant="outline">
                       <a href="#reflexao">
                         <MoonStar aria-hidden="true" />
                         Reflexão da noite
@@ -504,13 +511,16 @@ export function MeuDia() {
       chave: 'diario',
       rotulo: 'Diário',
       icone: BookHeart,
-      ancoras: ['reflexao'],
+      ancoras: ['diario', 'reflexao'],
       conteudo: (
         <PlanFeatureGate features={['evening_reflection']}>
-          <ReflexaoDaNoite
-            dataDoBriefing={briefing.data}
-            feedbackInicial={estado.feedback}
-          />
+          <div className="flex flex-col gap-8">
+            <DiarioPessoal />
+            <ReflexaoDaNoite
+              dataDoBriefing={briefing.data}
+              feedbackInicial={estado.feedback}
+            />
+          </div>
         </PlanFeatureGate>
       ),
     },

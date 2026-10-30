@@ -150,6 +150,38 @@ const coletores: Record<Origem, Coletor> = {
       )
     );
   },
+  async diario(userId, j, c) {
+    // O conteúdo do relato não sai do diário: aqui só o momento, a forma e
+    // o estado da análise, como a nota da reflexão.
+    const rs = await queryRows<{
+      id: string;
+      entry_date: string;
+      input_mode: string;
+      analysis_status: string;
+      created_at: string;
+    }>(
+      'SELECT id,entry_date,input_mode,analysis_status,created_at FROM personal_diary_entries WHERE user_id=? AND entry_date BETWEEN ? AND ?',
+      [userId, j.inicio, j.fim],
+      c
+    );
+    return rs.map((r) => {
+      const l = local(r.created_at, j.fuso);
+      return item(
+        'diario',
+        r.id,
+        r.entry_date,
+        l.data === r.entry_date ? l.hora : null,
+        'Relato no diário',
+        [
+          r.input_mode === 'voz' ? 'Contado por voz' : 'Digitado',
+          r.analysis_status === 'pronta'
+            ? 'com análise do dia'
+            : 'análise ainda não feita',
+        ].join(' · '),
+        [{ rotulo: 'Relato', valor: 'Guardado no diário (veja na origem)' }]
+      );
+    });
+  },
   async avaliacao(userId, j, c) {
     const [de, ate] = limitesUtc(j),
       nomes: Record<string, string> = {

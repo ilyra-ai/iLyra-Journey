@@ -1,0 +1,222 @@
+{
+  "data": "2026-10-30",
+  "tarefa": 135,
+  "ambiente": {
+    "node": "24.21.0",
+    "pnpm": "11.28.4",
+    "mysql": "9.7.2",
+    "axe": "4.14.0",
+    "navegador": "Chromium 153 completo (headless novo)",
+    "modo": "pnpm build + pnpm start"
+  },
+  "modeloDeQa": {
+    "nome": "Qwen2.5-1.5B-Instruct Q4_K_M",
+    "licenca": "Apache-2.0",
+    "revisao": "91cad51170dc346986eccefdc2dd33a9da36ead9",
+    "sha256": "6a1a2eb6d15622bf3c96857206351ba97e1af16c30d7a74ee38970e434e9407e",
+    "servidor": "llama-cpp-python 0.3.16 local (127.0.0.1), CPU 2 núcleos, configurado pela API de Administração → Modelos de IA",
+    "observacao": "resultados lidos do banco por um cliente mysql sem utf8mb4; caracteres acentuados aparecem trocados só na leitura"
+  },
+  "conta": "contas temporárias de QA removidas; ordem de modelos devolvida ao motor da Lyra",
+  "resultados": [
+    {
+      "etapa": "abas-na-ordem",
+      "passou": true,
+      "nomes": [
+        "Meu Dia",
+        "Orientações",
+        "Horários e semana",
+        "Céu e mapa",
+        "Diário",
+        "Madrugada",
+        "Manhã",
+        "Tarde",
+        "Noite\nagora"
+      ]
+    },
+    {
+      "etapa": "meu-dia-primeira-ativa",
+      "passou": true
+    },
+    {
+      "etapa": "meu-dia-ids",
+      "passou": true,
+      "titulo-meu-dia": 1,
+      "titulo-leitura": 1,
+      "titulo-alertas": 1
+    },
+    {
+      "etapa": "axe-meu-dia-1280",
+      "axe": 0,
+      "regras": 31,
+      "violacoes": []
+    },
+    {
+      "etapa": "alertas-fechados",
+      "passou": true
+    },
+    {
+      "etapa": "alertas-fechados-apos-recarga",
+      "passou": true
+    },
+    {
+      "etapa": "alertas-reabertos",
+      "passou": true
+    },
+    {
+      "etapa": "teclado-foco",
+      "foco": "Orientações"
+    },
+    {
+      "etapa": "teclado-seta-direita",
+      "passou": true
+    },
+    {
+      "etapa": "axe-orientacoes",
+      "axe": 0,
+      "regras": 29,
+      "violacoes": []
+    },
+    {
+      "etapa": "url-com-aba",
+      "passou": true
+    },
+    {
+      "etapa": "axe-horarios",
+      "axe": 0,
+      "regras": 30,
+      "violacoes": []
+    },
+    {
+      "etapa": "recarga-mantem-aba",
+      "passou": true
+    },
+    {
+      "etapa": "axe-ceu",
+      "axe": 0,
+      "regras": 33,
+      "violacoes": []
+    },
+    {
+      "etapa": "ancora-reflexao-abre-diario",
+      "passou": true
+    },
+    {
+      "etapa": "botao-contar-o-dia",
+      "passou": true
+    },
+    {
+      "etapa": "axe-diario-vazio",
+      "axe": 0,
+      "regras": 31,
+      "violacoes": []
+    },
+    {
+      "etapa": "voz-pede-aceite-antes-do-servico",
+      "passou": true
+    },
+    {
+      "etapa": "voz-servico-do-navegador",
+      "observacao": "O microfone não foi liberado. Libere-o nas configurações do navegador ou digite o relato."
+    },
+    {
+      "etapa": "sem-modelo-indisponivel",
+      "passou": true,
+      "banco": "indisponivel"
+    },
+    {
+      "etapa": "axe-diario-indisponivel",
+      "axe": 0,
+      "regras": 31,
+      "violacoes": []
+    },
+    {
+      "etapa": "admin-configura-modelo-local",
+      "passou": true,
+      "url": "http://127.0.0.1:8089/v1"
+    },
+    {
+      "etapa": "modelo-real-local",
+      "segundos": 50,
+      "banco": "pronta |  | Hoje acordei cedo, fui caminhar no parque com minha irm� e depois trabalhei muito a tarde. Fiquei cansada mas feliz."
+    },
+    {
+      "etapa": "axe-diario-apos-modelo",
+      "axe": 0,
+      "regras": 31,
+      "violacoes": []
+    },
+    {
+      "etapa": "calendario-marca-dia",
+      "passou": true,
+      "rotulo": "sexta-feira, 30 de outubro, 1 relato, hoje"
+    },
+    {
+      "etapa": "calendario-teclado",
+      "passou": true,
+      "focado": "quinta-feira, 29 de outubro, sem relatos"
+    },
+    {
+      "etapa": "editar-relato",
+      "passou": true,
+      "banco": "2|pendente"
+    },
+    {
+      "etapa": "diario-390-sem-overflow",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-diario-390",
+      "axe": 0,
+      "regras": 30,
+      "violacoes": []
+    },
+    {
+      "etapa": "diario-768-sem-overflow",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "diario-320-sem-overflow",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "meu-dia-320-sem-overflow",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "excluir-relato",
+      "passou": true
+    },
+    {
+      "etapa": "erros-js",
+      "total": 0,
+      "erros": [],
+      "todos": []
+    }
+  ],
+  "provaComModeloReal": [
+    {
+      "relato": "hoje acordei cedo fui caminhar no parque com a minha irma e depois trabalhei muito a tarde fiquei cansada mas feliz",
+      "segundos": 73,
+      "resultado": "pronta ##  ## Hoje acordei cedo, fui caminhar no parque com minha irm� e depois trabalhei muito a tarde. Fiquei cansada mas feliz. ## {\"padroes\": [], \"percepcoes\": [], \"acontecimentos\": [\"Aconteceu que voc� acordou cedo\", \"Voc� caminhou no parque com sua irm�\", \"Voc� trabalhou durante a tarde\"], \"relacaoComOMapa\": \"O c�u do dia � atento, indicando que hoje � um dia de prud�ncia. A Lua est� em G�meos, o signo mais sens�vel do mapa da pessoa. O signo da Lua favorece encerrar h�bitos ruins e organizar.\", \"caracteristicasDoDia\": \"Hoje, voc� acordou cedo e caminhou no parque com sua irm�. Voc� acabou de trabalhar muito a tarde.\"} ## \"G�meos\""
+    },
+    {
+      "relato": "de noite liguei pra minha mae e conversamos bastante sobre a viagem de dezembro me senti tranquila e com saudade",
+      "segundos": 1,
+      "resultado": "gerando ##  ##  ##  ##"
+    }
+  ],
+  "reproducaoDaRecusa": {
+    "relato": "de noite liguei pra minha mae e conversamos bastante sobre a viagem de dezembro me senti tranquila e com saudade",
+    "textoOrganizadoDoModelo": "2026-10-30",
+    "motivo": "o texto organizado acrescentou ou trocou palavras do relato"
+  }
+}

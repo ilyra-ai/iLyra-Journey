@@ -34,6 +34,12 @@ export const ORIGENS = {
     recursos: ['evening_reflection'],
     destino: '/dia',
   },
+  diario: {
+    nome: 'Diário pessoal',
+    assunto: 'registros',
+    recursos: ['evening_reflection'],
+    destino: '/dia?aba=diario',
+  },
   avaliacao: {
     nome: 'Avaliação de bem-estar',
     assunto: 'registros',

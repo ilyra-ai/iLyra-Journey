@@ -181,6 +181,19 @@ só o identificador do administrador responsável, data e estados, sem dados
 de consultas; ela entra na exportação desse administrador e o vínculo vira
 nulo se a conta dele for excluída.
 
+## Diário pessoal por voz (tarefa 135)
+
+`personal_diary_entries` pertence ao titular e entra na exportação com o
+relato exatamente como foi contado, o texto organizado, a análise, o modelo
+que a escreveu e os fatos do céu usados. A conta excluída leva os relatos.
+O áudio nunca chega ao servidor: o reconhecimento acontece no aparelho
+quando o navegador oferece; o serviço de voz do navegador (que processa o
+áudio fora do aparelho) só é usado depois de um aceite explícito a cada vez.
+O relato só vai a modelos em nuvem com o consentimento de nuvem da memória;
+sem ele, apenas modelos locais o recebem. Com a memória ligada, o relato
+entra na fila da memória individual; excluir o relato do diário não apaga
+lembranças já extraídas, que são corrigidas ou apagadas na página Memória.
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 A prévia e o PDF consultam somente as categorias selecionadas do titular

@@ -9,12 +9,12 @@ permissão foi retirada:
 | Orientações            | `titulo-focos`, `titulo-cuidados`, `titulo-coach` (abas por área) e respiração guiada |
 | Horários e semana      | `titulo-periodos`, janelas de hoje (`#janelas`) e o cartão da semana                  |
 | Céu e mapa             | `titulo-ceu` e "Para um coach ainda mais preciso"                                     |
-| Diário                 | reflexão da noite (`#reflexao`); a tarefa 135 acrescenta o diário pessoal (`#diario`) |
+| Diário                 | diário pessoal (`#diario`, tarefa 135) e reflexão da noite (`#reflexao`)              |
 
 - A aba ativa fica em `?aba=` e sobrevive à recarga. Links antigos com
-  âncora (`/dia#reflexao`, `#janelas`, `#respiracao`) abrem a aba
-  onde a seção mora e rolam até ela. Os botões do topo ("Reflexão da noite"
-  e "Levar para o calendário") fazem o mesmo.
+  âncora (`/dia#reflexao`, `#janelas`, `#respiracao`, `#diario`) abrem a aba
+  onde a seção mora e rolam até ela. Os botões do topo ("Contar o meu dia",
+  "Reflexão da noite" e "Levar para o calendário") fazem o mesmo.
 - Todas as abas ficam montadas e só as inativas são ocultadas, para não
   perder formulários em andamento nem recarregar dados ao alternar.
 - Abas do Radix: setas, Home/End, foco visível, `aria-selected` e lista

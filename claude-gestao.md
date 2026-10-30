@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `███████████████████░` **94,9%** |
+| Progresso          | `███████████████████░` **95,6%** |
 | Tarefas totais     | 136                              |
-| 🟢 Finalizadas     | 129                              |
+| 🟢 Finalizadas     | 130                              |
 | 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 7                                |
+| ⚪ A iniciar       | 6                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (129 ÷ 136 ≈ 94,9%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (130 ÷ 136 ≈ 95,6%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -68,6 +68,8 @@
 **Tarefa 134 concluída em 2026-10-30:** agenda exclusiva do administrador por padrão, com ativação global auditada; validação integral e QA publicados na `main`. Próxima etapa: 135 + 136 em conjunto.
 
 **Tarefa 136 concluída em 2026-10-30:** `/dia` em abas com "Meu Dia" primeiro e alertas fecháveis; executada junto da 135 e publicada antes dela, em commit próprio. A 135 segue na publicação seguinte.
+
+**Tarefa 135 concluída em 2026-10-30:** diário pessoal por voz na aba Diário de `/dia`, com análise validada e prova com modelo real local. Próximas: 86, 90, 100, 106, 115 e 127.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
@@ -198,20 +200,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Commit e publicação da implementação local:** `2ab166554c20f60826349659c83dc1acc0e23585`, confirmado na `main` pela API autenticada do GitHub, com árvore idêntica à revisão local e atualização sem force. Nenhuma branch ou worktree criada. A 127 continua bloqueada somente na prova externa descrita acima; a publicação não a declara concluída.
 
 - **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
-
-### 135 · Diário pessoal por voz em `/dia`, com análise do dia, memória individual e calendário
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-30 · **Orientação atual:** somente acrescentar a tarefa ao painel e aguardar instruções; não iniciar a implementação.
-- **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). O diário deve fazer parte dessa página, coordenado com a organização em abas solicitada pelo usuário.
-- **Pedido do usuário:** implementar a solicitação transcrita do áudio e revisada neste chat: permitir que cada pessoa conte por voz como foi o seu dia, receba o texto organizado e uma análise personalizada e consulte o diário em formato de agenda, enquanto a Lyra desenvolve uma compreensão contextualizada de sua trajetória.
-- **Relato por voz e organização do texto:** transcrever o relato e corrigir ortografia e pontuação, preservando o sentido, os acontecimentos e a forma de expressão do usuário. Não acrescentar fatos à fala nem apresentar uma transcrição que não tenha sido realmente processada.
-- **Análise do dia e mapa pessoal:** analisar o conteúdo efetivamente relatado e apresentar, em pt-BR simples e natural, os principais acontecimentos, percepções e características daquele dia. Relacionar o relato aos dados reais do mapa astral do próprio titular, mantendo clara a distinção entre o que a pessoa contou e a interpretação produzida pela Lyra. O pedido de “diagnóstico do dia” corresponde à análise interpretativa do relato; não transformar essa interpretação em diagnóstico clínico nem em medição de saúde.
-- **Memória individual e acompanhamento contínuo:** salvar os registros e suas análises na memória individual do usuário. Utilizar o histórico real ao longo dos dias para compreender experiências, reconhecer padrões e construir progressivamente um mapeamento pessoal, sem inventar vivências, conclusões ou informações ausentes. Preservar isolamento por titular, consentimentos, direitos do plano e exportação/exclusão aplicáveis.
-- **Diário em formato de agenda:** apresentar os registros organizados por data, em uma interface de calendário inspirada na organização do Google Agenda. Ao selecionar um dia, permitir consultar o relato e a análise correspondentes. A referência ao Google Agenda define o formato de apresentação; não acrescenta uma integração externa com a conta Google.
-- **Conferência prévia e integração:** antes de implementar, conferir a `main` e reaproveitar voz, reflexão diária, persistência, memória e navegação existentes; avaliar as entregas 44, 85, 124 e 128 e a futura linha do tempo 131. Distinguir este diário pessoal do diário alimentar 133. Coordenar a localização do diário com a tarefa 136, sem impor nomes adicionais de abas não definidos pelo usuário nem duplicar registros e serviços existentes.
-- **Experiência e validação futura:** seguir o Lyra Clean claro, a acessibilidade e as referências oficiais atuais de 2026. Validar captura de voz, transcrição, correção fiel, análise com modelo real autorizado, indisponibilidade de modelo/microfone, gravação, reabertura por data, memória individual e isolamento entre contas. Executar os testes e gates aplicáveis, conferir o fluxo no navegador e publicar a implementação em commit e push próprios na `main`, com evidências no painel. Este registro não declara o diário implementado nem validações funcionais executadas.
-
-- **Publicação deste registro documental:** commit `1c22b67c6adf52072ea12d3c7b764eadbe888cda`, confirmado na `main` pela API autenticada do GitHub e pela releitura do arquivo. Somente o painel foi alterado; a tarefa permanece a iniciar, aguardando instruções. Este SHA não corresponde à implementação do diário.
 
 ## Tópico 4 · Histórico das Tarefas Finalizadas
 
@@ -2267,3 +2255,20 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 - **Implementação em 2026-10-30:** `/dia` em cinco abas (Meu Dia, Orientações, Horários e semana, Céu e mapa, Diário), com os 14 blocos e identificadores preservados; "Meu Dia" reúne `titulo-meu-dia`, `titulo-alertas` e `titulo-leitura`. Aba ativa em `?aba=`, âncoras antigas abrem a aba certa, abas sempre montadas. "Atenção hoje" compacto e fechável, sem apagar dados. Executada junto da 135 e publicada antes dela, em commit próprio. Documentação em `docs/dia-em-abas.md`.
 - **Evidências:** gates aprovados; 970 unitários; 586 integrações; build sem avisos. QA em produção: 25 verificações e 6 axe sem violações, incluindo 390, 768 e 320 px. Relatório em `docs/auditoria/2026-10-30-dia-em-abas-136.md`. Conta de QA removida. Nenhuma branch ou worktree.
+
+### 135 · Diário pessoal por voz em `/dia`, com análise do dia, memória individual e calendário
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). O diário deve fazer parte dessa página, coordenado com a organização em abas solicitada pelo usuário.
+- **Pedido do usuário:** implementar a solicitação transcrita do áudio e revisada neste chat: permitir que cada pessoa conte por voz como foi o seu dia, receba o texto organizado e uma análise personalizada e consulte o diário em formato de agenda, enquanto a Lyra desenvolve uma compreensão contextualizada de sua trajetória.
+- **Relato por voz e organização do texto:** transcrever o relato e corrigir ortografia e pontuação, preservando o sentido, os acontecimentos e a forma de expressão do usuário. Não acrescentar fatos à fala nem apresentar uma transcrição que não tenha sido realmente processada.
+- **Análise do dia e mapa pessoal:** analisar o conteúdo efetivamente relatado e apresentar, em pt-BR simples e natural, os principais acontecimentos, percepções e características daquele dia. Relacionar o relato aos dados reais do mapa astral do próprio titular, mantendo clara a distinção entre o que a pessoa contou e a interpretação produzida pela Lyra. O pedido de “diagnóstico do dia” corresponde à análise interpretativa do relato; não transformar essa interpretação em diagnóstico clínico nem em medição de saúde.
+- **Memória individual e acompanhamento contínuo:** salvar os registros e suas análises na memória individual do usuário. Utilizar o histórico real ao longo dos dias para compreender experiências, reconhecer padrões e construir progressivamente um mapeamento pessoal, sem inventar vivências, conclusões ou informações ausentes. Preservar isolamento por titular, consentimentos, direitos do plano e exportação/exclusão aplicáveis.
+- **Diário em formato de agenda:** apresentar os registros organizados por data, em uma interface de calendário inspirada na organização do Google Agenda. Ao selecionar um dia, permitir consultar o relato e a análise correspondentes. A referência ao Google Agenda define o formato de apresentação; não acrescenta uma integração externa com a conta Google.
+- **Conferência prévia e integração:** antes de implementar, conferir a `main` e reaproveitar voz, reflexão diária, persistência, memória e navegação existentes; avaliar as entregas 44, 85, 124 e 128 e a futura linha do tempo 131. Distinguir este diário pessoal do diário alimentar 133. Coordenar a localização do diário com a tarefa 136, sem impor nomes adicionais de abas não definidos pelo usuário nem duplicar registros e serviços existentes.
+- **Experiência e validação futura:** seguir o Lyra Clean claro, a acessibilidade e as referências oficiais atuais de 2026. Validar captura de voz, transcrição, correção fiel, análise com modelo real autorizado, indisponibilidade de modelo/microfone, gravação, reabertura por data, memória individual e isolamento entre contas. Executar os testes e gates aplicáveis, conferir o fluxo no navegador e publicar a implementação em commit e push próprios na `main`, com evidências no painel. Este registro não declara o diário implementado nem validações funcionais executadas.
+
+- **Publicação deste registro documental:** commit `1c22b67c6adf52072ea12d3c7b764eadbe888cda`, confirmado na `main` pela API autenticada do GitHub e pela releitura do arquivo. Somente o painel foi alterado; a tarefa permanece a iniciar, aguardando instruções. Este SHA não corresponde à implementação do diário.
+
+- **Implementação em 2026-10-30:** migração 062 (`personal_diary_entries`); API de mês, dia, criação idempotente, edição com versão, exclusão e análise com lease; voz no aparelho primeiro e serviço do navegador só com aceite; análise pelo modelo autorizado (só locais sem consentimento de nuvem) com validação de fidelidade, base no relato, padrões só com histórico, mapa só quando enviado e sem linguagem clínica; agenda mensal na aba Diário de `/dia`; memória individual pela fila durável; linha do tempo sem conteúdo; LGPD; `docs/diario-pessoal.md`.
+- **Evidências:** gates aprovados; 982 unitários; 594 integrações (8 novas, com servidor de contrato HTTP identificado); build sem avisos. QA em produção: 22 verificações e 8 axe sem violações. Prova com modelo real local (Qwen2.5-1.5B-Instruct, Apache-2.0, configurado pela administração): análise pronta em 50–79 s e recusa correta de uma saída infiel. Corrigidos na QA: fidelidade que aceitava troca de sentido, padrões inventados e leitura sem base no relato, rótulo repetido. Fronteira: a captura de fala real não pôde ser provada no navegador do ambiente (sem português no aparelho e microfone recusado). Relatório em `docs/auditoria/2026-10-30-diario-pessoal-135.md`. Contas de QA removidas. Nenhuma branch ou worktree.

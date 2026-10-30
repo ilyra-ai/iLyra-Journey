@@ -264,6 +264,16 @@ anterior e novo. Desativado (padrão), `/api/data/appointments` e
 "Agendamentos estão desativados pelo administrador do app.". Detalhes em
 [Agendamentos para usuários](./agendamentos-para-usuarios.md).
 
+## Diário pessoal (tarefa 135)
+
+`GET /api/diario-pessoal?mes=AAAA-MM` lista os dias com relatos e
+`?data=AAAA-MM-DD`, os relatos do dia. `POST` cria (idempotente pelo `id`,
+até 10 por dia), `PATCH /api/diario-pessoal/[id]` edita com `versao` e
+`DELETE` exclui. `POST /api/diario-pessoal/[id]/analise` organiza o texto e
+escreve a análise com o modelo autorizado, recusando respostas infiéis ao
+relato; sem consentimento de nuvem, só modelos locais. Contratos, estados e
+limites em [Diário pessoal](./diario-pessoal.md).
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 `GET /api/relatorio-pessoal` fornece opções autorizadas.
