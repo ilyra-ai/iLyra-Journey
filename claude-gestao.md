@@ -2241,7 +2241,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 131 · Linha do tempo pessoal unificada com filtros por assunto
 
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `a5a1db98` · **Push confirmado:** `c48f986..a5a1db9 main -> main`.
 - **Pedido do usuário:** escolher um dia e encontrar juntos registros, práticas, metas e acontecimentos pessoais, com filtros por assunto. Corresponde ao item 6 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
 - **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar histórico de métricas, reflexões, práticas, metas e revisão semanal; a linha do tempo de períodos e janelas do dia não é um histórico unificado dessas atividades. Integrar acontecimentos da tarefa 120 conforme sua disponibilidade, sem inventar entradas.
 - **Escopo funcional:** apresentar eventos reais em ordem cronológica com data e horário corretos, origem identificada, filtros, período, paginação e acesso ao registro original. Respeitar limites do histórico, ocultar categorias indisponíveis e refletir edições e exclusões. Não duplicar registros ao agregar fontes nem expor conteúdo de conversas ou informações sensíveis desnecessariamente.
