@@ -250,6 +250,8 @@
 - **Experiência e acessibilidade:** pesquisar referências oficiais atuais de 2026 antes da implementação visual e seguir o Lyra Clean claro, os tokens e componentes existentes. Garantir alternância compreensível, indicação da aba ativa, teclado, foco, leitor de tela, contraste, zoom e responsividade em desktop, tablet e celular, preservando âncoras, carregamento, erros, ausência de dados, filtros e ações aplicáveis.
 - **Conferência e validação futura:** antes de implementar, verificar se já existe progresso na `main` e mapear a cobertura de todo o conteúdo. Validar a primeira aba e seus três identificadores, fechamento dos alertas, agrupamento integral do restante, navegação e recarga, direitos dos planos, isolamento e atualização dos dados. Executar QA no navegador e os gates do projeto; revisar o diff, atualizar o painel e publicar commit e push próprios na `main`, sem branches ou worktrees. Este registro não declara a página reorganizada nem validações funcionais executadas.
 
+- **Publicação deste registro documental:** commit `d5e4b467a4a1cacc9faae5f749349d05c90c2098`, confirmado na `main` pela API autenticada do GitHub e pela releitura do arquivo. Somente o painel foi alterado; a tarefa permanece a iniciar na ordem autorizada. Este SHA não corresponde à implementação das abas.
+
 ## Tópico 4 · Histórico das Tarefas Finalizadas
 
 ### 01 · Instrução mestra no `CLAUDE.md` e obrigatoriedade para agentes de IA
