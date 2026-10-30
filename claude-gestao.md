@@ -24,9 +24,9 @@
 | Progresso          | `██████████████████░░` **91,2%** |
 | Tarefas totais     | 136                              |
 | 🟢 Finalizadas     | 124                              |
-| 🔵 Em andamento    | 0                                |
+| 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 12                               |
+| ⚪ A iniciar       | 11                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
@@ -63,11 +63,22 @@
 
 **Tarefa 130 concluída em 2026-10-30:** implementação, validação integral e QA publicados na `main`. Próximas tarefas na ordem numérica das não bloqueadas; as tarefas 86, 90, 100, 106, 115 e 127 foram movidas para a iniciar para execução posterior, conforme decisão do usuário.
 
+**Orientação do usuário em 2026-10-30 (após a 130):** continuar todas as tarefas até finalizar, executando em conjunto as que compartilham escopo. Execução conjunta autorizada e rastreada: 135 e 136 (mesma página `/dia`, com o diário dentro das abas). Ordem: 131, 132, 133, 134, 135 + 136 e, em seguida, 86, 90, 100, 106, 115 e 127. Cada entrega continua com validação integral, painel, commit e push na `main`, sem branches ou worktrees. Esta orientação substitui a restrição anterior a execuções conjuntas.
+
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 131 · Linha do tempo pessoal unificada com filtros por assunto
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-30, após a publicação da 130 em `998ee140`.
+- **Pedido do usuário:** escolher um dia e encontrar juntos registros, práticas, metas e acontecimentos pessoais, com filtros por assunto. Corresponde ao item 6 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar histórico de métricas, reflexões, práticas, metas e revisão semanal; a linha do tempo de períodos e janelas do dia não é um histórico unificado dessas atividades. Integrar acontecimentos da tarefa 120 conforme sua disponibilidade, sem inventar entradas.
+- **Escopo funcional:** apresentar eventos reais em ordem cronológica com data e horário corretos, origem identificada, filtros, período, paginação e acesso ao registro original. Respeitar limites do histórico, ocultar categorias indisponíveis e refletir edições e exclusões. Não duplicar registros ao agregar fontes nem expor conteúdo de conversas ou informações sensíveis desnecessariamente.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir ordenação e fuso, várias fontes no mesmo dia, filtros, paginação, datas sem registros, abertura da origem, atualizações, exclusões e recusa de dados de outras contas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência prévia em 2026-10-30:** `main` sincronizada em `dc28e8c`. Não existe histórico unificado: a linha de períodos e janelas do dia não reúne atividades. Fontes reais confirmadas no esquema: registro do dia (`daily_metrics`), reflexão da noite, avaliações, acompanhamentos (130), respiração, foco e pausa, rotinas, metas (criação e prazo), acontecimentos (120), modo descanso e relatos das experiências. Cada fonte manterá os direitos do plano da sua própria página; a consulta é somente leitura e não cria cópia dos dados.
 
 ### BLOQUEADAS
 
@@ -192,15 +203,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Commit e publicação da implementação local:** `2ab166554c20f60826349659c83dc1acc0e23585`, confirmado na `main` pela API autenticada do GitHub, com árvore idêntica à revisão local e atualização sem force. Nenhuma branch ou worktree criada. A 127 continua bloqueada somente na prova externa descrita acima; a publicação não a declara concluída.
 
 - **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
-
-### 131 · Linha do tempo pessoal unificada com filtros por assunto
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** escolher um dia e encontrar juntos registros, práticas, metas e acontecimentos pessoais, com filtros por assunto. Corresponde ao item 6 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar histórico de métricas, reflexões, práticas, metas e revisão semanal; a linha do tempo de períodos e janelas do dia não é um histórico unificado dessas atividades. Integrar acontecimentos da tarefa 120 conforme sua disponibilidade, sem inventar entradas.
-- **Escopo funcional:** apresentar eventos reais em ordem cronológica com data e horário corretos, origem identificada, filtros, período, paginação e acesso ao registro original. Respeitar limites do histórico, ocultar categorias indisponíveis e refletir edições e exclusões. Não duplicar registros ao agregar fontes nem expor conteúdo de conversas ou informações sensíveis desnecessariamente.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** conferir ordenação e fuso, várias fontes no mesmo dia, filtros, paginação, datas sem registros, abertura da origem, atualizações, exclusões e recusa de dados de outras contas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ### 132 · Biblioteca de meditações e relaxamentos guiados em áudio
 
