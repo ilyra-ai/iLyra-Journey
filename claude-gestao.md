@@ -25,8 +25,8 @@
 | Tarefas totais     | 136                              |
 | 🟢 Finalizadas     | 123                              |
 | 🔵 Em andamento    | 1                                |
-| 🔴 Bloqueadas      | 6                                |
-| ⚪ A iniciar       | 6                                |
+| 🔴 Bloqueadas      | 1                                |
+| ⚪ A iniciar       | 11                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
@@ -59,6 +59,8 @@
 
 **Retomada autorizada neste chat após o registro em 2026-10-30:** o usuário autorizou iniciar as tarefas conforme o `CLAUDE.md` e o workflow do projeto, com verificação integral, atualização do painel e commit e push na `main` ao final de cada tarefa, antes da seguinte, sem entregas em lote, branches ou worktrees. Esta autorização substitui a espera de instruções acima; conferir e aproveitar o progresso anterior da 130 antes de continuar, seguindo a ordem numérica das tarefas não bloqueadas e preservando a orientação anterior sobre as bloqueadas.
 
+**Decisão do usuário em 2026-10-30 (reclassificação):** as tarefas 90, 100, 106, 115 e 127 saíram de **BLOQUEADAS** e foram movidas para o Tópico 3 · Tarefas a Iniciar, para execução posterior na ordem numérica. Somente a 86 permanece bloqueada. Esta decisão substitui, para essas cinco tarefas, a orientação anterior de não executá-las; o histórico e as fronteiras pendentes de cada uma continuam registrados em seus tópicos, sem declarar comprovação externa.
+
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
@@ -90,9 +92,23 @@
 - **Persistência e acesso:** preservar pedido, imagem e referência ao modelo na conversa, com armazenamento real vinculado ao titular, autorização no servidor, validação dos arquivos e limites de uso. Respeitar modo privado e consentimento para provedores externos, incluir os dados na exportação e exclusão da conta e não expor chaves ou imagens privadas em URLs públicas.
 - **Validação e entrega:** conferir geração solicitada no chat e geração do mapa após sua leitura, comprovando o uso do segundo modelo entre as cinco conexões e o tratamento de conexão ausente ou incompatível. Testar provedor e modelo capazes de criar imagens, reabertura da conversa, download, isolamento entre contas e interface desktop/mobile, além dos quality gates. A implementação terá commit e push próprios na main; este registro não significa funcionalidade já implementada.
 
+## Tópico 3 · Tarefas a Iniciar
+
+---
+
+**Registro desta solicitação:** tarefas 89–95 acrescentadas em 2026-10-22 como **a iniciar**, sem declarar implementação ou validação funcional. A publicação imediata deste registro é documental; cada implementação seguirá com validação, atualização do painel, commit e push próprios na main, sem branches ou worktrees.
+
+---
+
+---
+
+---
+
+**Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
+
 ### 90 · Treinamento real por Aprendizado por Reforço com Feedback Humano via chat
 
-- **Status:** 🔴 bloqueada em pré-requisito de treinamento real · **Registro:** 2026-10-22.
+- **Status:** ⚪ a iniciar (retirada das bloqueadas em 2026-10-30, por decisão do usuário) · **Registro:** 2026-10-22.
 - **Controle administrativo:** acrescentar no chat da Lyra, ao lado de “Como a Lyra responde”, um botão de alternância On/Off chamado **“Treinamento”**, visível somente para o administrador do app. Ao ativar On, habilitar automaticamente o treinamento do Motor Lyra via chat. Exigir um modelo de IA realmente conectado: sem modelo conectado o treinamento não funciona, e a interface deve informar essa condição.
 - **Ativação e salvamento:** ao clicar em On, informar ao Motor Lyra e ao modelo conectado que foi habilitado o treinamento do tipo **Aprendizado por Reforço com Feedback Humano**. Salvar automaticamente tudo que for treinado durante o processo, sem depender de clicar em Off para persistir os dados; preservar o treinamento diante de recarga ou interrupção.
 - **Finalização e aplicação:** ao clicar em Off, informar que o treinamento foi finalizado e que o Motor Lyra deve começar a usar os novos treinamentos com **todos os usuários**, antigos e novos. Preservar rastreabilidade da versão aplicada e isolamento dos dados pessoais das conversas.
@@ -101,9 +117,11 @@
 - **Verificação em 2026-10-24:** a base atual possui documentos de conhecimento e preferências do chat, mas isso não treina pesos. Não há provedor de treinamento conectado nesta nuvem nem pesos locais licenciados e disponíveis para treino; o download no Hugging Face foi recusado pelo proxy com HTTP 403. O Jan do computador do usuário não é acessível pelo localhost da nuvem. Ambiente Python de inferência foi preparado separadamente, sem alegar que ele oferece RLHF ou que foi treinado.
 - **Limite preservado:** não foi acrescentado um botão que apenas salve mensagens e o apresente como RLHF. Retomar a implementação quando houver um modelo treinável/endpoint real acessível, com licença e capacidade de persistir e aplicar a versão treinada. As demais tarefas independentes continuam.
 
+- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
+
 ### 100 · Aba Faturamento no dashboard e gestão financeira completa
 
-- **Status:** 🔴 bloqueada somente na validação oficial externa · **Registro:** 2026-10-22 · **Início:** 2026-10-25.
+- **Status:** ⚪ a iniciar (retirada das bloqueadas em 2026-10-30, por decisão do usuário) · **Registro:** 2026-10-22 · **Início:** 2026-10-25.
 - **Pedido do usuário:** incluir no dashboard administrativo uma aba **“Faturamento”**, com o mesmo visual das abas de **“Gestão de Conteúdo Dinâmico”** em `http://localhost:3000/admin/content`, conforme anexo. Reunir todas as métricas de faturamento **por dia, mês e ano**, gestão total do faturamento, **cancelamento de faturas, reembolsos e demais operações financeiras pertinentes**.
 - **Dados e recursos reais:** inventariar cobrança, assinaturas, faturas, pagamentos e provedores existentes; pesquisar profundamente referências de 2026 e APIs oficiais antes de definir e implementar o conjunto completo de métricas e ações. Relacionar cada valor à origem persistida e aos eventos do provedor, distinguir estados de cobrança, valores brutos e líquidos, cancelamentos e reembolsos, respeitar moeda, fuso e período e permitir conferir os registros de origem. Não apresentar projeções como receita realizada.
 - **Operações:** implementar cancelamento e reembolso reais conforme as capacidades e regras do provedor e o estado da fatura/pagamento, com validação no servidor, autorização administrativa, confirmação clara da ação, idempotência, prevenção de duplicidade, tratamento de falhas, trilha de auditoria e reconciliação por webhooks. Preservar registros fiscais e histórico financeiro; não converter exclusão de registro local em cancelamento ou reembolso fictício.
@@ -119,9 +137,11 @@
 - **Complemento publicado em 2026-10-26:** commit `84ed4d0dc254cc7dd2fe95d3b72ada3604183250` · push `b20a049..84ed4d0 main -> main`, confirmado por `git ls-remote`. Históricos em páginas de 20, pendências verificadas globalmente; exportação LGPD por vínculo comprovado e valores exatos, sem autoria interna. Política de privacidade atualizada, migração 044 intacta. 573 unitários, 378 integrações, formato, lint, tipos e build aprovados. QA em banco temporário com 125 operações/125 refunds: sete páginas, isolamento da base de desenvolvimento, 1440/390/320 sem overflow, axe 27 regras sem violações e nenhuma exceção. Base temporária removida. QA do estado vazio repetido em produção: APIs, permissões, filtros e falha/retentativa aprovados; axe 28 regras. Evidências `/tmp/lyra100-final-*.log` e capturas; `@current_problems` não disponível.
 - **Bloqueio atual comprovado:** chaves oficiais de teste e segredo de webhook continuam ausentes no processo/configuração local e painel (HTTP 200, Stripe inativa, dois ambientes não configurados em `/tmp/lyra100-final-readiness.log`). Restam somente cancelamento/reembolso/sincronização oficiais e QA com esses movimentos/webhooks. Contratos locais e fixtures isoladas não substituem essa prova. As pendências anteriores de paginação/exportação foram resolvidas; continuar as tarefas independentes.
 
+- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
+
 ### 106 · Menu Planos para compra e upgrade dos usuários
 
-- **Status:** 🔴 bloqueada somente na validação oficial de compra/upgrade · **Registro:** 2026-10-22.
+- **Status:** ⚪ a iniciar (retirada das bloqueadas em 2026-10-30, por decisão do usuário) · **Registro:** 2026-10-22.
 - **Pedido do usuário:** criar o menu **“Planos”** no sidebar para todos os planos e perfis não administrativos, permitindo comprar e fazer upgrade do próprio plano. O administrador não deve receber esse menu comercial, pois utiliza a gestão administrativa dos planos e usuários para realizar os upgrades correspondentes.
 - **Implementação:** inspecionar e reaproveitar a jornada comercial e os serviços de cobrança existentes antes de criar outra página. Oferecer comparação e seleção dos planos comercializáveis, identificação do plano atual e compra ou upgrade reais da própria conta, respeitando elegibilidade, estados da assinatura e provedores efetivamente configurados. Não oferecer o plano Administrador para compra nem confundir assinatura comercial com papel administrativo. Preservar a gestão administrativa de planos e usuários, incluindo seus fluxos autorizados de alteração de plano.
 - **Qualidade e validação:** pesquisar referências oficiais atuais antes dos ajustes visuais e seguir o Lyra Clean claro, acessível e responsivo. Conferir sidebar desktop/mobile, presença para usuários comuns, ausência para administradores, autorização no servidor, prevenção de alteração de outra conta e sincronização do plano após confirmação real do pagamento. Validar falhas e indisponibilidade de cobrança sem simular transações; executar testes e gates, publicar commit e push próprios na main e registrar evidências.
@@ -133,9 +153,11 @@
 - **Implementação publicada em 2026-10-26:** menu comercial e página `/planos`, comparação de preços e recursos reais por ciclo, integração aos serviços existentes, restrições administrativas e recusa de planos privados/inativos ou redução pelo checkout. Assinaturas Stripe existentes são encaminhadas ao portal. **Commit:** `2974026eed85995cf79b44614624497c8c7b6452`, confirmado na `main` pela API autenticada do GitHub, sem branches ou worktrees.
 - **Validação e fronteira:** 595 unitários, 389 integrações MySQL, lint, formato, tipos, build e QA dos três planos em 1440/390/320 aprovados. Sem configuração de pagamento nesta instância, a contratação elegível retorna 503 sem alterar o plano; nenhuma compra externa foi executada. Falta somente comprovar compra/upgrade e confirmação oficial do pagamento. Não executar esta fronteira bloqueada sem nova orientação. Evidências em `docs/auditoria/2026-10-26-planos-106-107.md`.
 
+- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
+
 ### 115 · Preenchimento automático das métricas e leituras por IA com linguagem natural para leigos
 
-- **Status:** 🔴 bloqueada somente na prova de inferência com modelo real acessível · **Registro:** 2026-10-26 · **Início:** 2026-10-27.
+- **Status:** ⚪ a iniciar (retirada das bloqueadas em 2026-10-30, por decisão do usuário) · **Registro:** 2026-10-26 · **Início:** 2026-10-27.
 - **Pedido do usuário:** o modelo de IA deve preencher automaticamente todas as métricas e apresentar descrições naturais, objetivas e compreensíveis para uma pessoa leiga. Não trazer termos técnicos da leitura do mapa nem citar Lua, planetas e outras informações astrológicas que o usuário não entende nas descrições exibidas.
 - **Conferência prévia e cobertura integral:** inspecionar primeiro a implementação atual e inventariar todas as métricas, indicadores, cartões, leituras, cálculos, textos, fontes de dados e rotinas de atualização, sem limitar a análise ao recorte visível do painel. Reaproveitar a geração já existente e as entregas de linguagem simples, identidade e correção de inferências das tarefas 49, 50, 55, 56, 82, 108 e 109. Mapear para cada item a origem real, quem o preenche, quando é atualizado, o papel do modelo e a apresentação em cada aba da tarefa 114.
 - **Preenchimento automático real:** integrar o modelo de IA efetivamente conectado ao fluxo de preparação e atualização do painel e das suas abas, usando dados autorizados do titular e resultados dos cálculos existentes. Definir os gatilhos reais de atualização conforme a arquitetura do app, evitando que o usuário precise pedir manualmente o preenchimento de cada item. Validar saídas estruturadas, cobertura de todos os campos aplicáveis, persistência, atualização coerente e retentativa, com controle de concorrência, idempotência, limites de uso e invalidação de conteúdo antigo quando os dados mudarem. Não afirmar que houve chamada a um modelo conectado quando a resposta veio apenas do motor local.
@@ -149,11 +171,11 @@
 - **Validação local:** 621 unitários, 400 integrações com MySQL real, formato, lint, tipos, build e produção HTTP 200. As cinco abas e sete grupos foram conferidos em desktop/mobile; 26 verificações axe sem violações nas regras executadas, zero exceções JavaScript. Cache, novo login, edição, modo privado, ausência, zero e preservação dos valores aprovados. Evidências em `docs/auditoria/2026-10-27-painel-115.md`.
 - **Fronteira preservada:** os ensaios de geração usaram servidor HTTP de contrato identificado, não um modelo generativo. Nenhum provedor real acessível está configurado nesta instância; o localhost do computador do usuário não é o localhost desta nuvem. Falta comprovar a chamada e a qualidade das saídas de um modelo real autorizado. A tarefa não foi declarada concluída. As tarefas independentes continuam, sem insistir nas bloqueadas 86, 90, 100 e 106.
 
----
+- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
 
 ### 127 · Fotos e documentos anexados às conversas da Lyra
 
-- **Status:** 🔴 bloqueada somente na prova de inferência com modelo real autorizado · **Registro:** 2026-10-26 · **Conferência:** 2026-10-29.
+- **Status:** ⚪ a iniciar (retirada das bloqueadas em 2026-10-30, por decisão do usuário) · **Registro:** 2026-10-26 · **Conferência:** 2026-10-29.
 - **Pedido do usuário:** enviar fotos e documentos no chat e pedir explicações, com indicação dos trechos utilizados e das limitações de leitura. Corresponde ao item 1 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
 - **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; os tipos atuais do chat contêm texto e imagens geradas, e o armazenamento de uploads consultado aceita avatares; isso não comprova envio de anexos pelo usuário. Reutilizar histórico, privacidade e a estrutura da tarefa 113, sem confundir este recurso com geração de imagens da tarefa 86.
 - **Escopo funcional:** permitir selecionar, pré-visualizar, enviar, consultar, baixar e excluir anexos privados vinculados à conversa. Definir formatos e tamanhos realmente suportados, validar conteúdo no servidor, proteger acesso por titular e tratar arquivos inválidos ou ilegíveis. Interpretar somente o conteúdo efetivamente lido, com referências ao documento ou imagem e indicação de incerteza; tratar o anexo como dado, sem executar comandos ou instruções nele contidos. Respeitar consentimento para provedores externos e capacidade real do modelo conectado.
@@ -172,19 +194,7 @@
 
 - **Commit e publicação da implementação local:** `2ab166554c20f60826349659c83dc1acc0e23585`, confirmado na `main` pela API autenticada do GitHub, com árvore idêntica à revisão local e atualização sem force. Nenhuma branch ou worktree criada. A 127 continua bloqueada somente na prova externa descrita acima; a publicação não a declara concluída.
 
-## Tópico 3 · Tarefas a Iniciar
-
----
-
-**Registro desta solicitação:** tarefas 89–95 acrescentadas em 2026-10-22 como **a iniciar**, sem declarar implementação ou validação funcional. A publicação imediata deste registro é documental; cada implementação seguirá com validação, atualização do painel, commit e push próprios na main, sem branches ou worktrees.
-
----
-
----
-
----
-
-**Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
+- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
 
 ### 131 · Linha do tempo pessoal unificada com filtros por assunto
 
