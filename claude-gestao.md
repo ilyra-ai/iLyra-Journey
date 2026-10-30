@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `██████████████████░░` **91,8%** |
-| Tarefas totais     | 134                              |
+| Progresso          | `██████████████████░░` **91,1%** |
+| Tarefas totais     | 135                              |
 | 🟢 Finalizadas     | 123                              |
 | 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 6                                |
-| ⚪ A iniciar       | 4                                |
+| ⚪ A iniciar       | 5                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (123 ÷ 134 ≈ 91,8%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (123 ÷ 135 ≈ 91,1%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -54,6 +54,8 @@
 **Orientação vigente do usuário em 2026-10-30:** concluir as tarefas não bloqueadas individualmente, sem entregas em lote. Antes de iniciar, conferir se já existe implementação e aproveitar commits/arquivos anteriores. Registrar o início no painel; ao terminar, verificar o projeto inteiro, corrigir falhas, atualizar este painel antes do commit e publicar imediatamente na `main`, sem branches adicionais ou worktrees. Confirmar a publicação antes de iniciar a próxima. Não executar as bloqueadas 86, 90, 100, 106, 115 e 127. Esta orientação substitui a possibilidade anterior de execução conjunta.
 
 **Continuidade confirmada em 2026-10-30:** 128 encerrada em `0c7a23cd`; 129 concluída e publicada em `95ad6908`; 130 é a próxima tarefa não bloqueada. A implementação de voz já estava em `4a1fe166` e foi aproveitada. Verificação integral e limites registrados no relatório de retomada.
+
+**Solicitação mais recente neste chat em 2026-10-30:** registrar as novas tarefas do diário pessoal e da organização de `/dia` em abas, mantendo-as **a iniciar**, e aguardar instruções antes de qualquer implementação. Esta etapa autoriza somente a atualização e publicação documental do painel; não retoma a 130 nem as demais implementações e preserva as tarefas bloqueadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
@@ -220,6 +222,18 @@
 - **Desativação integral:** quando desligado para usuários, retirar todos os pontos de entrada do app e recusar também acesso direto e operações nas APIs correspondentes, inclusive leitura, criação, edição, exclusão e consultas auxiliares vinculadas à funcionalidade. Impedir atalhos pela URL, manipulação do navegador ou chamadas manuais. Não fazer consultas que sabidamente retornarão 403 para montar menus ou notificações. Conferir canais e calendários ligados a consultas, preservando funcionalidades independentes como as janelas pessoais de autoconhecimento.
 - **Persistência e integridade:** manter agendamentos, profissionais e histórico já registrados; desativar não significa apagar ou cancelar consultas reais. Reativar deve recuperar o acesso aos dados autorizados de cada titular. Aplicar a configuração após recarga, novo login e mudança de papel ou plano, evitando estado antigo conceder acesso indevido. Registrar alterações administrativas com responsável, data e estado anterior e novo, sem expor dados pessoais de consultas.
 - **Experiência e validação:** apresentar o controle em pt-BR, com estado claro, operação acessível e feedback de sucesso ou falha. Testar desligado por padrão, administrador, usuários dos planos, ativação/desativação, persistência, acesso direto, todas as operações pertinentes, isolamento e tentativas de alteração por não administradores. Validar menus e notificações em desktop e celular, regressões, gates e revisão do diff. Publicar commit e push próprios na `main`, sem branches ou worktrees, e atualizar este painel com o SHA real. Este registro não declara o recurso já desativado ou a implementação concluída.
+
+### 135 · Diário pessoal por voz em `/dia`, com análise do dia, memória individual e calendário
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-30 · **Orientação atual:** somente acrescentar a tarefa ao painel e aguardar instruções; não iniciar a implementação.
+- **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). O diário deve fazer parte dessa página, coordenado com a organização em abas solicitada pelo usuário.
+- **Pedido do usuário:** implementar a solicitação transcrita do áudio e revisada neste chat: permitir que cada pessoa conte por voz como foi o seu dia, receba o texto organizado e uma análise personalizada e consulte o diário em formato de agenda, enquanto a Lyra desenvolve uma compreensão contextualizada de sua trajetória.
+- **Relato por voz e organização do texto:** transcrever o relato e corrigir ortografia e pontuação, preservando o sentido, os acontecimentos e a forma de expressão do usuário. Não acrescentar fatos à fala nem apresentar uma transcrição que não tenha sido realmente processada.
+- **Análise do dia e mapa pessoal:** analisar o conteúdo efetivamente relatado e apresentar, em pt-BR simples e natural, os principais acontecimentos, percepções e características daquele dia. Relacionar o relato aos dados reais do mapa astral do próprio titular, mantendo clara a distinção entre o que a pessoa contou e a interpretação produzida pela Lyra. O pedido de “diagnóstico do dia” corresponde à análise interpretativa do relato; não transformar essa interpretação em diagnóstico clínico nem em medição de saúde.
+- **Memória individual e acompanhamento contínuo:** salvar os registros e suas análises na memória individual do usuário. Utilizar o histórico real ao longo dos dias para compreender experiências, reconhecer padrões e construir progressivamente um mapeamento pessoal, sem inventar vivências, conclusões ou informações ausentes. Preservar isolamento por titular, consentimentos, direitos do plano e exportação/exclusão aplicáveis.
+- **Diário em formato de agenda:** apresentar os registros organizados por data, em uma interface de calendário inspirada na organização do Google Agenda. Ao selecionar um dia, permitir consultar o relato e a análise correspondentes. A referência ao Google Agenda define o formato de apresentação; não acrescenta uma integração externa com a conta Google.
+- **Conferência prévia e integração:** antes de implementar, conferir a `main` e reaproveitar voz, reflexão diária, persistência, memória e navegação existentes; avaliar as entregas 44, 85, 124 e 128 e a futura linha do tempo 131. Distinguir este diário pessoal do diário alimentar 133. Coordenar a localização do diário com a tarefa 136, sem impor nomes adicionais de abas não definidos pelo usuário nem duplicar registros e serviços existentes.
+- **Experiência e validação futura:** seguir o Lyra Clean claro, a acessibilidade e as referências oficiais atuais de 2026. Validar captura de voz, transcrição, correção fiel, análise com modelo real autorizado, indisponibilidade de modelo/microfone, gravação, reabertura por data, memória individual e isolamento entre contas. Executar os testes e gates aplicáveis, conferir o fluxo no navegador e publicar a implementação em commit e push próprios na `main`, com evidências no painel. Este registro não declara o diário implementado nem validações funcionais executadas.
 
 ## Tópico 4 · Histórico das Tarefas Finalizadas
 
