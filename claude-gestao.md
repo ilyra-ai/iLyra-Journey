@@ -2248,7 +2248,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 133 · Diário alimentar simples com registro por texto ou foto
 
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `38ea33de` · **Push confirmado:** `78da362..38ea33d main -> main`.
 - **Pedido do usuário:** registrar refeições por texto ou foto, horário e percepção pessoal, com estimativas identificadas e confirmáveis pelo usuário. Corresponde ao item 10 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
 - **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar recomendações de alimentação e métricas existentes, distinguindo um diário de refeições de um plano alimentar ou total diário de proteína. Coordenar anexos com a tarefa 127 sem duplicar armazenamento ou consentimento.
 - **Escopo funcional:** permitir criar, consultar, editar e excluir refeições, lanches e bebidas com descrição, horário, foto opcional e percepção do titular. Caso exista interpretação da foto por modelo compatível, mostrar o que foi reconhecido para confirmação e correção; não declarar leitura por IA quando não ocorreu. Qualquer estimativa deve ter origem e limitações claras, sem tratar foto como pesagem ou inventar nutrientes. Integrar registros autorizados ao histórico e aos relatórios disponíveis.
