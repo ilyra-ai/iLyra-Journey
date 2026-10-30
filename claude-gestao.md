@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `██████████████████░░` **91,1%** |
-| Tarefas totais     | 135                              |
+| Progresso          | `██████████████████░░` **90,4%** |
+| Tarefas totais     | 136                              |
 | 🟢 Finalizadas     | 123                              |
 | 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 6                                |
-| ⚪ A iniciar       | 5                                |
+| ⚪ A iniciar       | 6                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (123 ÷ 135 ≈ 91,1%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (123 ÷ 136 ≈ 90,4%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -55,7 +55,9 @@
 
 **Continuidade confirmada em 2026-10-30:** 128 encerrada em `0c7a23cd`; 129 concluída e publicada em `95ad6908`; 130 é a próxima tarefa não bloqueada. A implementação de voz já estava em `4a1fe166` e foi aproveitada. Verificação integral e limites registrados no relatório de retomada.
 
-**Solicitação mais recente neste chat em 2026-10-30:** registrar as novas tarefas do diário pessoal e da organização de `/dia` em abas, mantendo-as **a iniciar**, e aguardar instruções antes de qualquer implementação. Esta etapa autoriza somente a atualização e publicação documental do painel; não retoma a 130 nem as demais implementações e preserva as tarefas bloqueadas.
+**Solicitação de registro neste chat em 2026-10-30:** registrar as novas tarefas do diário pessoal e da organização de `/dia` em abas, mantendo-as **a iniciar**, e aguardar instruções antes de qualquer implementação. Esta etapa autoriza somente a atualização e publicação documental do painel; não retoma a 130 nem as demais implementações e preserva as tarefas bloqueadas.
+
+**Retomada autorizada neste chat após o registro em 2026-10-30:** o usuário autorizou iniciar as tarefas conforme o `CLAUDE.md` e o workflow do projeto, com verificação integral, atualização do painel e commit e push na `main` ao final de cada tarefa, antes da seguinte, sem entregas em lote, branches ou worktrees. Esta autorização substitui a espera de instruções acima; conferir e aproveitar o progresso anterior da 130 antes de continuar, seguindo a ordem numérica das tarefas não bloqueadas e preservando a orientação anterior sobre as bloqueadas.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
@@ -236,6 +238,17 @@
 - **Experiência e validação futura:** seguir o Lyra Clean claro, a acessibilidade e as referências oficiais atuais de 2026. Validar captura de voz, transcrição, correção fiel, análise com modelo real autorizado, indisponibilidade de modelo/microfone, gravação, reabertura por data, memória individual e isolamento entre contas. Executar os testes e gates aplicáveis, conferir o fluxo no navegador e publicar a implementação em commit e push próprios na `main`, com evidências no painel. Este registro não declara o diário implementado nem validações funcionais executadas.
 
 - **Publicação deste registro documental:** commit `1c22b67c6adf52072ea12d3c7b764eadbe888cda`, confirmado na `main` pela API autenticada do GitHub e pela releitura do arquivo. Somente o painel foi alterado; a tarefa permanece a iniciar, aguardando instruções. Este SHA não corresponde à implementação do diário.
+
+### 136 · Organização de `/dia` em abas por categoria, com “Meu Dia” como primeira aba
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-10-30 · **Execução:** autorizada após o registro, seguindo a ordem numérica e a entrega individual de cada tarefa.
+- **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). Esta solicitação é específica dessa página; as abas do painel principal entregues na tarefa 114 não substituem este escopo.
+- **Pedido do usuário:** organizar todas as métricas, cards e demais seções da página por categoria e assunto, de forma harmoniosa, em tópicos distribuídos por abas, com organização adequada de UI/UX.
+- **Primeira aba obrigatória:** chamar exatamente **“Meu Dia”** e reunir as seções `titulo-alertas`, `titulo-meu-dia` e `titulo-leitura`. Conferir os componentes e identificadores reais antes de alterar a estrutura, preservando sua função e relações de acessibilidade.
+- **Alertas sutis e fecháveis:** a seção `titulo-alertas` deve ficar menor, mais sutil e com opção acessível de fechar, funcionando somente como alerta ao usuário. Reduzir seu peso visual sem esconder informações necessárias nem confundir fechar a apresentação com excluir dados.
+- **Demais abas por conteúdo:** inventariar todas as métricas, cartões, gráficos, orientações, reflexões, calendário e demais seções existentes em `/dia`; agrupar o restante conforme o conteúdo e o tópico, com nomes claros, hierarquia e distribuição coerentes. Não excluir funcionalidades, dados, ações ou permissões para simplificar a tela nem impor categorias sem conferir o conteúdo real. Coordenar a localização do diário da tarefa 135 e reaproveitar as abas internas existentes quando pertinente.
+- **Experiência e acessibilidade:** pesquisar referências oficiais atuais de 2026 antes da implementação visual e seguir o Lyra Clean claro, os tokens e componentes existentes. Garantir alternância compreensível, indicação da aba ativa, teclado, foco, leitor de tela, contraste, zoom e responsividade em desktop, tablet e celular, preservando âncoras, carregamento, erros, ausência de dados, filtros e ações aplicáveis.
+- **Conferência e validação futura:** antes de implementar, verificar se já existe progresso na `main` e mapear a cobertura de todo o conteúdo. Validar a primeira aba e seus três identificadores, fechamento dos alertas, agrupamento integral do restante, navegação e recarga, direitos dos planos, isolamento e atualização dos dados. Executar QA no navegador e os gates do projeto; revisar o diff, atualizar o painel e publicar commit e push próprios na `main`, sem branches ou worktrees. Este registro não declara a página reorganizada nem validações funcionais executadas.
 
 ## Tópico 4 · Histórico das Tarefas Finalizadas
 
