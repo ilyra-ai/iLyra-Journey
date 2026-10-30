@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `███████████████████░` **94,1%** |
+| Progresso          | `███████████████████░` **94,9%** |
 | Tarefas totais     | 136                              |
-| 🟢 Finalizadas     | 128                              |
+| 🟢 Finalizadas     | 129                              |
 | 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 8                                |
+| ⚪ A iniciar       | 7                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (128 ÷ 136 ≈ 94,1%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (129 ÷ 136 ≈ 94,9%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -66,6 +66,8 @@
 **Orientação do usuário em 2026-10-30 (após a 130):** continuar todas as tarefas até finalizar, executando em conjunto as que compartilham escopo. Execução conjunta autorizada e rastreada: 135 e 136 (mesma página `/dia`, com o diário dentro das abas). Ordem: 131, 132, 133, 134, 135 + 136 e, em seguida, 86, 90, 100, 106, 115 e 127. Cada entrega continua com validação integral, painel, commit e push na `main`, sem branches ou worktrees. Esta orientação substitui a restrição anterior a execuções conjuntas.
 
 **Tarefa 134 concluída em 2026-10-30:** agenda exclusiva do administrador por padrão, com ativação global auditada; validação integral e QA publicados na `main`. Próxima etapa: 135 + 136 em conjunto.
+
+**Tarefa 136 concluída em 2026-10-30:** `/dia` em abas com "Meu Dia" primeiro e alertas fecháveis; executada junto da 135 e publicada antes dela, em commit próprio. A 135 segue na publicação seguinte.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
@@ -210,19 +212,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Experiência e validação futura:** seguir o Lyra Clean claro, a acessibilidade e as referências oficiais atuais de 2026. Validar captura de voz, transcrição, correção fiel, análise com modelo real autorizado, indisponibilidade de modelo/microfone, gravação, reabertura por data, memória individual e isolamento entre contas. Executar os testes e gates aplicáveis, conferir o fluxo no navegador e publicar a implementação em commit e push próprios na `main`, com evidências no painel. Este registro não declara o diário implementado nem validações funcionais executadas.
 
 - **Publicação deste registro documental:** commit `1c22b67c6adf52072ea12d3c7b764eadbe888cda`, confirmado na `main` pela API autenticada do GitHub e pela releitura do arquivo. Somente o painel foi alterado; a tarefa permanece a iniciar, aguardando instruções. Este SHA não corresponde à implementação do diário.
-
-### 136 · Organização de `/dia` em abas por categoria, com “Meu Dia” como primeira aba
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-30 · **Execução:** autorizada após o registro, seguindo a ordem numérica e a entrega individual de cada tarefa.
-- **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). Esta solicitação é específica dessa página; as abas do painel principal entregues na tarefa 114 não substituem este escopo.
-- **Pedido do usuário:** organizar todas as métricas, cards e demais seções da página por categoria e assunto, de forma harmoniosa, em tópicos distribuídos por abas, com organização adequada de UI/UX.
-- **Primeira aba obrigatória:** chamar exatamente **“Meu Dia”** e reunir as seções `titulo-alertas`, `titulo-meu-dia` e `titulo-leitura`. Conferir os componentes e identificadores reais antes de alterar a estrutura, preservando sua função e relações de acessibilidade.
-- **Alertas sutis e fecháveis:** a seção `titulo-alertas` deve ficar menor, mais sutil e com opção acessível de fechar, funcionando somente como alerta ao usuário. Reduzir seu peso visual sem esconder informações necessárias nem confundir fechar a apresentação com excluir dados.
-- **Demais abas por conteúdo:** inventariar todas as métricas, cartões, gráficos, orientações, reflexões, calendário e demais seções existentes em `/dia`; agrupar o restante conforme o conteúdo e o tópico, com nomes claros, hierarquia e distribuição coerentes. Não excluir funcionalidades, dados, ações ou permissões para simplificar a tela nem impor categorias sem conferir o conteúdo real. Coordenar a localização do diário da tarefa 135 e reaproveitar as abas internas existentes quando pertinente.
-- **Experiência e acessibilidade:** pesquisar referências oficiais atuais de 2026 antes da implementação visual e seguir o Lyra Clean claro, os tokens e componentes existentes. Garantir alternância compreensível, indicação da aba ativa, teclado, foco, leitor de tela, contraste, zoom e responsividade em desktop, tablet e celular, preservando âncoras, carregamento, erros, ausência de dados, filtros e ações aplicáveis.
-- **Conferência e validação futura:** antes de implementar, verificar se já existe progresso na `main` e mapear a cobertura de todo o conteúdo. Validar a primeira aba e seus três identificadores, fechamento dos alertas, agrupamento integral do restante, navegação e recarga, direitos dos planos, isolamento e atualização dos dados. Executar QA no navegador e os gates do projeto; revisar o diff, atualizar o painel e publicar commit e push próprios na `main`, sem branches ou worktrees. Este registro não declara a página reorganizada nem validações funcionais executadas.
-
-- **Publicação deste registro documental:** commit `d5e4b467a4a1cacc9faae5f749349d05c90c2098`, confirmado na `main` pela API autenticada do GitHub e pela releitura do arquivo. Somente o painel foi alterado; a tarefa permanece a iniciar na ordem autorizada. Este SHA não corresponde à implementação das abas.
 
 ## Tópico 4 · Histórico das Tarefas Finalizadas
 
@@ -2262,3 +2251,19 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 - **Implementação em 2026-10-30:** migração 061 com `platform_feature_switches` (`agendamentos_usuarios` desativado por padrão, versão, responsável) e `platform_feature_switch_events` (estado anterior e novo, responsável, data, sem dados de consultas). O interruptor é aplicado no cálculo central de direitos: desligado, `appointments_active` e `professionals_total` ficam `enabled: false` e `globalmenteDesativado: true` para não administradores, então menu lateral, gaveta do celular, busca Ctrl K, sino, bloqueio de rota e APIs reagem juntos (403 "Agendamentos estão desativados pelo administrador do app."). Ligado, o plano continua valendo; o administrador mantém acesso. `GET/PUT /api/admin/agendamentos` com 401/403/400/409; cartão com chave, confirmação, última alteração e últimas 20 alterações em Admin → Planos; aviso "Recurso desativado pelo administrador" sem oferta de plano no acesso direto; exportação LGPD dos eventos do titular; `docs/agendamentos-para-usuarios.md`, `docs/api.md` e `docs/lgpd.md`.
 - **Evidências:** gates aprovados; 970 unitários; 586 integrações com MySQL real (2 novas); build sem avisos. QA em produção: 18 verificações e 4 axe sem violações, incluindo celular a 390 px. Corrigidos na QA: aviso genérico de plano no acesso direto (o bloqueio de rota vinha antes da página), texto do diálogo que trocava durante o fechamento, rótulo do histórico que sugeria total e concordância do aviso. Relatório em `docs/auditoria/2026-10-30-agendamentos-134.md`. Contas de QA removidas e interruptor deixado no padrão desativado. Nenhuma branch ou worktree.
+
+### 136 · Organização de `/dia` em abas por categoria, com “Meu Dia” como primeira aba
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). Esta solicitação é específica dessa página; as abas do painel principal entregues na tarefa 114 não substituem este escopo.
+- **Pedido do usuário:** organizar todas as métricas, cards e demais seções da página por categoria e assunto, de forma harmoniosa, em tópicos distribuídos por abas, com organização adequada de UI/UX.
+- **Primeira aba obrigatória:** chamar exatamente **“Meu Dia”** e reunir as seções `titulo-alertas`, `titulo-meu-dia` e `titulo-leitura`. Conferir os componentes e identificadores reais antes de alterar a estrutura, preservando sua função e relações de acessibilidade.
+- **Alertas sutis e fecháveis:** a seção `titulo-alertas` deve ficar menor, mais sutil e com opção acessível de fechar, funcionando somente como alerta ao usuário. Reduzir seu peso visual sem esconder informações necessárias nem confundir fechar a apresentação com excluir dados.
+- **Demais abas por conteúdo:** inventariar todas as métricas, cartões, gráficos, orientações, reflexões, calendário e demais seções existentes em `/dia`; agrupar o restante conforme o conteúdo e o tópico, com nomes claros, hierarquia e distribuição coerentes. Não excluir funcionalidades, dados, ações ou permissões para simplificar a tela nem impor categorias sem conferir o conteúdo real. Coordenar a localização do diário da tarefa 135 e reaproveitar as abas internas existentes quando pertinente.
+- **Experiência e acessibilidade:** pesquisar referências oficiais atuais de 2026 antes da implementação visual e seguir o Lyra Clean claro, os tokens e componentes existentes. Garantir alternância compreensível, indicação da aba ativa, teclado, foco, leitor de tela, contraste, zoom e responsividade em desktop, tablet e celular, preservando âncoras, carregamento, erros, ausência de dados, filtros e ações aplicáveis.
+- **Conferência e validação futura:** antes de implementar, verificar se já existe progresso na `main` e mapear a cobertura de todo o conteúdo. Validar a primeira aba e seus três identificadores, fechamento dos alertas, agrupamento integral do restante, navegação e recarga, direitos dos planos, isolamento e atualização dos dados. Executar QA no navegador e os gates do projeto; revisar o diff, atualizar o painel e publicar commit e push próprios na `main`, sem branches ou worktrees. Este registro não declara a página reorganizada nem validações funcionais executadas.
+
+- **Publicação deste registro documental:** commit `d5e4b467a4a1cacc9faae5f749349d05c90c2098`, confirmado na `main` pela API autenticada do GitHub e pela releitura do arquivo. Somente o painel foi alterado; a tarefa permanece a iniciar na ordem autorizada. Este SHA não corresponde à implementação das abas.
+
+- **Implementação em 2026-10-30:** `/dia` em cinco abas (Meu Dia, Orientações, Horários e semana, Céu e mapa, Diário), com os 14 blocos e identificadores preservados; "Meu Dia" reúne `titulo-meu-dia`, `titulo-alertas` e `titulo-leitura`. Aba ativa em `?aba=`, âncoras antigas abrem a aba certa, abas sempre montadas. "Atenção hoje" compacto e fechável, sem apagar dados. Executada junto da 135 e publicada antes dela, em commit próprio. Documentação em `docs/dia-em-abas.md`.
+- **Evidências:** gates aprovados; 970 unitários; 586 integrações; build sem avisos. QA em produção: 25 verificações e 6 axe sem violações, incluindo 390, 768 e 320 px. Relatório em `docs/auditoria/2026-10-30-dia-em-abas-136.md`. Conta de QA removida. Nenhuma branch ou worktree.

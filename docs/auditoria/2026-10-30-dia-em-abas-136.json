@@ -1,0 +1,205 @@
+{
+  "data": "2026-10-30",
+  "tarefa": 136,
+  "ambiente": {
+    "node": "24.21.0",
+    "pnpm": "11.28.4",
+    "mysql": "9.7.2",
+    "axe": "4.14.0",
+    "navegador": "Chromium 153 completo (headless novo)",
+    "modo": "pnpm build + pnpm start"
+  },
+  "conta": "conta temporária de QA removida",
+  "resultados": [
+    {
+      "etapa": "abas-na-ordem",
+      "passou": true,
+      "nomes": [
+        "Meu Dia",
+        "Orientações",
+        "Horários e semana",
+        "Céu e mapa",
+        "Diário",
+        "Madrugada",
+        "Manhã",
+        "Tarde",
+        "Noite\nagora"
+      ]
+    },
+    {
+      "etapa": "meu-dia-primeira-ativa",
+      "passou": true
+    },
+    {
+      "etapa": "meu-dia-ids",
+      "passou": true,
+      "titulo-meu-dia": 1,
+      "titulo-leitura": 1,
+      "titulo-alertas": 1
+    },
+    {
+      "etapa": "axe-meu-dia-1280",
+      "axe": 0,
+      "regras": 31,
+      "violacoes": []
+    },
+    {
+      "etapa": "alertas-fechados",
+      "passou": true
+    },
+    {
+      "etapa": "alertas-fechados-apos-recarga",
+      "passou": true
+    },
+    {
+      "etapa": "alertas-reabertos",
+      "passou": true
+    },
+    {
+      "etapa": "teclado-foco",
+      "foco": "Orientações"
+    },
+    {
+      "etapa": "teclado-seta-direita",
+      "passou": true
+    },
+    {
+      "etapa": "axe-orientacoes",
+      "axe": 0,
+      "regras": 29,
+      "violacoes": []
+    },
+    {
+      "etapa": "url-com-aba",
+      "passou": true
+    },
+    {
+      "etapa": "axe-horarios",
+      "axe": 0,
+      "regras": 30,
+      "violacoes": []
+    },
+    {
+      "etapa": "recarga-mantem-aba",
+      "passou": true
+    },
+    {
+      "etapa": "axe-ceu",
+      "axe": 0,
+      "regras": 33,
+      "violacoes": []
+    },
+    {
+      "etapa": "ancora-reflexao-abre-diario",
+      "passou": true
+    },
+    {
+      "etapa": "axe-diario-reflexao",
+      "axe": 0,
+      "regras": 31,
+      "violacoes": []
+    },
+    {
+      "etapa": "Meu Dia-390-sem-overflow",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "Orientações-390-sem-overflow",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "Horários e semana-390-sem-overflow",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "Céu e mapa-390-sem-overflow",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "Diário-390-sem-overflow",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-meu-dia-390",
+      "axe": 0,
+      "regras": 30,
+      "violacoes": []
+    },
+    {
+      "etapa": "Meu Dia-768-sem-overflow",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "Orientações-768-sem-overflow",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "Horários e semana-768-sem-overflow",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "Céu e mapa-768-sem-overflow",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "Diário-768-sem-overflow",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "Meu Dia-320-sem-overflow",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "Orientações-320-sem-overflow",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "Horários e semana-320-sem-overflow",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "Céu e mapa-320-sem-overflow",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "Diário-320-sem-overflow",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "erros-js",
+      "total": 0,
+      "erros": [],
+      "todos": []
+    }
+  ]
+}
