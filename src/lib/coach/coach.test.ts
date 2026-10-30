@@ -396,33 +396,40 @@ describe('linguagem simples (tarefa 49)', () => {
     expect(termoTecnicoEm('Cuide da sua saúde com calma.')).toBeNull();
   });
 
-  it('nenhum texto do dia usa termos técnicos, com e sem mapa, em 60 dias', () => {
-    const perfis = [
-      perfil(),
-      perfil({ data: '1972-12-03', hora: '23:40' }),
-      perfil({ local: null }),
-    ];
-    const achados: string[] = [];
-    for (const [indice, p] of perfis.entries()) {
-      for (let i = 0; i < 60; i++) {
-        const data = diasAntes('2026-12-31', i);
-        const b = gerarBriefingLocal({
-          contexto: contexto({
-            data,
-            perfil: p,
-            hoje: i % 2 === 0 ? bemRecuperadaHoje(data) : null,
-          }),
-          agora: AGORA,
-        });
-        for (const texto of textosParaAPessoa(b)) {
-          const termo = termoTecnicoEm(texto);
-          if (termo)
-            achados.push(`perfil ${indice} ${data}: "${termo}" em "${texto}"`);
-        }
+  // Preserva os 60 dias × três perfis; cada leitura tem timeout e
+  // diagnóstico próprios, em vez de agrupar 180 leituras num único teste.
+  const perfis = [
+    perfil(),
+    perfil({ data: '1972-12-03', hora: '23:40' }),
+    perfil({ local: null }),
+  ];
+  const cenarios = perfis.flatMap((p, indice) =>
+    Array.from({ length: 60 }, (_, i) => ({
+      perfil: indice + 1,
+      data: diasAntes('2026-12-31', i),
+      comMetricas: i % 2 === 0,
+      p,
+    }))
+  );
+  it.each(cenarios)(
+    'nenhum texto do dia usa termos técnicos: perfil $perfil, data $data',
+    ({ data, p, comMetricas }) => {
+      const b = gerarBriefingLocal({
+        contexto: contexto({
+          data,
+          perfil: p,
+          hoje: comMetricas ? bemRecuperadaHoje(data) : null,
+        }),
+        agora: AGORA,
+      });
+      const achados: string[] = [];
+      for (const texto of textosParaAPessoa(b)) {
+        const termo = termoTecnicoEm(texto);
+        if (termo) achados.push(`"${termo}" em "${texto}"`);
       }
+      expect(achados).toEqual([]);
     }
-    expect(achados).toEqual([]);
-  });
+  );
 
   it('fala do mapa da pessoa: tom do dia, área do mapa, Lua de nascimento e fase da vida', () => {
     const b = gerarBriefingLocal({ contexto: contexto(), agora: AGORA });

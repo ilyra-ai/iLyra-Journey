@@ -101,38 +101,46 @@ describe('leitura da semana (motor da Lyra)', () => {
     expect(comFase).not.toMatch(/no (segunda|terça|quarta|quinta|sexta)/);
   });
 
-  it('nenhum texto da semana usa termos técnicos, em 26 semanas e 3 perfis', () => {
-    const perfis = [
-      perfil(),
-      perfil({ data: '1972-12-03', hora: '23:40' }),
-      perfil({ data: null, local: null }),
-    ];
-    const achados: string[] = [];
-    for (const p of perfis) {
-      for (let i = 0; i < 26; i++) {
-        const leitura = semana(diasAntes('2026-12-31', i * 7), p);
-        const textos = [
-          leitura.resumo,
-          leitura.proxima.resumo,
-          leitura.fase ?? '',
-          leitura.faltando ?? '',
-          ...leitura.transitos,
-          ...[...leitura.passados, ...leitura.proxima.dias].flatMap((d) => [
-            d.luaEm,
-            d.clima,
-            d.favorece,
-            d.diaDaLua,
-            d.paraVoce?.tema ?? '',
-            d.paraVoce?.conselho ?? '',
-            d.paraVoce?.area ?? '',
-          ]),
-        ];
-        for (const texto of textos) {
-          const termo = termoTecnicoEm(texto);
-          if (termo) achados.push(`"${termo}" em "${texto}"`);
-        }
+  // Cada combinação tem seu próprio limite e diagnóstico. A cobertura continua
+  // sendo de 26 semanas por perfil, sem elevar o timeout nem omitir textos.
+  const perfis = [
+    perfil(),
+    perfil({ data: '1972-12-03', hora: '23:40' }),
+    perfil({ data: null, local: null }),
+  ];
+  const cenarios = perfis.flatMap((p, indice) =>
+    Array.from({ length: 26 }, (_, i) => ({
+      perfil: indice + 1,
+      data: diasAntes('2026-12-31', i * 7),
+      p,
+    }))
+  );
+  it.each(cenarios)(
+    'nenhum texto usa termos técnicos: perfil $perfil, semana de $data',
+    ({ data, p }) => {
+      const leitura = semana(data, p);
+      const textos = [
+        leitura.resumo,
+        leitura.proxima.resumo,
+        leitura.fase ?? '',
+        leitura.faltando ?? '',
+        ...leitura.transitos,
+        ...[...leitura.passados, ...leitura.proxima.dias].flatMap((d) => [
+          d.luaEm,
+          d.clima,
+          d.favorece,
+          d.diaDaLua,
+          d.paraVoce?.tema ?? '',
+          d.paraVoce?.conselho ?? '',
+          d.paraVoce?.area ?? '',
+        ]),
+      ];
+      const achados: string[] = [];
+      for (const texto of textos) {
+        const termo = termoTecnicoEm(texto);
+        if (termo) achados.push(`"${termo}" em "${texto}"`);
       }
+      expect(achados).toEqual([]);
     }
-    expect(achados).toEqual([]);
-  });
+  );
 });

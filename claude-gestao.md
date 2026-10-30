@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `█████████████████░░░` **90,3%** |
+| Progresso          | `██████████████████░░` **91,0%** |
 | Tarefas totais     | 134                              |
-| 🟢 Finalizadas     | 121                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 122                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 6                                |
 | ⚪ A iniciar       | 6                                |
 | Branch de trabalho | `main` (única permitida)         |
-| Última atualização | 2026-10-29                       |
+| Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (121 ÷ 134 ≈ 90,3%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (122 ÷ 134 ≈ 91,0%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -55,19 +55,7 @@
 
 ### ANDAMENTO
 
-### 128 · Leitura em voz alta das respostas da Lyra
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-29, conforme retomada autorizada e ordem numérica.
-- **Pedido do usuário:** ouvir respostas do chat, pausar, retomar e ajustar a velocidade de leitura. Corresponde ao item 2 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; o chat já oferece ditado por voz, e respiração e monitoramento possuem recursos de fala. Reaproveitar as capacidades existentes, distinguindo entrada por voz de leitura das respostas; o componente de resposta consultado não oferece esse controle.
-- **Escopo funcional:** acrescentar reprodução por resposta com iniciar, pausar, retomar, parar e velocidade acessíveis. Usar voz em pt-BR quando disponível, explicar limitações de compatibilidade e selecionar texto adequado para leitura sem narrar sintaxe Markdown ou valores incorretos. Não iniciar áudio sem ação do usuário; evitar sobreposição de falas, cancelar ao sair ou trocar de conta e respeitar privacidade e consentimento se houver serviço externo.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** testar reprodução e controles reais nos navegadores anunciados, resposta longa, tabelas, números e unidades, mensagens incompletas, troca de conversa, recursos indisponíveis, teclado e celular. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Conferência inicial:** 127 publicada, com prova externa preservada. O chat oferece cópia, favoritos e refazer, mas não leitura de respostas. Reutilizar a Web Speech API e a detecção de recursos, somente com voz local em português; sem envio a serviço externo. Navegador de QA informou API presente e nenhuma voz instalada. Preparar e conferir sintetizador real de sistema para validar reprodução, sem substituir a API por uma implementação de teste.
-
-- **Validação concluída em 2026-10-29, aguardando publicação desta tarefa:** leitura das respostas concluídas com controles reais, voz local em português e preferência por pt-BR. Fonte semântica do Markdown, tabelas com cabeçalhos/valores, preservação de zero e unidades, código e URLs explicitamente fora da narração. Trechos sem corte de números, pausa/retomada com repetição informada do trecho atual, velocidade, cancelamento entre respostas/abas, navegação, nova conversa, sessão e troca de conta. Controles ausentes em respostas incompletas. Sem serviço de voz externo, cota de IA adicional ou áudio persistido pelo app.
-- **Evidências:** 703 unitários em 88 arquivos, 547 integrações MySQL em 58 arquivos, instalação congelada offline, formato, lint sem avisos, tipos e build limpo aprovados; três unitários focados, lint, tipos e novo build após os ajustes. Produção: 14 verificações funcionais e 11 execuções axe sem violações, 320/390/1280/1440, zoom 200%, foco/Tab/Escape, toque emulado, planos Free/Meta/Care, leitura completa em 25 trechos nativos terminados, ausência de voz e API realmente desativada. Captura WAV real: 118.769 amostras, 237.582 bytes, eventos nativos start/end; não é teste de alto-falante físico. Nenhuma exceção JavaScript. Corrigidos posicionamento da janela ancorada em zoom, substituída pelo diálogo central, e tratamento de sessão sem API. Documentação e auditoria em `docs/leitura-em-voz-alta.md` e `docs/auditoria/2026-10-29-leitura-128.md`. Os testes não certificam outros sistemas operacionais ou a pronúncia de toda voz instalada.
+Nenhuma tarefa em implementação; fechamento da 128 validado, antes da retomada da 129.
 
 ### BLOQUEADAS
 
@@ -2175,3 +2163,21 @@
 - **Evidências:** 693 unitários em 86 arquivos, 534 integrações MySQL em 57 arquivos, formato, lint sem avisos, tipos e build aprovados. Dez verificações funcionais e sete execuções axe sem violações, 320/390/1280/1440 e zoom 200%, teclado, foco, CRUD e isolamento. Um minuto ativo aguardado no relógio real, recarga e suspensão real controlada da página, Web Audio observado pelo CDP, desconexão/reconexão reais com erro em pt-BR. Não se alega alto-falante físico, suspensão de hardware nem atenção contínua. Relatórios `docs/foco-e-pausa.md` e `docs/auditoria/2026-10-29-foco-126.md`. Publicação confirmada na `main` pela API autenticada do GitHub.
 
 - **Commit e publicação:** `84b817602b6bf417249ee9d8df31ea5657a28fa2`, conteúdo conferido por SHA e main atualizada com verificação do commit anterior, sem force, branches ou worktrees.
+
+### 128 · Leitura em voz alta das respostas da Lyra
+
+- **Status:** 🟢 finalizada · **Implementação:** `4a1fe166` · **Publicação:** confirmada em `origin/main` por `git fetch` · **Fechamento:** 2026-10-30.
+- **Retomada em 2026-10-30:** antes de implementar, conferida a `origin/main`: a implementação já está publicada em `4a1fe166`. Não refazer o recurso. Reexecutar a verificação integral do projeto nesta instância antes de encerrar a tarefa e publicar o painel atualizado. Por orientação expressa do usuário nesta sessão, não executar as bloqueadas 86, 90, 100, 106, 115 e 127. A próxima tarefa somente começa após validação, atualização do painel, commit e push próprios da tarefa atual na `main`.
+- **Verificação global da retomada:** instalação congelada, auditoria sem vulnerabilidades conhecidas, formato, lint, tipos, build, 547 integrações MySQL e 30 testes dos launchers aprovados. O unitário de linguagem semanal excedeu o limite ao agregar 78 combinações num único caso (15,3 s com concorrência; 7,6 s na repetição). Separar as mesmas 26 semanas × três perfis em casos independentes, sem elevar o timeout nem remover asserções; revalidar o projeto inteiro antes de publicar. Seis percursos de produção no Chromium, com ausência real de voz/API e larguras 320/390/1280, aprovados sem exceções JavaScript. Não foi repetida a síntese de áudio nesta instância; a prova nativa anterior permanece documentada.
+- **Pedido do usuário:** ouvir respostas do chat, pausar, retomar e ajustar a velocidade de leitura. Corresponde ao item 2 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; o chat já oferece ditado por voz, e respiração e monitoramento possuem recursos de fala. Reaproveitar as capacidades existentes, distinguindo entrada por voz de leitura das respostas; o componente de resposta consultado não oferece esse controle.
+- **Escopo funcional:** acrescentar reprodução por resposta com iniciar, pausar, retomar, parar e velocidade acessíveis. Usar voz em pt-BR quando disponível, explicar limitações de compatibilidade e selecionar texto adequado para leitura sem narrar sintaxe Markdown ou valores incorretos. Não iniciar áudio sem ação do usuário; evitar sobreposição de falas, cancelar ao sair ou trocar de conta e respeitar privacidade e consentimento se houver serviço externo.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** testar reprodução e controles reais nos navegadores anunciados, resposta longa, tabelas, números e unidades, mensagens incompletas, troca de conversa, recursos indisponíveis, teclado e celular. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência inicial:** 127 publicada, com prova externa preservada. O chat oferece cópia, favoritos e refazer, mas não leitura de respostas. Reutilizar a Web Speech API e a detecção de recursos, somente com voz local em português; sem envio a serviço externo. Navegador de QA informou API presente e nenhuma voz instalada. Preparar e conferir sintetizador real de sistema para validar reprodução, sem substituir a API por uma implementação de teste.
+
+- **Validação concluída em 2026-10-29, aguardando publicação desta tarefa:** leitura das respostas concluídas com controles reais, voz local em português e preferência por pt-BR. Fonte semântica do Markdown, tabelas com cabeçalhos/valores, preservação de zero e unidades, código e URLs explicitamente fora da narração. Trechos sem corte de números, pausa/retomada com repetição informada do trecho atual, velocidade, cancelamento entre respostas/abas, navegação, nova conversa, sessão e troca de conta. Controles ausentes em respostas incompletas. Sem serviço de voz externo, cota de IA adicional ou áudio persistido pelo app.
+- **Evidências:** 703 unitários em 88 arquivos, 547 integrações MySQL em 58 arquivos, instalação congelada offline, formato, lint sem avisos, tipos e build limpo aprovados; três unitários focados, lint, tipos e novo build após os ajustes. Produção: 14 verificações funcionais e 11 execuções axe sem violações, 320/390/1280/1440, zoom 200%, foco/Tab/Escape, toque emulado, planos Free/Meta/Care, leitura completa em 25 trechos nativos terminados, ausência de voz e API realmente desativada. Captura WAV real: 118.769 amostras, 237.582 bytes, eventos nativos start/end; não é teste de alto-falante físico. Nenhuma exceção JavaScript. Corrigidos posicionamento da janela ancorada em zoom, substituída pelo diálogo central, e tratamento de sessão sem API. Documentação e auditoria em `docs/leitura-em-voz-alta.md` e `docs/auditoria/2026-10-29-leitura-128.md`. Os testes não certificam outros sistemas operacionais ou a pronúncia de toda voz instalada.
+
+- **Fechamento validado em 2026-10-30:** aproveitada a implementação publicada, sem refazer a funcionalidade. A verificação integral passou: fix:format, fix:lint, check:lint, check:format, check:types, 959 unitários em 88 arquivos, 547 integrações MySQL em 58 arquivos, 30 testes dos launchers e build. Corrigida a agregação excessiva de cenários nos testes de linguagem diária e semanal: mesmas 258 combinações e asserções, agora independentes, com timeout original preservado. Seis percursos de produção no Chromium, sem exceções JavaScript, e dados temporários removidos. Evidências e limites em `docs/auditoria/2026-10-30-retomada-128.md`. As bloqueadas 86, 90, 100, 106, 115 e 127 não foram executadas. A 129 é a próxima tarefa não bloqueada; só iniciar após a publicação deste fechamento.
