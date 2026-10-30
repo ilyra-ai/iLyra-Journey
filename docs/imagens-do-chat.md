@@ -47,14 +47,24 @@ identificador próprios; resposta atrasada não sobrescreve a nova. Reabrir a
 conversa recupera o estado e a imagem; repetir pedido já pronto não gera ou
 cobra de novo. Interrupção pode ser retomada após o prazo expirar.
 
-## Evidência e fronteira externa
+## Evidência
 
-Os testes usam banco real, SDK real, HTTP local controlado e arquivo PNG real
-para conferir o contrato, persistência, conversão, isolamento e exclusão. Esse
-servidor de testes **não é um modelo de IA** e não comprova inferência externa.
-A validação final com um modelo gerador real depende de um provedor acessível
-e configurado nesta instância; localhost do computador do usuário não é o
-localhost da nuvem. Não declare essa etapa aprovada sem executá-la.
+Os testes automatizados usam banco real, SDK real, HTTP local controlado e
+PNG real para conferir contrato, persistência, conversão, isolamento e
+exclusão; esse servidor de testes **não é um modelo de IA**.
+
+Em 2026-10-30 a geração foi comprovada com **inferência real**: um modelo de
+difusão aberto (`nota-ai/bk-sdm-tiny`, OpenRAIL-M, revisão
+`0364108e53b7f7f4d2585e817a0b7a83dc261cfa`) servido localmente na API
+`/v1/images/generations` e configurado na segunda posição pela própria API
+de Administração → Modelos de IA, com o Motor Lyra em primeiro. Pelo chat,
+o pedido explícito e a leitura do mapa geraram imagens 512×512 em cerca de
+65 s cada, gravadas como WebP. Detalhes em
+`docs/auditoria/2026-10-30-imagens-86.md`.
+
+O adaptador Google (Gemini) usa o mesmo fluxo, mas não foi exercitado com um
+provedor externo: isso exige a chave do próprio usuário configurada na
+administração. Não declare uma imagem do Gemini gerada sem esse teste.
 
 O componente de resultado reutiliza os estilos e controles existentes. Não
 redesenha as telas, cores, disposição ou tipografia do chat já implementado.

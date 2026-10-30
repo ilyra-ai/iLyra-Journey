@@ -1,0 +1,79 @@
+{
+  "data": "2026-10-30",
+  "tarefa": 86,
+  "modeloDeQa": {
+    "nome": "nota-ai/bk-sdm-tiny",
+    "licenca": "creativeml-openrail-m",
+    "revisao": "0364108e53b7f7f4d2585e817a0b7a83dc261cfa",
+    "servidor": "diffusers 0.35.2 + PyTorch 2.9.1 CPU, /v1/images/generations local"
+  },
+  "linhasDoBanco": [
+    "solicitada|pronta|image/webp|512|512|lm_studio|bk-sdm-tiny|109700",
+    "mapa|pronta|image/webp|512|512|lm_studio|bk-sdm-tiny|92744"
+  ],
+  "resultados": [
+    {
+      "etapa": "sem-segundo-modelo-informa",
+      "passou": true
+    },
+    {
+      "etapa": "admin-segundo-modelo-imagem",
+      "passou": true
+    },
+    {
+      "etapa": "imagem-real-gerada",
+      "passou": true,
+      "segundos": 65
+    },
+    {
+      "etapa": "download-privado",
+      "passou": true,
+      "baixar": [200, "image/webp", 109700, "private, no-store"]
+    },
+    {
+      "etapa": "isolamento-outra-conta",
+      "passou": true,
+      "status": 404
+    },
+    {
+      "etapa": "anonimo-recusado",
+      "passou": true
+    },
+    {
+      "etapa": "axe-chat-com-imagem",
+      "axe": 0,
+      "regras": 29,
+      "violacoes": []
+    },
+    {
+      "etapa": "reabrir-mantem-imagem",
+      "passou": true
+    },
+    {
+      "etapa": "mapa-gerado-sem-dados-pessoais",
+      "passou": true,
+      "segundos": 66,
+      "trechoDoPedido": "crie uma ilustra��o simb�lica do mapa pessoal com visual claro, leg�vel e organizado. use os dados calculados abaixo como refer�ncia, sem inventar posi��es, casas, ascendente ou informa��es pessoais ausentes.\\na imagem �"
+    },
+    {
+      "etapa": "chat-390-sem-overflow",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-chat-390",
+      "axe": 0,
+      "regras": 29,
+      "violacoes": []
+    },
+    {
+      "etapa": "erros-js",
+      "total": 0,
+      "erros": [],
+      "todos": [
+        "console: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Image from 'next/image';
 import type { ImagemDoTurno } from '@/lib/chat/tipos';
 import { usePrivacyMode } from '@/hooks/use-privacy-mode';
 import { buscarJson } from '@/lib/http/transporte';
@@ -37,17 +38,18 @@ export function ImagemDaConversa({
     <figure className="mt-3 max-w-xl space-y-2 rounded-xl border border-border bg-card p-3">
       {imagem.estado === 'pronta' ? (
         <>
-          {/* Arquivo privado: a sessão do titular é exigida a cada leitura. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          {/* Arquivo privado: a sessão do titular é exigida a cada leitura,
+              por isso a imagem não passa pelo otimizador (unoptimized). */}
+          <Image
+            unoptimized
             src={`${url}?arquivo=1`}
             alt={
               imagem.tipo === 'mapa'
                 ? 'Interpretação visual do seu mapa pessoal gerada por IA'
                 : 'Imagem gerada para o seu pedido nesta conversa'
             }
-            width={imagem.largura ?? undefined}
-            height={imagem.altura ?? undefined}
+            width={imagem.largura ?? 1024}
+            height={imagem.altura ?? 1024}
             className="h-auto max-w-full rounded-lg"
           />
           <a

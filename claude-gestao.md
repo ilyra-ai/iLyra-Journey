@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `███████████████████░` **95,6%** |
+| Progresso          | `███████████████████░` **96,3%** |
 | Tarefas totais     | 136                              |
-| 🟢 Finalizadas     | 130                              |
+| 🟢 Finalizadas     | 131                              |
 | 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 6                                |
+| ⚪ A iniciar       | 5                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (130 ÷ 136 ≈ 95,6%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (131 ÷ 136 ≈ 96,3%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -71,6 +71,8 @@
 
 **Tarefa 135 concluída em 2026-10-30:** diário pessoal por voz na aba Diário de `/dia`, com análise validada e prova com modelo real local. Próximas: 86, 90, 100, 106, 115 e 127.
 
+**Tarefa 86 concluída em 2026-10-30:** geração de imagens no chat comprovada com modelo de difusão real local na segunda posição; o adaptador Gemini aguarda a chave do usuário para teste externo.
+
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
@@ -94,22 +96,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 86 · Geração de imagens no chat com modelos conectados
-
-- **Status:** ⚪ a iniciar (retirada das bloqueadas em 2026-10-30, por decisão do usuário) · **Registro:** 2026-10-20 · **Início:** 2026-10-22.
-- **Retomada em 2026-10-24:** arquivos originais de geração, pedido e migração recuperados dos patches do chat anterior e reutilizados após revisão. Integração ao chat, armazenamento privado, retentativa e exportação em validação. Contratos conferidos nos pacotes oficiais do SDK; detalhes em `docs/imagens-do-chat.md`. Validação com modelo gerador real ainda depende de provedor acessível nesta nuvem; solicitado ao usuário sem pedir segredo no chat.
-- **Pedido do usuário:** o chat do app deve permitir criar imagens. Conforme complemento recebido em 2026-10-20, usar o segundo modelo de IA conectado nas configurações do app, que permitem conectar cinco modelos simultaneamente, tanto quando o usuário solicitar uma imagem quanto quando o Motor Lyra fizer a leitura do mapa pessoal, gerando também a imagem do mapa daquele usuário.
-- **Implementação nesta nuvem:** seleção exata do segundo modelo, validação e normalização real de imagens raster, arquivo privado por titular no MySQL, reabertura, download, retentativa, limite de uso, trava por tentativa, privacidade e consentimento, exportação LGPD e exclusão em cascade. Componente de resultado integrado sem redesenhar o chat. SDKs fixados e instalação congelada aprovada; nenhuma exceção à política de dependências acrescentada.
-- **Evidência local:** 599 testes unitários (74 arquivos), 201 integrações (26 arquivos), tipos, lint, formatação, build e instalação congelada passaram. Migração 034 aplicada: 36 migrations na saúde HTTP 200. QA HTTP de produção confirmou login, pedido persistido, mensagem de segundo modelo ausente, reabertura e recusa anônima; conversa temporária removida. Testes de imagem usam PNG real e HTTP controlado, não inferência de um modelo.
-- **Fronteira pendente:** usuário indicou Gemini para o teste real. O requisito seguro `GEMINI_IMAGE_API_KEY` e o destino `generativelanguage.googleapis.com` foram salvos no rascunho; valor não copiado para arquivos, comandos ou logs. É necessário configurar e aplicar essa credencial para consultar modelos e testar geração real. Chromium apresentou falhas do ambiente nas tentativas anteriores de captura; conferência visual mobile/desktop permanece sem comprovação. A tarefa não foi declarada finalizada e não se alegou imagem gerada por IA externa.
-- **Decisão do usuário em 2026-10-24:** deixar a geração bloqueada caso não seja possível validar, para que ele decida o provedor. Nenhuma geração externa foi comprovada; não insistir em outra conexão sem a configuração necessária. **Implementação publicada:** `3f95ad7` · **Push:** `942ff75..3f95ad7 main -> main`, confirmado. A publicação do código não encerra a pendência da tarefa.
-- **Roteamento e mapa pessoal:** conferir a ordem real das cinco conexões e encaminhar a geração de imagens ao segundo modelo configurado, preservando a configuração dos demais. Na leitura do mapa, construir a imagem a partir dos dados reais e autorizados do próprio titular e vinculá-la à leitura e à conversa correspondentes. Não inventar dados do mapa nem substituir o segundo modelo silenciosamente; se ele não estiver configurado, estiver indisponível ou não oferecer geração de imagens, informar a condição e permitir corrigir a conexão e tentar novamente.
-- **Critérios:** inspecionar a configuração e as capacidades reais dos provedores, pesquisar suas APIs oficiais atuais e implementar geração real pelo servidor, verificando a compatibilidade do segundo modelo e exibindo mensagens claras quando a conexão só oferecer texto. Não simular imagens nem atribuir essa capacidade a modelos que não a possuem. Integrar envio do pedido, andamento, falhas e retentativa à experiência simples e responsiva do chat, exibindo o resultado e permitindo baixar a imagem.
-- **Persistência e acesso:** preservar pedido, imagem e referência ao modelo na conversa, com armazenamento real vinculado ao titular, autorização no servidor, validação dos arquivos e limites de uso. Respeitar modo privado e consentimento para provedores externos, incluir os dados na exportação e exclusão da conta e não expor chaves ou imagens privadas em URLs públicas.
-- **Validação e entrega:** conferir geração solicitada no chat e geração do mapa após sua leitura, comprovando o uso do segundo modelo entre as cinco conexões e o tratamento de conexão ausente ou incompatível. Testar provedor e modelo capazes de criar imagens, reabertura da conversa, download, isolamento entre contas e interface desktop/mobile, além dos quality gates. A implementação terá commit e push próprios na main; este registro não significa funcionalidade já implementada.
-
-- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
 
 ### 90 · Treinamento real por Aprendizado por Reforço com Feedback Humano via chat
 
@@ -2272,3 +2258,22 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 - **Implementação em 2026-10-30:** migração 062 (`personal_diary_entries`); API de mês, dia, criação idempotente, edição com versão, exclusão e análise com lease; voz no aparelho primeiro e serviço do navegador só com aceite; análise pelo modelo autorizado (só locais sem consentimento de nuvem) com validação de fidelidade, base no relato, padrões só com histórico, mapa só quando enviado e sem linguagem clínica; agenda mensal na aba Diário de `/dia`; memória individual pela fila durável; linha do tempo sem conteúdo; LGPD; `docs/diario-pessoal.md`.
 - **Evidências:** gates aprovados; 982 unitários; 594 integrações (8 novas, com servidor de contrato HTTP identificado); build sem avisos. QA em produção: 22 verificações e 8 axe sem violações. Prova com modelo real local (Qwen2.5-1.5B-Instruct, Apache-2.0, configurado pela administração): análise pronta em 50–79 s e recusa correta de uma saída infiel. Corrigidos na QA: fidelidade que aceitava troca de sentido, padrões inventados e leitura sem base no relato, rótulo repetido. Fronteira: a captura de fala real não pôde ser provada no navegador do ambiente (sem português no aparelho e microfone recusado). Relatório em `docs/auditoria/2026-10-30-diario-pessoal-135.md`. Contas de QA removidas. Nenhuma branch ou worktree.
+
+### 86 · Geração de imagens no chat com modelos conectados
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-20 · **Início:** 2026-10-22 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Retomada em 2026-10-24:** arquivos originais de geração, pedido e migração recuperados dos patches do chat anterior e reutilizados após revisão. Integração ao chat, armazenamento privado, retentativa e exportação em validação. Contratos conferidos nos pacotes oficiais do SDK; detalhes em `docs/imagens-do-chat.md`. Validação com modelo gerador real ainda depende de provedor acessível nesta nuvem; solicitado ao usuário sem pedir segredo no chat.
+- **Pedido do usuário:** o chat do app deve permitir criar imagens. Conforme complemento recebido em 2026-10-20, usar o segundo modelo de IA conectado nas configurações do app, que permitem conectar cinco modelos simultaneamente, tanto quando o usuário solicitar uma imagem quanto quando o Motor Lyra fizer a leitura do mapa pessoal, gerando também a imagem do mapa daquele usuário.
+- **Implementação nesta nuvem:** seleção exata do segundo modelo, validação e normalização real de imagens raster, arquivo privado por titular no MySQL, reabertura, download, retentativa, limite de uso, trava por tentativa, privacidade e consentimento, exportação LGPD e exclusão em cascade. Componente de resultado integrado sem redesenhar o chat. SDKs fixados e instalação congelada aprovada; nenhuma exceção à política de dependências acrescentada.
+- **Evidência local:** 599 testes unitários (74 arquivos), 201 integrações (26 arquivos), tipos, lint, formatação, build e instalação congelada passaram. Migração 034 aplicada: 36 migrations na saúde HTTP 200. QA HTTP de produção confirmou login, pedido persistido, mensagem de segundo modelo ausente, reabertura e recusa anônima; conversa temporária removida. Testes de imagem usam PNG real e HTTP controlado, não inferência de um modelo.
+- **Fronteira pendente:** usuário indicou Gemini para o teste real. O requisito seguro `GEMINI_IMAGE_API_KEY` e o destino `generativelanguage.googleapis.com` foram salvos no rascunho; valor não copiado para arquivos, comandos ou logs. É necessário configurar e aplicar essa credencial para consultar modelos e testar geração real. Chromium apresentou falhas do ambiente nas tentativas anteriores de captura; conferência visual mobile/desktop permanece sem comprovação. A tarefa não foi declarada finalizada e não se alegou imagem gerada por IA externa.
+- **Decisão do usuário em 2026-10-24:** deixar a geração bloqueada caso não seja possível validar, para que ele decida o provedor. Nenhuma geração externa foi comprovada; não insistir em outra conexão sem a configuração necessária. **Implementação publicada:** `3f95ad7` · **Push:** `942ff75..3f95ad7 main -> main`, confirmado. A publicação do código não encerra a pendência da tarefa.
+- **Roteamento e mapa pessoal:** conferir a ordem real das cinco conexões e encaminhar a geração de imagens ao segundo modelo configurado, preservando a configuração dos demais. Na leitura do mapa, construir a imagem a partir dos dados reais e autorizados do próprio titular e vinculá-la à leitura e à conversa correspondentes. Não inventar dados do mapa nem substituir o segundo modelo silenciosamente; se ele não estiver configurado, estiver indisponível ou não oferecer geração de imagens, informar a condição e permitir corrigir a conexão e tentar novamente.
+- **Critérios:** inspecionar a configuração e as capacidades reais dos provedores, pesquisar suas APIs oficiais atuais e implementar geração real pelo servidor, verificando a compatibilidade do segundo modelo e exibindo mensagens claras quando a conexão só oferecer texto. Não simular imagens nem atribuir essa capacidade a modelos que não a possuem. Integrar envio do pedido, andamento, falhas e retentativa à experiência simples e responsiva do chat, exibindo o resultado e permitindo baixar a imagem.
+- **Persistência e acesso:** preservar pedido, imagem e referência ao modelo na conversa, com armazenamento real vinculado ao titular, autorização no servidor, validação dos arquivos e limites de uso. Respeitar modo privado e consentimento para provedores externos, incluir os dados na exportação e exclusão da conta e não expor chaves ou imagens privadas em URLs públicas.
+- **Validação e entrega:** conferir geração solicitada no chat e geração do mapa após sua leitura, comprovando o uso do segundo modelo entre as cinco conexões e o tratamento de conexão ausente ou incompatível. Testar provedor e modelo capazes de criar imagens, reabertura da conversa, download, isolamento entre contas e interface desktop/mobile, além dos quality gates. A implementação terá commit e push próprios na main; este registro não significa funcionalidade já implementada.
+
+- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
+
+- **Conclusão em 2026-10-30:** geração comprovada com inferência real de um modelo de difusão aberto (`nota-ai/bk-sdm-tiny`, OpenRAIL-M, revisão fixada) servido localmente em `/v1/images/generations` e configurado na segunda posição pela administração, com o Motor Lyra em primeiro. Pelo chat: imagem do pedido e interpretação visual do mapa (512×512, WebP, ~65 s cada), download privado, 404 para outra conta, 401 sem sessão, reabertura, mapa sem dados pessoais no pedido e aviso sem segundo modelo. Corrigido o `eslint-disable` de `ImagemDaConversa` (agora `next/image` com `unoptimized`).
+- **Evidências:** gates aprovados; 982 unitários; 594 integrações; build sem avisos; QA com 2 axe sem violações e 390 px sem rolagem. Relatório em `docs/auditoria/2026-10-30-imagens-86.md`. Limite declarado: o adaptador Gemini não foi exercitado com o provedor externo, que exige a chave do usuário. Nenhuma branch ou worktree.
