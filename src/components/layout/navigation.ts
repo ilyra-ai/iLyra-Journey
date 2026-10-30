@@ -11,6 +11,7 @@ import {
   FileText,
   Gem,
   HeartPulse,
+  History,
   LayoutDashboard,
   Moon,
   Radio,
@@ -187,6 +188,15 @@ export const navigationItems: NavigationDefinition[] = [
     description:
       'Acompanhe pequenas mudanças escolhidas por você e revise seus registros.',
     icon: ClipboardList,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+  },
+  {
+    href: '/linha-do-tempo',
+    label: 'Minha linha do tempo',
+    description:
+      'Escolha um dia e veja juntos registros, práticas, metas e acontecimentos.',
+    icon: History,
     section: 'Pessoal',
     sectionKey: 'personal',
   },

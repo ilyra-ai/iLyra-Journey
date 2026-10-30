@@ -93,8 +93,9 @@ transacional por titular protege limite, ordem e operações simultâneas.
 Em `/relatorio-pessoal`, cada acompanhamento pode ser selecionado
 individualmente. Somente os escolhidos entram na prévia e no PDF, com o rótulo
 e a faixa da escala de cada resposta; notas só entram com a opção de notas.
-A seleção participa do digest que protege o download. A integração com a
-futura linha do tempo pessoal (tarefa 131) será feita nessa tarefa.
+A seleção participa do digest que protege o download. As respostas também
+aparecem na [linha do tempo pessoal](./linha-do-tempo.md) (tarefa 131), com
+link para o acompanhamento de origem.
 
 ## Persistência e privacidade
 

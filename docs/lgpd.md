@@ -153,6 +153,13 @@ três tabelas. Não há envio a provedor externo. O histórico vigente do plano
 limita leitura e gravação. Detalhes em
 [Acompanhamentos pessoais](./acompanhamentos-pessoais.md).
 
+## Linha do tempo pessoal (tarefa 131)
+
+Consulta somente leitura das origens já guardadas pelo titular autenticado,
+sem nova tabela, cópia ou envio externo. Cada origem respeita os recursos do
+plano da sua página e o corte do histórico. Notas pessoais e conversas não
+são exibidas. Exportação e exclusão continuam pelas tabelas de origem.
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 A prévia e o PDF consultam somente as categorias selecionadas do titular

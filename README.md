@@ -17,6 +17,7 @@ a perceber a própria rotina e escolher pequenos passos de autocuidado.
 - ☀️ **Criar suas rotinas:** organizar pequenos passos, pausar e retomar quando fizer sentido.
 - 🌙 **Modo descanso:** pausar convites, preservar registros e escolher uma retomada gradual, com dias neutros e prazos originais guardados. Veja [os efeitos](docs/modo-descanso.md).
 - 📄 **Meu relatório pessoal:** escolher datas e conteúdo, revisar e baixar um PDF privado com dados disponíveis e lacunas explícitas. Veja [os detalhes](docs/relatorio-pessoal.md).
+- 🕰️ **Minha linha do tempo:** escolher um dia e ver juntos registros, práticas, metas e acontecimentos, com filtros por assunto e link para cada origem. Veja [como funciona](docs/linha-do-tempo.md).
 - 🎚️ **Meus acompanhamentos:** criar acompanhamentos como concentração ou motivação, com escala, rótulos e frequência escolhidos por você, e ver a evolução das respostas. Veja [o funcionamento](docs/acompanhamentos-pessoais.md).
 - 🧭 **Acompanhar experiências pessoais:** definir uma pequena mudança, registrar percepções e revisar dados disponíveis, sem concluir causalidade. Veja [o funcionamento](docs/experiencias-pessoais.md).
 - 🗓️ **Anotar acontecimentos:** guardar o contexto do dia e observar seus registros de sono e energia, com limites e lacunas claros.

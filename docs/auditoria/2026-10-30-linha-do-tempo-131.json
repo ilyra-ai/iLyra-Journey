@@ -1,0 +1,123 @@
+{
+  "data": "2026-10-30",
+  "tarefa": 131,
+  "ambiente": {
+    "node": "24.21.0",
+    "pnpm": "11.28.4",
+    "axe": "4.14.0",
+    "modo": "pnpm build + pnpm start"
+  },
+  "conta": "conta temporária de QA removida",
+  "resultados": [
+    {
+      "etapa": "hoje-todas-as-origens",
+      "passou": true,
+      "n": 5,
+      "status": "5 itens de 30/10/2026 a 30/10/2026."
+    },
+    {
+      "etapa": "menu",
+      "passou": true
+    },
+    {
+      "etapa": "ordem-dia",
+      "passou": true,
+      "horas": ["No dia", "No dia", "No dia", "09:15", "14:00"]
+    },
+    {
+      "etapa": "detalhes-registro",
+      "passou": true
+    },
+    {
+      "etapa": "sem-nota",
+      "passou": true
+    },
+    {
+      "etapa": "axe-linha-1280",
+      "axe": 0,
+      "regras": 32,
+      "violacoes": []
+    },
+    {
+      "etapa": "filtro-assunto",
+      "passou": true,
+      "url": "assuntos=praticas%2Cmetas%2Cacontecimentos%2Cexperiencias",
+      "itens": 2
+    },
+    {
+      "etapa": "filtro-persistido-na-url",
+      "passou": true
+    },
+    {
+      "etapa": "paginacao",
+      "passou": true,
+      "antes": 40,
+      "depois": 47,
+      "textoStatus": "47 itens de 29/10/2026 a 29/10/2026."
+    },
+    {
+      "etapa": "sem-duplicar",
+      "passou": true,
+      "total": 47
+    },
+    {
+      "etapa": "periodo-7-dias",
+      "passou": true
+    },
+    {
+      "etapa": "abrir-origem",
+      "passou": true,
+      "url": "/acompanhamentos?acompanhamento=0644dc67-2272-47c8-9c2b-4c73a0184823"
+    },
+    {
+      "etapa": "teclado-filtros",
+      "passou": true,
+      "focado": "Práticas1"
+    },
+    {
+      "etapa": "sem-overflow-768",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "axe-linha-768",
+      "axe": 0,
+      "regras": 28,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-390",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-linha-390",
+      "axe": 0,
+      "regras": 27,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-320",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "axe-linha-320",
+      "axe": 0,
+      "regras": 27,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-sessao-401",
+      "passou": true
+    },
+    {
+      "etapa": "erros-js",
+      "total": 0,
+      "erros": []
+    }
+  ]
+}

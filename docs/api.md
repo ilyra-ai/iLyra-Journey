@@ -232,6 +232,14 @@ arquivamento, ordem completa dos ativos e respostas datadas pelo fuso do
 perfil. Leituras são privadas sem cache. Contratos, códigos e limites em
 [Acompanhamentos pessoais](./acompanhamentos-pessoais.md).
 
+## Linha do tempo pessoal (tarefa 131)
+
+`GET /api/linha-do-tempo` exige sessão e histórico autorizado. Reúne, somente
+para leitura, as origens permitidas pelo plano no período (até 31 dias), com
+filtros por assunto, paginação de 40 itens e horário local do perfil. Notas e
+conversas não são incluídas. Detalhes em
+[Linha do tempo pessoal](./linha-do-tempo.md).
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 `GET /api/relatorio-pessoal` fornece opções autorizadas.

@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `██████████████████░░` **91,2%** |
+| Progresso          | `██████████████████░░` **91,9%** |
 | Tarefas totais     | 136                              |
-| 🟢 Finalizadas     | 124                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 125                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 0                                |
 | ⚪ A iniciar       | 11                               |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (124 ÷ 136 ≈ 91,2%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (125 ÷ 136 ≈ 91,9%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -69,16 +69,7 @@
 
 ### ANDAMENTO
 
-### 131 · Linha do tempo pessoal unificada com filtros por assunto
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-30, após a publicação da 130 em `998ee140`.
-- **Pedido do usuário:** escolher um dia e encontrar juntos registros, práticas, metas e acontecimentos pessoais, com filtros por assunto. Corresponde ao item 6 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar histórico de métricas, reflexões, práticas, metas e revisão semanal; a linha do tempo de períodos e janelas do dia não é um histórico unificado dessas atividades. Integrar acontecimentos da tarefa 120 conforme sua disponibilidade, sem inventar entradas.
-- **Escopo funcional:** apresentar eventos reais em ordem cronológica com data e horário corretos, origem identificada, filtros, período, paginação e acesso ao registro original. Respeitar limites do histórico, ocultar categorias indisponíveis e refletir edições e exclusões. Não duplicar registros ao agregar fontes nem expor conteúdo de conversas ou informações sensíveis desnecessariamente.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** conferir ordenação e fuso, várias fontes no mesmo dia, filtros, paginação, datas sem registros, abertura da origem, atualizações, exclusões e recusa de dados de outras contas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Conferência prévia em 2026-10-30:** `main` sincronizada em `dc28e8c`. Não existe histórico unificado: a linha de períodos e janelas do dia não reúne atividades. Fontes reais confirmadas no esquema: registro do dia (`daily_metrics`), reflexão da noite, avaliações, acompanhamentos (130), respiração, foco e pausa, rotinas, metas (criação e prazo), acontecimentos (120), modo descanso e relatos das experiências. Cada fonte manterá os direitos do plano da sua própria página; a consulta é somente leitura e não cria cópia dos dados.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -2247,3 +2238,17 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 - **Implementação em 2026-10-30:** migração 058 (`personal_trackers`, `personal_tracker_definitions`, `personal_tracker_entries`) com propriedade composta, cascatas e restrições. CRUD completo de acompanhamentos (criação idempotente, edição, ordem persistida, arquivar/restaurar, exclusão) e de respostas datadas pelo fuso do perfil, com versões contra sobrescrita. Escala de 2 a 11 pontos (início 0 ou 1, rótulos obrigatórios nos extremos) e frequência diária ou semanal; mudar escala ou frequência cria nova definição sem converter respostas antigas. Ausência representada como “sem registro”, nunca zero. Página `/acompanhamentos`, menu **Meus acompanhamentos**, direitos `wellbeing_assessments` + `metrics_history_days` e corte do histórico do plano. Relatório pessoal com seleção explícita por acompanhamento (prévia, digest e PDF). Exportação LGPD, exclusão, política de privacidade, README e `docs/acompanhamentos-pessoais.md`. A integração com a linha do tempo fica para a 131, ainda inexistente.
 - **Evidências:** fix:format, fix:lint, check:lint, check:format e check:types aprovados; 965 unitários (90 arquivos); 571 integrações com MySQL real (60 arquivos, 8 novas da tarefa); build de produção sem avisos. QA em produção (`pnpm start`): 52 verificações aprovadas, 15 execuções axe WCAG 2.0/2.1/2.2 A/AA sem violações, zero exceções JavaScript, 1280/768/390/320 sem estouro. Corrigidos na causa raiz durante o QA: seletor Radix zerando o maior ponto ao trocar de modelo, mensagens de validação em inglês, classe `sr-only` anulada no item da escala e gráfico móvel abrindo longe das respostas recentes. Contas de QA removidas (0 restantes). Relatório em `docs/auditoria/2026-10-30-acompanhamentos-130.md` e resultados em `.json`. `@current_problems` não está exposto nesta sessão. Nenhuma branch ou worktree criada.
+
+### 131 · Linha do tempo pessoal unificada com filtros por assunto
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Pedido do usuário:** escolher um dia e encontrar juntos registros, práticas, metas e acontecimentos pessoais, com filtros por assunto. Corresponde ao item 6 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar histórico de métricas, reflexões, práticas, metas e revisão semanal; a linha do tempo de períodos e janelas do dia não é um histórico unificado dessas atividades. Integrar acontecimentos da tarefa 120 conforme sua disponibilidade, sem inventar entradas.
+- **Escopo funcional:** apresentar eventos reais em ordem cronológica com data e horário corretos, origem identificada, filtros, período, paginação e acesso ao registro original. Respeitar limites do histórico, ocultar categorias indisponíveis e refletir edições e exclusões. Não duplicar registros ao agregar fontes nem expor conteúdo de conversas ou informações sensíveis desnecessariamente.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir ordenação e fuso, várias fontes no mesmo dia, filtros, paginação, datas sem registros, abertura da origem, atualizações, exclusões e recusa de dados de outras contas. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência prévia em 2026-10-30:** `main` sincronizada em `dc28e8c`. Não existe histórico unificado: a linha de períodos e janelas do dia não reúne atividades. Fontes reais confirmadas no esquema: registro do dia (`daily_metrics`), reflexão da noite, avaliações, acompanhamentos (130), respiração, foco e pausa, rotinas, metas (criação e prazo), acontecimentos (120), modo descanso e relatos das experiências. Cada fonte manterá os direitos do plano da sua própria página; a consulta é somente leitura e não cria cópia dos dados.
+
+- **Implementação em 2026-10-30:** `GET /api/linha-do-tempo` somente leitura reunindo onze origens reais (registro do dia, reflexão, avaliações, acompanhamentos, respiração, foco e pausa, rotinas, metas, acontecimentos, modo descanso e experiências), cada uma com o recurso do plano da sua página; até 31 dias, corte do histórico, filtros por assunto, páginas de 40 itens, chave `origem:id` sem repetição, fuso do perfil e horários locais. Notas e conversas não são exibidas; edições e exclusões refletem na consulta seguinte. Página `/linha-do-tempo`, menu, filtros na URL, link para a origem e "carregar mais". A integração com os acompanhamentos da 130 foi concluída.
+- **Evidências:** gates aprovados; 965 unitários; 576 integrações com MySQL real (5 novas); build sem avisos. QA em produção: 21 verificações, 4 execuções axe sem violações, zero exceções JavaScript; corrigido estouro de 1 px em 320 px. Relatório em `docs/auditoria/2026-10-30-linha-do-tempo-131.md`. Contas de QA removidas. Nenhuma branch ou worktree.
