@@ -165,3 +165,16 @@ preservado. Avisos dispensados permanecem em seu histórico existente,
 seguindo a retenção desse recurso. O histórico de descanso é paginado
 sem truncamento silencioso. Leituras são privadas e sem cache.
 Detalhes em [Modo descanso](./modo-descanso.md).
+
+## Versões dos registros manuais
+
+O histórico guarda os campos alterados, valores anteriores e novos, autoria da
+própria conta e data/hora. Fica consultável por até 90 dias, dentro do histórico
+do plano. Versões vencidas são removidas ao gravar, consultar ou exportar esse
+histórico; contas sem atividade podem mantê-las fisicamente até uma dessas
+operações ou sua exclusão, sem disponibilizá-las para consulta ou restauração.
+O histórico integra a exportação do titular e é eliminado em cascata com o
+registro ou a conta. Desfazer exige sessão e recurso do plano, a última revisão
+intacta e a janela de edição vigente. Não recupera exclusões definitivas nem
+transforma uma restauração em medição de sensor. A política de 30/10/2026
+informa essa finalidade e retenção. Detalhes em [Versões dos registros](./versoes-dos-registros.md).

@@ -14,12 +14,19 @@ import { TABLE_CONFIG } from '@/lib/mysql/table-config';
 
 it('cobre todas as métricas do schema real com nomes e unidades, reutilizando os campos já definidos', async () => {
   const columns = await queryRows<{ coluna: string }>(
-    `SELECT COLUMN_NAME coluna FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='daily_metrics' AND DATA_TYPE IN ('tinyint','smallint','mediumint','int','bigint','decimal','float','double')`
+    `SELECT COLUMN_NAME coluna FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='daily_metrics' AND COLUMN_NAME <> 'record_revision' AND DATA_TYPE IN ('tinyint','smallint','mediumint','int','bigint','decimal','float','double')`
   );
   expect([...NUMERIC_METRIC_COLUMNS].sort()).toEqual(
     columns.map((c) => c.coluna).sort()
   );
   expect(NUMERIC_METRIC_COLUMNS).toHaveLength(63);
+  // A revisão numérica é controle de concorrência, não uma medição de saúde.
+  const [revisao] = await queryRows<{ tipo: string; nulo: string }>(
+    "SELECT DATA_TYPE tipo, IS_NULLABLE nulo FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='daily_metrics' AND COLUMN_NAME='record_revision'"
+  );
+  expect(revisao).toEqual({ tipo: 'bigint', nulo: 'NO' });
+  expect(NUMERIC_METRIC_COLUMNS).not.toContain('record_revision');
+  expect(TABLE_CONFIG.daily_metrics.columns).not.toContain('record_revision');
   const dados = TABLE_CONFIG.daily_metrics.columns.filter(
     (c) =>
       !['id', 'user_id', 'date', 'created_at', 'metrics_updated_at'].includes(c)

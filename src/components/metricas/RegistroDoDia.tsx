@@ -1,4 +1,5 @@
 'use client';
+import { HistoricoDasAlteracoes } from './HistoricoDasAlteracoes';
 import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import * as React from 'react';
@@ -121,7 +122,7 @@ export function RegistroDoDiaDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
         aria-modal="true"
-        className="flex max-h-[min(92dvh,52rem)] flex-col gap-0 p-0 sm:max-w-2xl"
+        className="flex max-h-[min(calc(100%-2rem),52rem)] flex-col gap-0 p-0 sm:max-w-2xl"
       >
         <DialogHeader className="border-b border-border px-5 pb-4 pt-5 sm:px-6">
           <DialogTitle className="flex items-center gap-2">
@@ -380,6 +381,13 @@ function FormularioDoRegistro({
         className="flex-1 space-y-6 overflow-y-auto px-5 py-5 sm:px-6"
         noValidate
       >
+        <HistoricoDasAlteracoes
+          data={data}
+          aoRestaurar={(r) => {
+            setRascunho(rascunhoDoRegistro(r));
+            setErros({});
+          }}
+        />
         <section className="space-y-4">
           <h3 className="font-display text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Como você está

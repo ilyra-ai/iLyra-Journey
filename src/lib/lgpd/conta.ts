@@ -1,3 +1,4 @@
+import { limparVersoesAntigas } from '@/lib/metricas/versoes';
 import { exportarFinanceiroDoTitular } from '@/lib/billing/admin/exportacao';
 import { travarAdministracao } from '@/lib/auth/bloqueio';
 import { rm } from 'node:fs/promises';
@@ -233,6 +234,7 @@ export async function listarRegistrosFiscais(options: {
 // (hash) nunca é exportada.
 const TABELAS_DO_TITULAR = [
   ['daily_metrics', 'user_id'],
+  ['manual_metric_versions', 'user_id'],
   ['goals', 'user_id'],
   ['habits', 'user_id'],
   ['ai_plans', 'user_id'],
@@ -272,6 +274,7 @@ const TABELAS_DO_TITULAR = [
 ] as const;
 
 export async function exportarDadosDoTitular(userId: string) {
+  await limparVersoesAntigas(userId);
   const contas = await queryRows<RowDataPacket>(
     'SELECT id, email, blocked_at, created_at, updated_at FROM users WHERE id = ? LIMIT 1',
     [userId]

@@ -1,0 +1,59 @@
+{
+  "data": "2026-10-30",
+  "principal": {
+    "checks": [
+      {
+        "etapa": "confirmacao-1280",
+        "axe": 0
+      },
+      {
+        "etapa": "historico-1280",
+        "axe": 0
+      },
+      {
+        "etapa": "restauracao-persistida-1280",
+        "passou": true
+      },
+      {
+        "etapa": "conflito-tela-desatualizada",
+        "status": 409,
+        "valor_preservado": 77
+      },
+      {
+        "etapa": "confirmacao-390",
+        "axe": 0
+      },
+      {
+        "etapa": "historico-390",
+        "axe": 0
+      },
+      {
+        "etapa": "restauracao-persistida-390",
+        "passou": true
+      },
+      {
+        "etapa": "confirmacao-320",
+        "axe": 0
+      },
+      {
+        "etapa": "historico-320",
+        "axe": 0
+      },
+      {
+        "etapa": "restauracao-persistida-320",
+        "passou": true
+      }
+    ],
+    "pageerrors": []
+  },
+  "adicional": {
+    "checks": [
+      "falha real de rede em pt-BR e recuperação",
+      "dia sem alterações",
+      "paginação real da interface além de 20 versões",
+      "Tab contido, Escape e retorno de foco",
+      "zoom CSS 200% e axe sem violações nas regras executadas"
+    ],
+    "pageerrors": []
+  }
+}

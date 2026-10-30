@@ -12,6 +12,7 @@ a perceber a própria rotina e escolher pequenos passos de autocuidado.
 - 💬 **Conversar com a Lyra:** tirar dúvidas, refletir, retomar conversas e ouvir respostas com uma voz local em português, quando disponível no dispositivo.
 - ⭐ **Encontrar orientações:** buscar no texto das suas conversas e guardar respostas favoritas para consultar depois.
 - 📊 **Acompanhar seu dia:** registrar sono, humor, água e movimento e consultar o que mudou.
+- ↩️ **Rever preenchimentos:** consultar alterações manuais e desfazer a última revisão elegível com confirmação. Veja [o histórico de versões](docs/versoes-dos-registros.md).
 - 🌱 **Cuidar dos seus hábitos:** organizar metas e acompanhar seu progresso.
 - ☀️ **Criar suas rotinas:** organizar pequenos passos, pausar e retomar quando fizer sentido.
 - 🌙 **Modo descanso:** pausar convites, preservar registros e escolher uma retomada gradual, com dias neutros e prazos originais guardados. Veja [os efeitos](docs/modo-descanso.md).

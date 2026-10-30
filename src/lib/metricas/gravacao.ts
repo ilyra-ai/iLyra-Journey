@@ -5,7 +5,14 @@ import { randomUUID } from 'node:crypto';
 import { limiteDeFrequencia } from '@/lib/health/limite-de-frequencia';
 import { atualizarMetasESequencias } from '@/lib/metas/servico';
 import { criarNotificacao } from '@/lib/notificacoes/servico';
-import { executeStatement, queryRows } from '@/lib/mysql/pool';
+import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
+import {
+  COLUNAS_MANUAIS,
+  limparVersoesAntigas,
+  registrarVersaoManual,
+  type RegistroVersionado,
+  type MudancasManuais,
+} from './versoes';
 
 import { recalcularEscoresDesde } from './escores-do-dia';
 
@@ -14,6 +21,8 @@ import { recalcularEscoresDesde } from './escores-do-dia';
  * dia (e dos 7 seguintes), metas automáticas, prazos e sequências.
  */
 export async function depoisDeGravarRegistro(userId: string, data: string) {
+  // Fora da transação da linha: a limpeza pode abranger outros dias do titular.
+  await limparVersoesAntigas(userId);
   if (await contaTemRecurso(userId, 'ai_scores'))
     await recalcularEscoresDesde(userId, data);
   if (await contaTemRecurso(userId, 'goal_progress_tracking'))
@@ -105,20 +114,47 @@ export async function persistirRegistroDoDia(
   registro: RegistroDoDia,
   c?: PoolConnection
 ): Promise<void> {
+  if (!c) {
+    await withTransaction((conexao) =>
+      persistirRegistroDoDia(userId, registro, conexao)
+    );
+    return;
+  }
+  await executeStatement(
+    'INSERT INTO daily_metrics(id,user_id,date) VALUES(?,?,?) ON DUPLICATE KEY UPDATE id=daily_metrics.id',
+    [randomUUID(), userId, registro.data],
+    c
+  );
+  const [anterior] = await queryRows<RegistroVersionado>(
+    `SELECT id,record_revision,${COLUNAS_MANUAIS.join(',')} FROM daily_metrics WHERE user_id=? AND date=? FOR UPDATE`,
+    [userId, registro.data],
+    c
+  );
   const informados = NOMES_DOS_CAMPOS.filter(
     (campo) => registro.valores[campo] !== undefined
   );
-  const colunas = informados.map((campo) => CAMPOS_DO_REGISTRO[campo].coluna);
-  const valores = informados.map((campo) => registro.valores[campo] as number);
-
+  const mudancas: MudancasManuais = {};
+  for (const campo of informados) {
+    const bruto = anterior[CAMPOS_DO_REGISTRO[campo].coluna];
+    const antes = bruto === null ? null : Number(bruto);
+    const novo = registro.valores[campo]!;
+    if (antes !== novo) mudancas[campo] = { anterior: antes, novo };
+  }
+  const alterados = NOMES_DOS_CAMPOS.filter(
+    (campo) => mudancas[campo] !== undefined
+  );
+  if (!alterados.length) return;
   await executeStatement(
-    `INSERT INTO daily_metrics (id, user_id, date, ${colunas.join(', ')}, metrics_updated_at)
-     VALUES (?, ?, ?, ${colunas.map(() => '?').join(', ')}, UTC_TIMESTAMP())
-     AS novo
-     ON DUPLICATE KEY UPDATE
-       ${colunas.map((coluna) => `${coluna} = novo.${coluna}`).join(',\n       ')},
-       metrics_updated_at = novo.metrics_updated_at`,
-    [randomUUID(), userId, registro.data, ...valores],
+    `UPDATE daily_metrics SET ${alterados.map((k) => `${CAMPOS_DO_REGISTRO[k].coluna}=?`).join(',')},record_revision=record_revision+1,metrics_updated_at=UTC_TIMESTAMP() WHERE id=? AND user_id=?`,
+    [...alterados.map((k) => mudancas[k]!.novo), anterior.id, userId],
+    c
+  );
+  await registrarVersaoManual(
+    userId,
+    anterior,
+    registro.data,
+    mudancas,
+    'registro',
     c
   );
 }
@@ -144,6 +180,7 @@ export async function somarMinutosDeMeditacao(
          COALESCE(daily_metrics.meditation_minutes, 0) + novo.meditation_minutes,
          ?
        ),
+       record_revision = daily_metrics.record_revision + 1,
        metrics_updated_at = novo.metrics_updated_at`,
     [randomUUID(), userId, data, minutos, maximo, maximo]
   );
@@ -197,7 +234,8 @@ export async function gravarSessaoDoSensor(
           ELSE LEAST(daily_metrics.resting_heart_rate, novo.resting_heart_rate)
         END,
         hrv_ms = COALESCE(novo.hrv_ms, daily_metrics.hrv_ms),
-        metrics_updated_at = novo.metrics_updated_at`,
+        record_revision = daily_metrics.record_revision + 1,
+       metrics_updated_at = novo.metrics_updated_at`,
     [
       randomUUID(),
       userId,

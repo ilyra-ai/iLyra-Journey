@@ -236,6 +236,15 @@ export default function PoliticaDePrivacidadePage() {
             imediatamente, junto com as fotos enviadas.
           </p>
           <p>
+            Alterações manuais dos seus registros guardam os campos, valores
+            anteriores e novos, data e autoria da própria conta. As versões
+            ficam consultáveis por até 90 dias, dentro do histórico do plano; as
+            vencidas são removidas ao gravar, consultar ou exportar esse
+            histórico. Excluir o registro ou a conta elimina também suas
+            versões. O recurso não recupera dados excluídos definitivamente nem
+            envia os valores a um serviço externo para desfazer uma alteração.
+          </p>
+          <p>
             Anexos do chat são privados e vinculados à conversa. TXT UTF-8 e
             imagens estáticas PNG, JPEG e WebP podem ser guardados; imagens são
             convertidas em PNG sem metadados. Só os arquivos selecionados são
