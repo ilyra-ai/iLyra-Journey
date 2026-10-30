@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `██████████████████░░` **91,0%** |
+| Progresso          | `██████████████████░░` **91,8%** |
 | Tarefas totais     | 134                              |
-| 🟢 Finalizadas     | 122                              |
-| 🔵 Em andamento    | 1                                |
+| 🟢 Finalizadas     | 123                              |
+| 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 6                                |
 | ⚪ A iniciar       | 5                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (122 ÷ 134 ≈ 91,0%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (123 ÷ 134 ≈ 91,8%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -53,26 +53,13 @@
 
 **Orientação vigente do usuário em 2026-10-30:** concluir as tarefas não bloqueadas individualmente, sem entregas em lote. Antes de iniciar, conferir se já existe implementação e aproveitar commits/arquivos anteriores. Registrar o início no painel; ao terminar, verificar o projeto inteiro, corrigir falhas, atualizar este painel antes do commit e publicar imediatamente na `main`, sem branches adicionais ou worktrees. Confirmar a publicação antes de iniciar a próxima. Não executar as bloqueadas 86, 90, 100, 106, 115 e 127. Esta orientação substitui a possibilidade anterior de execução conjunta.
 
-**Continuidade confirmada em 2026-10-30:** 128 encerrada e publicada em `0c7a23cd`; 129 é a próxima tarefa não bloqueada. A implementação de voz já estava em `4a1fe166` e foi aproveitada. Verificação integral e limites registrados no relatório de retomada.
+**Continuidade confirmada em 2026-10-30:** 128 encerrada em `0c7a23cd`; 129 concluída e publicada em `95ad6908`; 130 é a próxima tarefa não bloqueada. A implementação de voz já estava em `4a1fe166` e foi aproveitada. Verificação integral e limites registrados no relatório de retomada.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
 
-### 129 · Histórico de versões e desfazer alterações em registros manuais
-
-- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Início publicado:** `cf9c9d7d` · **Implementação e validação concluídas, aguardando publicação.**
-- **Pedido do usuário:** corrigir um preenchimento acidental e consultar ou recuperar valores anteriores de registros manuais quando aplicável. Corresponde ao item 4 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar o check-in e a gravação das métricas existentes; o fluxo consultado atualiza a linha do dia e recalcula resultados, sem comprovar histórico de versões recuperáveis para o próprio titular. Distinguir essa capacidade do histórico administrativo.
-- **Escopo funcional:** registrar alterações manuais com data, campo, valor anterior e novo, permitir consultar versões e desfazer alterações elegíveis com confirmação clara. Tratar concorrência para não sobrescrever gravações posteriores e recalcular resultados dependentes sem duplicar contagens. Preservar a origem dos dados e não converter uma correção manual em medição de sensor. Definir retenção e não restaurar dados eliminados definitivamente por solicitação de privacidade.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** conferir alteração e desfazer reais, versões persistidas, concorrência, recarga, campos sem valor, zero, cálculos dependentes, autorização e exclusão definitiva. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
-- **Conferência antes de implementar em 2026-10-30:** `main` limpa e sincronizada em `9a177394`. Buscas por desfazer, versões e revisões em `src`, migrations e documentação não encontraram histórico recuperável das métricas manuais; o histórico de conversas e o administrativo têm finalidade distinta. Reutilizar a gravação de check-in existente, preservando sensores, sincronização offline, escores, limites do plano e privacidade. Nenhum arquivo adicional do outro chat estava disponível nas pastas compartilhadas; a implementação publicada e os relatórios anteriores foram aproveitados na 128. Não executar tarefas bloqueadas.
-
-- **Progresso local em 2026-10-30:** migration 057 aplicada no MySQL real; captura transacional de alterações na gravação compartilhada, revisões de concorrência, API privada de histórico/desfazer, consulta paginada e confirmação no check-in implementadas localmente. Dezesseis integrações da tarefa e regressões de métricas/offline passaram juntas (42 testes em três arquivos), incluindo recálculo real de escores, consulta antiga sem ampliação da janela de edição, isolamento, concorrência, zero/NULL, retenção, exportação, cascatas e idempotência offline. Política de privacidade atualizada e versionada. Em validação global e QA de produção; nenhuma conclusão ou publicação da implementação alegada.
-
-- **Entrega validada em 2026-10-30:** histórico privado paginado, campos/valores anteriores e novos, confirmação e restauração da última revisão intacta, proteção contra concorrência e gravações de sensor/prática, zero/NULL, recálculos e ausência de duplicação. Escrita compartilhada com avaliações e offline; retenção consultável de 90 dias, portabilidade e cascatas com registro/conta. Política de privacidade atualizada. Verificação global aprovada: instalação congelada offline, fix:format, fix:lint, check:lint, check:format, tipos, 959 unitários, 563 integrações MySQL, 30 testes dos launchers e build. Quinze verificações de produção, sete execuções axe sem violações nas regras avaliadas, zero exceções JavaScript, 320/390/1280 e zoom CSS 200%. Corrigidos texto de erro de rede, altura do check-in em zoom e distinção da revisão técnica no inventário de métricas. Relatório e resultados em `docs/auditoria/2026-10-30-versoes-129.md` e `.json`. Nenhuma bloqueada executada.
+Nenhuma tarefa em implementação; a 129 foi publicada e a 130 é a próxima não bloqueada.
 
 ### BLOQUEADAS
 
@@ -2191,3 +2178,18 @@
 - **Fechamento validado em 2026-10-30:** aproveitada a implementação publicada, sem refazer a funcionalidade. A verificação integral passou: fix:format, fix:lint, check:lint, check:format, check:types, 959 unitários em 88 arquivos, 547 integrações MySQL em 58 arquivos, 30 testes dos launchers e build. Corrigida a agregação excessiva de cenários nos testes de linguagem diária e semanal: mesmas 258 combinações e asserções, agora independentes, com timeout original preservado. Seis percursos de produção no Chromium, sem exceções JavaScript, e dados temporários removidos. Evidências e limites em `docs/auditoria/2026-10-30-retomada-128.md`. As bloqueadas 86, 90, 100, 106, 115 e 127 não foram executadas. A 129 é a próxima tarefa não bloqueada; só iniciar após a publicação deste fechamento.
 
 - **Publicação do fechamento da 128:** `0c7a23cd` · **Push confirmado:** `4a1fe166..0c7a23cd main -> main`. Este registro posterior preserva o SHA real da entrega e é publicado antes de iniciar a 129.
+
+### 129 · Histórico de versões e desfazer alterações em registros manuais
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Conclusão:** 2026-10-30 · **Commit:** `95ad6908` · **Push confirmado:** `cf9c9d7d..95ad6908 main -> main`.
+- **Pedido do usuário:** corrigir um preenchimento acidental e consultar ou recuperar valores anteriores de registros manuais quando aplicável. Corresponde ao item 4 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar o check-in e a gravação das métricas existentes; o fluxo consultado atualiza a linha do dia e recalcula resultados, sem comprovar histórico de versões recuperáveis para o próprio titular. Distinguir essa capacidade do histórico administrativo.
+- **Escopo funcional:** registrar alterações manuais com data, campo, valor anterior e novo, permitir consultar versões e desfazer alterações elegíveis com confirmação clara. Tratar concorrência para não sobrescrever gravações posteriores e recalcular resultados dependentes sem duplicar contagens. Preservar a origem dos dados e não converter uma correção manual em medição de sensor. Definir retenção e não restaurar dados eliminados definitivamente por solicitação de privacidade.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir alteração e desfazer reais, versões persistidas, concorrência, recarga, campos sem valor, zero, cálculos dependentes, autorização e exclusão definitiva. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência antes de implementar em 2026-10-30:** `main` limpa e sincronizada em `9a177394`. Buscas por desfazer, versões e revisões em `src`, migrations e documentação não encontraram histórico recuperável das métricas manuais; o histórico de conversas e o administrativo têm finalidade distinta. Reutilizar a gravação de check-in existente, preservando sensores, sincronização offline, escores, limites do plano e privacidade. Nenhum arquivo adicional do outro chat estava disponível nas pastas compartilhadas; a implementação publicada e os relatórios anteriores foram aproveitados na 128. Não executar tarefas bloqueadas.
+
+- **Progresso local em 2026-10-30:** migration 057 aplicada no MySQL real; captura transacional de alterações na gravação compartilhada, revisões de concorrência, API privada de histórico/desfazer, consulta paginada e confirmação no check-in implementadas localmente. Dezesseis integrações da tarefa e regressões de métricas/offline passaram juntas (42 testes em três arquivos), incluindo recálculo real de escores, consulta antiga sem ampliação da janela de edição, isolamento, concorrência, zero/NULL, retenção, exportação, cascatas e idempotência offline. Política de privacidade atualizada e versionada. Em validação global e QA de produção; nenhuma conclusão ou publicação da implementação alegada.
+
+- **Entrega validada em 2026-10-30:** histórico privado paginado, campos/valores anteriores e novos, confirmação e restauração da última revisão intacta, proteção contra concorrência e gravações de sensor/prática, zero/NULL, recálculos e ausência de duplicação. Escrita compartilhada com avaliações e offline; retenção consultável de 90 dias, portabilidade e cascatas com registro/conta. Política de privacidade atualizada. Verificação global aprovada: instalação congelada offline, fix:format, fix:lint, check:lint, check:format, tipos, 959 unitários, 563 integrações MySQL, 30 testes dos launchers e build. Quinze verificações de produção, sete execuções axe sem violações nas regras avaliadas, zero exceções JavaScript, 320/390/1280 e zoom CSS 200%. Corrigidos texto de erro de rede, altura do check-in em zoom e distinção da revisão técnica no inventário de métricas. Relatório e resultados em `docs/auditoria/2026-10-30-versoes-129.md` e `.json`. Nenhuma bloqueada executada.
