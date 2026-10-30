@@ -2234,7 +2234,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 130 · Acompanhamentos pessoais com campos e escalas definidos pelo usuário
 
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `998ee140` · **Push confirmado:** `120e22d..998ee14 main -> main`.
 - **Pedido do usuário:** criar acompanhamentos como concentração ou motivação, escolhendo uma escala simples e compreensível. Corresponde ao item 5 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
 - **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar avaliações, hábitos e registros existentes; métricas fixas e metas manuais não equivalem a campos de acompanhamento criados pelo usuário. Conferir o catálogo e o esquema atuais antes de ampliar a estrutura.
 - **Escopo funcional:** permitir criar, editar, organizar, arquivar e excluir acompanhamentos com nome, escala, rótulos e frequência escolhidos pelo titular; registrar respostas datadas e consultar evolução. Manter compatibilidade das respostas antigas ao mudar uma escala, representar ausência corretamente e identificar avaliações como relatos pessoais, sem apresentá-las como medições clínicas. Integrar a seleção aos relatórios e à linha do tempo quando essas tarefas estiverem disponíveis.
