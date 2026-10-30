@@ -24,9 +24,9 @@
 | Progresso          | `██████████████████░░` **91,0%** |
 | Tarefas totais     | 134                              |
 | 🟢 Finalizadas     | 122                              |
-| 🔵 Em andamento    | 0                                |
+| 🔵 Em andamento    | 1                                |
 | 🔴 Bloqueadas      | 6                                |
-| ⚪ A iniciar       | 6                                |
+| ⚪ A iniciar       | 5                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
@@ -59,7 +59,16 @@
 
 ### ANDAMENTO
 
-Nenhuma tarefa em implementação; fechamento da 128 validado, antes da retomada da 129.
+### 129 · Histórico de versões e desfazer alterações em registros manuais
+
+- **Status:** 🔵 em andamento · **Registro:** 2026-10-26 · **Início autorizado:** 2026-10-30, após a publicação e confirmação do fechamento da 128.
+- **Pedido do usuário:** corrigir um preenchimento acidental e consultar ou recuperar valores anteriores de registros manuais quando aplicável. Corresponde ao item 4 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar o check-in e a gravação das métricas existentes; o fluxo consultado atualiza a linha do dia e recalcula resultados, sem comprovar histórico de versões recuperáveis para o próprio titular. Distinguir essa capacidade do histórico administrativo.
+- **Escopo funcional:** registrar alterações manuais com data, campo, valor anterior e novo, permitir consultar versões e desfazer alterações elegíveis com confirmação clara. Tratar concorrência para não sobrescrever gravações posteriores e recalcular resultados dependentes sem duplicar contagens. Preservar a origem dos dados e não converter uma correção manual em medição de sensor. Definir retenção e não restaurar dados eliminados definitivamente por solicitação de privacidade.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir alteração e desfazer reais, versões persistidas, concorrência, recarga, campos sem valor, zero, cálculos dependentes, autorização e exclusão definitiva. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Conferência antes de implementar em 2026-10-30:** `main` limpa e sincronizada em `9a177394`. Buscas por desfazer, versões e revisões em `src`, migrations e documentação não encontraram histórico recuperável das métricas manuais; o histórico de conversas e o administrativo têm finalidade distinta. Reutilizar a gravação de check-in existente, preservando sensores, sincronização offline, escores, limites do plano e privacidade. Nenhum arquivo adicional do outro chat estava disponível nas pastas compartilhadas; a implementação publicada e os relatórios anteriores foram aproveitados na 128. Não executar tarefas bloqueadas.
 
 ### BLOQUEADAS
 
@@ -172,15 +181,6 @@ Nenhuma tarefa em implementação; fechamento da 128 validado, antes da retomada
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 129 · Histórico de versões e desfazer alterações em registros manuais
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** corrigir um preenchimento acidental e consultar ou recuperar valores anteriores de registros manuais quando aplicável. Corresponde ao item 4 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar o check-in e a gravação das métricas existentes; o fluxo consultado atualiza a linha do dia e recalcula resultados, sem comprovar histórico de versões recuperáveis para o próprio titular. Distinguir essa capacidade do histórico administrativo.
-- **Escopo funcional:** registrar alterações manuais com data, campo, valor anterior e novo, permitir consultar versões e desfazer alterações elegíveis com confirmação clara. Tratar concorrência para não sobrescrever gravações posteriores e recalcular resultados dependentes sem duplicar contagens. Preservar a origem dos dados e não converter uma correção manual em medição de sensor. Definir retenção e não restaurar dados eliminados definitivamente por solicitação de privacidade.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** conferir alteração e desfazer reais, versões persistidas, concorrência, recarga, campos sem valor, zero, cálculos dependentes, autorização e exclusão definitiva. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
 
 ### 130 · Acompanhamentos pessoais com campos e escalas definidos pelo usuário
 
