@@ -235,6 +235,8 @@
 - **Conferência prévia e integração:** antes de implementar, conferir a `main` e reaproveitar voz, reflexão diária, persistência, memória e navegação existentes; avaliar as entregas 44, 85, 124 e 128 e a futura linha do tempo 131. Distinguir este diário pessoal do diário alimentar 133. Coordenar a localização do diário com a tarefa 136, sem impor nomes adicionais de abas não definidos pelo usuário nem duplicar registros e serviços existentes.
 - **Experiência e validação futura:** seguir o Lyra Clean claro, a acessibilidade e as referências oficiais atuais de 2026. Validar captura de voz, transcrição, correção fiel, análise com modelo real autorizado, indisponibilidade de modelo/microfone, gravação, reabertura por data, memória individual e isolamento entre contas. Executar os testes e gates aplicáveis, conferir o fluxo no navegador e publicar a implementação em commit e push próprios na `main`, com evidências no painel. Este registro não declara o diário implementado nem validações funcionais executadas.
 
+- **Publicação deste registro documental:** commit `1c22b67c6adf52072ea12d3c7b764eadbe888cda`, confirmado na `main` pela API autenticada do GitHub e pela releitura do arquivo. Somente o painel foi alterado; a tarefa permanece a iniciar, aguardando instruções. Este SHA não corresponde à implementação do diário.
+
 ## Tópico 4 · Histórico das Tarefas Finalizadas
 
 ### 01 · Instrução mestra no `CLAUDE.md` e obrigatoriedade para agentes de IA
