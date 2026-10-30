@@ -25,6 +25,7 @@ import {
   Target,
   UserRound,
   UsersRound,
+  Utensils,
   Wind,
 } from 'lucide-react';
 
@@ -208,6 +209,15 @@ export const navigationItems: NavigationDefinition[] = [
     description:
       'Escolha um dia e veja juntos registros, práticas, metas e acontecimentos.',
     icon: History,
+    section: 'Pessoal',
+    sectionKey: 'personal',
+  },
+  {
+    href: '/alimentacao',
+    label: 'Diário alimentar',
+    description:
+      'Refeições, lanches e bebidas por texto ou foto, com horário e percepção.',
+    icon: Utensils,
     section: 'Pessoal',
     sectionKey: 'personal',
   },

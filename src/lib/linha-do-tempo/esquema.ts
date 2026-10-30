@@ -46,6 +46,12 @@ export const ORIGENS = {
     recursos: ['wellbeing_assessments'],
     destino: '/acompanhamentos',
   },
+  refeicao: {
+    nome: 'Diário alimentar',
+    assunto: 'registros',
+    recursos: ['daily_checkin'],
+    destino: '/alimentacao',
+  },
   respiracao: {
     nome: 'Respiração guiada',
     assunto: 'praticas',

@@ -20,6 +20,12 @@ import {
   escalaDoBanco,
 } from '@/lib/acompanhamentos/servico';
 import { faixaDaEscala, rotuloDoValor } from '@/lib/acompanhamentos/esquema';
+import {
+  PORCOES,
+  TIPOS,
+  type Porcao,
+  type TipoDeRefeicao,
+} from '@/lib/alimentacao/esquema';
 export async function opcoesDoRelatorio(
   s: AppSession,
   agora = new Date()
@@ -40,6 +46,7 @@ export async function opcoesDoRelatorio(
     metricas,
     reflexoes,
     acontecimentos,
+    alimentacao: metricas,
     acompanhamentos: avaliacoes
       ? (await acompanhamentosDoRelatorio(s.user.id)).map((a) => ({
           id: a.id,
@@ -66,6 +73,7 @@ export async function montarRelatorio(
     (p.metricas.length && !ctx.metricas) ||
     (p.reflexoes && !ctx.reflexoes) ||
     (p.acontecimentos && !ctx.acontecimentos) ||
+    (p.alimentacao && !ctx.alimentacao) ||
     (p.acompanhamentos.length > 0 &&
       !(await contaTemRecurso(s.user.id, 'wellbeing_assessments')))
   )
@@ -222,12 +230,40 @@ export async function montarRelatorio(
             }),
         });
     }
+    const alimentacao = p.alimentacao
+      ? (
+          await queryRows<{
+            entry_date: string;
+            entry_time: string;
+            kind: TipoDeRefeicao;
+            description: string;
+            portion_estimate: Porcao | null;
+            perception: number | null;
+            com_foto: number;
+            note?: string;
+          }>(
+            `SELECT e.entry_date,e.entry_time,e.kind,e.description,e.portion_estimate,e.perception,(f.entry_id IS NOT NULL) com_foto${p.notas ? ',e.note' : ''} FROM meal_entries e LEFT JOIN meal_photos f ON f.entry_id=e.id AND f.user_id=e.user_id WHERE e.user_id=? AND e.entry_date BETWEEN ? AND ? ORDER BY e.entry_date,e.entry_time,e.id`,
+            [s.user.id, p.inicio, p.fim],
+            c
+          )
+        ).map((r) => ({
+          data: r.entry_date,
+          hora: r.entry_time,
+          tipo: TIPOS[r.kind],
+          descricao: r.description,
+          porcao: r.portion_estimate ? PORCOES[r.portion_estimate] : null,
+          percepcao: r.perception === null ? null : Number(r.perception),
+          temFoto: Boolean(Number(r.com_foto)),
+          ...(p.notas ? { nota: r.note ?? '' } : {}),
+        }))
+      : [];
     const dados = {
       selecao,
       fuso: ctx.fuso,
       dias,
       resumos,
       acompanhamentos,
+      alimentacao,
     };
     return {
       ...dados,

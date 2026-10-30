@@ -223,6 +223,61 @@ export function PreviaDoRelatorio({
           </CardContent>
         </Card>
       )}
+      {r.selecao.alimentacao && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Diário alimentar</CardTitle>
+            <CardDescription>
+              Registros feitos por você. A porção é a sua estimativa; não há
+              cálculo de nutrientes. Fotos não entram no PDF. Dias sem registro
+              não significam que não houve refeição.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {r.alimentacao.length ? (
+              <Table scrollLabel="Registros do diário alimentar">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Data e hora</TableHead>
+                    <TableHead>Tipo</TableHead>
+                    <TableHead>Descrição</TableHead>
+                    <TableHead>Porção estimada</TableHead>
+                    <TableHead>Como se sentiu</TableHead>
+                    {r.selecao.notas && <TableHead>Nota</TableHead>}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {r.alimentacao.map((x, i) => (
+                    <TableRow key={`${x.data}-${x.hora}-${i}`}>
+                      <TableCell className="whitespace-nowrap">
+                        {dataBreve(x.data)} {x.hora}
+                      </TableCell>
+                      <TableCell>{x.tipo}</TableCell>
+                      <TableCell className="whitespace-pre-wrap [overflow-wrap:anywhere]">
+                        {x.descricao || 'Registro somente com foto'}
+                        {x.temFoto ? ' (com foto)' : ''}
+                      </TableCell>
+                      <TableCell>{x.porcao ?? '—'}</TableCell>
+                      <TableCell>
+                        {x.percepcao === null ? '—' : `${x.percepcao}/5`}
+                      </TableCell>
+                      {r.selecao.notas && (
+                        <TableCell className="whitespace-pre-wrap [overflow-wrap:anywhere]">
+                          {x.nota || 'Sem nota.'}
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Nenhum registro neste período.
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      )}
       {r.acompanhamentos.length > 0 && (
         <Card>
           <CardHeader>

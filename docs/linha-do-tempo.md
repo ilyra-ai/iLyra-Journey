@@ -10,6 +10,7 @@ onde o registro original pode ser consultado ou corrigido.
 | Assunto            | Origem                        | Tabela                                              | Recurso do plano                           |
 | ------------------ | ----------------------------- | --------------------------------------------------- | ------------------------------------------ |
 | Registros pessoais | Registro do dia (consolidado) | `daily_metrics`                                     | `daily_checkin`                            |
+| Registros pessoais | Diário alimentar (133)        | `meal_entries`                                      | `daily_checkin`                            |
 | Registros pessoais | Reflexão da noite             | `daily_reflections`                                 | `evening_reflection`                       |
 | Registros pessoais | Avaliação de bem-estar        | `user_assessments`                                  | `wellbeing_assessments`                    |
 | Registros pessoais | Acompanhamento pessoal (130)  | `personal_tracker_entries`                          | `wellbeing_assessments`                    |

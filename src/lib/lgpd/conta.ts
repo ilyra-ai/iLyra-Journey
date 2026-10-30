@@ -251,6 +251,7 @@ const TABELAS_DO_TITULAR = [
   ['app_intro_progress', 'user_id'],
   ['focus_sessions', 'user_id'],
   ['meditation_sessions', 'user_id'],
+  ['meal_entries', 'user_id'],
   ['rest_periods', 'user_id'],
   ['rest_goal_links', 'user_id'],
   ['personal_experiments', 'user_id'],
@@ -377,6 +378,17 @@ export async function exportarDadosDoTitular(userId: string) {
       ...linha,
       image_base64: Buffer.isBuffer(image_data)
         ? image_data.toString('base64')
+        : null,
+    })),
+    fotos_do_diario_alimentar: (
+      await queryRows<RowDataPacket>(
+        'SELECT entry_id,mime_type,byte_size,sha256,file_data,created_at FROM meal_photos WHERE user_id=? ORDER BY created_at,entry_id',
+        [userId]
+      )
+    ).map(({ file_data, ...f }) => ({
+      ...f,
+      arquivo_base64: Buffer.isBuffer(file_data)
+        ? file_data.toString('base64')
         : null,
     })),
     descricoes_do_painel: await queryRows<RowDataPacket>(

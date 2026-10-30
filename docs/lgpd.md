@@ -166,6 +166,13 @@ são exibidas. Exportação e exclusão continuam pelas tabelas de origem.
 somados do titular; entra na exportação e é removida com a conta. A narração
 é local no dispositivo; nenhum texto ou áudio é enviado a serviço externo.
 
+## Diário alimentar (tarefa 133)
+
+`meal_entries` e `meal_photos` pertencem ao titular; a exportação inclui os
+registros e as fotos em base64 (PNG sem metadados). Excluir o registro remove
+a foto; excluir a conta remove ambos. Não há leitura por IA nem envio
+externo das fotos.
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 A prévia e o PDF consultam somente as categorias selecionadas do titular

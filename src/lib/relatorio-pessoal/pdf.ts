@@ -106,6 +106,7 @@ export async function gerarPdfPessoal(r: RelatorioPessoal): Promise<Buffer> {
       ...(r.selecao.reflexoes ? ['Reflexões pessoais'] : []),
       ...(r.selecao.acontecimentos ? ['Acontecimentos pessoais'] : []),
       ...r.acompanhamentos.map((a) => `Acompanhamento: ${a.nome}`),
+      ...(r.selecao.alimentacao ? ['Diário alimentar'] : []),
     ].join('; ') + '.'
   );
   texto(
@@ -233,6 +234,31 @@ export async function gerarPdfPessoal(r: RelatorioPessoal): Promise<Buffer> {
       espaco(20);
       texto(
         `${x.frequencia === 'semanal' ? `Semana de ${data(x.data)}` : data(x.data)} | ${x.rotulo} | escala ${x.escala}`
+      );
+      if (r.selecao.notas)
+        texto(x.nota ? `Nota pessoal: ${x.nota}` : 'Sem nota pessoal.');
+    }
+  }
+  if (r.selecao.alimentacao) {
+    pagina('Diário alimentar');
+    texto(
+      'Fonte: diário alimentar preenchido por você. Porção é a sua estimativa; o app não calcula nutrientes nem trata fotos como pesagem. Fotos não são incluídas neste PDF. Dias sem registro não significam que não houve refeição.'
+    );
+    texto(
+      `${r.alimentacao.length} ${r.alimentacao.length === 1 ? 'registro' : 'registros'} no período.`
+    );
+    for (const x of r.alimentacao) {
+      espaco(20);
+      texto(
+        [
+          `${data(x.data)} ${x.hora} | ${x.tipo}`,
+          x.descricao || 'Registro somente com foto',
+          x.porcao ? `porção estimada: ${x.porcao}` : null,
+          x.percepcao === null ? null : `como se sentiu: ${x.percepcao}/5`,
+          x.temFoto ? 'com foto' : null,
+        ]
+          .filter(Boolean)
+          .join(' | ')
       );
       if (r.selecao.notas)
         texto(x.nota ? `Nota pessoal: ${x.nota}` : 'Sem nota pessoal.');

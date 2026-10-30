@@ -1,0 +1,152 @@
+{
+  "data": "2026-10-30",
+  "tarefa": 133,
+  "ambiente": {
+    "node": "24.21.0",
+    "pnpm": "11.28.4",
+    "axe": "4.14.0",
+    "modo": "pnpm build + pnpm start"
+  },
+  "conta": "conta temporária de QA removida",
+  "resultados": [
+    {
+      "etapa": "dia-vazio",
+      "passou": true
+    },
+    {
+      "etapa": "menu",
+      "passou": true
+    },
+    {
+      "etapa": "axe-vazio-1280",
+      "axe": 0,
+      "regras": 29,
+      "violacoes": []
+    },
+    {
+      "etapa": "validacao-vazia",
+      "passou": true
+    },
+    {
+      "etapa": "axe-formulario-1280",
+      "axe": 0,
+      "regras": 24,
+      "violacoes": []
+    },
+    {
+      "etapa": "foto-png-sem-exif",
+      "passou": true,
+      "mime": "image/png"
+    },
+    {
+      "etapa": "registro-com-foto",
+      "passou": true
+    },
+    {
+      "etapa": "axe-lista-1280",
+      "axe": 0,
+      "regras": 29,
+      "violacoes": []
+    },
+    {
+      "etapa": "edicao",
+      "passou": true
+    },
+    {
+      "etapa": "falha-de-rede",
+      "passou": true,
+      "msg": "Não foi possível falar com o servidor. Verifique a sua conexão."
+    },
+    {
+      "etapa": "exclusao",
+      "passou": true
+    },
+    {
+      "etapa": "navegacao-por-dia",
+      "passou": true
+    },
+    {
+      "etapa": "na-linha-do-tempo",
+      "passou": true
+    },
+    {
+      "etapa": "no-relatorio",
+      "passou": true
+    },
+    {
+      "etapa": "sem-overflow-lista-768",
+      "passou": true,
+      "sw": 768,
+      "w": 768
+    },
+    {
+      "etapa": "axe-lista-768",
+      "axe": 0,
+      "regras": 27,
+      "violacoes": []
+    },
+    {
+      "etapa": "dialogo-768",
+      "passou": true
+    },
+    {
+      "etapa": "axe-formulario-768",
+      "axe": 0,
+      "regras": 25,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-lista-390",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-lista-390",
+      "axe": 0,
+      "regras": 27,
+      "violacoes": []
+    },
+    {
+      "etapa": "dialogo-390",
+      "passou": true
+    },
+    {
+      "etapa": "axe-formulario-390",
+      "axe": 0,
+      "regras": 25,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-overflow-lista-320",
+      "passou": true,
+      "sw": 320,
+      "w": 320
+    },
+    {
+      "etapa": "axe-lista-320",
+      "axe": 0,
+      "regras": 27,
+      "violacoes": []
+    },
+    {
+      "etapa": "dialogo-320",
+      "passou": true
+    },
+    {
+      "etapa": "axe-formulario-320",
+      "axe": 0,
+      "regras": 25,
+      "violacoes": []
+    },
+    {
+      "etapa": "sem-sessao-401",
+      "passou": true
+    },
+    {
+      "etapa": "erros-js",
+      "total": 0,
+      "erros": []
+    }
+  ]
+}

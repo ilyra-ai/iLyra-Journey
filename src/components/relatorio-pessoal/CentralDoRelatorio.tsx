@@ -41,6 +41,7 @@ function Editor({ opcoes: o }: { opcoes: OpcoesDoRelatorio }) {
       reflexoes: false,
       acontecimentos: false,
       acompanhamentos: [],
+      alimentacao: false,
       notas: false,
     })),
     [r, setR] = useState<RelatorioPessoal | null>(null),
@@ -243,6 +244,21 @@ function Editor({ opcoes: o }: { opcoes: OpcoesDoRelatorio }) {
                       />
                       <FieldLabel htmlFor="relatorio-acontecimentos">
                         Acontecimentos e marcadores pessoais
+                      </FieldLabel>
+                    </Field>
+                  )}
+                  {o.alimentacao && (
+                    <Field orientation="horizontal">
+                      <Checkbox
+                        className="size-6 after:-inset-1"
+                        id="relatorio-alimentacao"
+                        checked={p.alimentacao}
+                        onCheckedChange={(v) =>
+                          alterar({ ...p, alimentacao: v === true })
+                        }
+                      />
+                      <FieldLabel htmlFor="relatorio-alimentacao">
+                        Diário alimentar (sem fotos)
                       </FieldLabel>
                     </Field>
                   )}

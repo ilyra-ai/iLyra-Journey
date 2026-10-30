@@ -16,6 +16,13 @@ import {
 } from '@/lib/relatorio-pessoal/esquema';
 import { DEFINICOES, type Tecnica } from '@/lib/respiracao/tecnicas';
 import { praticaPorId } from '@/lib/meditacoes/catalogo';
+import {
+  PERCEPCOES,
+  PORCOES,
+  TIPOS,
+  type Porcao,
+  type TipoDeRefeicao,
+} from '@/lib/alimentacao/esquema';
 import { escalaDoBanco } from '@/lib/acompanhamentos/servico';
 import { faixaDaEscala, rotuloDoValor } from '@/lib/acompanhamentos/esquema';
 import {
@@ -217,6 +224,62 @@ const coletores: Record<Origem, Coletor> = {
             : []),
         ],
         `/acompanhamentos?acompanhamento=${encodeURIComponent(r.tracker_id)}`
+      );
+    });
+  },
+  async refeicao(userId, j, c) {
+    const rs = await queryRows<{
+      id: string;
+      entry_date: string;
+      entry_time: string;
+      kind: TipoDeRefeicao;
+      description: string;
+      portion_estimate: Porcao | null;
+      perception: number | null;
+      com_nota: number;
+      com_foto: number;
+    }>(
+      "SELECT e.id,e.entry_date,e.entry_time,e.kind,e.description,e.portion_estimate,e.perception,(e.note<>'') com_nota,(p.entry_id IS NOT NULL) com_foto FROM meal_entries e LEFT JOIN meal_photos p ON p.entry_id=e.id AND p.user_id=e.user_id WHERE e.user_id=? AND e.entry_date BETWEEN ? AND ?",
+      [userId, j.inicio, j.fim],
+      c
+    );
+    return rs.map((r) => {
+      const descricao =
+        r.description.length > 140
+          ? `${r.description.slice(0, 139)}…`
+          : r.description;
+      return item(
+        'refeicao',
+        r.id,
+        r.entry_date,
+        r.entry_time,
+        TIPOS[r.kind],
+        descricao || 'Registro com foto',
+        [
+          ...(r.portion_estimate
+            ? [
+                {
+                  rotulo: 'Porção (sua estimativa)',
+                  valor: PORCOES[r.portion_estimate],
+                },
+              ]
+            : []),
+          ...(r.perception === null
+            ? []
+            : [
+                {
+                  rotulo: 'Como se sentiu depois',
+                  valor: `${r.perception}/5 · ${PERCEPCOES[r.perception]}`,
+                },
+              ]),
+          ...(Number(r.com_foto)
+            ? [{ rotulo: 'Foto', valor: 'Anexada (veja na origem)' }]
+            : []),
+          ...(Number(r.com_nota)
+            ? [{ rotulo: 'Nota pessoal', valor: 'Registrada (veja na origem)' }]
+            : []),
+        ],
+        `/alimentacao?data=${r.entry_date}`
       );
     });
   },

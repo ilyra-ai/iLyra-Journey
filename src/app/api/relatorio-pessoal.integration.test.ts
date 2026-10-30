@@ -19,6 +19,7 @@ const selecao = (): Selecao => ({
   reflexoes: false,
   acontecimentos: false,
   acompanhamentos: [],
+  alimentacao: false,
   notas: false,
 });
 async function preparar() {

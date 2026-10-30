@@ -28,6 +28,8 @@ export const selecaoSchema = z
         'Selecione cada acompanhamento uma vez.'
       )
       .default([]),
+    /** Diário alimentar (tarefa 133); opcional. */
+    alimentacao: z.boolean().default(false),
     notas: z.boolean(),
   })
   .strict()
@@ -41,6 +43,7 @@ export const selecaoSchema = z
       p.metricas.length > 0 ||
       p.reflexoes ||
       p.acontecimentos ||
+      p.alimentacao ||
       p.acompanhamentos.length > 0,
     'Selecione ao menos uma categoria.'
   );
@@ -58,6 +61,8 @@ export interface OpcoesDoRelatorio {
   reflexoes: boolean;
   acontecimentos: boolean;
   metricas: boolean;
+  /** Diário alimentar disponível no plano. */
+  alimentacao: boolean;
   /** Acompanhamentos do titular, ativos ou arquivados; vazio sem o recurso. */
   acompanhamentos: Array<{ id: string; nome: string; arquivado: boolean }>;
 }
@@ -98,6 +103,16 @@ export interface RelatorioPessoal {
   extraidoEm: string;
   dias: DiaDoRelatorio[];
   acompanhamentos: AcompanhamentoDoRelatorio[];
+  alimentacao: Array<{
+    data: string;
+    hora: string;
+    tipo: string;
+    descricao: string;
+    porcao: string | null;
+    percepcao: number | null;
+    temFoto: boolean;
+    nota?: string;
+  }>;
   revisao: string;
   resumos: {
     campo: CampoDoRegistro;

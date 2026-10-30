@@ -245,6 +245,15 @@ export default function PoliticaDePrivacidadePage() {
             envia os valores a um serviço externo para desfazer uma alteração.
           </p>
           <p>
+            O diário alimentar guarda o que você registra: data, horário,
+            descrição, sua estimativa de quantidade, como se sentiu, nota e a
+            foto opcional. A foto é convertida em PNG sem metadados (como local
+            e aparelho), fica visível só para você e não é analisada por
+            inteligência artificial nem enviada a serviços externos. Os
+            registros e fotos entram na exportação dos seus dados e são apagados
+            ao excluir o registro ou a conta.
+          </p>
+          <p>
             As meditações guiadas guardam a prática escolhida, a versão do
             roteiro, o tempo realizado e os minutos somados à sua meditação do
             dia. A narração é feita pela voz do seu próprio dispositivo: nenhum

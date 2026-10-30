@@ -36,6 +36,8 @@ não é avaliação clínica, diagnóstico ou interpretação por modelo de IA.
 - `inicio` e `fim`: datas civis ISO, intervalo inclusivo de até 90 dias;
 - `metricas`: nomes únicos do contrato em `src/lib/metricas/registro-do-dia.ts`;
 - `reflexoes`, `acontecimentos`, `notas`: escolhas booleanas explícitas.
+- `alimentacao`: escolha booleana opcional (padrão falso) do diário alimentar
+  (tarefa 133), sem fotos; exige `daily_checkin`.
 - `acompanhamentos`: lista opcional de IDs únicos de acompanhamentos do
   próprio titular (padrão vazio); ID de outra conta responde 404.
   Cada resposta mantém o rótulo e a escala em que foi dada; períodos sem

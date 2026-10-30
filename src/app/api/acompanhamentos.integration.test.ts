@@ -611,6 +611,7 @@ describe('acompanhamentos pessoais persistidos com MySQL real', () => {
       { id: b.id, nome: 'Motivação', arquivado: true },
     ]);
     const base: Omit<Selecao, 'acompanhamentos'> = {
+      alimentacao: false,
       inicio: '2026-10-20',
       fim: '2026-10-29',
       metricas: [],

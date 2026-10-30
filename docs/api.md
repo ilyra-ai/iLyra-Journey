@@ -247,6 +247,14 @@ conversas não são incluídas. Detalhes em
 conta, tempo medido pelo servidor e soma única dos minutos inteiros à
 meditação do dia. Detalhes em [Meditações guiadas](./meditacoes-guiadas.md).
 
+## Diário alimentar (tarefa 133)
+
+`GET/POST /api/alimentacao`, `PATCH/DELETE /api/alimentacao/[id]` e
+`GET/PUT/DELETE /api/alimentacao/[id]/foto` exigem sessão, registro do dia e
+histórico autorizado. Criação idempotente em multipart, versões, foto
+normalizada sem metadados e servida só ao titular. Detalhes em
+[Diário alimentar](./diario-alimentar.md).
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 `GET /api/relatorio-pessoal` fornece opções autorizadas.

@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `██████████████████░░` **92,6%** |
+| Progresso          | `███████████████████░` **93,4%** |
 | Tarefas totais     | 136                              |
-| 🟢 Finalizadas     | 126                              |
+| 🟢 Finalizadas     | 127                              |
 | 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 10                               |
+| ⚪ A iniciar       | 9                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (126 ÷ 136 ≈ 92,6%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (127 ÷ 136 ≈ 93,4%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -194,17 +194,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Commit e publicação da implementação local:** `2ab166554c20f60826349659c83dc1acc0e23585`, confirmado na `main` pela API autenticada do GitHub, com árvore idêntica à revisão local e atualização sem force. Nenhuma branch ou worktree criada. A 127 continua bloqueada somente na prova externa descrita acima; a publicação não a declara concluída.
 
 - **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
-
-### 133 · Diário alimentar simples com registro por texto ou foto
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-26 · **Orientação atual:** registrar a tarefa e aguardar instruções; não iniciar a implementação.
-- **Pedido do usuário:** registrar refeições por texto ou foto, horário e percepção pessoal, com estimativas identificadas e confirmáveis pelo usuário. Corresponde ao item 10 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
-- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar recomendações de alimentação e métricas existentes, distinguindo um diário de refeições de um plano alimentar ou total diário de proteína. Coordenar anexos com a tarefa 127 sem duplicar armazenamento ou consentimento.
-- **Escopo funcional:** permitir criar, consultar, editar e excluir refeições, lanches e bebidas com descrição, horário, foto opcional e percepção do titular. Caso exista interpretação da foto por modelo compatível, mostrar o que foi reconhecido para confirmação e correção; não declarar leitura por IA quando não ocorreu. Qualquer estimativa deve ter origem e limitações claras, sem tratar foto como pesagem ou inventar nutrientes. Integrar registros autorizados ao histórico e aos relatórios disponíveis.
-- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
-- **Validação e entrega:** conferir CRUD, datas e fusos, fotos, confirmação e correção de reconhecimento real quando oferecido, modelo ausente ou incompatível, estimativas, persistência, histórico, exportação, exclusão e privacidade. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
-
----
 
 ### 134 · Agendamentos exclusivo do administrador por padrão, com ativação global para usuários
 
@@ -2256,3 +2245,15 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Conferência e direitos em 2026-10-30:** não havia biblioteca narrada. As vozes pt-BR do Piper derivam de bases de uso não comercial (lessac/Blizzard 2013, RyanSpeech CC BY-NC-SA 4.0) e foram descartadas. A narração usa a voz local em português do dispositivo, pelo controlador da 128, com oito roteiros próprios versionados; sem voz local, a prática segue pela transcrição, sem anunciar mídia inexistente.
 - **Implementação:** migração 059 `meditation_sessions`; início idempotente, uma prática aberta, relógio do servidor, pausas fora do tempo, limite à duração; minutos inteiros somados uma única vez à meditação do dia local (reserva atômica). Página `/meditacoes` com filtros por duração e objetivo, reprodutor, narração ligável, transcrição com passo atual, concluir/interromper e histórico; origem na linha do tempo; LGPD, privacidade, README e `docs/meditacoes-guiadas.md`.
 - **Evidências:** gates aprovados; 968 unitários; 580 integrações com MySQL real (4 novas); build sem avisos. QA em produção: 31 verificações, 8 axe sem violações, zero exceções JavaScript; narração real em pt-BR com áudio capturado (RMS ≈ 5.000) via Speech Dispatcher e eSpeak NG somente no ambiente de QA. Relatório em `docs/auditoria/2026-10-30-meditacoes-132.md`. Contas de QA removidas. Nenhuma branch ou worktree.
+
+### 133 · Diário alimentar simples com registro por texto ou foto
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-26 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Pedido do usuário:** registrar refeições por texto ou foto, horário e percepção pessoal, com estimativas identificadas e confirmáveis pelo usuário. Corresponde ao item 10 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
+- **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; reutilizar recomendações de alimentação e métricas existentes, distinguindo um diário de refeições de um plano alimentar ou total diário de proteína. Coordenar anexos com a tarefa 127 sem duplicar armazenamento ou consentimento.
+- **Escopo funcional:** permitir criar, consultar, editar e excluir refeições, lanches e bebidas com descrição, horário, foto opcional e percepção do titular. Caso exista interpretação da foto por modelo compatível, mostrar o que foi reconhecido para confirmação e correção; não declarar leitura por IA quando não ocorreu. Qualquer estimativa deve ter origem e limitações claras, sem tratar foto como pesagem ou inventar nutrientes. Integrar registros autorizados ao histórico e aos relatórios disponíveis.
+- **Experiência, dados e integração:** seguir o Lyra Clean claro, com pt-BR compreensível, responsividade, teclado, foco e estados de carregamento, erro e ausência de dados. Usar dados reais e autorizados, persistência e validação no servidor, isolamento por titular, direitos do plano e consentimentos, exportação e exclusão aplicáveis. Pesquisar referências oficiais atuais antes da implementação.
+- **Validação e entrega:** conferir CRUD, datas e fusos, fotos, confirmação e correção de reconhecimento real quando oferecido, modelo ausente ou incompatível, estimativas, persistência, histórico, exportação, exclusão e privacidade. Executar os testes, QA e gates pertinentes à implementação, revisar diff e status e publicar commit e push próprios na `main`, sem branches ou worktrees; atualizar este painel com SHA e evidências reais. Este registro não representa funcionalidade implementada.
+
+- **Implementação em 2026-10-30:** migração 060 (`meal_entries`, `meal_photos`); CRUD real com criação multipart idempotente, versões, troca/remoção de foto e exclusão; foto normalizada como na 127 (PNG sem metadados), privada e servida só ao titular; estimativa de quantidade do titular sempre rotulada, sem nutrientes inventados. Sem modelo autorizado, a leitura de fotos por IA não é oferecida nem declarada. Página `/alimentacao`, linha do tempo, relatório pessoal por seleção explícita (sem fotos), exportação LGPD com fotos, privacidade, README e `docs/diario-alimentar.md`.
+- **Evidências:** gates aprovados; 970 unitários; 584 integrações com MySQL real (4 novas); build sem avisos. QA em produção: 28 verificações, 9 axe sem violações após corrigir o nome acessível do campo de arquivo, zero exceções JavaScript; JPEG com EXIF guardado como PNG sem EXIF. Relatório em `docs/auditoria/2026-10-30-diario-alimentar-133.md`. Contas de QA removidas. Nenhuma branch ou worktree.
