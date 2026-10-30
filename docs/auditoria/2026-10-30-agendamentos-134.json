@@ -1,0 +1,111 @@
+{
+  "data": "2026-10-30",
+  "tarefa": 134,
+  "ambiente": {
+    "node": "24.21.0",
+    "pnpm": "11.28.4",
+    "mysql": "9.7.2",
+    "axe": "4.14.0",
+    "modo": "pnpm build + pnpm start"
+  },
+  "contas": "contas temporárias de QA (usuário Free e administrador) removidas; interruptor deixado desativado (padrão)",
+  "observacao_console": "o único registro de console é o 403 provocado de propósito pela chamada manual à API com o recurso desligado",
+  "resultados": [
+    {
+      "etapa": "usuario-sem-menu",
+      "passou": true
+    },
+    {
+      "etapa": "usuario-busca-sem-agenda",
+      "passou": true
+    },
+    {
+      "etapa": "usuario-url-direta-aviso",
+      "passou": true
+    },
+    {
+      "etapa": "axe-aviso-usuario",
+      "axe": 0,
+      "regras": 27,
+      "violacoes": []
+    },
+    {
+      "etapa": "sino-sem-chamada-da-agenda",
+      "passou": true
+    },
+    {
+      "etapa": "usuario-api-403",
+      "passou": true,
+      "mensagem": "Agendamentos estão desativados pelo administrador do app."
+    },
+    {
+      "etapa": "admin-com-menu",
+      "passou": true
+    },
+    {
+      "etapa": "axe-controle-admin",
+      "axe": 0,
+      "regras": 30,
+      "violacoes": []
+    },
+    {
+      "etapa": "admin-ativou",
+      "passou": true,
+      "banco": "1"
+    },
+    {
+      "etapa": "usuario-liberado-apos-ativar",
+      "passou": true
+    },
+    {
+      "etapa": "usuario-api-200",
+      "passou": true
+    },
+    {
+      "etapa": "admin-desativou-teclado",
+      "passou": true,
+      "eventosAntes": 10,
+      "esperado": 12,
+      "banco": "12"
+    },
+    {
+      "etapa": "usuario-bloqueado-de-novo",
+      "passou": true
+    },
+    {
+      "etapa": "celular-gaveta",
+      "passou": true,
+      "usuario": 0,
+      "admin": 1
+    },
+    {
+      "etapa": "usuario-aviso-390-sem-overflow",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-aviso-usuario-390",
+      "axe": 0,
+      "regras": 22,
+      "violacoes": []
+    },
+    {
+      "etapa": "admin-390-sem-overflow",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-controle-admin-390",
+      "axe": 0,
+      "regras": 25,
+      "violacoes": []
+    },
+    {
+      "etapa": "erros-js",
+      "total": 0,
+      "erros": []
+    }
+  ]
+}

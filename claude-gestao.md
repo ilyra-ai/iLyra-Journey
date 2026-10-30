@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `███████████████████░` **93,4%** |
+| Progresso          | `███████████████████░` **94,1%** |
 | Tarefas totais     | 136                              |
-| 🟢 Finalizadas     | 127                              |
+| 🟢 Finalizadas     | 128                              |
 | 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 9                                |
+| ⚪ A iniciar       | 8                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (127 ÷ 136 ≈ 93,4%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (128 ÷ 136 ≈ 94,1%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -64,6 +64,8 @@
 **Tarefa 130 concluída em 2026-10-30:** implementação, validação integral e QA publicados na `main`. Próximas tarefas na ordem numérica das não bloqueadas; as tarefas 86, 90, 100, 106, 115 e 127 foram movidas para a iniciar para execução posterior, conforme decisão do usuário.
 
 **Orientação do usuário em 2026-10-30 (após a 130):** continuar todas as tarefas até finalizar, executando em conjunto as que compartilham escopo. Execução conjunta autorizada e rastreada: 135 e 136 (mesma página `/dia`, com o diário dentro das abas). Ordem: 131, 132, 133, 134, 135 + 136 e, em seguida, 86, 90, 100, 106, 115 e 127. Cada entrega continua com validação integral, painel, commit e push na `main`, sem branches ou worktrees. Esta orientação substitui a restrição anterior a execuções conjuntas.
+
+**Tarefa 134 concluída em 2026-10-30:** agenda exclusiva do administrador por padrão, com ativação global auditada; validação integral e QA publicados na `main`. Próxima etapa: 135 + 136 em conjunto.
 
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
@@ -194,16 +196,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Commit e publicação da implementação local:** `2ab166554c20f60826349659c83dc1acc0e23585`, confirmado na `main` pela API autenticada do GitHub, com árvore idêntica à revisão local e atualização sem force. Nenhuma branch ou worktree criada. A 127 continua bloqueada somente na prova externa descrita acima; a publicação não a declara concluída.
 
 - **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
-
-### 134 · Agendamentos exclusivo do administrador por padrão, com ativação global para usuários
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-10-27 · **Execução:** segue a retomada autorizada e a ordem numérica das tarefas não bloqueadas.
-- **Pedido do usuário:** desativar o menu Agendamentos do sidebar e do app para que, inicialmente, somente o administrador possa visualizar e usar esse recurso. Dar ao administrador a opção de ativar ou desativar Agendamentos por completo para os usuários.
-- **Conferência prévia obrigatória:** inventariar a página, menus, sidebar desktop e celular, busca, atalhos, ações rápidas, botões, notificações de consultas, APIs e integrações vinculadas a agendamentos e profissionais. Reaproveitar a matriz de recursos dos planos, a autorização administrativa e os controles existentes; não confundir a ocultação de um item com o bloqueio funcional do recurso.
-- **Controle administrativo real:** criar uma configuração global persistida, desativada para usuários por padrão, que somente o administrador possa consultar e alterar nos controles administrativos apropriados. O administrador mantém seu próprio acesso para gerir o recurso. Ao ativar para os usuários, continuar exigindo os direitos do plano e demais autorizações aplicáveis; a configuração não pode conceder permissões administrativas nem ampliar recursos do plano.
-- **Desativação integral:** quando desligado para usuários, retirar todos os pontos de entrada do app e recusar também acesso direto e operações nas APIs correspondentes, inclusive leitura, criação, edição, exclusão e consultas auxiliares vinculadas à funcionalidade. Impedir atalhos pela URL, manipulação do navegador ou chamadas manuais. Não fazer consultas que sabidamente retornarão 403 para montar menus ou notificações. Conferir canais e calendários ligados a consultas, preservando funcionalidades independentes como as janelas pessoais de autoconhecimento.
-- **Persistência e integridade:** manter agendamentos, profissionais e histórico já registrados; desativar não significa apagar ou cancelar consultas reais. Reativar deve recuperar o acesso aos dados autorizados de cada titular. Aplicar a configuração após recarga, novo login e mudança de papel ou plano, evitando estado antigo conceder acesso indevido. Registrar alterações administrativas com responsável, data e estado anterior e novo, sem expor dados pessoais de consultas.
-- **Experiência e validação:** apresentar o controle em pt-BR, com estado claro, operação acessível e feedback de sucesso ou falha. Testar desligado por padrão, administrador, usuários dos planos, ativação/desativação, persistência, acesso direto, todas as operações pertinentes, isolamento e tentativas de alteração por não administradores. Validar menus e notificações em desktop e celular, regressões, gates e revisão do diff. Publicar commit e push próprios na `main`, sem branches ou worktrees, e atualizar este painel com o SHA real. Este registro não declara o recurso já desativado ou a implementação concluída.
 
 ### 135 · Diário pessoal por voz em `/dia`, com análise do dia, memória individual e calendário
 
@@ -2257,3 +2249,16 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 - **Implementação em 2026-10-30:** migração 060 (`meal_entries`, `meal_photos`); CRUD real com criação multipart idempotente, versões, troca/remoção de foto e exclusão; foto normalizada como na 127 (PNG sem metadados), privada e servida só ao titular; estimativa de quantidade do titular sempre rotulada, sem nutrientes inventados. Sem modelo autorizado, a leitura de fotos por IA não é oferecida nem declarada. Página `/alimentacao`, linha do tempo, relatório pessoal por seleção explícita (sem fotos), exportação LGPD com fotos, privacidade, README e `docs/diario-alimentar.md`.
 - **Evidências:** gates aprovados; 970 unitários; 584 integrações com MySQL real (4 novas); build sem avisos. QA em produção: 28 verificações, 9 axe sem violações após corrigir o nome acessível do campo de arquivo, zero exceções JavaScript; JPEG com EXIF guardado como PNG sem EXIF. Relatório em `docs/auditoria/2026-10-30-diario-alimentar-133.md`. Contas de QA removidas. Nenhuma branch ou worktree.
+
+### 134 · Agendamentos exclusivo do administrador por padrão, com ativação global para usuários
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-27 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Pedido do usuário:** desativar o menu Agendamentos do sidebar e do app para que, inicialmente, somente o administrador possa visualizar e usar esse recurso. Dar ao administrador a opção de ativar ou desativar Agendamentos por completo para os usuários.
+- **Conferência prévia obrigatória:** inventariar a página, menus, sidebar desktop e celular, busca, atalhos, ações rápidas, botões, notificações de consultas, APIs e integrações vinculadas a agendamentos e profissionais. Reaproveitar a matriz de recursos dos planos, a autorização administrativa e os controles existentes; não confundir a ocultação de um item com o bloqueio funcional do recurso.
+- **Controle administrativo real:** criar uma configuração global persistida, desativada para usuários por padrão, que somente o administrador possa consultar e alterar nos controles administrativos apropriados. O administrador mantém seu próprio acesso para gerir o recurso. Ao ativar para os usuários, continuar exigindo os direitos do plano e demais autorizações aplicáveis; a configuração não pode conceder permissões administrativas nem ampliar recursos do plano.
+- **Desativação integral:** quando desligado para usuários, retirar todos os pontos de entrada do app e recusar também acesso direto e operações nas APIs correspondentes, inclusive leitura, criação, edição, exclusão e consultas auxiliares vinculadas à funcionalidade. Impedir atalhos pela URL, manipulação do navegador ou chamadas manuais. Não fazer consultas que sabidamente retornarão 403 para montar menus ou notificações. Conferir canais e calendários ligados a consultas, preservando funcionalidades independentes como as janelas pessoais de autoconhecimento.
+- **Persistência e integridade:** manter agendamentos, profissionais e histórico já registrados; desativar não significa apagar ou cancelar consultas reais. Reativar deve recuperar o acesso aos dados autorizados de cada titular. Aplicar a configuração após recarga, novo login e mudança de papel ou plano, evitando estado antigo conceder acesso indevido. Registrar alterações administrativas com responsável, data e estado anterior e novo, sem expor dados pessoais de consultas.
+- **Experiência e validação:** apresentar o controle em pt-BR, com estado claro, operação acessível e feedback de sucesso ou falha. Testar desligado por padrão, administrador, usuários dos planos, ativação/desativação, persistência, acesso direto, todas as operações pertinentes, isolamento e tentativas de alteração por não administradores. Validar menus e notificações em desktop e celular, regressões, gates e revisão do diff. Publicar commit e push próprios na `main`, sem branches ou worktrees, e atualizar este painel com o SHA real. Este registro não declara o recurso já desativado ou a implementação concluída.
+
+- **Implementação em 2026-10-30:** migração 061 com `platform_feature_switches` (`agendamentos_usuarios` desativado por padrão, versão, responsável) e `platform_feature_switch_events` (estado anterior e novo, responsável, data, sem dados de consultas). O interruptor é aplicado no cálculo central de direitos: desligado, `appointments_active` e `professionals_total` ficam `enabled: false` e `globalmenteDesativado: true` para não administradores, então menu lateral, gaveta do celular, busca Ctrl K, sino, bloqueio de rota e APIs reagem juntos (403 "Agendamentos estão desativados pelo administrador do app."). Ligado, o plano continua valendo; o administrador mantém acesso. `GET/PUT /api/admin/agendamentos` com 401/403/400/409; cartão com chave, confirmação, última alteração e últimas 20 alterações em Admin → Planos; aviso "Recurso desativado pelo administrador" sem oferta de plano no acesso direto; exportação LGPD dos eventos do titular; `docs/agendamentos-para-usuarios.md`, `docs/api.md` e `docs/lgpd.md`.
+- **Evidências:** gates aprovados; 970 unitários; 586 integrações com MySQL real (2 novas); build sem avisos. QA em produção: 18 verificações e 4 axe sem violações, incluindo celular a 390 px. Corrigidos na QA: aviso genérico de plano no acesso direto (o bloqueio de rota vinha antes da página), texto do diálogo que trocava durante o fechamento, rótulo do histórico que sugeria total e concordância do aviso. Relatório em `docs/auditoria/2026-10-30-agendamentos-134.md`. Contas de QA removidas e interruptor deixado no padrão desativado. Nenhuma branch ou worktree.

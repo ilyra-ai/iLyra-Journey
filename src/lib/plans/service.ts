@@ -24,6 +24,10 @@ import {
 } from '@/types/subscription';
 import { AppSession } from '@/types/app-session';
 import { capacidadeDisponivel } from './dependencias';
+import {
+  RECURSOS_DE_AGENDAMENTO,
+  agendamentosLiberadosParaUsuarios,
+} from '@/lib/plataforma/interruptores';
 
 type QueryableConnection = PoolConnection;
 
@@ -544,6 +548,26 @@ async function buildFeatureAccessList(
   return features.sort((left, right) => left.sortOrder - right.sortOrder);
 }
 
+/**
+ * Interruptores globais que restringem recursos a usuários não
+ * administradores (tarefa 134). Nunca ampliam o que o plano libera.
+ */
+async function aplicarInterruptoresGlobais(
+  features: PlanFeatureAccess[],
+  connection?: QueryableConnection
+): Promise<PlanFeatureAccess[]> {
+  if (
+    !features.some((f) => RECURSOS_DE_AGENDAMENTO.includes(f.key)) ||
+    (await agendamentosLiberadosParaUsuarios(connection))
+  )
+    return features;
+  return features.map((f) =>
+    RECURSOS_DE_AGENDAMENTO.includes(f.key)
+      ? { ...f, enabled: false, globalmenteDesativado: true }
+      : f
+  );
+}
+
 async function fetchFeatureAccess(
   userId: string,
   role: string,
@@ -564,9 +588,8 @@ async function fetchFeatureAccess(
       connection
     ));
 
-  const featureList = await buildFeatureAccessList(
-    userId,
-    current.plan_id,
+  const featureList = await aplicarInterruptoresGlobais(
+    await buildFeatureAccessList(userId, current.plan_id, connection),
     connection
   );
   const feature = featureList.find((item) => item.key === featureKey);
@@ -629,7 +652,7 @@ export async function getAccountSubscriptionSummary(
             quotaValue: null,
             remainingValue: null,
           }))
-        : features,
+        : await aplicarInterruptoresGlobais(features),
   };
 }
 
@@ -1192,6 +1215,15 @@ export async function limiteDeMetricasDaConta(userId: string) {
   return feature.enabled ? feature.quotaValue : 0;
 }
 
+function mensagemDeRecursoIndisponivel(
+  feature: PlanFeatureAccess,
+  subscription: { plan_name: string }
+) {
+  return feature.globalmenteDesativado
+    ? 'Agendamentos estão desativados pelo administrador do app.'
+    : `O plano ${subscription.plan_name} não inclui ${feature.name}.`;
+}
+
 export async function requireFeatureEnabled(
   session: AppSession,
   featureKey: PlanFeatureKey,
@@ -1210,7 +1242,7 @@ export async function requireFeatureEnabled(
 
   if (!feature.enabled) {
     throw new HttpError(
-      `O plano ${subscription.plan_name} não inclui ${feature.name}.`,
+      mensagemDeRecursoIndisponivel(feature, subscription),
       403
     );
   }
@@ -1239,7 +1271,7 @@ export async function assertActiveRowsQuota(options: {
 
   if (!feature.enabled) {
     throw new HttpError(
-      `O plano ${subscription.plan_name} não inclui ${feature.name}.`,
+      mensagemDeRecursoIndisponivel(feature, subscription),
       403
     );
   }

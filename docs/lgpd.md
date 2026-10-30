@@ -173,6 +173,14 @@ registros e as fotos em base64 (PNG sem metadados). Excluir o registro remove
 a foto; excluir a conta remove ambos. Não há leitura por IA nem envio
 externo das fotos.
 
+## Agendamentos para usuários (tarefa 134)
+
+Desativar o recurso não apaga consultas nem profissionais; os dados seguem na
+exportação de cada titular. A trilha `platform_feature_switch_events` guarda
+só o identificador do administrador responsável, data e estados, sem dados
+de consultas; ela entra na exportação desse administrador e o vínculo vira
+nulo se a conta dele for excluída.
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 A prévia e o PDF consultam somente as categorias selecionadas do titular

@@ -55,6 +55,11 @@ export interface PlanFeatureAccess {
   usedValue: number | null;
   remainingValue: number | null;
   sortOrder: number;
+  /**
+   * Recurso desligado para usuários por configuração global do administrador
+   * (ex.: agendamentos, tarefa 134), independentemente do plano.
+   */
+  globalmenteDesativado?: boolean;
 }
 
 export interface SubscriptionPlanSummary {

@@ -1,15 +1,24 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, beforeAll, afterAll } from 'vitest';
 
 import { executeStatement } from '@/lib/mysql/pool';
 import type { PlanFeatureKey } from '@/types/subscription';
 import type { SemanaDaPessoa } from '@/lib/semana/servico';
 
-import { criarUsuario } from '../../../tests/integration/fixtures';
+import {
+  criarUsuario,
+  definirAgendamentosParaUsuarios,
+} from '../../../tests/integration/fixtures';
 import { chamar } from '../../../tests/integration/http';
 
 import * as dados from './data/[table]/route';
 import * as metas from './metas/route';
 import * as semana from './semana/route';
+
+// Pré-condição: agenda liberada para usuários (o padrão é desativado, tarefa
+// 134). Este arquivo verifica os direitos do plano sobre consultas e
+// profissionais.
+beforeAll(() => definirAgendamentosParaUsuarios(true));
+afterAll(() => definirAgendamentosParaUsuarios(false));
 
 // Liga ou desliga um recurso no plano Free (como o admin faz na matriz).
 async function recursoNoFree(recurso: PlanFeatureKey, habilitado: boolean) {

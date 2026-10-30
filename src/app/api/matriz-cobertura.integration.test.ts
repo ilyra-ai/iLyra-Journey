@@ -3,6 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   criarUsuario,
   type UsuarioDeTeste,
+  definirAgendamentosParaUsuarios,
 } from '../../../tests/integration/fixtures';
 import { chamar } from '../../../tests/integration/http';
 import { executeStatement, queryRows } from '@/lib/mysql/pool';
@@ -47,6 +48,12 @@ import * as feedback from './coach/feedback/route';
 import * as ephemeris from './astrology/ephemeris/route';
 import * as feed from './calendario/feed/[arquivo]/route';
 import { cidadePorId } from '@/lib/geo/cidades';
+
+// Pré-condição: agenda liberada para usuários (o padrão é desativado, tarefa
+// 134). Este arquivo verifica os direitos do plano sobre consultas e
+// profissionais.
+beforeAll(() => definirAgendamentosParaUsuarios(true));
+afterAll(() => definirAgendamentosParaUsuarios(false));
 
 let admin: UsuarioDeTeste;
 let original: PlanMatrixPlan[];

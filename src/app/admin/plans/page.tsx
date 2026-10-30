@@ -6,6 +6,7 @@ import { SplashScreen } from '@/components/SplashScreen';
 import { useAuth } from '@/context/AuthContext';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 import { AdminPlanMatrixContent } from '@/components/admin/AdminPlanMatrixContent';
+import { AgendamentosParaUsuarios } from '@/components/admin/AgendamentosParaUsuarios';
 
 export default function AdminPlansPage() {
   const { session } = useAuth();
@@ -25,7 +26,10 @@ export default function AdminPlansPage() {
 
   return (
     <AppShell>
-      <AdminPlanMatrixContent />
+      <div className="flex min-w-0 flex-col gap-6">
+        <AgendamentosParaUsuarios />
+        <AdminPlanMatrixContent />
+      </div>
     </AppShell>
   );
 }

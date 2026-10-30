@@ -255,6 +255,15 @@ histórico autorizado. Criação idempotente em multipart, versões, foto
 normalizada sem metadados e servida só ao titular. Detalhes em
 [Diário alimentar](./diario-alimentar.md).
 
+## Agendamentos para usuários (tarefa 134)
+
+`GET/PUT /api/admin/agendamentos` exigem sessão de administrador. O `PUT`
+recebe `ativo` e `versao` (409 se mudou) e grava responsável, data e estados
+anterior e novo. Desativado (padrão), `/api/data/appointments` e
+`/api/data/professionals` respondem 403 para usuários, com a mensagem
+"Agendamentos estão desativados pelo administrador do app.". Detalhes em
+[Agendamentos para usuários](./agendamentos-para-usuarios.md).
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 `GET /api/relatorio-pessoal` fornece opções autorizadas.

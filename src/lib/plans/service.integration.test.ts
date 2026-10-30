@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, afterAll } from 'vitest';
 
 import { HttpError } from '@/lib/http-error';
 import { queryRows } from '@/lib/mysql/pool';
@@ -18,7 +18,14 @@ import {
   contar,
   criarUsuario,
   type UsuarioDeTeste,
+  definirAgendamentosParaUsuarios,
 } from '../../../tests/integration/fixtures';
+
+// Pré-condição: agenda liberada para usuários (o padrão é desativado, tarefa
+// 134). Este arquivo verifica os direitos do plano sobre consultas e
+// profissionais.
+beforeAll(() => definirAgendamentosParaUsuarios(true));
+afterAll(() => definirAgendamentosParaUsuarios(false));
 
 // Regras de plano contra a matriz real semeada pelas migrations (003): os
 // valores esperados são lidos do próprio banco, não fixados no teste.

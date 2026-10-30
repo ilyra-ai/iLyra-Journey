@@ -27,8 +27,18 @@ export function PlanFeatureGate({
   const faltante = features.find((key) => !isPlanFeatureEnabled(data, key));
   if (!faltante) return children;
   if (ocultar) return null;
-  const nome =
-    data?.features.find((f) => f.key === faltante)?.name ?? 'esta página';
+  const recurso = data?.features.find((f) => f.key === faltante),
+    nome = recurso?.name ?? 'esta página';
+  // Desligado pelo administrador para todos (tarefa 134): não é limitação do
+  // plano, então não há oferta de troca de plano.
+  if (recurso?.globalmenteDesativado)
+    return (
+      <PlanUpgradeNotice
+        currentPlanKey={data?.plan.key ?? 'free'}
+        title="Recurso desativado pelo administrador"
+        description={`O recurso “${nome}” está desativado pelo administrador do app para todos os usuários. Seus registros continuam guardados e voltam a aparecer se o recurso for reativado.`}
+      />
+    );
   return (
     <PlanUpgradeNotice
       currentPlanKey={data?.plan.key ?? 'free'}

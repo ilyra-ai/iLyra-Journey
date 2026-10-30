@@ -58,3 +58,15 @@ export async function contar(
   const linhas = await queryRows<{ total: number }>(sql, params);
   return Number(linhas[0]?.total ?? 0);
 }
+
+/**
+ * Configuração global de Agendamentos (tarefa 134). O padrão do produto é
+ * desativado para usuários; testes de direitos do plano da agenda ligam o
+ * recurso como pré-condição e restauram o padrão ao terminar.
+ */
+export async function definirAgendamentosParaUsuarios(ativo: boolean) {
+  await executeStatement(
+    "UPDATE platform_feature_switches SET enabled=?,version=version+1 WHERE switch_key='agendamentos_usuarios'",
+    [ativo]
+  );
+}
