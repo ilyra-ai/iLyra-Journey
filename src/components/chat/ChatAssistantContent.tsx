@@ -45,6 +45,12 @@ import { ChatInput } from './ChatInput';
 import { TypingIndicator } from './TypingIndicator';
 import { MemoriaDaLyra } from './MemoriaDaLyra';
 import { PesquisaDeConversas } from './PesquisaDeConversas';
+import { useIsAdmin } from '@/hooks/use-is-admin';
+import {
+  AvaliacaoDaResposta,
+  ControleDeTreinamento,
+  useTreinamentoDoChat,
+} from './TreinamentoDoChat';
 
 const PainelDaConversa = dynamic(
   () => import('./PainelDaConversa').then((modulo) => modulo.PainelDaConversa),
@@ -228,6 +234,8 @@ export function ChatAssistantContent({
   mensagemId?: string | null;
   aoAbrirConversa?: (id: string | null) => void;
 } = {}) {
+  const administrador = useIsAdmin();
+  const treino = useTreinamentoDoChat(administrador);
   const [anexos, setAnexos] = useState<string[]>([]);
   const [consentimentoAnexos, setConsentimentoAnexos] = useState(false);
   const historico = useConversaLyra(
@@ -436,6 +444,7 @@ export function ChatAssistantContent({
               <span className="sr-only sm:hidden">Nova conversa</span>
             </Button>
           )}
+          {administrador ? <ControleDeTreinamento treino={treino} /> : null}
           {chatConfig.showIntegrations ? (
             <SobreOChat
               titulo={chatConfig.integrationsTitle}
@@ -628,6 +637,13 @@ export function ChatAssistantContent({
                       : undefined
                   }
                 />
+                {treino.ativo &&
+                msg.sender === 'ai' &&
+                msg.turnoId &&
+                !msg.emFluxo &&
+                !msg.incompleta ? (
+                  <AvaliacaoDaResposta turnoId={msg.turnoId} treino={treino} />
+                ) : null}
                 {msg.anexos?.length ? (
                   <Button
                     type="button"

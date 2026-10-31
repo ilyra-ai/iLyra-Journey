@@ -1,0 +1,80 @@
+{
+  "data": "2026-10-30",
+  "tarefa": 90,
+  "modelo": {
+    "nome": "Qwen/Qwen2.5-0.5B-Instruct",
+    "licenca": "apache-2.0",
+    "revisao": "7ae557604adf67be50417f59c2c2f167def9a775",
+    "mecanismo": "KTO + LoRA (TRL 0.24.0, PEFT 0.17.1)"
+  },
+  "treinoReal": {
+    "exemplos": 6,
+    "segundos": 80,
+    "versao": 1,
+    "antes": {
+      "margem": 0.2386,
+      "logprobDesejaveis": -2.9598,
+      "logprobIndesejaveis": -3.1985
+    },
+    "depois": {
+      "margem": 0.921,
+      "logprobDesejaveis": -2.6308,
+      "logprobIndesejaveis": -3.5518
+    },
+    "perdaFinal": 0.2632,
+    "picoDeMemoriaMB": 4634,
+    "tokens": 384
+  },
+  "ensaioDireto": {
+    "exemplos": 6,
+    "margemAntes": -0.9534,
+    "margemDepois": 1.02,
+    "segundos": 40
+  },
+  "resultados": [
+    {
+      "etapa": "modelo-treinavel-conectado",
+      "passou": true
+    },
+    {
+      "etapa": "tela-mostra-versao-aplicada",
+      "passou": true,
+      "texto": "Versão 1 aplicada a todos em 30/10/2026, 21:53 com 6 exemplos. Margem entre respostas aprovadas e reprovadas: 0,24 antes, 0,92 depois."
+    },
+    {
+      "etapa": "axe-controle-aplicado",
+      "axe": 0,
+      "regras": 29,
+      "violacoes": []
+    },
+    {
+      "etapa": "usuario-atendido-pela-versao-1",
+      "passou": false,
+      "erro": "{\"antes\":0,\"depois\":0,\"saude\":{\"ok\":true,\"modelo\":\"Qwen/Qwen2.5-0.5B-Instruct\",\"revisao\":\"7ae557604adf67be50417f59c2c2f167def9a775\",\"versao\":1}}",
+      "observacao": "Contagem automática feita antes de o Python gravar o log (buffer). Conferido no log: chamadas POST /v1/chat/completions 200 nas linhas 62 e 70, depois do fim do treino (linha 49), com versão 1 ativa."
+    },
+    {
+      "etapa": "recarga-mantem-avaliacao",
+      "passou": true,
+      "pressionado": "Boa resposta"
+    },
+    {
+      "etapa": "chat-390-sem-overflow",
+      "passou": true,
+      "sw": 390,
+      "w": 390
+    },
+    {
+      "etapa": "axe-controle-390",
+      "axe": 0,
+      "regras": 28,
+      "violacoes": []
+    },
+    {
+      "etapa": "erros-js",
+      "total": 0,
+      "erros": [],
+      "todos": []
+    }
+  ]
+}

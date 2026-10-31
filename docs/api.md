@@ -274,6 +274,21 @@ escreve a análise com o modelo autorizado, recusando respostas infiéis ao
 relato; sem consentimento de nuvem, só modelos locais. Contratos, estados e
 limites em [Diário pessoal](./diario-pessoal.md).
 
+## Treinamento por feedback humano (tarefa 90)
+
+Somente administradores (401 sem sessão, 403 para usuários).
+`GET /api/admin/treinamento` informa se o modelo treinável está conectado,
+a sessão ligada ou treinando, a versão ativa e o histórico com métricas.
+`POST /api/admin/treinamento` recebe `{ acao: 'ativar' | 'desativar' }`:
+ligar exige o modelo `lyra-treinavel` como primeiro da ordem (409 sem ele);
+desligar envia as avaliações ao serviço, que treina e aplica a nova versão
+(também reenvia um treino que falhou). `GET/POST
+/api/admin/treinamento/avaliacoes` e `PATCH/DELETE
+/api/admin/treinamento/avaliacoes/[id]` (com `versao`) são o CRUD das
+avaliações da sessão ligada; só respostas das conversas do próprio
+administrador são aceitas (404 nas demais). Detalhes em
+[Treinamento por feedback](./treinamento-por-feedback.md).
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 `GET /api/relatorio-pessoal` fornece opções autorizadas.

@@ -20,6 +20,7 @@ export const SEGREDOS_GERADOS = {
   ADMIN_BOOTSTRAP_PASSWORD: 24,
   LYRA_MEMORIA_SEGREDO: 48,
   LYRA_MEMORIA_BANCO_SENHA: 32,
+  LYRA_TREINO_SEGREDO: 48,
 };
 
 // HS256 exige chave de pelo menos 256 bits (RFC 7518, seção 3.2).

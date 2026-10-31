@@ -194,6 +194,17 @@ sem ele, apenas modelos locais o recebem. Com a memória ligada, o relato
 entra na fila da memória individual; excluir o relato do diário não apaga
 lembranças já extraídas, que são corrigidas ou apagadas na página Memória.
 
+## Treinamento por feedback humano (tarefa 90)
+
+`ai_training_feedback` guarda pergunta, resposta, nota e resposta ideal das
+conversas do **próprio administrador** que avaliou; entra na exportação
+dele e é removida ao excluir a conversa ou a conta. `ai_training_sessions`
+guarda quem ligou, datas, versão e métricas; o vínculo com a conta vira nulo
+se ela for excluída. Conversas de outros usuários nunca entram no treino, e
+o treino roda no serviço local, sem envio externo. Os pesos treinados ficam
+no volume do serviço; eles não guardam o texto das avaliações, mas foram
+ajustados com ele, por isso o treino só usa conversas do administrador.
+
 ## Relatório pessoal em PDF (tarefa 122)
 
 A prévia e o PDF consultam somente as categorias selecionadas do titular

@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `███████████████████░` **96,3%** |
+| Progresso          | `███████████████████░` **97,1%** |
 | Tarefas totais     | 136                              |
-| 🟢 Finalizadas     | 131                              |
+| 🟢 Finalizadas     | 132                              |
 | 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 5                                |
+| ⚪ A iniciar       | 4                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-10-30                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (131 ÷ 136 ≈ 96,3%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (132 ÷ 136 ≈ 97,1%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -73,6 +73,8 @@
 
 **Tarefa 86 concluída em 2026-10-30:** geração de imagens no chat comprovada com modelo de difusão real local na segunda posição; o adaptador Gemini aguarda a chave do usuário para teste externo.
 
+**Tarefa 90 concluída em 2026-10-30:** treinamento real de pesos por feedback humano no chat (KTO + LoRA), com versão aplicada a todos e métricas reais.
+
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
@@ -96,19 +98,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 90 · Treinamento real por Aprendizado por Reforço com Feedback Humano via chat
-
-- **Status:** ⚪ a iniciar (retirada das bloqueadas em 2026-10-30, por decisão do usuário) · **Registro:** 2026-10-22.
-- **Controle administrativo:** acrescentar no chat da Lyra, ao lado de “Como a Lyra responde”, um botão de alternância On/Off chamado **“Treinamento”**, visível somente para o administrador do app. Ao ativar On, habilitar automaticamente o treinamento do Motor Lyra via chat. Exigir um modelo de IA realmente conectado: sem modelo conectado o treinamento não funciona, e a interface deve informar essa condição.
-- **Ativação e salvamento:** ao clicar em On, informar ao Motor Lyra e ao modelo conectado que foi habilitado o treinamento do tipo **Aprendizado por Reforço com Feedback Humano**. Salvar automaticamente tudo que for treinado durante o processo, sem depender de clicar em Off para persistir os dados; preservar o treinamento diante de recarga ou interrupção.
-- **Finalização e aplicação:** ao clicar em Off, informar que o treinamento foi finalizado e que o Motor Lyra deve começar a usar os novos treinamentos com **todos os usuários**, antigos e novos. Preservar rastreabilidade da versão aplicada e isolamento dos dados pessoais das conversas.
-- **Implementação real:** investigar a arquitetura, as capacidades dos modelos e as APIs oficiais antes de definir o mecanismo. Comprovar feedback humano, processo de aprendizagem, persistência e efeito do treinamento; não apresentar simples armazenamento de mensagens, memória ou alteração de prompt como treinamento RLHF de pesos do modelo. Registrar com precisão o mecanismo implementado e qualquer capacidade externa indispensável, sem simular resultados.
-- **Permissões e validação:** comprovar que o controle não aparece para outros planos, perfis e usuários não administradores e que o servidor também recusa operações não autorizadas. Validar On/Off, ausência e perda de conexão, salvamento durante On, retomada, aplicação global após Off, CRUD dos dados de treinamento e regressões do chat, desktop/mobile, testes, gates, commit e push individuais na main.
-- **Verificação em 2026-10-24:** a base atual possui documentos de conhecimento e preferências do chat, mas isso não treina pesos. Não há provedor de treinamento conectado nesta nuvem nem pesos locais licenciados e disponíveis para treino; o download no Hugging Face foi recusado pelo proxy com HTTP 403. O Jan do computador do usuário não é acessível pelo localhost da nuvem. Ambiente Python de inferência foi preparado separadamente, sem alegar que ele oferece RLHF ou que foi treinado.
-- **Limite preservado:** não foi acrescentado um botão que apenas salve mensagens e o apresente como RLHF. Retomar a implementação quando houver um modelo treinável/endpoint real acessível, com licença e capacidade de persistir e aplicar a versão treinada. As demais tarefas independentes continuam.
-
-- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
 
 ### 100 · Aba Faturamento no dashboard e gestão financeira completa
 
@@ -2277,3 +2266,19 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 - **Conclusão em 2026-10-30:** geração comprovada com inferência real de um modelo de difusão aberto (`nota-ai/bk-sdm-tiny`, OpenRAIL-M, revisão fixada) servido localmente em `/v1/images/generations` e configurado na segunda posição pela administração, com o Motor Lyra em primeiro. Pelo chat: imagem do pedido e interpretação visual do mapa (512×512, WebP, ~65 s cada), download privado, 404 para outra conta, 401 sem sessão, reabertura, mapa sem dados pessoais no pedido e aviso sem segundo modelo. Corrigido o `eslint-disable` de `ImagemDaConversa` (agora `next/image` com `unoptimized`).
 - **Evidências:** gates aprovados; 982 unitários; 594 integrações; build sem avisos; QA com 2 axe sem violações e 390 px sem rolagem. Relatório em `docs/auditoria/2026-10-30-imagens-86.md`. Limite declarado: o adaptador Gemini não foi exercitado com o provedor externo, que exige a chave do usuário. Nenhuma branch ou worktree.
+
+### 90 · Treinamento real por Aprendizado por Reforço com Feedback Humano via chat
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** publicado na `main` (SHA confirmado no registro seguinte).
+- **Controle administrativo:** acrescentar no chat da Lyra, ao lado de “Como a Lyra responde”, um botão de alternância On/Off chamado **“Treinamento”**, visível somente para o administrador do app. Ao ativar On, habilitar automaticamente o treinamento do Motor Lyra via chat. Exigir um modelo de IA realmente conectado: sem modelo conectado o treinamento não funciona, e a interface deve informar essa condição.
+- **Ativação e salvamento:** ao clicar em On, informar ao Motor Lyra e ao modelo conectado que foi habilitado o treinamento do tipo **Aprendizado por Reforço com Feedback Humano**. Salvar automaticamente tudo que for treinado durante o processo, sem depender de clicar em Off para persistir os dados; preservar o treinamento diante de recarga ou interrupção.
+- **Finalização e aplicação:** ao clicar em Off, informar que o treinamento foi finalizado e que o Motor Lyra deve começar a usar os novos treinamentos com **todos os usuários**, antigos e novos. Preservar rastreabilidade da versão aplicada e isolamento dos dados pessoais das conversas.
+- **Implementação real:** investigar a arquitetura, as capacidades dos modelos e as APIs oficiais antes de definir o mecanismo. Comprovar feedback humano, processo de aprendizagem, persistência e efeito do treinamento; não apresentar simples armazenamento de mensagens, memória ou alteração de prompt como treinamento RLHF de pesos do modelo. Registrar com precisão o mecanismo implementado e qualquer capacidade externa indispensável, sem simular resultados.
+- **Permissões e validação:** comprovar que o controle não aparece para outros planos, perfis e usuários não administradores e que o servidor também recusa operações não autorizadas. Validar On/Off, ausência e perda de conexão, salvamento durante On, retomada, aplicação global após Off, CRUD dos dados de treinamento e regressões do chat, desktop/mobile, testes, gates, commit e push individuais na main.
+- **Verificação em 2026-10-24:** a base atual possui documentos de conhecimento e preferências do chat, mas isso não treina pesos. Não há provedor de treinamento conectado nesta nuvem nem pesos locais licenciados e disponíveis para treino; o download no Hugging Face foi recusado pelo proxy com HTTP 403. O Jan do computador do usuário não é acessível pelo localhost da nuvem. Ambiente Python de inferência foi preparado separadamente, sem alegar que ele oferece RLHF ou que foi treinado.
+- **Limite preservado:** não foi acrescentado um botão que apenas salve mensagens e o apresente como RLHF. Retomar a implementação quando houver um modelo treinável/endpoint real acessível, com licença e capacidade de persistir e aplicar a versão treinada. As demais tarefas independentes continuam.
+
+- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
+
+- **Implementação em 2026-10-30:** serviço `services/treinamento` que treina os **pesos** de `Qwen/Qwen2.5-0.5B-Instruct` (Apache-2.0) com KTO + LoRA (TRL), registrado com precisão como alinhamento por feedback humano da família do RLHF, sem modelo de recompensa nem PPO; serve as versões cumulativas em `/v1/chat/completions` (`lyra-treinavel`). App: migração 063, interruptor "Treinamento" só do administrador ao lado de "Como a Lyra responde", avaliações salvas na hora (CRUD), finalização com treino e aplicação a todos, acompanhamento, métricas, reenvio de falha, LGPD, Compose opcional e `docs/treinamento-por-feedback.md`.
+- **Evidências:** gates aprovados; 984 unitários; 597 integrações; 30 testes de launchers; build sem avisos. Treino real pelo app: versão 1 aplicada com margem de 0,24 para 0,92 em 80 s; queda real no meio do treino tratada como falha, com reenvio; usuário comum atendido pela nova versão; axe sem violações. Corrigidos: versões que não acumulavam, consumo de memória, tarefa perdida travando a sessão, texto apagado ao digitar e estado após recarga. Limites: imagem Docker do serviço não construída aqui (proxy no build). Relatório em `docs/auditoria/2026-10-30-treinamento-90.md`. Nenhuma branch ou worktree.

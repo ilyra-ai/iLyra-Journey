@@ -121,6 +121,39 @@ services:
       retries: 12
       start_period: 90s
 
+  # Treinamento por feedback humano (tarefa 90). Opcional e pesado (PyTorch e
+  # modelo base): sobe só com --profile treinamento. Serve o modelo
+  # "lyra-treinavel" em http://127.0.0.1:${LYRA_TREINO_PORTA:-8021}/v1.
+  treinamento:
+    profiles: ['treinamento']
+    build:
+      context: ./services/treinamento
+    restart: unless-stopped
+    environment:
+      LYRA_TREINO_SEGREDO: ${LYRA_TREINO_SEGREDO:?gere os segredos com pnpm env:init}
+    ports:
+      - '127.0.0.1:${LYRA_TREINO_PORTA:-8021}:8000'
+    volumes:
+      - treinamento_data:/dados
+    read_only: true
+    tmpfs:
+      - /tmp:size=512m,mode=1777
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'python',
+          '-c',
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/saude', timeout=5)",
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+      start_period: 180s
+
 volumes:
   mysql_data:
   memoria_data:
+  treinamento_data:
