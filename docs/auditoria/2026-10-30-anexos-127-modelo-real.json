@@ -1,0 +1,15 @@
+{
+  "data": "2026-10-30",
+  "tarefa": 127,
+  "modelo": "Qwen2.5-1.5B-Instruct Q4_K_M (Apache-2.0), llama-cpp-python 0.3.16 local, CPU 2 núcleos",
+  "formatoAceitoPeloServidor": "json_object com esquema (json_schema recusado com 500 e recuo automático do app)",
+  "respostaBrutaDoModelo": "{\"codigoVisual\":\"[]\",\"resposta\":\"✨ Olá, xuxu! Você bebeu menos água na quarta-feira. O que anotou nesse dia? Por favor, forneça as informações.\" , \"fontes\":[{ \"anexo\":1,\"linhaInicial\":1,\"linhaFinal\":6,\"regiao\":\"registros de hidratação da semana\"}, { \"anexo\":2,\"linhaInicial\":7,\"linhaFinal\":8,\"regiao\":\"Observação: na quarta-feira tive dor de cabeça à tarde.\"}],\"naoLidos\":[{ \"anexo\":1,\"motivo\":\"registros de hidratação da semana\"}]}",
+  "resultadoNoApp": "recusada pela validação dos anexos; turno gravado como erro, sem resposta salva",
+  "motivosObservados": [
+    "codigoVisual deveria ser vazio sem imagens e veio '[]'",
+    "cita anexo 2 inexistente",
+    "marca o anexo 1 como não lido depois de citá-lo",
+    "pede à pessoa a informação que está no arquivo"
+  ],
+  "modelo05B": "também recusado (Qwen2.5-0.5B-Instruct)"
+}

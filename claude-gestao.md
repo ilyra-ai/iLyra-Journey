@@ -179,6 +179,8 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ## Tópico 4 · Histórico das Tarefas Finalizadas
 
+- **Prova com modelo real local em 2026-10-30 (tarefa ainda a iniciar):** TXT real enviado como anexo e pergunta com consentimento pela API do app, com o Qwen2.5-0.5B e depois o Qwen2.5-1.5B locais (Apache-2.0). O servidor recusou `json_schema` e o app recuou para `json_object` com o esquema, como previsto. As duas respostas foram **recusadas** pela validação dos anexos e o turno ficou como erro, sem resposta salva. A resposta bruta do 1,5B mostra o motivo: `codigoVisual` "[]" sem imagens, citação de um anexo 2 inexistente, o anexo 1 marcado como não lido depois de citado e pedido à pessoa da informação que estava no arquivo. **Fronteira restante:** uma resposta aceita, com referências corretas a TXT e fotos, exige modelo maior (texto) e um modelo com visão, inviáveis em tempo útil neste CPU; deve ser comprovada no computador do usuário. Evidência em `docs/auditoria/2026-10-30-anexos-127-modelo-real.json`. Tarefa não declarada concluída.
+
 ### 01 · Instrução mestra no `CLAUDE.md` e obrigatoriedade para agentes de IA
 
 - **Status:** 🟢 finalizada · **Commit:** `1272c56` · **Push:** `db86930..1272c56 main -> main` (confirmado)
