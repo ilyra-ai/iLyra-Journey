@@ -75,6 +75,19 @@
 
 **Tarefa 90 concluída em 2026-10-30:** treinamento real de pesos por feedback humano no chat (KTO + LoRA), com versão aplicada a todos e métricas reais.
 
+**QA geral no navegador em 2026-11-03 (pedido do usuário para o final):** os perfis Free, Care (assinante real da Stripe de teste) e administrador percorreram todas as rotas do menu lateral e do menu do usuário em 1440 e 390 px, mais uma varredura profunda das abas administrativas. Foram 70 páginas por perfil, sem erro de console, falha 5xx, tela de erro ou transbordo. Interações conferidas:
+
+- menu do usuário e tema;
+- navegação móvel;
+- notificações;
+- busca Ctrl+K;
+- apresentação opcional;
+- CRUD de metas pela tela, conferido no MySQL (criar, atualizar progresso e excluir com confirmação);
+- busca na gestão de usuários;
+- abas de conteúdo.
+
+Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas tarefas 100 (filtro de ambiente e transbordo em 320 px) e 115 (falso positivo da unidade de pressão). Relatório: `docs/auditoria/2026-11-03-qa-geral-navegador.md`.
+
 ## Tópico 2 · Tarefas em Andamento ou Bloqueadas
 
 ### ANDAMENTO
