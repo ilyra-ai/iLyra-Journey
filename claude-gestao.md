@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `███████████████████░` **97,1%** |
-| Tarefas totais     | 136                              |
+| Progresso          | `███████████████████░` **96,4%** |
+| Tarefas totais     | 137                              |
 | 🟢 Finalizadas     | 132                              |
 | 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 4                                |
+| ⚪ A iniciar       | 5                                |
 | Branch de trabalho | `main` (única permitida)         |
-| Última atualização | 2026-10-30                       |
+| Última atualização | 2026-11-02                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (132 ÷ 136 ≈ 97,1%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (132 ÷ 137 ≈ 96,4%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -177,9 +177,20 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 - **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
 
-## Tópico 4 · Histórico das Tarefas Finalizadas
-
 - **Prova com modelo real local em 2026-10-30 (tarefa ainda a iniciar):** TXT real enviado como anexo e pergunta com consentimento pela API do app, com o Qwen2.5-0.5B e depois o Qwen2.5-1.5B locais (Apache-2.0). O servidor recusou `json_schema` e o app recuou para `json_object` com o esquema, como previsto. As duas respostas foram **recusadas** pela validação dos anexos e o turno ficou como erro, sem resposta salva. A resposta bruta do 1,5B mostra o motivo: `codigoVisual` "[]" sem imagens, citação de um anexo 2 inexistente, o anexo 1 marcado como não lido depois de citado e pedido à pessoa da informação que estava no arquivo. **Fronteira restante:** uma resposta aceita, com referências corretas a TXT e fotos, exige modelo maior (texto) e um modelo com visão, inviáveis em tempo útil neste CPU; deve ser comprovada no computador do usuário. Evidência em `docs/auditoria/2026-10-30-anexos-127-modelo-real.json`. Tarefa não declarada concluída.
+- **Compatibilidade com o Jan em 2026-11-02 (entrega própria, pré-requisito da prova com o modelo do usuário):** com o Qwen3_8-2B do Jan do usuário, o pedido exato da 127 voltou em markdown. Causa raiz comprovada pelo navegador integrado no computador do usuário: o Jan descarta a mensagem de sistema e ignora o `response_format`. Com "seu nome é Zéquinha" no sistema, a resposta foi "sou um modelo de inteligência artificial"; na mensagem do usuário, "sou o Zéquinha". Implementada em Admin → Modelos de IA a opção por provedor **Instruções na mensagem do usuário** (migração 064 com CHECK 0/1; ligada no preset e nas conexões salvas do Jan; demais desligadas). Com ela, instruções, JSON Schema e pedido vão em uma única mensagem do usuário, e o `response_format` continua sendo enviado. O teste de conexão respeita a opção. Gates: formato, lint e tipos com exit 0; 988 unitários (4 novos); 601 integrações em 67 arquivos (3 novas: gravação, leitura, troca, recusa de valor inválido, teste de conexão e 403 para não administrador); build sem avisos. A prova aceita da 127 e da 115 com esse modelo segue na próxima etapa; esta entrega não as declara concluídas.
+- **Esquema da leitura por tipo de anexo em 2026-11-02 (entrega própria):** com a opção do Jan ligada, o pedido real do app (conferido por SHA-256 no navegador do computador do usuário) foi enviado ao Qwen3_8-2B pela ponte manual. A resposta voltou em markdown e o app recusou corretamente (503, nada salvo). Repetindo o mesmo pedido 6 vezes, 1 passaria: o modelo preenchia `regiao` em TXT, que a conferência recusa. Causa: o esquema genérico aceitava região e linhas para qualquer anexo. Implementado `esquemaDaLeitura`: anexo até a quantidade selecionada, linha até a maior linha, só TXT exige linhas e região nula com `codigoVisual` vazio, e só imagem exige região e linhas nulas. Com ele, 6 de 8 respostas vieram com a forma correta. A conferência do servidor não foi afrouxada. Gates: formato, lint e tipos com exit 0; 988 unitários; 601 integrações (esquema por tipo coberto nos testes de TXT e de imagem); build sem avisos. Documentado em `docs/anexos-do-chat.md`.
+
+- **Prova real com o modelo do usuário em 2026-11-02 (TXT):** com a opção do Jan e o esquema por tipo, o app em produção enviou a pergunta "Em qual dia eu bebi menos água e o que anotei nesse dia?" com `hidratacao.txt`. O pedido foi levado sem alteração ao Qwen3_8-2B do Jan do usuário (SHA-256 do conteúdo conferido no navegador integrado) e a resposta bruta voltou ao app pela ponte local, sem edição. Resultado: HTTP 200 em 44 s, turno `concluido` e resposta salva: quarta-feira, 1 litro, dor de cabeça à tarde, com as fontes (linhas 1–7) montadas pelo servidor e o crédito "Leitura por Jan, modelo Qwen3_8-2B-Q4_K_M". Evidência em `docs/auditoria/2026-11-02-anexos-127-jan.json`. **Restante:** a leitura de foto com o Gemma-4-E4B do Jan, que reconheceu o texto de uma imagem de teste.
+
+### 137 · Pasta `Old` com os arquivos que o app não utiliza
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-11-02.
+- **Pedido do usuário:** depois de finalizar os testes em geral, criar uma pasta chamada **"Old"** na raiz do projeto e mover para ela todos os arquivos que não são utilizados pelo app. Na raiz, nas pastas e nas subpastas devem ficar somente os arquivos necessários para executar o app por completo, de forma real: sem simulações, placeholders, hardcode ou cortes em linhas e códigos.
+- **Critério de execução:** só depois da QA geral. Mover somente com evidência de não uso. Para cada arquivo, procurar com `rg` imports, requires, imports dinâmicos, scripts, loaders, configurações, documentação, launchers (`run.py`, `run.sh`, `run_windows.py`), Docker Compose, migrações, testes, CI e uso indireto. Não mover nada por intuição nem por indicação isolada de ferramenta automática. Preservar o que a instalação limpa, os launchers, o build, os testes, as migrações e a documentação oficial exigem. Usar `git mv` para manter o histórico; nenhuma exclusão.
+- **Validação:** depois da movimentação, repetir a instalação limpa (`pnpm install --frozen-lockfile`), os gates (formato, lint, tipos, unitários, integrações e build), a subida pelos launchers, as migrações e a QA no navegador, para provar que o app continua completo. Registrar a lista do que foi movido e o motivo de cada item, fazer commit e push próprios na `main`, sem branches ou worktrees, e atualizar este painel.
+
+## Tópico 4 · Histórico das Tarefas Finalizadas
 
 ### 01 · Instrução mestra no `CLAUDE.md` e obrigatoriedade para agentes de IA
 
@@ -2116,8 +2127,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Evidências:** 693 unitários em 86 arquivos, 534 integrações MySQL em 57 arquivos, formato, lint sem avisos, tipos e build aprovados. Dez verificações funcionais e sete execuções axe sem violações, 320/390/1280/1440 e zoom 200%, teclado, foco, CRUD e isolamento. Um minuto ativo aguardado no relógio real, recarga e suspensão real controlada da página, Web Audio observado pelo CDP, desconexão/reconexão reais com erro em pt-BR. Não se alega alto-falante físico, suspensão de hardware nem atenção contínua. Relatórios `docs/foco-e-pausa.md` e `docs/auditoria/2026-10-29-foco-126.md`. Publicação confirmada na `main` pela API autenticada do GitHub.
 
 - **Commit e publicação:** `84b817602b6bf417249ee9d8df31ea5657a28fa2`, conteúdo conferido por SHA e main atualizada com verificação do commit anterior, sem force, branches ou worktrees.
-- **Compatibilidade com o Jan em 2026-11-02 (entrega própria, pré-requisito da prova com o modelo do usuário):** com o Qwen3_8-2B do Jan do usuário, o pedido exato da 127 voltou em markdown. Causa raiz comprovada pelo navegador integrado no computador do usuário: o Jan descarta a mensagem de sistema e ignora o `response_format`. Com "seu nome é Zéquinha" no sistema, a resposta foi "sou um modelo de inteligência artificial"; na mensagem do usuário, "sou o Zéquinha". Implementada em Admin → Modelos de IA a opção por provedor **Instruções na mensagem do usuário** (migração 064 com CHECK 0/1; ligada no preset e nas conexões salvas do Jan; demais desligadas). Com ela, instruções, JSON Schema e pedido vão em uma única mensagem do usuário, e o `response_format` continua sendo enviado. O teste de conexão respeita a opção. Gates: formato, lint e tipos com exit 0; 988 unitários (4 novos); 601 integrações em 67 arquivos (3 novas: gravação, leitura, troca, recusa de valor inválido, teste de conexão e 403 para não administrador); build sem avisos. A prova aceita da 127 e da 115 com esse modelo segue na próxima etapa; esta entrega não as declara concluídas.
-- **Esquema da leitura por tipo de anexo em 2026-11-02 (entrega própria):** com a opção do Jan ligada, o pedido real do app (conferido por SHA-256 no navegador do computador do usuário) foi enviado ao Qwen3_8-2B pela ponte manual. A resposta voltou em markdown e o app recusou corretamente (503, nada salvo). Repetindo o mesmo pedido 6 vezes, 1 passaria: o modelo preenchia `regiao` em TXT, que a conferência recusa. Causa: o esquema genérico aceitava região e linhas para qualquer anexo. Implementado `esquemaDaLeitura`: anexo até a quantidade selecionada, linha até a maior linha, só TXT exige linhas e região nula com `codigoVisual` vazio, e só imagem exige região e linhas nulas. Com ele, 6 de 8 respostas vieram com a forma correta. A conferência do servidor não foi afrouxada. Gates: formato, lint e tipos com exit 0; 988 unitários; 601 integrações (esquema por tipo coberto nos testes de TXT e de imagem); build sem avisos. Documentado em `docs/anexos-do-chat.md`.
 
 ### 128 · Leitura em voz alta das respostas da Lyra
 

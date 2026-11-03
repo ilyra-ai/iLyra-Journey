@@ -1,0 +1,43 @@
+{
+  "data": "2026-11-02",
+  "tarefa": 127,
+  "modelo": "Qwen3_8-2B-Q4_K_M no Jan do computador do usuário (http://127.0.0.1:1337/v1)",
+  "transporte": "O app em produção (next start) gerou cada pedido para uma ponte local (127.0.0.1:8097) que só grava e devolve bytes. O corpo foi reenviado sem alteração ao Jan pelo navegador integrado do computador do usuário, com SHA-256 do conteúdo conferido antes do envio, e a resposta bruta do Jan foi devolvida ao app sem edição.",
+  "configuracao": {
+    "preset": "jan",
+    "instrucoesNaMensagem": true,
+    "tempoMaximoSegundos": 600,
+    "temperatura": 0.2
+  },
+  "trocas": [
+    {
+      "pedido": 2,
+      "papeis": ["user"],
+      "sha256_conteudo": "8d5311478b5f1c98a0054f4a6093058e7327e6618805b1ac70840cc180b0695a",
+      "esquema_regiao": {
+        "anyOf": [
+          {
+            "type": "string",
+            "maxLength": 200
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "resposta_bruta": "# 📅 Dia em que bebeu menos água\n\n**Quarta-feira** — bebeu **1 litro** de água.\n\nO registro indica que na quarta-feira houve uma redução no consumo de água em relação aos dias anteriores. Se quiser, posso ajudar a analisar o contexto ou comparar com os outros dias da semana.",
+      "resultado_no_app": "recusada pela conferência (markdown sem JSON); HTTP 503, nenhuma resposta salva"
+    },
+    {
+      "pedido": 3,
+      "papeis": ["user"],
+      "sha256_conteudo": "e1a001125f36232082953c8d954fd5271f686b5b267412bd5c7b12deef55947f",
+      "esquema_regiao": {
+        "type": "null"
+      },
+      "resposta_bruta": "```json\n{\n  \"codigoVisual\": \"\",\n  \"resposta\": \"Na quarta-feira você bebeu menos água (1 litro). Anotou: 'na quarta-feira tive dor de cabeça à tarde'.\",\n  \"fontes\": [\n    {\n      \"anexo\": 1,\n      \"linhaInicial\": 1,\n      \"linhaFinal\": 7,\n      \"regiao\": null\n    }\n  ],\n  \"naoLidos\": []\n}\n```",
+      "resultado_no_app": "aceita; HTTP 200, turno concluido e resposta salva com fontes montadas pelo servidor (linhas 1–7)"
+    }
+  ],
+  "observacao": "O pedido 2 usou o esquema genérico (antes de esquemaDaLeitura); o pedido 3, o esquema por tipo. Repetições do pedido 2 no Jan: 1 de 6 com forma válida; com o esquema por tipo: 6 de 8. A leitura de fotos exige modelo com visão e não é coberta por este modelo."
+}
