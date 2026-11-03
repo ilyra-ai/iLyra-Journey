@@ -21,16 +21,16 @@
 
 | Indicador          | Valor                            |
 | ------------------ | -------------------------------- |
-| Progresso          | `███████████████████░` **97,1%** |
+| Progresso          | `███████████████████░` **97,8%** |
 | Tarefas totais     | 137                              |
-| 🟢 Finalizadas     | 133                              |
+| 🟢 Finalizadas     | 134                              |
 | 🔵 Em andamento    | 0                                |
 | 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 4                                |
+| ⚪ A iniciar       | 3                                |
 | Branch de trabalho | `main` (única permitida)         |
 | Última atualização | 2026-11-02                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (133 ÷ 137 ≈ 97,1%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (134 ÷ 137 ≈ 97,8%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -98,22 +98,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 106 · Menu Planos para compra e upgrade dos usuários
-
-- **Status:** ⚪ a iniciar (retirada das bloqueadas em 2026-10-30, por decisão do usuário) · **Registro:** 2026-10-22.
-- **Pedido do usuário:** criar o menu **“Planos”** no sidebar para todos os planos e perfis não administrativos, permitindo comprar e fazer upgrade do próprio plano. O administrador não deve receber esse menu comercial, pois utiliza a gestão administrativa dos planos e usuários para realizar os upgrades correspondentes.
-- **Implementação:** inspecionar e reaproveitar a jornada comercial e os serviços de cobrança existentes antes de criar outra página. Oferecer comparação e seleção dos planos comercializáveis, identificação do plano atual e compra ou upgrade reais da própria conta, respeitando elegibilidade, estados da assinatura e provedores efetivamente configurados. Não oferecer o plano Administrador para compra nem confundir assinatura comercial com papel administrativo. Preservar a gestão administrativa de planos e usuários, incluindo seus fluxos autorizados de alteração de plano.
-- **Qualidade e validação:** pesquisar referências oficiais atuais antes dos ajustes visuais e seguir o Lyra Clean claro, acessível e responsivo. Conferir sidebar desktop/mobile, presença para usuários comuns, ausência para administradores, autorização no servidor, prevenção de alteração de outra conta e sincronização do plano após confirmação real do pagamento. Validar falhas e indisponibilidade de cobrança sem simular transações; executar testes e gates, publicar commit e push próprios na main e registrar evidências.
-
-**Registro adicional de 2026-10-22:** tarefas 104–106 registradas; a implementação ainda não foi concluída. A tarefa 104 registra o bloqueio de perfil informado imediatamente antes das novas solicitações 105 e 106.
-
-- **Retomada em 2026-10-26:** conferência prévia confirmou os serviços comerciais e a identificação de plano existentes, mas não encontrou o menu comercial nem o indicador clicável junto ao logo. Executar em conjunto com a tarefa 107 para reutilizar a mesma jornada. Nenhuma transação externa será alegada sem prova real.
-
-- **Implementação publicada em 2026-10-26:** menu comercial e página `/planos`, comparação de preços e recursos reais por ciclo, integração aos serviços existentes, restrições administrativas e recusa de planos privados/inativos ou redução pelo checkout. Assinaturas Stripe existentes são encaminhadas ao portal. **Commit:** `2974026eed85995cf79b44614624497c8c7b6452`, confirmado na `main` pela API autenticada do GitHub, sem branches ou worktrees.
-- **Validação e fronteira:** 595 unitários, 389 integrações MySQL, lint, formato, tipos, build e QA dos três planos em 1440/390/320 aprovados. Sem configuração de pagamento nesta instância, a contratação elegível retorna 503 sem alterar o plano; nenhuma compra externa foi executada. Falta somente comprovar compra/upgrade e confirmação oficial do pagamento. Não executar esta fronteira bloqueada sem nova orientação. Evidências em `docs/auditoria/2026-10-26-planos-106-107.md`.
-
-- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
 
 ### 115 · Preenchimento automático das métricas e leituras por IA com linguagem natural para leigos
 
@@ -1884,6 +1868,26 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 - **Resultado da validação:** nenhuma reconstrução de funcionalidade foi necessária. Reutilizadas as entregas 96/104; 594 unitários e 384 integrações aprovados, lint, formato, tipos e build aprovados. MySQL 9.7.2 real, saúde HTTP 200 com 46 migrações. QA dos três planos em 11 páginas, menus em 390/320, desktop 1440, bloqueio/reativação de Respiração com API 403/200, sete páginas administrativas e axe-core sem violações (28–30 regras). Capturas inspecionadas, matriz restaurada e contas temporárias excluídas. Limites e evidências em `docs/auditoria/2026-10-26-conferencia-de-pendencias.md`.
 - **Publicação das evidências:** commit `4536be69e8145d242f838da80b32b6b2b511905d`, confirmado como cabeça da `main` pelo GitHub conectado. Não houve criação de branch, worktree ou mudança do código funcional. A publicação foi feita pela API autenticada do GitHub; não se alega execução de `git push` pelo terminal, cuja autenticação não está disponível nesta instância.
+
+### 106 · Menu Planos para compra e upgrade dos usuários
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22 · **Conclusão:** 2026-11-02 · **Commit e push:** registrados abaixo.
+- **Pedido do usuário:** criar o menu **“Planos”** no sidebar para todos os planos e perfis não administrativos, permitindo comprar e fazer upgrade do próprio plano. O administrador não deve receber esse menu comercial, pois utiliza a gestão administrativa dos planos e usuários para realizar os upgrades correspondentes.
+- **Implementação:** inspecionar e reaproveitar a jornada comercial e os serviços de cobrança existentes antes de criar outra página. Oferecer comparação e seleção dos planos comercializáveis, identificação do plano atual e compra ou upgrade reais da própria conta, respeitando elegibilidade, estados da assinatura e provedores efetivamente configurados. Não oferecer o plano Administrador para compra nem confundir assinatura comercial com papel administrativo. Preservar a gestão administrativa de planos e usuários, incluindo seus fluxos autorizados de alteração de plano.
+- **Qualidade e validação:** pesquisar referências oficiais atuais antes dos ajustes visuais e seguir o Lyra Clean claro, acessível e responsivo. Conferir sidebar desktop/mobile, presença para usuários comuns, ausência para administradores, autorização no servidor, prevenção de alteração de outra conta e sincronização do plano após confirmação real do pagamento. Validar falhas e indisponibilidade de cobrança sem simular transações; executar testes e gates, publicar commit e push próprios na main e registrar evidências.
+
+**Registro adicional de 2026-10-22:** tarefas 104–106 registradas; a implementação ainda não foi concluída. A tarefa 104 registra o bloqueio de perfil informado imediatamente antes das novas solicitações 105 e 106.
+
+- **Retomada em 2026-10-26:** conferência prévia confirmou os serviços comerciais e a identificação de plano existentes, mas não encontrou o menu comercial nem o indicador clicável junto ao logo. Executar em conjunto com a tarefa 107 para reutilizar a mesma jornada. Nenhuma transação externa será alegada sem prova real.
+
+- **Implementação publicada em 2026-10-26:** menu comercial e página `/planos`, comparação de preços e recursos reais por ciclo, integração aos serviços existentes, restrições administrativas e recusa de planos privados/inativos ou redução pelo checkout. Assinaturas Stripe existentes são encaminhadas ao portal. **Commit:** `2974026eed85995cf79b44614624497c8c7b6452`, confirmado na `main` pela API autenticada do GitHub, sem branches ou worktrees.
+- **Validação e fronteira:** 595 unitários, 389 integrações MySQL, lint, formato, tipos, build e QA dos três planos em 1440/390/320 aprovados. Sem configuração de pagamento nesta instância, a contratação elegível retorna 503 sem alterar o plano; nenhuma compra externa foi executada. Falta somente comprovar compra/upgrade e confirmação oficial do pagamento. Não executar esta fronteira bloqueada sem nova orientação. Evidências em `docs/auditoria/2026-10-26-planos-106-107.md`.
+
+- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
+
+- **Conclusão em 2026-11-02 com a Stripe de teste real:** uma conta nova no plano Free assinou o **Meta mensal** em `/planos`, pelo Checkout hospedado da Stripe, com o cartão de teste oficial 4242 em BRL. Os 12 webhooks reais (`checkout.session.completed`, `customer.subscription.created`, `invoice.paid` e outros) responderam 200. O banco passou a `meta · active · monthly · stripe`, com o Free como `replaced`. O **upgrade para Care** pelo portal da Stripe (Atualizar assinatura → Care → Confirmar) gerou `customer.subscription.updated`, e o banco passou a `care · active`; o selo e o menu mostram Care. Pessoa comum: "Planos" → `/planos`. Administrador: `/planos` redireciona para `/admin/plans`, sem menu comercial. `/planos` sem transbordo e sem erros em 1440, 390 e 320 px. Nenhum código precisou mudar nesta tarefa.
+- **Observação:** com o navegador da sessão nos EUA, o Checkout abriu em USD (_Adaptive Pricing_ da conta Stripe), com BRL ao lado; a compra foi feita em BRL. É configuração da conta da Stripe e não foi alterada.
+- **Evidências:** `docs/auditoria/2026-11-02-planos-106-stripe-teste.md`.
 
 ### 107 · Identificação do plano ao lado do logo na área autenticada
 
