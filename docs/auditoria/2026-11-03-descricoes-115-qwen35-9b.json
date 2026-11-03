@@ -1,0 +1,50 @@
+{
+  "data": "2026-11-03",
+  "tarefa": 115,
+  "objetivo": "Comprovar uma geração aceita e gravada pelo app com um modelo real do usuário, a fronteira registrada em 2026-11-02",
+  "modelo": {
+    "provedor": "Jan, no computador do usuário (GPU local)",
+    "nome": "Qwen3_5-9B-IQ4_XS",
+    "configuracao_no_app": "Admin → Modelos de IA, preset Jan, temperatura 0,3, limite de 170 s, 'Instruções na mensagem do usuário' ligada"
+  },
+  "pedido": {
+    "origem": "Rota real POST /api/painel/descricoes em produção (next start), para uma conta de QA com mapa natal e sem métricas no dia",
+    "sha256_do_corpo": "79e040b9101e23e7f509205716d4c8ef76b66f3780bf3b435d4850eace0bd03e",
+    "tamanho_do_corpo": 37330,
+    "sha256_do_conteudo": "63360bb7ed369a3a4beb98d674b3eff372e469218dbf6f0388e3604ece20359b",
+    "tamanho_do_conteudo": 31593,
+    "mensagens": ["user"],
+    "response_format": "json_schema 'resposta', strict, 53 chaves obrigatórias em descricoes",
+    "max_tokens": 8000
+  },
+  "transporte": "O app da nuvem não alcança o localhost do computador do usuário. O conteúdo foi reconstruído no navegador integrado do computador do usuário e conferido pelo SHA-256 antes do envio ao Jan. A resposta foi remontada na nuvem e gravada na ponte somente depois de conferir o SHA-256 do texto bruto inteiro, idêntico ao medido no navegador. Na primeira tentativa a ponte gravou o pedido e respondeu 503; na segunda devolveu a resposta real do Jan.",
+  "resposta": {
+    "status_http": 200,
+    "tempo_s": 30,
+    "finish_reason": "stop",
+    "tokens": { "entrada": 13158, "saida": 1937 },
+    "sha256_da_resposta_bruta": "ce0b5084bdb1645f864e78ddcf65fd507510d8e4888991e5d55362f13772ed3b",
+    "sha256_do_conteudo": "a1557633d5d820716973fb8815740ab91db88666249ed5e62afb13e179ac16ec",
+    "chaves_em_descricoes": 53
+  },
+  "resultado_no_app": {
+    "resposta_da_rota": "200, estado 'pronto', 53 explicações",
+    "mysql_dashboard_descriptions": "status 'pronto', provider_name 'Jan', model_name 'Qwen3_5-9B-IQ4_XS', attempts 2, record_date 2026-11-03, 53 explicações em content",
+    "validador": "Aceitou as 53 explicações pelas regras de src/lib/painel/geracao.ts: nenhuma com Lua, planetas, signos, casas, nakshatras ou dashas, nenhuma classificação clínica, nenhum valor inventado",
+    "tela": "Com login da conta, o painel em 390 px mostrou o texto gerado no cartão Passos do dia ('Zero passos é um registro válido…'), sem transbordo (scrollWidth 390) e sem erros de console ou de página"
+  },
+  "exemplos_gravados": {
+    "steps": "Quantidade de passos registrados no dia. Zero passos é um registro válido e não significa ausência de informação.",
+    "blood_pressure_systolic": "Pressão arterial registrada com seus dois valores. O painel não faz diagnóstico nem escolhe tratamento por uma leitura.",
+    "leitura_reflexao": "Leitura interpretativa para autoconhecimento. Ela não mede seu corpo nem determina o que vai acontecer.",
+    "leitura_ciclo": "Estimativa do calendário com as informações que você registrou. Não confirma ovulação, fertilidade ou gravidez."
+  },
+  "historico": [
+    "2026-10-30: Qwen2.5-0.5B local, recusado pelo validador (evidência 2026-10-30-descricoes-115-modelo-real.json)",
+    "2026-11-02: Qwen3_8-2B e Gemma-4-E4B no Jan, recusáveis (evidência 2026-11-02-descricoes-115-jan.json)",
+    "2026-11-03: Qwen3.8-27B no Jan levou 220 s para 300 tokens, lento demais para o limite do app; descartado",
+    "2026-11-03: Qwen3_5-9B-IQ4_XS no Jan, aceito e gravado (esta evidência)"
+  ],
+  "conclusao": "Fronteira da tarefa 115 resolvida: um modelo real do usuário gerou, pelo fluxo real do app, as 53 explicações em linguagem simples, e o app as validou, gravou no MySQL e exibiu no painel.",
+  "privacidade": "Modelo local no computador do usuário; nenhum dado enviado a provedor em nuvem."
+}

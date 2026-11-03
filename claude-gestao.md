@@ -1959,7 +1959,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 115 · Preenchimento automático das métricas e leituras por IA com linguagem natural para leigos
 
-- **Status:** 🟢 finalizada com fronteira registrada (geração aceita por modelo real) · **Registro:** 2026-10-26 · **Início:** 2026-10-27 · **Conclusão:** 2026-11-02 · **Commit:** `c3aca11` · **Push confirmado:** `d50bdae..c3aca11 main -> main`.
+- **Status:** 🟢 finalizada, com geração aceita e gravada por modelo real em 2026-11-03 · **Registro:** 2026-10-26 · **Início:** 2026-10-27 · **Conclusão:** 2026-11-02 (`c3aca11`, push `d50bdae..c3aca11 main -> main`) · **Fronteira resolvida:** 2026-11-03, com commit próprio desta prova.
 - **Pedido do usuário:** o modelo de IA deve preencher automaticamente todas as métricas e apresentar descrições naturais, objetivas e compreensíveis para uma pessoa leiga. Não trazer termos técnicos da leitura do mapa nem citar Lua, planetas e outras informações astrológicas que o usuário não entende nas descrições exibidas.
 - **Conferência prévia e cobertura integral:** inspecionar primeiro a implementação atual e inventariar todas as métricas, indicadores, cartões, leituras, cálculos, textos, fontes de dados e rotinas de atualização, sem limitar a análise ao recorte visível do painel. Reaproveitar a geração já existente e as entregas de linguagem simples, identidade e correção de inferências das tarefas 49, 50, 55, 56, 82, 108 e 109. Mapear para cada item a origem real, quem o preenche, quando é atualizado, o papel do modelo e a apresentação em cada aba da tarefa 114.
 - **Preenchimento automático real:** integrar o modelo de IA efetivamente conectado ao fluxo de preparação e atualização do painel e das suas abas, usando dados autorizados do titular e resultados dos cálculos existentes. Definir os gatilhos reais de atualização conforme a arquitetura do app, evitando que o usuário precise pedir manualmente o preenchimento de cada item. Validar saídas estruturadas, cobertura de todos os campos aplicáveis, persistência, atualização coerente e retentativa, com controle de concorrência, idempotência, limites de uso e invalidação de conteúdo antigo quando os dados mudarem. Não afirmar que houve chamada a um modelo conectado quando a resposta veio apenas do motor local.
@@ -1988,6 +1988,13 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
   - **Comprovado:** a geração real e a recusa de saídas inválidas com modelos reais, dentro do limite de 120 s.
   - **Fronteira registrada:** uma geração aceita e gravada exige um modelo instruído maior. Com a GPU de 12 GB do usuário, um modelo de 7–8B quantizado no Jan é o próximo passo.
   - **Evidência:** `docs/auditoria/2026-11-02-descricoes-115-jan.json`.
+- **Fronteira resolvida em 2026-11-03 com o Qwen3.5-9B do Jan do usuário:**
+  - **Pedido real:** a rota `POST /api/painel/descricoes` em produção gerou o pedido (corpo `79e040b9101e…`, conteúdo de 31.593 caracteres). Ele foi conferido pelo SHA-256 no navegador integrado antes do envio ao `Qwen3_5-9B-IQ4_XS`.
+  - **Resposta:** 30 s, `finish_reason: stop`, 13.158 tokens de entrada e 1.937 de saída, com as 53 chaves. A resposta bruta foi gravada na ponte só depois de conferido o SHA-256 do texto inteiro.
+  - **Resultado no app:** 200, estado "pronto". No MySQL ficou `pronto · Jan · Qwen3_5-9B-IQ4_XS`, com 2 tentativas (a primeira registrou o pedido na ponte) e 53 explicações. Nenhuma cita Lua, planetas ou signos, traz classificação clínica ou inventa valores.
+  - **Tela:** o painel em 390 px mostra o texto gerado no cartão "Passos do dia", sem transbordo e sem erros de console.
+  - **Descartado:** o Qwen3.8-27B levou 220 s para 300 tokens, lento demais para o limite do app.
+  - **Evidência:** `docs/auditoria/2026-11-03-descricoes-115-qwen35-9b.json`.
 
 ### 116 · README simples, objetivo e acolhedor para o usuário entender o app
 
