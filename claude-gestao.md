@@ -86,6 +86,15 @@ O `@sentry/bundler-plugins` 11.x (inclusive o 11.10.0, o mais recente) declara g
 
 **Aviso restante, investigado:** minimatch < 11.0.1 apenas nas ferramentas de lint (ESLint 10.14, @eslint/config-array, typescript-eslint, eslint-plugin-import e jsx-a11y). As versões mais recentes delas ainda declaram minimatch ^10 ou ^3; a correção só existe no 11, com outra API. Esses pacotes não entram no build nem no runtime e só leem padrões da configuração do próprio repositório. Fica registrado até o ESLint e os plugins adotarem o minimatch 11.
 
+**Validação final da instrução mestra em 2026-11-03:**
+
+- **Instalação e gates:** instalação limpa congelada; lint, formato e tipos com exit 0; 990 unitários; 601 integrações; 30 testes dos launchers; build sem avisos; Compose válido; migrações idempotentes (66/66).
+- **`run.py`:** `doctor` e `up --prod` completos, com memória Graphiti, `/api/health`, páginas e login do administrador. A segunda subida não fez nada em duplicidade. `status`, `logs` e `stop`, seguido de nova subida, preservaram os dados.
+- **`run.sh` e `run_windows.py`:** `run.sh` (bash do Linux) com `doctor`, `status`, `stop`, `up --prod` e `logs db`; `run_windows.py` delega ao `run.sh` fora do Windows.
+- **Falhas controladas:** Docker desligado, porta 3000 ocupada por outro programa (preservado, app em 3001) e Node fora da versão.
+- **Ajustes só do ambiente da sessão, fora do repositório:** espelho `mirror.gcr.io` por causa do limite do Docker Hub e certificado do proxy na imagem base local.
+- **Fronteira:** o Git Bash do Windows 11 não está disponível neste ambiente. Relatório: `docs/auditoria/2026-11-03-validacao-final.md`.
+
 - menu do usuário e tema;
 - navegação móvel;
 - notificações;
