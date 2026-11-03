@@ -30,10 +30,17 @@ describe('descrições sem medições geradas', () => {
     'Seu valor é saudável para você.',
     'Seu nakshatra exige mais energia.',
     'Aumente seu consumo de água hoje.',
+    'Mercúrio retrógrado pede atenção à pressão.',
   ])('recusa texto indevido: %s', (texto) => {
     const r = resposta();
     r.descricoes.steps = texto;
     expect(descricoesSchema.safeParse(r).success).toBe(false);
+  });
+  it('aceita a unidade da pressão arterial, que não é o planeta', () => {
+    const r = resposta();
+    r.descricoes.blood_pressure_systolic =
+      'É a pressão máxima registrada na artéria, em milímetros de mercúrio, como informado pela fonte.';
+    expect(descricoesSchema.safeParse(r).success).toBe(true);
   });
   it('rejeita frases repetidas e preserva ausência, zero e a fonte original', () => {
     const r = resposta();

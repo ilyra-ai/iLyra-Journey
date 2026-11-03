@@ -13,8 +13,11 @@ const chaves = CATALOGO_DAS_EXPLICACOES.map((m) => m.id) as [
   ChaveDaExplicacao,
   ...ChaveDaExplicacao[],
 ];
+// "Milímetros de mercúrio" é a unidade da pressão arterial, não o planeta:
+// a explicação correta da unidade era recusada (conferido com um modelo real
+// em 2026-11-02).
 const linguagemIndevida =
-  /\b(lua|sol|planetas?|signos?|mercúrio|vênus|marte|júpiter|saturno|ascendente|quântic[oa]|chakras?|nakshatras?|dashas?)\b|\p{N}/iu;
+  /\b(lua|sol|planetas?|signos?|(?<!milímetros de )mercúrio|vênus|marte|júpiter|saturno|ascendente|quântic[oa]|chakras?|nakshatras?|dashas?)\b|\p{N}/iu;
 const conclusaoClinica =
   /\b(diagnostica|diagnóstico de|você tem|normal|saudável|ideal|adequad[oa]|hipoglicemia|diabetes|tome|suplement[oa]|aumente|reduza|risco de)\b/iu;
 export const descricoesSchema = z

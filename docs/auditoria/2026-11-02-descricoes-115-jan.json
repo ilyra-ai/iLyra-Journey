@@ -1,0 +1,33 @@
+{
+  "data": "2026-11-02",
+  "tarefa": 115,
+  "pedido": {
+    "origem": "Rota real POST /api/painel/descricoes em produção, para uma conta de QA com mapa natal e sem métricas no dia, com o Jan configurado com 'Instruções na mensagem do usuário'",
+    "sha256_do_corpo": "359e183aec63…",
+    "sha256_do_conteudo": "ff2e1a338e45066f03dbff206f4039107a5555f6161e3cccfe947c35a7b1bfcf",
+    "tamanho_do_conteudo": 32076,
+    "mensagens": ["user"],
+    "response_format": "json_schema (53 chaves obrigatórias, texto em cada uma)",
+    "observacao": "O pedido é determinístico: duas contas diferentes com os mesmos dados geraram o mesmo SHA-256 do corpo."
+  },
+  "transporte": "Conteúdo reconstruído no navegador integrado do computador do usuário e conferido pelo SHA-256 antes do envio ao Jan; respostas lidas sem edição.",
+  "respostas_reais": [
+    {
+      "modelo": "Qwen3_8-2B-Q4_K_M",
+      "tempo_s": 46,
+      "resultado": "Recusável: devolveu em markdown a lista de campos com valores inventados (por exemplo, HRV '124 ms' e prontidão '72', quando todos os valores eram nulos) e uma 'conclusão geral' com classificação de saúde; sem o objeto descricoes."
+    },
+    {
+      "modelo": "Gemma-4-E4B-Uncensored-HauhauCS-Aggressive-IQ4_XS",
+      "tempo_s": 38,
+      "resultado": "Estrutura correta com as 53 chaves, mas 5 textos violam as regras do próprio validador (linguagemIndevida e conclusaoClinica de src/lib/painel/geracao.ts): 'Lua em Câncer' e 'Escorpião' nas leituras interpretativas, 'de 0 a 100' em prontidão e 'faixa ideal' em abaixo da faixa. O validador recusa a geração inteira. Um sexto texto ('milímetros de mercúrio', a unidade da pressão arterial) era recusado por falso positivo do validador, corrigido nesta entrega."
+    },
+    {
+      "modelo": "Gemma-4-E4B-Uncensored-HauhauCS-Aggressive-IQ4_XS (repetições)",
+      "tempo_s": [59, 26],
+      "resultado": "Sem o objeto descricoes nas duas respostas."
+    }
+  ],
+  "conclusao": "Os modelos disponíveis no Jan do usuário (2B e 4B) respondem dentro do limite de 120 s, mas não cumprem as regras estritas das 53 explicações. Nenhuma saída inválida seria gravada: o validador recusa a geração e o painel fica em 'falha', com nova tentativa disponível.",
+  "fronteira": "Uma geração aceita e gravada exige um modelo instruído maior. Com a GPU de 12 GB do computador do usuário, um modelo de 7–8B quantizado no Jan é o próximo passo para a prova."
+}
