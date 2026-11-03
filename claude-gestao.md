@@ -77,6 +77,15 @@
 
 **QA geral no navegador em 2026-11-03 (pedido do usuário para o final):** os perfis Free, Care (assinante real da Stripe de teste) e administrador percorreram todas as rotas do menu lateral e do menu do usuário em 1440 e 390 px, mais uma varredura profunda das abas administrativas. Foram 70 páginas por perfil, sem erro de console, falha 5xx, tela de erro ou transbordo. Interações conferidas:
 
+**Auditoria de dependências da validação final em 2026-11-03:** a instalação limpa (`pnpm install --frozen-lockfile`) e o `pnpm audit` acusaram 2 avisos moderados novos de 2026-11 na dependência de produção do Sentry:
+
+- GHSA-3g3m-2fjr-6pw4 (glob ≤ 14.0.1);
+- GHSA-g3hv-75wg-m249 (minimatch < 11.0.1).
+
+O `@sentry/bundler-plugins` 11.x (inclusive o 11.10.0, o mais recente) declara glob ^13.0.6, e não existe 13.x corrigido. O plugin só chama `glob(padrões, { absolute, nodir })`, igual no glob 14. Correção: override `'@sentry/bundler-plugins>glob': ^14.0.3`, validado por `scripts/verificar-glob-sentry.mjs`, que executa a função real do plugin e compara com o sistema de arquivos. Gates: formato, lint e tipos com exit 0; 990 unitários; 601 integrações; build sem avisos; instalação congelada offline aprovada.
+
+**Aviso restante, investigado:** minimatch < 11.0.1 apenas nas ferramentas de lint (ESLint 10.14, @eslint/config-array, typescript-eslint, eslint-plugin-import e jsx-a11y). As versões mais recentes delas ainda declaram minimatch ^10 ou ^3; a correção só existe no 11, com outra API. Esses pacotes não entram no build nem no runtime e só leem padrões da configuração do próprio repositório. Fica registrado até o ESLint e os plugins adotarem o minimatch 11.
+
 - menu do usuário e tema;
 - navegação móvel;
 - notificações;

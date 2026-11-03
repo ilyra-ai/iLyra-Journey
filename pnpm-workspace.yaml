@@ -51,3 +51,11 @@ overrides:
   happy-dom@>=17.0.0 <=21.0.3: ^21.0.4
   # GHSA-mrhx-c7xc-m3w5: inclui as cópias de Zod 4 usadas pelo ESLint.
   zod@>=4.0.0 <4.6.6: ^4.6.7
+  # GHSA-3g3m-2fjr-6pw4 (glob <= 14.0.1, cancelamento por AbortSignal) e
+  # GHSA-g3hv-75wg-m249 (minimatch < 11.0.1, trazido pelo glob 13), avisos de
+  # 2026-11. O @sentry/bundler-plugins 11.x (inclusive o 11.10.0, o mais
+  # recente) declara glob ^13.0.6, e não há 13.x corrigido. O plugin só chama
+  # `glob(padrões, { absolute: true, nodir: true })`, cuja assinatura e cujo
+  # retorno (lista de caminhos) são iguais no glob 14; validado com
+  # scripts/verificar-glob-sentry.mjs, que executa a função real do plugin.
+  '@sentry/bundler-plugins>glob': ^14.0.3
