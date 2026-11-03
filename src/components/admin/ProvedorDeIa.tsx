@@ -27,6 +27,7 @@ import {
   CardHeader,
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -83,6 +84,7 @@ interface ProvedorEmEdicao {
   novoModelo: string;
   temperatura: number;
   tempoMaximo: number;
+  instrucoesNaMensagem: boolean;
   testes: Record<string, Teste>;
 }
 
@@ -138,6 +140,8 @@ function emEdicao(
     novoModelo: '',
     temperatura: salvo?.temperatura ?? 0.7,
     tempoMaximo: salvo?.tempoMaximoSegundos ?? 90,
+    instrucoesNaMensagem:
+      salvo?.instrucoesNaMensagem ?? preset.instrucoesNaMensagem ?? false,
     testes: {},
   };
 }
@@ -246,7 +250,9 @@ export function ProvedorDeIa() {
           (mudanca.temperatura !== undefined &&
             mudanca.temperatura !== p.temperatura) ||
           (mudanca.tempoMaximo !== undefined &&
-            mudanca.tempoMaximo !== p.tempoMaximo);
+            mudanca.tempoMaximo !== p.tempoMaximo) ||
+          (mudanca.instrucoesNaMensagem !== undefined &&
+            mudanca.instrucoesNaMensagem !== p.instrucoesNaMensagem);
         return {
           ...p,
           ...mudanca,
@@ -312,6 +318,9 @@ export function ProvedorDeIa() {
             : { chave: null }),
       tempoMaximoSegundos: p.tempoMaximo,
       temperatura: p.temperatura,
+      ...(preset?.tipo === 'openai_compativel'
+        ? { instrucoesNaMensagem: p.instrucoesNaMensagem }
+        : {}),
     };
   };
 
@@ -992,6 +1001,34 @@ export function ProvedorDeIa() {
                   </p>
                 </div>
               </div>
+
+              {usaUrl ? (
+                <div className="flex items-start justify-between gap-4 rounded-2xl border border-border bg-background/60 p-4">
+                  <div className="grid gap-1">
+                    <Label htmlFor={`${idBase}-instrucoes`}>
+                      Instruções na mensagem do usuário
+                    </Label>
+                    <p
+                      id={`${idBase}-instrucoes-ajuda`}
+                      className="text-xs leading-relaxed text-muted-foreground"
+                    >
+                      Ligue para servidores que ignoram a mensagem de sistema e
+                      o formato JSON pedido (o Jan, por exemplo). As instruções
+                      da Lyra e o formato da resposta passam a ir no início da
+                      mensagem; teste o modelo depois de mudar.
+                    </p>
+                  </div>
+                  <Switch
+                    id={`${idBase}-instrucoes`}
+                    aria-describedby={`${idBase}-instrucoes-ajuda`}
+                    checked={p.instrucoesNaMensagem}
+                    disabled={ocupado !== null}
+                    onCheckedChange={(v) =>
+                      atualizar(p.preset, { instrucoesNaMensagem: v })
+                    }
+                  />
+                </div>
+              ) : null}
             </section>
           );
         })}

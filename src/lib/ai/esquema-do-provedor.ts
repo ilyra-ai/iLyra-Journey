@@ -21,6 +21,8 @@ export const provedorSchema = z
     modelos: z.array(modeloSchema).max(50),
     tempoMaximoSegundos: z.number().int().min(10).max(600),
     temperatura: z.number().min(0).max(2),
+    /** Instruções e esquema na mensagem do usuário (ver `mensagensOpenAi`). */
+    instrucoesNaMensagem: z.boolean().optional(),
   })
   .strict();
 
@@ -92,5 +94,8 @@ export function conexaoInformada(
     chave,
     tempoMaximoSegundos: informado.tempoMaximoSegundos,
     temperatura: informado.temperatura,
+    instrucoesNaMensagem:
+      preset.tipo === 'openai_compativel' &&
+      Boolean(informado.instrucoesNaMensagem),
   };
 }

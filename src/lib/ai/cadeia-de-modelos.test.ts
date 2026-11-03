@@ -237,6 +237,7 @@ function provedor(
     modelos,
     tempoMaximoSegundos: 60,
     temperatura: 0.7,
+    instrucoesNaMensagem: false,
     atualizadoEm: '2026-10-16T10:00:00.000Z',
   };
 }

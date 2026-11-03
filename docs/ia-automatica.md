@@ -77,6 +77,17 @@ funcionando e, ainda assim, recusar a conexão feita pelo Node no WSL.
   **Buscar modelos** e selecione o identificador retornado pela API, que
   pode incluir a quantização no nome. O contador do provedor indica
   **selecionados**; o resultado da consulta informa os **disponíveis**.
+- **Instruções na mensagem do usuário** (só servidores compatíveis com a
+  OpenAI; migração 064): o Jan troca a mensagem de sistema pelas instruções
+  do próprio assistente e ignora o `response_format`. Conferido em
+  2026-11-02 com o Qwen3_8-2B do Jan: com "seu nome é Zéquinha" no sistema,
+  ele respondeu "sou um modelo de inteligência artificial"; com a mesma
+  instrução na mensagem do usuário, respondeu "sou o Zéquinha". Com a opção
+  ligada, o app envia uma única mensagem do usuário com as instruções da
+  Lyra, o JSON Schema pedido (quando há) e o pedido, e continua enviando o
+  `response_format` aos servidores que o respeitam. A opção já vem ligada ao
+  marcar o Jan e a migração a liga nas conexões do Jan já salvas; nos demais
+  provedores começa desligada. Depois de mudar, teste o modelo de novo.
 - A lista pode ser filtrada pelo nome, sem truncar o catálogo em 40 itens.
   Alterar endereço ou chave invalida a consulta e os testes anteriores;
   erros de descoberta ficam visíveis junto ao provedor.

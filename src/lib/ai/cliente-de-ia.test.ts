@@ -226,6 +226,117 @@ describe('saída estruturada por JSON Schema', () => {
   });
 });
 
+describe('instruções na mensagem do usuário (servidores como o Jan)', () => {
+  const esquema = {
+    type: 'object',
+    properties: { a: { type: 'string' } },
+    required: ['a'],
+    additionalProperties: false,
+  };
+  const conexao = (
+    baseUrl: string,
+    instrucoesNaMensagem?: boolean
+  ): ConexaoDeIa => ({
+    tipo: 'openai_compativel',
+    baseUrl,
+    modelo: 'qwen3',
+    chave: null,
+    tempoMaximoSegundos: 5,
+    temperatura: 0.2,
+    instrucoesNaMensagem,
+  });
+  const mensagens = (servidor: ServidorOpenAiCompativel) =>
+    (
+      servidor.requisicoes.find((r) => r.caminho === '/v1/chat/completions')
+        ?.corpo as { messages: Array<{ role: string; content: unknown }> }
+    ).messages;
+
+  it('sem a opção, mantém a mensagem de sistema separada', async () => {
+    const servidor = await iniciarServidorOpenAiCompativel();
+    try {
+      servidor.responder('ok');
+      await gerarTexto(conexao(servidor.baseUrl), {
+        sistema: 'Você é a Lyra.',
+        usuario: 'Oi',
+      });
+      expect(mensagens(servidor)).toEqual([
+        { role: 'system', content: 'Você é a Lyra.' },
+        { role: 'user', content: 'Oi' },
+      ]);
+    } finally {
+      await servidor.fechar();
+    }
+  });
+
+  it('com a opção, envia uma só mensagem com instruções, esquema e pedido, e mantém o response_format', async () => {
+    const servidor = await iniciarServidorOpenAiCompativel();
+    try {
+      servidor.responder('```json\n{"a":"ok"}\n```');
+      const texto = await gerarTexto(conexao(servidor.baseUrl, true), {
+        sistema: 'Você é a Lyra.',
+        usuario: 'Oi',
+        esquemaJson: esquema,
+      });
+      expect(extrairJson(texto)).toEqual({ a: 'ok' });
+      expect(mensagens(servidor)).toEqual([
+        {
+          role: 'user',
+          content:
+            'Instruções do sistema (siga-as integralmente):\nVocê é a Lyra.' +
+            '\n\nResponda somente com um objeto JSON válido que siga exatamente este JSON Schema, sem markdown e sem texto fora do JSON:\n' +
+            JSON.stringify(esquema) +
+            '\n\n---\n\nOi',
+        },
+      ]);
+      expect(servidor.requisicoes[0].corpo).toMatchObject({
+        response_format: { type: 'json_schema' },
+      });
+    } finally {
+      await servidor.fechar();
+    }
+  });
+
+  it('com imagens, as instruções vão na parte de texto, depois das imagens', async () => {
+    const servidor = await iniciarServidorOpenAiCompativel();
+    try {
+      servidor.responder('ok');
+      await gerarTexto(conexao(servidor.baseUrl, true), {
+        sistema: 'S',
+        usuario: 'U',
+        json: true,
+        imagens: [{ tipo: 'image/png', base64: 'AAAA' }],
+      });
+      expect(mensagens(servidor)).toEqual([
+        {
+          role: 'user',
+          content: [
+            {
+              type: 'image_url',
+              image_url: { url: 'data:image/png;base64,AAAA' },
+            },
+            {
+              type: 'text',
+              text:
+                'Instruções do sistema (siga-as integralmente):\nS' +
+                '\n\nResponda somente com um objeto JSON válido, sem markdown e sem texto fora do JSON.' +
+                '\n\n---\n\nU',
+            },
+          ],
+        },
+      ]);
+    } finally {
+      await servidor.fechar();
+    }
+  });
+
+  it('o preset do Jan começa com a opção ligada; os demais locais, desligada', () => {
+    expect(presetPorId('jan')?.instrucoesNaMensagem).toBe(true);
+    for (const id of ['ollama', 'lm_studio', 'llama_cpp', 'openai']) {
+      expect(presetPorId(id)?.instrucoesNaMensagem ?? false).toBe(false);
+    }
+  });
+});
+
 describe('APIs nativas (Gemini e Anthropic)', () => {
   function capturar(resposta: unknown) {
     const pedidos: Array<{ url: string; init: RequestInit }> = [];

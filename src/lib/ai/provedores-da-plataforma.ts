@@ -43,6 +43,8 @@ export interface ProvedorConfigurado {
   modelos: string[];
   tempoMaximoSegundos: number;
   temperatura: number;
+  /** O servidor descarta a mensagem de sistema (ver `mensagensOpenAi`). */
+  instrucoesNaMensagem: boolean;
   atualizadoEm: string;
 }
 
@@ -78,6 +80,7 @@ interface LinhaDoProvedor {
   models: string | unknown[];
   timeout_seconds: number;
   temperature: string | number;
+  instructions_in_user_message: number;
   updated_at: string | Date;
 }
 
@@ -122,7 +125,8 @@ export async function lerConfiguracaoDeIa(): Promise<ConfiguracaoDeIa> {
   const [linhas, linhasDaOrdem] = await Promise.all([
     queryRows<LinhaDoProvedor>(
       `SELECT id, preset, provider_type, base_url, api_key_ciphertext,
-              api_key_last4, models, timeout_seconds, temperature, updated_at
+              api_key_last4, models, timeout_seconds, temperature,
+              instructions_in_user_message, updated_at
          FROM ai_provider_connections
         ORDER BY preset`
     ),
@@ -150,6 +154,9 @@ export async function lerConfiguracaoDeIa(): Promise<ConfiguracaoDeIa> {
       modelos: listaDeModelos(linha.models),
       tempoMaximoSegundos: Number(linha.timeout_seconds),
       temperatura: Number(linha.temperature),
+      instrucoesNaMensagem:
+        tipo === 'openai_compativel' &&
+        Number(linha.instructions_in_user_message) === 1,
       atualizadoEm: iso(linha.updated_at),
     });
   }
@@ -227,6 +234,7 @@ export function conexaoDoModelo(
     chave: provedor.chave,
     tempoMaximoSegundos: provedor.tempoMaximoSegundos,
     temperatura: provedor.temperatura,
+    instrucoesNaMensagem: provedor.instrucoesNaMensagem,
   };
 }
 
@@ -238,6 +246,8 @@ export interface AlteracaoDoProvedor {
   modelos: string[];
   tempoMaximoSegundos: number;
   temperatura: number;
+  /** Ausente: `false`. Ignorado fora de `openai_compativel`. */
+  instrucoesNaMensagem?: boolean;
 }
 
 export interface AlteracaoDaConfiguracao {
@@ -298,6 +308,8 @@ function validarProvedor(
     modelos,
     tempoMaximoSegundos: alteracao.tempoMaximoSegundos,
     temperatura: alteracao.temperatura,
+    instrucoesNaMensagem:
+      tipo === 'openai_compativel' && Boolean(alteracao.instrucoesNaMensagem),
   };
 }
 
@@ -375,6 +387,7 @@ export async function salvarConfiguracaoDeIa(
         JSON.stringify(provedor.modelos),
         provedor.tempoMaximoSegundos,
         provedor.temperatura,
+        provedor.instrucoesNaMensagem ? 1 : 0,
         adminId,
       ];
       if (existente) {
@@ -382,7 +395,8 @@ export async function salvarConfiguracaoDeIa(
           `UPDATE ai_provider_connections
               SET provider_type = ?, base_url = ?, api_key_ciphertext = ?,
                   api_key_last4 = ?, models = ?, timeout_seconds = ?,
-                  temperature = ?, updated_by = ?, updated_at = UTC_TIMESTAMP()
+                  temperature = ?, instructions_in_user_message = ?,
+                  updated_by = ?, updated_at = UTC_TIMESTAMP()
             WHERE id = ?`,
           [...valores, id]
         );
@@ -390,9 +404,10 @@ export async function salvarConfiguracaoDeIa(
         await conexao.execute(
           `INSERT INTO ai_provider_connections (
              provider_type, base_url, api_key_ciphertext, api_key_last4,
-             models, timeout_seconds, temperature, updated_by, id, preset,
+             models, timeout_seconds, temperature,
+             instructions_in_user_message, updated_by, id, preset,
              created_at, updated_at
-           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, UTC_TIMESTAMP(), UTC_TIMESTAMP())`,
+           ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, UTC_TIMESTAMP(), UTC_TIMESTAMP())`,
           [...valores, id, provedor.preset]
         );
       }

@@ -34,6 +34,11 @@ export interface PresetDeProvedor {
   urlPadrao: string | null;
   exigeChave: boolean;
   descricao: string;
+  /**
+   * Valor inicial de "instruções na mensagem do usuário" ao marcar o
+   * provedor: servidores conhecidos por descartar a mensagem de sistema.
+   */
+  instrucoesNaMensagem?: boolean;
 }
 
 export const PRESETS_DE_PROVEDOR: readonly PresetDeProvedor[] = [
@@ -74,6 +79,9 @@ export const PRESETS_DE_PROVEDOR: readonly PresetDeProvedor[] = [
     urlPadrao: 'http://localhost:1337/v1',
     exigeChave: false,
     descricao: 'Local API Server do Jan (pode exigir a chave definida no Jan).',
+    // O Jan troca a mensagem de sistema pelas instruções do próprio
+    // assistente e ignora o response_format (conferido em 2026-11-02).
+    instrucoesNaMensagem: true,
   },
   {
     id: 'llama_cpp',

@@ -17,6 +17,11 @@ export interface ConexaoDeIa {
   chave: string | null;
   tempoMaximoSegundos: number;
   temperatura: number;
+  /**
+   * Só `openai_compativel`: o servidor descarta a mensagem de sistema e o
+   * `response_format` (ver `mensagensOpenAi`). Ausente equivale a `false`.
+   */
+  instrucoesNaMensagem?: boolean;
 }
 
 export class ErroDoProvedor extends Error {
@@ -297,6 +302,53 @@ function formatoRecusado(erro: unknown) {
   );
 }
 
+/**
+ * Instruções e esquema escritos na própria mensagem do usuário, para
+ * servidores que descartam a mensagem de sistema e o `response_format`.
+ */
+export function instrucoesComoMensagem(pedido: PedidoDeTexto) {
+  const formato = pedido.esquemaJson
+    ? '\n\nResponda somente com um objeto JSON válido que siga exatamente este JSON Schema, sem markdown e sem texto fora do JSON:\n' +
+      JSON.stringify(pedido.esquemaJson)
+    : pedido.json
+      ? '\n\nResponda somente com um objeto JSON válido, sem markdown e sem texto fora do JSON.'
+      : '';
+  return (
+    'Instruções do sistema (siga-as integralmente):\n' +
+    pedido.sistema +
+    formato +
+    '\n\n---\n\n' +
+    pedido.usuario
+  );
+}
+
+/**
+ * Mensagens do chat completions. Com `instrucoesNaMensagem`, tudo vai em uma
+ * única mensagem do usuário: o Jan, por exemplo, troca a mensagem de sistema
+ * pelas instruções do próprio assistente e ignora o `response_format`, mas
+ * segue o que está na mensagem do usuário. O `response_format` continua
+ * sendo enviado para os servidores que o respeitam.
+ */
+export function mensagensOpenAi(conexao: ConexaoDeIa, pedido: PedidoDeTexto) {
+  const juntas = Boolean(conexao.instrucoesNaMensagem);
+  const texto = juntas ? instrucoesComoMensagem(pedido) : pedido.usuario;
+  const usuario = {
+    role: 'user',
+    content: pedido.imagens?.length
+      ? [
+          ...pedido.imagens.map((i) => ({
+            type: 'image_url',
+            image_url: { url: `data:${i.tipo};base64,${i.base64}` },
+          })),
+          { type: 'text', text: texto },
+        ]
+      : texto,
+  };
+  return juntas
+    ? [usuario]
+    : [{ role: 'system', content: pedido.sistema }, usuario];
+}
+
 /** Remove raciocínio exposto (`<think>`) que alguns modelos locais devolvem. */
 export function semRaciocinio(texto: string) {
   return texto.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
@@ -357,23 +409,7 @@ export async function gerarTextoDetalhado(
               model: conexao.modelo,
               temperature: conexao.temperatura,
               stream: Boolean(pedido.aoTexto),
-              messages: [
-                { role: 'system', content: pedido.sistema },
-                {
-                  role: 'user',
-                  content: pedido.imagens?.length
-                    ? [
-                        ...pedido.imagens.map((i) => ({
-                          type: 'image_url',
-                          image_url: {
-                            url: `data:${i.tipo};base64,${i.base64}`,
-                          },
-                        })),
-                        { type: 'text', text: pedido.usuario },
-                      ]
-                    : pedido.usuario,
-                },
-              ],
+              messages: mensagensOpenAi(conexao, pedido),
               ...(pedido.maximoDeTokens
                 ? { max_tokens: pedido.maximoDeTokens }
                 : {}),
