@@ -49,7 +49,7 @@ const Trend = dynamic(() => import('./BillingTrend'), {
 });
 const avisar = () => {};
 const campo =
-  'h-10 max-w-full rounded-md border border-input bg-background px-3 text-sm';
+  'h-10 w-full max-w-full rounded-md border border-input bg-background px-3 text-sm';
 const N = new Intl.NumberFormat('pt-BR');
 const DIA = new Intl.DateTimeFormat('pt-BR', {
   timeZone: 'UTC',
@@ -136,7 +136,7 @@ function DadosFatura({
 }) {
   return (
     <div className="space-y-2">
-      <p className="font-medium">{r.numero ?? r.externa}</p>
+      <p className="break-all font-medium">{r.numero ?? r.externa}</p>
       <p className="break-all text-sm text-muted-foreground">{r.externa}</p>
       <p className="text-sm">
         {nomeDoProvedor(r.provedor)} · {nomeDoAmbiente(r.ambiente)} ·{' '}
@@ -419,7 +419,7 @@ function Evolucao({
       </CardHeader>
       <CardContent>
         <div className="mb-5 grid gap-3 sm:grid-cols-2">
-          <div className="flex flex-col gap-2">
+          <div className="flex min-w-0 flex-col gap-2">
             <Label htmlFor="financeiro-indicador">O que acompanhar</Label>
             <select
               id="financeiro-indicador"
@@ -434,7 +434,7 @@ function Evolucao({
               ))}
             </select>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex min-w-0 flex-col gap-2">
             <Label htmlFor="financeiro-serie">Ambiente, provedor e moeda</Label>
             <select
               id="financeiro-serie"
@@ -542,6 +542,23 @@ export function AdminBillingContent() {
     avisar,
     null
   );
+  // O primeiro recorte segue o ambiente em uso na Stripe: com o modo de teste
+  // ativo, abrir em "Produção" escondia tudo o que acabou de ser importado.
+  // Ajuste feito durante a renderização (padrão do React para estado que
+  // depende de um dado recebido), uma única vez.
+  const [ambienteAjustado, setAmbienteAjustado] = React.useState(false);
+  const ambienteEmUso = data?.financeiro.conexao.ambiente;
+  if (!ambienteAjustado && ambienteEmUso) {
+    setAmbienteAjustado(true);
+    if (
+      (ambienteEmUso === 'test' || ambienteEmUso === 'live') &&
+      filtros.ambiente !== ambienteEmUso &&
+      JSON.stringify(draft) === JSON.stringify(filtros)
+    ) {
+      setFiltros({ ...filtros, ambiente: ambienteEmUso });
+      setDraft({ ...draft, ambiente: ambienteEmUso });
+    }
+  }
   const moedas = [
     ...new Set(
       [
@@ -601,6 +618,11 @@ export function AdminBillingContent() {
         setProgresso(run);
         if (run.stage === 'completed') {
           toast.success('Histórico financeiro atualizado.');
+          // Mostra o ambiente que acabou de ser importado.
+          if (filtros.ambiente !== ambiente && filtros.ambiente !== 'todos') {
+            setFiltros((f) => ({ ...f, ambiente }));
+            setDraft((f) => ({ ...f, ambiente }));
+          }
           break;
         }
       }
@@ -837,6 +859,7 @@ export function AdminBillingContent() {
               </p>
               <div className="flex flex-wrap gap-2">
                 <Button
+                  className="h-auto min-h-10 whitespace-normal text-left"
                   disabled={!fn.conexao.configurada || syncing}
                   onClick={() => void sincronizar()}
                 >
