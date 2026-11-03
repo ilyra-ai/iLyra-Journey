@@ -19,18 +19,18 @@
 
 ## Tópico 1 · Andamento Geral
 
-| Indicador          | Valor                            |
-| ------------------ | -------------------------------- |
-| Progresso          | `████████████████████` **99,3%** |
-| Tarefas totais     | 137                              |
-| 🟢 Finalizadas     | 136                              |
-| 🔵 Em andamento    | 0                                |
-| 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 1                                |
-| Branch de trabalho | `main` (única permitida)         |
-| Última atualização | 2026-11-02                       |
+| Indicador          | Valor                           |
+| ------------------ | ------------------------------- |
+| Progresso          | `████████████████████` **100%** |
+| Tarefas totais     | 137                             |
+| 🟢 Finalizadas     | 137                             |
+| 🔵 Em andamento    | 0                               |
+| 🔴 Bloqueadas      | 0                               |
+| ⚪ A iniciar       | 0                               |
+| Branch de trabalho | `main` (única permitida)        |
+| Última atualização | 2026-11-03                      |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (136 ÷ 137 ≈ 99,3%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (137 ÷ 137 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -129,13 +129,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 137 · Pasta `Old` com os arquivos que o app não utiliza
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-11-02.
-- **Pedido do usuário:** depois de finalizar os testes em geral, criar uma pasta chamada **"Old"** na raiz do projeto e mover para ela todos os arquivos que não são utilizados pelo app. Na raiz, nas pastas e nas subpastas devem ficar somente os arquivos necessários para executar o app por completo, de forma real: sem simulações, placeholders, hardcode ou cortes em linhas e códigos.
-- **Critério de execução:** só depois da QA geral. Mover somente com evidência de não uso. Para cada arquivo, procurar com `rg` imports, requires, imports dinâmicos, scripts, loaders, configurações, documentação, launchers (`run.py`, `run.sh`, `run_windows.py`), Docker Compose, migrações, testes, CI e uso indireto. Não mover nada por intuição nem por indicação isolada de ferramenta automática. Preservar o que a instalação limpa, os launchers, o build, os testes, as migrações e a documentação oficial exigem. Usar `git mv` para manter o histórico; nenhuma exclusão.
-- **Validação:** depois da movimentação, repetir a instalação limpa (`pnpm install --frozen-lockfile`), os gates (formato, lint, tipos, unitários, integrações e build), a subida pelos launchers, as migrações e a QA no navegador, para provar que o app continua completo. Registrar a lista do que foi movido e o motivo de cada item, fazer commit e push próprios na `main`, sem branches ou worktrees, e atualizar este painel.
 
 ## Tópico 4 · Histórico das Tarefas Finalizadas
 
@@ -2368,3 +2361,26 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 - **Implementação em 2026-10-30:** serviço `services/treinamento` que treina os **pesos** de `Qwen/Qwen2.5-0.5B-Instruct` (Apache-2.0) com KTO + LoRA (TRL), registrado com precisão como alinhamento por feedback humano da família do RLHF, sem modelo de recompensa nem PPO; serve as versões cumulativas em `/v1/chat/completions` (`lyra-treinavel`). App: migração 063, interruptor "Treinamento" só do administrador ao lado de "Como a Lyra responde", avaliações salvas na hora (CRUD), finalização com treino e aplicação a todos, acompanhamento, métricas, reenvio de falha, LGPD, Compose opcional e `docs/treinamento-por-feedback.md`.
 - **Evidências:** gates aprovados; 984 unitários; 597 integrações; 30 testes de launchers; build sem avisos. Treino real pelo app: versão 1 aplicada com margem de 0,24 para 0,92 em 80 s; queda real no meio do treino tratada como falha, com reenvio; usuário comum atendido pela nova versão; axe sem violações. Corrigidos: versões que não acumulavam, consumo de memória, tarefa perdida travando a sessão, texto apagado ao digitar e estado após recarga. Limites: imagem Docker do serviço não construída aqui (proxy no build). Relatório em `docs/auditoria/2026-10-30-treinamento-90.md`. Nenhuma branch ou worktree.
+
+### 137 · Pasta `Old` com os arquivos que o app não utiliza
+
+- **Status:** 🟢 finalizada · **Registro:** 2026-11-02 · **Início:** 2026-11-03 · **Conclusão:** 2026-11-03 · **Commit e push:** registrados abaixo.
+- **Pedido do usuário:** depois de finalizar os testes em geral, criar uma pasta chamada **"Old"** na raiz do projeto e mover para ela todos os arquivos que não são utilizados pelo app. Na raiz, nas pastas e nas subpastas devem ficar somente os arquivos necessários para executar o app por completo, de forma real: sem simulações, placeholders, hardcode ou cortes em linhas e códigos.
+- **Critério de execução:** só depois da QA geral. Mover somente com evidência de não uso. Para cada arquivo, procurar com `rg` imports, requires, imports dinâmicos, scripts, loaders, configurações, documentação, launchers (`run.py`, `run.sh`, `run_windows.py`), Docker Compose, migrações, testes, CI e uso indireto. Não mover nada por intuição nem por indicação isolada de ferramenta automática. Preservar o que a instalação limpa, os launchers, o build, os testes, as migrações e a documentação oficial exigem. Usar `git mv` para manter o histórico; nenhuma exclusão.
+- **Validação:** depois da movimentação, repetir a instalação limpa (`pnpm install --frozen-lockfile`), os gates (formato, lint, tipos, unitários, integrações e build), a subida pelos launchers, as migrações e a QA no navegador, para provar que o app continua completo. Registrar a lista do que foi movido e o motivo de cada item, fazer commit e push próprios na `main`, sem branches ou worktrees, e atualizar este painel.
+
+- **Execução em 2026-11-03, depois da QA geral e da validação final:** cada candidato foi conferido com `git grep` em código, `package.json`, launchers, Compose, testes e documentação, e com o `knip` 6.44, que não encontrou nenhum arquivo sem uso em `src/`. Foram movidos com `git mv` para `Old/`, sem apagar nada:
+  - os quatro documentos antigos de instrução e redesenho da raiz;
+  - o instalador portátil `implement_elementor_lyra.py`, que serve para levar o módulo a outros projetos. O script `lyra-customaze:install` saiu do `package.json` e o README do módulo passou a apontar para `Old/`;
+  - o `codemagic.yaml` (CI fora do escopo);
+  - o `scripts/verificar-identidade.mjs`, sem nenhuma referência.
+
+  Ficaram na raiz o app, os módulos importados, as dependências reproduzíveis, o banco, os serviços, os launchers, os scripts de operação, os testes, as configurações, as regras e a documentação. As configurações de ferramentas de desenvolvimento (`.agents/`, `skills-lock.json`, `.codex/`, `.claude/`, `.mcp.json`) também ficaram, porque são lidas em locais fixos da raiz e o `CLAUDE.md` manda inspecioná-las. O motivo de cada item está em `Old/README.md`.
+
+- **Validação depois da movimentação:**
+  - instalação limpa congelada;
+  - formato, lint e tipos com exit 0;
+  - 990 unitários, 601 integrações e 30 testes dos launchers;
+  - `run.py up --prod` com build limpo sem avisos, `/api/health`, páginas e login do administrador;
+  - varredura de 70 páginas como Care e como administrador, sem falhas.
+- **Nenhuma branch ou worktree.**
