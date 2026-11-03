@@ -39,5 +39,15 @@
       "resultado_no_app": "aceita; HTTP 200, turno concluido e resposta salva com fontes montadas pelo servidor (linhas 1–7)"
     }
   ],
-  "observacao": "O pedido 2 usou o esquema genérico (antes de esquemaDaLeitura); o pedido 3, o esquema por tipo. Repetições do pedido 2 no Jan: 1 de 6 com forma válida; com o esquema por tipo: 6 de 8. A leitura de fotos exige modelo com visão e não é coberta por este modelo."
+  "observacao": "O pedido 2 usou o esquema genérico (antes de esquemaDaLeitura); o pedido 3, o esquema por tipo. Repetições do pedido 2 no Jan: 1 de 6 com forma válida; com o esquema por tipo: 6 de 8. A leitura de fotos exige modelo com visão e não é coberta por este modelo.",
+  "foto": {
+    "modelo": "Gemma-4-E4B-Uncensored-HauhauCS-Aggressive-IQ4_XS no Jan do computador do usuário (modelo com visão)",
+    "arquivo": "garrafa.png (PNG 400x110 com o texto 'Garrafa de água: 750 ml' e 'Bebi 3 garrafas hoje')",
+    "pedido_do_app": "pedido 5: duas imagens (a foto e a verificação com código aleatório) e o texto com o esquema por tipo (só região para imagem); SHA-256 do texto e de cada imagem conferidos no navegador antes do envio",
+    "resposta_bruta": "resposta correta sobre a foto (2250 ml, região citada), mas codigoVisual 'Image of water bottle measurement and consumption log.' em vez do código da imagem de verificação",
+    "resultado_no_app": "recusado; nada salvo. A resposta da ponte chegou após 317 s e o servidor HTTP do Node já tinha encerrado o pedido aos 300 s (limite padrão requestTimeout); pela conferência, a resposta também seria recusada por falta da verificação visual",
+    "repeticoes_do_mesmo_pedido": "4 repetições: codigoVisual '', '', 's1e1', 's1e5'; nenhuma com o código correto",
+    "diagnostico": "O Gemma do Jan lê uma imagem isolada (transcreveu '11DC48AB' sozinho e o texto da foto), mas com duas imagens no mesmo pedido não transcreve a segunda ('ABDABD...'). Com a verificação em primeiro, leu o código mas passou a inventar uma garrafa e volumes (600 ml, 400 ml, 1,5 L). A verificação visual do app cumpriu o papel: impediu que uma leitura de foto não comprovada fosse apresentada.",
+    "fronteira": "Uma leitura de foto aceita exige um modelo com visão que trate várias imagens por pedido. Não há outro modelo com visão no Jan do usuário."
+  }
 }
