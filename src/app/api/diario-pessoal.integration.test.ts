@@ -409,6 +409,31 @@ describe('diário pessoal (tarefa 135)', () => {
       `Relato do diário pessoal de ${r.data}: ${relato}`
     );
   });
+  it('lista os dias de meses com 30 dias e de fevereiro, incluindo o último dia', async () => {
+    // Administrador: histórico sem corte, para meses passados fixos.
+    const u = await criarUsuario('admin', 'MesesCurtos');
+    const datas = ['2026-09-01', '2026-09-30', '2026-10-01', '2026-02-28'];
+    for (const data of datas)
+      await executeStatement(
+        "INSERT INTO personal_diary_entries(id,user_id,entry_date,input_mode,original_text) VALUES(?,?,?,'texto',?)",
+        [randomUUID(), u.id, data, relato]
+      );
+    const mes = async (m: string) =>
+      (
+        (
+          await chamar(diario.GET, {
+            usuario: u,
+            path: `/api/diario-pessoal?mes=${m}`,
+          })
+        ).json as MesDoDiario
+      ).dias;
+    expect(await mes('2026-09')).toEqual([
+      { data: '2026-09-01', total: 1 },
+      { data: '2026-09-30', total: 1 },
+    ]);
+    expect(await mes('2026-02')).toEqual([{ data: '2026-02-28', total: 1 }]);
+    expect(await mes('2026-10')).toEqual([{ data: '2026-10-01', total: 1 }]);
+  });
   it('integra linha do tempo sem o conteúdo, plano, exportação e exclusão da conta', async () => {
     const u = await criarUsuario();
     const r = (await criar(u)).json as Relato;

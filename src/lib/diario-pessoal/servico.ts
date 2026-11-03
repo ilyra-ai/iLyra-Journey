@@ -136,11 +136,15 @@ export async function lerMesDoDiario(
   await autorizarDiarioPessoal(s);
   const ctx = await contextoDoDiario(s.user.id, agora),
     alvo = mes ?? ctx.hoje.slice(0, 7);
+  // Fim do mês pelo próprio MySQL: um dia 31 fixo ("2026-11-31") é data
+  // inválida e esvaziava os meses de 30 dias e fevereiro.
+  const inicio = `${alvo}-01`;
   const dias = await queryRows<{ entry_date: string; total: number }>(
     `SELECT entry_date,COUNT(*) total FROM personal_diary_entries
-     WHERE user_id=? AND entry_date BETWEEN ? AND ? AND entry_date >= ?
+     WHERE user_id=? AND entry_date >= ? AND entry_date < DATE_ADD(?, INTERVAL 1 MONTH)
+       AND entry_date >= ?
      GROUP BY entry_date ORDER BY entry_date`,
-    [s.user.id, `${alvo}-01`, `${alvo}-31`, ctx.corte ?? '0000-01-01']
+    [s.user.id, inicio, inicio, ctx.corte ?? '0000-01-01']
   );
   return {
     mes: alvo,
