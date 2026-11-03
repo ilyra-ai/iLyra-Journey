@@ -72,6 +72,55 @@ function conferir(texto: string, arquivos: Fonte[], codigo: string) {
     throw new Error('Falta informar a leitura ou limitação de um arquivo.');
   return r;
 }
+type Esquema = Record<string, unknown> & {
+  properties: Record<string, Record<string, unknown>>;
+};
+/**
+ * JSON Schema da leitura ajustado aos anexos reais: limites de anexo e de
+ * linhas, e, quando todos são do mesmo tipo, só a forma de fonte válida
+ * (linhas para TXT e região para imagem). Servidores com gramática geram
+ * presos a ele, e modelos que só leem o esquema no texto (ver
+ * `instrucoesNaMensagem`) deixam de preencher região em TXT. A conferência
+ * em `conferir` continua valendo igual para qualquer tipo.
+ */
+export function esquemaDaLeitura(arquivos: Fonte[]) {
+  const esquema = z.toJSONSchema(formato) as Esquema;
+  const textos = arquivos.filter((a) => a.text_content !== null);
+  const imagens = arquivos.length - textos.length;
+  const maiorLinha = Math.max(
+    1,
+    ...textos.map((a) => a.text_content!.split(/\r?\n/).length)
+  );
+  const fontes = esquema.properties.fontes as Esquema & {
+    items: Esquema;
+  };
+  const campos = fontes.items.properties;
+  campos.anexo = { type: 'integer', minimum: 1, maximum: arquivos.length };
+  const linha = { type: 'integer', minimum: 1, maximum: maiorLinha };
+  if (imagens === 0) {
+    campos.linhaInicial = linha;
+    campos.linhaFinal = linha;
+    campos.regiao = { type: 'null' };
+    esquema.properties.codigoVisual = { type: 'string', maxLength: 0 };
+  } else if (textos.length === 0) {
+    campos.linhaInicial = { type: 'null' };
+    campos.linhaFinal = { type: 'null' };
+    campos.regiao = { type: 'string', minLength: 1, maxLength: 200 };
+  } else {
+    campos.linhaInicial = { anyOf: [linha, { type: 'null' }] };
+    campos.linhaFinal = { anyOf: [linha, { type: 'null' }] };
+  }
+  const naoLidos = esquema.properties.naoLidos as Esquema & {
+    items: Esquema;
+  };
+  naoLidos.maxItems = arquivos.length;
+  naoLidos.items.properties.anexo = {
+    type: 'integer',
+    minimum: 1,
+    maximum: arquivos.length,
+  };
+  return esquema;
+}
 function escapar(s: string) {
   return s.replace(/[\\`*_{}[\]()#+.!<>|~]/g, '\\$&');
 }
@@ -135,7 +184,7 @@ export async function lerComModelo(
         JSON.stringify(dados),
       imagens,
       json: true,
-      esquemaJson: z.toJSONSchema(formato),
+      esquemaJson: esquemaDaLeitura(arquivos),
       nomeDoEsquema: 'leitura_de_anexos',
       maximoDeTokens: 4096,
       aoTexto: undefined,

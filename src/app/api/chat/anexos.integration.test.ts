@@ -14,6 +14,13 @@ import {
   selecionarAnexos,
 } from '@/lib/anexos/servico';
 import { lerComModelo } from '@/lib/anexos/leitura';
+type EsquemaDaLeitura = {
+  properties: {
+    codigoVisual: unknown;
+    fontes: { items: { properties: Record<string, unknown> } };
+    naoLidos: { maxItems: number };
+  };
+};
 import {
   iniciarTurno,
   concluirTurno,
@@ -452,6 +459,24 @@ describe('anexos privados, MySQL e handlers reais', () => {
       expect(texto).toContain('Percepção: 0');
       expect(texto).toContain('linhas 1–2');
       expect(JSON.stringify(recebido)).toContain('DADOS NÃO CONFIÁVEIS');
+      // Só TXT: o esquema exige linhas, região nula e nenhum código visual.
+      const esquema = (
+        recebido as {
+          response_format: { json_schema: { schema: EsquemaDaLeitura } };
+        }
+      ).response_format.json_schema.schema;
+      const total = arquivos[0].text_content!.split(/\r?\n/).length;
+      expect(esquema.properties.fontes.items.properties).toMatchObject({
+        anexo: { type: 'integer', minimum: 1, maximum: 1 },
+        linhaInicial: { type: 'integer', minimum: 1, maximum: total },
+        linhaFinal: { type: 'integer', minimum: 1, maximum: total },
+        regiao: { type: 'null' },
+      });
+      expect(esquema.properties.codigoVisual).toEqual({
+        type: 'string',
+        maxLength: 0,
+      });
+      expect(esquema.properties.naoLidos.maxItems).toBe(1);
     } finally {
       servidor.close();
       await once(servidor, 'close');
@@ -525,6 +550,18 @@ describe('anexos privados, MySQL e handlers reais', () => {
         buscar
       )
     ).rejects.toHaveProperty('statusCode', 503);
+    // Só imagem: linhas nulas e região obrigatória.
+    expect(
+      (
+        pedido as unknown as {
+          response_format: { json_schema: { schema: EsquemaDaLeitura } };
+        }
+      ).response_format.json_schema.schema.properties.fontes.items.properties
+    ).toMatchObject({
+      linhaInicial: { type: 'null' },
+      linhaFinal: { type: 'null' },
+      regiao: { type: 'string', minLength: 1, maxLength: 200 },
+    });
     const mensagem = (
       pedido as unknown as { messages: Array<{ content: unknown }> }
     ).messages[1];

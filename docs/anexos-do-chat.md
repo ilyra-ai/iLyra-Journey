@@ -50,6 +50,16 @@ consultada e informa que a descrição vem do modelo. Cada arquivo selecionado d
 ter fonte ou limitação declarada. A pessoa continua responsável por conferir os
 arquivos; a leitura pode errar e não substitui atendimento profissional.
 
+O JSON Schema enviado ao modelo é montado a partir dos anexos reais
+(`esquemaDaLeitura`): número do anexo até a quantidade selecionada, linha até a
+maior linha dos TXT e, quando todos os anexos são do mesmo tipo, somente a forma
+de fonte válida (linhas com região nula para TXT; região com linhas nulas para
+imagens; `codigoVisual` vazio sem imagens). Em 2026-11-02, com o pedido real
+repetido no Qwen3_8-2B do Jan, o esquema genérico levou o modelo a preencher a
+região em TXT em quase todas as respostas, que eram recusadas; com o esquema por
+tipo, 6 de 8 respostas vieram com a forma correta. A conferência do servidor não
+mudou: linhas, região, cobertura e código visual continuam verificados igual.
+
 ## Persistência, privacidade e exclusão
 
 A migração 056 cria chat_attachments com FK composta para conversa e titular;
