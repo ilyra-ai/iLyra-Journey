@@ -21,12 +21,12 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **93,6%** (131 de 140)   |
-| Implementações publicadas               | **99,3%** (139 de 140)   |
+| Conclusão integral                      | **94,3%** (132 de 140)   |
+| Implementações publicadas               | **100%** (140 de 140)    |
 | Tarefas totais                          | 140                      |
-| 🟢 Concluídas                           | 131                      |
+| 🟢 Concluídas                           | 132                      |
 | 🟡 Implementadas com validação pendente | 8                        |
-| 🔵 Em andamento                         | 1                        |
+| 🔵 Em andamento                         | 0                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 0                        |
 | Branch de trabalho                      | `main` (única permitida) |
@@ -114,15 +114,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### ANDAMENTO
 
-### 140 · Reorganizar a navegação lateral por categorias e submenus
-
-- **Status:** 🔵 em andamento · **Início:** 2026-11-04.
-- **Pedido:** organizar os menus do usuário e do administrador em categorias e submenus coerentes, facilitando a navegação no computador e no celular.
-- **Conferência prévia:** navegação e filtros centralizados em `navigation.ts`; desktop e celular repetem a renderização; histórico de conversas, configurações publicadas, atalhos e direitos dos planos serão preservados. Busca por TODO/FIXME no backend não encontrou pendência funcional relacionada à navegação.
-- **Implementação prevista:** componente compartilhado com divulgação acessível, grupo da página atual aberto, categorias vazias omitidas e separação da administração. Seguir Lyra Clean, referências oficiais atuais do shadcn, Carbon e WAI-ARIA; validar permissões, cobertura dos destinos, teclado, desktop/mobile e gates antes de publicar na `main`.
-- **Implementado e revisado:** `SidebarNavigation` compartilhado pelo desktop, menu móvel e prévia; atalhos Dia a dia; Minha jornada com Planejamento e hábitos, Práticas de bem-estar e Registros e evolução; Saúde e conexões; Minha conta. Para administradores, Administração vem logo após os atalhos e reúne Pessoas e planos, Conteúdo e IA e Dados e relatórios. Estrutura aplicada somente aos destinos filtrados por plano, papel, configuração publicada e ativação de Agendamentos. Rótulos personalizados e ordem dentro das categorias preservados; histórico e atalhos existentes mantidos. Controles de 44 px, rótulos sem truncamento, estado expandido, listas nomeadas e abertura da categoria da rota atual, incluindo subpáginas.
-- **Gates reais:** instalação congelada, fix:format, fix:lint, check:lint, check:format e check:types aprovados; 997 unitários em 94 arquivos (sete novos testes da taxonomia), 601 integrações MySQL em 67 arquivos e build de produção aprovados. Após o ajuste da posição administrativa, teste focado, lint dos arquivos alterados, formatação e build novamente aprovados. `@current_problems` indisponível nesta sessão.
-- **QA real em produção:** navegador com administrador e conta Free temporária; Enter/Espaço, expansão/recolhimento, página ativa, submenus pessoais e administrativos, navegação efetiva e fechamento do painel móvel. Larguras 1280, 390 e 320 px, sem transbordo; nenhuma mensagem de erro/aviso no console durante os percursos. HTTP: 30 páginas do catálogo como administrador e 24 como usuário comum, todas 200; API administrativa 200/403 conforme o papel. Saúde do app com 66 migrações e login do administrador aprovados. Conta temporária excluída e ausência confirmada; administrador restaurado no navegador. Nenhum dado de usuário real alterado. Documentação e fontes em `docs/design-system.md`. Implementação validada, aguardando publicação individual na `main`.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -2427,3 +2419,13 @@ Nenhuma tarefa a iniciar. As notas abaixo preservam registros históricos de cri
 - **Critério:** conferir números únicos, totais, estados e preservação dos blocos; validar formatação e publicar individualmente na `main`.
 - **Revisão e evidências:** 139 números únicos e completos; Tópico 4 ordenado de 01 a 138; oito estados 🟡 (14, 15, 23, 86, 90, 100, 127 e 135), cada um com a fronteira explícita. Comparação automatizada preservou os 139 blocos históricos, descontando apenas as mudanças de estado autorizadas, as novas linhas de validação e espaços de formatação. Formatação global e `git diff --check` aprovados. Sem mudança de código nesta tarefa: mantidos os gates completos aprovados na 138, sem alegar nova execução.
 - **Pedido adicional atendido em 2026-11-04:** Docker Desktop testado com `hello-world`; frontend e API de produção ativos em `http://localhost:3000`; MySQL 9.7.2 saudável em 3307 com 66/66 migrações; FalkorDB e memória Graphiti saudáveis, `/saude` com 256 dimensões. `/api/health`, início, login e autenticação do administrador aprovados por HTTP; tela de login conferida no navegador. `.env.local` e logs permanecem ignorados pelo Git; nenhuma credencial foi adicionada ao painel. O doctor do Git Bash passou com um aviso de detecção da build do Windows; não se declara a validação completa dos launchers.
+
+### 140 · Reorganizar a navegação lateral por categorias e submenus
+
+- **Status:** 🟢 finalizada · **Início e conclusão:** 2026-11-04 · **Commit:** `6a3f7d15` · **Push confirmado:** `29e25b02..6a3f7d15 main -> main`.
+- **Pedido:** organizar os menus do usuário e do administrador em categorias e submenus coerentes, facilitando a navegação no computador e no celular.
+- **Conferência prévia:** navegação e filtros centralizados em `navigation.ts`; desktop e celular repetem a renderização; histórico de conversas, configurações publicadas, atalhos e direitos dos planos serão preservados. Busca por TODO/FIXME no backend não encontrou pendência funcional relacionada à navegação.
+- **Implementação prevista:** componente compartilhado com divulgação acessível, grupo da página atual aberto, categorias vazias omitidas e separação da administração. Seguir Lyra Clean, referências oficiais atuais do shadcn, Carbon e WAI-ARIA; validar permissões, cobertura dos destinos, teclado, desktop/mobile e gates antes de publicar na `main`.
+- **Implementado e revisado:** `SidebarNavigation` compartilhado pelo desktop, menu móvel e prévia; atalhos Dia a dia; Minha jornada com Planejamento e hábitos, Práticas de bem-estar e Registros e evolução; Saúde e conexões; Minha conta. Para administradores, Administração vem logo após os atalhos e reúne Pessoas e planos, Conteúdo e IA e Dados e relatórios. Estrutura aplicada somente aos destinos filtrados por plano, papel, configuração publicada e ativação de Agendamentos. Rótulos personalizados e ordem dentro das categorias preservados; histórico e atalhos existentes mantidos. Controles de 44 px, rótulos sem truncamento, estado expandido, listas nomeadas e abertura da categoria da rota atual, incluindo subpáginas.
+- **Gates reais:** instalação congelada, fix:format, fix:lint, check:lint, check:format e check:types aprovados; 997 unitários em 94 arquivos (sete novos testes da taxonomia), 601 integrações MySQL em 67 arquivos e build de produção aprovados. Após o ajuste da posição administrativa, teste focado, lint dos arquivos alterados, formatação e build novamente aprovados. `@current_problems` indisponível nesta sessão.
+- **QA real em produção:** navegador com administrador e conta Free temporária; Enter/Espaço, expansão/recolhimento, página ativa, submenus pessoais e administrativos, navegação efetiva e fechamento do painel móvel. Larguras 1280, 390 e 320 px, sem transbordo; nenhuma mensagem de erro/aviso no console durante os percursos. HTTP: 30 páginas do catálogo como administrador e 24 como usuário comum, todas 200; API administrativa 200/403 conforme o papel. Saúde do app com 66 migrações e login do administrador aprovados. Conta temporária excluída e ausência confirmada; administrador restaurado no navegador. Nenhum dado de usuário real alterado. Documentação e fontes em `docs/design-system.md`. Implementação validada e publicada individualmente na `main`, sem branches ou worktrees.
