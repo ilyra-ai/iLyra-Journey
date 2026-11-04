@@ -21,12 +21,12 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **94,2%** (131 de 139)   |
-| Implementações publicadas               | **100%** (139 de 139)    |
-| Tarefas totais                          | 139                      |
+| Conclusão integral                      | **93,6%** (131 de 140)   |
+| Implementações publicadas               | **99,3%** (139 de 140)   |
+| Tarefas totais                          | 140                      |
 | 🟢 Concluídas                           | 131                      |
 | 🟡 Implementadas com validação pendente | 8                        |
-| 🔵 Em andamento                         | 0                        |
+| 🔵 Em andamento                         | 1                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 0                        |
 | Branch de trabalho                      | `main` (única permitida) |
@@ -114,7 +114,15 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 140 · Reorganizar a navegação lateral por categorias e submenus
+
+- **Status:** 🔵 em andamento · **Início:** 2026-11-04.
+- **Pedido:** organizar os menus do usuário e do administrador em categorias e submenus coerentes, facilitando a navegação no computador e no celular.
+- **Conferência prévia:** navegação e filtros centralizados em `navigation.ts`; desktop e celular repetem a renderização; histórico de conversas, configurações publicadas, atalhos e direitos dos planos serão preservados. Busca por TODO/FIXME no backend não encontrou pendência funcional relacionada à navegação.
+- **Implementação prevista:** componente compartilhado com divulgação acessível, grupo da página atual aberto, categorias vazias omitidas e separação da administração. Seguir Lyra Clean, referências oficiais atuais do shadcn, Carbon e WAI-ARIA; validar permissões, cobertura dos destinos, teclado, desktop/mobile e gates antes de publicar na `main`.
+- **Implementado e revisado:** `SidebarNavigation` compartilhado pelo desktop, menu móvel e prévia; atalhos Dia a dia; Minha jornada com Planejamento e hábitos, Práticas de bem-estar e Registros e evolução; Saúde e conexões; Minha conta. Para administradores, Administração vem logo após os atalhos e reúne Pessoas e planos, Conteúdo e IA e Dados e relatórios. Estrutura aplicada somente aos destinos filtrados por plano, papel, configuração publicada e ativação de Agendamentos. Rótulos personalizados e ordem dentro das categorias preservados; histórico e atalhos existentes mantidos. Controles de 44 px, rótulos sem truncamento, estado expandido, listas nomeadas e abertura da categoria da rota atual, incluindo subpáginas.
+- **Gates reais:** instalação congelada, fix:format, fix:lint, check:lint, check:format e check:types aprovados; 997 unitários em 94 arquivos (sete novos testes da taxonomia), 601 integrações MySQL em 67 arquivos e build de produção aprovados. Após o ajuste da posição administrativa, teste focado, lint dos arquivos alterados, formatação e build novamente aprovados. `@current_problems` indisponível nesta sessão.
+- **QA real em produção:** navegador com administrador e conta Free temporária; Enter/Espaço, expansão/recolhimento, página ativa, submenus pessoais e administrativos, navegação efetiva e fechamento do painel móvel. Larguras 1280, 390 e 320 px, sem transbordo; nenhuma mensagem de erro/aviso no console durante os percursos. HTTP: 30 páginas do catálogo como administrador e 24 como usuário comum, todas 200; API administrativa 200/403 conforme o papel. Saúde do app com 66 migrações e login do administrador aprovados. Conta temporária excluída e ausência confirmada; administrador restaurado no navegador. Nenhum dado de usuário real alterado. Documentação e fontes em `docs/design-system.md`. Implementação validada, aguardando publicação individual na `main`.
 
 ### BLOQUEADAS
 

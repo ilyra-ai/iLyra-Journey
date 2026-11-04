@@ -215,6 +215,34 @@ e usa a definição do catálogo. As pontuações interpretativas são apresenta
 como reflexões, sem classificação clínica por um valor isolado. O cartão de
 mudanças aguarda histórico antes de anunciar estabilidade.
 
+## Navegação lateral por assunto (2026-11-04, tarefa 140)
+
+- **Dia a dia:** Lyra AI, Painel e Meu dia ficam acessíveis diretamente.
+- **Minha jornada:** submenus Planejamento e hábitos, Práticas de bem-estar
+  e Registros e evolução. Cada um reúne somente páginas já disponíveis ao titular.
+- **Saúde e conexões:** Monitoramento, Dispositivos e Agendamentos, conforme
+  direitos do plano e ativação global de Agendamentos.
+- **Minha conta:** Perfil, Planos (somente usuários comuns) e Sem internet.
+- **Administração:** logo após Dia a dia para quem administra; visão geral direta; submenus Pessoas e planos,
+  Conteúdo e IA e Dados e relatórios, exclusivos do administrador.
+
+Desktop, menu móvel e prévia do construtor usam `SidebarNavigation`.
+O grupo da página atual abre automaticamente, inclusive em acessos diretos;
+Enter e Espaço abrem ou fecham os demais grupos. Links recolhidos ficam fora
+da navegação por teclado; a lista é nomeada pelo botão com `aria-controls`
+e `aria-expanded`. A navegação continua sendo uma lista de links, sem
+`role="menu"`. No celular, escolher uma página fecha o painel.
+
+Rótulos e ordem personalizada do construtor são preservados dentro de cada
+categoria. Categorias vazias não aparecem; novos destinos personalizados
+continuam acessíveis. Histórico de conversas, busca e atalhos existentes
+permanecem disponíveis. Os rótulos aceitam quebra de linha e os controles
+têm pelo menos 44 px, com cores semânticas do Lyra Clean.
+
+Referências consultadas em 04/11/2026: [navegação com disclosure do WAI-ARIA](https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/),
+[Carbon atualizado em outubro de 2026](https://www.carbondesignsystem.com/building-blocks/core/components/ui-shell-left-panel/accessibility)
+e [submenus do shadcn](https://ui.shadcn.com/docs/components/radix/sidebar).
+
 ## Referências históricas
 
 - Proposta aprovada: sistema visual, login, dashboard e metas, publicados como

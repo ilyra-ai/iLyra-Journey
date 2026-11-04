@@ -1,12 +1,10 @@
 'use client';
-import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import React from 'react';
 import Link from 'next/link';
 import { Menu } from 'lucide-react';
 import { PlanoJuntoAoLogo } from '@/components/subscription/PlanoJuntoAoLogo';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
-import { HistoricoDeConversas } from '@/components/chat/HistoricoDeConversas';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -16,8 +14,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { SidebarLink } from './SidebarLink';
-import { getVisibleNavigation, groupNavigation } from './navigation';
+import { SidebarNavigation } from './SidebarNavigation';
+import { getVisibleNavigation } from './navigation';
 import { useAuth } from '@/context/AuthContext';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 import { useRotaLiberada } from '@/hooks/use-rota-liberada';
@@ -36,9 +34,7 @@ export function MobileSidebar() {
   const [open, setOpen] = React.useState(false);
   const rotaLiberada = useRotaLiberada();
 
-  const sections = groupNavigation(
-    getVisibleNavigation(isAdmin, appConfig, rotaLiberada)
-  );
+  const itens = getVisibleNavigation(isAdmin, appConfig, rotaLiberada);
   const firstName =
     session?.user?.email?.split('@')[0]?.replace(/\./g, ' ') || 'Paciente';
   const iconScale = appConfig.sizing.iconScale;
@@ -101,42 +97,11 @@ export function MobileSidebar() {
           aria-label="Navegação móvel"
           className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto"
         >
-          {/* Mesma estrutura do menu lateral: lista nomeada por seção. */}
-          {Object.entries(sections).map(([section, items], indice) => (
-            <div key={section} className="flex flex-col">
-              <p
-                id={`menu-movel-secao-${indice}`}
-                className="px-2.5 pb-1.5 text-xs font-medium text-muted-foreground"
-              >
-                {section}
-              </p>
-              <ul
-                aria-labelledby={`menu-movel-secao-${indice}`}
-                className="flex flex-col gap-0.5"
-              >
-                {items.map((item) => (
-                  <li key={item.href}>
-                    <SidebarLink
-                      href={item.href}
-                      icon={item.icon}
-                      onClick={() => setOpen(false)}
-                      iconScale={iconScale}
-                      labelScale={navLabelScale}
-                    >
-                      {item.label}
-                    </SidebarLink>
-                    {item.href === '/chat' ? (
-                      <PlanFeatureGate features={['chat_history']} ocultar>
-                        <HistoricoDeConversas
-                          aoEscolher={() => setOpen(false)}
-                        />
-                      </PlanFeatureGate>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <SidebarNavigation
+            itens={itens}
+            config={appConfig}
+            aoNavegar={() => setOpen(false)}
+          />
         </nav>
       </SheetContent>
     </Sheet>

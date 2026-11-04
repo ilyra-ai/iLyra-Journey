@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { cn } from '@/lib/utils';
 import { scalePx, scaleRem } from '@/lib/site-page-config/runtime';
+import { destinoLateralAtivo } from './sidebar-structure';
 
 type SidebarLinkProps = {
   href: string;
@@ -17,8 +18,8 @@ type SidebarLinkProps = {
 };
 
 /*
-  Item de navegação "Lyra Clean": ícone + rótulo em uma linha, 40px de
-  altura, fundo teal suave no item ativo. As descrições de cada página
+  Item de navegação "Lyra Clean": ícone + rótulo sem cortes, pelo menos
+  44px de altura e fundo teal suave no item ativo. As descrições de cada página
   continuam disponíveis na busca (Ctrl K), onde ajudam a encontrar a tela.
 */
 export function SidebarLink({
@@ -31,7 +32,7 @@ export function SidebarLink({
   labelScale = 1,
 }: SidebarLinkProps) {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  const isActive = destinoLateralAtivo(pathname, href);
 
   return (
     <Link
@@ -39,7 +40,7 @@ export function SidebarLink({
       onClick={onClick}
       aria-current={isActive ? 'page' : undefined}
       className={cn(
-        'flex min-h-10 w-full items-center gap-2.5 rounded px-2.5 transition-colors duration-150',
+        'flex min-h-11 w-full items-center gap-2.5 rounded px-2.5 py-2 transition-colors duration-150',
         isActive
           ? 'bg-sidebar-accent font-semibold text-sidebar-accent-foreground'
           : 'text-foreground/80 hover:bg-muted hover:text-foreground',
@@ -60,7 +61,7 @@ export function SidebarLink({
           }}
         />
       )}
-      <span className="truncate">{children}</span>
+      <span className="min-w-0 break-words leading-snug">{children}</span>
     </Link>
   );
 }

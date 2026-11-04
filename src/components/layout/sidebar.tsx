@@ -1,12 +1,10 @@
 'use client';
-import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import Link from 'next/link';
 import React from 'react';
 import { Settings2 } from 'lucide-react';
 import { PlanoJuntoAoLogo } from '@/components/subscription/PlanoJuntoAoLogo';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
-import { HistoricoDeConversas } from '@/components/chat/HistoricoDeConversas';
 import { useAuth } from '@/context/AuthContext';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
@@ -16,8 +14,8 @@ import { scalePx, scaleRem } from '@/lib/site-page-config/runtime';
 import type { AppPageConfig } from '@/lib/site-page-config/schema';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { usePerfilDoCabecalho } from '@/hooks/use-perfil-do-cabecalho';
-import { SidebarLink } from './SidebarLink';
-import { getVisibleNavigation, groupNavigation } from './navigation';
+import { SidebarNavigation } from './SidebarNavigation';
+import { getVisibleNavigation } from './navigation';
 
 /*
   Sidebar "Lyra Clean": branca, borda direita de 1px, marca compacta,
@@ -48,12 +46,10 @@ export function Sidebar({
   const initial = firstName.charAt(0).toUpperCase();
   const rotaLiberadaPeloPlano = useRotaLiberada();
   // Na prévia do Construtor a sidebar é vista como administrador (tudo).
-  const sections = groupNavigation(
-    getVisibleNavigation(
-      isAdmin,
-      appConfig,
-      previa ? undefined : rotaLiberadaPeloPlano
-    )
+  const itens = getVisibleNavigation(
+    isAdmin,
+    appConfig,
+    previa ? undefined : rotaLiberadaPeloPlano
   );
   const navLabelScale = appConfig.typography.navLabel;
   const iconScale = appConfig.sizing.iconScale;
@@ -102,40 +98,7 @@ export function Sidebar({
           aria-label="Navegação principal"
           className="flex min-h-0 flex-1 flex-col gap-5 overflow-y-auto"
         >
-          {/* Cada seção é uma lista nomeada pelo próprio rótulo (tarefa 62):
-              o leitor de tela anuncia "lista, Saúde, 4 itens". */}
-          {Object.entries(sections).map(([section, items], indice) => (
-            <div key={section} className="flex flex-col">
-              <p
-                id={`menu-lateral-secao-${indice}`}
-                className="px-2.5 pb-1.5 text-xs font-medium text-muted-foreground"
-              >
-                {section}
-              </p>
-              <ul
-                aria-labelledby={`menu-lateral-secao-${indice}`}
-                className="flex flex-col gap-0.5"
-              >
-                {items.map((item) => (
-                  <li key={item.href}>
-                    <SidebarLink
-                      href={item.href}
-                      icon={item.icon}
-                      iconScale={iconScale}
-                      labelScale={navLabelScale}
-                    >
-                      {item.label}
-                    </SidebarLink>
-                    {item.href === '/chat' && !previa ? (
-                      <PlanFeatureGate features={['chat_history']} ocultar>
-                        <HistoricoDeConversas />
-                      </PlanFeatureGate>
-                    ) : null}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <SidebarNavigation itens={itens} config={appConfig} previa={previa} />
         </nav>
 
         <div className="flex items-center gap-2.5 border-t border-sidebar-border px-2.5 pt-3.5">
