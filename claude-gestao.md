@@ -10,27 +10,29 @@
 2. As tarefas são sempre listadas em **ordem numérica crescente** dentro de cada tópico.
 3. **ANDAMENTO** comporta no máximo **3 tarefas simultâneas**; ao finalizar, a tarefa sai do Tópico 2 e entra no Tópico 4.
 4. **BLOQUEADAS** recebe toda tarefa que dependa de interação do usuário, credencial externa ou limitação real do ambiente, sempre com a evidência do bloqueio.
-5. O Tópico 4 registra apenas o que foi realmente implementado, testado, commitado e enviado para `origin/main`, com SHA e evidências reais.
+5. O Tópico 4 preserva implementações publicadas, SHAs e evidências reais. O estado 🟡 distingue implementação entregue de validação ainda pendente; somente 🟢 entra no percentual de conclusão integral. Evidências históricas permanecem datadas e não são apresentadas como reexecuções atuais.
 6. **Obrigatório:** logo após o commit e push de cada tarefa para `main`, este painel é atualizado imediatamente com o SHA real da tarefa e enviado em um commit e push próprios para `main`.
 
-**Legenda:** 🟢 finalizada · 🔵 em andamento · 🔴 bloqueada · ⚪ a iniciar
+**Legenda:** 🟢 concluída com as evidências aplicáveis · 🟡 implementada, validação pendente · 🔵 em andamento · 🔴 bloqueada · ⚪ a iniciar
 
 ---
 
 ## Tópico 1 · Andamento Geral
 
-| Indicador          | Valor                           |
-| ------------------ | ------------------------------- |
-| Progresso          | `████████████████████` **100%** |
-| Tarefas totais     | 138                             |
-| 🟢 Finalizadas     | 138                             |
-| 🔵 Em andamento    | 0                               |
-| 🔴 Bloqueadas      | 0                               |
-| ⚪ A iniciar       | 0                               |
-| Branch de trabalho | `main` (única permitida)        |
-| Última atualização | 2026-11-04                      |
+| Indicador                               | Valor                    |
+| --------------------------------------- | ------------------------ |
+| Conclusão integral                      | **93,5%** (130 de 139)   |
+| Implementações publicadas               | **99,3%** (138 de 139)   |
+| Tarefas totais                          | 139                      |
+| 🟢 Concluídas                           | 130                      |
+| 🟡 Implementadas com validação pendente | 8                        |
+| 🔵 Em andamento                         | 1                        |
+| 🔴 Bloqueadas                           | 0                        |
+| ⚪ A iniciar                            | 0                        |
+| Branch de trabalho                      | `main` (única permitida) |
+| Última atualização                      | 2026-11-04               |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (138 ÷ 138 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os oito estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -112,13 +114,21 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 139 · Ordenar a gestão e distinguir conclusão de validação pendente
+
+- **Status:** 🔵 em andamento · **Início:** 2026-11-04.
+- **Escopo autorizado:** ordenar numericamente todos os tópicos, preservar o histórico e os SHAs, separar implementação publicada de validação integral e expor as fronteiras ainda não comprovadas.
+- **Critério:** conferir números únicos, totais, estados e preservação dos blocos; validar formatação e publicar individualmente na `main`.
+- **Revisão e evidências:** 139 números únicos e completos; Tópico 4 ordenado de 01 a 138; oito estados 🟡 (14, 15, 23, 86, 90, 100, 127 e 135), cada um com a fronteira explícita. Comparação automatizada preservou os 139 blocos históricos, descontando apenas as mudanças de estado autorizadas, as novas linhas de validação e espaços de formatação. Formatação global e `git diff --check` aprovados. Sem mudança de código nesta tarefa: mantidos os gates completos aprovados na 138, sem alegar nova execução.
+- **Pedido adicional atendido em 2026-11-04:** Docker Desktop testado com `hello-world`; frontend e API de produção ativos em `http://localhost:3000`; MySQL 9.7.2 saudável em 3307 com 66/66 migrações; FalkorDB e memória Graphiti saudáveis, `/saude` com 256 dimensões. `/api/health`, início, login e autenticação do administrador aprovados por HTTP; tela de login conferida no navegador. `.env.local` e logs permanecem ignorados pelo Git; nenhuma credencial foi adicionada ao painel. O doctor do Git Bash passou com um aviso de detecção da build do Windows; não se declara a validação completa dos launchers.
 
 ### BLOQUEADAS
 
 Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ## Tópico 3 · Tarefas a Iniciar
+
+Nenhuma tarefa a iniciar. As notas abaixo preservam registros históricos de criação; não indicam tarefas atualmente abertas.
 
 ---
 
@@ -132,7 +142,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
 
-## Tópico 4 · Histórico das Tarefas Finalizadas
+## Tópico 4 · Implementações Publicadas e Estado da Validação
 
 ### 01 · Instrução mestra no `CLAUDE.md` e obrigatoriedade para agentes de IA
 
@@ -433,7 +443,8 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 14 · Correção e modernização completa do run.sh
 
-- **Status:** 🟢 finalizada · **Commit:** `0e07294` · **Push:** `main -> main` (confirmado; `main...origin/main` sem divergência)
+- **Status:** 🟡 implementada · validação pendente · **Commit:** `0e07294` · **Push:** `main -> main` (confirmado; `main...origin/main` sem divergência)
+- **Validação atual (revisão de 2026-11-04):** Execução completa do run.sh no Windows 11/Git Bash: subida, logs, parada, reinício e modo interativo. O doctor nativo passou em 04/11/2026, mas não comprova esses percursos.
 - **Diagnóstico do `run.sh` anterior:**
   - `kill_port` encerrava qualquer processo na porta da aplicação, inclusive de terceiros (item 27).
   - O ramo `ss` coletava os PIDs de **todas** as portas em escuta, não só da porta pedida.
@@ -462,7 +473,8 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 15 · Revisão do run_windows.py e eliminação de redundância
 
-- **Status:** 🟢 finalizada · **Commit:** `d92005f` · **Push:** `main -> main` (confirmado; `main...origin/main` sem divergência)
+- **Status:** 🟡 implementada · validação pendente · **Commit:** `d92005f` · **Push:** `main -> main` (confirmado; `main...origin/main` sem divergência)
+- **Validação atual (revisão de 2026-11-04):** Execução completa do wrapper run_windows.py no Windows 11, incluindo delegação de subida, logs, parada e reinício. O doctor nativo passou em 04/11/2026.
 - **Por que o arquivo existia:** criado (commit `71e04a0`) porque o `run.py` da época era só para WSL/Ubuntu; virou uma segunda implementação do launcher no Windows, paralela ao `run.sh`.
 - **Divergências encontradas na versão anterior (661 linhas):**
   - recorria ao `npm` sem `pnpm` no PATH e instalava sem `--frozen-lockfile`, fora do Corepack;
@@ -664,7 +676,8 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 23 · Documentação final e validação integral
 
-- **Status:** 🟢 finalizada · **Commit:** `a4ee832` · **Push:** `a5a18ad..a4ee832 main -> main` (confirmado)
+- **Status:** 🟡 implementada · validação pendente · **Commit:** `a4ee832` · **Push:** `a5a18ad..a4ee832 main -> main` (confirmado)
+- **Validação atual (revisão de 2026-11-04):** Fechamento integral condicionado às fronteiras de validação registradas neste painel; os gates aprovados não comprovam automaticamente plataformas, dispositivos e provedores externos.
 - **Documentação:**
   - `README.md`: contagem real de testes (241 unitários e 73 de integração), portões completos (`test:integration` e `build`), segurança atual, links para `docs/acessibilidade.md` e `docs/design-system.md`, e contribuição direto na `main`.
   - `AGENTS.md`: sistema visual vigente e `test:integration` nos portões obrigatórios.
@@ -1601,6 +1614,26 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Pesquisa inicial:** [Graphiti oficial](https://github.com/getzep/graphiti), licença Apache 2.0, biblioteca Python e bancos de grafos suportados; exemplos REST/MCP não oferecem autenticação nem isolamento de usuários e não serão expostos como serviço de produção. A integração foi iniciada pela infraestrutura e pelo backend, antes dos controles visuais.
 - **Progresso verificado em 2026-10-20:** implementação e revisão concluídas. Graphiti 0.31.2, FalkorDB 6.0.2 e índices locais de 256 dimensões saudáveis; migração 031 aplicada sem apagar dados. Passaram 521 testes unitários, 187 de integração, 30 dos launchers, lint, formatação, tipos e build de produção, com saúde HTTP 200 e 33 migrations. Depois de o usuário reabrir o Jan, o roteiro HTTP completo confirmou extração real, origem, isolamento, alternância entre titulares, recuperação em outra conversa, reinício, correção temporal, exportação, Motor Lyra, modo privado, retentativa e exclusão pendente. Na interface, ativação, relato, origem, correção, download, pausa persistente e mensagem privada sem captura passaram; desktop e celulares de 390 e 320 pixels sem excesso horizontal. Auditoria Python sem vulnerabilidades conhecidas e inferência ONNX com vetores idênticos à referência. Configuração de modelos e modo privado restaurados; nenhuma conta temporária de memória ficou no banco. Relatório e artefatos verificáveis em `docs/memoria-graphiti.md`; commit e push individuais publicados e confirmados na main.
 
+### 86 · Geração de imagens no chat com modelos conectados
+
+- **Status:** 🟡 implementada · validação pendente · **Registro:** 2026-10-20 · **Início:** 2026-10-22 · **Conclusão:** 2026-10-30 · **Commit:** `037270c2` · **Push confirmado:** `59f8787..037270c main -> main`.
+- **Validação atual (revisão de 2026-11-04):** Adaptador Gemini com credencial real ainda não exercitado; a geração com modelo de difusão local foi comprovada e permanece válida.
+- **Retomada em 2026-10-24:** arquivos originais de geração, pedido e migração recuperados dos patches do chat anterior e reutilizados após revisão. Integração ao chat, armazenamento privado, retentativa e exportação em validação. Contratos conferidos nos pacotes oficiais do SDK; detalhes em `docs/imagens-do-chat.md`. Validação com modelo gerador real ainda depende de provedor acessível nesta nuvem; solicitado ao usuário sem pedir segredo no chat.
+- **Pedido do usuário:** o chat do app deve permitir criar imagens. Conforme complemento recebido em 2026-10-20, usar o segundo modelo de IA conectado nas configurações do app, que permitem conectar cinco modelos simultaneamente, tanto quando o usuário solicitar uma imagem quanto quando o Motor Lyra fizer a leitura do mapa pessoal, gerando também a imagem do mapa daquele usuário.
+- **Implementação nesta nuvem:** seleção exata do segundo modelo, validação e normalização real de imagens raster, arquivo privado por titular no MySQL, reabertura, download, retentativa, limite de uso, trava por tentativa, privacidade e consentimento, exportação LGPD e exclusão em cascade. Componente de resultado integrado sem redesenhar o chat. SDKs fixados e instalação congelada aprovada; nenhuma exceção à política de dependências acrescentada.
+- **Evidência local:** 599 testes unitários (74 arquivos), 201 integrações (26 arquivos), tipos, lint, formatação, build e instalação congelada passaram. Migração 034 aplicada: 36 migrations na saúde HTTP 200. QA HTTP de produção confirmou login, pedido persistido, mensagem de segundo modelo ausente, reabertura e recusa anônima; conversa temporária removida. Testes de imagem usam PNG real e HTTP controlado, não inferência de um modelo.
+- **Fronteira pendente:** usuário indicou Gemini para o teste real. O requisito seguro `GEMINI_IMAGE_API_KEY` e o destino `generativelanguage.googleapis.com` foram salvos no rascunho; valor não copiado para arquivos, comandos ou logs. É necessário configurar e aplicar essa credencial para consultar modelos e testar geração real. Chromium apresentou falhas do ambiente nas tentativas anteriores de captura; conferência visual mobile/desktop permanece sem comprovação. A tarefa não foi declarada finalizada e não se alegou imagem gerada por IA externa.
+- **Decisão do usuário em 2026-10-24:** deixar a geração bloqueada caso não seja possível validar, para que ele decida o provedor. Nenhuma geração externa foi comprovada; não insistir em outra conexão sem a configuração necessária. **Implementação publicada:** `3f95ad7` · **Push:** `942ff75..3f95ad7 main -> main`, confirmado. A publicação do código não encerra a pendência da tarefa.
+- **Roteamento e mapa pessoal:** conferir a ordem real das cinco conexões e encaminhar a geração de imagens ao segundo modelo configurado, preservando a configuração dos demais. Na leitura do mapa, construir a imagem a partir dos dados reais e autorizados do próprio titular e vinculá-la à leitura e à conversa correspondentes. Não inventar dados do mapa nem substituir o segundo modelo silenciosamente; se ele não estiver configurado, estiver indisponível ou não oferecer geração de imagens, informar a condição e permitir corrigir a conexão e tentar novamente.
+- **Critérios:** inspecionar a configuração e as capacidades reais dos provedores, pesquisar suas APIs oficiais atuais e implementar geração real pelo servidor, verificando a compatibilidade do segundo modelo e exibindo mensagens claras quando a conexão só oferecer texto. Não simular imagens nem atribuir essa capacidade a modelos que não a possuem. Integrar envio do pedido, andamento, falhas e retentativa à experiência simples e responsiva do chat, exibindo o resultado e permitindo baixar a imagem.
+- **Persistência e acesso:** preservar pedido, imagem e referência ao modelo na conversa, com armazenamento real vinculado ao titular, autorização no servidor, validação dos arquivos e limites de uso. Respeitar modo privado e consentimento para provedores externos, incluir os dados na exportação e exclusão da conta e não expor chaves ou imagens privadas em URLs públicas.
+- **Validação e entrega:** conferir geração solicitada no chat e geração do mapa após sua leitura, comprovando o uso do segundo modelo entre as cinco conexões e o tratamento de conexão ausente ou incompatível. Testar provedor e modelo capazes de criar imagens, reabertura da conversa, download, isolamento entre contas e interface desktop/mobile, além dos quality gates. A implementação terá commit e push próprios na main; este registro não significa funcionalidade já implementada.
+
+- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
+
+- **Conclusão em 2026-10-30:** geração comprovada com inferência real de um modelo de difusão aberto (`nota-ai/bk-sdm-tiny`, OpenRAIL-M, revisão fixada) servido localmente em `/v1/images/generations` e configurado na segunda posição pela administração, com o Motor Lyra em primeiro. Pelo chat: imagem do pedido e interpretação visual do mapa (512×512, WebP, ~65 s cada), download privado, 404 para outra conta, 401 sem sessão, reabertura, mapa sem dados pessoais no pedido e aviso sem segundo modelo. Corrigido o `eslint-disable` de `ImagemDaConversa` (agora `next/image` com `unoptimized`).
+- **Evidências:** gates aprovados; 982 unitários; 594 integrações; build sem avisos; QA com 2 axe sem violações e 390 px sem rolagem. Relatório em `docs/auditoria/2026-10-30-imagens-86.md`. Limite declarado: o adaptador Gemini não foi exercitado com o provedor externo, que exige a chave do usuário. Nenhuma branch ou worktree.
+
 ### 87 · Estado real dos provedores de IA no painel
 
 - **Status:** 🟢 finalizada · **Registro:** 2026-10-21.
@@ -1632,6 +1665,23 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Entrega em validação final:** editor, 55 arquivos de biblioteca exclusivos, renderizadores, rotas, estilos, menu e diretório de instruções removidos; dependências `@puckeditor/core` e `parse5` removidas com lockfile regenerado e instalação congelada aprovada. O construtor de Conteúdo e `/admin/page-builder` foram preservados, pois a remoção da rota duplicada é a tarefa 98. Configurações antigas são filtradas no schema e na navegação; teste verifica que a personalização de Conteúdo permanece.
 - **Dados preservados:** nenhuma migração ou tabela histórica foi alterada ou apagada. Teste com registro real em `puck_documents` confirma retenção e recusa pela API genérica. Referências restantes estão restritas a compatibilidade, regressões, migrações e histórico explicitamente identificado; código de execução e pacote removidos.
 - **Evidências:** 528 unitários (69 arquivos) e 202 integrações (27 arquivos), tipos, lint, formatação e build aprovados. Foram aposentados 75 testes unitários exclusivos do editor e acrescentadas duas regressões de navegação/configuração; um teste de integração exclusivo do editor saiu e outro verifica retenção histórica. Não houve teste falhando ocultado ou desativado. QA HTTP/browser conferiu 404 das três rotas removidas, ausência do menu, rascunho/publicação reais do construtor e preservação de Conteúdo, login e chat em 1440/390/320 px sem overflow. Configurações temporárias restauradas. Logs `/tmp/lyra89-*.log` e capturas `/tmp/lyra89-*.png`; documentação em `docs/remocao-editor-visual.md`. **Commit:** `9590ab1` · **Push:** `b019a45..9590ab1 main -> main`, confirmado.
+
+### 90 · Treinamento real por Aprendizado por Reforço com Feedback Humano via chat
+
+- **Status:** 🟡 implementada · validação pendente · **Registro:** 2026-10-22 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `7c507377` · **Push confirmado:** `ded7f8f..7c50737 main -> main`.
+- **Validação atual (revisão de 2026-11-04):** Construção e execução da imagem Docker do serviço de treinamento ainda não comprovadas. O treino real fora dessa imagem continua comprovado.
+- **Controle administrativo:** acrescentar no chat da Lyra, ao lado de “Como a Lyra responde”, um botão de alternância On/Off chamado **“Treinamento”**, visível somente para o administrador do app. Ao ativar On, habilitar automaticamente o treinamento do Motor Lyra via chat. Exigir um modelo de IA realmente conectado: sem modelo conectado o treinamento não funciona, e a interface deve informar essa condição.
+- **Ativação e salvamento:** ao clicar em On, informar ao Motor Lyra e ao modelo conectado que foi habilitado o treinamento do tipo **Aprendizado por Reforço com Feedback Humano**. Salvar automaticamente tudo que for treinado durante o processo, sem depender de clicar em Off para persistir os dados; preservar o treinamento diante de recarga ou interrupção.
+- **Finalização e aplicação:** ao clicar em Off, informar que o treinamento foi finalizado e que o Motor Lyra deve começar a usar os novos treinamentos com **todos os usuários**, antigos e novos. Preservar rastreabilidade da versão aplicada e isolamento dos dados pessoais das conversas.
+- **Implementação real:** investigar a arquitetura, as capacidades dos modelos e as APIs oficiais antes de definir o mecanismo. Comprovar feedback humano, processo de aprendizagem, persistência e efeito do treinamento; não apresentar simples armazenamento de mensagens, memória ou alteração de prompt como treinamento RLHF de pesos do modelo. Registrar com precisão o mecanismo implementado e qualquer capacidade externa indispensável, sem simular resultados.
+- **Permissões e validação:** comprovar que o controle não aparece para outros planos, perfis e usuários não administradores e que o servidor também recusa operações não autorizadas. Validar On/Off, ausência e perda de conexão, salvamento durante On, retomada, aplicação global após Off, CRUD dos dados de treinamento e regressões do chat, desktop/mobile, testes, gates, commit e push individuais na main.
+- **Verificação em 2026-10-24:** a base atual possui documentos de conhecimento e preferências do chat, mas isso não treina pesos. Não há provedor de treinamento conectado nesta nuvem nem pesos locais licenciados e disponíveis para treino; o download no Hugging Face foi recusado pelo proxy com HTTP 403. O Jan do computador do usuário não é acessível pelo localhost da nuvem. Ambiente Python de inferência foi preparado separadamente, sem alegar que ele oferece RLHF ou que foi treinado.
+- **Limite preservado:** não foi acrescentado um botão que apenas salve mensagens e o apresente como RLHF. Retomar a implementação quando houver um modelo treinável/endpoint real acessível, com licença e capacidade de persistir e aplicar a versão treinada. As demais tarefas independentes continuam.
+
+- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
+
+- **Implementação em 2026-10-30:** serviço `services/treinamento` que treina os **pesos** de `Qwen/Qwen2.5-0.5B-Instruct` (Apache-2.0) com KTO + LoRA (TRL), registrado com precisão como alinhamento por feedback humano da família do RLHF, sem modelo de recompensa nem PPO; serve as versões cumulativas em `/v1/chat/completions` (`lyra-treinavel`). App: migração 063, interruptor "Treinamento" só do administrador ao lado de "Como a Lyra responde", avaliações salvas na hora (CRUD), finalização com treino e aplicação a todos, acompanhamento, métricas, reenvio de falha, LGPD, Compose opcional e `docs/treinamento-por-feedback.md`.
+- **Evidências:** gates aprovados; 984 unitários; 597 integrações; 30 testes de launchers; build sem avisos. Treino real pelo app: versão 1 aplicada com margem de 0,24 para 0,92 em 80 s; queda real no meio do treino tratada como falha, com reenvio; usuário comum atendido pela nova versão; axe sem violações. Corrigidos: versões que não acumulavam, consumo de memória, tarefa perdida travando a sessão, texto apagado ao digitar e estado após recarga. Limites: imagem Docker do serviço não construída aqui (proxy no build). Relatório em `docs/auditoria/2026-10-30-treinamento-90.md`. Nenhuma branch ou worktree.
 
 ### 91 · Auditoria exaustiva dos planos e entitlements e plano Administrador
 
@@ -1755,7 +1805,8 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 100 · Aba Faturamento no dashboard e gestão financeira completa
 
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-22 · **Início:** 2026-10-25 · **Conclusão:** 2026-11-02 · **Commit:** `52f3770` · **Push confirmado:** `6f3582b..52f3770 main -> main`.
+- **Status:** 🟡 implementada · validação pendente · **Registro:** 2026-10-22 · **Início:** 2026-10-25 · **Conclusão:** 2026-11-02 · **Commit:** `52f3770` · **Push confirmado:** `6f3582b..52f3770 main -> main`.
+- **Validação atual (revisão de 2026-11-04):** Cancelamento de reembolso Stripe no estado requires_action: coberto por contrato, sem transação real nesse estado.
 - **Pedido do usuário:** incluir no dashboard administrativo uma aba **“Faturamento”**, com o mesmo visual das abas de **“Gestão de Conteúdo Dinâmico”** em `http://localhost:3000/admin/content`, conforme anexo. Reunir todas as métricas de faturamento **por dia, mês e ano**, gestão total do faturamento, **cancelamento de faturas, reembolsos e demais operações financeiras pertinentes**.
 - **Dados e recursos reais:** inventariar cobrança, assinaturas, faturas, pagamentos e provedores existentes; pesquisar profundamente referências de 2026 e APIs oficiais antes de definir e implementar o conjunto completo de métricas e ações. Relacionar cada valor à origem persistida e aos eventos do provedor, distinguir estados de cobrança, valores brutos e líquidos, cancelamentos e reembolsos, respeitar moeda, fuso e período e permitir conferir os registros de origem. Não apresentar projeções como receita realizada.
 - **Operações:** implementar cancelamento e reembolso reais conforme as capacidades e regras do provedor e o estado da fatura/pagamento, com validação no servidor, autorização administrativa, confirmação clara da ação, idempotência, prevenção de duplicidade, tratamento de falhas, trilha de auditoria e reconciliação por webhooks. Preservar registros fiscais e histórico financeiro; não converter exclusão de registro local em cancelamento ou reembolso fictício.
@@ -2168,7 +2219,8 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 127 · Fotos e documentos anexados às conversas da Lyra
 
-- **Status:** 🟢 finalizada com fronteira registrada (leitura de foto aceita) · **Registro:** 2026-10-26 · **Conferência:** 2026-10-29 · **Conclusão:** 2026-11-02 · **Commit:** `3222389` · **Push confirmado:** `7157aa3..3222389 main -> main`.
+- **Status:** 🟡 implementada · validação pendente com fronteira registrada (leitura de foto aceita) · **Registro:** 2026-10-26 · **Conferência:** 2026-10-29 · **Conclusão:** 2026-11-02 · **Commit:** `3222389` · **Push confirmado:** `7157aa3..3222389 main -> main`.
+- **Validação atual (revisão de 2026-11-04):** Leitura de foto aceita e persistida com modelo de visão compatível com várias imagens por pedido. TXT foi comprovado; a recusa correta de foto não comprova leitura aceita.
 - **Pedido do usuário:** enviar fotos e documentos no chat e pedir explicações, com indicação dos trechos utilizados e das limitações de leitura. Corresponde ao item 1 da segunda lista de sugestões; os itens 3, 8 e 9 foram excluídos por orientação expressa do usuário.
 - **Conferência prévia obrigatória:** verificar novamente a `main` antes de implementar; os tipos atuais do chat contêm texto e imagens geradas, e o armazenamento de uploads consultado aceita avatares; isso não comprova envio de anexos pelo usuário. Reutilizar histórico, privacidade e a estrutura da tarefa 113, sem confundir este recurso com geração de imagens da tarefa 86.
 - **Escopo funcional:** permitir selecionar, pré-visualizar, enviar, consultar, baixar e excluir anexos privados vinculados à conversa. Definir formatos e tamanhos realmente suportados, validar conteúdo no servidor, proteger acesso por titular e tratar arquivos inválidos ou ilegíveis. Interpretar somente o conteúdo efetivamente lido, com referências ao documento ou imagem e indicação de incerteza; tratar o anexo como dado, sem executar comandos ou instruções nele contidos. Respeitar consentimento para provedores externos e capacidade real do modelo conectado.
@@ -2302,25 +2354,10 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Implementação em 2026-10-30:** migração 061 com `platform_feature_switches` (`agendamentos_usuarios` desativado por padrão, versão, responsável) e `platform_feature_switch_events` (estado anterior e novo, responsável, data, sem dados de consultas). O interruptor é aplicado no cálculo central de direitos: desligado, `appointments_active` e `professionals_total` ficam `enabled: false` e `globalmenteDesativado: true` para não administradores, então menu lateral, gaveta do celular, busca Ctrl K, sino, bloqueio de rota e APIs reagem juntos (403 "Agendamentos estão desativados pelo administrador do app."). Ligado, o plano continua valendo; o administrador mantém acesso. `GET/PUT /api/admin/agendamentos` com 401/403/400/409; cartão com chave, confirmação, última alteração e últimas 20 alterações em Admin → Planos; aviso "Recurso desativado pelo administrador" sem oferta de plano no acesso direto; exportação LGPD dos eventos do titular; `docs/agendamentos-para-usuarios.md`, `docs/api.md` e `docs/lgpd.md`.
 - **Evidências:** gates aprovados; 970 unitários; 586 integrações com MySQL real (2 novas); build sem avisos. QA em produção: 18 verificações e 4 axe sem violações, incluindo celular a 390 px. Corrigidos na QA: aviso genérico de plano no acesso direto (o bloqueio de rota vinha antes da página), texto do diálogo que trocava durante o fechamento, rótulo do histórico que sugeria total e concordância do aviso. Relatório em `docs/auditoria/2026-10-30-agendamentos-134.md`. Contas de QA removidas e interruptor deixado no padrão desativado. Nenhuma branch ou worktree.
 
-### 136 · Organização de `/dia` em abas por categoria, com “Meu Dia” como primeira aba
-
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `6a6779c7` · **Push confirmado:** `60a2e66..6a6779c main -> main`.
-- **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). Esta solicitação é específica dessa página; as abas do painel principal entregues na tarefa 114 não substituem este escopo.
-- **Pedido do usuário:** organizar todas as métricas, cards e demais seções da página por categoria e assunto, de forma harmoniosa, em tópicos distribuídos por abas, com organização adequada de UI/UX.
-- **Primeira aba obrigatória:** chamar exatamente **“Meu Dia”** e reunir as seções `titulo-alertas`, `titulo-meu-dia` e `titulo-leitura`. Conferir os componentes e identificadores reais antes de alterar a estrutura, preservando sua função e relações de acessibilidade.
-- **Alertas sutis e fecháveis:** a seção `titulo-alertas` deve ficar menor, mais sutil e com opção acessível de fechar, funcionando somente como alerta ao usuário. Reduzir seu peso visual sem esconder informações necessárias nem confundir fechar a apresentação com excluir dados.
-- **Demais abas por conteúdo:** inventariar todas as métricas, cartões, gráficos, orientações, reflexões, calendário e demais seções existentes em `/dia`; agrupar o restante conforme o conteúdo e o tópico, com nomes claros, hierarquia e distribuição coerentes. Não excluir funcionalidades, dados, ações ou permissões para simplificar a tela nem impor categorias sem conferir o conteúdo real. Coordenar a localização do diário da tarefa 135 e reaproveitar as abas internas existentes quando pertinente.
-- **Experiência e acessibilidade:** pesquisar referências oficiais atuais de 2026 antes da implementação visual e seguir o Lyra Clean claro, os tokens e componentes existentes. Garantir alternância compreensível, indicação da aba ativa, teclado, foco, leitor de tela, contraste, zoom e responsividade em desktop, tablet e celular, preservando âncoras, carregamento, erros, ausência de dados, filtros e ações aplicáveis.
-- **Conferência e validação futura:** antes de implementar, verificar se já existe progresso na `main` e mapear a cobertura de todo o conteúdo. Validar a primeira aba e seus três identificadores, fechamento dos alertas, agrupamento integral do restante, navegação e recarga, direitos dos planos, isolamento e atualização dos dados. Executar QA no navegador e os gates do projeto; revisar o diff, atualizar o painel e publicar commit e push próprios na `main`, sem branches ou worktrees. Este registro não declara a página reorganizada nem validações funcionais executadas.
-
-- **Publicação deste registro documental:** commit `d5e4b467a4a1cacc9faae5f749349d05c90c2098`, confirmado na `main` pela API autenticada do GitHub e pela releitura do arquivo. Somente o painel foi alterado; a tarefa permanece a iniciar na ordem autorizada. Este SHA não corresponde à implementação das abas.
-
-- **Implementação em 2026-10-30:** `/dia` em cinco abas (Meu Dia, Orientações, Horários e semana, Céu e mapa, Diário), com os 14 blocos e identificadores preservados; "Meu Dia" reúne `titulo-meu-dia`, `titulo-alertas` e `titulo-leitura`. Aba ativa em `?aba=`, âncoras antigas abrem a aba certa, abas sempre montadas. "Atenção hoje" compacto e fechável, sem apagar dados. Executada junto da 135 e publicada antes dela, em commit próprio. Documentação em `docs/dia-em-abas.md`.
-- **Evidências:** gates aprovados; 970 unitários; 586 integrações; build sem avisos. QA em produção: 25 verificações e 6 axe sem violações, incluindo 390, 768 e 320 px. Relatório em `docs/auditoria/2026-10-30-dia-em-abas-136.md`. Conta de QA removida. Nenhuma branch ou worktree.
-
 ### 135 · Diário pessoal por voz em `/dia`, com análise do dia, memória individual e calendário
 
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `689f36f9` · **Push confirmado:** `0933314..689f36f main -> main`.
+- **Status:** 🟡 implementada · validação pendente · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `689f36f9` · **Push confirmado:** `0933314..689f36f main -> main`.
+- **Validação atual (revisão de 2026-11-04):** Captura de fala real em português com microfone autorizado e passagem pelo fluxo do diário; análise, persistência e consulta já têm evidências.
 - **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). O diário deve fazer parte dessa página, coordenado com a organização em abas solicitada pelo usuário.
 - **Pedido do usuário:** implementar a solicitação transcrita do áudio e revisada neste chat: permitir que cada pessoa conte por voz como foi o seu dia, receba o texto organizado e uma análise personalizada e consulte o diário em formato de agenda, enquanto a Lyra desenvolve uma compreensão contextualizada de sua trajetória.
 - **Relato por voz e organização do texto:** transcrever o relato e corrigir ortografia e pontuação, preservando o sentido, os acontecimentos e a forma de expressão do usuário. Não acrescentar fatos à fala nem apresentar uma transcrição que não tenha sido realmente processada.
@@ -2336,40 +2373,21 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Evidências:** gates aprovados; 982 unitários; 594 integrações (8 novas, com servidor de contrato HTTP identificado); build sem avisos. QA em produção: 22 verificações e 8 axe sem violações. Prova com modelo real local (Qwen2.5-1.5B-Instruct, Apache-2.0, configurado pela administração): análise pronta em 50–79 s e recusa correta de uma saída infiel. Corrigidos na QA: fidelidade que aceitava troca de sentido, padrões inventados e leitura sem base no relato, rótulo repetido. Fronteira: a captura de fala real não pôde ser provada no navegador do ambiente (sem português no aparelho e microfone recusado). Relatório em `docs/auditoria/2026-10-30-diario-pessoal-135.md`. Contas de QA removidas. Nenhuma branch ou worktree.
 - **Correção em 2026-11-02 (agenda mensal vazia em meses de 30 dias):** a suíte de integração falhou em novembro: o mês voltava sem dias. Causa raiz comprovada no MySQL 9.7: a consulta usava o dia 31 fixo como fim do mês; `'2026-11-31'` é data inválida e `BETWEEN '2026-11-01' AND '2026-11-31'` resulta em 0 (em outubro, 1). Afetava novembro, abril, junho, setembro e fevereiro. Correção: fim do mês calculado pelo próprio banco (`entry_date < DATE_ADD(início, INTERVAL 1 MONTH)`), sem data montada no texto. Regressão: integração nova com relatos no último dia de setembro e de fevereiro e no primeiro de outubro. Gates: formato, lint e tipos com exit 0; 984 unitários; 598 integrações em 66 arquivos; build sem avisos.
 
-### 86 · Geração de imagens no chat com modelos conectados
+### 136 · Organização de `/dia` em abas por categoria, com “Meu Dia” como primeira aba
 
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-20 · **Início:** 2026-10-22 · **Conclusão:** 2026-10-30 · **Commit:** `037270c2` · **Push confirmado:** `59f8787..037270c main -> main`.
-- **Retomada em 2026-10-24:** arquivos originais de geração, pedido e migração recuperados dos patches do chat anterior e reutilizados após revisão. Integração ao chat, armazenamento privado, retentativa e exportação em validação. Contratos conferidos nos pacotes oficiais do SDK; detalhes em `docs/imagens-do-chat.md`. Validação com modelo gerador real ainda depende de provedor acessível nesta nuvem; solicitado ao usuário sem pedir segredo no chat.
-- **Pedido do usuário:** o chat do app deve permitir criar imagens. Conforme complemento recebido em 2026-10-20, usar o segundo modelo de IA conectado nas configurações do app, que permitem conectar cinco modelos simultaneamente, tanto quando o usuário solicitar uma imagem quanto quando o Motor Lyra fizer a leitura do mapa pessoal, gerando também a imagem do mapa daquele usuário.
-- **Implementação nesta nuvem:** seleção exata do segundo modelo, validação e normalização real de imagens raster, arquivo privado por titular no MySQL, reabertura, download, retentativa, limite de uso, trava por tentativa, privacidade e consentimento, exportação LGPD e exclusão em cascade. Componente de resultado integrado sem redesenhar o chat. SDKs fixados e instalação congelada aprovada; nenhuma exceção à política de dependências acrescentada.
-- **Evidência local:** 599 testes unitários (74 arquivos), 201 integrações (26 arquivos), tipos, lint, formatação, build e instalação congelada passaram. Migração 034 aplicada: 36 migrations na saúde HTTP 200. QA HTTP de produção confirmou login, pedido persistido, mensagem de segundo modelo ausente, reabertura e recusa anônima; conversa temporária removida. Testes de imagem usam PNG real e HTTP controlado, não inferência de um modelo.
-- **Fronteira pendente:** usuário indicou Gemini para o teste real. O requisito seguro `GEMINI_IMAGE_API_KEY` e o destino `generativelanguage.googleapis.com` foram salvos no rascunho; valor não copiado para arquivos, comandos ou logs. É necessário configurar e aplicar essa credencial para consultar modelos e testar geração real. Chromium apresentou falhas do ambiente nas tentativas anteriores de captura; conferência visual mobile/desktop permanece sem comprovação. A tarefa não foi declarada finalizada e não se alegou imagem gerada por IA externa.
-- **Decisão do usuário em 2026-10-24:** deixar a geração bloqueada caso não seja possível validar, para que ele decida o provedor. Nenhuma geração externa foi comprovada; não insistir em outra conexão sem a configuração necessária. **Implementação publicada:** `3f95ad7` · **Push:** `942ff75..3f95ad7 main -> main`, confirmado. A publicação do código não encerra a pendência da tarefa.
-- **Roteamento e mapa pessoal:** conferir a ordem real das cinco conexões e encaminhar a geração de imagens ao segundo modelo configurado, preservando a configuração dos demais. Na leitura do mapa, construir a imagem a partir dos dados reais e autorizados do próprio titular e vinculá-la à leitura e à conversa correspondentes. Não inventar dados do mapa nem substituir o segundo modelo silenciosamente; se ele não estiver configurado, estiver indisponível ou não oferecer geração de imagens, informar a condição e permitir corrigir a conexão e tentar novamente.
-- **Critérios:** inspecionar a configuração e as capacidades reais dos provedores, pesquisar suas APIs oficiais atuais e implementar geração real pelo servidor, verificando a compatibilidade do segundo modelo e exibindo mensagens claras quando a conexão só oferecer texto. Não simular imagens nem atribuir essa capacidade a modelos que não a possuem. Integrar envio do pedido, andamento, falhas e retentativa à experiência simples e responsiva do chat, exibindo o resultado e permitindo baixar a imagem.
-- **Persistência e acesso:** preservar pedido, imagem e referência ao modelo na conversa, com armazenamento real vinculado ao titular, autorização no servidor, validação dos arquivos e limites de uso. Respeitar modo privado e consentimento para provedores externos, incluir os dados na exportação e exclusão da conta e não expor chaves ou imagens privadas em URLs públicas.
-- **Validação e entrega:** conferir geração solicitada no chat e geração do mapa após sua leitura, comprovando o uso do segundo modelo entre as cinco conexões e o tratamento de conexão ausente ou incompatível. Testar provedor e modelo capazes de criar imagens, reabertura da conversa, download, isolamento entre contas e interface desktop/mobile, além dos quality gates. A implementação terá commit e push próprios na main; este registro não significa funcionalidade já implementada.
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `6a6779c7` · **Push confirmado:** `60a2e66..6a6779c main -> main`.
+- **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). Esta solicitação é específica dessa página; as abas do painel principal entregues na tarefa 114 não substituem este escopo.
+- **Pedido do usuário:** organizar todas as métricas, cards e demais seções da página por categoria e assunto, de forma harmoniosa, em tópicos distribuídos por abas, com organização adequada de UI/UX.
+- **Primeira aba obrigatória:** chamar exatamente **“Meu Dia”** e reunir as seções `titulo-alertas`, `titulo-meu-dia` e `titulo-leitura`. Conferir os componentes e identificadores reais antes de alterar a estrutura, preservando sua função e relações de acessibilidade.
+- **Alertas sutis e fecháveis:** a seção `titulo-alertas` deve ficar menor, mais sutil e com opção acessível de fechar, funcionando somente como alerta ao usuário. Reduzir seu peso visual sem esconder informações necessárias nem confundir fechar a apresentação com excluir dados.
+- **Demais abas por conteúdo:** inventariar todas as métricas, cartões, gráficos, orientações, reflexões, calendário e demais seções existentes em `/dia`; agrupar o restante conforme o conteúdo e o tópico, com nomes claros, hierarquia e distribuição coerentes. Não excluir funcionalidades, dados, ações ou permissões para simplificar a tela nem impor categorias sem conferir o conteúdo real. Coordenar a localização do diário da tarefa 135 e reaproveitar as abas internas existentes quando pertinente.
+- **Experiência e acessibilidade:** pesquisar referências oficiais atuais de 2026 antes da implementação visual e seguir o Lyra Clean claro, os tokens e componentes existentes. Garantir alternância compreensível, indicação da aba ativa, teclado, foco, leitor de tela, contraste, zoom e responsividade em desktop, tablet e celular, preservando âncoras, carregamento, erros, ausência de dados, filtros e ações aplicáveis.
+- **Conferência e validação futura:** antes de implementar, verificar se já existe progresso na `main` e mapear a cobertura de todo o conteúdo. Validar a primeira aba e seus três identificadores, fechamento dos alertas, agrupamento integral do restante, navegação e recarga, direitos dos planos, isolamento e atualização dos dados. Executar QA no navegador e os gates do projeto; revisar o diff, atualizar o painel e publicar commit e push próprios na `main`, sem branches ou worktrees. Este registro não declara a página reorganizada nem validações funcionais executadas.
 
-- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
+- **Publicação deste registro documental:** commit `d5e4b467a4a1cacc9faae5f749349d05c90c2098`, confirmado na `main` pela API autenticada do GitHub e pela releitura do arquivo. Somente o painel foi alterado; a tarefa permanece a iniciar na ordem autorizada. Este SHA não corresponde à implementação das abas.
 
-- **Conclusão em 2026-10-30:** geração comprovada com inferência real de um modelo de difusão aberto (`nota-ai/bk-sdm-tiny`, OpenRAIL-M, revisão fixada) servido localmente em `/v1/images/generations` e configurado na segunda posição pela administração, com o Motor Lyra em primeiro. Pelo chat: imagem do pedido e interpretação visual do mapa (512×512, WebP, ~65 s cada), download privado, 404 para outra conta, 401 sem sessão, reabertura, mapa sem dados pessoais no pedido e aviso sem segundo modelo. Corrigido o `eslint-disable` de `ImagemDaConversa` (agora `next/image` com `unoptimized`).
-- **Evidências:** gates aprovados; 982 unitários; 594 integrações; build sem avisos; QA com 2 axe sem violações e 390 px sem rolagem. Relatório em `docs/auditoria/2026-10-30-imagens-86.md`. Limite declarado: o adaptador Gemini não foi exercitado com o provedor externo, que exige a chave do usuário. Nenhuma branch ou worktree.
-
-### 90 · Treinamento real por Aprendizado por Reforço com Feedback Humano via chat
-
-- **Status:** 🟢 finalizada · **Registro:** 2026-10-22 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `7c507377` · **Push confirmado:** `ded7f8f..7c50737 main -> main`.
-- **Controle administrativo:** acrescentar no chat da Lyra, ao lado de “Como a Lyra responde”, um botão de alternância On/Off chamado **“Treinamento”**, visível somente para o administrador do app. Ao ativar On, habilitar automaticamente o treinamento do Motor Lyra via chat. Exigir um modelo de IA realmente conectado: sem modelo conectado o treinamento não funciona, e a interface deve informar essa condição.
-- **Ativação e salvamento:** ao clicar em On, informar ao Motor Lyra e ao modelo conectado que foi habilitado o treinamento do tipo **Aprendizado por Reforço com Feedback Humano**. Salvar automaticamente tudo que for treinado durante o processo, sem depender de clicar em Off para persistir os dados; preservar o treinamento diante de recarga ou interrupção.
-- **Finalização e aplicação:** ao clicar em Off, informar que o treinamento foi finalizado e que o Motor Lyra deve começar a usar os novos treinamentos com **todos os usuários**, antigos e novos. Preservar rastreabilidade da versão aplicada e isolamento dos dados pessoais das conversas.
-- **Implementação real:** investigar a arquitetura, as capacidades dos modelos e as APIs oficiais antes de definir o mecanismo. Comprovar feedback humano, processo de aprendizagem, persistência e efeito do treinamento; não apresentar simples armazenamento de mensagens, memória ou alteração de prompt como treinamento RLHF de pesos do modelo. Registrar com precisão o mecanismo implementado e qualquer capacidade externa indispensável, sem simular resultados.
-- **Permissões e validação:** comprovar que o controle não aparece para outros planos, perfis e usuários não administradores e que o servidor também recusa operações não autorizadas. Validar On/Off, ausência e perda de conexão, salvamento durante On, retomada, aplicação global após Off, CRUD dos dados de treinamento e regressões do chat, desktop/mobile, testes, gates, commit e push individuais na main.
-- **Verificação em 2026-10-24:** a base atual possui documentos de conhecimento e preferências do chat, mas isso não treina pesos. Não há provedor de treinamento conectado nesta nuvem nem pesos locais licenciados e disponíveis para treino; o download no Hugging Face foi recusado pelo proxy com HTTP 403. O Jan do computador do usuário não é acessível pelo localhost da nuvem. Ambiente Python de inferência foi preparado separadamente, sem alegar que ele oferece RLHF ou que foi treinado.
-- **Limite preservado:** não foi acrescentado um botão que apenas salve mensagens e o apresente como RLHF. Retomar a implementação quando houver um modelo treinável/endpoint real acessível, com licença e capacidade de persistir e aplicar a versão treinada. As demais tarefas independentes continuam.
-
-- **Reclassificação em 2026-10-30:** por decisão expressa do usuário, a tarefa saiu de **BLOQUEADAS** e passou para **a iniciar**, para ser executada posteriormente na ordem numérica das tarefas não bloqueadas. Os registros acima permanecem como histórico real do que já foi publicado e da fronteira que estava pendente; esta reclassificação não declara a fronteira comprovada nem a tarefa concluída. Ao retomar, conferir a `main`, reaproveitar os commits existentes e validar com evidências reais, sem branches ou worktrees.
-
-- **Implementação em 2026-10-30:** serviço `services/treinamento` que treina os **pesos** de `Qwen/Qwen2.5-0.5B-Instruct` (Apache-2.0) com KTO + LoRA (TRL), registrado com precisão como alinhamento por feedback humano da família do RLHF, sem modelo de recompensa nem PPO; serve as versões cumulativas em `/v1/chat/completions` (`lyra-treinavel`). App: migração 063, interruptor "Treinamento" só do administrador ao lado de "Como a Lyra responde", avaliações salvas na hora (CRUD), finalização com treino e aplicação a todos, acompanhamento, métricas, reenvio de falha, LGPD, Compose opcional e `docs/treinamento-por-feedback.md`.
-- **Evidências:** gates aprovados; 984 unitários; 597 integrações; 30 testes de launchers; build sem avisos. Treino real pelo app: versão 1 aplicada com margem de 0,24 para 0,92 em 80 s; queda real no meio do treino tratada como falha, com reenvio; usuário comum atendido pela nova versão; axe sem violações. Corrigidos: versões que não acumulavam, consumo de memória, tarefa perdida travando a sessão, texto apagado ao digitar e estado após recarga. Limites: imagem Docker do serviço não construída aqui (proxy no build). Relatório em `docs/auditoria/2026-10-30-treinamento-90.md`. Nenhuma branch ou worktree.
+- **Implementação em 2026-10-30:** `/dia` em cinco abas (Meu Dia, Orientações, Horários e semana, Céu e mapa, Diário), com os 14 blocos e identificadores preservados; "Meu Dia" reúne `titulo-meu-dia`, `titulo-alertas` e `titulo-leitura`. Aba ativa em `?aba=`, âncoras antigas abrem a aba certa, abas sempre montadas. "Atenção hoje" compacto e fechável, sem apagar dados. Executada junto da 135 e publicada antes dela, em commit próprio. Documentação em `docs/dia-em-abas.md`.
+- **Evidências:** gates aprovados; 970 unitários; 586 integrações; build sem avisos. QA em produção: 25 verificações e 6 axe sem violações, incluindo 390, 768 e 320 px. Relatório em `docs/auditoria/2026-10-30-dia-em-abas-136.md`. Conta de QA removida. Nenhuma branch ou worktree.
 
 ### 137 · Pasta `Old` com os arquivos que o app não utiliza
 
