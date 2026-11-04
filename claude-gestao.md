@@ -19,18 +19,18 @@
 
 ## Tópico 1 · Andamento Geral
 
-| Indicador          | Valor                           |
-| ------------------ | ------------------------------- |
-| Progresso          | `████████████████████` **100%** |
-| Tarefas totais     | 137                             |
-| 🟢 Finalizadas     | 137                             |
-| 🔵 Em andamento    | 0                               |
-| 🔴 Bloqueadas      | 0                               |
-| ⚪ A iniciar       | 0                               |
-| Branch de trabalho | `main` (única permitida)        |
-| Última atualização | 2026-11-03                      |
+| Indicador          | Valor                            |
+| ------------------ | -------------------------------- |
+| Progresso          | `████████████████████` **99,3%** |
+| Tarefas totais     | 138                              |
+| 🟢 Finalizadas     | 137                              |
+| 🔵 Em andamento    | 1                                |
+| 🔴 Bloqueadas      | 0                                |
+| ⚪ A iniciar       | 0                                |
+| Branch de trabalho | `main` (única permitida)         |
+| Última atualização | 2026-11-04                       |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (137 ÷ 137 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (137 ÷ 138 = 99,3%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -86,6 +86,8 @@ O `@sentry/bundler-plugins` 11.x (inclusive o 11.10.0, o mais recente) declara g
 
 **Aviso restante, investigado:** minimatch < 11.0.1 apenas nas ferramentas de lint (ESLint 10.14, @eslint/config-array, typescript-eslint, eslint-plugin-import e jsx-a11y). As versões mais recentes delas ainda declaram minimatch ^10 ou ^3; a correção só existe no 11, com outra API. Esses pacotes não entram no build nem no runtime e só leem padrões da configuração do próprio repositório. Fica registrado até o ESLint e os plugins adotarem o minimatch 11.
 
+**Atualização em 2026-11-04 (tarefa 138; substitui o diagnóstico acima):** a [API oficial do GitHub](https://api.github.com/advisories/GHSA-g3hv-75wg-m249), atualizada às 16:50:04 UTC, restringe o intervalo afetado a `>= 7.0.0, < 11.0.1`. ESLint, config-array e typescript-estree passaram a resolver minimatch 11.0.4 por overrides seletivos. Os plugins antigos continuam com 3.1.5, fora do intervalo afetado, preservando a API callable e `makeRe`. O registro npm ainda retorna o intervalo antigo `<11.0.1`, gerando um falso positivo apenas sobre 3.1.5; o aviso não foi ocultado nem incluído em lista de exclusão. `pnpm audit --prod` não encontrou vulnerabilidades conhecidas. O lockfile não contém mais minimatch 10, conferido com `rg`; a verificação dos consumidores reais está em `scripts/verificar-minimatch-lint.mjs`.
+
 **Validação final da instrução mestra em 2026-11-03:**
 
 - **Instalação e gates:** instalação limpa congelada; lint, formato e tipos com exit 0; 990 unitários; 601 integrações; 30 testes dos launchers; build sem avisos; Compose válido; migrações idempotentes (66/66).
@@ -110,7 +112,11 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 138 · Corrigir o aviso de minimatch nas ferramentas de lint
+
+- **Status:** 🔵 em andamento · **Início:** 2026-11-04.
+- **Escopo autorizado:** investigar o aviso GHSA-g3hv-75wg-m249, corrigir a resolução afetada preservando as APIs dos consumidores, validar lint e gates aplicáveis e publicar na `main`.
+- **Ambiente e progresso:** Node 24.21.0 preparado isoladamente; instalação congelada aprovada. Verificação dos consumidores reais e revisão independente aprovadas; fix:format, fix:lint, check:lint, check:format, check:types, 990 unitários, 601 integrações MySQL e build aprovados. Migrações repetidas: 66/66 já aplicadas. Launchers: a suíte exige Linux (módulo `pwd` e executável Bash); no Python nativo do Windows houve falha de plataforma, e no WSL os 30 testes passaram. Nenhuma alteração na instalação global de Node; `@current_problems` não está disponível entre as ferramentas desta sessão. Implementação validada, aguardando publicação individual.
 
 ### BLOQUEADAS
 

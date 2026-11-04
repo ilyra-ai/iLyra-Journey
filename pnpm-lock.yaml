@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  eslint>minimatch: 11.0.4
+  '@eslint/config-array>minimatch': 11.0.4
+  '@typescript-eslint/typescript-estree>minimatch': 11.0.4
   brace-expansion@>=5.0.0 <5.0.12: ^5.0.12
   fast-uri@>=3.0.0 <3.1.9: ^3.1.9
   browserslist@<4.28.7: ^4.28.7
@@ -3837,14 +3840,6 @@ packages:
     resolution: {integrity: sha512-aU5EJuIN2WDemCcAp2vFBfp/m4EAhWJnUNSSw0ixs7/kXbd6Pg64EmwJkNdFhB8aWt1sH2CTXrLxo/iAGV3oPQ==}
     engines: {node: '>= 0.6'}
 
-  minimatch@10.2.5:
-    resolution: {integrity: sha512-MULkVLfKGYDFYejP07QOurDLLQpcjk7Fw+7jXS2R2czRQzR56yHRveU5NDJEOviH+hETZKSkIk5c+T23GjFUMg==}
-    engines: {node: 18 || 20 || >=22}
-
-  minimatch@10.2.6:
-    resolution: {integrity: sha512-vpLQEs+VLCr1nU0BXS07maYoFwlDAH0gngQuuttxIwutDFEMHq2blX+8vpgxDdK3J1PwjCJiep77OitTZ4Ll1A==}
-    engines: {node: 18 || 20 || >=22}
-
   minimatch@11.0.4:
     resolution: {integrity: sha512-/UJ1dEoVQTjPNDh6SGlUo+ueLMmoHTas4q+8yaAR/5t6nLAIiBDJtoYUh20IYleix7ehiQkgczb84PE3uzHkxg==}
     engines: {node: 20 || >=22}
@@ -5137,7 +5132,7 @@ snapshots:
     dependencies:
       '@eslint/object-schema': 3.0.5
       debug: 4.4.3(supports-color@8.1.1)
-      minimatch: 10.2.6
+      minimatch: 11.0.4
     transitivePeerDependencies:
       - supports-color
 
@@ -6603,7 +6598,7 @@ snapshots:
       '@typescript-eslint/types': 8.71.1
       '@typescript-eslint/visitor-keys': 8.71.1
       debug: 4.4.3(supports-color@8.1.1)
-      minimatch: 10.2.5
+      minimatch: 11.0.4
       semver: 7.8.5
       tinyglobby: 0.2.17
       ts-api-utils: 2.5.0(typescript@6.0.3)
@@ -7565,7 +7560,7 @@ snapshots:
       imurmurhash: 0.1.4
       is-glob: 4.0.3
       json-stable-stringify-without-jsonify: 1.0.1
-      minimatch: 10.2.6
+      minimatch: 11.0.4
       natural-compare: 1.4.0
       optionator: 0.9.4
     optionalDependencies:
@@ -8634,14 +8629,6 @@ snapshots:
       - supports-color
 
   mime-db@1.54.0: {}
-
-  minimatch@10.2.5:
-    dependencies:
-      brace-expansion: 5.0.12
-
-  minimatch@10.2.6:
-    dependencies:
-      brace-expansion: 5.0.12
 
   minimatch@11.0.4:
     dependencies:
