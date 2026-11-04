@@ -21,12 +21,12 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **93,5%** (130 de 139)   |
-| Implementações publicadas               | **99,3%** (138 de 139)   |
+| Conclusão integral                      | **94,2%** (131 de 139)   |
+| Implementações publicadas               | **100%** (139 de 139)    |
 | Tarefas totais                          | 139                      |
-| 🟢 Concluídas                           | 130                      |
+| 🟢 Concluídas                           | 131                      |
 | 🟡 Implementadas com validação pendente | 8                        |
-| 🔵 Em andamento                         | 1                        |
+| 🔵 Em andamento                         | 0                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 0                        |
 | Branch de trabalho                      | `main` (única permitida) |
@@ -114,13 +114,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### ANDAMENTO
 
-### 139 · Ordenar a gestão e distinguir conclusão de validação pendente
-
-- **Status:** 🔵 em andamento · **Início:** 2026-11-04.
-- **Escopo autorizado:** ordenar numericamente todos os tópicos, preservar o histórico e os SHAs, separar implementação publicada de validação integral e expor as fronteiras ainda não comprovadas.
-- **Critério:** conferir números únicos, totais, estados e preservação dos blocos; validar formatação e publicar individualmente na `main`.
-- **Revisão e evidências:** 139 números únicos e completos; Tópico 4 ordenado de 01 a 138; oito estados 🟡 (14, 15, 23, 86, 90, 100, 127 e 135), cada um com a fronteira explícita. Comparação automatizada preservou os 139 blocos históricos, descontando apenas as mudanças de estado autorizadas, as novas linhas de validação e espaços de formatação. Formatação global e `git diff --check` aprovados. Sem mudança de código nesta tarefa: mantidos os gates completos aprovados na 138, sem alegar nova execução.
-- **Pedido adicional atendido em 2026-11-04:** Docker Desktop testado com `hello-world`; frontend e API de produção ativos em `http://localhost:3000`; MySQL 9.7.2 saudável em 3307 com 66/66 migrações; FalkorDB e memória Graphiti saudáveis, `/saude` com 256 dimensões. `/api/health`, início, login e autenticação do administrador aprovados por HTTP; tela de login conferida no navegador. `.env.local` e logs permanecem ignorados pelo Git; nenhuma credencial foi adicionada ao painel. O doctor do Git Bash passou com um aviso de detecção da build do Windows; não se declara a validação completa dos launchers.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -2417,3 +2411,11 @@ Nenhuma tarefa a iniciar. As notas abaixo preservam registros históricos de cri
 - **Status:** 🟢 finalizada · **Início e conclusão:** 2026-11-04 · **Commit:** `38bf2f87` · **Push confirmado:** `0c883ce4..38bf2f87 main -> main`.
 - **Escopo autorizado:** investigar o aviso GHSA-g3hv-75wg-m249, corrigir a resolução afetada preservando as APIs dos consumidores, validar lint e gates aplicáveis e publicar na `main`.
 - **Ambiente e progresso:** Node 24.21.0 preparado isoladamente; instalação congelada aprovada. Verificação dos consumidores reais e revisão independente aprovadas; fix:format, fix:lint, check:lint, check:format, check:types, 990 unitários, 601 integrações MySQL e build aprovados. Migrações repetidas: 66/66 já aplicadas. Launchers: a suíte exige Linux (módulo `pwd` e executável Bash); no Python nativo do Windows houve falha de plataforma, e no WSL os 30 testes passaram. Nenhuma alteração na instalação global de Node; `@current_problems` não está disponível entre as ferramentas desta sessão. Implementação validada e publicada individualmente na `main`.
+
+### 139 · Ordenar a gestão e distinguir conclusão de validação pendente
+
+- **Status:** 🟢 finalizada · **Início e conclusão:** 2026-11-04 · **Commit:** `263007d0` · **Push confirmado:** `1f726f48..263007d0 main -> main`.
+- **Escopo autorizado:** ordenar numericamente todos os tópicos, preservar o histórico e os SHAs, separar implementação publicada de validação integral e expor as fronteiras ainda não comprovadas.
+- **Critério:** conferir números únicos, totais, estados e preservação dos blocos; validar formatação e publicar individualmente na `main`.
+- **Revisão e evidências:** 139 números únicos e completos; Tópico 4 ordenado de 01 a 138; oito estados 🟡 (14, 15, 23, 86, 90, 100, 127 e 135), cada um com a fronteira explícita. Comparação automatizada preservou os 139 blocos históricos, descontando apenas as mudanças de estado autorizadas, as novas linhas de validação e espaços de formatação. Formatação global e `git diff --check` aprovados. Sem mudança de código nesta tarefa: mantidos os gates completos aprovados na 138, sem alegar nova execução.
+- **Pedido adicional atendido em 2026-11-04:** Docker Desktop testado com `hello-world`; frontend e API de produção ativos em `http://localhost:3000`; MySQL 9.7.2 saudável em 3307 com 66/66 migrações; FalkorDB e memória Graphiti saudáveis, `/saude` com 256 dimensões. `/api/health`, início, login e autenticação do administrador aprovados por HTTP; tela de login conferida no navegador. `.env.local` e logs permanecem ignorados pelo Git; nenhuma credencial foi adicionada ao painel. O doctor do Git Bash passou com um aviso de detecção da build do Windows; não se declara a validação completa dos launchers.
