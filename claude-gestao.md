@@ -21,18 +21,18 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **94,3%** (132 de 140)   |
+| Conclusão integral                      | **95,0%** (133 de 140)   |
 | Implementações publicadas               | **100%** (140 de 140)    |
 | Tarefas totais                          | 140                      |
-| 🟢 Concluídas                           | 132                      |
-| 🟡 Implementadas com validação pendente | 8                        |
+| 🟢 Concluídas                           | 133                      |
+| 🟡 Implementadas com validação pendente | 7                        |
 | 🔵 Em andamento                         | 0                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 0                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-04               |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os oito estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os sete estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -1662,8 +1662,9 @@ Nenhuma tarefa a iniciar. As notas abaixo preservam registros históricos de cri
 
 ### 90 · Treinamento real por Aprendizado por Reforço com Feedback Humano via chat
 
-- **Status:** 🟡 implementada · validação pendente · **Registro:** 2026-10-22 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `7c507377` · **Push confirmado:** `ded7f8f..7c50737 main -> main`.
-- **Validação atual (revisão de 2026-11-04):** Construção e execução da imagem Docker do serviço de treinamento ainda não comprovadas. O treino real fora dessa imagem continua comprovado.
+- **Status:** 🟢 finalizada · **Registro:** 2026-10-22 · **Início:** 2026-10-30 · **Conclusão da implementação:** 2026-10-30 · **Commit da implementação:** `7c507377` · **Push confirmado:** `ded7f8f..7c50737 main -> main` · **Fechamento da validação Docker:** 2026-11-04.
+- **Validação atual (revisão de 2026-11-04):** imagem Docker construída e saudável; treino KTO + LoRA real com quatro exemplos controlados, versão 1 persistida e inferência comprovada após reinício. Margem medida de 0,9301726875 para 2,1651024818. Formatação, lint, tipos, 997 unitários, 601 integrações MySQL e build aprovados. Evidência: `docs/auditoria/2026-11-04-treinamento-90-docker.md`.
+- **Retomada da validação em 2026-11-04:** construção da imagem pelo Docker Desktop iniciada com o perfil `treinamento` do Compose, dependências verificadas por hashes e volume persistente do projeto. A conclusão depende de executar a imagem e comprovar a saúde, inferência e persistência reais; o início da construção não representa aprovação.
 - **Controle administrativo:** acrescentar no chat da Lyra, ao lado de “Como a Lyra responde”, um botão de alternância On/Off chamado **“Treinamento”**, visível somente para o administrador do app. Ao ativar On, habilitar automaticamente o treinamento do Motor Lyra via chat. Exigir um modelo de IA realmente conectado: sem modelo conectado o treinamento não funciona, e a interface deve informar essa condição.
 - **Ativação e salvamento:** ao clicar em On, informar ao Motor Lyra e ao modelo conectado que foi habilitado o treinamento do tipo **Aprendizado por Reforço com Feedback Humano**. Salvar automaticamente tudo que for treinado durante o processo, sem depender de clicar em Off para persistir os dados; preservar o treinamento diante de recarga ou interrupção.
 - **Finalização e aplicação:** ao clicar em Off, informar que o treinamento foi finalizado e que o Motor Lyra deve começar a usar os novos treinamentos com **todos os usuários**, antigos e novos. Preservar rastreabilidade da versão aplicada e isolamento dos dados pessoais das conversas.
