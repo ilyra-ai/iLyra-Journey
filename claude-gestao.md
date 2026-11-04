@@ -19,18 +19,18 @@
 
 ## Tópico 1 · Andamento Geral
 
-| Indicador          | Valor                            |
-| ------------------ | -------------------------------- |
-| Progresso          | `████████████████████` **99,3%** |
-| Tarefas totais     | 138                              |
-| 🟢 Finalizadas     | 137                              |
-| 🔵 Em andamento    | 1                                |
-| 🔴 Bloqueadas      | 0                                |
-| ⚪ A iniciar       | 0                                |
-| Branch de trabalho | `main` (única permitida)         |
-| Última atualização | 2026-11-04                       |
+| Indicador          | Valor                           |
+| ------------------ | ------------------------------- |
+| Progresso          | `████████████████████` **100%** |
+| Tarefas totais     | 138                             |
+| 🟢 Finalizadas     | 138                             |
+| 🔵 Em andamento    | 0                               |
+| 🔴 Bloqueadas      | 0                               |
+| ⚪ A iniciar       | 0                               |
+| Branch de trabalho | `main` (única permitida)        |
+| Última atualização | 2026-11-04                      |
 
-> Cálculo: tarefas finalizadas ÷ tarefas totais (137 ÷ 138 = 99,3%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
+> Cálculo: tarefas finalizadas ÷ tarefas totais (138 ÷ 138 = 100%). Cada bloco da barra representa 5% (arredondamento para o bloco mais próximo).
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -112,11 +112,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### ANDAMENTO
 
-### 138 · Corrigir o aviso de minimatch nas ferramentas de lint
-
-- **Status:** 🔵 em andamento · **Início:** 2026-11-04.
-- **Escopo autorizado:** investigar o aviso GHSA-g3hv-75wg-m249, corrigir a resolução afetada preservando as APIs dos consumidores, validar lint e gates aplicáveis e publicar na `main`.
-- **Ambiente e progresso:** Node 24.21.0 preparado isoladamente; instalação congelada aprovada. Verificação dos consumidores reais e revisão independente aprovadas; fix:format, fix:lint, check:lint, check:format, check:types, 990 unitários, 601 integrações MySQL e build aprovados. Migrações repetidas: 66/66 já aplicadas. Launchers: a suíte exige Linux (módulo `pwd` e executável Bash); no Python nativo do Windows houve falha de plataforma, e no WSL os 30 testes passaram. Nenhuma alteração na instalação global de Node; `@current_problems` não está disponível entre as ferramentas desta sessão. Implementação validada, aguardando publicação individual.
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -2397,3 +2393,9 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
   - `run.py up --prod` com build limpo sem avisos, `/api/health`, páginas e login do administrador;
   - varredura de 70 páginas como Care e como administrador, sem falhas.
 - **Nenhuma branch ou worktree.**
+
+### 138 · Corrigir o aviso de minimatch nas ferramentas de lint
+
+- **Status:** 🟢 finalizada · **Início e conclusão:** 2026-11-04 · **Commit:** `38bf2f87` · **Push confirmado:** `0c883ce4..38bf2f87 main -> main`.
+- **Escopo autorizado:** investigar o aviso GHSA-g3hv-75wg-m249, corrigir a resolução afetada preservando as APIs dos consumidores, validar lint e gates aplicáveis e publicar na `main`.
+- **Ambiente e progresso:** Node 24.21.0 preparado isoladamente; instalação congelada aprovada. Verificação dos consumidores reais e revisão independente aprovadas; fix:format, fix:lint, check:lint, check:format, check:types, 990 unitários, 601 integrações MySQL e build aprovados. Migrações repetidas: 66/66 já aplicadas. Launchers: a suíte exige Linux (módulo `pwd` e executável Bash); no Python nativo do Windows houve falha de plataforma, e no WSL os 30 testes passaram. Nenhuma alteração na instalação global de Node; `@current_problems` não está disponível entre as ferramentas desta sessão. Implementação validada e publicada individualmente na `main`.
