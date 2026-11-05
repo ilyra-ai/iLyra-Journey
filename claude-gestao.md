@@ -21,18 +21,18 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **94,3%** (133 de 141)   |
+| Conclusão integral                      | **95,0%** (134 de 141)   |
 | Implementações publicadas               | **100%** (141 de 141)    |
 | Tarefas totais                          | 141                      |
-| 🟢 Concluídas                           | 133                      |
-| 🟡 Implementadas com validação pendente | 8                        |
+| 🟢 Concluídas                           | 134                      |
+| 🟡 Implementadas com validação pendente | 7                        |
 | 🔵 Em andamento                         | 0                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 0                        |
 | Branch de trabalho                      | `main` (única permitida) |
-| Última atualização                      | 2026-11-04               |
+| Última atualização                      | 2026-11-05               |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os oito estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os sete estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -2351,8 +2351,8 @@ Nenhuma tarefa a iniciar. As notas abaixo preservam registros históricos de cri
 
 ### 135 · Diário pessoal por voz em `/dia`, com análise do dia, memória individual e calendário
 
-- **Status:** 🟡 implementada · validação pendente · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão:** 2026-10-30 · **Commit:** `689f36f9` · **Push confirmado:** `0933314..689f36f main -> main` · **Correção do acesso, microfone e início direto:** `1c0fb36d` · **Push confirmado:** `20486022..1c0fb36d main -> main`.
-- **Validação atual (revisão de 2026-11-05):** acesso sem cidade corrigido, política HTTP alterada de bloqueio total para `microphone=(self)` e confirmação intermediária retirada por pedido do usuário; Contar por voz inicia o reconhecedor no mesmo clique, com permissão nativa preservada. Chrome real confirmou o formulário e o contexto seguro; HTTP confirmou a política. Lint, tipos, 1001 unitários, 601 integrações MySQL e compilação aprovados. Captura de fala real e salvamento continuam pendentes. Avisos de rastreamento da nova tarefa 141 tratados separadamente. Evidência: `docs/auditoria/2026-11-05-diario-135-acesso.md`.
+- **Status:** 🟢 concluída · **Registro:** 2026-10-30 · **Início:** 2026-10-30 · **Conclusão validada:** 2026-11-05 · **Commit inicial:** `689f36f9` · **Push confirmado:** `0933314..689f36f main -> main` · **Correção do acesso, microfone e início direto:** `1c0fb36d` · **Push confirmado:** `20486022..1c0fb36d main -> main`.
+- **Validação atual (2026-11-05):** fala real e transcrição confirmadas pelo usuário; relato persistido em modo voz com motor do navegador. A análise do mesmo relato retornou HTTP 200, estado `pronta`, motivo nulo e autoria Jan/Qwen local após corrigir a saída estruturada e aceitar citações literais de palavras curtas. Sem teto acumulado de tentativas, conforme pedido; concorrência preservada. Lint, formato, tipos, 1003 unitários, 602 integrações MySQL e build de 136 páginas aprovados. Evidência: `docs/auditoria/2026-11-05-diario-135-acesso.md`.
 - **Retomada da validação em 2026-11-04:** usuário disponível para falar no microfone real. O QA identificou que a ausência de cidade no perfil esconde todas as abas de `/dia`, inclusive o diário, embora o servidor não exija cidade para guardar relatos. Corrigir a composição da página para manter o diário acessível sem briefing, preservando os direitos do plano e a ausência de interpretação do mapa sem dados.
 - **Página de implementação:** `http://localhost:3000/dia` (rota `/dia`). O diário deve fazer parte dessa página, coordenado com a organização em abas solicitada pelo usuário.
 - **Pedido do usuário:** implementar a solicitação transcrita do áudio e revisada neste chat: permitir que cada pessoa conte por voz como foi o seu dia, receba o texto organizado e uma análise personalizada e consulte o diário em formato de agenda, enquanto a Lyra desenvolve uma compreensão contextualizada de sua trajetória.

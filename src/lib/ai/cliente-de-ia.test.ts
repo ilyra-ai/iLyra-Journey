@@ -166,6 +166,41 @@ describe('saída estruturada por JSON Schema', () => {
     }
   });
 
+  it('Qwen 3 local entrega saída estruturada sem esgotar os tokens em raciocínio', async () => {
+    const servidor = await iniciarServidorOpenAiCompativel();
+    try {
+      for (const modelo of ['Qwen3_5-9B-IQ4_XS', 'Qwen/Qwen3.5-9B']) {
+        servidor.responder('{"a":"ok"}');
+        await gerarTexto(
+          { ...conexao(servidor.baseUrl), modelo },
+          {
+            sistema: 's',
+            usuario: 'u',
+            esquemaJson: esquema,
+          }
+        );
+      }
+      for (const requisicao of servidor.requisicoes) {
+        expect(requisicao.corpo).toMatchObject({
+          chat_template_kwargs: { enable_thinking: false },
+        });
+      }
+      servidor.responder('Resposta livre');
+      await gerarTexto(
+        { ...conexao(servidor.baseUrl), modelo: 'Qwen3_5-9B-IQ4_XS' },
+        {
+          sistema: 's',
+          usuario: 'u',
+        }
+      );
+      expect(servidor.requisicoes.at(-1)?.corpo).not.toHaveProperty(
+        'chat_template_kwargs'
+      );
+    } finally {
+      await servidor.fechar();
+    }
+  });
+
   it('servidor que recusa json_schema com 500 (llama-cpp-python) recebe json_object com o esquema', async () => {
     const servidor = await iniciarServidorOpenAiCompativel({
       recusarFormatos: { tipos: ['json_schema'], status: 500 },

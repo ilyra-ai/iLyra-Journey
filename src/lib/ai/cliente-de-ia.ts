@@ -1,5 +1,5 @@
 import { lerFluxoDoProvedor } from './fluxo-de-texto';
-import type { TipoDeProvedor } from './provedores-catalogo';
+import { type TipoDeProvedor, urlEhLocal } from './provedores-catalogo';
 import { buscarComAcessoLocal } from './transporte-local-wsl';
 import {
   descobrirModelosLocais,
@@ -424,6 +424,14 @@ export async function gerarTextoDetalhado(
               temperature: conexao.temperatura,
               stream: Boolean(pedido.aoTexto),
               messages: mensagensOpenAi(conexao, pedido),
+              // Qwen 3 local pode consumir todo o orçamento em raciocínio,
+              // deixando content vazio. Na saída estruturada, gere o JSON
+              // diretamente pelo parâmetro oficial do template do modelo.
+              ...(pedido.esquemaJson &&
+              /(?:^|\/)qwen3[._-]/i.test(conexao.modelo) &&
+              (conexao.integrado || urlEhLocal(conexao.baseUrl))
+                ? { chat_template_kwargs: { enable_thinking: false } }
+                : {}),
               ...(pedido.maximoDeTokens
                 ? { max_tokens: pedido.maximoDeTokens }
                 : {}),

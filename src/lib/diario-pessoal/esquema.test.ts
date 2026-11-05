@@ -163,6 +163,28 @@ describe('análise do dia', () => {
   });
 });
 
+describe('citações literais de relatos curtos', () => {
+  it('aceita palavras curtas citadas e continua recusando citações inventadas', () => {
+    const original = 'um dois três';
+    const leitura = analise({
+      textoOrganizado: 'Um, dois, três.',
+      acontecimentos: ['Você disse “um, dois, três”.'],
+      percepcoes: [],
+      caracteristicasDoDia: 'Você disse "um dois três"; não descreveu seu dia.',
+      relacaoComOMapa: null,
+    });
+    expect(conferirAnalise(leitura, original, false, false)).toBeNull();
+    expect(
+      conferirAnalise(
+        { ...leitura, acontecimentos: ['Você disse "seis sete".'] },
+        original,
+        false,
+        false
+      )
+    ).toBe('a análise listou acontecimentos que não estão no relato');
+  });
+});
+
 describe('novo relato', () => {
   const base = {
     id: '6f9a1c62-6a8e-4c1e-9a55-2f1a0e0b7d10',

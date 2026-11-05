@@ -366,6 +366,29 @@ describe('diário pessoal (tarefa 135)', () => {
     }
   });
 
+  it('permite nova análise após muitas falhas sem limite acumulado de tentativas', async () => {
+    await configurar('ollama');
+    try {
+      modo = 'fiel';
+      const u = await criarUsuario();
+      const r = (await criar(u)).json as Relato;
+      await executeStatement(
+        "UPDATE personal_diary_entries SET analysis_attempts=100,analysis_status='falhou' WHERE id=?",
+        [r.id]
+      );
+      const resposta = await analisar(u, r);
+      expect(resposta.status).toBe(200);
+      expect((resposta.json as Relato).estadoDaAnalise).toBe('pronta');
+      const [linha] = await queryRows<{ analysis_attempts: number }>(
+        'SELECT analysis_attempts FROM personal_diary_entries WHERE id=?',
+        [r.id]
+      );
+      expect(Number(linha.analysis_attempts)).toBe(101);
+    } finally {
+      await voltarAoMotorDaLyra();
+    }
+  });
+
   it('recusa texto organizado infiel e análise clínica sem gravar nada delas', async () => {
     await configurar('ollama');
     try {

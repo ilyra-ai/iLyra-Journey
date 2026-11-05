@@ -53,6 +53,13 @@ mapa. A reflexão sobre o briefing só aparece quando ele está disponível.
     a voz da Lyra é conferida.
     Resposta recusada passa ao próximo modelo; se nenhum entregar, o relato
     fica como foi contado e a tela mostra o motivo, com "Tentar de novo".
+- As tentativas de análise não têm teto acumulado por relato. Uma falha
+  permite nova tentativa; o contador é diagnóstico. Uma análise em andamento
+  continua protegida contra execução simultânea no mesmo relato.
+- Qwen 3 local recebe o parâmetro oficial de resposta direta nos pedidos
+  estruturados, evitando gastar os tokens apenas em raciocínio. A instrução
+  exige trechos literais como base, inclusive em testes de voz sem fatos do
+  dia. Citações reais de palavras curtas também são aceitas pela conferência.
 - **Mapa pessoal**: entram os fatos do céu do dia e do mapa da própria pessoa
   guardados no briefing daquela data (Lua, clima do dia, estrela pessoal do
   dia e período de vida). Eles são gravados junto da análise, para ela

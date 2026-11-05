@@ -184,8 +184,16 @@ function radicais(valor: string) {
       .map((p) => p.slice(0, 5))
   );
 }
-const ancorado = (texto: string, base: Set<string>) =>
-  [...radicais(texto)].some((r) => base.has(r));
+function ancorado(texto: string, base: Set<string>, original: string) {
+  if ([...radicais(texto)].some((r) => base.has(r))) return true;
+  // Uma citação literal também sustenta relatos com palavras curtas
+  // ("um, dois, três"), que não possuem radicais de cinco letras.
+  const relato = ` ${palavras(original).join(' ')} `;
+  return [...texto.matchAll(/["“]([^"”]+)["”]/gu)].some((citacao) => {
+    const trecho = palavras(citacao[1]);
+    return trecho.length >= 2 && relato.includes(` ${trecho.join(' ')} `);
+  });
+}
 
 /**
  * Recusa análises fora do contrato: texto infiel, linguagem clínica,
@@ -208,9 +216,9 @@ export function conferirAnalise(
   if (!temHistorico && analise.padroes.length)
     return 'a análise apontou padrões sem relatos anteriores';
   const base = radicais(original);
-  if (analise.acontecimentos.some((a) => !ancorado(a, base)))
+  if (analise.acontecimentos.some((a) => !ancorado(a, base, original)))
     return 'a análise listou acontecimentos que não estão no relato';
-  if (!ancorado(analise.caracteristicasDoDia, base))
+  if (!ancorado(analise.caracteristicasDoDia, base, original))
     return 'a leitura do dia não fala do que a pessoa contou';
   const interpretacao = [
     ...analise.acontecimentos,

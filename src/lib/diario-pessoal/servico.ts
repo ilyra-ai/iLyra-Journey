@@ -49,7 +49,6 @@ type Linha = {
   created_at: string;
 };
 
-const MAXIMO_DE_ANALISES_POR_RELATO = 6;
 const iso = (s: string | null) => (s ? s.replace(' ', 'T') + 'Z' : null);
 const json = <T>(v: unknown): T | null =>
   v === null || v === undefined
@@ -366,11 +365,6 @@ export async function analisarRelato(
       );
       return null;
     }
-    if (Number(r.analysis_attempts) >= MAXIMO_DE_ANALISES_POR_RELATO)
-      throw new HttpError(
-        'Este relato atingiu o limite de tentativas de análise.',
-        429
-      );
     await c.execute(
       "UPDATE personal_diary_entries SET analysis_status='gerando',analysis_reason=NULL,analysis_attempts=analysis_attempts+1,analysis_lease_until=TIMESTAMPADD(SECOND,?,UTC_TIMESTAMP(3)) WHERE id=? AND user_id=?",
       [segundos, id, s.user.id]
