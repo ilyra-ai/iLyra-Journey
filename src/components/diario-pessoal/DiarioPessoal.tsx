@@ -3,7 +3,6 @@ import { useCallback, useId, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   BookHeart,
-  Download,
   Loader2,
   Mic,
   Pencil,
@@ -36,7 +35,7 @@ import {
   TAMANHO_MAXIMO,
 } from '@/lib/diario-pessoal/esquema';
 import { CalendarioDoDiario, diaPorExtenso } from './CalendarioDoDiario';
-import { type MotorDeVoz, useDitado } from './useDitado';
+import { useDitado } from './useDitado';
 
 const SEM_MES: MesDoDiario | null = null;
 const SEM_RELATOS: { relatos: Relato[] } | null = null;
@@ -415,21 +414,16 @@ function NovoRelato({
   const ids = useId();
   const [texto, setTexto] = useState('');
   const [salvando, setSalvando] = useState(false);
-  const [aceitarNavegador, setAceitarNavegador] = useState(false);
-  const [falado, setFalado] = useState<MotorDeVoz | null>(null);
   const acrescentar = useCallback((trecho: string) => {
     if (!trecho) return;
     setTexto((t) => (t ? `${t.trimEnd()} ${trecho}` : trecho));
   }, []);
   const voz = useDitado(acrescentar);
   const ouvindo = voz.estado.tipo === 'ouvindo';
-  const motorAtual = ouvindo
-    ? (voz.estado as { motor: MotorDeVoz }).motor
-    : voz.motorUsado;
 
   async function salvar() {
     setSalvando(true);
-    const motor = falado ?? motorAtual;
+    const motor = voz.motorUsado;
     try {
       const criado = await requisitar<Relato>('/api/diario-pessoal', 'POST', {
         id: crypto.randomUUID(),
@@ -439,7 +433,6 @@ function NovoRelato({
         motor: motor ?? null,
       });
       setTexto('');
-      setFalado(null);
       voz.esquecerMotor();
       aoCriar(criado);
     } catch (e) {
@@ -493,9 +486,7 @@ function NovoRelato({
             : 'Ouvindo… o áudio está sendo processado pelo serviço do navegador.'
           : voz.estado.tipo === 'verificando'
             ? 'Conferindo o reconhecimento de voz deste aparelho…'
-            : voz.estado.tipo === 'baixando'
-              ? 'Baixando a voz em português para este aparelho…'
-              : ''}
+            : ''}
       </div>
       {voz.erro ? (
         <p role="alert" className="text-sm text-destructive">
@@ -508,65 +499,6 @@ function NovoRelato({
           acima.
         </p>
       ) : null}
-      {voz.estado.tipo === 'baixavel' ? (
-        <div className="flex flex-col gap-2 rounded-xl bg-muted/60 p-3 text-sm">
-          <p>
-            Este aparelho pode reconhecer português sem enviar o áudio para
-            fora, depois de baixar o pacote de voz.
-          </p>
-          <Button
-            type="button"
-            size="sm"
-            className="self-start"
-            onClick={() => void voz.baixar()}
-          >
-            <Download aria-hidden="true" />
-            Baixar a voz em português
-          </Button>
-        </div>
-      ) : null}
-      {voz.estado.tipo === 'pedir-navegador' ? (
-        <div className="flex flex-col gap-2 rounded-xl bg-muted/60 p-3 text-sm">
-          <p>
-            Este aparelho não reconhece português localmente. O serviço de voz
-            do navegador processa o áudio fora do aparelho (no Chrome, pelo
-            Google). Se preferir, digite o relato.
-          </p>
-          <label className="flex items-start gap-2">
-            <input
-              type="checkbox"
-              className="mt-1 h-4 w-4 accent-[hsl(var(--primary))]"
-              checked={aceitarNavegador}
-              onChange={(e) => setAceitarNavegador(e.target.checked)}
-            />
-            Entendo e quero usar o serviço de voz do navegador desta vez.
-          </label>
-          <div className="flex flex-wrap gap-2">
-            <Button
-              type="button"
-              size="sm"
-              disabled={!aceitarNavegador}
-              onClick={() => {
-                setAceitarNavegador(false);
-                setFalado('navegador');
-                voz.iniciar('navegador');
-              }}
-            >
-              <Mic aria-hidden="true" />
-              Falar com o serviço do navegador
-            </Button>
-            <Button
-              type="button"
-              size="sm"
-              variant="ghost"
-              onClick={voz.cancelar}
-            >
-              Digitar
-            </Button>
-          </div>
-        </div>
-      ) : null}
-
       <div className="flex flex-wrap gap-2">
         {ouvindo ? (
           <Button type="button" variant="outline" onClick={voz.parar}>
@@ -577,17 +509,8 @@ function NovoRelato({
           <Button
             type="button"
             variant="outline"
-            disabled={
-              salvando ||
-              voz.estado.tipo === 'verificando' ||
-              voz.estado.tipo === 'baixando'
-            }
-            onClick={() => {
-              if (voz.motorUsado === 'aparelho') {
-                setFalado('aparelho');
-                voz.iniciar('aparelho');
-              } else void voz.comecar().then(() => undefined);
-            }}
+            disabled={salvando || voz.estado.tipo === 'verificando'}
+            onClick={() => void voz.comecar()}
           >
             <Mic aria-hidden="true" />
             Contar por voz

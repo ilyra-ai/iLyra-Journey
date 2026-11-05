@@ -4,9 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 /**
  * Ditado do diário (tarefa 135) com a Web Speech API. Prefere o
  * reconhecimento no próprio aparelho (`processLocally`), em que o áudio não
- * sai do dispositivo. Quando o aparelho não oferece o português, o serviço
- * do navegador só é usado depois que a pessoa aceita, porque nesse caso o
- * áudio é processado fora do aparelho (no Chrome, pelo serviço do Google).
+ * sai do dispositivo. Sem português local instalado, o clique em Contar por
+ * voz inicia o serviço do navegador, sujeito à permissão nativa do microfone.
+ * Nesse caso o áudio é processado fora do aparelho (no Chrome, pelo Google).
  */
 
 interface Alternativa {
@@ -45,7 +45,6 @@ type Opcoes = {
 interface Construtor {
   new (): Reconhecedor;
   available?: (o: Opcoes) => Promise<string>;
-  install?: (o: Opcoes) => Promise<boolean>;
 }
 
 export type MotorDeVoz = 'aparelho' | 'navegador';
@@ -53,9 +52,6 @@ export type EstadoDoDitado =
   | { tipo: 'parado' }
   | { tipo: 'verificando' }
   | { tipo: 'ouvindo'; motor: MotorDeVoz }
-  | { tipo: 'baixavel' }
-  | { tipo: 'baixando' }
-  | { tipo: 'pedir-navegador' }
   | { tipo: 'sem-suporte' };
 
 const OPCOES: Opcoes = {
@@ -117,8 +113,10 @@ export function useDitado(aoTexto: (trecho: string) => void) {
       let parcial = '';
       for (let i = e.resultIndex; i < e.results.length; i++) {
         const trecho = e.results[i][0]?.transcript ?? '';
-        if (e.results[i].isFinal) aoTextoRef.current(trecho.trim());
-        else parcial += trecho;
+        if (e.results[i].isFinal && trecho.trim()) {
+          setMotorUsado(motor);
+          aoTextoRef.current(trecho.trim());
+        } else if (!e.results[i].isFinal) parcial += trecho;
       }
       setProvisorio(parcial.trim());
     };
@@ -133,7 +131,6 @@ export function useDitado(aoTexto: (trecho: string) => void) {
     };
     atual.current = r;
     setErro(null);
-    setMotorUsado(motor);
     setEstado({ tipo: 'ouvindo', motor });
     try {
       r.start();
@@ -153,7 +150,7 @@ export function useDitado(aoTexto: (trecho: string) => void) {
       return;
     }
     if (!SR.available) {
-      setEstado({ tipo: 'pedir-navegador' });
+      iniciar('navegador');
       return;
     }
     setEstado({ tipo: 'verificando' });
@@ -164,33 +161,10 @@ export function useDitado(aoTexto: (trecho: string) => void) {
       disponivel = 'unavailable';
     }
     if (disponivel === 'available') iniciar('aparelho');
-    else if (disponivel === 'downloadable') setEstado({ tipo: 'baixavel' });
-    else if (disponivel === 'downloading') setEstado({ tipo: 'baixando' });
-    else setEstado({ tipo: 'pedir-navegador' });
-  }, [iniciar]);
-
-  const baixar = useCallback(async () => {
-    const SR = construtor();
-    if (!SR?.install) return;
-    setEstado({ tipo: 'baixando' });
-    let instalado = false;
-    try {
-      instalado = await SR.install(OPCOES);
-    } catch {
-      instalado = false;
-    }
-    if (instalado) iniciar('aparelho');
-    else {
-      setEstado({ tipo: 'pedir-navegador' });
-      setErro('Não foi possível baixar a voz em português neste aparelho.');
-    }
+    else iniciar('navegador');
   }, [iniciar]);
 
   const parar = useCallback(() => atual.current?.stop(), []);
-  const cancelar = useCallback(() => {
-    atual.current?.abort();
-    setEstado({ tipo: 'parado' });
-  }, []);
   const esquecerMotor = useCallback(() => setMotorUsado(null), []);
 
   return {
@@ -199,10 +173,8 @@ export function useDitado(aoTexto: (trecho: string) => void) {
     erro,
     motorUsado,
     comecar,
-    baixar,
     iniciar,
     parar,
-    cancelar,
     esquecerMotor,
   };
 }

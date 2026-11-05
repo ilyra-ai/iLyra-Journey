@@ -9,16 +9,27 @@ Na aba **Diário**, a pessoa conta por voz ou por escrito como foi o dia,
 quantas vezes quiser (até 10 relatos por dia), e consulta os relatos numa
 agenda mensal.
 
+O diário continua acessível quando faltam cidade ou dados para o briefing
+do coach, inclusive pelo endereço `/dia?aba=diario`. A aba Meu Dia explica
+os dados faltantes; o diário mantém as permissões do plano e não inventa um
+mapa. A reflexão sobre o briefing só aparece quando ele está disponível.
+
 ### Voz
 
 - Web Speech API, sempre começando pelo reconhecimento **no aparelho**
-  (`SpeechRecognition.available({ processLocally: true })`). Se o pacote de
-  português puder ser baixado, a tela oferece o download (`install`).
+  (`SpeechRecognition.available({ processLocally: true })`), quando o
+  português já está instalado.
 - Sem português no aparelho, o serviço de voz do navegador (que processa o
-  áudio fora do aparelho; no Chrome, pelo Google) só é usado depois de um
-  aceite explícito, a cada vez. Digitar continua sempre disponível.
+  áudio fora do aparelho; no Chrome, pelo Google) começa pelo mesmo clique
+  em **Contar por voz**, sem aviso intermediário ou confirmação adicional
+  do app, conforme pedido do usuário em 2026-11-05. A permissão nativa do
+  microfone continua obrigatória. Digitar continua sempre disponível.
+- O cabeçalho `Permissions-Policy` permite `microphone=(self)`: somente a
+  própria origem pode solicitar o microfone. Antes, `microphone=()` bloqueava
+  a captura inclusive em `localhost`, que o Chrome considera contexto seguro.
 - O áudio nunca chega ao servidor da Lyra. O relato registra se veio por voz
-  no aparelho, por voz no navegador ou digitado.
+  no aparelho, por voz no navegador ou digitado; o modo voz só é marcado
+  depois de receber transcrição final não vazia do reconhecedor real.
 - Microfone negado, sem fala, sem rede ou navegador sem suporte geram
   mensagens em pt-BR, e o texto já ditado continua no campo.
 

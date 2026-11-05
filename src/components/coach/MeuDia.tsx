@@ -209,13 +209,37 @@ export function MeuDia() {
 
   if (!estado || estado.estado !== 'pronto') {
     return (
-      <MolduraDoDia tom={null} rotulo={idDoTitulo}>
-        <EstadoSemDia
-          estado={estado}
-          carregando={carregando}
-          idDoTitulo={idDoTitulo}
+      <div className="flex flex-col gap-8 pb-16">
+        <AbasDoDia
+          abas={[
+            {
+              chave: 'meu-dia',
+              rotulo: 'Meu Dia',
+              icone: Sunrise,
+              conteudo: (
+                <MolduraDoDia tom={null} rotulo={idDoTitulo}>
+                  <EstadoSemDia
+                    estado={estado}
+                    carregando={carregando}
+                    idDoTitulo={idDoTitulo}
+                  />
+                </MolduraDoDia>
+              ),
+            },
+            {
+              chave: 'diario',
+              rotulo: 'Diário',
+              icone: BookHeart,
+              ancoras: ['diario'],
+              conteudo: (
+                <PlanFeatureGate features={['evening_reflection']}>
+                  <DiarioPessoal />
+                </PlanFeatureGate>
+              ),
+            },
+          ]}
         />
-      </MolduraDoDia>
+      </div>
     );
   }
 

@@ -51,7 +51,7 @@ const cabecalhosDeSeguranca = [
   {
     key: 'Permissions-Policy',
     value:
-      'camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()',
+      'camera=(), microphone=(self), geolocation=(), payment=(), usb=(), interest-cohort=()',
   },
   { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
   ...(process.env.NODE_ENV === 'production'
