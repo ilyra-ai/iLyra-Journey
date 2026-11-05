@@ -424,12 +424,13 @@ export async function gerarTextoDetalhado(
               temperature: conexao.temperatura,
               stream: Boolean(pedido.aoTexto),
               messages: mensagensOpenAi(conexao, pedido),
-              // Qwen 3 local pode consumir todo o orçamento em raciocínio,
-              // deixando content vazio. Na saída estruturada, gere o JSON
-              // diretamente pelo parâmetro oficial do template do modelo.
-              ...(pedido.esquemaJson &&
-              /(?:^|\/)qwen3[._-]/i.test(conexao.modelo) &&
-              (conexao.integrado || urlEhLocal(conexao.baseUrl))
+              // O motor integrado reserva os tokens para a resposta visível.
+              // O ID opaco não permite reconhecer Qwen pelo nome; templates
+              // sem esse parâmetro apenas não o utilizam.
+              ...(conexao.integrado ||
+              (pedido.esquemaJson &&
+                /(?:^|\/)qwen3[._-]/i.test(conexao.modelo) &&
+                urlEhLocal(conexao.baseUrl))
                 ? { chat_template_kwargs: { enable_thinking: false } }
                 : {}),
               ...(pedido.maximoDeTokens

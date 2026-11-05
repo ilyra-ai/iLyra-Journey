@@ -168,6 +168,17 @@ export function svgDoDesenho(entrada: unknown): string {
   );
 }
 
+/** Mantém as dimensões validadas, inclusive no limite de 2048 × 2048 pixels. */
+export async function rasterizarDesenho(entrada: unknown): Promise<Buffer> {
+  const svg = svgDoDesenho(entrada);
+  return sharp(Buffer.from(svg, 'utf8'), {
+    density: 72,
+    limitInputPixels: 4_194_304,
+  })
+    .webp({ quality: 92 })
+    .toBuffer();
+}
+
 /** Sem SVG arbitrário do modelo: nenhuma tag, URI, CSS ou script é aceita como entrada. */
 export async function gerarImagemVetorial(
   conexao: ConexaoDeIa,
@@ -192,12 +203,5 @@ export async function gerarImagemVetorial(
     maximoDeTokens: 5000,
     json: true,
   });
-  const svg = svgDoDesenho(extrairJson(resposta));
-  const bytes = await sharp(Buffer.from(svg, 'utf8'), {
-    density: 144,
-    limitInputPixels: 4_194_304,
-  })
-    .webp({ quality: 92 })
-    .toBuffer();
-  return bytes;
+  return rasterizarDesenho(extrairJson(resposta));
 }

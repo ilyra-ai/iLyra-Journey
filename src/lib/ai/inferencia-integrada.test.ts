@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import sharp from 'sharp';
 
-import { svgDoDesenho } from './imagem-vetorial';
+import { rasterizarDesenho, svgDoDesenho } from './imagem-vetorial';
 import { idDeModelo } from './inferencia-integrada';
 
 describe('Inferência local integrada', () => {
@@ -71,4 +72,23 @@ describe('Inferência local integrada', () => {
       })
     ).toThrow();
   });
+
+  it.each([512, 1600, 2048])(
+    'rasteriza WebP real com %i pixels sem duplicar as dimensões',
+    async (tamanho) => {
+      const bytes = await rasterizarDesenho({
+        largura: tamanho,
+        altura: tamanho,
+        fundo: '#FFFFFF',
+        formas: [
+          { tipo: 'circulo', cx: 100, cy: 100, raio: 80, cor: '#FFCC00' },
+        ],
+      });
+      const imagem = await sharp(bytes).metadata();
+      expect(imagem.format).toBe('webp');
+      expect(imagem.width).toBe(tamanho);
+      expect(imagem.height).toBe(tamanho);
+      expect(bytes.length).toBeGreaterThan(100);
+    }
+  );
 });

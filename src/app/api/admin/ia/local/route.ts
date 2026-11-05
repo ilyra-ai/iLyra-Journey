@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import path from 'node:path';
+import { platform } from 'node:os';
 
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -126,7 +127,7 @@ export async function POST(request: Request) {
       }
     }
 
-    if (process.platform !== 'linux')
+    if (platform() !== 'linux')
       return NextResponse.json(
         {
           error:

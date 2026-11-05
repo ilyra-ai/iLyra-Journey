@@ -2,9 +2,11 @@
 # Instalador do runtime local da Lyra. Nunca instala driver NVIDIA nem usa sudo.
 set -Eeuo pipefail
 
-raiz="$(cd -- "$(dirname -- "$0")/.." && pwd)"
-destino="$raiz/.lyra-run/llama.cpp"
+destino="$HOME/.cache/lyra-metacare/llama.cpp"
 binario="$destino/build/bin/llama-server"
+# Release oficial fixada para que a instalação seja reproduzível.
+tag="v0.9.0"
+revisao="cd959bae99ff4bed22bef2604f45241c09bbb8c8"
 
 if [[ "$(uname -s)" != "Linux" ]]; then
   echo "ERRO: a compilação automática é exclusiva de Linux/WSL2." >&2
@@ -14,6 +16,18 @@ if [[ -x "$binario" ]]; then
   echo "Motor de inferência local já instalado em $binario"
   exit 0
 fi
+
+# O CUDA oficial não adiciona seu diretório ao PATH do Ubuntu automaticamente.
+if ! command -v nvcc >/dev/null 2>&1 && [[ -x /usr/local/cuda/bin/nvcc ]]; then
+  export PATH="/usr/local/cuda/bin:$PATH"
+fi
+# Evita que o CMake percorra os diretórios Windows herdados pelo WSL.
+IFS=: read -r -a caminhos <<< "$PATH"
+caminhos_linux=()
+for caminho in "${caminhos[@]}"; do
+  [[ "$caminho" == /mnt/* ]] || caminhos_linux+=("$caminho")
+done
+export PATH="$(IFS=:; echo "${caminhos_linux[*]}")"
 
 for programa in git cmake c++ nvcc nvidia-smi; do
   if ! command -v "$programa" >/dev/null 2>&1; then
@@ -37,15 +51,19 @@ if ! nvidia-smi >/dev/null 2>&1; then
   exit 6
 fi
 
-mkdir -p "$raiz/.lyra-run"
-chmod 700 "$raiz/.lyra-run"
+mkdir -p "$(dirname -- "$destino")"
+chmod 700 "$(dirname -- "$destino")"
 if [[ ! -d "$destino/.git" ]]; then
   if [[ -e "$destino" ]]; then
     echo "ERRO: já há um diretório '$destino', mas não é um checkout Git. Nenhum arquivo foi apagado." >&2
     exit 7
   fi
   echo "Baixando código-fonte oficial do ggml-org/llama.cpp"
-  git clone --depth 1 --single-branch https://github.com/ggml-org/llama.cpp.git "$destino"
+  git clone --depth 1 --branch "$tag" --single-branch https://github.com/ggml-org/llama.cpp.git "$destino"
+fi
+if [[ "$(git -C "$destino" rev-parse HEAD)" != "$revisao" ]]; then
+  echo "ERRO: revisão do llama.cpp diferente da release validada $tag. Nenhum checkout existente foi substituído." >&2
+  exit 9
 fi
 
 echo "Compilando CUDA com arquitetura Blackwell sm_120"

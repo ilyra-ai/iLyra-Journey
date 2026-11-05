@@ -21,18 +21,18 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **93,7%** (134 de 143)   |
+| Conclusão integral                      | **94,4%** (135 de 143)   |
 | Implementações publicadas               | **98,6%** (141 de 143)   |
 | Tarefas totais                          | 143                      |
-| 🟢 Concluídas                           | 134                      |
-| 🟡 Implementadas com validação pendente | 7                        |
+| 🟢 Concluídas                           | 135                      |
+| 🟡 Implementadas com validação pendente | 6                        |
 | 🔵 Em andamento                         | 0                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 2                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-05               |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os sete estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os seis estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -2764,7 +2764,10 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 141 · Inferência local integrada à Lyra, sem aplicativos intermediários
 
-- **Status:** 🟡 implementada · validação específica pendente · **Registro/autorização:** 2026-11-04 · **Branch:** `main` (sem ramificações).
+- **Retomada autorizada em 2026-11-05:** finalizar integralmente a validação real no WSL2, corrigir falhas e publicar na `main`, preservando provedores existentes. Ubuntu 26.04.1 LTS/WSL2 acessível; RTX 5070 Ti Laptop com 12 GB reconhecida. Preparação de compilação/CUDA e ambiente Node compatível em andamento; nenhuma instalação, inferência ou medição de desempenho declarada concluída antecipadamente.
+- **Status:** 🟢 concluída · integração funcional validada no WSL2 em 2026-11-05 · **Registro/autorização:** 2026-11-04 · **Branch:** `main` (sem ramificações).
+- **Validação atual:** runtime oficial compilado com CUDA, Qwen 9B real selecionado e salvo pela interface, chat em produção com streaming, cancelamento e recuperação, duas chamadas simultâneas, JSON Schema, diário aceito e persistido, geração vetorial até WebP entregue e idêntico ao banco, encerramento/reinício e isolamento Unix comprovados. 1012 unitários, suíte completa de 602 integrações e duas integrações específicas de imagens aprovados; lint, formato, tipos e build com exit 0. O modelo foi medido com aproximadamente 5 GB de VRAM; chat aquecido com primeiro texto em 618 ms. Provedores, chaves, ordem anterior e dados pessoais preservados. Relatório: `docs/auditoria/2026-11-05-llama-cpp-wsl2.md`.
+- **Limite qualitativo registrado:** a integração funcional está concluída; não se declara acurácia universal do Qwen 9B. Uma análise infiel foi corretamente recusada, outra foi aceita e gravada. A imagem vetorial foi realmente gerada e entregue, porém sua fidelidade artística ao pedido não foi aprovada. Nenhuma arte fixa substituiu o resultado do modelo e nenhum validador foi relaxado.
 - **Publicação da revisão de integração:** commit `c8a41905`, enviado e confirmado em `origin/main` em 2026-11-05; validação específica do runtime continua pendente.
 - **Integração local em 2026-11-05:** commits recebidos e preservados; corrigidos lint da carga inicial do explorador, formatação e rastreamento indevido de todo o projeto pelo bundler ao inspecionar/executar o binário do host. Lint, formato, tipos, 1001 unitários, 601 integrações MySQL e build de 136 páginas aprovados; build final sem os avisos de rastreamento. Conferidos 187 manifestos de distribuição, sem segredos locais, logs, runtime ou pesos. Instalação CUDA, inferência GGUF e benchmark no Linux/WSL2 continuam não comprovados. Detalhes: `docs/inferencia-local-integrada.md`.
 - **Objetivo:** adicionar opção nativa **Lyra integrada** em Admin → Modelos de IA, com seleção, instalação e gerenciamento de modelos WSL2 e inferência rápida, mantendo todo o app.

@@ -6,15 +6,18 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { spawn, type ChildProcess } from 'node:child_process';
 import { promises as fs } from 'node:fs';
-import { homedir } from 'node:os';
+import { homedir, platform } from 'node:os';
 import path from 'node:path';
 import { request } from 'node:http';
 import { Readable } from 'node:stream';
+import { arquiteturaGguf } from './gguf';
 
 const PASTA_PRIVADA = path.resolve(
-  process.cwd(),
-  '.lyra-run',
-  'inferencia-local'
+  homedir(),
+  '.local',
+  'state',
+  'lyra-metacare',
+  createHash('sha256').update(process.cwd()).digest('hex').slice(0, 12)
 );
 const REGISTRO = path.join(PASTA_PRIVADA, 'registro.json');
 const SOCKET = path.join(PASTA_PRIVADA, 'motor-' + process.pid + '.sock');
@@ -52,7 +55,16 @@ interface EstadoMotor {
   log: string;
 }
 
-const estado: EstadoMotor = { filho: null, modelo: null, carga: null, log: '' };
+// Os bundles das rotas do Next compartilham o mesmo controlador por processo.
+const globalMotor = globalThis as typeof globalThis & {
+  __lyraMotorLocal?: EstadoMotor;
+};
+const estado = (globalMotor.__lyraMotorLocal ??= {
+  filho: null,
+  modelo: null,
+  carga: null,
+  log: '',
+});
 
 export function idDeModelo(caminhoReal: string): string {
   return (
@@ -130,9 +142,9 @@ function autorizadaParaCadastro(caminho: string): boolean {
 async function raizes(): Promise<string[]> {
   const registro = await lerRegistro();
   const candidatos = [
-    homedir(),
     ...registro.pastas,
     ...(process.env.LYRA_IA_RAIZES ?? '').split(path.delimiter).filter(Boolean),
+    homedir(),
   ];
   const existentes: string[] = [];
   for (const candidato of candidatos) {
@@ -149,7 +161,7 @@ async function raizes(): Promise<string[]> {
 
 /** O administrador escolhe uma pasta REAL do host WSL; não há acesso ao PC via navegador remoto. */
 export async function adicionarPasta(caminho: string): Promise<PastaNavegavel> {
-  if (process.platform !== 'linux') {
+  if (platform() !== 'linux') {
     throw new Error(
       'A inferência integrada exige que a Lyra execute no Linux/WSL2.'
     );
@@ -179,9 +191,8 @@ async function modeloDoArquivo(
   if (!dados.isFile()) return null;
   const arquivo = await fs.open(real, 'r');
   try {
-    const magic = Buffer.alloc(4);
-    const { bytesRead } = await arquivo.read(magic, 0, 4, 0);
-    if (bytesRead !== 4 || magic.toString('ascii') !== 'GGUF') return null;
+    const arquitetura = await arquiteturaGguf(arquivo);
+    if (!arquitetura || arquitetura === 'clip') return null;
   } finally {
     await arquivo.close();
   }
@@ -342,8 +353,9 @@ export function caminhoDoRuntime(): string {
   return (
     process.env.LYRA_LLAMA_SERVER?.trim() ||
     path.resolve(
-      process.cwd(),
-      '.lyra-run',
+      homedir(),
+      '.cache',
+      'lyra-metacare',
       'llama.cpp',
       'build',
       'bin',
@@ -418,7 +430,7 @@ export async function estadoDaInferencia(): Promise<{
     ),
     modelo: estado.modelo,
     caminhoRuntime: binario,
-    plataforma: process.platform,
+    plataforma: platform(),
   };
 }
 
@@ -432,6 +444,8 @@ function httpNoSocket(
     const req = request(
       {
         socketPath: SOCKET,
+        // O servidor fecha conexões SSE; não reutilizar um socket já encerrando.
+        agent: false,
         method: metodo,
         path: endpoint,
         headers:
@@ -477,7 +491,7 @@ async function encerrarMotor(): Promise<void> {
 
 /** Não altera o sistema, nem executa comandos provenientes do prompt/modelo. */
 async function iniciarMotor(id: string): Promise<void> {
-  if (process.platform !== 'linux') {
+  if (platform() !== 'linux') {
     throw new Error(
       'Runtime nativo disponível somente quando o servidor Lyra roda no Linux/WSL2.'
     );
