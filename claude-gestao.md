@@ -21,14 +21,14 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **94,4%** (135 de 143)   |
-| Implementações publicadas               | **98,6%** (141 de 143)   |
+| Conclusão integral                      | **95,1%** (136 de 143)   |
+| Implementações publicadas               | **99,3%** (142 de 143)   |
 | Tarefas totais                          | 143                      |
-| 🟢 Concluídas                           | 135                      |
+| 🟢 Concluídas                           | 136                      |
 | 🟡 Implementadas com validação pendente | 6                        |
 | 🔵 Em andamento                         | 0                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 2                        |
+| ⚪ A iniciar                            | 1                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-05               |
 
@@ -253,205 +253,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Documentos internos de referência:** `docs/design-system.md`, `docs/acessibilidade.md` e `CLAUDE.md`; considerar o histórico vigente e a aprovação do usuário antes de modificar decisões de produto.
 - **Critério da publicação atual:** apenas `claude-gestao.md` alterado, tarefa numerada uma vez no Tópico 3, estado **a iniciar**, indicadores recalculados sem reclassificar tarefas anteriores, revisão integral do diff, verificação de estrutura/formatação e publicação na `main`. Após o push, registrar o SHA real em commit documental próprio, conforme a regra deste painel.
 - **Próxima ação:** aguardar instruções do usuário. Este registro não constitui implementação da tarefa 142 nem validação integral das hipóteses de solução.
-
-### 143 · Auditoria integral do portfólio funcional: pertinência, obsolescência, consolidação e estratégia de produto
-
-- **Status:** ⚪ a iniciar · **Registro:** 2026-11-05 · **Prioridade:** alta, com revisão de promessas e metodologias antes de expansão funcional.
-- **Autorização atual:** somente registrar a auditoria aprovada no máximo de detalhes neste arquivo, revisar, fazer commit e push na `main` principal, sem branches, worktrees ou árvores paralelas, e aguardar instruções. Não implementar fusões, retirar funcionalidades, alterar cálculos, corrigir documentos de outros escopos, migrar registros nem mudar planos ou integrações nesta etapa.
-- **Pedido de origem, integral em seus quatro objetivos:** (1) avaliar se faz sentido manter cada função e funcionalidade no app; (2) identificar funções e funcionalidades obsoletas; (3) identificar o que pode ser juntado ou fundido; (4) apresentar opinião profissional sobre o conjunto do produto. O usuário aprovou o parecer e pediu sua transformação em nova tarefa; aprovação da análise não autoriza executar automaticamente cada recomendação.
-- **Parecer central aprovado:** a Lyra possui um núcleo valioso, mas cresceu em várias direções simultaneamente. Manter centrais as capacidades que sustentam **registrar o cotidiano → compreender padrões → escolher uma pequena ação → acompanhar o resultado**; consolidar experiências próximas, preservar distinções de dados e reformular apresentações que prometem mais que o mecanismo demonstra. Quantidade de recursos não é indicador suficiente de maturidade.
-- **Relação com a 142:** a 142 trata arquitetura da informação, clareza das jornadas e UI/UX; a 143 trata pertinência do portfólio, efetividade funcional, obsolescência e decisão de produto. Compartilhar inventário e evidências para evitar retrabalho, mas manter rastreabilidade própria. A preservação funcional da 142 não autoriza retirar recursos sob o pretexto de simplificar; eventual descontinuação exige decisão explícita, plano de compatibilidade e preservação dos dados.
-
-#### A · Método, evidências e fronteiras da auditoria de origem
-
-- Foram examinados catálogo de navegação, permissões dos planos, componentes, serviços de domínio, cálculos e documentação funcional. É uma avaliação estratégica apoiada no código, não nova homologação de todos os fluxos, modais, dispositivos e provedores externos nem leitura alegada de todas as linhas de código do projeto.
-- Referências principais inspecionadas: `src/components/layout/navigation.ts`, `src/types/subscription.ts`, `src/lib/plans/rotas.ts`, `src/lib/plans/dependencias.ts`, `src/lib/ai/plano-do-dia.ts`, `src/lib/ai/score-engine.ts`, `src/lib/integrativo/cobertura.ts`, motores integrativos e de longevidade, `src/hooks/use-bluetooth-vitals.ts`, `src/components/admin/AIConfigForm.tsx`, `src/lib/pagamentos/credenciais.ts`, serviços de registros/rotinas/experiências e documentação em `docs/`.
-- Não foram encontrados dados suficientes de adoção para concluir que determinada função não é usada. Ausência de uso em uma base local pequena, falta de configuração, falha de um provedor e pendência de QA não comprovam obsolescência.
-- Separar em cada decisão: fato observado no código, evidência de execução datada, avaliação profissional, hipótese de utilidade e pesquisa ainda necessária. Uma fórmula determinística com entradas reais não valida automaticamente o conceito que ela anuncia medir.
-- Antes da execução futura, conferir a versão vigente, os consumidores reais, importações, chamadas indiretas, campos serializados, permissões, configurações e efeitos de cada função. Não excluir com base apenas em busca textual negativa; registrar o alcance e as limitações da busca.
-- Classificar cada capacidade como **manter central**, **manter contextual**, **integrar a outra experiência**, **reformular**, **avançada/opcional**, **candidata a descontinuação** ou **compatibilidade técnica**. Recursos indisponíveis ou ainda não validados recebem estado próprio, sem serem rotulados automaticamente como obsoletos.
-
-#### B · Pertinência: registro, compreensão e acompanhamento
-
-| Capacidade                                       | Parecer aprovado                                                  | Direção recomendada para execução futura                                                                                                               |
-| ------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Registro diário de sono, humor, água e movimento | Essencial; alimenta as demais experiências.                       | Entrada simples, poucos campos principais e detalhes opcionais; preservar zero, ausência, origem e unidades.                                           |
-| Diário pessoal por texto e voz                   | Essencial e diferenciador; reduz esforço e preserva contexto.     | Integrar ao cotidiano; manter relato original, organização, interpretação e memória como resultados distintos.                                         |
-| Reflexão da noite                                | Útil, com sobreposição de entrada em relação ao diário.           | Registro estruturado rápido no mesmo ambiente, sem exigir duas narrativas semelhantes.                                                                 |
-| Acontecimentos e marcadores do dia               | Úteis para contextualizar dados.                                  | Marcações opcionais junto do diário; preservar revisão explícita e comparação própria.                                                                 |
-| Diário alimentar                                 | Coerente como registro pessoal.                                   | Simples, próximo dos registros; foto documental não é identificação de alimentos nem cálculo nutricional.                                              |
-| Acompanhamentos personalizados                   | Muito úteis para personalização.                                  | Manter frequência, definição e escala versionadas; permitir resposta no fluxo do check-in sem converter escalas em métricas clínicas.                  |
-| Experiências pessoais                            | Úteis para pessoas mais envolvidas.                               | Recurso avançado para acompanhar mudanças, com referência/observação e limites descritivos claros, sem atribuir causalidade.                           |
-| Linha do tempo                                   | Essencial para integrar o produto.                                | Histórico unificado com origem e acesso ao registro canônico, sem criar outra cópia dos dados.                                                         |
-| Relatório pessoal PDF                            | Útil e concreto.                                                  | Entrada contextual no histórico/evolução, com seleção, revisão e privacidade preservadas.                                                              |
-| Histórico de alterações e desfazer               | Importante para confiança.                                        | Ação junto do registro elegível, com confirmação e controle de versão.                                                                                 |
-| Avaliações de bem-estar                          | Podem fazer sentido, dependendo do propósito de cada instrumento. | Diferenciar instrumento padronizado, escala criada pela pessoa e interpretação de IA; revisar finalidade e metodologia antes de apresentar conclusões. |
-
-- Diário, reflexão, acontecimento e acompanhamento não são registros equivalentes: podem compartilhar uma interface, sem que isso autorize juntar tabelas, escalas, notas, proprietários ou regras de retenção.
-- A implementação alimentar aceita texto/foto, horário e percepção. Não interpreta fotos por IA nem identifica nutrientes; conferir novamente antes de qualquer comunicação comercial sobre reconhecimento.
-
-#### C · Pertinência: planejamento e práticas
-
-| Capacidade         | Parecer aprovado                                             | Direção recomendada para execução futura                                                                                 |
-| ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
-| Painel inicial     | Essencial.                                                   | Situação atual, pendências pessoais e próximo passo.                                                                     |
-| Meu dia            | Útil, com sobreposição de apresentação em relação ao painel. | Reunir experiência diária, resumo e aprofundamentos com papéis claros.                                                   |
-| Sua semana         | Útil como revisão.                                           | Evolução por períodos diário/semanal, sem segunda experiência concorrente de resumo.                                     |
-| Plano diário       | Útil quando conduz à ação.                                   | Ligar orientações a metas, hábitos, rotinas e práticas existentes; identificar o mecanismo de geração.                   |
-| Metas              | Úteis como resultados desejados.                             | Progresso compreensível e fonte de atualização explícita.                                                                |
-| Hábitos            | Úteis como comportamentos recorrentes.                       | Retirar a dependência de descoberta dentro do Perfil; integrar à jornada de metas e rotinas.                             |
-| Rotinas            | Úteis como sequência de ações e hábitos.                     | Preservar modelos e execuções; evitar trabalho e contagens duplicados.                                                   |
-| Lembretes          | Úteis, com capacidade atual limitada ao aplicativo.          | Entrada na atividade lembrada, canal real e estado de entrega compreensíveis.                                            |
-| Respiração guiada  | Coerente com autocuidado.                                    | Biblioteca compartilhada de práticas, mantendo protocolos e sessões próprios.                                            |
-| Meditações guiadas | Coerentes.                                                   | Descoberta e histórico compartilhados, com narração/transcrição e registro real preservados.                             |
-| Foco e pausa       | Complementar.                                                | Inserir em Práticas, sem competir como produto autônomo; tempo não comprova atenção.                                     |
-| Modo descanso      | Bom diferencial de respeito ao ritmo da pessoa.              | Preferências de ritmo/lembretes, com acesso rápido quando ativo; não confundir com suspensão de cobrança.                |
-| Calendário e ICS   | Úteis para quem usa planejamento.                            | Disponibilizar no contexto de horários/atividades, com atualização e revogação reais; evitar outra central desconectada. |
-
-- Limitação confirmada no parecer: lembretes são verificados pelo app aberto/visível, com notificação persistida no sino; não oferecem push, e-mail ou alarme garantido com o app fechado. Preservar a função, ajustar expectativa e avaliar demanda antes de ampliar canais.
-- Rotina concluída não comprova sessão de respiração/meditação executada, nem incrementa automaticamente hábito ou meta. Integração futura deve ligar uma execução real ao passo com identidade, origem e idempotência, sem fabricar progresso.
-
-#### D · Pertinência: conversa, autoconhecimento e inteligência
-
-| Capacidade                                        | Parecer aprovado                                        | Direção recomendada para execução futura                                                                                                 |
-| ------------------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Conversa com a Lyra                               | Central e diferenciadora.                               | Apoiar compreensão dos próprios registros e acesso a ações concretas; não substituir toda interação estruturada por chat.                |
-| Histórico, busca e favoritos                      | Essenciais para continuidade.                           | Ferramentas da conversa, com propriedade, exclusão e contexto preservados.                                                               |
-| Leitura de respostas em voz alta                  | Útil para acessibilidade e conveniência.                | Ação contextual com suporte e voz reais.                                                                                                 |
-| Anexos e leitura de documentos/fotos              | Úteis no contexto da conversa.                          | Explicitar formatos, capacidades e modelos; preservar a fronteira de leitura aceita ainda pendente.                                      |
-| Geração de imagens                                | Periférica à proposta principal de autocuidado.         | Opcional; não priorizar acima da jornada diária nem confundir geração raster, ilustração vetorial e leitura de fotos.                    |
-| Memória individual                                | Diferenciadora quando controlável e compreensível.      | Distinguir conversa salva, lembrança extraída e consentimento de nuvem; permitir consulta, correção e exclusão reais.                    |
-| Mapas e leituras védicas                          | Coerentes com a identidade escolhida.                   | Autoconhecimento simbólico, com entradas e cálculos identificados, distinto de medições fisiológicas e recomendações clínicas.           |
-| Coerência, prana, chakras, koshas e dosha         | Precisam de reformulação de significado e apresentação. | Avaliar área simbólica opcional; não tratá-los como medição objetiva dos conceitos anunciados apenas porque a fórmula usa biomarcadores. |
-| Longevidade, idade biológica e alertas preditivos | Revisão metodológica prioritária.                       | Revisar cálculo, nome, precisão, incerteza, promessas e decisões decorrentes antes de destacar avaliações pessoais.                      |
-| Ciclo menstrual                                   | Pode ser útil como acompanhamento opcional.             | Separar registros pessoais, estimativa de fase e recomendações genéricas; não apresentar estimativa como confirmação fisiológica.        |
-
-- Núcleo diferenciador a fortalecer: diário por voz, registros simples, memória controlável, práticas e histórico. Dimensão védica permanece como autoconhecimento claramente identificado; não é decisão de excluir a identidade da Lyra.
-- Preferências afetivas e de identidade, contexto narrativo e instruções pontuais do chat devem permanecer opcionais e não alterar identidade autenticada, consentimento, plano ou autorização. Não transformar uma preferência específica do criador em experiência obrigatória para todas as pessoas.
-
-#### E · Pertinência: dispositivos, conta e operação pessoal
-
-| Capacidade                              | Parecer aprovado                              | Direção recomendada para execução futura                                                                                                  |
-| --------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Bluetooth                               | Útil para público com dispositivo compatível. | Mostrar suporte efetivo ao serviço cardíaco, dados disponíveis e compatibilidade de navegador.                                            |
-| Monitoramento ao vivo                   | Útil durante sessão conectada.                | Integrar ao aparelho/sessão; não dar o mesmo destaque diário para quem não usa dispositivo.                                               |
-| Perfil e preferências                   | Essenciais.                                   | Cadastro e escolhas; atividades frequentes, como hábitos, precisam de entrada na jornada apropriada.                                      |
-| Privacidade, exportação e exclusão      | Essenciais.                                   | Preservar autonomia, visibilidade e distinção entre servidor, memória extraída, arquivos baixados e cópias locais.                        |
-| Offline                                 | Útil em contextos específicos.                | Capacidade de registro com preparação, cofre, recuperação de falhas e sincronização compreensíveis, sem prometer acesso integral offline. |
-| Planos comerciais, assinatura e compras | Necessários para o negócio.                   | Separar claramente plano de atividades e assinatura comercial; manter histórico e estados reais.                                          |
-| Agendamentos e profissionais            | Condicionais ao modelo de negócio.            | Manter administrativos por padrão, como já decidido; ampliar somente se existir jornada concreta de atendimento.                          |
-
-- O hook inspecionado solicita Bluetooth `heart_rate`, oferecendo frequência cardíaca e VFC quando disponíveis. Um catálogo extenso de métricas não prova coleta automática dessas métricas, sincronização com qualquer relógio ou integração com Apple Saúde/Health Connect. Não reativar integrações anteriormente desativadas como parte implícita desta tarefa.
-- Não retirar recursos de acessibilidade ou privacidade por serem pouco usados. Valor obrigatório, confiança, autonomia e inclusão não dependem apenas de frequência.
-
-#### F · Pertinência: administração e infraestrutura funcional
-
-| Capacidade                                | Parecer e direção recomendada                                                                                                                            |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Usuários, bloqueios, sessões e acessos    | Essencial; ações operacionais claras, autorizadas e auditadas.                                                                                           |
-| Notas e marcadores administrativos        | Úteis para operação; separados do diário e dos acontecimentos pessoais.                                                                                  |
-| Planos, preços e permissões               | Essenciais; simplificar apresentação comercial sem enfraquecer autorização e dependências.                                                               |
-| Faturamento, reembolsos e assinaturas     | Essenciais; preservar idempotência, conciliação, estados reais e confirmação de operações.                                                               |
-| Fiscal                                    | Necessário conforme operação; integrar navegação financeira mantendo finalidade, retenção e origem próprias.                                             |
-| Relatórios administrativos                | Úteis para aprofundamento e exportação; reutilizar cálculos do dashboard sem uma segunda central executiva concorrente.                                  |
-| Saúde dos dados                           | Útil para operação técnica; distinta da saúde ou bem-estar de uma pessoa.                                                                                |
-| Conteúdo: hábitos sugeridos e orientações | Útil se consumido pela experiência; vincular curadoria ao conteúdo realmente publicado e exibido.                                                        |
-| Construtor da experiência web             | Útil para personalização administrativa; manter limites e compatibilidade com o Lyra Clean.                                                              |
-| Provedores e ordem de modelos             | Necessários na arquitetura atual; configuração simples primeiro e avançada sob demanda.                                                                  |
-| Conhecimento e instruções                 | Úteis, com finalidades distintas; conteúdo de referência e instrução não equivalem a alteração de pesos.                                                 |
-| Treinamento KTO/LoRA                      | Avançado e especializado; fora da operação cotidiana. A implementação atual treina o serviço próprio, não qualquer modelo do Jan ou provedor externo.    |
-| Inferência local integrada                | Potencialmente útil para implantação; não declarar benefício de desempenho ou funcionamento comprovado enquanto a validação específica estiver pendente. |
-| Diagnósticos e estado operacional         | Necessários; resultados de verificação real separados de textos estáticos que explicam a arquitetura.                                                    |
-
-- A categoria textual **Treinamento** do gerenciador de conhecimento não é o treinamento KTO/LoRA do serviço. Diferenciar os conceitos na interface, documentação e comunicação comercial.
-- A memória personaliza com relatos da pessoa; o treinamento altera pesos no serviço próprio com avaliações autorizadas. Nunca combinar dados de usuários em treinamento como consequência automática de ativar memória ou simplificar configuração.
-
-#### G · Candidatos a obsolescência, funções sem efeito e compatibilidade
-
-1. **Missão e objetivos administrativos — candidato a configuração sem efeito:** `mission` e `key_objectives` aparecem no formulário, tipos e acesso aos dados. A busca em `src` não encontrou consumo pelos motores de resposta. Confirmar chamadas indiretas e percurso completo; depois decidir entre integração real com comportamento/testes ou retirada da apresentação como controle funcional, preservando conteúdo histórico. Não alegar comprovação absoluta de código morto apenas pela busca. Os pesos `weight_*` são consumidos pelo cálculo e não pertencem automaticamente à mesma classificação.
-2. **“Plano de IA” — função útil com nome abrangente demais:** `gerarPlanoDaPessoa` chama `generateLocalWellnessPlan`, gerador determinístico. A geração é real; não equivale por si só a elaboração por modelo generativo. Recomendar **Plano do dia** com origem identificada, sem desativar o motor nem inserir chamada externa apenas para justificar o nome.
-3. **Mercado Pago e PayPal — capacidade preparatória, não checkout completo:** o catálogo declara `checkoutIntegrado: false` para ambos e `true` para Stripe. Salvar/testar credenciais não prova cobrança/assinatura completa. Reclassificar exposição para integrações preparatórias até decisão de execução, sem apagar credenciais ou configurações do usuário.
-4. **Fiscal e Pagamentos antigos — compatibilidade legítima:** `/admin/fiscal` e `/admin/payments` redirecionam para abas do dashboard. Não são duplicação de implementação nem motivo automático para remoção; preservar favoritos e links úteis.
-5. **Puck/construtor antigo — removidos anteriormente:** rotas antigas são excluídas da navegação. Não recriar produtos removidos para reorganizar a administração; preservar somente compatibilidades aplicáveis e o construtor vigente.
-6. **Documentação do diário — obsolescência documental comprovada no parecer:** `docs/diario-pessoal.md` ainda mencionava 429 após seis tentativas e captura real pendente, em conflito com a correção/validação da 135 e com trechos mais novos do próprio documento. Reconciliar na execução autorizada; não tratar como comportamento vigente nem ampliar a correção documental para reinstalar o limite.
-7. **Recursos avançados — não presumir desuso:** offline, experiências, treinamento e múltiplos provedores podem servir a públicos específicos. Avaliar adoção, tarefa atendida, custo, dependências e alternativas; reduzir exposição inicial quando apropriado antes de propor descarte.
-8. **Integrações e QA pendentes — não são obsolescência:** falta de chave, faturamento, hardware, sandbox compatível ou prova de execução não demonstra inutilidade. Manter registro honesto do estado e das condições de disponibilidade.
-
-- Para cada candidato, registrar consumidores, dados persistidos, direitos, custo operacional, alternativa existente e impacto de migração. Só propor exclusão após reprodução, análise de uso/necessidade e decisão explícita do usuário; nunca apagar registros para simplificar.
-
-#### H · Fusões recomendadas: experiência, não mistura automática de dados
-
-| Consolidação proposta     | O que reúne                                                      | Distinções obrigatórias a preservar                                                |
-| ------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| Hoje                      | Painel, Meu dia e acesso ao plano diário.                        | Resumo, orientação e registro; dados e interpretação com origem identificada.      |
-| Meu diário                | Relato por texto/voz, reflexão e acontecimentos.                 | Texto original, escalas e marcadores; revisão e análise independentes.             |
-| Meu progresso             | Linha do tempo, revisão semanal, tendências e relatório pessoal. | Consulta histórica, comparação, filtros e exportação privada.                      |
-| Metas e rotinas           | Metas, hábitos, rotinas e seus lembretes.                        | Resultado desejado, comportamento recorrente, sequência e aviso.                   |
-| Práticas                  | Respiração, meditações e foco/pausa.                             | Protocolos, duração, narração, temporizadores, sessões e agregação próprias.       |
-| Dispositivos e sessão     | Conexão, estado do aparelho e monitoramento ao vivo.             | Configuração da fonte, leituras, sessão e persistência efetiva.                    |
-| Ritmo e notificações      | Lembretes, silêncio, descanso e retorno gradual.                 | Preferências, ocorrências, alertas que não devem ser pausados e efeitos nas metas. |
-| Financeiro administrativo | Faturamento, pagamentos, fiscal e análises financeiras.          | Configuração, transação, documento, ambiente/moeda e relatório.                    |
-| Inteligência da Lyra      | Modelos, conhecimento, instruções e treinamento.                 | Conexão, conteúdo, comportamento, lembranças e alteração de pesos.                 |
-| Conta                     | Cadastro, preferências, assinatura e privacidade.                | Direitos do titular, consentimento, configuração e cobrança.                       |
-
-- As propostas são hipóteses de arquitetura funcional a validar, não autorização atual para substituir menus ou fundir bancos. Aproveitar o inventário da 142, resolver conflitos de rótulos e preservar configurações publicadas, links diretos, parâmetros, atalhos, histórico e permissões.
-- **Integração funcional a avaliar:** ao concluir uma prática real, permitir que a rotina reconheça a execução vinculada explicitamente, reduzindo marcação repetida. Definir vínculo por sessão/execução, titular, instante e ação, com confirmação adequada, idempotência e prevenção de dupla contagem. Repetir pedido, voltar à página ou editar o modelo de rotina não pode somar minutos nem progresso novamente.
-- **Não fundir memória e treinamento:** lembrar informações da pessoa é diferente de modificar pesos. Preservar consentimentos, propriedade e isolamento.
-- **Não fundir conversa e diário automaticamente:** oferecer ação explícita para transformar conteúdo escolhido em registro, com revisão, origem e possibilidade de cancelamento; conversa privada não vira diário por inferência.
-- **Não fundir dado medido e leitura simbólica:** podem compartilhar contexto visual sem perder natureza, origem, limites e permissões.
-- **Não fundir PDF pessoal e exportação integral da conta:** resumo selecionado e portabilidade têm finalidades distintas; preservar ambos.
-- **Não tornar equivalentes conclusão de hábito, passo de rotina e minutos de prática:** são eventos relacionados; uma declaração manual não comprova prática e uma sessão não autoriza alterar qualquer meta sem regra e vínculo válidos.
-
-#### I · Revisão prioritária de índices, metodologia e promessas
-
-- Motores de coerência, prana, chakras, koshas e dosha possuem consumidores ativos em hooks e motores de conversa; não classificá-los como código morto. A questão é significado, validade da apresentação, sobreposição e utilidade para a pessoa.
-- Vários motores usam sinais semelhantes para gerar pontuações distintas e valores de referência para ausências. `src/lib/integrativo/cobertura.ts` impede exibição sem cobertura mínima e informa faltantes; essa proteção reduz resultados sem base suficiente, mas não valida o índice nem transforma valores de referência em medições do titular.
-- Preservar o valor de conteúdo simbólico e cultural escolhido para a marca; avaliar retirar a prioridade de pontuações da experiência principal e reformular como interpretação opcional. Não apresentar biomarcadores como medição objetiva de conceitos simbólicos apenas porque existe uma fórmula matemática.
-- O escore de longevidade usa faixas, pesos e componentes definidos no código; o limiar de cobertura é critério do produto, não comprovação de capacidade preditiva. Revisar tratamento de ausências, contribuição de cada variável, interpretação, nome, metodologia e comunicação de incerteza.
-- O motor de idade biológica soma impactos em anos por regras sobre biomarcadores; o parecer não encontrou validação específica dessa implementação. Referenciar modelos publicados não transfere a validação desses modelos para fórmula própria. Revisar antes de anunciar rejuvenescimento, ritmo de envelhecimento ou idade biológica pessoal como medida comprovada.
-- O motor de alertas contém associação descrita como antecipação de sintomas em aproximadamente 48 horas; distinguir comentário de código, comportamento realmente exposto e evidência de desempenho preditivo. O parecer não encontrou validação específica que sustente essa capacidade da implementação.
-- Recomendar reformulação ou suspensão de promessas avaliativas/preditivas sem sustentação demonstrada até revisão metodológica adequada, preservando registros e observações descritivas úteis. A recomendação não é uma desativação autorizada neste registro.
-- Revisar também estimativas de ciclo e recomendações genéricas, rótulos de confiança e relações com alimentação, exercício e recuperação. Um cálculo que produz número válido tecnicamente pode continuar inadequado como afirmação sobre uma pessoa.
-- Não inventar estudo, referência, validação clínica, precisão, sensibilidade, especificidade ou confiança estatística. Documentar método original, entradas exigidas, população/contexto pertinente, limitações, tratamento de dados ausentes e evidência efetivamente disponível; envolver avaliação especializada quando necessária, sem atribuir ao próprio app uma certificação não obtida.
-
-#### J · Estratégia de produto e prioridades empresariais
-
-1. **Revisar promessas, índices e configurações sem efeito demonstrado:** verdade e confiança antes de expansão.
-2. **Consolidar jornada diária e pontos de registro:** registrar o cotidiano sem procurar entre vários produtos internos.
-3. **Conectar metas, hábitos, rotinas e práticas:** ações relacionadas, sem duplicação de trabalho nem progresso fictício.
-4. **Valorizar histórico e evolução:** transformar registros em consulta compreensível e continuidade de uso.
-5. **Simplificar operação administrativa:** separar decisões executivas, gestão transacional e ferramentas técnicas avançadas.
-6. **Medir valor antes de ampliar periferia:** geração de imagens e novas integrações não devem preceder a clareza do núcleo.
-
-- Avaliar a contribuição de cada função para primeira tarefa concluída, retorno, utilidade percebida, confiança e autonomia. Complementar com frequência de uso, abandono, erros, esforço, pedidos de ajuda, custo de operação e manutenção; não confundir volume de cliques com valor entregue.
-- Não produzir rankings de adoção, retenção, conversão ou ROI com números fictícios. Definir período, população, denominadores e critérios; a base administrativa atual não demonstra automaticamente retenção D1/D7/D30, churn, MRR ou lucro.
-- Se for necessária coleta adicional, propor finalidade e mínimo de dados, com privacidade e autorização aplicáveis; não acrescentar telemetria de textos, saúde, memória, credenciais ou anexos como consequência implícita da auditoria.
-- Funções de privacidade, acessibilidade e integridade têm valor mesmo com uso raro. Custo e adoção são critérios de decisão, não autorização para enfraquecer direitos ou salvaguardas.
-- Parecer final aprovado: manter a maior parte das capacidades, reduzir substancialmente a fragmentação e revisar interpretações apresentadas como medições; tornar a Lyra mais clara sem perder identidade nem empobrecer o produto.
-
-#### K · Entregáveis, critérios de aceite e execução futura
-
-- **Inventário rastreável:** cada capacidade e subfunção com finalidade, público, entrada, saída, consumidores, dados, permissões, dependências, estado de implementação/validação e evidência. Cobrir fluxos pessoais, administrativos e técnicos que sustentam o produto, sem presumir que um item de menu equivale a uma única função.
-- **Matriz de decisão:** manter, contextualizar, integrar, reformular ou propor descontinuação; justificar com necessidade real, evidência, sobreposição, custo e impacto. Diferenciar hipótese de solução de decisão aprovada e de implementação concluída.
-- **Mapa de consolidação:** origem → experiência proposta → função preservada → armazenamento canônico → compatibilidade → autorização → teste de não regressão. Nenhuma função fica órfã e nenhum histórico é misturado silenciosamente.
-- **Relatório metodológico:** capacidades calculadas, medidas, autorrelatadas e simbólicas identificadas; configurações demonstram efeito ou são apresentadas honestamente; integrações preparatórias não aparecem como checkout completo ou compatibilidade universal.
-- **Prova real:** na execução autorizada, validar navegador → API → autorização → persistência/processo → retorno na UI, incluindo alterações, exclusão, concorrência, histórico, recarga, falha e recuperação. Contratos isolados não comprovam provedor externo, microfone, aparelho, geração de imagem ou treino real.
-- **Regressões:** preservar identidade e Lyra Clean, acessibilidade, responsividade, isolamento administrativo, entitlements, consentimentos, backup/migração quando necessários e ausência de segredos. Executar os gates aplicáveis de `CLAUDE.md`/`AGENTS.md`, integrações MySQL e build, além dos percursos reais afetados, sem simular resultados.
-- **Aceite de dados:** fusão de experiência não elimina categorias, escala versionada, relatos originais, autoria, unidades, corte do plano, fonte e datas. Deduplicação de progresso requer regra verificável e não recalcula silenciosamente o passado.
-- **Aceite de obsolescência:** qualquer retirada efetiva exige análise de consumidores, decisão explícita, compatibilidade/migração, proteção dos dados e busca de verificação após remoção. Não apagar configuração ou dados existentes para entregar aparência de simplicidade.
-- **Pesquisa e fronteiras:** validar compreensão e utilidade com tarefas comparáveis e participantes reais quando disponíveis/autorizados; não chamar teste do agente de pesquisa com usuários. Declarar expressamente o que não foi executado ou permanece externo.
-- **Dependências:** reutilizar tarefas já entregues e o inventário da 142. Esta auditoria não encerra nem autoriza contornar pendências 14, 15, 23, 86, 100, 127 e 141; faturamento Gemini continua pendente por decisão do usuário. Treinamento Docker e captura/análise reais da 135 preservados.
-- **Publicação futura:** por atividade lógica, analisar, implementar, testar, revisar, atualizar painel e fazer commit/push na `main` antes da seguinte; sem branches, worktrees, force-push ou lote de atividades independentes. Registrar SHA real após publicação conforme a regra do painel.
-
-#### L · Referências, verificação do registro e próximo passo
-
-- **Registro publicado:** commit `fd64f0d1`, push confirmado `7e3c5303..fd64f0d1 main -> main` em 2026-11-05. Apenas este arquivo alterado; formatação e `git diff --check` aprovados; conferência automatizada confirmou 143 números únicos e os 142 registros anteriores preservados. Indicadores: 134 concluídas, sete com validação pendente e duas a iniciar. Publicação estritamente documental, sem implementação nem alegação de novos testes funcionais.
-- [GOV.UK — compreender usuários e necessidades](https://www.gov.uk/service-manual/service-standard/point-1-understand-user-needs).
-- [IBM — divulgação progressiva por tarefa](https://www.ibm.com/docs/en/technical-content?topic=practices-progressive-disclosure).
-- [W3C — evitar excesso de conteúdo e opções sem propósito](https://www.w3.org/WAI/WCAG2/supplemental/patterns/o5p03-manageable-quantity/).
-- **Documentos internos de apoio:** README; `docs/diario-pessoal.md`, `docs/diario-alimentar.md`, `docs/acompanhamentos-pessoais.md`, `docs/acontecimentos-pessoais.md`, `docs/experiencias-pessoais.md`, `docs/rotinas-pessoais.md`, `docs/lembretes-pessoais.md`, `docs/foco-e-pausa.md`, `docs/meditacoes-guiadas.md`, `docs/linha-do-tempo.md`, `docs/relatorio-pessoal.md`, `docs/modo-descanso.md`, `docs/offline.md`, `docs/memoria-graphiti.md`, `docs/treinamento-por-feedback.md` e `docs/relatorios-administrativos.md`; interpretar limitações e datas, sem tratar inconsistências documentais como comportamento atual.
-- **Critério desta etapa:** somente registro documental; tarefa 143 única no Tópico 3, após a 142; indicadores atualizados sem reclassificar tarefas anteriores; revisão do texto e diff; formatação e conferência de estrutura; commit e push na `main`, seguidos do registro do SHA real em commit documental próprio. Não alegar novos testes funcionais nesta publicação.
-- **Próximo passo:** aguardar instruções do usuário. A tarefa permanece **a iniciar**; nenhuma recomendação de fusão, remoção, alteração metodológica ou nova coleta foi executada.
 
 ---
 
@@ -2786,3 +2587,208 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Implementação publicada em 2026-11-04:** commit `9ea084c0c182f76149e2285645749fc20d542aa2` confirmado na `main` (13 arquivos). Novo preset aditivo `lyra_integrada`, socket Unix privado sem porta TCP, processo llama-server gerenciado pela Lyra, descoberta GGUF por pastas reais com IDs, seleção/admin, parâmetros GPU/CPU/contexto, instalação CUDA sm_120 pelo painel, transporte de chat com streaming e ilustrações vetoriais sanitizadas via JSON→SVG→WebP. Treinamento KTO e demais provedores preservados.
 - **Validação desta sessão:** leitura e conferência estática dos 13 blobs e do diff no commit; HEAD remoto confirmado. Testes unitários foram escritos, **não executados**; `pnpm check:types`, lint, formato, testes, build, banco, navegador, instalação, CUDA, inferência real e benchmark **não executados** aqui. O sandbox atual não possui checkout executável do repositório nem acesso ao WSL2/GPU/modelos do notebook. Essa lacuna impede considerar a tarefa 🟢 concluída. A execução no notebook, correção de eventuais defeitos e QA integral permanecem necessários.
 - **Documentação:** `docs/inferencia-local-integrada.md`. A criação do commit e push não constitui evidência de funcionamento real.
+
+### 143 · Auditoria integral do portfólio funcional: pertinência, obsolescência, consolidação e estratégia de produto
+
+- **Status:** 🟢 auditoria concluída · **Registro:** 2026-11-05 · **Prioridade:** alta, com revisão de promessas e metodologias antes de expansão funcional.
+- **Autorização do registro inicial (histórico):** somente registrar a auditoria aprovada no máximo de detalhes neste arquivo, revisar, fazer commit e push na `main` principal, sem branches, worktrees ou árvores paralelas, e aguardar instruções. Não implementar fusões, retirar funcionalidades, alterar cálculos, corrigir documentos de outros escopos, migrar registros nem mudar planos ou integrações nesta etapa.
+- **Pedido de origem, integral em seus quatro objetivos:** (1) avaliar se faz sentido manter cada função e funcionalidade no app; (2) identificar funções e funcionalidades obsoletas; (3) identificar o que pode ser juntado ou fundido; (4) apresentar opinião profissional sobre o conjunto do produto. O usuário aprovou o parecer e pediu sua transformação em nova tarefa; aprovação da análise não autoriza executar automaticamente cada recomendação.
+- **Parecer central aprovado:** a Lyra possui um núcleo valioso, mas cresceu em várias direções simultaneamente. Manter centrais as capacidades que sustentam **registrar o cotidiano → compreender padrões → escolher uma pequena ação → acompanhar o resultado**; consolidar experiências próximas, preservar distinções de dados e reformular apresentações que prometem mais que o mecanismo demonstra. Quantidade de recursos não é indicador suficiente de maturidade.
+- **Relação com a 142:** a 142 trata arquitetura da informação, clareza das jornadas e UI/UX; a 143 trata pertinência do portfólio, efetividade funcional, obsolescência e decisão de produto. Compartilhar inventário e evidências para evitar retrabalho, mas manter rastreabilidade própria. A preservação funcional da 142 não autoriza retirar recursos sob o pretexto de simplificar; eventual descontinuação exige decisão explícita, plano de compatibilidade e preservação dos dados.
+
+- **Retomada autorizada em 2026-11-05:** executar a auditoria funcional por solicitação do usuário, com inventário rastreável, matriz de decisões e mapa de consolidação para a 142. A autorização desta auditoria não constitui decisão específica de excluir funcionalidades, alterar índices ou fundir dados. Reconciliar achados históricos com o código atual e com a conclusão funcional da 141.
+
+#### A · Método, evidências e fronteiras da auditoria de origem
+
+- Foram examinados catálogo de navegação, permissões dos planos, componentes, serviços de domínio, cálculos e documentação funcional. É uma avaliação estratégica apoiada no código, não nova homologação de todos os fluxos, modais, dispositivos e provedores externos nem leitura alegada de todas as linhas de código do projeto.
+- Referências principais inspecionadas: `src/components/layout/navigation.ts`, `src/types/subscription.ts`, `src/lib/plans/rotas.ts`, `src/lib/plans/dependencias.ts`, `src/lib/ai/plano-do-dia.ts`, `src/lib/ai/score-engine.ts`, `src/lib/integrativo/cobertura.ts`, motores integrativos e de longevidade, `src/hooks/use-bluetooth-vitals.ts`, `src/components/admin/AIConfigForm.tsx`, `src/lib/pagamentos/credenciais.ts`, serviços de registros/rotinas/experiências e documentação em `docs/`.
+- Não foram encontrados dados suficientes de adoção para concluir que determinada função não é usada. Ausência de uso em uma base local pequena, falta de configuração, falha de um provedor e pendência de QA não comprovam obsolescência.
+- Separar em cada decisão: fato observado no código, evidência de execução datada, avaliação profissional, hipótese de utilidade e pesquisa ainda necessária. Uma fórmula determinística com entradas reais não valida automaticamente o conceito que ela anuncia medir.
+- Antes da execução futura, conferir a versão vigente, os consumidores reais, importações, chamadas indiretas, campos serializados, permissões, configurações e efeitos de cada função. Não excluir com base apenas em busca textual negativa; registrar o alcance e as limitações da busca.
+- Classificar cada capacidade como **manter central**, **manter contextual**, **integrar a outra experiência**, **reformular**, **avançada/opcional**, **candidata a descontinuação** ou **compatibilidade técnica**. Recursos indisponíveis ou ainda não validados recebem estado próprio, sem serem rotulados automaticamente como obsoletos.
+
+#### B · Pertinência: registro, compreensão e acompanhamento
+
+| Capacidade                                       | Parecer aprovado                                                  | Direção recomendada para execução futura                                                                                                               |
+| ------------------------------------------------ | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Registro diário de sono, humor, água e movimento | Essencial; alimenta as demais experiências.                       | Entrada simples, poucos campos principais e detalhes opcionais; preservar zero, ausência, origem e unidades.                                           |
+| Diário pessoal por texto e voz                   | Essencial e diferenciador; reduz esforço e preserva contexto.     | Integrar ao cotidiano; manter relato original, organização, interpretação e memória como resultados distintos.                                         |
+| Reflexão da noite                                | Útil, com sobreposição de entrada em relação ao diário.           | Registro estruturado rápido no mesmo ambiente, sem exigir duas narrativas semelhantes.                                                                 |
+| Acontecimentos e marcadores do dia               | Úteis para contextualizar dados.                                  | Marcações opcionais junto do diário; preservar revisão explícita e comparação própria.                                                                 |
+| Diário alimentar                                 | Coerente como registro pessoal.                                   | Simples, próximo dos registros; foto documental não é identificação de alimentos nem cálculo nutricional.                                              |
+| Acompanhamentos personalizados                   | Muito úteis para personalização.                                  | Manter frequência, definição e escala versionadas; permitir resposta no fluxo do check-in sem converter escalas em métricas clínicas.                  |
+| Experiências pessoais                            | Úteis para pessoas mais envolvidas.                               | Recurso avançado para acompanhar mudanças, com referência/observação e limites descritivos claros, sem atribuir causalidade.                           |
+| Linha do tempo                                   | Essencial para integrar o produto.                                | Histórico unificado com origem e acesso ao registro canônico, sem criar outra cópia dos dados.                                                         |
+| Relatório pessoal PDF                            | Útil e concreto.                                                  | Entrada contextual no histórico/evolução, com seleção, revisão e privacidade preservadas.                                                              |
+| Histórico de alterações e desfazer               | Importante para confiança.                                        | Ação junto do registro elegível, com confirmação e controle de versão.                                                                                 |
+| Avaliações de bem-estar                          | Podem fazer sentido, dependendo do propósito de cada instrumento. | Diferenciar instrumento padronizado, escala criada pela pessoa e interpretação de IA; revisar finalidade e metodologia antes de apresentar conclusões. |
+
+- Diário, reflexão, acontecimento e acompanhamento não são registros equivalentes: podem compartilhar uma interface, sem que isso autorize juntar tabelas, escalas, notas, proprietários ou regras de retenção.
+- A implementação alimentar aceita texto/foto, horário e percepção. Não interpreta fotos por IA nem identifica nutrientes; conferir novamente antes de qualquer comunicação comercial sobre reconhecimento.
+
+#### C · Pertinência: planejamento e práticas
+
+| Capacidade         | Parecer aprovado                                             | Direção recomendada para execução futura                                                                                 |
+| ------------------ | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| Painel inicial     | Essencial.                                                   | Situação atual, pendências pessoais e próximo passo.                                                                     |
+| Meu dia            | Útil, com sobreposição de apresentação em relação ao painel. | Reunir experiência diária, resumo e aprofundamentos com papéis claros.                                                   |
+| Sua semana         | Útil como revisão.                                           | Evolução por períodos diário/semanal, sem segunda experiência concorrente de resumo.                                     |
+| Plano diário       | Útil quando conduz à ação.                                   | Ligar orientações a metas, hábitos, rotinas e práticas existentes; identificar o mecanismo de geração.                   |
+| Metas              | Úteis como resultados desejados.                             | Progresso compreensível e fonte de atualização explícita.                                                                |
+| Hábitos            | Úteis como comportamentos recorrentes.                       | Retirar a dependência de descoberta dentro do Perfil; integrar à jornada de metas e rotinas.                             |
+| Rotinas            | Úteis como sequência de ações e hábitos.                     | Preservar modelos e execuções; evitar trabalho e contagens duplicados.                                                   |
+| Lembretes          | Úteis, com capacidade atual limitada ao aplicativo.          | Entrada na atividade lembrada, canal real e estado de entrega compreensíveis.                                            |
+| Respiração guiada  | Coerente com autocuidado.                                    | Biblioteca compartilhada de práticas, mantendo protocolos e sessões próprios.                                            |
+| Meditações guiadas | Coerentes.                                                   | Descoberta e histórico compartilhados, com narração/transcrição e registro real preservados.                             |
+| Foco e pausa       | Complementar.                                                | Inserir em Práticas, sem competir como produto autônomo; tempo não comprova atenção.                                     |
+| Modo descanso      | Bom diferencial de respeito ao ritmo da pessoa.              | Preferências de ritmo/lembretes, com acesso rápido quando ativo; não confundir com suspensão de cobrança.                |
+| Calendário e ICS   | Úteis para quem usa planejamento.                            | Disponibilizar no contexto de horários/atividades, com atualização e revogação reais; evitar outra central desconectada. |
+
+- Limitação confirmada no parecer: lembretes são verificados pelo app aberto/visível, com notificação persistida no sino; não oferecem push, e-mail ou alarme garantido com o app fechado. Preservar a função, ajustar expectativa e avaliar demanda antes de ampliar canais.
+- Rotina concluída não comprova sessão de respiração/meditação executada, nem incrementa automaticamente hábito ou meta. Integração futura deve ligar uma execução real ao passo com identidade, origem e idempotência, sem fabricar progresso.
+
+#### D · Pertinência: conversa, autoconhecimento e inteligência
+
+| Capacidade                                        | Parecer aprovado                                        | Direção recomendada para execução futura                                                                                                 |
+| ------------------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Conversa com a Lyra                               | Central e diferenciadora.                               | Apoiar compreensão dos próprios registros e acesso a ações concretas; não substituir toda interação estruturada por chat.                |
+| Histórico, busca e favoritos                      | Essenciais para continuidade.                           | Ferramentas da conversa, com propriedade, exclusão e contexto preservados.                                                               |
+| Leitura de respostas em voz alta                  | Útil para acessibilidade e conveniência.                | Ação contextual com suporte e voz reais.                                                                                                 |
+| Anexos e leitura de documentos/fotos              | Úteis no contexto da conversa.                          | Explicitar formatos, capacidades e modelos; preservar a fronteira de leitura aceita ainda pendente.                                      |
+| Geração de imagens                                | Periférica à proposta principal de autocuidado.         | Opcional; não priorizar acima da jornada diária nem confundir geração raster, ilustração vetorial e leitura de fotos.                    |
+| Memória individual                                | Diferenciadora quando controlável e compreensível.      | Distinguir conversa salva, lembrança extraída e consentimento de nuvem; permitir consulta, correção e exclusão reais.                    |
+| Mapas e leituras védicas                          | Coerentes com a identidade escolhida.                   | Autoconhecimento simbólico, com entradas e cálculos identificados, distinto de medições fisiológicas e recomendações clínicas.           |
+| Coerência, prana, chakras, koshas e dosha         | Precisam de reformulação de significado e apresentação. | Avaliar área simbólica opcional; não tratá-los como medição objetiva dos conceitos anunciados apenas porque a fórmula usa biomarcadores. |
+| Longevidade, idade biológica e alertas preditivos | Revisão metodológica prioritária.                       | Revisar cálculo, nome, precisão, incerteza, promessas e decisões decorrentes antes de destacar avaliações pessoais.                      |
+| Ciclo menstrual                                   | Pode ser útil como acompanhamento opcional.             | Separar registros pessoais, estimativa de fase e recomendações genéricas; não apresentar estimativa como confirmação fisiológica.        |
+
+- Núcleo diferenciador a fortalecer: diário por voz, registros simples, memória controlável, práticas e histórico. Dimensão védica permanece como autoconhecimento claramente identificado; não é decisão de excluir a identidade da Lyra.
+- Preferências afetivas e de identidade, contexto narrativo e instruções pontuais do chat devem permanecer opcionais e não alterar identidade autenticada, consentimento, plano ou autorização. Não transformar uma preferência específica do criador em experiência obrigatória para todas as pessoas.
+
+#### E · Pertinência: dispositivos, conta e operação pessoal
+
+| Capacidade                              | Parecer aprovado                              | Direção recomendada para execução futura                                                                                                  |
+| --------------------------------------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Bluetooth                               | Útil para público com dispositivo compatível. | Mostrar suporte efetivo ao serviço cardíaco, dados disponíveis e compatibilidade de navegador.                                            |
+| Monitoramento ao vivo                   | Útil durante sessão conectada.                | Integrar ao aparelho/sessão; não dar o mesmo destaque diário para quem não usa dispositivo.                                               |
+| Perfil e preferências                   | Essenciais.                                   | Cadastro e escolhas; atividades frequentes, como hábitos, precisam de entrada na jornada apropriada.                                      |
+| Privacidade, exportação e exclusão      | Essenciais.                                   | Preservar autonomia, visibilidade e distinção entre servidor, memória extraída, arquivos baixados e cópias locais.                        |
+| Offline                                 | Útil em contextos específicos.                | Capacidade de registro com preparação, cofre, recuperação de falhas e sincronização compreensíveis, sem prometer acesso integral offline. |
+| Planos comerciais, assinatura e compras | Necessários para o negócio.                   | Separar claramente plano de atividades e assinatura comercial; manter histórico e estados reais.                                          |
+| Agendamentos e profissionais            | Condicionais ao modelo de negócio.            | Manter administrativos por padrão, como já decidido; ampliar somente se existir jornada concreta de atendimento.                          |
+
+- O hook inspecionado solicita Bluetooth `heart_rate`, oferecendo frequência cardíaca e VFC quando disponíveis. Um catálogo extenso de métricas não prova coleta automática dessas métricas, sincronização com qualquer relógio ou integração com Apple Saúde/Health Connect. Não reativar integrações anteriormente desativadas como parte implícita desta tarefa.
+- Não retirar recursos de acessibilidade ou privacidade por serem pouco usados. Valor obrigatório, confiança, autonomia e inclusão não dependem apenas de frequência.
+
+#### F · Pertinência: administração e infraestrutura funcional
+
+| Capacidade                                | Parecer e direção recomendada                                                                                                                            |
+| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Usuários, bloqueios, sessões e acessos    | Essencial; ações operacionais claras, autorizadas e auditadas.                                                                                           |
+| Notas e marcadores administrativos        | Úteis para operação; separados do diário e dos acontecimentos pessoais.                                                                                  |
+| Planos, preços e permissões               | Essenciais; simplificar apresentação comercial sem enfraquecer autorização e dependências.                                                               |
+| Faturamento, reembolsos e assinaturas     | Essenciais; preservar idempotência, conciliação, estados reais e confirmação de operações.                                                               |
+| Fiscal                                    | Necessário conforme operação; integrar navegação financeira mantendo finalidade, retenção e origem próprias.                                             |
+| Relatórios administrativos                | Úteis para aprofundamento e exportação; reutilizar cálculos do dashboard sem uma segunda central executiva concorrente.                                  |
+| Saúde dos dados                           | Útil para operação técnica; distinta da saúde ou bem-estar de uma pessoa.                                                                                |
+| Conteúdo: hábitos sugeridos e orientações | Útil se consumido pela experiência; vincular curadoria ao conteúdo realmente publicado e exibido.                                                        |
+| Construtor da experiência web             | Útil para personalização administrativa; manter limites e compatibilidade com o Lyra Clean.                                                              |
+| Provedores e ordem de modelos             | Necessários na arquitetura atual; configuração simples primeiro e avançada sob demanda.                                                                  |
+| Conhecimento e instruções                 | Úteis, com finalidades distintas; conteúdo de referência e instrução não equivalem a alteração de pesos.                                                 |
+| Treinamento KTO/LoRA                      | Avançado e especializado; fora da operação cotidiana. A implementação atual treina o serviço próprio, não qualquer modelo do Jan ou provedor externo.    |
+| Inferência local integrada                | Potencialmente útil para implantação; não declarar benefício de desempenho ou funcionamento comprovado enquanto a validação específica estiver pendente. |
+| Diagnósticos e estado operacional         | Necessários; resultados de verificação real separados de textos estáticos que explicam a arquitetura.                                                    |
+
+- A categoria textual **Treinamento** do gerenciador de conhecimento não é o treinamento KTO/LoRA do serviço. Diferenciar os conceitos na interface, documentação e comunicação comercial.
+- A memória personaliza com relatos da pessoa; o treinamento altera pesos no serviço próprio com avaliações autorizadas. Nunca combinar dados de usuários em treinamento como consequência automática de ativar memória ou simplificar configuração.
+
+#### G · Candidatos a obsolescência, funções sem efeito e compatibilidade
+
+1. **Missão e objetivos administrativos — candidato a configuração sem efeito:** `mission` e `key_objectives` aparecem no formulário, tipos e acesso aos dados. A busca em `src` não encontrou consumo pelos motores de resposta. Confirmar chamadas indiretas e percurso completo; depois decidir entre integração real com comportamento/testes ou retirada da apresentação como controle funcional, preservando conteúdo histórico. Não alegar comprovação absoluta de código morto apenas pela busca. Os pesos `weight_*` são consumidos pelo cálculo e não pertencem automaticamente à mesma classificação.
+2. **“Plano de IA” — função útil com nome abrangente demais:** `gerarPlanoDaPessoa` chama `generateLocalWellnessPlan`, gerador determinístico. A geração é real; não equivale por si só a elaboração por modelo generativo. Recomendar **Plano do dia** com origem identificada, sem desativar o motor nem inserir chamada externa apenas para justificar o nome.
+3. **Mercado Pago e PayPal — capacidade preparatória, não checkout completo:** o catálogo declara `checkoutIntegrado: false` para ambos e `true` para Stripe. Salvar/testar credenciais não prova cobrança/assinatura completa. Reclassificar exposição para integrações preparatórias até decisão de execução, sem apagar credenciais ou configurações do usuário.
+4. **Fiscal e Pagamentos antigos — compatibilidade legítima:** `/admin/fiscal` e `/admin/payments` redirecionam para abas do dashboard. Não são duplicação de implementação nem motivo automático para remoção; preservar favoritos e links úteis.
+5. **Puck/construtor antigo — removidos anteriormente:** rotas antigas são excluídas da navegação. Não recriar produtos removidos para reorganizar a administração; preservar somente compatibilidades aplicáveis e o construtor vigente.
+6. **Documentação do diário — obsolescência documental comprovada no parecer:** `docs/diario-pessoal.md` ainda mencionava 429 após seis tentativas e captura real pendente, em conflito com a correção/validação da 135 e com trechos mais novos do próprio documento. Reconciliar na execução autorizada; não tratar como comportamento vigente nem ampliar a correção documental para reinstalar o limite.
+7. **Recursos avançados — não presumir desuso:** offline, experiências, treinamento e múltiplos provedores podem servir a públicos específicos. Avaliar adoção, tarefa atendida, custo, dependências e alternativas; reduzir exposição inicial quando apropriado antes de propor descarte.
+8. **Integrações e QA pendentes — não são obsolescência:** falta de chave, faturamento, hardware, sandbox compatível ou prova de execução não demonstra inutilidade. Manter registro honesto do estado e das condições de disponibilidade.
+
+- Para cada candidato, registrar consumidores, dados persistidos, direitos, custo operacional, alternativa existente e impacto de migração. Só propor exclusão após reprodução, análise de uso/necessidade e decisão explícita do usuário; nunca apagar registros para simplificar.
+
+#### H · Fusões recomendadas: experiência, não mistura automática de dados
+
+| Consolidação proposta     | O que reúne                                                      | Distinções obrigatórias a preservar                                                |
+| ------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Hoje                      | Painel, Meu dia e acesso ao plano diário.                        | Resumo, orientação e registro; dados e interpretação com origem identificada.      |
+| Meu diário                | Relato por texto/voz, reflexão e acontecimentos.                 | Texto original, escalas e marcadores; revisão e análise independentes.             |
+| Meu progresso             | Linha do tempo, revisão semanal, tendências e relatório pessoal. | Consulta histórica, comparação, filtros e exportação privada.                      |
+| Metas e rotinas           | Metas, hábitos, rotinas e seus lembretes.                        | Resultado desejado, comportamento recorrente, sequência e aviso.                   |
+| Práticas                  | Respiração, meditações e foco/pausa.                             | Protocolos, duração, narração, temporizadores, sessões e agregação próprias.       |
+| Dispositivos e sessão     | Conexão, estado do aparelho e monitoramento ao vivo.             | Configuração da fonte, leituras, sessão e persistência efetiva.                    |
+| Ritmo e notificações      | Lembretes, silêncio, descanso e retorno gradual.                 | Preferências, ocorrências, alertas que não devem ser pausados e efeitos nas metas. |
+| Financeiro administrativo | Faturamento, pagamentos, fiscal e análises financeiras.          | Configuração, transação, documento, ambiente/moeda e relatório.                    |
+| Inteligência da Lyra      | Modelos, conhecimento, instruções e treinamento.                 | Conexão, conteúdo, comportamento, lembranças e alteração de pesos.                 |
+| Conta                     | Cadastro, preferências, assinatura e privacidade.                | Direitos do titular, consentimento, configuração e cobrança.                       |
+
+- As propostas são hipóteses de arquitetura funcional a validar, não autorização atual para substituir menus ou fundir bancos. Aproveitar o inventário da 142, resolver conflitos de rótulos e preservar configurações publicadas, links diretos, parâmetros, atalhos, histórico e permissões.
+- **Integração funcional a avaliar:** ao concluir uma prática real, permitir que a rotina reconheça a execução vinculada explicitamente, reduzindo marcação repetida. Definir vínculo por sessão/execução, titular, instante e ação, com confirmação adequada, idempotência e prevenção de dupla contagem. Repetir pedido, voltar à página ou editar o modelo de rotina não pode somar minutos nem progresso novamente.
+- **Não fundir memória e treinamento:** lembrar informações da pessoa é diferente de modificar pesos. Preservar consentimentos, propriedade e isolamento.
+- **Não fundir conversa e diário automaticamente:** oferecer ação explícita para transformar conteúdo escolhido em registro, com revisão, origem e possibilidade de cancelamento; conversa privada não vira diário por inferência.
+- **Não fundir dado medido e leitura simbólica:** podem compartilhar contexto visual sem perder natureza, origem, limites e permissões.
+- **Não fundir PDF pessoal e exportação integral da conta:** resumo selecionado e portabilidade têm finalidades distintas; preservar ambos.
+- **Não tornar equivalentes conclusão de hábito, passo de rotina e minutos de prática:** são eventos relacionados; uma declaração manual não comprova prática e uma sessão não autoriza alterar qualquer meta sem regra e vínculo válidos.
+
+#### I · Revisão prioritária de índices, metodologia e promessas
+
+- Motores de coerência, prana, chakras, koshas e dosha possuem consumidores ativos em hooks e motores de conversa; não classificá-los como código morto. A questão é significado, validade da apresentação, sobreposição e utilidade para a pessoa.
+- Vários motores usam sinais semelhantes para gerar pontuações distintas e valores de referência para ausências. `src/lib/integrativo/cobertura.ts` impede exibição sem cobertura mínima e informa faltantes; essa proteção reduz resultados sem base suficiente, mas não valida o índice nem transforma valores de referência em medições do titular.
+- Preservar o valor de conteúdo simbólico e cultural escolhido para a marca; avaliar retirar a prioridade de pontuações da experiência principal e reformular como interpretação opcional. Não apresentar biomarcadores como medição objetiva de conceitos simbólicos apenas porque existe uma fórmula matemática.
+- O escore de longevidade usa faixas, pesos e componentes definidos no código; o limiar de cobertura é critério do produto, não comprovação de capacidade preditiva. Revisar tratamento de ausências, contribuição de cada variável, interpretação, nome, metodologia e comunicação de incerteza.
+- O motor de idade biológica soma impactos em anos por regras sobre biomarcadores; o parecer não encontrou validação específica dessa implementação. Referenciar modelos publicados não transfere a validação desses modelos para fórmula própria. Revisar antes de anunciar rejuvenescimento, ritmo de envelhecimento ou idade biológica pessoal como medida comprovada.
+- O motor de alertas contém associação descrita como antecipação de sintomas em aproximadamente 48 horas; distinguir comentário de código, comportamento realmente exposto e evidência de desempenho preditivo. O parecer não encontrou validação específica que sustente essa capacidade da implementação.
+- Recomendar reformulação ou suspensão de promessas avaliativas/preditivas sem sustentação demonstrada até revisão metodológica adequada, preservando registros e observações descritivas úteis. A recomendação não é uma desativação autorizada neste registro.
+- Revisar também estimativas de ciclo e recomendações genéricas, rótulos de confiança e relações com alimentação, exercício e recuperação. Um cálculo que produz número válido tecnicamente pode continuar inadequado como afirmação sobre uma pessoa.
+- Não inventar estudo, referência, validação clínica, precisão, sensibilidade, especificidade ou confiança estatística. Documentar método original, entradas exigidas, população/contexto pertinente, limitações, tratamento de dados ausentes e evidência efetivamente disponível; envolver avaliação especializada quando necessária, sem atribuir ao próprio app uma certificação não obtida.
+
+#### J · Estratégia de produto e prioridades empresariais
+
+1. **Revisar promessas, índices e configurações sem efeito demonstrado:** verdade e confiança antes de expansão.
+2. **Consolidar jornada diária e pontos de registro:** registrar o cotidiano sem procurar entre vários produtos internos.
+3. **Conectar metas, hábitos, rotinas e práticas:** ações relacionadas, sem duplicação de trabalho nem progresso fictício.
+4. **Valorizar histórico e evolução:** transformar registros em consulta compreensível e continuidade de uso.
+5. **Simplificar operação administrativa:** separar decisões executivas, gestão transacional e ferramentas técnicas avançadas.
+6. **Medir valor antes de ampliar periferia:** geração de imagens e novas integrações não devem preceder a clareza do núcleo.
+
+- Avaliar a contribuição de cada função para primeira tarefa concluída, retorno, utilidade percebida, confiança e autonomia. Complementar com frequência de uso, abandono, erros, esforço, pedidos de ajuda, custo de operação e manutenção; não confundir volume de cliques com valor entregue.
+- Não produzir rankings de adoção, retenção, conversão ou ROI com números fictícios. Definir período, população, denominadores e critérios; a base administrativa atual não demonstra automaticamente retenção D1/D7/D30, churn, MRR ou lucro.
+- Se for necessária coleta adicional, propor finalidade e mínimo de dados, com privacidade e autorização aplicáveis; não acrescentar telemetria de textos, saúde, memória, credenciais ou anexos como consequência implícita da auditoria.
+- Funções de privacidade, acessibilidade e integridade têm valor mesmo com uso raro. Custo e adoção são critérios de decisão, não autorização para enfraquecer direitos ou salvaguardas.
+- Parecer final aprovado: manter a maior parte das capacidades, reduzir substancialmente a fragmentação e revisar interpretações apresentadas como medições; tornar a Lyra mais clara sem perder identidade nem empobrecer o produto.
+
+#### K · Entregáveis, critérios de aceite e execução futura
+
+- **Inventário rastreável:** cada capacidade e subfunção com finalidade, público, entrada, saída, consumidores, dados, permissões, dependências, estado de implementação/validação e evidência. Cobrir fluxos pessoais, administrativos e técnicos que sustentam o produto, sem presumir que um item de menu equivale a uma única função.
+- **Matriz de decisão:** manter, contextualizar, integrar, reformular ou propor descontinuação; justificar com necessidade real, evidência, sobreposição, custo e impacto. Diferenciar hipótese de solução de decisão aprovada e de implementação concluída.
+- **Mapa de consolidação:** origem → experiência proposta → função preservada → armazenamento canônico → compatibilidade → autorização → teste de não regressão. Nenhuma função fica órfã e nenhum histórico é misturado silenciosamente.
+- **Relatório metodológico:** capacidades calculadas, medidas, autorrelatadas e simbólicas identificadas; configurações demonstram efeito ou são apresentadas honestamente; integrações preparatórias não aparecem como checkout completo ou compatibilidade universal.
+- **Prova real:** na execução autorizada, validar navegador → API → autorização → persistência/processo → retorno na UI, incluindo alterações, exclusão, concorrência, histórico, recarga, falha e recuperação. Contratos isolados não comprovam provedor externo, microfone, aparelho, geração de imagem ou treino real.
+- **Regressões:** preservar identidade e Lyra Clean, acessibilidade, responsividade, isolamento administrativo, entitlements, consentimentos, backup/migração quando necessários e ausência de segredos. Executar os gates aplicáveis de `CLAUDE.md`/`AGENTS.md`, integrações MySQL e build, além dos percursos reais afetados, sem simular resultados.
+- **Aceite de dados:** fusão de experiência não elimina categorias, escala versionada, relatos originais, autoria, unidades, corte do plano, fonte e datas. Deduplicação de progresso requer regra verificável e não recalcula silenciosamente o passado.
+- **Aceite de obsolescência:** qualquer retirada efetiva exige análise de consumidores, decisão explícita, compatibilidade/migração, proteção dos dados e busca de verificação após remoção. Não apagar configuração ou dados existentes para entregar aparência de simplicidade.
+- **Pesquisa e fronteiras:** validar compreensão e utilidade com tarefas comparáveis e participantes reais quando disponíveis/autorizados; não chamar teste do agente de pesquisa com usuários. Declarar expressamente o que não foi executado ou permanece externo.
+- **Dependências:** reutilizar tarefas já entregues e o inventário da 142. Esta auditoria não encerra nem autoriza contornar pendências 14, 15, 23, 86, 100 e 127; a validação funcional da 141 foi concluída e seu limite qualitativo está documentado; faturamento Gemini continua pendente por decisão do usuário. Treinamento Docker e captura/análise reais da 135 preservados.
+- **Publicação futura:** por atividade lógica, analisar, implementar, testar, revisar, atualizar painel e fazer commit/push na `main` antes da seguinte; sem branches, worktrees, force-push ou lote de atividades independentes. Registrar SHA real após publicação conforme a regra do painel.
+
+#### L · Referências, verificação do registro e próximo passo
+
+- **Registro publicado:** commit `fd64f0d1`, push confirmado `7e3c5303..fd64f0d1 main -> main` em 2026-11-05. Apenas este arquivo alterado; formatação e `git diff --check` aprovados; conferência automatizada confirmou 143 números únicos e os 142 registros anteriores preservados. Indicadores: 134 concluídas, sete com validação pendente e duas a iniciar. Publicação estritamente documental, sem implementação nem alegação de novos testes funcionais.
+- [GOV.UK — compreender usuários e necessidades](https://www.gov.uk/service-manual/service-standard/point-1-understand-user-needs).
+- [IBM — divulgação progressiva por tarefa](https://www.ibm.com/docs/en/technical-content?topic=practices-progressive-disclosure).
+- [W3C — evitar excesso de conteúdo e opções sem propósito](https://www.w3.org/WAI/WCAG2/supplemental/patterns/o5p03-manageable-quantity/).
+- **Documentos internos de apoio:** README; `docs/diario-pessoal.md`, `docs/diario-alimentar.md`, `docs/acompanhamentos-pessoais.md`, `docs/acontecimentos-pessoais.md`, `docs/experiencias-pessoais.md`, `docs/rotinas-pessoais.md`, `docs/lembretes-pessoais.md`, `docs/foco-e-pausa.md`, `docs/meditacoes-guiadas.md`, `docs/linha-do-tempo.md`, `docs/relatorio-pessoal.md`, `docs/modo-descanso.md`, `docs/offline.md`, `docs/memoria-graphiti.md`, `docs/treinamento-por-feedback.md` e `docs/relatorios-administrativos.md`; interpretar limitações e datas, sem tratar inconsistências documentais como comportamento atual.
+- **Critério do registro inicial (histórico):** somente registro documental; tarefa 143 única no Tópico 3, após a 142; indicadores atualizados sem reclassificar tarefas anteriores; revisão do texto e diff; formatação e conferência de estrutura; commit e push na `main`, seguidos do registro do SHA real em commit documental próprio. Não alegar novos testes funcionais nesta publicação.
+- **Conclusão em 2026-11-05:** inventário reproduzível de 683 módulos TS/TSX, 6044 nós de função, 39 páginas, 140 APIs/205 operações e quatro arquivos Python/49 funções. Matriz com 71 famílias: 41 manter, 14 integrar, oito reformular, seis avançadas/opcionais e duas de compatibilidade/preparação. Conferidos os hashes dos 683 módulos e as fontes canônicas das 71 linhas. Entregáveis em `docs/auditoria/2026-11-05-portfolio-funcional.md`, `2026-11-05-portfolio-matriz.csv`, `2026-11-05-portfolio-inventario.json` e `scripts/auditar-portfolio.mjs`.
+- **Correções documentais:** diário reconciliado com tentativas sem teto acumulado e captura já comprovada; treinamento distingue pesos próprios de modelos externos. Nenhum recurso, cálculo, dado ou menu foi removido ou fundido nesta auditoria.
+- **Fronteira de execução:** oito consultas autenticadas com HTTP 200 e administração sem sessão com 401. Inspeção autenticada Playwright MCP recusada pelo filtro de segredos; proteção preservada e tentativa não contabilizada como QA aprovado. Não houve novo teste de microfone, dispositivos ou fornecedores externos. A auditoria não equivale à implementação de suas recomendações nem à homologação das seis tarefas amarelas.
+- **Próximo passo:** usar a matriz na execução da 142, mediante instrução do usuário. Alterações metodológicas e descontinuações exigem decisão específica.
+- **Gates finais reais:** `fix:format`, `fix:lint`, `check:lint`, `check:format` e `check:types` aprovados; 1012 testes unitários em 96 arquivos, 602 integrações MySQL em 67 arquivos e build de produção de 136 páginas aprovados. A primeira checagem de formato detectou o JSON recém-regenerado; a formatação foi aplicada e a nova checagem passou. A tentativa anterior de integração interrompida com o Docker desligado não foi contabilizada. Docker com MySQL, memória, FalkorDB e treinamento saudáveis; produção reiniciada em `localhost:3000`, HTTP 200 conferido no Windows. `@current_problems` não está disponível nas ferramentas da sessão. Revisão do diff e estrutura: 143 tarefas únicas, 136 verdes, seis amarelas e uma a iniciar.

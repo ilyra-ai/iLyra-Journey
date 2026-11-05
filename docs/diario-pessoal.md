@@ -105,15 +105,16 @@ apagam na página Memória.
 
 Respostas: 401 sem sessão, 403 sem o recurso do plano ou fora do histórico,
 404 relato de outra conta, 409 versão antiga, identificador reutilizado,
-análise em andamento ou já feita e limite diário, 429 após 6 tentativas de
-análise por relato.
+análise em andamento ou já feita e limite diário. Não existe teto acumulado
+de tentativas de análise por relato.
 
 ## Limites conhecidos
 
-- O reconhecimento de voz depende do navegador. O Chromium de testes deste
-  ambiente não tem português no aparelho e recusou o microfone ao serviço do
-  navegador; a captura real de fala precisa ser conferida no navegador do
-  usuário. O "headless shell" do Playwright fecha a aba ao consultar
-  `SpeechRecognition.available()`; o Chromium completo responde normalmente.
+- O reconhecimento de voz depende do navegador. A captura real pelo microfone
+  do usuário foi confirmada em 2026-11-05, conforme a validação da tarefa 135
+  no painel de gestão. Isso não garante suporte em todos os navegadores.
+  A recusa no Chromium de testes e o fechamento da aba do "headless shell"
+  ao consultar `SpeechRecognition.available()` são limitações históricas
+  desses ambientes, não uma pendência da captura já comprovada.
 - Modelos pequenos erram com frequência: a validação recusa e o relato fica
   guardado como foi contado. Prefira modelos maiores na ordem de uso.

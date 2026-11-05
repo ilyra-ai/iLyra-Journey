@@ -1,9 +1,12 @@
 # Treinamento por feedback humano no chat (tarefa 90)
 
 O administrador liga o **Treinamento** no chat (ao lado de "Como a Lyra
-responde"), conversa com a Lyra e avalia as respostas. Ao desligar, os
-**pesos** do modelo conectado são treinados com essas avaliações e a nova
-versão passa a responder a todos os usuários.
+responde"), conversa com a Lyra e avalia as respostas. Ao desligar, inicia o
+treinamento dos **pesos do modelo próprio do serviço de treinamento** com
+essas avaliações. Após conclusão bem-sucedida, a nova versão passa a atender
+os pedidos encaminhados a esse serviço pela ordem de modelos configurada.
+Isso não treina automaticamente modelos do Jan, arquivos GGUF selecionados
+na inferência integrada nem provedores externos.
 
 ## Mecanismo, com precisão
 
