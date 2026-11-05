@@ -445,6 +445,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 #### L · Referências, verificação do registro e próximo passo
 
+- **Registro publicado:** commit `fd64f0d1`, push confirmado `7e3c5303..fd64f0d1 main -> main` em 2026-11-05. Apenas este arquivo alterado; formatação e `git diff --check` aprovados; conferência automatizada confirmou 143 números únicos e os 142 registros anteriores preservados. Indicadores: 134 concluídas, sete com validação pendente e duas a iniciar. Publicação estritamente documental, sem implementação nem alegação de novos testes funcionais.
 - [GOV.UK — compreender usuários e necessidades](https://www.gov.uk/service-manual/service-standard/point-1-understand-user-needs).
 - [IBM — divulgação progressiva por tarefa](https://www.ibm.com/docs/en/technical-content?topic=practices-progressive-disclosure).
 - [W3C — evitar excesso de conteúdo e opções sem propósito](https://www.w3.org/WAI/WCAG2/supplemental/patterns/o5p03-manageable-quantity/).
