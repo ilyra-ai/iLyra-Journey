@@ -21,12 +21,12 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **95,0%** (133 de 140)   |
-| Implementações publicadas               | **100%** (140 de 140)    |
-| Tarefas totais                          | 140                      |
+| Conclusão integral                      | **94,3%** (133 de 141)   |
+| Implementações publicadas               | **99,3%** (140 de 141)   |
+| Tarefas totais                          | 141                      |
 | 🟢 Concluídas                           | 133                      |
 | 🟡 Implementadas com validação pendente | 7                        |
-| 🔵 Em andamento                         | 0                        |
+| 🔵 Em andamento                         | 1                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 0                        |
 | Branch de trabalho                      | `main` (única permitida) |
@@ -114,7 +114,22 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
+### 141 · Inferência local integrada à Lyra, sem aplicativos intermediários
+
+- **Status:** 🔵 em andamento · **Registro/autorização:** 2026-11-04 · **Branch:** `main` (sem ramificações).
+- **Objetivo:** adicionar opção nativa **Lyra integrada** em Admin → Modelos de IA, com seleção, instalação e gerenciamento de modelos WSL2 e inferência rápida, mantendo todo o app.
+- **Regra absoluta de preservação:** nunca remover ou desativar Ollama, Jan, LM Studio, vLLM, llama.cpp externo, nuvem, fallback, chat, memória, voz, imagens, ferramentas, MCP, treinamento, planos, CRUD ou demais funcionalidades, rotas, dados e configurações. A opção é estritamente aditiva e opt-in.
+- **Execução:** o app controla o runtime local de `llama.cpp`/CUDA Blackwell `sm_120` com processo isolado e socket Unix privado (sem porta HTTP/TCP ou URL para compartilhar pesos). Terceiros não precisam abrir outro aplicativo. Preservar a implantação remota: a nuvem não possui acesso automático ao WSL2 do usuário.
+- **Descoberta local:** botão de busca de arquivos GGUF reais nos diretórios de modelos/caches do WSL2 e em pastas autorizadas explicitamente; listar nome, caminho, tamanho, formato, suporte e estado. Avaliar caches Ollama/Jan/LM Studio/Hugging Face sem fingir suporte universal a outros formatos. Impedir symlink traversal, vazamento de diretórios privados e varredura irrestrita.
+- **Instalação e seleção:** interface premium clara pt-BR dentro da página administrativa de modelos, instalação/diagnóstico do runtime, modelo selecionável, botão de ativar/desativar e teste de resposta. Sem hardcode de modelo, URL falsa, simulação de instalação ou download implícito de fonte insegura.
+- **Qualidade/latência:** priorizar TTFT, tokens/segundo, streaming real, cache de prompt, identidade/raciocínio, GPU 12 GB, CPU Ryzen 9 e 64 GB RAM com orçamento para Windows/app. Medir limites de RAM, VRAM, concorrência, reinício, cancelamento e falhas. Nunca declarar benchmark sem executar.
+- **Identidade Lyra:** modelo conectado recebe o mesmo prompt e personalidade, motor determinístico, contexto, memórias autorizadas e validação existente de `src/lib/lyra/modelos-como-lyra.ts`. Não transformar Lyra em chat genérico.
+- **Imagens:** preservar geração raster por provedor da segunda posição; acrescentar caminho opcional de SVG gerado pelo LLM textual com sanitização e conversão real a PNG/WebP via sharp. Não apresentar texto SVG como geração fotográfica.
+- **Integração:** reutilizar provedores, cadeia de modelos, configuração do administrador, `src/lib/ai`, chat, teste de conexão e transportes. Não introduzir servidor acessível na rede nem alterar as configurações existentes.
+- **Qualidade e segurança:** validar diretórios, binários, integridade de pesos e escopos de permissão; autenticação administrativa e isolamento; preservar licença/compatibilidade; UI Lyra Clean responsiva e acessível.
+- **Verificações obrigatórias:** examinar integralmente `CLAUDE.md` e `AGENTS.md`, baseline real, instalar e executar na máquina de destino quando acessível, testes de carga, streaming, SVG→PNG, regressão de todos os provedores e do CRUD, lint, tipos, formato, unitários, integrações MySQL, build e QA navegador. Sem notebook/WSL conectado ao ambiente de execução, declarar essa etapa **não verificada**; nunca simular QA.
+- **Fluxo Git:** commits e push apenas em `main`, sem branch/worktree/force push. Atualizar este painel com SHA e resultados após entrega. Este registro inicia a tarefa, não afirma implementação nem testes concluídos.
+
 
 ### BLOQUEADAS
 
