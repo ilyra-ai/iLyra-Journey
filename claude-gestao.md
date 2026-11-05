@@ -21,14 +21,14 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **95,0%** (134 de 141)   |
-| Implementações publicadas               | **100%** (141 de 141)    |
-| Tarefas totais                          | 141                      |
+| Conclusão integral                      | **94,4%** (134 de 142)   |
+| Implementações publicadas               | **99,3%** (141 de 142)   |
+| Tarefas totais                          | 142                      |
 | 🟢 Concluídas                           | 134                      |
 | 🟡 Implementadas com validação pendente | 7                        |
 | 🔵 Em andamento                         | 0                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 0                        |
+| ⚪ A iniciar                            | 1                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-05               |
 
@@ -122,7 +122,136 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ## Tópico 3 · Tarefas a Iniciar
 
-Nenhuma tarefa a iniciar. As notas abaixo preservam registros históricos de criação; não indicam tarefas atualmente abertas.
+### 142 · Simplificação integral da experiência do usuário e do administrador: arquitetura da informação, jornadas, visual web, CSS, UI e UX
+
+- **Status:** ⚪ a iniciar · **Registro:** 2026-11-05 · **Prioridade:** alta, com correção crítica de estados sem dados como primeira frente da execução futura.
+- **Autorização atual:** exclusivamente registrar neste arquivo, no máximo de detalhes, a análise aprovada pelo usuário, revisar o registro, fazer commit e push na `main` principal e aguardar novas instruções. Não iniciar implementação, redesenho, migração de navegação, alterações de dados ou testes com participantes nesta etapa. A aprovação do diagnóstico não é aprovação automática de cada solução proposta.
+- **Solicitação de origem:** o usuário considera o app ótimo em recursos, mas extremamente confuso para as pessoas e para ele próprio; pediu análise profissional empresarial de elite, com rigor forense de UI/UX, visual web, CSS, usuário e administrador. Após receber o parecer, aprovou seu registro como nova tarefa e determinou aguardar instruções depois da publicação documental.
+- **Objetivo de negócio e experiência:** diminuir o esforço para entender o produto, localizar funções e concluir tarefas; tornar claros o próximo passo, a origem dos dados e o resultado das ações; facilitar operação administrativa, confiança e continuidade de uso. Preservar integralmente recursos, dados, permissões e identidade da Lyra. Não prometer aumento de retenção, conversão ou produtividade sem medir.
+- **Diagnóstico central aprovado:** a fragilidade predominante é a arquitetura da informação e a orientação das tarefas. A pessoa precisa compreender a organização interna do sistema antes de conseguir utilizá-lo com facilidade. O próximo investimento deve ser clareza de produto e simplificação das jornadas, antes de acrescentar recursos. Não resolver apenas com troca de cores, ícones, biblioteca ou mais submenus.
+
+#### A · Base de evidências, alcance e limites do parecer de origem
+
+- **Inspeção realizada:** leitura da estrutura de navegação e componentes, documentação do sistema visual e acessibilidade; observação do conteúdo renderizado no navegador autenticado como administrador, no painel pessoal `/` e no dashboard `/admin/dashboard`. Foram inspecionados, entre outros, `src/components/layout/sidebar-structure.ts`, `src/components/admin/AdminDashboardTabs.tsx`, `src/components/admin/AdminContentManagement.tsx`, `src/components/coach/AbasDoDia.tsx` e `docs/design-system.md`.
+- **Natureza do resultado:** auditoria heurística com evidências de estrutura e conteúdo. Impactos sobre esforço mental, descoberta e orientação são avaliações profissionais; não são resultados medidos de pesquisa com usuários nem comprovação de falhas em todas as contas.
+- **Limite de cobertura:** a inspeção visual completa foi interrompida porque a ferramenta não conseguiu confirmar com segurança a URL da janela do Chrome. Não foram obtidas novas medições completas de contraste, responsividade, desempenho, teclado ou todas as telas. A amostra autenticada era administrativa; não declarar que foi realizada uma nova auditoria independente com todos os planos e perfis.
+- **Documentação histórica:** auditorias anteriores de acessibilidade e os gates das tarefas anteriores são referências datadas, não novas execuções desta tarefa. Aprovação técnica de contraste e teclado não comprova, sozinha, facilidade de compreensão.
+- **Antes de implementar:** confirmar cada ocorrência na versão vigente, conta, plano, rota, configuração publicada e estado dos dados; registrar reprodução e causa raiz. Reutilizar as entregas das tarefas 27, 33, 34, 47, 49–54, 59–62, 76, 113–115, 125, 135, 136 e 140, quando aplicáveis, sem retrabalho e sem desfazer preferências do usuário inadvertidamente.
+
+#### B · Achados priorizados e consequências a tratar
+
+| Código | Prioridade | Evidência observada no parecer de origem                                                                                                            | Consequência e direção de correção                                                                                                                                                                                                                                                                                              |
+| ------ | ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UX-01  | Crítica    | O painel apresentou **“Em sintonia”** junto de **“Ainda não há registro hoje: faça o check-in ou conecte um dispositivo.”**                         | Uma apresentação positiva pode ser entendida como avaliação sustentada por dados inexistentes. Investigar a origem e a semântica do estado; distinguir ausência de dados, insuficiência, processamento e resultado efetivamente calculado. Não fabricar avaliação nem corrigir apenas a aparência mantendo semântica incorreta. |
+| UX-02  | Alta       | Painel, Meu dia, Minha semana, Meu plano, registros e orientações distribuem atividades próximas em destinos diferentes.                            | A pessoa não identifica facilmente onde começar e qual área responde à sua necessidade. Definir função inequívoca para cada destino, uma jornada principal e pontos de entrada coerentes. Proximidade de assunto não significa que as funções sejam duplicadas: inventariar antes de consolidar.                                |
+| UX-03  | Alta       | A conta administrativa reúne navegação pessoal e operacional no mesmo menu.                                                                         | O administrador alterna entre cuidar de si e operar a plataforma sem uma mudança de contexto suficientemente explícita. Propor ambientes reconhecíveis e transição clara, mantendo acesso às funções pessoais e autorização real no servidor.                                                                                   |
+| UX-04  | Alta       | O Diário está em Meu dia; alimentação, acompanhamentos, acontecimentos e experiências ficam em Registros e evolução.                                | Registrar algo sobre si não possui uma entrada conceitualmente uniforme. Criar acesso coerente por intenção e atalhos contextuais, preservando distinções de dados, regras e histórico de cada domínio.                                                                                                                         |
+| UX-05  | Alta       | O dashboard administrativo reúne filtros, indicadores e comparações, tabela extensa por domínio, linha temporal e atalhos.                          | Resumo executivo e investigação detalhada competem pela atenção. Priorizar pendências acionáveis e indicadores essenciais, com aprofundamento contextual e metodologia acessível.                                                                                                                                               |
+| UX-06  | Média      | Vocabulário próximo: disposição, recuperação, evolução, monitoramento, acompanhamentos e experiências; “Sua disposição” usa ação “Ver recuperação”. | Rótulos não permitem prever suficientemente o destino. Criar vocabulário consistente e alinhado à tarefa da pessoa, sem alterar significado dos dados para acomodar um novo nome.                                                                                                                                               |
+| UX-07  | Média      | Menu lateral, submenus, abas, ações rápidas e atalhos no cabeçalho coexistem.                                                                       | A prioridade e a função de cada mecanismo não estão suficientemente evidentes. Separar navegação global, navegação da página e ações contextuais; evitar múltiplos caminhos concorrentes sem orientação.                                                                                                                        |
+
+#### C · Inventário obrigatório e rastreabilidade funcional
+
+- Inventariar rotas públicas, autenticadas e administrativas, menus, submenus, abas, cartões, gráficos, formulários, modais, tabelas, notificações, busca e atalhos. Para cada item, registrar público, finalidade, frequência presumida a confirmar, ação principal, dependências, origem dos dados e direitos do plano.
+- Construir matriz **intenção da pessoa → entrada atual → percurso → resultado persistido → entrada proposta**. Identificar sobreposição conceitual, destino de cada recurso e condições de exibição. Nenhuma função pode ficar órfã por ser recolhida ou reorganizada.
+- Cobrir landing, login/cadastro, onboarding, apresentação inicial, painel, Meu dia/Diário, semana, plano pessoal, metas, hábitos/rotinas, lembretes, respiração, meditações, foco, descanso, alimentação, acompanhamentos, acontecimentos, experiências, linha do tempo, relatório pessoal, monitoramento, dispositivos, agendamentos, perfil, planos comerciais, experiência offline, chat, histórico, busca, favoritos, anexos, imagens, memória e treinamento.
+- Na administração, cobrir visão geral, usuários e acessos, planos/permissões, faturamento/reembolsos, fiscal, pagamentos, conteúdo/experiência, modelos de IA, conhecimento, memória/treinamento conforme as capacidades existentes, dados e relatórios. Não criar um segundo CRUD para uma função que já existe.
+- Separar duplicação de acesso de duplicação de funcionalidade: atalhos podem existir, desde que indiquem o mesmo destino, estado e resultado de forma previsível. Preservar links diretos, parâmetros de aba, âncoras, URLs salvas, busca, histórico e contexto ao voltar.
+
+#### D · Jornada pessoal e relação entre Painel e Meu dia
+
+- A entrada principal deve responder: **“Como estou hoje, com base no que registrei?”**, **“O que preciso fazer agora?”** e **“Onde vejo meu histórico?”**. Determinar, mediante inventário e validação, o papel de Painel e Meu dia; não fundi-los nem excluir telas sem mapear integralmente o conteúdo e a navegação.
+- **Sem dados:** apresentar um estado honesto e uma ação principal compreensível, com “Registrar como estou” como proposta inicial de rótulo a validar. Explicar a alternativa de conectar um dispositivo sem pressupor hardware disponível.
+- **Com dados:** apresentar resumo curto, origem dos registros, data/período e atualização; distinguir registro manual, sensor, cálculo determinístico e interpretação de IA. Não confundir falta de registro com zero nem dado antigo com medição atual.
+- **Próximo passo:** priorizar uma orientação ou atividade pertinente e possível naquela conta; deixar as alternativas secundárias acessíveis sem competir com a ação principal. Respeitar plano, preferências, memória, consentimentos e condições reais de integração.
+- **Aprofundamento:** disponibilizar explicações e histórico sob demanda, com nomes previsíveis, sem esconder indisponibilidade nem descartar dados ou ações existentes.
+- Revisar a concorrência entre **“Registrar meu dia”**, **“Conectar cinta”** e **“Reavaliar agora”** observada antes de haver registros. Investigar requisitos e efeito de cada ação; usar linguagem compatível com os dispositivos efetivamente suportados. Não renomear uma função específica como se passasse a suportar qualquer aparelho.
+- Revisar a localização de **“Sem internet”**, observado como destino permanente: distinguir condição de conectividade, registros offline, pendências de sincronização e ajuda. A localização final é uma decisão de arquitetura a validar, preservando consulta e recuperação de dados offline.
+- Oferecer um ponto de entrada coerente para registros pessoais e acessos contextuais ao Diário; manter voz real, edição, análise, calendário, memória autorizada e ausência de teto acumulado de tentativas de análise entregues na 135. Não trocar uma experiência funcional por demonstração estática.
+- Reaproveitar apresentação e onboarding existentes, adequando a orientação à primeira tarefa relevante. Não impor tutoriais repetidos nem fazer do tutorial uma compensação para navegação confusa.
+
+#### E · Ambiente administrativo e organização proposta a validar
+
+- Criar uma distinção perceptível entre experiência pessoal e administração, com contexto ativo, nome da área, navegação e retorno claros. Preservar a mesma identidade visual, sessões, preferências e permissões; a separação visual nunca substitui autorização no backend.
+- A organização abaixo é **hipótese de solução**, não implementação aprovada nem obrigação de criar novas páginas; validar com inventário, rotas e tarefas operacionais existentes:
+
+| Área proposta           | Finalidade e conteúdo a organizar                                                                                                                       |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Visão geral             | Pendências que exigem ação, situação operacional e indicadores executivos essenciais.                                                                   |
+| Pessoas                 | Usuários, acessos, bloqueios, sessões, perfis e assinaturas, respeitando os recursos existentes.                                                        |
+| Financeiro              | Faturamento, reembolsos, documentos fiscais e configuração de pagamentos, com estados e ambiente de teste/produção claros.                              |
+| Conteúdo e experiência  | Hábitos sugeridos, orientações e apresentação/configuração da experiência web.                                                                          |
+| Inteligência artificial | Modelos, conexões, conhecimento, memória e treinamento; distinguir funções e manter todos os provedores e capacidades existentes.                       |
+| Operação e dados        | Integrações, saúde da plataforma, qualidade dos dados e diagnósticos. Definir o destino de relatórios executivos e operacionais sem duplicação confusa. |
+
+- Distinguir **visão executiva**, **análise por domínio** e **investigação de registros**. Os filtros aplicados devem ser identificáveis; manter origem, período, comparações e possibilidade de conferir o número sem exigir leitura de uma tabela extensa para entender a operação.
+- A explicação observada **“filtro pelo plano vigente hoje, inclusive ao consultar o passado”** é material para a interpretação. Manter essa informação disponível e junto da decisão relevante; não omiti-la nem apresentar a fotografia atual como histórico de assinaturas.
+- Levar detalhes metodológicos extensos para explicação contextual ou área de metodologia; manter visíveis as ressalvas que mudem o significado imediato do indicador. Padronizar apresentação de UTC, data local e período para reduzir ambiguidade, sem mudar silenciosamente o cálculo.
+- Diferenciar **“não há registros”**, **“filtro sem resultados”**, **“integração não configurada”**, **“serviço indisponível”**, **“carregando”** e **“erro”**. Cada estado deve oferecer uma ação pertinente quando houver, sem tratar zeros ou indisponibilidade como sucesso.
+- Preservar confirmação, idempotência, auditoria e permissões das operações sensíveis; não remover salvaguardas financeiras ou de acesso com a justificativa de simplificar a interface. Não realizar cobranças ou mudanças em contas reais como demonstração de UX.
+
+#### F · Vocabulário, navegação e divulgação progressiva
+
+- Criar glossário de termos e rótulos: nome, definição, público, contexto e destino. Explicar diferenças entre plano pessoal e plano comercial, diário e reflexão, monitoramento e acompanhamentos, metas e hábitos, experiências e acontecimentos, disposição e recuperação.
+- Usar rótulos de ação concretos e consistentes com o resultado. Corrigir desencontros como **“Sua disposição” → “Ver recuperação”** preservando a semântica real do indicador e o destino adequado.
+- Definir responsabilidades de menu global, submenus, abas, busca, atalhos de cabeçalho e ações rápidas. Mostrar localização atual e contexto; manter a descoberta de funções secundárias com divulgação progressiva, sem esconder a tarefa principal atrás de camadas sucessivas.
+- Preservar a prioridade anteriormente solicitada para Lyra AI, histórico e personalizações publicadas até que uma orientação nova autorize a mudança. Documentar conflitos de organização em vez de sobrescrever preferências silenciosamente.
+- Reutilizar a taxonomia e o componente compartilhado da tarefa 140 quando adequados; desktop e celular devem utilizar a mesma fonte de destinos e direitos. Alterações de categoria não podem permitir acesso indevido ou fazer um item desaparecer por não estar no agrupamento.
+- Linguagem integralmente pt-BR, simples, respeitosa e empresarial. Termos técnicos de IA, estatística, infraestrutura e faturamento devem aparecer no contexto certo, com ajuda quando necessária, sem ocupar o fluxo principal do usuário leigo.
+
+#### G · Sistema visual, CSS, componentes e gráficos
+
+- Preservar **Lyra Clean**, tema claro como padrão vigente, marca e paleta teal/coral; utilizar `docs/design-system.md`, `docs/acessibilidade.md`, tokens de `src/app/globals.css`, `AppShell`, `PageIntro` e primitivos existentes. Manter escolhas de tema já salvas e não reintroduzir gradientes decorativos, orbes, vidro fosco, sombras coloridas ou caixa alta espaçada.
+- A base documentada possui cores claras, tokens centralizados, componentes reutilizáveis, tipografia definida e superfícies discretas. O diagnóstico não justifica substituir Tailwind CSS, shadcn/ui, Radix UI ou Recharts. Investigar e corrigir causas concretas antes de propor troca de tecnologia.
+- Dar maior destaque à ação principal e ordenar secundárias; reduzir repetição de cartões de igual importância visual. Diferenciar **resumo**, **registro**, **interpretação** e **configuração** por hierarquia, agrupamento, títulos, espaçamento e contexto, sem depender apenas de cor.
+- Auditar tipografia, comprimento de linha, densidade, margens, largura útil, bordas, alinhamento, raios, estados de controles e continuidade entre telas. Corrigir causas de inconsistência nos componentes/tokens adequados, evitando valores isolados e estilos duplicados.
+- Tratar estados vazios como informação e orientação; evitar apresentação com aparência de avaliação concluída quando não houver base suficiente. Progresso e carregamento precisam corresponder a processos reais, sem porcentagens ou animações que simulem conclusão.
+- Gráficos devem responder a perguntas específicas, com título, unidade, período, fonte, contexto de comparação e explicação curta quando necessária. Preservar distinção entre zero e ausência, lacunas e dados completos; não preencher séries ou indicadores com dados artificiais para melhorar a aparência.
+- Testar legendas, cores, leitura sem cor, tabela/alternativa textual, escalas, eixos, tooltips e interação por teclado e toque. Não afirmar revisão visual de gráficos não exibidos ou sem dados reais; usar cenários de QA claramente identificados, sem misturá-los a dados de usuários.
+
+#### H · Responsividade, acessibilidade e estados de interação
+
+- Validar desktop, notebook, tablet e celular em larguras documentadas, incluindo 320, 390, 768, 1280 e 1440 px; avaliar também altura útil de notebook, zoom de texto e zoom do navegador. Conferir navegação recolhida/expandida, rolagem, tabelas, gráficos, formulários, calendários, modais, teclado virtual e ações fixas.
+- Verificar ausência de corte e transbordo, continuidade da leitura, rótulos completos, ação principal localizável e ordem coerente no celular. Tabelas extensas podem ter rolagem acessível, com contexto e identificação das colunas preservados; não comprimir conteúdo até ficar ilegível.
+- Cumprir WCAG 2.2 AA, semântica, nomes acessíveis, contraste, foco visível e não encoberto, teclado, ordem de foco, leitor de tela, alvos de toque e preferência de movimento reduzido. Auditar computacionalmente e inspecionar manualmente; uma ferramenta automática não comprova compreensão cognitiva.
+- Conferir estados normal, hover, foco, ativo, desabilitado, carregamento, sucesso, vazio, dados insuficientes, erro, perda de conexão, sessão expirada e permissão insuficiente. Erros devem preservar o trabalho já feito e oferecer recuperação real, sem expor conteúdo sensível, segredos ou detalhes desnecessários ao usuário.
+- Separar salvamento do relato, geração da análise e envio autorizado à memória; manter os resultados independentes e compreensíveis. Não apresentar falha de IA como perda do relato quando ele já estiver persistido.
+
+#### I · Ordem de execução futura e fronteiras técnicas
+
+1. **Baseline e verdade dos estados:** revalidar evidências, inventariar telas/dados e corrigir primeiro causas de avaliações ou mensagens enganosas; conferir backend antes de alterar a apresentação dependente dele.
+2. **Arquitetura e jornada pessoal:** definir entradas, papel de Painel/Meu dia e matriz de destinos; tornar claro o próximo passo e como consultar histórico.
+3. **Contexto administrativo:** organizar a operação e a transição para a experiência pessoal, preservando permissões e percursos financeiros.
+4. **Vocabulário e registros:** alinhar nomes, rótulos, acessos e recuperação de tarefas; preservar URLs, dados e direitos.
+5. **Hierarquia visual e componentes:** aplicar o desenho aprovado, CSS consistente, gráficos compreensíveis e responsividade; manter todas as funções descobertas no inventário.
+6. **Validação integral e compreensão:** executar regressões, QA visual/acessível, percursos reais e pesquisa de tarefas com participantes quando disponíveis e autorizados; comparar evidências, corrigir e publicar cada atividade lógica individualmente.
+
+- Ao receber autorização de implementação, conferir novamente Git, regras, dependências e tarefas já entregues; não criar branches, worktrees, árvores paralelas nem force-push. Cada atividade lógica deve ser validada e publicada na `main` antes da seguinte, sem um commit geral que acumule atividades independentes.
+- Esta tarefa não declara concluídas as pendências 14, 15, 23, 86, 100, 127 e 141. Reutilizar a prova real da voz/diário e treinamento já entregues; não simular serviços externos indisponíveis nem habilitar faturamento Gemini, deixado pendente por decisão do usuário.
+- Pesquisar referências oficiais e atuais antes do desenho futuro; documentar por que cada decisão atende à tarefa da pessoa. Tendências de 2026 não substituem clareza, acessibilidade, desempenho e preservação funcional.
+
+#### J · Validação real, pesquisa de tarefas e critérios de aceite
+
+- **Cobertura por perfil:** visitante, conta nova, usuário com plano Free, planos pagos efetivamente existentes e administrador; usuário com perfil incompleto/completo, com/sem dados, com/sem dispositivo e com diferentes estados de conectividade. Confirmar capacidades reais de cada plano em vez de presumir acesso universal.
+- **Percursos pessoais:** entrar e entender o próximo passo; registrar como está; localizar Diário e ditar/salvar/consultar relato; distinguir registro de análise; consultar histórico e evolução; encontrar plano pessoal, meta, rotina e prática; conversar com a Lyra; consultar anexos e memória conforme permissão; encontrar preferências e plano comercial; recuperar trabalho após falha ou conexão interrompida.
+- **Percursos administrativos:** identificar contexto ativo e pendências; localizar usuário, acesso e assinatura; consultar filtros/indicadores e aprofundar registros; localizar faturamento, fiscal e pagamentos; distinguir ambiente de teste/produção; configurar conteúdo e encontrar modelos/conhecimento/treinamento; consultar saúde dos dados; retornar à experiência pessoal sem perder contexto nem expor funções restritas.
+- **Regressão técnica:** executar os gates aplicáveis do projeto — instalação congelada quando necessária, `pnpm fix:format`, `pnpm fix:lint`, `pnpm check:lint`, `pnpm check:format`, `pnpm check:types`, `pnpm test`, `pnpm test:integration` com MySQL real e `pnpm build` — e verificar `@current_problems` quando disponível. Nesta etapa documental não afirmar reexecução desses testes funcionais; registrar somente as verificações realmente realizadas.
+- **Prova de ponta a ponta:** navegador → ação/API → autorização → banco/processo real → retorno na interface; conferir persistência e estado após recarregar, voltar e alternar abas/contextos. Fluxo mais bonito não basta se não salva, perde dados ou depende de placeholders.
+- **Pesquisa com pessoas:** definir tarefas e condições antes das sessões; observar participantes reais quando houver disponibilidade e autorização. Medir sucesso sem ajuda, erros, pedidos de ajuda, escolhas equivocadas, retornos e tempo de conclusão; identificar amostra, contexto, roteiro e resultados. Não inventar participantes, percentuais, satisfação, notas ou benchmarks; testes do próprio agente não substituem pesquisa com usuários.
+- **Comparação antes/depois:** registrar baseline reproduzível e usar tarefas e condições comparáveis. Definir metas quantitativas justificadas depois de medir o ponto de partida; não impor números fictícios como se já fossem resultados. Se não houver participantes, declarar a pesquisa não realizada e manter essa fronteira de validação explícita.
+- **Aceite funcional:** todos os destinos do inventário continuam alcançáveis conforme os direitos; rotas antigas e atalhos permanecem válidos ou recebem encaminhamento compatível; ações salvam resultados reais, estados são honestos, dados e consentimentos são preservados, administração continua isolada e nenhuma função existente é eliminada por simplificação.
+- **Aceite de compreensão:** finalidade de cada área e próximo passo identificáveis; ação principal distinguível; rótulos antecipam o destino; entrada coerente para registros; separação administrativa perceptível; resumos e aprofundamentos não competem; metodologia que altera significado permanece acessível no contexto certo.
+- **Aceite visual e acessível:** aplicação consistente do Lyra Clean, sem regressões de responsividade, contraste, teclado, foco, semântica, toque ou gráficos; evidências atuais nas telas e perfis cobertos, com limitações declaradas.
+- **Entrega futura:** matriz de inventário e migração de destinos, glossário, desenho/jornadas documentados, implementação real, evidências antes/depois, relatório de QA e pesquisa efetivamente realizada, relação de pendências externas, commits e pushes por atividade. Atualizar documentação para o produto final; não declarar sucesso integral com validações específicas ainda pendentes.
+
+#### K · Referências e publicação deste registro
+
+- [W3C — propósito compreensível, hierarquia familiar e controles consistentes](https://www.w3.org/WAI/WCAG2/supplemental/objectives/o1-understandable/).
+- [W3C — conteúdo claro e compreensível](https://www.w3.org/WAI/WCAG2/supplemental/objectives/o3-clear-content/).
+- [IBM — divulgação progressiva de informações conforme a tarefa](https://www.ibm.com/docs/en/technical-content?topic=practices-progressive-disclosure).
+- **Documentos internos de referência:** `docs/design-system.md`, `docs/acessibilidade.md` e `CLAUDE.md`; considerar o histórico vigente e a aprovação do usuário antes de modificar decisões de produto.
+- **Critério da publicação atual:** apenas `claude-gestao.md` alterado, tarefa numerada uma vez no Tópico 3, estado **a iniciar**, indicadores recalculados sem reclassificar tarefas anteriores, revisão integral do diff, verificação de estrutura/formatação e publicação na `main`. Após o push, registrar o SHA real em commit documental próprio, conforme a regra deste painel.
+- **Próxima ação:** aguardar instruções do usuário. Este registro não constitui implementação da tarefa 142 nem validação integral das hipóteses de solução.
 
 ---
 
