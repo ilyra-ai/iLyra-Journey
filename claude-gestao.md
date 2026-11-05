@@ -22,17 +22,17 @@
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
 | Conclusão integral                      | **94,3%** (133 de 141)   |
-| Implementações publicadas               | **99,3%** (140 de 141)   |
+| Implementações publicadas               | **100%** (141 de 141)    |
 | Tarefas totais                          | 141                      |
 | 🟢 Concluídas                           | 133                      |
-| 🟡 Implementadas com validação pendente | 7                        |
-| 🔵 Em andamento                         | 1                        |
+| 🟡 Implementadas com validação pendente | 8                        |
+| 🔵 Em andamento                         | 0                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 0                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-04               |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os sete estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os oito estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -114,22 +114,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### ANDAMENTO
 
-### 141 · Inferência local integrada à Lyra, sem aplicativos intermediários
-
-- **Status:** 🔵 em andamento · **Registro/autorização:** 2026-11-04 · **Branch:** `main` (sem ramificações).
-- **Objetivo:** adicionar opção nativa **Lyra integrada** em Admin → Modelos de IA, com seleção, instalação e gerenciamento de modelos WSL2 e inferência rápida, mantendo todo o app.
-- **Regra absoluta de preservação:** nunca remover ou desativar Ollama, Jan, LM Studio, vLLM, llama.cpp externo, nuvem, fallback, chat, memória, voz, imagens, ferramentas, MCP, treinamento, planos, CRUD ou demais funcionalidades, rotas, dados e configurações. A opção é estritamente aditiva e opt-in.
-- **Execução:** o app controla o runtime local de `llama.cpp`/CUDA Blackwell `sm_120` com processo isolado e socket Unix privado (sem porta HTTP/TCP ou URL para compartilhar pesos). Terceiros não precisam abrir outro aplicativo. Preservar a implantação remota: a nuvem não possui acesso automático ao WSL2 do usuário.
-- **Descoberta local:** botão de busca de arquivos GGUF reais nos diretórios de modelos/caches do WSL2 e em pastas autorizadas explicitamente; listar nome, caminho, tamanho, formato, suporte e estado. Avaliar caches Ollama/Jan/LM Studio/Hugging Face sem fingir suporte universal a outros formatos. Impedir symlink traversal, vazamento de diretórios privados e varredura irrestrita.
-- **Instalação e seleção:** interface premium clara pt-BR dentro da página administrativa de modelos, instalação/diagnóstico do runtime, modelo selecionável, botão de ativar/desativar e teste de resposta. Sem hardcode de modelo, URL falsa, simulação de instalação ou download implícito de fonte insegura.
-- **Qualidade/latência:** priorizar TTFT, tokens/segundo, streaming real, cache de prompt, identidade/raciocínio, GPU 12 GB, CPU Ryzen 9 e 64 GB RAM com orçamento para Windows/app. Medir limites de RAM, VRAM, concorrência, reinício, cancelamento e falhas. Nunca declarar benchmark sem executar.
-- **Identidade Lyra:** modelo conectado recebe o mesmo prompt e personalidade, motor determinístico, contexto, memórias autorizadas e validação existente de `src/lib/lyra/modelos-como-lyra.ts`. Não transformar Lyra em chat genérico.
-- **Imagens:** preservar geração raster por provedor da segunda posição; acrescentar caminho opcional de SVG gerado pelo LLM textual com sanitização e conversão real a PNG/WebP via sharp. Não apresentar texto SVG como geração fotográfica.
-- **Integração:** reutilizar provedores, cadeia de modelos, configuração do administrador, `src/lib/ai`, chat, teste de conexão e transportes. Não introduzir servidor acessível na rede nem alterar as configurações existentes.
-- **Qualidade e segurança:** validar diretórios, binários, integridade de pesos e escopos de permissão; autenticação administrativa e isolamento; preservar licença/compatibilidade; UI Lyra Clean responsiva e acessível.
-- **Verificações obrigatórias:** examinar integralmente `CLAUDE.md` e `AGENTS.md`, baseline real, instalar e executar na máquina de destino quando acessível, testes de carga, streaming, SVG→PNG, regressão de todos os provedores e do CRUD, lint, tipos, formato, unitários, integrações MySQL, build e QA navegador. Sem notebook/WSL conectado ao ambiente de execução, declarar essa etapa **não verificada**; nunca simular QA.
-- **Fluxo Git:** commits e push apenas em `main`, sem branch/worktree/force push. Atualizar este painel com SHA e resultados após entrega. Este registro inicia a tarefa, não afirma implementação nem testes concluídos.
-
+Nenhuma tarefa em andamento.
 
 ### BLOQUEADAS
 
@@ -2445,3 +2430,23 @@ Nenhuma tarefa a iniciar. As notas abaixo preservam registros históricos de cri
 - **Implementado e revisado:** `SidebarNavigation` compartilhado pelo desktop, menu móvel e prévia; atalhos Dia a dia; Minha jornada com Planejamento e hábitos, Práticas de bem-estar e Registros e evolução; Saúde e conexões; Minha conta. Para administradores, Administração vem logo após os atalhos e reúne Pessoas e planos, Conteúdo e IA e Dados e relatórios. Estrutura aplicada somente aos destinos filtrados por plano, papel, configuração publicada e ativação de Agendamentos. Rótulos personalizados e ordem dentro das categorias preservados; histórico e atalhos existentes mantidos. Controles de 44 px, rótulos sem truncamento, estado expandido, listas nomeadas e abertura da categoria da rota atual, incluindo subpáginas.
 - **Gates reais:** instalação congelada, fix:format, fix:lint, check:lint, check:format e check:types aprovados; 997 unitários em 94 arquivos (sete novos testes da taxonomia), 601 integrações MySQL em 67 arquivos e build de produção aprovados. Após o ajuste da posição administrativa, teste focado, lint dos arquivos alterados, formatação e build novamente aprovados. `@current_problems` indisponível nesta sessão.
 - **QA real em produção:** navegador com administrador e conta Free temporária; Enter/Espaço, expansão/recolhimento, página ativa, submenus pessoais e administrativos, navegação efetiva e fechamento do painel móvel. Larguras 1280, 390 e 320 px, sem transbordo; nenhuma mensagem de erro/aviso no console durante os percursos. HTTP: 30 páginas do catálogo como administrador e 24 como usuário comum, todas 200; API administrativa 200/403 conforme o papel. Saúde do app com 66 migrações e login do administrador aprovados. Conta temporária excluída e ausência confirmada; administrador restaurado no navegador. Nenhum dado de usuário real alterado. Documentação e fontes em `docs/design-system.md`. Implementação validada e publicada individualmente na `main`, sem branches ou worktrees.
+
+### 141 · Inferência local integrada à Lyra, sem aplicativos intermediários
+
+- **Status:** 🔵 em andamento · **Registro/autorização:** 2026-11-04 · **Branch:** `main` (sem ramificações).
+- **Objetivo:** adicionar opção nativa **Lyra integrada** em Admin → Modelos de IA, com seleção, instalação e gerenciamento de modelos WSL2 e inferência rápida, mantendo todo o app.
+- **Regra absoluta de preservação:** nunca remover ou desativar Ollama, Jan, LM Studio, vLLM, llama.cpp externo, nuvem, fallback, chat, memória, voz, imagens, ferramentas, MCP, treinamento, planos, CRUD ou demais funcionalidades, rotas, dados e configurações. A opção é estritamente aditiva e opt-in.
+- **Execução:** o app controla o runtime local de `llama.cpp`/CUDA Blackwell `sm_120` com processo isolado e socket Unix privado (sem porta HTTP/TCP ou URL para compartilhar pesos). Terceiros não precisam abrir outro aplicativo. Preservar a implantação remota: a nuvem não possui acesso automático ao WSL2 do usuário.
+- **Descoberta local:** botão de busca de arquivos GGUF reais nos diretórios de modelos/caches do WSL2 e em pastas autorizadas explicitamente; listar nome, caminho, tamanho, formato, suporte e estado. Avaliar caches Ollama/Jan/LM Studio/Hugging Face sem fingir suporte universal a outros formatos. Impedir symlink traversal, vazamento de diretórios privados e varredura irrestrita.
+- **Instalação e seleção:** interface premium clara pt-BR dentro da página administrativa de modelos, instalação/diagnóstico do runtime, modelo selecionável, botão de ativar/desativar e teste de resposta. Sem hardcode de modelo, URL falsa, simulação de instalação ou download implícito de fonte insegura.
+- **Qualidade/latência:** priorizar TTFT, tokens/segundo, streaming real, cache de prompt, identidade/raciocínio, GPU 12 GB, CPU Ryzen 9 e 64 GB RAM com orçamento para Windows/app. Medir limites de RAM, VRAM, concorrência, reinício, cancelamento e falhas. Nunca declarar benchmark sem executar.
+- **Identidade Lyra:** modelo conectado recebe o mesmo prompt e personalidade, motor determinístico, contexto, memórias autorizadas e validação existente de `src/lib/lyra/modelos-como-lyra.ts`. Não transformar Lyra em chat genérico.
+- **Imagens:** preservar geração raster por provedor da segunda posição; acrescentar caminho opcional de SVG gerado pelo LLM textual com sanitização e conversão real a PNG/WebP via sharp. Não apresentar texto SVG como geração fotográfica.
+- **Integração:** reutilizar provedores, cadeia de modelos, configuração do administrador, `src/lib/ai`, chat, teste de conexão e transportes. Não introduzir servidor acessível na rede nem alterar as configurações existentes.
+- **Qualidade e segurança:** validar diretórios, binários, integridade de pesos e escopos de permissão; autenticação administrativa e isolamento; preservar licença/compatibilidade; UI Lyra Clean responsiva e acessível.
+- **Verificações obrigatórias:** examinar integralmente `CLAUDE.md` e `AGENTS.md`, baseline real, instalar e executar na máquina de destino quando acessível, testes de carga, streaming, SVG→PNG, regressão de todos os provedores e do CRUD, lint, tipos, formato, unitários, integrações MySQL, build e QA navegador. Sem notebook/WSL conectado ao ambiente de execução, declarar essa etapa **não verificada**; nunca simular QA.
+- **Fluxo Git:** commits e push apenas em `main`, sem branch/worktree/force push. Atualizar este painel com SHA e resultados após entrega. Este registro inicia a tarefa, não afirma implementação nem testes concluídos.
+- **Implementação publicada em 2026-11-04:** commit `9ea084c0c182f76149e2285645749fc20d542aa2` confirmado na `main` (13 arquivos). Novo preset aditivo `lyra_integrada`, socket Unix privado sem porta TCP, processo llama-server gerenciado pela Lyra, descoberta GGUF por pastas reais com IDs, seleção/admin, parâmetros GPU/CPU/contexto, instalação CUDA sm_120 pelo painel, transporte de chat com streaming e ilustrações vetoriais sanitizadas via JSON→SVG→WebP. Treinamento KTO e demais provedores preservados.
+- **Validação desta sessão:** leitura e conferência estática dos 13 blobs e do diff no commit; HEAD remoto confirmado. Testes unitários foram escritos, **não executados**; `pnpm check:types`, lint, formato, testes, build, banco, navegador, instalação, CUDA, inferência real e benchmark **não executados** aqui. O sandbox atual não possui checkout executável do repositório nem acesso ao WSL2/GPU/modelos do notebook. Essa lacuna impede considerar a tarefa 🟢 concluída. A execução no notebook, correção de eventuais defeitos e QA integral permanecem necessários.
+- **Documentação:** `docs/inferencia-local-integrada.md`. A criação do commit e push não constitui evidência de funcionamento real.
+
