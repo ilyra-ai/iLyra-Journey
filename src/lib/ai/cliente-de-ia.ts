@@ -1,6 +1,7 @@
 import { lerFluxoDoProvedor } from './fluxo-de-texto';
 import type { TipoDeProvedor } from './provedores-catalogo';
 import { buscarComAcessoLocal } from './transporte-local-wsl';
+import { descobrirModelosLocais, solicitarInferenciaIntegrada } from './inferencia-integrada';
 
 /**
  * Cliente HTTP dos provedores de IA (servidor). Fala as três APIs aceitas
@@ -13,6 +14,8 @@ export interface ConexaoDeIa {
   tipo: Exclude<TipoDeProvedor, 'lyra_local'>;
   /** Obrigatória para `openai_compativel`; ignorada nas APIs nativas. */
   baseUrl: string | null;
+  /** Executa o GGUF diretamente pela Lyra via socket Unix privado. */
+  integrado?: boolean;
   modelo: string;
   chave: string | null;
   tempoMaximoSegundos: number;
@@ -74,18 +77,13 @@ async function requisitar(
 ): Promise<unknown> {
   let resposta: Response;
   try {
-    resposta = await buscarComAcessoLocal(
-      url,
-      {
-        ...init,
-        cache: 'no-store',
-        signal: AbortSignal.any([
-          AbortSignal.timeout(conexao.tempoMaximoSegundos * 1000),
-          ...(fluxo?.cancelamento ? [fluxo.cancelamento] : []),
-        ]),
-      },
-      buscar
-    );
+    const sinal = AbortSignal.any([
+      AbortSignal.timeout(conexao.tempoMaximoSegundos * 1000),
+      ...(fluxo?.cancelamento ? [fluxo.cancelamento] : []),
+    ]);
+    resposta = conexao.integrado
+      ? await solicitarInferenciaIntegrada(conexao.modelo, String(init.body ?? ''), sinal)
+      : await buscarComAcessoLocal(url, { ...init, cache: 'no-store', signal: sinal }, buscar);
   } catch (erro) {
     fluxo?.cancelamento?.throwIfAborted();
     const nome = erro instanceof Error ? erro.name : '';
@@ -188,6 +186,9 @@ export async function listarModelos(
   conexao: Omit<ConexaoDeIa, 'modelo' | 'temperatura'>,
   buscar: typeof fetch = fetch
 ): Promise<string[]> {
+  if (conexao.integrado) {
+    return (await descobrirModelosLocais()).map(modelo => modelo.id).sort();
+  }
   const completa: ConexaoDeIa = { ...conexao, modelo: '', temperatura: 0 };
   let ids: string[] = [];
   if (conexao.tipo === 'openai_compativel') {
@@ -401,7 +402,7 @@ export async function gerarTextoDetalhado(
       try {
         corpo = (await requisitar(
           conexao,
-          `${baseObrigatoria(conexao)}/chat/completions`,
+          conexao.integrado ? '/v1/chat/completions' : `${baseObrigatoria(conexao)}/chat/completions`,
           {
             method: 'POST',
             headers: cabecalhosOpenAi(conexao),

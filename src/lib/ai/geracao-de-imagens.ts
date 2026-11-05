@@ -10,6 +10,7 @@ import {
   type ConfiguracaoDeIa,
 } from './provedores-da-plataforma';
 import { buscarComAcessoLocal } from './transporte-local-wsl';
+import { gerarImagemVetorial } from './imagem-vetorial';
 
 export const LIMITE_DA_IMAGEM = 5 * 1024 * 1024;
 const LIMITE_DA_RESPOSTA = 12 * 1024 * 1024;
@@ -124,6 +125,14 @@ export async function gerarImagemNoSegundoModelo(
 ) {
   const segundo = segundoModeloParaImagem(configuracao);
   const { conexao } = segundo;
+  if (conexao.integrado) {
+    const imagem = await gerarImagemVetorial(conexao, prompt);
+    return {
+      ...(await validarImagemGerada(imagem)),
+      preset: segundo.preset,
+      modelo: conexao.modelo,
+    };
+  }
   const transporte: typeof fetch = async (entrada, opcoes) => {
     const pedido = new Request(entrada, opcoes);
     const headers = new Headers(pedido.headers);

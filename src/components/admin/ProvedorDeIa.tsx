@@ -20,6 +20,7 @@ import {
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
+import { ExploradorDaInferenciaLocal } from '@/components/admin/ExploradorDaInferenciaLocal';
 import {
   Card,
   CardContent,
@@ -488,9 +489,9 @@ export function ProvedorDeIa() {
 
   const temNuvem = selecionados.some((p) => {
     const preset = presetPor(p.preset);
-    return !(
-      preset?.tipo === 'openai_compativel' && urlEhLocal(p.baseUrl.trim())
-    );
+    return !(p.preset === 'lyra_integrada' ||
+      (preset?.tipo === 'openai_compativel' && urlEhLocal(p.baseUrl.trim())));
+
   });
   const resumoSalvo = dados.ordem
     .map((elo, i) =>
@@ -606,12 +607,12 @@ export function ProvedorDeIa() {
           const preset = presetPor(p.preset);
           if (!preset) return null;
           const salvo = salvoPor(p.preset);
-          const usaUrl = preset.tipo === 'openai_compativel';
+          const usaUrl = preset.tipo === 'openai_compativel' && p.preset !== 'lyra_integrada';
           const exigeChave =
             preset.exigeChave ||
             preset.tipo === 'gemini' ||
             preset.tipo === 'anthropic';
-          const ehLocal = usaUrl && urlEhLocal(p.baseUrl);
+          const ehLocal = p.preset === 'lyra_integrada' || (usaUrl && urlEhLocal(p.baseUrl));
           const idBase = `ia-${p.preset}`;
           const estado = estadoDaConexao(
             p.verificacao,
@@ -703,6 +704,7 @@ export function ProvedorDeIa() {
                 </div>
               ) : null}
 
+              {p.preset !== 'lyra_integrada' ? (
               <div className="grid gap-2">
                 <Label htmlFor={`${idBase}-chave`}>
                   Chave de API {exigeChave ? '' : '(opcional)'}
@@ -757,6 +759,16 @@ export function ProvedorDeIa() {
                   </label>
                 ) : null}
               </div>
+
+              ) : null}
+
+              {p.preset === 'lyra_integrada' ? (
+                <ExploradorDaInferenciaLocal
+                  escolhidos={p.modelos}
+                  desabilitado={ocupado !== null}
+                  selecionar={(id) => alternarModelo(p, id)}
+                />
+              ) : null}
 
               <div className="grid gap-2">
                 <div className="flex flex-wrap items-center justify-between gap-2">
@@ -839,6 +851,7 @@ export function ProvedorDeIa() {
                       : 'Busque os modelos do servidor ou informe o identificador exato abaixo.'}
                   </p>
                 )}
+                {p.preset !== 'lyra_integrada' ? (
                 <div className="flex flex-col gap-2 sm:flex-row">
                   <Input
                     aria-label={`Adicionar modelo de ${preset.nome} pelo nome`}
@@ -868,6 +881,7 @@ export function ProvedorDeIa() {
                     Adicionar
                   </Button>
                 </div>
+                ) : null}
                 {p.modelos.length > 0 ? (
                   <ul
                     className="mt-1 grid gap-2"

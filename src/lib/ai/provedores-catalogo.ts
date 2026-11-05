@@ -53,6 +53,15 @@ export const PRESETS_DE_PROVEDOR: readonly PresetDeProvedor[] = [
       'Leitura escrita pelo motor védico determinístico, sem modelo generativo.',
   },
   {
+    id: 'lyra_integrada',
+    nome: 'Lyra · modelo integrado',
+    tipo: 'openai_compativel',
+    local: true,
+    urlPadrao: null,
+    exigeChave: false,
+    descricao: 'Inferência GGUF no próprio app via socket Unix privado, sem Ollama, Jan ou porta de rede.',
+  },
+  {
     id: 'ollama',
     nome: 'Ollama',
     tipo: 'openai_compativel',

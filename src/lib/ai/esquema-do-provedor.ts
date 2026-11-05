@@ -88,8 +88,10 @@ export function conexaoInformada(
   }
   return {
     tipo: preset.tipo,
+    integrado: preset.id === 'lyra_integrada',
     baseUrl:
-      preset.tipo === 'openai_compativel' ? informado.baseUrl || null : null,
+      preset.tipo === 'openai_compativel' && preset.id !== 'lyra_integrada'
+        ? informado.baseUrl || null : null,
     modelo,
     chave,
     tempoMaximoSegundos: informado.tempoMaximoSegundos,

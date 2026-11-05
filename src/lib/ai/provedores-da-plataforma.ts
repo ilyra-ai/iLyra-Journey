@@ -117,8 +117,10 @@ function tipoGenerativo(valor: string): TipoGenerativo | null {
 export function provedorEhLocal(provedor: {
   tipo: TipoGenerativo;
   baseUrl: string | null;
+  preset?: string;
 }) {
-  return provedor.tipo === 'openai_compativel' && urlEhLocal(provedor.baseUrl);
+  return provedor.preset === 'lyra_integrada' ||
+    (provedor.tipo === 'openai_compativel' && urlEhLocal(provedor.baseUrl));
 }
 
 export async function lerConfiguracaoDeIa(): Promise<ConfiguracaoDeIa> {
@@ -219,7 +221,7 @@ export function conexaoDoModelo(
   modelo: string
 ): ConexaoDeIa | null {
   if (!modelo.trim()) return null;
-  if (provedor.tipo === 'openai_compativel' && !provedor.baseUrl) return null;
+  if (provedor.tipo === 'openai_compativel' && !provedor.baseUrl && provedor.preset !== 'lyra_integrada') return null;
   if (
     (provedor.tipo === 'gemini' || provedor.tipo === 'anthropic') &&
     !provedor.chave
@@ -230,6 +232,7 @@ export function conexaoDoModelo(
   return {
     tipo: provedor.tipo,
     baseUrl: provedor.baseUrl,
+    integrado: provedor.preset === 'lyra_integrada',
     modelo,
     chave: provedor.chave,
     tempoMaximoSegundos: provedor.tempoMaximoSegundos,
@@ -265,7 +268,7 @@ function validarProvedor(
   }
   const tipo = preset.tipo;
   let baseUrl: string | null = null;
-  if (tipo === 'openai_compativel') {
+  if (tipo === 'openai_compativel' && preset.id !== 'lyra_integrada') {
     if (!alteracao.baseUrl?.trim()) {
       throw new HttpError(
         `Informe a URL base do servidor de IA (${preset.nome}).`,
