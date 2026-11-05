@@ -489,9 +489,10 @@ export function ProvedorDeIa() {
 
   const temNuvem = selecionados.some((p) => {
     const preset = presetPor(p.preset);
-    return !(p.preset === 'lyra_integrada' ||
-      (preset?.tipo === 'openai_compativel' && urlEhLocal(p.baseUrl.trim())));
-
+    return !(
+      p.preset === 'lyra_integrada' ||
+      (preset?.tipo === 'openai_compativel' && urlEhLocal(p.baseUrl.trim()))
+    );
   });
   const resumoSalvo = dados.ordem
     .map((elo, i) =>
@@ -607,12 +608,15 @@ export function ProvedorDeIa() {
           const preset = presetPor(p.preset);
           if (!preset) return null;
           const salvo = salvoPor(p.preset);
-          const usaUrl = preset.tipo === 'openai_compativel' && p.preset !== 'lyra_integrada';
+          const usaUrl =
+            preset.tipo === 'openai_compativel' &&
+            p.preset !== 'lyra_integrada';
           const exigeChave =
             preset.exigeChave ||
             preset.tipo === 'gemini' ||
             preset.tipo === 'anthropic';
-          const ehLocal = p.preset === 'lyra_integrada' || (usaUrl && urlEhLocal(p.baseUrl));
+          const ehLocal =
+            p.preset === 'lyra_integrada' || (usaUrl && urlEhLocal(p.baseUrl));
           const idBase = `ia-${p.preset}`;
           const estado = estadoDaConexao(
             p.verificacao,
@@ -705,61 +709,60 @@ export function ProvedorDeIa() {
               ) : null}
 
               {p.preset !== 'lyra_integrada' ? (
-              <div className="grid gap-2">
-                <Label htmlFor={`${idBase}-chave`}>
-                  Chave de API {exigeChave ? '' : '(opcional)'}
-                </Label>
-                <div className="relative">
-                  <KeyRound
-                    className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                  <Input
-                    id={`${idBase}-chave`}
-                    type="password"
-                    autoComplete="new-password"
-                    spellCheck={false}
-                    className="pl-9"
-                    placeholder={
-                      salvo?.temChave
-                        ? `Chave salva terminada em ${salvo.finalDaChave ?? '••••'}`
-                        : exigeChave
-                          ? 'Cole a chave deste provedor'
-                          : 'Só se o servidor exigir'
-                    }
-                    value={p.chave}
-                    disabled={ocupado !== null}
-                    onChange={(e) =>
-                      atualizar(p.preset, {
-                        chave: e.target.value,
-                        ...(e.target.value ? { apagarChave: false } : {}),
-                      })
-                    }
-                  />
-                </div>
-                {salvo?.chaveIlegivel ? (
-                  <p
-                    className="text-xs font-medium text-destructive"
-                    role="alert"
-                  >
-                    A chave salva não pode mais ser lida (o AUTH_SECRET mudou).
-                    Informe a chave de novo.
-                  </p>
-                ) : null}
-                {salvo?.temChave && !exigeChave ? (
-                  <label className="flex min-h-8 items-center gap-2 text-xs text-foreground">
-                    <Checkbox
-                      checked={p.apagarChave}
+                <div className="grid gap-2">
+                  <Label htmlFor={`${idBase}-chave`}>
+                    Chave de API {exigeChave ? '' : '(opcional)'}
+                  </Label>
+                  <div className="relative">
+                    <KeyRound
+                      className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                      aria-hidden="true"
+                    />
+                    <Input
+                      id={`${idBase}-chave`}
+                      type="password"
+                      autoComplete="new-password"
+                      spellCheck={false}
+                      className="pl-9"
+                      placeholder={
+                        salvo?.temChave
+                          ? `Chave salva terminada em ${salvo.finalDaChave ?? '••••'}`
+                          : exigeChave
+                            ? 'Cole a chave deste provedor'
+                            : 'Só se o servidor exigir'
+                      }
+                      value={p.chave}
                       disabled={ocupado !== null}
-                      onCheckedChange={(v) =>
-                        atualizar(p.preset, { apagarChave: v === true })
+                      onChange={(e) =>
+                        atualizar(p.preset, {
+                          chave: e.target.value,
+                          ...(e.target.value ? { apagarChave: false } : {}),
+                        })
                       }
                     />
-                    Remover a chave salva
-                  </label>
-                ) : null}
-              </div>
-
+                  </div>
+                  {salvo?.chaveIlegivel ? (
+                    <p
+                      className="text-xs font-medium text-destructive"
+                      role="alert"
+                    >
+                      A chave salva não pode mais ser lida (o AUTH_SECRET
+                      mudou). Informe a chave de novo.
+                    </p>
+                  ) : null}
+                  {salvo?.temChave && !exigeChave ? (
+                    <label className="flex min-h-8 items-center gap-2 text-xs text-foreground">
+                      <Checkbox
+                        checked={p.apagarChave}
+                        disabled={ocupado !== null}
+                        onCheckedChange={(v) =>
+                          atualizar(p.preset, { apagarChave: v === true })
+                        }
+                      />
+                      Remover a chave salva
+                    </label>
+                  ) : null}
+                </div>
               ) : null}
 
               {p.preset === 'lyra_integrada' ? (
@@ -852,35 +855,35 @@ export function ProvedorDeIa() {
                   </p>
                 )}
                 {p.preset !== 'lyra_integrada' ? (
-                <div className="flex flex-col gap-2 sm:flex-row">
-                  <Input
-                    aria-label={`Adicionar modelo de ${preset.nome} pelo nome`}
-                    autoComplete="off"
-                    spellCheck={false}
-                    placeholder="ex.: qwen2.5:7b-instruct"
-                    value={p.novoModelo}
-                    disabled={ocupado !== null}
-                    onChange={(e) =>
-                      atualizar(p.preset, { novoModelo: e.target.value })
-                    }
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') {
-                        e.preventDefault();
-                        adicionarModelo(p);
+                  <div className="flex flex-col gap-2 sm:flex-row">
+                    <Input
+                      aria-label={`Adicionar modelo de ${preset.nome} pelo nome`}
+                      autoComplete="off"
+                      spellCheck={false}
+                      placeholder="ex.: qwen2.5:7b-instruct"
+                      value={p.novoModelo}
+                      disabled={ocupado !== null}
+                      onChange={(e) =>
+                        atualizar(p.preset, { novoModelo: e.target.value })
                       }
-                    }}
-                    className="min-w-0 flex-1"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => adicionarModelo(p)}
-                    disabled={ocupado !== null || !p.novoModelo.trim()}
-                  >
-                    <Plus aria-hidden="true" />
-                    Adicionar
-                  </Button>
-                </div>
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          adicionarModelo(p);
+                        }
+                      }}
+                      className="min-w-0 flex-1"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => adicionarModelo(p)}
+                      disabled={ocupado !== null || !p.novoModelo.trim()}
+                    >
+                      <Plus aria-hidden="true" />
+                      Adicionar
+                    </Button>
+                  </div>
                 ) : null}
                 {p.modelos.length > 0 ? (
                   <ul

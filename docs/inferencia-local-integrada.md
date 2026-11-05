@@ -59,3 +59,19 @@ O carregamento pode falhar se memória ou driver forem insuficientes. Ajuste o n
 ## Validação real pendente no notebook
 
 O ambiente remoto de trabalho não tem acesso ao Ubuntu/WSL2, à GPU ou aos modelos pessoais do usuário. Portanto, não se declara teste CUDA, benchmark, instalação concluída, tempos de resposta, execução de SVG pelo modelo real ou QA da interface no notebook. Os gates e testes do CLAUDE.md precisam ser realizados antes de classificar a tarefa como integralmente concluída.
+
+## Verificação de integração no Windows em 2026-11-05
+
+Após receber os commits desta tarefa na main local, foram corrigidos o
+carregamento inicial síncrono do explorador (cargas HTTP paralelas com
+descarte após desmontagem) e a formatação. O binário instalado no host foi
+explicitamente separado do rastreamento de assets do Next.js nas chamadas
+de inspeção e execução, seguindo a anotação indicada pelo compilador.
+O runtime e os pesos continuam validados e carregados em execução.
+
+Lint, formato, tipos, 1001 unitários em 95 arquivos, 601 integrações MySQL
+em 67 arquivos e build com 136 páginas passaram. O build final não emitiu
+os avisos de rastreamento do projeto inteiro. A conferência dos 187 manifestos
+de distribuição não encontrou `.env.local`, `.logs`, `.lyra-run` nem GGUF.
+Esses checks não constituem execução CUDA, inferência ou benchmark do runtime
+Linux/WSL2; essas provas específicas continuam pendentes.

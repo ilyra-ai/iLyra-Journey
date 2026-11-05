@@ -59,7 +59,8 @@ export const PRESETS_DE_PROVEDOR: readonly PresetDeProvedor[] = [
     local: true,
     urlPadrao: null,
     exigeChave: false,
-    descricao: 'Inferência GGUF no próprio app via socket Unix privado, sem Ollama, Jan ou porta de rede.',
+    descricao:
+      'Inferência GGUF no próprio app via socket Unix privado, sem Ollama, Jan ou porta de rede.',
   },
   {
     id: 'ollama',

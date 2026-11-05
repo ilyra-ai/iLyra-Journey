@@ -119,8 +119,10 @@ export function provedorEhLocal(provedor: {
   baseUrl: string | null;
   preset?: string;
 }) {
-  return provedor.preset === 'lyra_integrada' ||
-    (provedor.tipo === 'openai_compativel' && urlEhLocal(provedor.baseUrl));
+  return (
+    provedor.preset === 'lyra_integrada' ||
+    (provedor.tipo === 'openai_compativel' && urlEhLocal(provedor.baseUrl))
+  );
 }
 
 export async function lerConfiguracaoDeIa(): Promise<ConfiguracaoDeIa> {
@@ -221,7 +223,12 @@ export function conexaoDoModelo(
   modelo: string
 ): ConexaoDeIa | null {
   if (!modelo.trim()) return null;
-  if (provedor.tipo === 'openai_compativel' && !provedor.baseUrl && provedor.preset !== 'lyra_integrada') return null;
+  if (
+    provedor.tipo === 'openai_compativel' &&
+    !provedor.baseUrl &&
+    provedor.preset !== 'lyra_integrada'
+  )
+    return null;
   if (
     (provedor.tipo === 'gemini' || provedor.tipo === 'anthropic') &&
     !provedor.chave

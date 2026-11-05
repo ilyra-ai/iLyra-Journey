@@ -1,7 +1,10 @@
 import { lerFluxoDoProvedor } from './fluxo-de-texto';
 import type { TipoDeProvedor } from './provedores-catalogo';
 import { buscarComAcessoLocal } from './transporte-local-wsl';
-import { descobrirModelosLocais, solicitarInferenciaIntegrada } from './inferencia-integrada';
+import {
+  descobrirModelosLocais,
+  solicitarInferenciaIntegrada,
+} from './inferencia-integrada';
 
 /**
  * Cliente HTTP dos provedores de IA (servidor). Fala as três APIs aceitas
@@ -82,8 +85,16 @@ async function requisitar(
       ...(fluxo?.cancelamento ? [fluxo.cancelamento] : []),
     ]);
     resposta = conexao.integrado
-      ? await solicitarInferenciaIntegrada(conexao.modelo, String(init.body ?? ''), sinal)
-      : await buscarComAcessoLocal(url, { ...init, cache: 'no-store', signal: sinal }, buscar);
+      ? await solicitarInferenciaIntegrada(
+          conexao.modelo,
+          String(init.body ?? ''),
+          sinal
+        )
+      : await buscarComAcessoLocal(
+          url,
+          { ...init, cache: 'no-store', signal: sinal },
+          buscar
+        );
   } catch (erro) {
     fluxo?.cancelamento?.throwIfAborted();
     const nome = erro instanceof Error ? erro.name : '';
@@ -187,7 +198,7 @@ export async function listarModelos(
   buscar: typeof fetch = fetch
 ): Promise<string[]> {
   if (conexao.integrado) {
-    return (await descobrirModelosLocais()).map(modelo => modelo.id).sort();
+    return (await descobrirModelosLocais()).map((modelo) => modelo.id).sort();
   }
   const completa: ConexaoDeIa = { ...conexao, modelo: '', temperatura: 0 };
   let ids: string[] = [];
@@ -402,7 +413,9 @@ export async function gerarTextoDetalhado(
       try {
         corpo = (await requisitar(
           conexao,
-          conexao.integrado ? '/v1/chat/completions' : `${baseObrigatoria(conexao)}/chat/completions`,
+          conexao.integrado
+            ? '/v1/chat/completions'
+            : `${baseObrigatoria(conexao)}/chat/completions`,
           {
             method: 'POST',
             headers: cabecalhosOpenAi(conexao),

@@ -91,7 +91,8 @@ export function conexaoInformada(
     integrado: preset.id === 'lyra_integrada',
     baseUrl:
       preset.tipo === 'openai_compativel' && preset.id !== 'lyra_integrada'
-        ? informado.baseUrl || null : null,
+        ? informado.baseUrl || null
+        : null,
     modelo,
     chave,
     tempoMaximoSegundos: informado.tempoMaximoSegundos,

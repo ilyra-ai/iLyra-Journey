@@ -17,12 +17,23 @@ describe('Inferência local integrada', () => {
       largura: 512,
       altura: 512,
       fundo: '#FFFFFF',
-      formas: [{
-        tipo: 'texto', x: 20, y: 70, tamanho: 32, cor: '#102030',
-        conteudo: 'Você & <Lyra>',
-      }, {
-        tipo: 'circulo', cx: 200, cy: 210, raio: 50, cor: '#AABBCC',
-      }],
+      formas: [
+        {
+          tipo: 'texto',
+          x: 20,
+          y: 70,
+          tamanho: 32,
+          cor: '#102030',
+          conteudo: 'Você & <Lyra>',
+        },
+        {
+          tipo: 'circulo',
+          cx: 200,
+          cy: 210,
+          raio: 50,
+          cor: '#AABBCC',
+        },
+      ],
     });
     expect(svg).toContain('Você &amp; &lt;Lyra&gt;');
     expect(svg).toContain('<circle');
@@ -30,21 +41,34 @@ describe('Inferência local integrada', () => {
   });
 
   it('não aceita tags SVG arbitrárias, javascript nem links externos', () => {
-    expect(() => svgDoDesenho({
-      largura: 512, altura: 512, fundo: '#FFFFFF', formas: [
-        { tipo: 'image', href: 'https://externo.invalid/asset' },
-      ],
-    })).toThrow();
-    expect(() => svgDoDesenho({
-      largura: 512, altura: 512, fundo: '#FFFFFF', formas: [
-        { tipo: 'caminho', d: 'M0 0" onload="alert(1)', cor: '#111111' },
-      ],
-    })).toThrow();
+    expect(() =>
+      svgDoDesenho({
+        largura: 512,
+        altura: 512,
+        fundo: '#FFFFFF',
+        formas: [{ tipo: 'image', href: 'https://externo.invalid/asset' }],
+      })
+    ).toThrow();
+    expect(() =>
+      svgDoDesenho({
+        largura: 512,
+        altura: 512,
+        fundo: '#FFFFFF',
+        formas: [
+          { tipo: 'caminho', d: 'M0 0" onload="alert(1)', cor: '#111111' },
+        ],
+      })
+    ).toThrow();
   });
 
   it('recusa tamanhos e códigos de cor fora do contrato', () => {
-    expect(() => svgDoDesenho({
-      largura: 100000, altura: 512, fundo: 'red', formas: [],
-    })).toThrow();
+    expect(() =>
+      svgDoDesenho({
+        largura: 100000,
+        altura: 512,
+        fundo: 'red',
+        formas: [],
+      })
+    ).toThrow();
   });
 });
