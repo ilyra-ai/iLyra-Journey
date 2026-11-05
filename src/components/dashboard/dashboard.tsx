@@ -32,6 +32,7 @@ import { resumoDoGrafico } from '@/lib/graficos/resumo';
 import { useDescricoesDoPainel } from '@/hooks/use-descricoes-do-painel';
 import { ExplicacoesDoPainel } from './ExplicacoesDoPainel';
 import { descreverMetrica, descreverLeitura } from '@/lib/painel/catalogo';
+import { estadoDosRegistros } from '@/lib/painel/estado-dos-registros';
 import { useAIScores } from '@/hooks/use-ai-scores';
 import { useProfile } from '@/hooks/use-profile';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
@@ -476,25 +477,22 @@ export function Dashboard() {
     },
   ];
 
-  const syncBadgeVariant = isSyncing
-    ? 'info'
-    : syncError
-      ? 'warning'
-      : 'success';
-
-  const syncBadgeLabel = isSyncing
-    ? appConfig.dashboard.syncStatusLoading
-    : syncError
-      ? appConfig.dashboard.syncStatusPartial
-      : appConfig.dashboard.syncStatusReady;
-
-  const syncSummary = isSyncing
-    ? 'Atualizando os registros disponíveis da sua conta.'
-    : syncError
-      ? syncError
-      : todayMetrics?.registrado
-        ? 'Leitura consolidada com os registros de hoje, do dispositivo e da sua conta.'
-        : 'Ainda não há registro hoje: faça o check-in ou conecte um dispositivo.';
+  const estadoDosDados = estadoDosRegistros({
+    carregando: isSyncing || metricsLoading,
+    erro: erroMetricas
+      ? 'Não foi possível carregar os registros. Tente novamente.'
+      : syncError || null,
+    registrado: todayMetrics?.registrado === true,
+  });
+  const syncBadgeVariant = estadoDosDados.variante;
+  // Rótulos publicados continuam disponíveis, explicitamente como estado
+  // de sincronização. O padrão antigo nunca se torna avaliação de saúde.
+  const syncBadgeLabel =
+    estadoDosDados.rotulo === 'Registros de hoje disponíveis' &&
+    appConfig.dashboard.syncStatusReady !== 'Em sintonia'
+      ? `Sincronização: ${appConfig.dashboard.syncStatusReady}`
+      : estadoDosDados.rotulo;
+  const syncSummary = estadoDosDados.descricao;
 
   const astroTitle = 'Sua reflexão do dia';
   const astroDetail = descreverLeitura(

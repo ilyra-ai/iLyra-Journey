@@ -26,9 +26,9 @@
 | Tarefas totais                          | 143                      |
 | 🟢 Concluídas                           | 136                      |
 | 🟡 Implementadas com validação pendente | 6                        |
-| 🔵 Em andamento                         | 0                        |
+| 🔵 Em andamento                         | 1                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 1                        |
+| ⚪ A iniciar                            | 0                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-05               |
 
@@ -114,21 +114,16 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### ANDAMENTO
 
-Nenhuma tarefa em andamento.
-
-### BLOQUEADAS
-
-Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
-
-## Tópico 3 · Tarefas a Iniciar
-
 ### 142 · Simplificação integral da experiência do usuário e do administrador: arquitetura da informação, jornadas, visual web, CSS, UI e UX
 
-- **Status:** ⚪ a iniciar · **Registro:** 2026-11-05 · **Prioridade:** alta, com correção crítica de estados sem dados como primeira frente da execução futura.
-- **Autorização atual:** exclusivamente registrar neste arquivo, no máximo de detalhes, a análise aprovada pelo usuário, revisar o registro, fazer commit e push na `main` principal e aguardar novas instruções. Não iniciar implementação, redesenho, migração de navegação, alterações de dados ou testes com participantes nesta etapa. A aprovação do diagnóstico não é aprovação automática de cada solução proposta.
+- **Status:** 🔵 em andamento · **Registro:** 2026-11-05 · **Prioridade:** alta, com correção crítica de estados sem dados como primeira frente da execução futura.
+- **Autorização do registro inicial (histórico):** exclusivamente registrar neste arquivo, no máximo de detalhes, a análise aprovada pelo usuário, revisar o registro, fazer commit e push na `main` principal e aguardar novas instruções. Não iniciar implementação, redesenho, migração de navegação, alterações de dados ou testes com participantes nesta etapa. A aprovação do diagnóstico não é aprovação automática de cada solução proposta.
 - **Solicitação de origem:** o usuário considera o app ótimo em recursos, mas extremamente confuso para as pessoas e para ele próprio; pediu análise profissional empresarial de elite, com rigor forense de UI/UX, visual web, CSS, usuário e administrador. Após receber o parecer, aprovou seu registro como nova tarefa e determinou aguardar instruções depois da publicação documental.
 - **Objetivo de negócio e experiência:** diminuir o esforço para entender o produto, localizar funções e concluir tarefas; tornar claros o próximo passo, a origem dos dados e o resultado das ações; facilitar operação administrativa, confiança e continuidade de uso. Preservar integralmente recursos, dados, permissões e identidade da Lyra. Não prometer aumento de retenção, conversão ou produtividade sem medir.
 - **Diagnóstico central aprovado:** a fragilidade predominante é a arquitetura da informação e a orientação das tarefas. A pessoa precisa compreender a organização interna do sistema antes de conseguir utilizá-lo com facilidade. O próximo investimento deve ser clareza de produto e simplificação das jornadas, antes de acrescentar recursos. Não resolver apenas com troca de cores, ícones, biblioteca ou mais submenus.
+
+- **Execução autorizada em 2026-11-05:** continuar após a auditoria 143. Implementar por frente lógica, validar e publicar cada frente na `main` antes da próxima, sem branches/worktrees. Primeiro corrigir a semântica do estado de sincronização, depois a jornada e a separação administrativa. A 141 está funcionalmente concluída; suas limitações qualitativas permanecem documentadas.
+- **Frente 142.1 · Estado dos registros:** causa reproduzida no navegador de produção: o selo de sincronização bem-sucedida usava o padrão “Em sintonia” mesmo sem registro do dia. Implementada classificação própria para carregamento, falha, ausência e leitura concluída, sem sugerir avaliação positiva de saúde; erro da consulta tem mensagem segura. Rótulo personalizado de sincronização concluída é contextualizado, sem regravar configurações. Quatro testes específicos, lint e formato dos arquivos alterados e tipos aprovados. Prévia real em `localhost:3001` confirmou “Sem registros hoje” e indicadores ausentes, preservando as abas e o formulário existente. A primeira checagem de tipos revelou erro de tipo desconhecido; corrigido e validado novamente. Gates integrais em execução; não declarados antecipadamente aprovados. A 142 permanece em andamento.
 
 #### A · Base de evidências, alcance e limites do parecer de origem
 
@@ -253,6 +248,14 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Documentos internos de referência:** `docs/design-system.md`, `docs/acessibilidade.md` e `CLAUDE.md`; considerar o histórico vigente e a aprovação do usuário antes de modificar decisões de produto.
 - **Critério da publicação atual:** apenas `claude-gestao.md` alterado, tarefa numerada uma vez no Tópico 3, estado **a iniciar**, indicadores recalculados sem reclassificar tarefas anteriores, revisão integral do diff, verificação de estrutura/formatação e publicação na `main`. Após o push, registrar o SHA real em commit documental próprio, conforme a regra deste painel.
 - **Próxima ação:** aguardar instruções do usuário. Este registro não constitui implementação da tarefa 142 nem validação integral das hipóteses de solução.
+
+### BLOQUEADAS
+
+Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
+
+## Tópico 3 · Tarefas a Iniciar
+
+Nenhuma tarefa a iniciar.
 
 ---
 
