@@ -2435,6 +2435,7 @@ Nenhuma tarefa a iniciar. As notas abaixo preservam registros históricos de cri
 ### 141 · Inferência local integrada à Lyra, sem aplicativos intermediários
 
 - **Status:** 🟡 implementada · validação específica pendente · **Registro/autorização:** 2026-11-04 · **Branch:** `main` (sem ramificações).
+- **Publicação da revisão de integração:** commit `c8a41905`, enviado e confirmado em `origin/main` em 2026-11-05; validação específica do runtime continua pendente.
 - **Integração local em 2026-11-05:** commits recebidos e preservados; corrigidos lint da carga inicial do explorador, formatação e rastreamento indevido de todo o projeto pelo bundler ao inspecionar/executar o binário do host. Lint, formato, tipos, 1001 unitários, 601 integrações MySQL e build de 136 páginas aprovados; build final sem os avisos de rastreamento. Conferidos 187 manifestos de distribuição, sem segredos locais, logs, runtime ou pesos. Instalação CUDA, inferência GGUF e benchmark no Linux/WSL2 continuam não comprovados. Detalhes: `docs/inferencia-local-integrada.md`.
 - **Objetivo:** adicionar opção nativa **Lyra integrada** em Admin → Modelos de IA, com seleção, instalação e gerenciamento de modelos WSL2 e inferência rápida, mantendo todo o app.
 - **Regra absoluta de preservação:** nunca remover ou desativar Ollama, Jan, LM Studio, vLLM, llama.cpp externo, nuvem, fallback, chat, memória, voz, imagens, ferramentas, MCP, treinamento, planos, CRUD ou demais funcionalidades, rotas, dados e configurações. A opção é estritamente aditiva e opt-in.
