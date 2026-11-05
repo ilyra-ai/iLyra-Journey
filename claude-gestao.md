@@ -246,6 +246,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 #### K · Referências e publicação deste registro
 
+- **Registro publicado:** commit `267543d4`, push confirmado `77751fa6..267543d4 main -> main` em 2026-11-05. Somente este arquivo alterado; formatação e `git diff --check` aprovados; conferência automatizada confirmou 142 números únicos, os 141 registros anteriores preservados e os sete achados presentes. Indicadores: 134 concluídas, sete com validação pendente e uma a iniciar. Nenhuma implementação iniciada e nenhum novo teste funcional alegado.
 - [W3C — propósito compreensível, hierarquia familiar e controles consistentes](https://www.w3.org/WAI/WCAG2/supplemental/objectives/o1-understandable/).
 - [W3C — conteúdo claro e compreensível](https://www.w3.org/WAI/WCAG2/supplemental/objectives/o3-clear-content/).
 - [IBM — divulgação progressiva de informações conforme a tarefa](https://www.ibm.com/docs/en/technical-content?topic=practices-progressive-disclosure).
