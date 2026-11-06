@@ -21,18 +21,18 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **91,9%** (137 de 149)   |
+| Conclusão integral                      | **92,6%** (138 de 149)   |
 | Implementações publicadas               | **96,6%** (144 de 149)   |
 | Tarefas totais                          | 149                      |
-| 🟢 Concluídas                           | 137                      |
-| 🟡 Implementadas com validação pendente | 7                        |
+| 🟢 Concluídas                           | 138                      |
+| 🟡 Implementadas com validação pendente | 6                        |
 | 🔵 Em andamento                         | 2                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 3                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-06               |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os sete estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os seis estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Escopo vigente em 2026-11-06:** o usuário autorizou a landing pública 149 e seus ajustes de fontes, responsividade e conteúdo. As tarefas 142 e 144 continuam **pausadas**; suas alterações locais não integram esta publicação. As 145, 146 e o restante do redesenho 147 continuam a iniciar. Após publicar a 149, manter o app em localhost para validação visual do usuário e aguardar instruções.
 
@@ -2950,7 +2950,7 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 149 · Implementar a landing celestial aprovada com mapas e planos reais
 
-**Estado: 🟡 implementada · Validação visual final do usuário pendente, somente a landing pública.**
+**Estado: 🟢 concluída · Landing aprovada explicitamente pelo usuário em 2026-11-06: “ficou ótimo”. Código e refinamentos publicados na main.**
 
 - **Hierarquia tipográfica obrigatória, atualizada pelo usuário:** H1 e H2 usam **Clicker Script Regular**; textos normais usam **Imprima Regular**; textos em negrito e itálico usam **Varela**. A regra dos títulos prevalece sobre ênfases dentro deles. Aplicar agora na landing e preservar esta orientação no futuro redesenho integral. Fontes locais com licença SIL OFL incluída. Os arquivos Varela fornecidos são Regular 400: negrito e itálico são sintetizados pelo navegador, sem afirmar existir uma variante original não fornecida.
 - **Substituição da fonte anterior:** descontinuar o teste local da fonte de licença restrita; excluir seu carregamento e não incluí-la no Git. Clicker Script foi conferida no arquivo enviado e no catálogo oficial Google Fonts, com acentos em português e licença de redistribuição.
