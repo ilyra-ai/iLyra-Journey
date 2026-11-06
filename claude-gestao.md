@@ -21,14 +21,14 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **93,2%** (136 de 146)   |
-| Implementações publicadas               | **97,3%** (142 de 146)   |
-| Tarefas totais                          | 146                      |
+| Conclusão integral                      | **92,5%** (136 de 147)   |
+| Implementações publicadas               | **96,6%** (142 de 147)   |
+| Tarefas totais                          | 147                      |
 | 🟢 Concluídas                           | 136                      |
 | 🟡 Implementadas com validação pendente | 6                        |
 | 🔵 Em andamento                         | 2                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 2                        |
+| ⚪ A iniciar                            | 3                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-06               |
 
@@ -37,6 +37,8 @@
 **Paralisação vigente em 2026-11-06:** por solicitação expressa do usuário, atualizar e publicar somente este painel, interromper os processos de trabalho iniciados neste chat e aguardar novas instruções. As tarefas 142 e 144 continuam classificadas como iniciadas, mas estão **pausadas**, sem autorização para prosseguir agora. As 145 e 146 estão a iniciar. Não publicar as alterações de código ainda não validadas, não iniciar outra tarefa e não apresentar testes anteriores como validação do estado final atual.
 
 **Publicação documental da paralisação em 2026-11-06:** commit `9e92288c2ad80393d076e89672693193f16b67ba`, push confirmado `72d12437..9e92288c main -> main`. Somente `claude-gestao.md` incluído; 146 tarefas únicas conferidas, formato do arquivo aprovado e diff sem erros de whitespace. Alterações funcionais locais permanecem não publicadas. Este registro subsequente cumpre a regra 6 e não autoriza retomar o trabalho.
+
+**Autorização vigente em 2026-11-06 — registro da 147:** salvar o mockup aprovado na raiz, registrar a nova tarefa, publicar somente o painel e a imagem na `main` e aguardar instruções. O redesign permanece **a iniciar**; as implementações pausadas e as alterações funcionais locais não estão autorizadas para retomada ou publicação. Para o futuro redesign, a aprovação expressa do tema escuro e amarelo substitui as referências anteriores de tema claro, salmão e verde; o logo conserva sua geometria.
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -324,6 +326,71 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - Reutilizar a configuração real de navegação, categorias, submenus, destinos, busca, permissões de plano, papel e controles globais. Não reintroduzir os grupos desativados nem `/dia` na barra superior.
 - Manter uma experiência responsiva adequada no celular; verificar desktop, tablet e mobile, teclado, foco, rótulos acessíveis, submenus e ausência de transbordo ou sobreposição do conteúdo.
 - Nenhuma implementação desta tarefa foi iniciada. Após autorização para retomar e publicação das anteriores, pesquisar as referências aplicáveis, implementar, validar as jornadas reais e publicar em commit e push próprios na `main`, sem branches/worktrees; registrar o SHA e aguardar a orientação vigente.
+
+---
+
+### 147 · Redesign integral do app fiel ao mockup celestial aprovado: tema escuro, amarelo suave e experiência editorial
+
+**Estado: ⚪ a iniciar · Registrada em 2026-11-06. A implementação depende de nova instrução do usuário.**
+
+**Solicitação e limite desta etapa**
+
+- Refazer por completo o design do app de forma fidedigna à imagem aprovada. Antes de implementar, registrar esta tarefa, salvar a imagem na raiz do projeto, vinculá-la aqui, fazer commit e push na `main` e aguardar instruções.
+- Esta entrega é exclusivamente documental. Não iniciar o redesign, não retomar as tarefas pausadas e não publicar código funcional ainda não validado junto deste registro.
+
+**Referência visual oficial e verificável**
+
+- Arquivo na raiz: [lyra-design-aprovado-2026-11-06.png](./lyra-design-aprovado-2026-11-06.png).
+- Cópia binária idêntica ao último mockup aprovado, sem pop-up: **1.936.678 bytes**; SHA-256 **`560B6154A77F391D683BE6C5902FA1F942CD32D530C9D7955443B7203CB8CA22`**.
+- Esta imagem, já com os três novos cards astrológicos, é a referência principal. As versões com Sono, Movimento e Disposição não orientam os cards desta tarefa.
+
+![Mockup oficial aprovado para o redesign integral da Lyra MetaCare](./lyra-design-aprovado-2026-11-06.png)
+
+**Direção visual aprovada e conflito com orientações anteriores**
+
+- Aplicar a composição celestial escura: fundos azul-marinho/carvão, superfícies cinza esfumaçado, amarelo suave semelhante ao da imagem (referência aproximada `#F1E3A0`, a conferir na extração dos tokens), textos claros, bordas finas douradas e profundidade controlada.
+- Usar títulos com tipografia serifada editorial elegante e textos de interface com fonte sem serifa legível. Verificar famílias e licenças reais antes da adoção; não afirmar conhecer a fonte exata do mockup sem identificação.
+- Preservar o desenho correto do logo da Lyra, incluindo a geometria do símbolo; adequar sua aplicação cromática ao amarelo do mockup, sem inventar outra marca.
+- Incorporar planetas, luas, signos, constelações e ilustrações relacionadas ao conteúdo de forma harmoniosa, com hierarquia, respiro e legibilidade. Evitar decoração que prejudique leitura, interação ou desempenho.
+- **Conflito registrado:** as orientações anteriores de tema claro “Lyra Clean”, salmão `#FD865F` e verde secundário divergem da aprovação expressa mais recente. Para esta tarefa prevalece a nova solicitação do usuário: tema escuro e amarelo fiel à imagem. Atualizar os documentos visuais pertinentes durante a implementação autorizada; este registro não altera código nem declara o sistema visual atual já migrado.
+
+**Abrangência, navegação e continuidade**
+
+- O redesign abrange o app inteiro: jornadas do usuário e da administração, autenticação, conta, assinatura, formulários, tabelas, gráficos, menus, diálogos e estados de carregamento, vazio, erro e sucesso. Não limitar a entrega à pintura do dashboard.
+- No desktop, usar navegação horizontal superior com logo à esquerda, destinos centrais e ações de conta/busca à direita, conforme a composição aprovada. Reaproveitar categorias, destinos, permissões e controles reais.
+- No mobile e tablet, reorganizar conteúdos e navegação de forma responsiva, sem apenas reduzir a tela desktop. Tratar nomes longos, tabelas e diálogos sem transbordo; manter alvos de toque adequados e acesso a todos os destinos autorizados.
+- Relacionar esta tarefa à auditoria 142, à localização do mapa na 145 e à navegação superior da 146. Conferir sobreposição antes de implementar para evitar retrabalho; este registro não conclui, cancela nem retoma essas tarefas.
+- Preservar o escopo funcional corrigido da 144: painel pessoal, Lyra AI e memória, histórico, revisão semanal, relatórios e pagamentos pessoais continuam disponíveis conforme permissões. Não reativar os oito grupos desativados nem `/dia` por causa do mockup.
+
+**Dashboard: composição e comportamentos obrigatórios**
+
+1. Manter a hierarquia da referência: cabeçalho e data, três cards de resumo, mapa principal à esquerda e Lyra AI à direita, Linha temporal e Signo abaixo, finalização visual discreta. Adaptar proporcionalmente nos demais tamanhos.
+2. **Lua de hoje**, substituindo Sono: exibir fase lunar e signo da Lua calculados para a data e o fuso pertinentes, com imagem coerente com a fase e acesso à explicação. Não fixar o exemplo “Crescente em Leão”. Explicitar o método astrológico utilizado de forma coerente com o motor existente.
+3. **Seu período atual**, substituindo Movimento: mostrar período e subperíodo reais do mapa, com planeta e explicação correspondentes. Não fixar “Júpiter / Vênus”. Se os dados de nascimento forem insuficientes, apresentar o estado real e a ação para completá-los.
+4. **Destaque do dia**, substituindo Disposição: apresentar tema ou oportunidade proveniente da leitura real do dia e ilustração contextual. Não inventar métricas, pontuações ou garantias de acontecimentos.
+5. **Card dos mapas:** substituir o texto genérico “Explore seu Ascendente...” pelo resumo da leitura do mapa selecionado. Disponibilizar Védico, Lyra DM Samādhi e Quantum; iniciar automaticamente em **Védico por padrão** quando o usuário entrar. A troca deve atualizar a leitura, os detalhes e a representação pertinente de verdade, sem reutilizar o mesmo parágrafo apenas trocando o título. Preservar o acesso “Explorar meu mapa”, os cálculos existentes e os estados de dados insuficientes, processamento e falha.
+6. **Linha temporal:** substituir o título “Seu histórico” neste card. Começar no dia atual e seguir pelos próximos dias, totalizando sete dias conforme o mockup. Cada data deve ter uma ilustração bonita e positiva relacionada à leitura daquela pessoa naquele dia; não usar imagens aleatórias como se fossem interpretações. Datas e rótulo “Hoje” seguem data e fuso reais.
+7. Ao clicar em uma data da Linha temporal, abrir um **pop-up responsivo** com o resumo dos **três mapas** daquele dia, identificados e organizados de forma harmoniosa. No celular, permitir organização vertical legível; garantir fechamento, navegação por teclado, foco inicial e retorno do foco. A imagem principal não mostra o pop-up, mas a interação permanece requisito aprovado.
+8. **Signo · nome completo do usuário:** transformar a apresentação do antigo card “Relatório pessoal” neste card, com a imagem do signo no lugar do livro e resumo do signo na data atual. Usar nome, signo e leitura reais; “Helena Duarte Martins”, Leão e os textos do mockup são ilustrativos. Definir e documentar qual signo e método astrológico alimentam o card para manter consistência com o restante do app. Disponibilizar a leitura detalhada.
+9. A substituição visual do card de relatório não remove relatórios, prévia, seleção de conteúdo, PDF ou histórico. Manter acesso real pelas jornadas correspondentes. Preservar a Lyra AI funcional, conversas, memória, anexos e demais recursos existentes conforme disponibilidade de modelo, plano e autorização.
+
+**Dados reais, acessibilidade e qualidade técnica**
+
+- Nome, data, signo, períodos, leituras e imagens do mockup são exemplos visuais, não dados de produção. Integrar serviços e cálculos reais; não usar a imagem inteira como fundo para simular uma interface funcional, nem inserir conteúdos fixos para mascarar ausência de integração.
+- As leituras dos dias futuros devem corresponder à data selecionada, sem copiar a leitura de hoje. Preservar segurança, isolamento entre contas, permissões e dados de nascimento sem expor informações pessoais em documentação ou evidências.
+- Conferir código e Git antes de alterar; aproveitar componentes e motores existentes. Resolver dependências reais do backend antes da interface correspondente. Quando a implementação for autorizada, pesquisar referências atuais e transformar a referência aprovada em um sistema compartilhado de tokens e componentes, evitando duplicação de regras de negócio.
+- Garantir contraste WCAG 2.2 AA também no tema escuro, foco visível, nomes acessíveis, estrutura semântica, teclado, leitores de tela, movimento reduzido e estados compreensíveis. Manter conteúdo legível sobre ilustrações e superfícies translúcidas.
+- Utilizar imagens e fontes com origem e licença verificáveis, tamanhos otimizados e carregamento adequado. Não comprometer desempenho com texturas ou animações excessivas; tratar falhas de carregamento sem simular conteúdo.
+
+**Critérios de aceite e provas da futura implementação**
+
+- Comparar capturas reais do dashboard com o PNG oficial na mesma dimensão, verificando composição, proporções, espaçamentos, cores, fontes, logo, cards e ilustrações. Validar também desktop, tablet, mobile e nomes longos, sem sobreposição ou transbordo.
+- Percorrer todas as jornadas do usuário e administrativas afetadas, com permissões reais; conferir menus, formulários, tabelas, gráficos, estados e diálogos. Testar teclado, foco, contraste e redução de movimento.
+- Validar ponta a ponta dados de perfil → cálculos/serviços → API → estado → apresentação. Conferir seleção dos três mapas, Védico inicial, sete dias futuros, pop-up da data correta, signo diário e acesso preservado aos relatórios. Tratar erros reais e indisponibilidade de modelos sem respostas inventadas.
+- Executar as checagens obrigatórias do projeto com o banco necessário em funcionamento e registrar resultados reais. Atualizar documentação visual, painel e evidências antes de declarar conclusão; mockup ou captura isolada não comprova funcionalidades.
+- Publicar cada tarefa validada em commit e push próprios na `main`, sem branches ou worktrees, e registrar o SHA conforme a regra 6 deste painel.
+
+**Aceite desta etapa documental:** imagem íntegra salva na raiz, referência vinculada, tarefa única e contadores atualizados, formato e diff conferidos, commit e push do painel e PNG confirmados. Depois, aguardar instruções; nenhuma implementação desta tarefa foi iniciada.
 
 ---
 
