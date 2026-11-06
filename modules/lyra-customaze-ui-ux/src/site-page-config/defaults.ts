@@ -259,31 +259,32 @@ const defaultLoginPageConfig: LoginPageConfig = {
     visible: true,
     badgeText: 'Lyra MetaCare',
     title: 'Que bom te ver por aqui.',
-    accentTitle: 'A leitura do seu dia está esperando por você.',
+    accentTitle: 'Seu céu. Novas perspectivas.',
     description:
-      'Entre para ver os melhores horários de hoje, o seu plano e o que o céu do seu mapa sugere.',
+      'Explore seus mapas pessoais e aprofunde suas descobertas com a Lyra AI.',
     noteEyebrow: 'Sua privacidade',
     noteText:
-      'Seus dados de saúde são seus. Você pode baixar uma cópia ou excluir a sua conta quando quiser.',
+      'Seus dados são seus. Você pode baixar uma cópia ou excluir sua conta quando quiser.',
     highlights: [
       {
         id: 'login-highlight-1',
-        title: 'Seu dia em poucas linhas',
-        description: 'O céu e os seus dados explicados em linguagem simples.',
+        title: 'Três perspectivas, seu universo',
+        description:
+          'Védico, Lyra DM Samādhi e Quantum para ampliar seu olhar.',
         icon: 'sun',
         tone: 'primary',
       },
       {
         id: 'login-highlight-2',
         title: 'A Lyra sempre por perto',
-        description: 'Converse sobre sono, energia e rotina a qualquer hora.',
+        description: 'Converse sobre suas leituras e retome suas descobertas.',
         icon: 'bot',
         tone: 'cosmic',
       },
       {
         id: 'login-highlight-3',
-        title: 'Um plano que se ajusta',
-        description: 'Metas e hábitos que acompanham o seu ritmo.',
+        title: 'No seu próprio ritmo',
+        description: 'Autoconhecimento com privacidade e significado.',
         icon: 'zap',
         tone: 'accent',
       },
@@ -293,7 +294,7 @@ const defaultLoginPageConfig: LoginPageConfig = {
     badgeText: 'Acesso seguro',
     brandText: 'lyra',
     title: 'Entre ou crie a sua conta.',
-    description: 'Leva menos de um minuto.',
+    description: 'Seu espaço de autoconhecimento começa aqui.',
     loginTabLabel: 'Entrar',
     registerTabLabel: 'Criar conta',
     emailLabel: 'Email',
@@ -304,7 +305,7 @@ const defaultLoginPageConfig: LoginPageConfig = {
     registerButtonLabel: 'Criar minha conta',
     footerEyebrow: 'Lembrete',
     footerText:
-      'A Lyra oferece orientação de bem-estar e autoconhecimento e não substitui avaliação profissional de saúde.',
+      'Leituras simbólicas para reflexão pessoal, com privacidade e significado.',
     backToLandingLabel: 'Voltar para a página inicial',
   },
 };

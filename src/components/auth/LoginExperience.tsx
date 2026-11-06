@@ -2,11 +2,14 @@
 
 import { CSSProperties, SubmitEvent, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import ceuVedico from '@/assets/celestial/ceu-vedico.png';
+import { CelestialBrand } from '@/components/public/CelestialBrand';
+import identidade from '@/components/public/CelestialIdentity.module.css';
 import { toast } from 'sonner';
-import { ArrowLeft, Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
+import { ArrowLeft, Eye, EyeOff, Mail, User } from 'lucide-react';
 
 import { useAuth } from '@/context/AuthContext';
-import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,20 +27,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import type { LoginPageConfig, ToneKey } from '@/lib/site-page-config/schema';
 import { getBuilderIcon } from '@/lib/site-page-config/ui';
-import { ThemeToggleButton } from '@/components/theme/ThemeControls';
 import {
   ROTA_POLITICA_DE_PRIVACIDADE,
   ROTA_TERMOS_DE_USO,
 } from '@/lib/lgpd/documentos';
-import '../public/PublicTheme.css';
 import './LoginExperience.css';
 
 type SubmitMode = 'login' | 'register' | null;
 
-// No visual "Lyra Clean" o coral fica reservado ao que é astral/IA; os
-// demais destaques usam o teal da marca.
+// Os destaques do construtor mantêm contraste na identidade celestial.
 function corDoIconeDestaque(tone: ToneKey): string {
-  return tone === 'cosmic' ? 'text-cosmic' : 'text-primary';
+  return tone === 'cosmic' ? 'text-foreground' : 'text-primary';
 }
 
 type LoginExperienceProps = {
@@ -57,22 +57,6 @@ function escalaFluida(
   const ideal = (baseRem * escala).toFixed(3);
   const max = (baseRem * 1.12 * escala).toFixed(3);
   return { fontSize: `clamp(${min}rem, ${ideal}rem, ${max}rem)` };
-}
-
-// Para o título grande: acompanha a largura da tela (≈ 2/3 do tamanho base
-// em 390px, o tamanho base perto de 1280px), para que no celular ele não
-// ocupe metade da primeira dobra. A escala do admin continua valendo.
-function escalaResponsiva(
-  baseRem: number,
-  escala: number
-): Pick<CSSProperties, 'fontSize'> {
-  const min = (baseRem * 0.66 * escala).toFixed(3);
-  const fixo = (baseRem * 0.52 * escala).toFixed(3);
-  const proporcional = (baseRem * 0.6 * escala).toFixed(3);
-  const max = (baseRem * 1.12 * escala).toFixed(3);
-  return {
-    fontSize: `clamp(${min}rem, calc(${fixo}rem + ${proporcional}vw), ${max}rem)`,
-  };
 }
 
 export function LoginExperience({
@@ -114,15 +98,16 @@ export function LoginExperience({
     height: `${(1.125 * sizing.iconScale).toFixed(3)}rem`,
   };
   const buttonStyle: CSSProperties = {
-    height: `${(3 * sizing.buttonScale).toFixed(3)}rem`,
-    ...escalaFluida(1.0625, typography.buttonLabel),
+    minHeight: `max(44px, ${(2.75 * sizing.buttonScale).toFixed(3)}rem)`,
+    height: 'auto',
+    ...escalaFluida(0.9375, typography.buttonLabel),
   };
   const fieldStyle = escalaFluida(1.0625, typography.fieldLabel);
   const labelStyle = escalaFluida(1, typography.fieldLabel);
 
   async function handleLogin(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (previewMode) return;
+    if (previewMode || submitMode) return;
 
     setSubmitMode('login');
 
@@ -146,7 +131,7 @@ export function LoginExperience({
 
   async function handleRegister(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (previewMode) return;
+    if (previewMode || submitMode) return;
     const apelido = apelidoSchema.safeParse(registerNickname);
     if (!apelido.success) {
       setNicknameError(apelido.error.issues[0]?.message ?? 'Revise o apelido.');
@@ -196,7 +181,16 @@ export function LoginExperience({
   return (
     <main
       id={previewMode ? undefined : 'conteudo-principal'}
-      className="lyra-public-theme source-sans-regular lyra-login grid min-h-dvh w-full grid-cols-1 content-start lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)] lg:grid-rows-[auto_auto_auto_auto]"
+      className={cn(identidade.theme, 'lyra-login')}
+      data-cadastro={isRegistering}
+      onClickCapture={
+        previewMode
+          ? (event) => {
+              if ((event.target as HTMLElement).closest('a'))
+                event.preventDefault();
+            }
+          : undefined
+      }
       style={
         {
           '--login-largura-intro': larguraDaIntroducao.maxWidth,
@@ -205,48 +199,24 @@ export function LoginExperience({
     >
       <div
         className={cn(
-          'login-marca flex min-w-0 items-center gap-1 lg:col-start-1 lg:row-start-1',
+          'login-marca flex min-w-0 flex-wrap items-center gap-1',
           paddingDaColunaEsquerda
         )}
       >
-        <MarcaLyra tamanho="40px" prioridade />
-        <span className="login-nome-marca text-foreground">
-          {auth.brandText === 'lyra' ? 'Lyra MetaCare' : auth.brandText}
-        </span>
-        {/* Na pré-visualização do construtor o botão mudaria o tema do
-            próprio painel administrativo. */}
-        {previewMode ? null : <ThemeToggleButton className="ml-auto" />}
+        <CelestialBrand />
+        {auth.brandText !== 'lyra' && auth.brandText !== 'Lyra MetaCare' ? (
+          <span className="text-sm text-muted-foreground">
+            {auth.brandText}
+          </span>
+        ) : null}
       </div>
 
-      {intro.visible ? (
-        <div
-          className={cn(
-            'login-abertura min-w-0 lg:col-start-1 lg:row-start-2',
-            paddingDaColunaEsquerda
-          )}
-        >
-          <div style={larguraDaIntroducao}>
-            {intro.badgeText !== 'Lyra MetaCare' ? (
-              <p className="mb-2 text-sm text-primary">{intro.badgeText}</p>
-            ) : null}
-            <h1
-              className="font-display font-semibold leading-[1.08] tracking-[-0.03em] text-foreground break-words"
-              style={escalaResponsiva(2.75, typography.introTitle)}
-            >
-              {intro.title}
-            </h1>
-          </div>
-        </div>
-      ) : (
-        // Introdução oculta no construtor de UI: a página continua com um
-        // título principal para leitores de tela (tarefa 62).
-        <h1 className="sr-only">Entrar na Lyra MetaCare</h1>
-      )}
+      <h1 className="sr-only">Acesso à Lyra MetaCare</h1>
 
       {/* Formulário: logo após o título no celular; coluna direita no desktop */}
       <section
         aria-labelledby="titulo-acesso"
-        className="login-acesso flex min-w-0 items-start justify-center lg:col-start-2 lg:row-span-4 lg:row-start-1"
+        className="login-acesso flex min-w-0 items-start justify-center"
       >
         <div
           className="w-full"
@@ -258,7 +228,7 @@ export function LoginExperience({
           <h2
             id="titulo-acesso"
             className="font-display font-semibold tracking-tight text-foreground"
-            style={escalaFluida(1.75, typography.authTitle)}
+            style={escalaFluida(3.25, typography.authTitle)}
           >
             {isRegistering ? auth.registerTabLabel : auth.loginTabLabel}
           </h2>
@@ -314,51 +284,42 @@ export function LoginExperience({
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <Label
-                    htmlFor="login-password"
-                    className="font-medium text-foreground"
-                    style={labelStyle}
-                  >
-                    {auth.passwordLabel}
-                  </Label>
-                  <div className="group relative">
-                    <div className={fieldIconWrapperClass}>
-                      <Lock
-                        className={fieldIconClass}
-                        style={iconStyle}
-                        aria-hidden
-                      />
-                    </div>
-                    <Input
-                      id="login-password"
-                      type={showPassword ? 'text' : 'password'}
-                      autoComplete="current-password"
-                      placeholder={auth.passwordLabel}
-                      required
-                      value={loginPassword}
-                      onChange={(e) => setLoginPassword(e.target.value)}
-                      className="pl-11 pr-11"
-                      style={fieldStyle}
-                      disabled={previewMode}
-                    />
-                    <button
+                <Field>
+                  <div className="flex items-center justify-between gap-2">
+                    <FieldLabel htmlFor="login-password" style={labelStyle}>
+                      {auth.passwordLabel}
+                    </FieldLabel>
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="sm"
                       onClick={() => setShowPassword(!showPassword)}
                       aria-label={
                         showPassword ? 'Ocultar senha' : 'Mostrar senha'
                       }
                       aria-pressed={showPassword}
-                      className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-[10px] text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
+                      aria-controls="login-password"
+                      disabled={previewMode}
                     >
                       {showPassword ? (
-                        <EyeOff className="h-[18px] w-[18px]" aria-hidden />
+                        <EyeOff data-icon="inline-start" aria-hidden />
                       ) : (
-                        <Eye className="h-[18px] w-[18px]" aria-hidden />
+                        <Eye data-icon="inline-start" aria-hidden />
                       )}
-                    </button>
+                      {showPassword ? 'Ocultar' : 'Mostrar'}
+                    </Button>
                   </div>
-                </div>
+                  <Input
+                    id="login-password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="current-password"
+                    required
+                    value={loginPassword}
+                    onChange={(event) => setLoginPassword(event.target.value)}
+                    style={fieldStyle}
+                    disabled={previewMode}
+                  />
+                </Field>
 
                 <div className="flex min-h-11 items-center gap-2.5">
                   <Checkbox
@@ -493,36 +454,48 @@ export function LoginExperience({
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-1.5">
-                  <Label
-                    htmlFor="reg-password"
-                    className="font-medium text-foreground"
-                    style={labelStyle}
-                  >
-                    {auth.passwordLabel}
-                  </Label>
-                  <div className="group relative">
-                    <div className={fieldIconWrapperClass}>
-                      <Lock
-                        className={fieldIconClass}
-                        style={iconStyle}
-                        aria-hidden
-                      />
-                    </div>
-                    <Input
-                      id="reg-password"
-                      type={showPassword ? 'text' : 'password'}
-                      autoComplete="new-password"
-                      placeholder={auth.passwordLabel}
-                      required
-                      value={registerPassword}
-                      onChange={(e) => setRegisterPassword(e.target.value)}
-                      className="pl-11"
-                      style={fieldStyle}
+                <Field>
+                  <div className="flex items-center justify-between gap-2">
+                    <FieldLabel htmlFor="reg-password" style={labelStyle}>
+                      {auth.passwordLabel}
+                    </FieldLabel>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={
+                        showPassword ? 'Ocultar senha' : 'Mostrar senha'
+                      }
+                      aria-pressed={showPassword}
+                      aria-controls="reg-password"
                       disabled={previewMode}
-                    />
+                    >
+                      {showPassword ? (
+                        <EyeOff data-icon="inline-start" aria-hidden />
+                      ) : (
+                        <Eye data-icon="inline-start" aria-hidden />
+                      )}
+                      {showPassword ? 'Ocultar' : 'Mostrar'}
+                    </Button>
                   </div>
-                </div>
+                  <Input
+                    id="reg-password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    minLength={8}
+                    required
+                    value={registerPassword}
+                    onChange={(event) =>
+                      setRegisterPassword(event.target.value)
+                    }
+                    style={fieldStyle}
+                    disabled={previewMode}
+                  />
+                  <FieldDescription>
+                    Use pelo menos 8 caracteres.
+                  </FieldDescription>
+                </Field>
 
                 <div className="flex items-start gap-2.5">
                   <Checkbox
@@ -584,38 +557,19 @@ export function LoginExperience({
               </form>
             </TabsContent>
           </Tabs>
-
-          <p className="login-troca-conta mt-2 text-center text-base text-muted-foreground">
-            {isRegistering ? 'Já tem uma conta?' : 'Ainda não tem conta?'}
-            <button
-              type="button"
-              onClick={() => setIsRegistering(!isRegistering)}
-              className="ml-1 inline-flex min-h-11 items-center rounded-sm px-1 font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              {isRegistering ? auth.loginTabLabel : auth.registerTabLabel}
-            </button>
-          </p>
-
-          <p
-            className="mt-2 border-t border-border pt-3 text-center leading-5 text-muted-foreground"
-            style={escalaFluida(0.875, typography.footerText)}
-          >
-            <span className="font-medium text-foreground">
-              {auth.footerEyebrow}
-            </span>{' '}
-            · {auth.footerText}
-          </p>
         </div>
       </section>
 
       {intro.visible ? (
-        <div
-          className={cn(
-            'login-detalhes min-w-0 lg:col-start-1 lg:row-start-3 lg:self-start',
-            paddingDaColunaEsquerda
-          )}
-        >
-          <div style={larguraDaIntroducao}>
+        <div className={cn('login-detalhes min-w-0', paddingDaColunaEsquerda)}>
+          <div className="login-intro-conteudo">
+            <Image
+              src={ceuVedico}
+              alt=""
+              sizes="(min-width: 1024px) 640px, 100vw"
+              className="login-arte"
+              loading="eager"
+            />
             <p
               className="font-display font-medium tracking-tight text-foreground/80"
               style={escalaFluida(1.25, typography.introTitle)}
@@ -663,27 +617,11 @@ export function LoginExperience({
                 })}
               </ul>
             ) : null}
-
-            {/* Nota da introdução (login.intro.noteEyebrow e noteText). */}
-            <p
-              className="login-nota mt-4 leading-6 text-muted-foreground"
-              style={escalaFluida(0.9375, typography.introBody)}
-            >
-              <span className="block font-medium text-foreground">
-                {intro.noteEyebrow}
-              </span>
-              {intro.noteText}
-            </p>
           </div>
         </div>
       ) : null}
 
-      <div
-        className={cn(
-          'login-rodape pt-3 lg:col-start-1 lg:row-start-4',
-          paddingDaColunaEsquerda
-        )}
-      >
+      <div className={cn('login-rodape pt-3', paddingDaColunaEsquerda)}>
         <Link
           href="/"
           className="-mx-1 inline-flex min-h-11 w-fit items-center gap-2 rounded-sm px-1 text-sm font-medium text-primary underline-offset-4 hover:underline focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-ring"
@@ -708,6 +646,12 @@ export function LoginExperience({
             Termos de uso
           </Link>
         </nav>
+        <p
+          className="login-lembrete text-muted-foreground"
+          style={escalaFluida(0.8125, typography.footerText)}
+        >
+          {auth.footerEyebrow} · {auth.footerText}
+        </p>
       </div>
     </main>
   );

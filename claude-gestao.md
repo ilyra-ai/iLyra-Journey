@@ -21,10 +21,10 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **92,0%** (138 de 150)   |
-| Implementações publicadas               | **96,7%** (145 de 150)   |
-| Tarefas totais                          | 150                      |
-| 🟢 Concluídas                           | 138                      |
+| Conclusão integral                      | **92,1%** (139 de 151)   |
+| Implementações publicadas               | **96,7%** (146 de 151)   |
+| Tarefas totais                          | 151                      |
+| 🟢 Concluídas                           | 139                      |
 | 🟡 Implementadas com validação pendente | 7                        |
 | 🔵 Em andamento                         | 2                        |
 | 🔴 Bloqueadas                           | 0                        |
@@ -3000,3 +3000,21 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Evidências em 2026-11-06:** ESLint e Prettier dos arquivos da tarefa aprovados; 1.017 testes unitários (97 arquivos), nove testes de integração de autenticação/armazenamento com MySQL real e build com TypeScript/138 páginas aprovados. No navegador, resposta real HTTP 200 da sessão temporariamente retida para conferir o estado de espera: conteúdo da rota ausente antes da liberação e carregamento removido automaticamente depois. Visitante em `/profile` redirecionado para `/login`.
 - **Enquadramento real:** 320×719, 390×844, 543×719, 848×719, 1024×600, 1280×720, 1366×768, 1536×864, 1920×1080, 2560×1440 e 3440×1440; sem rolagem horizontal e composição inteira contida na altura em todos esses cenários. Movimento reduzido confirmado com animação desativada. Sem erros de página ou avisos na execução conferida; captura real de desktop revisada.
 - **Publicação confirmada:** commit `0a1ae779`, push `857617a6..0a1ae779 main -> main`, dez arquivos da tarefa 150. Sem branches/worktrees e sem incluir as demais alterações pausadas. Registro subsequente conforme a regra 6; prosseguir somente para o login/cadastro já autorizado pelo usuário.
+
+### 151 · Redesenhar integralmente login e cadastro com autenticação real
+
+**Estado: 🟢 concluída · Aprovação visual do usuário em 2026-11-06.**
+
+- Substituir por completo a apresentação anterior pela identidade celestial aprovada: logo correto, fundo escuro, amarelo suave, arte dos mapas e hierarquia Clicker Script / Imprima / Varela. Reutilizar marca, fontes e tokens da 150 sem aplicar o novo tema às demais telas internas.
+- Entregar composição fluida e enquadrada em desktop de múltiplas larguras/alturas, notebook, ultrawide, tablet e mobile. Sem corte de controles, rolagem horizontal, zoom artificial ou campos escondidos; permitir rolagem vertical quando necessária.
+- Manter login, cadastro, lembrete de sessão, validação de apelido, mensagens de erro, termos/privacidade, alternância de senha e redirecionamento/onboarding reais. Não acrescentar login social, recuperação de senha ou outro botão sem backend existente.
+- Preservar configuração pública e prévia do Site Experience Builder: visibilidade da introdução, textos, escalas, tamanhos e modo inicial `?modo=cadastro`. Atualizar somente os textos padrão incompatíveis com o escopo atual do produto.
+- Reutilizar controles existentes de formulário e abas com semântica, labels, estados inválidos, teclado e foco visível. A arte é ilustrativa do produto e não um mapa pessoal calculado de um visitante.
+- Conferir no navegador as duas abas, formulário inválido, termos, exibição de senha, fluxo real de registro/login com conta temporária de QA e limpeza posterior, sem imprimir credenciais. Validar API/MySQL e gates pertinentes, registrar evidências e publicar esta tarefa separadamente na main, sem branches/worktrees.
+- **Refinamento solicitado durante a validação:** compactar o card de acesso e alinhar a composição em 1459×719, aumentar o título “Entrar”, retirar da apresentação o título “Que bom te ver por aqui.” e a nota “Sua privacidade”. Manter o H1 acessível sem ocupação visual. A imagem deve preencher a largura da coluna, com altura proporcional no mobile/tablet; evitar faixas laterais. Usar as abas existentes para alternar login/cadastro, eliminar a repetição da mesma ação no rodapé do card e mover o lembrete institucional para o rodapé geral. Preservar os dados de configuração dessas áreas para compatibilidade do construtor, sem reexibir os blocos cuja retirada foi solicitada.
+
+- **Entrega:** identidade celestial com marca e fontes locais, formulário real compacto, abas funcionais, contraste dos contornos, senha visível/oculta nas duas modalidades e validação mínima de senha igual à API. Mantidos cadastro, apelido, consentimento, login, sessão persistente e redirecionamento. Textos padrão atualizados sem anunciar os registros desativados.
+- **Validação técnica em 2026-11-06:** `pnpm fix:format`, `pnpm fix:lint`, `pnpm check:lint`, `pnpm check:format`, `pnpm check:types` e build final (138 páginas/128 recursos offline) aprovados; 1.017 testes unitários em 97 arquivos e 609 testes de integração em 68 arquivos aprovados. Os nove testes focados de autenticação/armazenamento também passaram. A sessão não expõe ferramenta `@current_problems`; a conferência foi feita pelos diagnósticos reais de ESLint, TypeScript, build e navegador.
+- **Prova ponta a ponta:** interface → API HTTP real → MySQL → sessão → onboarding. Cadastro 200, senha incorreta 401, login 200, sessão autenticada com papel `patient`, cookie persistente e exclusão da própria conta de QA 200/`deleted: true`. Sem impressão de credenciais; consulta ao banco confirmou zero contas temporárias remanescentes na conferência. Abas, formulário vazio inválido, aceite obrigatório e exibição de senha conferidos.
+- **Prova responsiva:** login e cadastro em 320, 390, 543, 768, 848, 1024, 1280, 1366, 1459, 1536, 1920, 2560 e 3440 px, sem rolagem horizontal nem controles fora da largura. Em 1459×719, login com documento de exatamente 719 px de altura e card de 480×561 px inteiramente enquadrado. A imagem preenche integralmente sua coluna; no mobile/tablet conserva a proporção original. O cadastro permite rolagem vertical nas janelas baixas para preservar todos os campos.
+- **Ampliação e revisão final:** texto ampliado a 200% em 320 px nos dois modos sem transbordamento após corrigir a quebra do botão de senha e de palavras longas. Sem exceções de página na conferência final. Remoção dos blocos visuais solicitados comprovada por busca no componente/CSS e pela ausência no DOM. Aprovação recebida: “ficou lindo”. README e sistema visual atualizados; as demais alterações pausadas continuam fora desta publicação.
