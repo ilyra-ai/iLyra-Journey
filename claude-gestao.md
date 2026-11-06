@@ -36,6 +36,8 @@
 
 **Paralisação vigente em 2026-11-06:** por solicitação expressa do usuário, atualizar e publicar somente este painel, interromper os processos de trabalho iniciados neste chat e aguardar novas instruções. As tarefas 142 e 144 continuam classificadas como iniciadas, mas estão **pausadas**, sem autorização para prosseguir agora. As 145 e 146 estão a iniciar. Não publicar as alterações de código ainda não validadas, não iniciar outra tarefa e não apresentar testes anteriores como validação do estado final atual.
 
+**Publicação documental da paralisação em 2026-11-06:** commit `9e92288c2ad80393d076e89672693193f16b67ba`, push confirmado `72d12437..9e92288c main -> main`. Somente `claude-gestao.md` incluído; 146 tarefas únicas conferidas, formato do arquivo aprovado e diff sem erros de whitespace. Alterações funcionais locais permanecem não publicadas. Este registro subsequente cumpre a regra 6 e não autoriza retomar o trabalho.
+
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
 - **Token temporário do GitHub:** mantido na configuração local do Git do ambiente de trabalho; o próprio usuário o remove ao publicar. Nunca é versionado, impresso ou salvo em memória.
