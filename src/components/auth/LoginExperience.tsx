@@ -41,6 +41,7 @@ function corDoIconeDestaque(tone: ToneKey): string {
 }
 
 type LoginExperienceProps = {
+  modoInicial?: 'login' | 'cadastro';
   // Configuração em edição no Site Experience Builder (pré-visualização).
   overrideConfig?: LoginPageConfig;
   previewMode?: boolean;
@@ -77,6 +78,7 @@ function escalaResponsiva(
 export function LoginExperience({
   overrideConfig,
   previewMode = false,
+  modoInicial = 'login',
 }: LoginExperienceProps) {
   // Depois do login ou do cadastro, o AuthProvider leva a sessão ao destino
   // certo (onboarding para conta nova, painel para as demais) numa única
@@ -98,7 +100,9 @@ export function LoginExperience({
   const [showPassword, setShowPassword] = useState(false);
 
   // Alterna entre as visões de login e cadastro.
-  const [isRegistering, setIsRegistering] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(
+    modoInicial === 'cadastro'
+  );
   // "Lembrar-me": sessão de 7 dias quando marcado; sessão de navegador quando
   // desmarcado (ver src/lib/auth/session.ts).
   const [rememberMe, setRememberMe] = useState(false);

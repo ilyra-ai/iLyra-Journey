@@ -1,600 +1,405 @@
 'use client';
-import { capacidadeDisponivel } from '@/lib/plans/dependencias';
-import { beneficiosPublicos } from '@/lib/plans/beneficios-publicos';
-import { EVENTO_PLANOS_ATUALIZADOS } from '@/lib/plans/atualizacao-publica';
 
-import {
-  type CSSProperties,
-  type FormEvent,
-  type MouseEvent,
-  type ReactNode,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { type CSSProperties, type ReactNode, useEffect, useState } from 'react';
+import Image, { type StaticImageData } from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import localFont from 'next/font/local';
 import {
   ArrowRight,
   Check,
   ChevronDown,
-  Compass,
-  Eye,
-  EyeOff,
-  Heart,
-  Leaf,
-  LockKeyhole,
   Menu,
-  Moon,
   RotateCw,
-  ShieldCheck,
   Sparkles,
-  Sun,
-  Waves,
   X,
 } from 'lucide-react';
-import { toast } from 'sonner';
 
-import { useAuth } from '@/context/AuthContext';
-import { MarcaLyra } from '@/components/marca/MarcaLyra';
-import { ThemeToggleButton } from '@/components/theme/ThemeControls';
+import ceuVedico from '@/assets/celestial/ceu-vedico.png';
+import esferaQuantum from '@/assets/celestial/esfera-quantum.png';
+import caminhoLunar from '@/assets/celestial/caminho-lunar.png';
+import lotusSamadhi from '@/assets/celestial/lotus-samadhi.png';
+import horizonte from '@/assets/celestial/horizonte.png';
+import marca from '@/assets/celestial/marca.png';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
-import { getBuilderIcon } from '@/lib/site-page-config/ui';
+import { beneficiosPublicos } from '@/lib/plans/beneficios-publicos';
+import { EVENTO_PLANOS_ATUALIZADOS } from '@/lib/plans/atualizacao-publica';
+import { moedaPtBr } from '@/lib/formato/numero';
 import {
   ROTA_POLITICA_DE_PRIVACIDADE,
   ROTA_TERMOS_DE_USO,
 } from '@/lib/lgpd/documentos';
-import { moedaPtBr } from '@/lib/formato/numero';
 import type {
   LandingPageConfig,
   LandingSectionKey,
 } from '@/lib/site-page-config/schema';
 import type { PlanMatrixPlan } from '@/types/subscription';
-import './LandingJornada.css';
-import '../public/PublicTheme.css';
+import styles from './LandingCelestial.module.css';
 
-/**
- * Landing de evolução consciente da Lyra MetaCare.
- *
- * Este componente substitui SOMENTE a landing pública. Ele mantém o contrato
- * original com o Construtor (overrideConfig e previewMode), os links
- * configuráveis, o login real, os planos obtidos da API, os recursos,
- * indicadores, FAQ, termos/LGPD.
- *
- * Ilustrações locais: /public/landing-jornada (extraídas exclusivamente da
- * arte aprovada pelo proprietário, sem imagens de pessoas). Só são usadas
- * quando os quatro arquivos existem (conferido no next.config.ts).
- */
-const COM_ARTE = process.env.LYRA_LANDING_COM_ARTE === '1';
+const editorial = localFont({
+  src: '../../assets/fonts/clicker-script/ClickerScript-Regular.ttf',
+  variable: '--font-celestial-editorial',
+  display: 'swap',
+  weight: '400',
+});
 
-type LandingPageProps = {
-  overrideConfig?: LandingPageConfig;
-  previewMode?: boolean;
+const imprima = localFont({
+  src: '../../assets/fonts/imprima/Imprima-Regular.ttf',
+  variable: '--font-imprima',
+  display: 'swap',
+  weight: '400',
+});
+
+const varela = localFont({
+  src: '../../assets/fonts/varela/varela-latin-400-normal.ttf',
+  variable: '--font-varela',
+  display: 'swap',
+  weight: '400',
+});
+
+const varelaEstendida = localFont({
+  src: '../../assets/fonts/varela/varela-latin-ext-400-normal.ttf',
+  variable: '--font-varela-estendida',
+  display: 'swap',
+  weight: '400',
+  preload: false,
+});
+
+type Props = { overrideConfig?: LandingPageConfig; previewMode?: boolean };
+type Catalogo = {
+  estado: 'carregando' | 'pronto' | 'erro';
+  planos: PlanMatrixPlan[];
+  erro?: string;
 };
 
-type PublicPlansPayload = { plans?: PlanMatrixPlan[]; error?: string };
-
-type LigacaoProps = {
-  href: string;
-  previewMode: boolean;
-  className?: string;
-  children: ReactNode;
-  onNavigate?: () => void;
+// As imagens são ilustrações editoriais, nunca resultados calculados de um mapa.
+const ilustracoesDosMapas: Record<string, StaticImageData> = {
+  'landing-feature-1': ceuVedico,
+  'landing-feature-2': lotusSamadhi,
+  'landing-feature-3': esferaQuantum,
+};
+const ilustracoesDosDestaques: Record<string, StaticImageData> = {
+  'landing-preview-1': ceuVedico,
+  'landing-preview-2': esferaQuantum,
+  'landing-preview-3': caminhoLunar,
+};
+const destinosDosDestaques: Record<string, string> = {
+  'landing-preview-1': '#mapas',
+  'landing-preview-2': '#lyra-ai',
+  'landing-preview-3': '#sobre',
+};
+const ilustracoesDosPlanos: Partial<
+  Record<PlanMatrixPlan['key'], StaticImageData>
+> = {
+  free: caminhoLunar,
+  meta: esferaQuantum,
+  care: lotusSamadhi,
 };
 
-function Ligacao({
-  href,
-  previewMode,
-  className,
-  children,
-  onNavigate,
-}: LigacaoProps) {
-  const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
-    if (previewMode) {
-      event.preventDefault();
-      return;
-    }
-    onNavigate?.();
-  };
-  if (href.startsWith('/')) {
-    return (
-      <Link href={href} className={className} onClick={onClick}>
-        {children}
-      </Link>
-    );
-  }
-  return (
-    <a
-      href={href}
-      className={className}
-      onClick={onClick}
-      rel={href.startsWith('https://') ? 'noopener noreferrer' : undefined}
-    >
-      {children}
-    </a>
-  );
-}
-
-// A cópia editorial substitui apenas os valores padrão de fábrica. Textos
-// publicados pelo administrador continuam prevalecendo sem mudança de schema.
-const COPIA_INICIAL = {
-  titulo: 'Seu corpo, sua rotina e o seu céu',
-  destaque: 'em um só lugar, com orientação clara para cada dia.',
-  descricao:
-    'A Lyra MetaCare reúne sono, energia e ritmo com a astrologia védica do seu mapa para sugerir o que fazer hoje, em linguagem simples. Não substitui avaliação profissional de saúde.',
-};
-
-function TituloSecao({
-  rotulo,
-  titulo,
-  descricao,
-  id,
-}: {
-  rotulo: string;
-  titulo: string;
-  descricao: string;
-  id: string;
-}) {
-  return (
-    <div className="jornada-secao-intro">
-      <p className="jornada-etiqueta">{rotulo}</p>
-      <h2 id={id}>{titulo}</h2>
-      <p>{descricao}</p>
-    </div>
-  );
-}
-
-function SimboloMarca({ prioridade = false }: { prioridade?: boolean }) {
-  return <MarcaLyra tamanho="48px" prioridade={prioridade} />;
-}
-
-export function LandingPage({
-  overrideConfig,
-  previewMode = false,
-}: LandingPageProps) {
-  const router = useRouter();
-  const { db } = useAuth();
-  const { config: publicada } = usePublicSitePageConfig('landing');
+export function LandingPage({ overrideConfig, previewMode = false }: Props) {
+  const { config: publicada, error: erroConfiguracao } =
+    usePublicSitePageConfig('landing');
   const config = overrideConfig ?? publicada;
-
   const [menuAberto, setMenuAberto] = useState(false);
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [verSenha, setVerSenha] = useState(false);
-  const [autenticando, setAutenticando] = useState(false);
-  const [planos, setPlanos] = useState<PlanMatrixPlan[]>([]);
-  const [estadoPlanos, setEstadoPlanos] = useState<
-    'loading' | 'ready' | 'error'
-  >('loading');
-  const [erroPlanos, setErroPlanos] = useState('');
-  const [tentativaPlanos, setTentativaPlanos] = useState(0);
+  const [catalogo, setCatalogo] = useState<Catalogo>({
+    estado: 'carregando',
+    planos: [],
+  });
+  const [tentativa, setTentativa] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
-    async function consultarPlanos() {
+    async function carregar() {
       try {
         const resposta = await fetch('/api/public/plans', {
           cache: 'no-store',
           signal: controller.signal,
         });
-        const payload = (await resposta.json()) as PublicPlansPayload;
-        if (!resposta.ok || !Array.isArray(payload.plans)) {
+        const dados = (await resposta.json()) as {
+          plans?: PlanMatrixPlan[];
+          error?: string;
+        };
+        if (!resposta.ok || !Array.isArray(dados.plans)) {
           throw new Error(
-            payload.error ?? 'Não foi possível carregar os planos.'
+            dados.error ?? 'Não foi possível consultar os planos.'
           );
         }
-        if (controller.signal.aborted) return;
-        setPlanos(
-          [...payload.plans].sort((a, b) => a.displayOrder - b.displayOrder)
-        );
-        setEstadoPlanos('ready');
+        if (!controller.signal.aborted) {
+          setCatalogo({
+            estado: 'pronto',
+            planos: [...dados.plans].sort(
+              (a, b) => a.displayOrder - b.displayOrder
+            ),
+          });
+        }
       } catch (erro) {
-        if (controller.signal.aborted) return;
-        setErroPlanos(
-          erro instanceof Error ? erro.message : 'Falha ao consultar os planos.'
-        );
-        setPlanos([]);
-        setEstadoPlanos('error');
+        if (!controller.signal.aborted)
+          setCatalogo({
+            estado: 'erro',
+            planos: [],
+            erro:
+              erro instanceof TypeError
+                ? 'Não foi possível conectar ao catálogo. Verifique sua conexão e tente novamente.'
+                : erro instanceof SyntaxError
+                  ? 'O catálogo não pôde ser carregado. Tente novamente em instantes.'
+                  : erro instanceof Error
+                    ? erro.message
+                    : 'Falha ao consultar os planos.',
+          });
       }
     }
-    void consultarPlanos();
+    void carregar();
     return () => controller.abort();
-  }, [tentativaPlanos]);
+  }, [tentativa]);
 
   useEffect(() => {
     const atualizar = () => {
       if (document.visibilityState === 'visible')
-        setTentativaPlanos((v) => v + 1);
+        setTentativa((atual) => atual + 1);
     };
-    const storage = (e: StorageEvent) => {
-      if (e.key === EVENTO_PLANOS_ATUALIZADOS) atualizar();
+    const aoArmazenar = (evento: StorageEvent) => {
+      if (evento.key === EVENTO_PLANOS_ATUALIZADOS) atualizar();
     };
     const timer = window.setInterval(atualizar, 30_000);
     window.addEventListener('focus', atualizar);
     document.addEventListener('visibilitychange', atualizar);
     window.addEventListener(EVENTO_PLANOS_ATUALIZADOS, atualizar);
-    window.addEventListener('storage', storage);
+    window.addEventListener('storage', aoArmazenar);
     return () => {
-      clearInterval(timer);
+      window.clearInterval(timer);
       window.removeEventListener('focus', atualizar);
       document.removeEventListener('visibilitychange', atualizar);
       window.removeEventListener(EVENTO_PLANOS_ATUALIZADOS, atualizar);
-      window.removeEventListener('storage', storage);
+      window.removeEventListener('storage', aoArmazenar);
     };
   }, []);
 
-  const estatisticas = useMemo(() => {
-    const habilitados = planos.flatMap((plano) =>
-      plano.features.filter((f) => capacidadeDisponivel(plano.features, f.key))
-    );
-    const categorias = new Set(habilitados.map((recurso) => recurso.category));
-    const comAssinatura = planos.filter((plano) => plano.assinaturaOnline);
-    return {
-      planCount: planos.length,
-      featureCount: habilitados.length,
-      categoryCount: categorias.size,
-      checkoutCount: comAssinatura.length,
-    };
-  }, [planos]);
-
-  const valorIndicador = (origem: string, personalizado: string) => {
-    if (origem === 'custom') return personalizado;
-    if (origem in estatisticas) {
-      return String(estatisticas[origem as keyof typeof estatisticas]);
-    }
-    return personalizado;
-  };
-
-  async function entrar(evento: FormEvent<HTMLFormElement>) {
-    evento.preventDefault();
-    if (previewMode || autenticando) return;
-    setAutenticando(true);
-    try {
-      const { error } = await db.auth.signInWithPassword({
-        email,
-        password: senha,
-      });
-      if (error) {
-        toast.error('Não foi possível entrar agora.', {
-          description: error.message,
-        });
-        return;
+  useEffect(() => {
+    if (!menuAberto) return;
+    const fechar = (evento: KeyboardEvent) => {
+      if (evento.key === 'Escape') {
+        setMenuAberto(false);
+        document.getElementById('abrir-menu-celestial')?.focus();
       }
-      toast.success('Boas-vindas. Sua órbita foi aberta com sucesso.');
-      router.push('/');
-    } catch (erro) {
-      toast.error('Falha na autenticação.', {
-        description:
-          erro instanceof Error
-            ? erro.message
-            : 'Tente novamente em instantes.',
-      });
-    } finally {
-      setAutenticando(false);
-    }
-  }
+    };
+    document.addEventListener('keydown', fechar);
+    return () => document.removeEventListener('keydown', fechar);
+  }, [menuAberto]);
 
-  // O padrão antigo colocava Benefícios antes de Jornada. A sequência
-  // pública aprovada passa a ser o padrão, preservando ordens personalizadas
-  // no Construtor; nesses casos, o menu acompanha a mesma sequência.
-  const ordemInicial: LandingSectionKey[] = [
-    'flow',
-    'features',
-    'metrics',
-    'plans',
-    'faq',
-    'finalCta',
-  ];
-  const ordemConfigurada =
-    config.sectionOrder.join(',') === 'features,metrics,flow,plans,faq,finalCta'
-      ? ordemInicial
-      : config.sectionOrder;
-  const ordem = Array.from(
-    new Set([...ordemConfigurada, ...ordemInicial])
-  ).filter((chave) => chave !== 'finalCta');
-  const ligacoesDasSecoes: Partial<
-    Record<LandingSectionKey, { label: string; href: string; visible: boolean }>
-  > = {
-    flow: { label: 'Jornada', href: '#fluxo', visible: config.flow.visible },
-    features: {
-      label: 'Benefícios',
-      href: '#recursos',
-      visible: config.features.visible,
-    },
-    plans: { label: 'Planos', href: '#planos', visible: config.plans.visible },
-    faq: { label: 'Dúvidas', href: '#faq', visible: config.faq.visible },
-  };
-  const menu = [
-    { label: 'Início', href: '#topo', visible: true },
-    { label: 'Leituras de Mapas', href: '#leituras-de-mapas', visible: true },
-    ...ordem.flatMap((chave) => {
-      const ligacao = ligacoesDasSecoes[chave];
-      return ligacao ? [ligacao] : [];
-    }),
-    { label: 'Sobre', href: '#sobre', visible: true },
-  ].filter((item) => item.visible);
-
-  const heroTitulo =
-    config.hero.title === COPIA_INICIAL.titulo
-      ? 'Evolua em direção à sua'
-      : config.hero.title;
-  const heroDestaque =
-    config.hero.accentTitle === COPIA_INICIAL.destaque
-      ? 'essência.'
-      : config.hero.accentTitle;
-  const heroDescricao =
-    config.hero.description === COPIA_INICIAL.descricao
-      ? 'Mais presença, equilíbrio, clareza e expansão interior para uma vida com mais significado. A Lyra MetaCare une dados de bem-estar, inteligência artificial e sabedoria integrativa para apoiar a sua jornada.'
-      : config.hero.description;
-
-  const fatoresDeEscala = {
-    '--j-hero': String(config.typography.heroTitle),
-    '--j-corpo': String(config.typography.heroBody),
-    '--j-titulo-secao': String(config.typography.sectionTitle),
-    '--j-titulo-cartao': String(config.typography.cardTitle),
-    '--j-texto-cartao': String(config.typography.cardBody),
-    '--j-botao': String(config.sizing.buttonScale),
-    '--j-botao-texto': String(config.typography.buttonLabel),
-    '--j-texto-secao': String(config.typography.sectionBody),
-    '--j-cartao': String(config.sizing.featureCard),
-    '--j-plano': String(config.sizing.planCard),
-    '--j-icone': String(config.sizing.iconScale),
-    '--j-hero-card': String(config.sizing.heroCard),
+  const escala = {
+    '--celestial-hero-scale': config.typography.heroTitle,
+    '--celestial-body-scale': config.typography.heroBody,
+    '--celestial-section-scale': config.typography.sectionTitle,
+    '--celestial-section-body-scale': config.typography.sectionBody,
+    '--celestial-card-scale': config.typography.cardTitle,
+    '--celestial-card-body-scale': config.typography.cardBody,
+    '--celestial-button-scale': config.sizing.buttonScale,
+    '--celestial-button-label-scale': config.typography.buttonLabel,
+    '--celestial-feature-scale': config.sizing.featureCard,
+    '--celestial-plan-scale': config.sizing.planCard,
+    '--celestial-hero-card-scale': config.sizing.heroCard,
+    '--celestial-icon-scale': config.sizing.iconScale,
   } as CSSProperties;
+  const Principal = previewMode ? 'div' : 'main';
+  const ordem = Array.from(
+    new Set([
+      ...config.sectionOrder,
+      'features',
+      'plans',
+      'flow',
+      'faq',
+      'finalCta',
+    ] as LandingSectionKey[])
+  );
 
-  // Estes quatro conceitos são editoriais. Recursos técnicos reais seguem
-  // sendo gerados logo abaixo a partir de config.features.items.
-  const pilares = [
-    {
-      titulo: 'Autoconhecimento',
-      descricao: 'Descubra seus padrões, seus ritmos e seu potencial.',
-      icon: <Leaf aria-hidden="true" />,
-    },
-    {
-      titulo: 'Equilíbrio integral',
-      descricao: 'Cultive harmonia entre corpo, emoções e energia.',
-      icon: <Waves aria-hidden="true" />,
-    },
-    {
-      titulo: 'Clareza interior',
-      descricao: 'Encontre presença e escolhas com mais consciência.',
-      icon: <Sun aria-hidden="true" />,
-    },
-    {
-      titulo: 'Inteligência compassiva',
-      descricao: 'Tecnologia para apoiar uma jornada mais gentil.',
-      icon: <Heart aria-hidden="true" />,
-    },
-  ];
+  const intro = (rotulo: string, titulo: string, descricao: string) => (
+    <div className={styles.sectionIntro}>
+      <p className={styles.eyebrow}>{rotulo}</p>
+      <h2>{titulo}</h2>
+      <p>{descricao}</p>
+    </div>
+  );
 
-  function renderizarSecao(chave: LandingSectionKey) {
+  function secao(chave: LandingSectionKey): ReactNode {
     switch (chave) {
       case 'features':
-        if (!config.features.visible) return null;
         return (
-          <section
-            key={chave}
-            className="jornada-secao jornada-beneficios-reais"
-            id="recursos"
-          >
-            <div className="jornada-container">
-              <TituloSecao
-                id="titulo-recursos"
-                rotulo={config.features.badgeText}
-                titulo={config.features.title}
-                descricao={config.features.description}
-              />
-              <div
-                className="jornada-grid-recursos"
-                aria-labelledby="titulo-recursos"
-              >
-                {config.features.items.map((item) => {
-                  const Icone = getBuilderIcon(item.icon);
-                  return (
-                    <article className="jornada-recurso" key={item.id}>
-                      <span className="jornada-icone">
-                        <Icone aria-hidden="true" />
-                      </span>
-                      <h3>{item.title}</h3>
-                      <p>{item.description}</p>
-                    </article>
-                  );
-                })}
-              </div>
-            </div>
-          </section>
-        );
-      case 'flow':
-        if (!config.flow.visible) return null;
-        return (
-          <section
-            key={chave}
-            className="jornada-secao jornada-fluxo"
-            id="fluxo"
-          >
-            <div className="jornada-container">
-              <TituloSecao
-                id="titulo-fluxo"
-                rotulo={config.flow.badgeText}
-                titulo={config.flow.title}
-                descricao={config.flow.description}
-              />
-              <ol
-                className="jornada-grid-passos"
-                aria-labelledby="titulo-fluxo"
-              >
-                {config.flow.items.map((item) => {
-                  const Icone = getBuilderIcon(item.icon);
-                  return (
-                    <li key={item.id}>
-                      {/* Linha do tempo: número grande, traço até o
-                          próximo passo e o ícone escolhido no Construtor. */}
-                      <div className="jornada-passo-topo">
-                        <span className="jornada-passo-numero">
-                          {item.step}
-                        </span>
-                        <span
-                          className="jornada-passo-traco"
-                          aria-hidden="true"
-                        />
-                        <span className="jornada-icone jornada-icone-pequeno">
-                          <Icone aria-hidden="true" />
-                        </span>
-                      </div>
-                      <h3>{item.title}</h3>
-                      <p>{item.description}</p>
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-          </section>
-        );
-      case 'metrics':
-        if (!config.metrics.visible) return null;
-        return (
-          <section key={chave} className="jornada-secao jornada-indicadores">
-            <div className="jornada-container">
-              <TituloSecao
-                id="titulo-indicadores"
-                rotulo={config.metrics.badgeText}
-                titulo={config.metrics.title}
-                descricao={config.metrics.description}
-              />
-              <dl
-                className="jornada-grid-indicadores"
-                aria-labelledby="titulo-indicadores"
-                aria-busy={estadoPlanos === 'loading'}
-              >
-                {config.metrics.items.map((item) => (
-                  <div key={item.id}>
-                    <dt>{item.label}</dt>
-                    <dd className="jornada-indicador-valor">
-                      {estadoPlanos === 'loading' && item.source !== 'custom'
-                        ? '…'
-                        : estadoPlanos === 'error' && item.source !== 'custom'
-                          ? '—'
-                          : valorIndicador(item.source, item.customValue)}
-                    </dd>
-                    <dd className="jornada-indicador-nota">{item.note}</dd>
-                  </div>
+          config.features.visible && (
+            <section id="mapas" className={styles.section} key={chave}>
+              <span id="recursos" className={styles.anchor} />
+              <span id="leituras-de-mapas" className={styles.anchor} />
+              {intro(
+                config.features.badgeText,
+                config.features.title,
+                config.features.description
+              )}
+              <div className={styles.mapGrid}>
+                {config.features.items.map((mapa) => (
+                  <article className={styles.mapCard} key={mapa.id}>
+                    <Image
+                      src={ilustracoesDosMapas[mapa.id] ?? ceuVedico}
+                      alt=""
+                      sizes="(max-width: 700px) 90vw, 30vw"
+                      className={styles.mapArt}
+                    />
+                    <div className={styles.mapCopy}>
+                      <h3>{mapa.title}</h3>
+                      <p>{mapa.description}</p>
+                    </div>
+                  </article>
                 ))}
-              </dl>
-            </div>
-          </section>
+              </div>
+              <p className={styles.note}>
+                As imagens ilustram cada perspectiva. Suas leituras são pessoais
+                e dependem dos dados do perfil e dos recursos do seu plano.
+              </p>
+            </section>
+          )
         );
       case 'plans':
-        if (!config.plans.visible) return null;
         return (
-          <section
-            key={chave}
-            className="jornada-secao jornada-planos"
-            id="planos"
-          >
-            <div className="jornada-container">
-              <TituloSecao
-                id="titulo-planos"
-                rotulo={config.plans.badgeText}
-                titulo={config.plans.title}
-                descricao={config.plans.description}
-              />
-              {estadoPlanos === 'loading' ? (
-                <p className="jornada-status" role="status">
+          config.plans.visible && (
+            <section
+              id="planos"
+              className={styles.section}
+              key={chave}
+              aria-busy={catalogo.estado === 'carregando'}
+            >
+              {intro(
+                config.plans.badgeText,
+                config.plans.title,
+                config.plans.description
+              )}
+              {catalogo.estado === 'carregando' && (
+                <p className={styles.status} role="status">
                   Consultando planos disponíveis…
                 </p>
-              ) : null}
-              {estadoPlanos === 'error' ? (
-                <div className="jornada-erro" role="alert">
-                  <p>{erroPlanos}</p>
+              )}
+              {catalogo.estado === 'erro' && (
+                <div className={styles.status} role="alert">
+                  <p>{catalogo.erro}</p>
                   <button
+                    className={styles.outlineButton}
                     type="button"
-                    className="jornada-botao jornada-botao-contorno"
                     onClick={() => {
-                      setEstadoPlanos('loading');
-                      setErroPlanos('');
-                      setTentativaPlanos((n) => n + 1);
+                      setCatalogo({ estado: 'carregando', planos: [] });
+                      setTentativa((atual) => atual + 1);
                     }}
                   >
                     <RotateCw aria-hidden="true" /> Tentar novamente
                   </button>
                 </div>
-              ) : null}
-              {estadoPlanos === 'ready' && planos.length === 0 ? (
-                <p className="jornada-status">
-                  Nenhum plano está aberto para assinatura no momento.
+              )}
+              {catalogo.estado === 'pronto' && catalogo.planos.length === 0 && (
+                <p className={styles.status}>
+                  Nenhum plano está publicado no momento.
                 </p>
-              ) : null}
-              {estadoPlanos === 'ready' && planos.length > 0 ? (
-                <div className="jornada-grid-planos">
-                  {planos.map((plano) => {
-                    const exibidas = beneficiosPublicos(plano.features);
-                    return (
-                      <article
-                        className={`jornada-plano ${plano.key === 'meta' ? 'jornada-plano-destaque' : ''}`}
-                        key={plano.key}
-                      >
-                        <div className="jornada-plano-topo">
+              )}
+              <div className={styles.planGrid}>
+                {catalogo.planos.map((plano) => {
+                  const beneficios = beneficiosPublicos(plano.features);
+                  return (
+                    <article
+                      key={plano.key}
+                      className={styles.planCard}
+                      data-destaque={Boolean(plano.highlightText)}
+                    >
+                      <Image
+                        src={ilustracoesDosPlanos[plano.key] ?? ceuVedico}
+                        alt=""
+                        sizes="(max-width: 700px) 90vw, 30vw"
+                        className={styles.planArt}
+                      />
+                      <div className={styles.planCopy}>
+                        <div className={styles.planTitle}>
                           <h3>{plano.name}</h3>
-                          {plano.highlightText ? (
+                          {plano.highlightText && (
                             <span>{plano.highlightText}</span>
-                          ) : null}
+                          )}
                         </div>
                         <p>{plano.tagline}</p>
-                        <p className="jornada-preco">
+                        <p className={styles.planDescription}>
+                          {plano.description}
+                        </p>
+                        <p className={styles.price}>
                           {moedaPtBr(plano.monthlyPrice, plano.currencyCode)}
                           <span> /mês</span>
                         </p>
-                        <p className="jornada-anual">
-                          ou {moedaPtBr(plano.annualPrice, plano.currencyCode)}{' '}
-                          por ano
-                        </p>
-                        <details className="jornada-descricao-plano">
-                          <summary>Sobre este plano</summary>
-                          <p>{plano.description}</p>
-                        </details>
-                        <p className="jornada-inclui">Inclui:</p>
-                        <ul>
-                          {exibidas.map((recurso) => (
-                            <li key={recurso.key}>
+                        {plano.annualPrice > 0 && (
+                          <p className={styles.annual}>
+                            ou{' '}
+                            {moedaPtBr(plano.annualPrice, plano.currencyCode)}{' '}
+                            por ano
+                          </p>
+                        )}
+                        <ul className={styles.benefits}>
+                          {beneficios.map((beneficio) => (
+                            <li key={beneficio.key}>
                               <Check aria-hidden="true" />
-                              {recurso.label}
+                              <span>{beneficio.label}</span>
                             </li>
                           ))}
-                          {exibidas.length === 0 && (
-                            <li>Nenhum recurso habilitado neste plano.</li>
-                          )}
                         </ul>
-                        <Ligacao
+                        {beneficios.length === 0 && (
+                          <p className={styles.note}>
+                            Nenhum recurso habilitado neste plano.
+                          </p>
+                        )}
+                        <Link
                           href={config.hero.primaryCtaHref}
-                          previewMode={previewMode}
-                          className="jornada-botao jornada-botao-plano"
+                          className={styles.primaryButton}
                         >
                           {config.plans.ctaLabel}{' '}
                           <ArrowRight aria-hidden="true" />
-                        </Ligacao>
-                      </article>
-                    );
-                  })}
+                        </Link>
+                        <p className={styles.note}>
+                          {plano.monthlyPrice === 0
+                            ? 'Comece com os recursos incluídos no plano gratuito.'
+                            : plano.assinaturaOnline
+                              ? 'A contratação está disponível na sua conta, após entrar.'
+                              : 'Consulte a disponibilidade de contratação na sua conta.'}
+                        </p>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+            </section>
+          )
+        );
+      case 'flow':
+        return (
+          config.flow.visible && (
+            <section id="sobre" className={styles.about} key={chave}>
+              <span id="fluxo" className={styles.anchor} />
+              <div>
+                {intro(
+                  config.flow.badgeText,
+                  config.flow.title,
+                  config.flow.description
+                )}
+                <div id="lyra-ai" className={styles.aiDescription}>
+                  <Sparkles aria-hidden="true" />
+                  <p>
+                    Com a Lyra AI, você pode conversar sobre suas leituras,
+                    aprofundar perguntas e retomar conversas. Memória e anexos
+                    seguem suas autorizações e os recursos disponíveis no seu
+                    plano.
+                  </p>
                 </div>
-              ) : null}
-            </div>
-          </section>
+              </div>
+            </section>
+          )
         );
       case 'faq':
-        if (!config.faq.visible) return null;
         return (
-          <section key={chave} className="jornada-secao jornada-faq" id="faq">
-            <div className="jornada-container jornada-faq-layout">
-              <TituloSecao
-                id="titulo-faq"
-                rotulo={config.faq.badgeText}
-                titulo={config.faq.title}
-                descricao={config.faq.description}
-              />
-              <div
-                className="jornada-faq-perguntas"
-                aria-labelledby="titulo-faq"
-              >
+          config.faq.visible && (
+            <section id="faq" className={styles.section} key={chave}>
+              {intro(
+                config.faq.badgeText,
+                config.faq.title,
+                config.faq.description
+              )}
+              <div className={styles.faq}>
                 {config.faq.items.map((item) => (
                   <details key={item.id}>
                     <summary>
@@ -605,438 +410,217 @@ export function LandingPage({
                   </details>
                 ))}
               </div>
-            </div>
+            </section>
+          )
+        );
+      case 'metrics': {
+        if (!config.metrics.visible) return null;
+        const contagens: Record<string, number> = {
+          planCount: catalogo.planos.length,
+          featureCount: catalogo.planos.flatMap((plano) =>
+            beneficiosPublicos(plano.features)
+          ).length,
+          categoryCount: new Set(
+            catalogo.planos.flatMap((plano) =>
+              plano.features.filter((f) => f.enabled).map((f) => f.category)
+            )
+          ).size,
+          checkoutCount: catalogo.planos.filter(
+            (plano) => plano.assinaturaOnline
+          ).length,
+        };
+        return (
+          <section className={styles.section} key={chave}>
+            {intro(
+              config.metrics.badgeText,
+              config.metrics.title,
+              config.metrics.description
+            )}
+            <dl className={styles.metrics}>
+              {config.metrics.items.map((item) => (
+                <div key={item.id}>
+                  <dt>{item.label}</dt>
+                  <dd>
+                    {item.source === 'custom'
+                      ? item.customValue
+                      : catalogo.estado === 'pronto'
+                        ? contagens[item.source]
+                        : 'Indisponível'}
+                  </dd>
+                  <dd>{item.note}</dd>
+                </div>
+              ))}
+            </dl>
           </section>
         );
+      }
       case 'finalCta':
-        if (!config.finalCta.visible) return null;
         return (
-          <section
-            key={chave}
-            className="jornada-encerramento"
-            aria-labelledby="titulo-encerramento"
-          >
-            <div className="jornada-onda-esquerda" aria-hidden="true" />
-            <div className="jornada-onda-direita" aria-hidden="true" />
-            <div className="jornada-encerramento-conteudo jornada-container">
-              <SimboloMarca />
-              <p className="jornada-etiqueta">{config.finalCta.badgeText}</p>
-              <h2 id="titulo-encerramento">
-                {config.finalCta.title ===
-                'O seu próximo dia pode começar mais claro.'
-                  ? 'Comece a sua jornada hoje.'
-                  : config.finalCta.title}
-              </h2>
-              <p>
-                {config.finalCta.description ===
-                'Crie sua conta e receba a primeira leitura do seu dia em poucos minutos.'
-                  ? 'Dê o primeiro passo para uma vida mais consciente, plena e em sintonia com o que realmente importa.'
-                  : config.finalCta.description}
-              </p>
-              <div className="jornada-botoes jornada-botoes-centro">
-                <Ligacao
-                  href={config.finalCta.primaryHref}
-                  previewMode={previewMode}
-                  className="jornada-botao jornada-botao-principal"
-                >
-                  {config.finalCta.primaryLabel === 'Criar minha conta'
-                    ? 'Comece agora'
-                    : config.finalCta.primaryLabel}{' '}
-                  <ArrowRight aria-hidden="true" />
-                </Ligacao>
-                <Ligacao
-                  href={config.finalCta.secondaryHref}
-                  previewMode={previewMode}
-                  className="jornada-botao-texto"
-                >
-                  {config.finalCta.secondaryLabel}{' '}
-                  <ArrowRight aria-hidden="true" />
-                </Ligacao>
-              </div>
-            </div>
-          </section>
+          config.finalCta.visible && (
+            <section className={styles.finalCta} key={chave}>
+              <Image
+                src={horizonte}
+                alt=""
+                fill
+                sizes="100vw"
+                className={styles.horizon}
+              />
+              <h2>{config.finalCta.title}</h2>
+              <Link
+                href={config.finalCta.primaryHref}
+                className={styles.primaryButton}
+              >
+                {config.finalCta.primaryLabel}
+                <ArrowRight aria-hidden="true" />
+              </Link>
+            </section>
+          )
         );
     }
   }
 
-  const secaoSobre = (
-    <section
-      className="jornada-manifesto"
-      id="sobre"
-      aria-labelledby="titulo-manifesto"
-    >
-      <div className="jornada-container jornada-manifesto-grid">
-        <div
-          className="jornada-vale"
-          role="img"
-          aria-label="Portal de luz sobre um vale com água e montanhas"
-        />
-        <div className="jornada-manifesto-texto">
-          <p className="jornada-etiqueta">Presença e transformação</p>
-          <h2 id="titulo-manifesto">
-            Viva com mais <em>presença e significado.</em>
-          </h2>
-          <p>
-            A vida ganha novas possibilidades quando você se reconecta com o que
-            realmente importa. A Lyra MetaCare acompanha a sua jornada
-            combinando tecnologia, cuidado e autoconhecimento.
-          </p>
-          <div className="jornada-compromisso">
-            <Compass aria-hidden="true" /> Mais vida <span>•</span> Mais clareza{' '}
-            <span>•</span> Mais você
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-  const Principal = previewMode ? 'div' : 'main';
-
-  const secaoEntrada = (
-    <section
-      className="jornada-secao jornada-login-direto"
-      aria-labelledby="titulo-login-direto"
-    >
-      <div className="jornada-container jornada-login-resumo">
-        <div>
-          <p className="jornada-etiqueta">
-            <LockKeyhole aria-hidden="true" /> {config.hero.quickAuthBadge}
-          </p>
-          <h2 id="titulo-login-direto">{config.hero.quickAuthTitle}</h2>
-          <p>{config.hero.quickAuthDescription}</p>
-        </div>
-        <details className="jornada-login-expansivel">
-          <summary>
-            {config.hero.quickAuthSubmitLabel} com e-mail e senha{' '}
-            <ChevronDown aria-hidden="true" />
-          </summary>
-          <form onSubmit={entrar}>
-            <label htmlFor="jornada-email">E-mail</label>
-            <input
-              id="jornada-email"
-              type="email"
-              autoComplete="email"
-              inputMode="email"
-              required
-              value={email}
-              disabled={previewMode || autenticando}
-              onChange={(evento) => setEmail(evento.target.value)}
-            />
-            <label htmlFor="jornada-senha">Senha</label>
-            <div className="jornada-campo-senha">
-              <input
-                id="jornada-senha"
-                type={verSenha ? 'text' : 'password'}
-                autoComplete="current-password"
-                required
-                value={senha}
-                disabled={previewMode || autenticando}
-                onChange={(evento) => setSenha(evento.target.value)}
-              />
-              <button
-                type="button"
-                aria-label={verSenha ? 'Ocultar senha' : 'Mostrar senha'}
-                aria-pressed={verSenha}
-                onClick={() => setVerSenha((atual) => !atual)}
-              >
-                {verSenha ? (
-                  <EyeOff aria-hidden="true" />
-                ) : (
-                  <Eye aria-hidden="true" />
-                )}
-              </button>
-            </div>
-            <button
-              type="submit"
-              className="jornada-botao jornada-botao-principal"
-              disabled={previewMode || autenticando}
-            >
-              {autenticando ? 'Entrando…' : config.hero.quickAuthSubmitLabel}{' '}
-              <ArrowRight aria-hidden="true" />
-            </button>
-            <Ligacao
-              href={config.hero.primaryCtaHref}
-              previewMode={previewMode}
-              className="jornada-link-criar"
-            >
-              {config.hero.quickAuthSecondaryLabel}
-            </Ligacao>
-          </form>
-        </details>
-      </div>
-    </section>
-  );
-
   return (
     <div
-      className={`lyra-public-theme source-sans-regular lyra-jornada${COM_ARTE ? ' jornada-com-arte' : ''}`}
-      style={fatoresDeEscala}
+      className={`${styles.page} ${editorial.variable} ${imprima.variable} ${varela.variable} ${varelaEstendida.variable}`}
+      style={escala}
+      onClickCapture={(evento) => {
+        if (evento.target instanceof Element && evento.target.closest('a')) {
+          if (previewMode) evento.preventDefault();
+          else setMenuAberto(false);
+        }
+      }}
     >
-      {/* O "Pular para o conteúdo" vem do layout raiz (src/app/layout.tsx),
-          que aponta para o #conteudo-principal abaixo. */}
-      <header className="jornada-cabecalho">
-        <div className="jornada-container jornada-cabecalho-conteudo">
-          <Ligacao
-            href="#topo"
-            previewMode={previewMode}
-            className="jornada-marca"
+      <header className={styles.header}>
+        <Link href="#topo" className={styles.brand}>
+          <Image
+            src={marca}
+            alt={config.footer.brandLine}
+            sizes="280px"
+            loading="eager"
+            className={styles.brandImage}
+          />
+        </Link>
+        <button
+          type="button"
+          id="abrir-menu-celestial"
+          className={styles.menuToggle}
+          aria-label={menuAberto ? 'Fechar menu' : 'Abrir menu'}
+          aria-expanded={menuAberto}
+          aria-controls="navegacao-celestial"
+          onClick={() => setMenuAberto((atual) => !atual)}
+        >
+          {menuAberto ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+        </button>
+        <nav
+          id="navegacao-celestial"
+          className={styles.nav}
+          data-aberto={menuAberto}
+          aria-label="Navegação principal"
+        >
+          <Link href="#experiencia">A experiência</Link>
+          {config.features.visible && <Link href="#mapas">Seus mapas</Link>}
+          {config.flow.visible && <Link href="#sobre">Sobre</Link>}
+          {config.plans.visible && <Link href="#planos">Planos</Link>}
+        </nav>
+        <div className={styles.headerActions}>
+          <Link href="/login" className={styles.login}>
+            {config.header.loginLabel}
+          </Link>
+          <Link
+            href={config.hero.primaryCtaHref}
+            className={styles.primaryButton}
           >
-            <SimboloMarca prioridade />
-            <span>{config.footer.brandLine}</span>
-          </Ligacao>
-          <nav
-            className={`jornada-menu ${menuAberto ? 'jornada-menu-aberto' : ''}`}
-            aria-label="Navegação principal"
-            id="navegacao-landing"
-          >
-            {menu.map((item) => (
-              <Ligacao
-                href={item.href}
-                previewMode={previewMode}
-                key={item.href}
-                onNavigate={() => setMenuAberto(false)}
-              >
-                {item.label}
-              </Ligacao>
-            ))}
-          </nav>
-          <div className="jornada-cabecalho-acoes">
-            {!previewMode ? <ThemeToggleButton /> : null}
-            <Ligacao
-              href={config.hero.primaryCtaHref}
-              previewMode={previewMode}
-              className="jornada-entrar"
-            >
-              {config.header.loginLabel}
-            </Ligacao>
-            <Ligacao
-              href={config.hero.primaryCtaHref}
-              previewMode={previewMode}
-              className="jornada-botao jornada-botao-principal jornada-header-cta"
-            >
-              {config.header.fullLoginLabel} <ArrowRight aria-hidden="true" />
-            </Ligacao>
-            <button
-              type="button"
-              className="jornada-abrir-menu"
-              aria-expanded={menuAberto}
-              aria-controls="navegacao-landing"
-              aria-label={menuAberto ? 'Fechar menu' : 'Abrir menu'}
-              onClick={() => setMenuAberto((aberto) => !aberto)}
-            >
-              {menuAberto ? (
-                <X aria-hidden="true" />
-              ) : (
-                <Menu aria-hidden="true" />
-              )}
-            </button>
-          </div>
+            {config.header.fullLoginLabel}
+          </Link>
         </div>
       </header>
-
-      {/* Na prévia do Construtor a página do admin já tem o seu
-          #conteudo-principal: o id só existe na landing pública. */}
       <Principal id={previewMode ? undefined : 'conteudo-principal'}>
+        {erroConfiguracao && !overrideConfig && (
+          <p className={styles.status} role="status">
+            Exibindo a apresentação padrão. Não foi possível atualizar o
+            conteúdo publicado neste momento.
+          </p>
+        )}
         <section
-          className="jornada-hero"
           id="topo"
-          aria-labelledby="titulo-hero"
+          className={styles.hero}
+          aria-labelledby="titulo-celestial"
         >
-          <div className="jornada-hero-ambiente" aria-hidden="true" />
-          <div className="jornada-container jornada-hero-conteudo">
-            <div className="jornada-hero-texto">
-              <p className="jornada-etiqueta">
-                <Sparkles aria-hidden="true" /> {config.hero.badgeText}
-              </p>
-              <h1 id="titulo-hero">
-                {heroTitulo} <em>{heroDestaque}</em>
-              </h1>
-              <p className="jornada-hero-descricao">{heroDescricao}</p>
-              <div className="jornada-botoes">
-                <Ligacao
-                  href={config.hero.primaryCtaHref}
-                  previewMode={previewMode}
-                  className="jornada-botao jornada-botao-principal"
-                >
-                  {config.hero.primaryCtaLabel === 'Começar agora'
-                    ? 'Comece agora'
-                    : config.hero.primaryCtaLabel}{' '}
-                  <ArrowRight aria-hidden="true" />
-                </Ligacao>
-                <Ligacao
-                  href={config.hero.secondaryCtaHref}
-                  previewMode={previewMode}
-                  className="jornada-botao-texto"
-                >
-                  {config.hero.secondaryCtaLabel}{' '}
-                  <ArrowRight aria-hidden="true" />
-                </Ligacao>
-              </div>
-              <div className="jornada-assinatura">
-                <span /> Uma vida mais consciente começa aqui
-              </div>
+          <div className={styles.heroCopy}>
+            <p className={styles.eyebrow}>{config.hero.badgeText}</p>
+            <h1 id="titulo-celestial">
+              {config.hero.title} <span>{config.hero.accentTitle}</span>
+            </h1>
+            <p className={styles.heroDescription}>{config.hero.description}</p>
+            <div className={styles.heroActions}>
+              <Link
+                href={config.hero.primaryCtaHref}
+                className={styles.primaryButton}
+              >
+                {config.hero.primaryCtaLabel}
+                <ArrowRight aria-hidden="true" />
+              </Link>
+              <Link
+                href={config.hero.secondaryCtaHref}
+                className={styles.textLink}
+              >
+                {config.hero.secondaryCtaLabel}
+              </Link>
             </div>
-            <div
-              className="jornada-hero-arte"
-              role="img"
-              aria-label="Flor de lótus luminosa sobre água e montanhas, evocando consciência e evolução"
-            />
           </div>
-        </section>
-
-        <section
-          className="jornada-pilares"
-          aria-label="Pilares de bem-estar consciente"
-        >
-          <div className="jornada-container jornada-grid-pilares">
-            {pilares.map((pilar) => (
-              <div key={pilar.titulo} className="jornada-pilar">
-                <span className="jornada-icone">{pilar.icon}</span>
-                <h2>{pilar.titulo}</h2>
-                <p>{pilar.descricao}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section
-          id="leituras-de-mapas"
-          className="jornada-secao jornada-mapas"
-          aria-labelledby="titulo-mapas"
-        >
-          <div className="jornada-container">
-            <TituloSecao
-              id="titulo-mapas"
-              rotulo="Leituras de Mapas"
-              titulo="Três caminhos para se conhecer melhor"
-              descricao="Do seu céu de nascimento às escolhas de hoje: conheça as leituras que o motor da Lyra reúne para acompanhar você."
+          <div className={styles.heroVisual}>
+            <Image
+              src={ceuVedico}
+              alt=""
+              sizes="(max-width: 700px) 100vw, 55vw"
+              loading="eager"
+              fetchPriority="high"
+              className={styles.heroArt}
             />
-            <div className="jornada-grid-mapas">
-              <article className="jornada-mapa">
-                <span className="jornada-icone">
-                  <Sun aria-hidden="true" />
-                </span>
-                <p className="jornada-mapa-tipo">Seu céu de nascimento</p>
-                <h3>Védico tradicional — Jyotish</h3>
-                <p>
-                  Ascendente, planetas, signos, casas, nakshatras e períodos
-                  planetários (dashas), calculados a partir da data, hora e
-                  cidade do seu nascimento.
-                </p>
-                <p className="jornada-mapa-detalhe">
-                  Uma base para explorar seus ritmos e as fases da vida.
-                </p>
-              </article>
-              <article className="jornada-mapa">
-                <span className="jornada-icone">
-                  <Compass aria-hidden="true" />
-                </span>
-                <p className="jornada-mapa-tipo">Conexões e significado</p>
-                <h3>Lyra DM Samadhi</h3>
-                <p>
-                  Integra o mapa védico às correspondências simbólicas de
-                  elementos, Roda de Cura, chakras, metais e alquimia definidas
-                  no método.
-                </p>
-                <p className="jornada-mapa-detalhe">
-                  Uma leitura de autoconhecimento que respeita a sua própria
-                  percepção.
-                </p>
-              </article>
-              <article className="jornada-mapa">
-                <span className="jornada-icone">
-                  <Sparkles aria-hidden="true" />
-                </span>
-                <p className="jornada-mapa-tipo">Da leitura à prática</p>
-                <h3>Quantum — Lyra e Arkático</h3>
-                <p>
-                  Transforma a reflexão em próximos passos e calcula um Score de
-                  Ação com a energia, a pressão e o tempo disponível que você
-                  informa.
-                </p>
-                <p className="jornada-mapa-detalhe">
-                  Pequenas ações para experimentar no seu ritmo, um ciclo de
-                  cada vez.
-                </p>
-              </article>
-            </div>
-            <p className="jornada-mapas-nota">
-              <ShieldCheck aria-hidden="true" />
-              <span>
-                Clareza em cada leitura: Desenho Humano ainda não é calculado.
-                Aspectos pessoais simbólicos de Samadhi e Arkático dependem de
-                você e não são deduzidos automaticamente. “Quantum” é o nome do
-                método, com uso simbólico; as leituras não substituem avaliação
-                profissional de saúde.
-              </span>
+            <p className={styles.heroCaption}>
+              <Sparkles aria-hidden="true" />
+              {config.hero.previewTitle}
             </p>
           </div>
         </section>
-
         <section
-          className="jornada-secao jornada-guia"
-          aria-labelledby="titulo-guia"
+          id="experiencia"
+          className={styles.highlights}
+          aria-label="A experiência Lyra"
         >
-          {/* Layout editorial em duas colunas (título à esquerda, lista à
-              direita) para não repetir a grade de três cartões usada em
-              Recursos e em Como funciona. */}
-          <div className="jornada-container jornada-guia-layout">
-            <TituloSecao
-              id="titulo-guia"
-              rotulo={config.hero.previewBadge}
-              titulo={config.hero.previewTitle}
-              descricao={config.hero.previewDescription}
-            />
-            <ul className="jornada-guia-lista">
-              {config.hero.previewItems.map((item) => {
-                const Icone = getBuilderIcon(item.icon);
-                return (
-                  <li key={item.id} className="jornada-guia-item">
-                    <span className="jornada-icone">
-                      <Icone aria-hidden="true" />
-                    </span>
-                    <div>
-                      <h3>{item.title}</h3>
-                      <p>{item.description}</p>
-                    </div>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        </section>
-
-        {/* Menu e blocos usam a mesma ordem. Sobre encerra a apresentação,
-            seguido do acesso rápido e do convite final. */}
-        {ordem.map(renderizarSecao)}
-        {secaoSobre}
-        {secaoEntrada}
-        {renderizarSecao('finalCta')}
-      </Principal>
-
-      <footer className="jornada-rodape">
-        <div className="jornada-container jornada-rodape-conteudo">
-          <div className="jornada-rodape-marca">
-            <SimboloMarca />
-            <strong>{config.footer.brandLine}</strong>
-          </div>
-          <p>{config.footer.note}</p>
-          <nav aria-label="Documentos legais">
-            <Ligacao
-              href={ROTA_POLITICA_DE_PRIVACIDADE}
-              previewMode={previewMode}
+          {config.hero.previewItems.map((item) => (
+            <Link
+              key={item.id}
+              href={destinosDosDestaques[item.id] ?? '#sobre'}
+              className={styles.highlight}
             >
-              Política de privacidade
-            </Ligacao>
-            <Ligacao href={ROTA_TERMOS_DE_USO} previewMode={previewMode}>
-              Termos de uso
-            </Ligacao>
-          </nav>
+              <Image
+                src={ilustracoesDosDestaques[item.id] ?? ceuVedico}
+                alt=""
+                sizes="(max-width: 700px) 34vw, 15vw"
+                className={styles.highlightArt}
+              />
+              <div>
+                <h2>{item.title}</h2>
+                <p>{item.description}</p>
+              </div>
+              <ArrowRight aria-hidden="true" />
+            </Link>
+          ))}
+        </section>
+        {ordem.map(secao)}
+      </Principal>
+      <footer className={styles.footer}>
+        <div className={styles.footerSignature}>
+          <span />
+          {config.footer.brandLine}
+          <span />
         </div>
-        <div className="jornada-container jornada-rodape-fim">
-          <ShieldCheck aria-hidden="true" /> Privacidade e respeito em cada
-          etapa <span>•</span> <Moon aria-hidden="true" /> Bem-estar e
-          autoconhecimento
-        </div>
+        <nav aria-label="Documentos legais">
+          <Link href={ROTA_POLITICA_DE_PRIVACIDADE}>Privacidade</Link>
+          <Link href={ROTA_TERMOS_DE_USO}>Termos</Link>
+        </nav>
+        <p>{config.footer.note}</p>
       </footer>
     </div>
   );

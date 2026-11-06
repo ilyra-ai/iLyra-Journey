@@ -1,5 +1,7 @@
 # Sistema visual "Lyra Clean"
 
+> **Escopo vigente em 2026-11-06:** a landing pública passa a seguir a identidade celestial escura e amarela aprovada pelo usuário, implementada na tarefa 149 com estilos isolados em `src/components/landing/LandingCelestial.module.css`. A referência completa do futuro app está na tarefa 147. As regras abaixo continuam sendo a base das telas internas ainda não redesenhadas; não aplicar a exceção da landing a essas telas sem nova autorização. O favicon foi atualizado para o símbolo amarelo por solicitação expressa. As fontes locais, os tokens da landing e a origem das ilustrações estão documentados em `src/assets/celestial/ORIGEM.md`.
+
 Visual aprovado pelo usuário em 2026-10-09 (tarefa 27) e aplicado em todo o
 app: mais simples, moderno e premium, sem perder nenhuma função. Substitui o
 visual anterior ("Cosmic Light", com vidro fosco, orbes e gradientes).

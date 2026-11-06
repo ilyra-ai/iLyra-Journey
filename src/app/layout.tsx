@@ -119,26 +119,24 @@ export const metadata: Metadata = {
     template: '%s | Lyra MetaCare',
   },
   description:
-    'Plataforma de bem-estar, longevidade e autoconhecimento: seus sinais do dia, o seu mapa védico e uma IA que orienta a rotina. Não substitui avaliação profissional de saúde.',
+    'Explore seus mapas pessoais, encontre novas perspectivas e converse com a Lyra. Autoconhecimento com leituras védicas, inteligência artificial e privacidade.',
   keywords: [
     'Lyra MetaCare',
-    'saúde preventiva',
-    'bem-estar',
+    'autoconhecimento',
     'inteligência artificial',
     'astrologia védica',
-    'longevidade',
-    'monitoramento',
-    'wellness premium',
+    'mapas pessoais',
+    'Lyra AI',
   ],
   applicationName: 'Lyra MetaCare',
   authors: [{ name: 'iLyra AI' }],
   creator: 'iLyra AI',
   publisher: 'iLyra AI',
-  category: 'health',
+  category: 'lifestyle',
   openGraph: {
     title: 'Lyra MetaCare',
     description:
-      'Seu bem-estar orquestrado com inteligência artificial, métricas vitais e sabedoria ancestral.',
+      'Um novo olhar para o seu dia. Explore seus mapas e converse com a Lyra.',
     siteName: 'Lyra MetaCare',
     locale: 'pt_BR',
     type: 'website',
@@ -147,7 +145,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Lyra MetaCare',
     description:
-      'Bem-estar preventivo premium com IA, biometria e uma experiência clara, serena e sofisticada.',
+      'Mapas pessoais, novas perspectivas e conversas com a Lyra AI, com privacidade e no seu ritmo.',
   },
   robots: {
     index: true,

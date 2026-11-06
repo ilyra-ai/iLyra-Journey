@@ -21,20 +21,20 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **92,6%** (137 de 148)   |
-| Implementações publicadas               | **96,6%** (143 de 148)   |
-| Tarefas totais                          | 148                      |
+| Conclusão integral                      | **91,9%** (137 de 149)   |
+| Implementações publicadas               | **96,6%** (144 de 149)   |
+| Tarefas totais                          | 149                      |
 | 🟢 Concluídas                           | 137                      |
-| 🟡 Implementadas com validação pendente | 6                        |
+| 🟡 Implementadas com validação pendente | 7                        |
 | 🔵 Em andamento                         | 2                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 3                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-06               |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os seis estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os sete estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
-**Paralisação vigente em 2026-11-06:** por solicitação expressa do usuário, atualizar e publicar somente este painel, interromper os processos de trabalho iniciados neste chat e aguardar novas instruções. As tarefas 142 e 144 continuam classificadas como iniciadas, mas estão **pausadas**, sem autorização para prosseguir agora. As 145 e 146 estão a iniciar. Não publicar as alterações de código ainda não validadas, não iniciar outra tarefa e não apresentar testes anteriores como validação do estado final atual.
+**Escopo vigente em 2026-11-06:** o usuário autorizou a landing pública 149 e seus ajustes de fontes, responsividade e conteúdo. As tarefas 142 e 144 continuam **pausadas**; suas alterações locais não integram esta publicação. As 145, 146 e o restante do redesenho 147 continuam a iniciar. Após publicar a 149, manter o app em localhost para validação visual do usuário e aguardar instruções.
 
 **Publicação documental da paralisação em 2026-11-06:** commit `9e92288c2ad80393d076e89672693193f16b67ba`, push confirmado `72d12437..9e92288c main -> main`. Somente `claude-gestao.md` incluído; 146 tarefas únicas conferidas, formato do arquivo aprovado e diff sem erros de whitespace. Alterações funcionais locais permanecem não publicadas. Este registro subsequente cumpre a regra 6 e não autoriza retomar o trabalho.
 
@@ -2947,3 +2947,28 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Publicação confirmada:** commit `0b5a63e00e5ff8f2081fd7c15e4ae05873660331`, push `083e4a49..0b5a63e0 main -> main`. Somente README, painel e novo PNG do logo incluídos. Conferidos 148 registros únicos, 11 referências locais válidas no README, ausência da referência ao logo antigo nesse documento, Prettier e diff sem erros de whitespace. Este registro do SHA atende à regra 6; aguardar instruções, sem iniciar a 147.
 - **Ajuste solicitado em 2026-11-06:** banner do logo com largura de `100%` do conteúdo do README, substituindo a restrição fixa de 480 px que deixava margens laterais excessivas. Proporção original preservada, sem altura fixa; respeitar o espaço interno próprio do GitHub. Alteração restrita à apresentação documental, com conferência de formato e diff; não retoma o redesign.
 - **Publicação do ajuste:** commit `bf93da6ceeca0a5e772bca4fcc1fe6044929130a`, push confirmado `074d5889..bf93da6c main -> main`. Somente README e painel publicados, Prettier aprovado e diff sem erros de whitespace. Registro subsequente conforme a regra 6; aguardar instruções.
+
+### 149 · Implementar a landing celestial aprovada com mapas e planos reais
+
+**Estado: 🟡 implementada · Validação visual final do usuário pendente, somente a landing pública.**
+
+- **Hierarquia tipográfica obrigatória, atualizada pelo usuário:** H1 e H2 usam **Clicker Script Regular**; textos normais usam **Imprima Regular**; textos em negrito e itálico usam **Varela**. A regra dos títulos prevalece sobre ênfases dentro deles. Aplicar agora na landing e preservar esta orientação no futuro redesenho integral. Fontes locais com licença SIL OFL incluída. Os arquivos Varela fornecidos são Regular 400: negrito e itálico são sintetizados pelo navegador, sem afirmar existir uma variante original não fornecida.
+- **Substituição da fonte anterior:** descontinuar o teste local da fonte de licença restrita; excluir seu carregamento e não incluí-la no Git. Clicker Script foi conferida no arquivo enviado e no catálogo oficial Google Fonts, com acentos em português e licença de redistribuição.
+
+- Implementar a composição da landing aprovada: logo amarelo, tema escuro, títulos editoriais, arte planetária, navegação superior, botões reais, três destaques e faixa final. Não usar a captura completa como interface.
+- Acrescentar explicação breve e imagem própria de cada mapa: Védico, Lyra DM Samādhi e Quantum, seguindo as ilustrações do pop-up aprovado.
+- Apresentar Free, Meta e Care com imagens, descrição, preços, benefícios e disponibilidade provenientes do catálogo real, incluindo carregamento, erro, nova tentativa e ausência de planos; não inventar valores ou checkout.
+- Preservar configuração publicada e prévia do construtor, personalizações e destinos existentes; distinguir cadastro de login por navegação funcional, sem redesenhar a tela de autenticação nesta etapa.
+- Estilos e componentes organizados para reaproveitamento futuro, sem alterar o restante do app. A aprovação recente do tema escuro e amarelo prevalece sobre a orientação visual clara anterior neste escopo. A 147 integral continua a iniciar e as frentes 142/144 permanecem pausadas.
+- Validar configuração/API/banco antes da apresentação, cumprir gates aplicáveis, conferir responsividade, teclado, links e estados reais no navegador. Preservar alterações locais anteriores fora desta publicação.
+- Publicar na main sem branches/worktrees; registrar evidências e SHA; iniciar o app em localhost, conferir a URL acessível e aguardar a validação do usuário.
+- **Referência específica:** [landing aprovada](./lyra-landing-aprovada-2026-11-06.png), preservada na raiz. As imagens dos mapas seguem o pop-up já aprovado; não são leituras calculadas de um usuário fictício.
+- **Complementos solicitados durante a execução:** seção Sobre com resumo do produto sem divulgar funções desativadas; novo favicon amarelo; responsividade desktop/mobile. Textos comerciais de fábrica atualizados pela migração 066, somente quando ainda iguais aos originais, sem mudar preços, direitos ou personalizações.
+- **Ajustes de validação do usuário:** Sobre em coluna única, sem vazio; manter o rótulo “Sobre” à esquerda e centralizar somente título e parágrafos. Retirar os três passos numerados; retirar somente o link “Lyra AI” da navegação superior; retirar “Explorar esta perspectiva” e suas setas dos três mapas, compactando imagens e espaçamento e eliminando a altura mínima do texto. Mapas e conversas continuam disponíveis no aplicativo.
+- **Enquadramento desktop solicitado:** área de conteúdo fluida com 82% da janela, tipografia e alturas da abertura proporcionais à largura/altura disponíveis, preservando os três destaques na composição inicial. Manter a adaptação própria de tablet e mobile e verificar as resoluções reais, sem cortar conteúdo para forçar um encaixe.
+- **Disponibilidade durante a validação:** manter a prévia em `localhost:3000` durante a compilação, usando os diretórios separados de desenvolvimento e produção do Next instalado. A interrupção anterior do servidor durante recompilações causou falha de transporte do catálogo; confirmar recuperação pela API e pelos três cards, sem inventar planos.
+
+- **Validação atual em 2026-11-06:** lint e formatação aprovados; 1.017 testes unitários em 97 arquivos e 609 testes de integração em 68 arquivos com MySQL real; TypeScript aprovado e build de produção com 138 páginas. No navegador, fontes Clicker Script, Imprima e Varela carregadas, catálogo e configuração reais disponíveis, sem erros de console na navegação conferida. Casos negativos das suítes exercitam falhas controladas; não equivalem a novas inferências externas.
+- **Responsividade conferida:** 320×740, 390×844, 768×1024, 1280×720, 1366×768, 1440×900, 1536×864, 1920×1080 e 2560×1440, sem rolagem horizontal. Títulos de mapas e planos em uma linha a partir de 768 px e quebra natural no mobile. Botões principais de 44 px no mobile. Corrigido o limite artificial de 760 px dos títulos.
+- **Cache e execução:** cache de compilação anterior isolado, recompilação concluída e servidor de produção reiniciado em `http://localhost:3000`. Assets de fontes com hashes novos e manifesto offline regenerado. O cache do navegador pessoal do usuário não foi manipulado nem sua sessão apagada.
+- **Escopo da publicação:** somente os arquivos da 149, fontes e documentação. Alterações locais das frentes pausadas 142/144 preservadas e excluídas do commit. A conferência visual final do usuário e o restante da 147 não são declarados concluídos.

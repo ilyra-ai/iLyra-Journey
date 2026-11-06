@@ -20,7 +20,7 @@
 
 A Lyra MetaCare reúne leituras pessoais, inteligência artificial e histórico em uma experiência de autoconhecimento. O novo design aprovado combina atmosfera celestial, ilustrações de planetas e signos, títulos editoriais e detalhes em amarelo suave.
 
-**Sobre a imagem:** esta é a referência visual aprovada para o redesign da tarefa 147, detalhada no [painel de tarefas](./claude-gestao.md). A implementação visual ainda não foi iniciada. Nome, datas e leituras apresentados no mockup são ilustrativos.
+**Sobre a imagem:** esta é a referência visual aprovada para o redesign da tarefa 147, detalhada no [painel de tarefas](./claude-gestao.md). A primeira etapa implementa a landing pública na tarefa 149; o restante do app aguarda autorização. Nome, datas e leituras apresentados no mockup são ilustrativos.
 
 ---
 

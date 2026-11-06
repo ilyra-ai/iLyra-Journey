@@ -19,12 +19,18 @@ Uso (na raiz do repositório)::
     python3 -m venv /tmp/marca && /tmp/marca/bin/pip install pillow numpy
     /tmp/marca/bin/python scripts/gerar-icones-da-marca.py
 
+Para gerar somente o favicon e o ícone de navegador do tema celestial,
+preservando os demais ícones e a marca das telas internas::
+
+    /tmp/marca/bin/python scripts/gerar-icones-da-marca.py --favicon-celestial
+
 Só é preciso rodar de novo se o logo oficial mudar.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
+import sys
 
 import numpy as np
 from PIL import Image, ImageDraw
@@ -130,4 +136,19 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    if sys.argv[1:] == ["--favicon-celestial"]:
+        # Empacota a arte aprovada nos formatos do navegador, sem redesenhá-la.
+        origem = RAIZ / "src/assets/celestial/simbolo.png"
+        simbolo = Image.open(origem).convert("RGBA")
+        if simbolo.width != simbolo.height:
+            raise SystemExit("O símbolo celestial precisa ser quadrado.")
+        reduzir(simbolo, 192).save(RAIZ / "src/app/icon.png", optimize=True)
+        reduzir(simbolo, 256).save(
+            RAIZ / "src/app/favicon.ico",
+            sizes=[(16, 16), (32, 32), (48, 48), (64, 64)],
+        )
+        print("Favicon celestial gerado: ICO 16/32/48/64 px e PNG 192 px.")
+    elif sys.argv[1:]:
+        raise SystemExit("Uso: gerar-icones-da-marca.py [--favicon-celestial]")
+    else:
+        main()

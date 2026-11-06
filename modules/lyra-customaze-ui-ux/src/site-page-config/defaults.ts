@@ -37,46 +37,46 @@ const defaultLandingPageConfig: LandingPageConfig = {
   },
   header: {
     loginLabel: 'Entrar',
-    fullLoginLabel: 'Começar',
+    fullLoginLabel: 'Criar minha conta',
   },
   hero: {
-    badgeText: 'Bem-estar, longevidade e autoconhecimento',
-    title: 'Seu corpo, sua rotina e o seu céu',
-    accentTitle: 'em um só lugar, com orientação clara para cada dia.',
+    badgeText: 'Seu espaço Lyra',
+    title: 'Um novo olhar',
+    accentTitle: 'para o seu dia.',
     description:
-      'A Lyra MetaCare reúne sono, energia e ritmo com a astrologia védica do seu mapa para sugerir o que fazer hoje, em linguagem simples. Não substitui avaliação profissional de saúde.',
-    primaryCtaLabel: 'Começar agora',
-    primaryCtaHref: '/login',
-    secondaryCtaLabel: 'Ver planos',
-    secondaryCtaHref: '#planos',
+      'Explore seus mapas, encontre novas perspectivas e converse com a Lyra.',
+    primaryCtaLabel: 'Começar minha jornada',
+    primaryCtaHref: '/login?modo=cadastro',
+    secondaryCtaLabel: 'Conhecer a Lyra',
+    secondaryCtaHref: '#lyra-ai',
     quickAuthBadge: 'Já tem conta?',
     quickAuthTitle: 'Entre por aqui',
     quickAuthDescription: 'Use o seu email e a sua senha para abrir o seu dia.',
     quickAuthSubmitLabel: 'Entrar',
     quickAuthSecondaryLabel: 'Criar conta',
     previewBadge: 'O que você recebe',
-    previewTitle: 'Um guia diário feito para você',
+    previewTitle: 'Seu céu. Novas perspectivas.',
     previewDescription:
       'Toda manhã a Lyra cruza os seus dados com o céu do seu mapa e mostra o essencial.',
     previewItems: [
       {
         id: 'landing-preview-1',
-        title: 'Seu dia em poucas linhas',
-        description: 'Os melhores horários e o clima do dia.',
+        title: 'Seus mapas',
+        description: 'Védico, Lyra DM Samādhi e Quantum.',
         icon: 'moonStar',
         tone: 'cosmic',
       },
       {
         id: 'landing-preview-2',
-        title: 'A Lyra para conversar',
-        description: 'Tire dúvidas sobre sono, energia e rotina.',
+        title: 'Converse com a Lyra',
+        description: 'Perguntas que abrem novos caminhos.',
         icon: 'brain',
         tone: 'primary',
       },
       {
         id: 'landing-preview-3',
-        title: 'Um plano que acompanha você',
-        description: 'Metas e hábitos ajustados ao seu ritmo.',
+        title: 'Seu tempo, seu ritmo',
+        description: 'Leituras para acompanhar seus próximos dias.',
         icon: 'sparkles',
         tone: 'accent',
       },
@@ -84,39 +84,38 @@ const defaultLandingPageConfig: LandingPageConfig = {
   },
   features: {
     visible: true,
-    badgeText: 'Recursos',
-    title: 'O que ajuda você a cuidar de si, sem complicação.',
-    description:
-      'Dados do corpo, rotina e autoconhecimento conversando entre si para sugerir os próximos passos.',
+    badgeText: 'Seus mapas',
+    title: 'Três caminhos para se conhecer melhor.',
+    description: 'Conheça o olhar de cada mapa e escolha por onde começar.',
     items: [
       {
         id: 'landing-feature-1',
-        title: 'Leitura do dia',
+        title: 'Védico',
         description:
-          'O céu do seu mapa traduzido em conselhos práticos para hoje.',
+          'Seu céu de nascimento: Ascendente, Lua, planetas, casas e períodos planetários, calculados com a data, a hora e o local do seu nascimento.',
         icon: 'moonStar',
         tone: 'cosmic',
       },
       {
         id: 'landing-feature-2',
-        title: 'Sinais do corpo com contexto',
+        title: 'Lyra DM Samādhi',
         description:
-          'Sono, energia e batimentos lidos juntos, e não cada um isolado.',
-        icon: 'heartPulse',
+          'Uma leitura simbólica que conecta o mapa védico a elementos, chakras e correspondências do método para explorar presença, intenção e significado.',
+        icon: 'sun',
         tone: 'accent',
       },
       {
         id: 'landing-feature-3',
-        title: 'A Lyra como guia',
+        title: 'Quantum',
         description:
-          'Uma conversa que conhece o seu dia e responde com cuidado.',
+          'Uma perspectiva de reflexão e ação que relaciona as leituras da Lyra às escolhas que você deseja experimentar, respeitando seu contexto e seu ritmo.',
         icon: 'brain',
         tone: 'primary',
       },
     ],
   },
   metrics: {
-    visible: true,
+    visible: false,
     badgeText: 'A Lyra em números',
     title: 'O que os nossos planos oferecem hoje',
     description: 'Números lidos do catálogo de planos publicado.',
@@ -157,9 +156,10 @@ const defaultLandingPageConfig: LandingPageConfig = {
   },
   flow: {
     visible: true,
-    badgeText: 'Como funciona',
-    title: 'Três passos para começar',
-    description: 'Leva poucos minutos, e você pode mudar tudo depois.',
+    badgeText: 'Sobre',
+    title: 'Um espaço para explorar quem você é.',
+    description:
+      'A Lyra MetaCare é um espaço de autoconhecimento que reúne mapas pessoais, leituras simbólicas e conversas com inteligência artificial. Aqui, a tradição védica e as perspectivas da Lyra se encontram para ajudar você a refletir sobre sua história, seus momentos e suas escolhas, com privacidade e no seu ritmo.',
     items: [
       {
         id: 'landing-step-1',
@@ -172,17 +172,17 @@ const defaultLandingPageConfig: LandingPageConfig = {
       {
         id: 'landing-step-2',
         step: '02',
-        title: 'Conte como você está',
+        title: 'Conheça seus mapas',
         description:
-          'Registre como dormiu e se sentiu, ou conecte um dispositivo compatível.',
+          'Explore as perspectivas do Védico, Lyra DM Samādhi e Quantum.',
         icon: 'heartPulse',
       },
       {
         id: 'landing-step-3',
         step: '03',
-        title: 'Receba o seu dia',
+        title: 'Converse com a Lyra',
         description:
-          'Todo dia a Lyra mostra o que favorece você, com plano, metas e conversa.',
+          'Aprofunde suas perguntas e retome suas descobertas quando quiser.',
         icon: 'bot',
       },
     ],
@@ -192,7 +192,7 @@ const defaultLandingPageConfig: LandingPageConfig = {
     badgeText: 'Planos',
     title: 'Escolha o plano que combina com você',
     description: 'Valores e recursos atualizados direto do nosso catálogo.',
-    ctaLabel: 'Começar com este plano',
+    ctaLabel: 'Criar conta para começar',
   },
   faq: {
     visible: true,
@@ -202,15 +202,15 @@ const defaultLandingPageConfig: LandingPageConfig = {
     items: [
       {
         id: 'landing-faq-1',
-        question: 'A Lyra substitui um profissional de saúde?',
+        question: 'As leituras dizem o que vai acontecer?',
         answer:
-          'Não. A Lyra é uma plataforma de bem-estar e autoconhecimento. As orientações não substituem avaliação profissional de saúde.',
+          'As leituras são interpretações simbólicas para reflexão e autoconhecimento. Elas não garantem acontecimentos nem substituem suas próprias escolhas.',
       },
       {
         id: 'landing-faq-2',
-        question: 'Preciso de um relógio ou de uma cinta?',
+        question: 'O que preciso para conhecer meu mapa?',
         answer:
-          'Não. Você pode registrar como se sentiu no dia. Um dispositivo compatível deixa as leituras mais completas.',
+          'Para calcular seu mapa védico, informe data, hora e cidade de nascimento no perfil. As leituras simbólicas são apresentadas como interpretações para reflexão pessoal.',
       },
       {
         id: 'landing-faq-3',
@@ -223,17 +223,16 @@ const defaultLandingPageConfig: LandingPageConfig = {
   finalCta: {
     visible: true,
     badgeText: 'Comece hoje',
-    title: 'O seu próximo dia pode começar mais claro.',
-    description:
-      'Crie sua conta e receba a primeira leitura do seu dia em poucos minutos.',
-    primaryLabel: 'Criar minha conta',
-    primaryHref: '/login',
+    title: 'Um espaço seu, com privacidade e significado.',
+    description: 'Suas descobertas, suas escolhas. Conheça o seu espaço Lyra.',
+    primaryLabel: 'Descobrir meu espaço Lyra',
+    primaryHref: '/login?modo=cadastro',
     secondaryLabel: 'Ver recursos',
     secondaryHref: '#recursos',
   },
   footer: {
     brandLine: 'lyra metacare',
-    note: 'Bem-estar, longevidade e autoconhecimento. Não substitui avaliação profissional de saúde.',
+    note: 'Autoconhecimento com privacidade e significado. Leituras simbólicas para reflexão pessoal.',
   },
   sectionOrder: ['features', 'metrics', 'flow', 'plans', 'faq', 'finalCta'],
 };
