@@ -392,6 +392,8 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 **Aceite desta etapa documental:** imagem íntegra salva na raiz, referência vinculada, tarefa única e contadores atualizados, formato e diff conferidos, commit e push do painel e PNG confirmados. Depois, aguardar instruções; nenhuma implementação desta tarefa foi iniciada.
 
+**Publicação documental confirmada em 2026-11-06:** commit `1e3c8bfa21264981c989ff158550dc6eb931dc5a`, push `310161b2..1e3c8bfa main -> main`. Incluídos somente este painel e o PNG oficial na raiz; 147 tarefas únicas conferidas, SHA-256 da imagem confirmado, Prettier aprovado e diff sem erros de whitespace. Este registro subsequente atende à regra 6 do painel. O redesign permanece a iniciar e as alterações funcionais locais continuam preservadas fora desta publicação. Aguardar instruções.
+
 ---
 
 **Registro desta solicitação:** tarefas 89–95 acrescentadas em 2026-10-22 como **a iniciar**, sem declarar implementação ou validação funcional. A publicação imediata deste registro é documental; cada implementação seguirá com validação, atualização do painel, commit e push próprios na main, sem branches ou worktrees.
