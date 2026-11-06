@@ -238,7 +238,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
                     <Image
                       src={ilustracoesDosMapas[mapa.id] ?? ceuVedico}
                       alt=""
-                      sizes="(max-width: 700px) 90vw, 30vw"
+                      sizes="(max-width: 900px) 90vw, 30vw"
                       className={styles.mapArt}
                     />
                     <div className={styles.mapCopy}>
@@ -306,7 +306,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
                       <Image
                         src={ilustracoesDosPlanos[plano.key] ?? ceuVedico}
                         alt=""
-                        sizes="(max-width: 700px) 90vw, 30vw"
+                        sizes="(max-width: 900px) 90vw, 30vw"
                         className={styles.planArt}
                       />
                       <div className={styles.planCopy}>
@@ -594,7 +594,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
               <Image
                 src={ilustracoesDosDestaques[item.id] ?? ceuVedico}
                 alt=""
-                sizes="(max-width: 700px) 34vw, 15vw"
+                sizes="(max-width: 700px) 34vw, (max-width: 900px) 40vw, 15vw"
                 className={styles.highlightArt}
               />
               <div>

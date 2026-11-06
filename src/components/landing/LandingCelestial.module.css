@@ -374,7 +374,7 @@
   padding: 0 1.75rem 1.25rem;
 }
 .mapCopy h3 {
-  font-size: calc(2.4rem * var(--celestial-card-scale, 1));
+  font-size: calc(2rem * var(--celestial-card-scale, 1));
   color: var(--celestial-gold);
   margin-bottom: 0.75rem;
 }
@@ -390,13 +390,13 @@
 }
 .planArt {
   width: 100%;
-  height: calc(170px * var(--celestial-plan-scale, 1));
+  height: calc(140px * var(--celestial-plan-scale, 1));
   object-fit: cover;
   object-position: center 48%;
   mask-image: linear-gradient(#000 65%, transparent);
 }
 .planCopy {
-  padding: 0.5rem 1.75rem 1.75rem;
+  padding: 0.5rem 1.35rem 1.35rem;
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -452,7 +452,7 @@
 }
 .benefits {
   list-style: none;
-  padding: 1.5rem 0;
+  padding: 1.125rem 0;
   margin: 0;
   flex: 1;
 }
@@ -461,7 +461,7 @@
   gap: 0.75rem;
   font-size: 0.875rem;
   line-height: 1.5;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 .benefits svg {
   width: 16px;
@@ -783,6 +783,9 @@
   .planCopy .primaryButton {
     align-self: flex-start;
   }
+  .mapArt {
+    height: auto;
+  }
 }
 
 @media (max-width: 700px) {
@@ -922,16 +925,16 @@
     grid-template-columns: 1fr;
   }
   .mapArt {
-    height: 210px;
-    object-fit: contain;
+    height: auto;
+    object-fit: cover;
   }
   .planArt {
-    height: 210px;
-    object-fit: contain;
+    height: calc(140px * var(--celestial-plan-scale, 1));
+    object-fit: cover;
   }
   .mapCopy,
   .planCopy {
-    padding-inline: 1.5rem;
+    padding-inline: 1.25rem;
   }
   .about {
     padding-block: 2.5rem;
@@ -976,7 +979,7 @@
 }
 
 .page .hero h1 {
-  line-height: 1.05;
+  line-height: 0.85;
 }
 
 .page .highlight h2 {

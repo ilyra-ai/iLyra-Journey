@@ -55,7 +55,7 @@ const defaultLandingPageConfig: LandingPageConfig = {
     quickAuthSubmitLabel: 'Entrar',
     quickAuthSecondaryLabel: 'Criar conta',
     previewBadge: 'O que você recebe',
-    previewTitle: 'Seu céu. Novas perspectivas.',
+    previewTitle: 'Novas perspectivas.',
     previewDescription:
       'Toda manhã a Lyra cruza os seus dados com o céu do seu mapa e mostra o essencial.',
     previewItems: [
@@ -225,7 +225,7 @@ const defaultLandingPageConfig: LandingPageConfig = {
     badgeText: 'Comece hoje',
     title: 'Um espaço seu, com privacidade e significado.',
     description: 'Suas descobertas, suas escolhas. Conheça o seu espaço Lyra.',
-    primaryLabel: 'Descobrir meu espaço Lyra',
+    primaryLabel: 'Descubra o seu espaço',
     primaryHref: '/login?modo=cadastro',
     secondaryLabel: 'Ver recursos',
     secondaryHref: '#recursos',
