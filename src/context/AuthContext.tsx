@@ -10,6 +10,7 @@ import { interromperLeituraDoChat } from '@/lib/voz/controlador';
 import { bloquearCofresAbertos } from '@/lib/offline/cofre';
 import { paginaSaindo } from '@/lib/navegador/saida-da-pagina';
 import { AppSession } from '@/types/app-session';
+import { SplashScreen } from '@/components/SplashScreen';
 
 type AuthContextType = {
   session: AppSession | null;
@@ -22,7 +23,7 @@ const RotaLiberadaContext = createContext(false);
 
 /** Protege o conteúdo sem adiar a montagem dos provedores globais. */
 export function AuthGate({ children }: { children: React.ReactNode }) {
-  return useContext(RotaLiberadaContext) ? children : null;
+  return useContext(RotaLiberadaContext) ? children : <SplashScreen />;
 }
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {

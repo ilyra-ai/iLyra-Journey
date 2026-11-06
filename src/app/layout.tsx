@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/components/ThemeProvider';
 import { ThemeColorSync } from '@/components/theme/ThemeControls';
 import { COR_DA_BARRA_DO_NAVEGADOR } from '@/components/theme/tema';
 import { Toaster } from '@/components/ui/sonner';
+import { fontesCelestiais } from '@/components/public/celestial-fonts';
 
 const inter = localFont({
   variable: '--font-inter',
@@ -179,7 +180,7 @@ export default function RootLayout({
       // atributo o Next a desliga durante a troca de rota (o modo dev avisava
       // em todas as páginas).
       data-scroll-behavior="smooth"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${sourceSans.variable}`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${sourceSans.variable} ${fontesCelestiais}`}
     >
       <body className="min-h-screen font-sans antialiased">
         <a href="#conteudo-principal" className="skip-nav">

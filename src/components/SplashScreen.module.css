@@ -1,0 +1,145 @@
+.screen {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100svh;
+  width: 100%;
+  padding: clamp(20px, 3vw, 52px);
+  overflow-x: clip;
+}
+
+.backdrop {
+  object-fit: cover;
+  object-position: center bottom;
+  opacity: 0.48;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 3svh, 28px);
+  width: min(100%, 900px);
+  margin-inline: auto;
+  padding-block: clamp(24px, 5svh, 64px);
+  text-align: center;
+}
+
+.orbit {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(140px, 21svh, 210px);
+  aspect-ratio: 1;
+}
+
+.orbitRing {
+  position: absolute;
+  inset: 0;
+  border: 1px solid hsl(var(--primary) / 0.32);
+  border-radius: 50%;
+  animation: orbita 9s linear infinite;
+}
+
+.orbitRing::after {
+  content: '';
+  position: absolute;
+  top: 12%;
+  right: 12%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: hsl(var(--primary));
+  box-shadow: 0 0 18px hsl(var(--primary) / 0.6);
+}
+
+.symbol {
+  width: 76%;
+  height: auto;
+  mask-image: radial-gradient(ellipse, #000 45%, transparent 74%);
+}
+
+.content h1 {
+  margin: 0;
+  max-width: 100%;
+  font-size: clamp(2.5rem, min(5.5vw, 8svh), 5rem);
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.message {
+  margin: 0;
+  max-width: 38rem;
+  color: hsl(var(--muted-foreground));
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+}
+
+.activity {
+  display: flex;
+  gap: 8px;
+}
+
+.activity span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: hsl(var(--primary));
+  animation: brilho 1.6s ease-in-out infinite alternate;
+}
+
+.activity span:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.activity span:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.footer::before,
+.footer::after {
+  content: '';
+  width: clamp(24px, 10vw, 160px);
+  height: 1px;
+  background: hsl(var(--primary) / 0.4);
+}
+
+@keyframes orbita {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes brilho {
+  from {
+    opacity: 0.3;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbitRing,
+  .activity span {
+    animation: none;
+  }
+}

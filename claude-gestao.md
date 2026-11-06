@@ -21,20 +21,20 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **92,6%** (138 de 149)   |
-| Implementações publicadas               | **96,6%** (144 de 149)   |
-| Tarefas totais                          | 149                      |
+| Conclusão integral                      | **92,0%** (138 de 150)   |
+| Implementações publicadas               | **96,7%** (145 de 150)   |
+| Tarefas totais                          | 150                      |
 | 🟢 Concluídas                           | 138                      |
-| 🟡 Implementadas com validação pendente | 6                        |
+| 🟡 Implementadas com validação pendente | 7                        |
 | 🔵 Em andamento                         | 2                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 3                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-06               |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os seis estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os sete estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
-**Escopo vigente em 2026-11-06:** o usuário autorizou a landing pública 149 e seus ajustes de fontes, responsividade e conteúdo. As tarefas 142 e 144 continuam **pausadas**; suas alterações locais não integram esta publicação. As 145, 146 e o restante do redesenho 147 continuam a iniciar. Após publicar a 149, manter o app em localhost para validação visual do usuário e aguardar instruções.
+**Escopo vigente em 2026-11-06:** landing 149 aprovada, com aprovação registrada e publicada em `857617a6`. O usuário autorizou redesenhar por completo o carregamento e, depois, o login/cadastro, seguindo a identidade celestial e mantendo enquadramento responsivo em desktop/mobile. Concluir e publicar cada frente individualmente na main antes da próxima. As tarefas 142 e 144 continuam **pausadas**; suas mudanças locais independentes ficam fora destes commits. As 145, 146 e o restante da 147 permanecem a iniciar.
 
 **Publicação documental da paralisação em 2026-11-06:** commit `9e92288c2ad80393d076e89672693193f16b67ba`, push confirmado `72d12437..9e92288c main -> main`. Somente `claude-gestao.md` incluído; 146 tarefas únicas conferidas, formato do arquivo aprovado e diff sem erros de whitespace. Alterações funcionais locais permanecem não publicadas. Este registro subsequente cumpre a regra 6 e não autoriza retomar o trabalho.
 
@@ -2983,3 +2983,19 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Imagens e compactação solicitadas nesta rodada:** mapas em mobile/tablet até 900 px com largura integral e altura automática, preservando a proporção original sem faixas laterais. Planos com banners de 140 px escaláveis e `cover` em todas as resoluções, preenchimento interno menor e menos espaço entre benefícios; conteúdo comercial, preços e ações mantidos. Revisar todos os `contain` da landing: nos mapas e planos o modo foi corrigido; o único remanescente é a arte principal flutuante, com máscara e sem moldura, para preservar a composição planetária. Não aplicar esta mudança às telas internas pausadas.
 - **Evidências finais desta rodada em 2026-11-06:** Prettier e ESLint dos arquivos alterados aprovados; 13 testes de configuração aprovados; build final com TypeScript e 138 páginas aprovado. MySQL real saudável, 68 migrações e catálogo Free/Meta/Care acessível. Navegador em 320, 390, 543, 768, 848, 900, 1024, 1366, 1536 e 1920 px, sem rolagem horizontal nem exceções de página. Até 900 px, largura de cada imagem dos mapas igual à largura interna do card e proporção original preservada (Védico 3:2; demais 1:1). Banners dos planos de 140 px e 12 benefícios presentes em cada plano deste catálogo, sem ocultação. H1 com altura de linha 0,85; títulos dos mapas em 32 px na escala padrão; selo “Novas perspectivas.” e CTA “Descubra o seu espaço” conferidos. Capturas reais revisadas em 543 px. Atributos `sizes` atualizados para as imagens maiores no tablet. Servidor de produção mantido em `http://localhost:3000`; alterações locais pausadas continuam fora da publicação.
 - **Publicação desta rodada confirmada:** commit `c5ac9136`, push `4de61555..c5ac9136 main -> main`. Somente os cinco arquivos desta rodada publicados, sem branches ou worktrees. Este registro subsequente atende à regra 6; manter localhost ativo e aguardar a validação visual do usuário.
+
+### 150 · Redesenhar integralmente o carregamento real do app
+
+**Estado: 🟡 implementada · Validação visual final do usuário pendente.**
+
+- Aplicar a identidade celestial aprovada: fundo escuro, amarelo suave, logo correto e hierarquia Clicker Script / Imprima / Varela. Reutilizar os ativos existentes com origem e licenças verificadas.
+- Criar uma composição completa e proporcional para qualquer janela de desktop, incluindo notebooks baixos, ultrawide, mobile, zoom e preferência por movimento reduzido. Permitir rolagem quando o conteúdo não couber, sem escala artificial ou cortes.
+- Integrar o visual ao carregamento verdadeiro: leitura inicial da sessão, redirecionamentos protegidos, importação dinâmica e limites de Suspense aplicáveis. Não criar temporizadores, progresso percentual fictício ou rota demonstrativa.
+- Preservar a proteção das rotas: o conteúdo bloqueado continua sem montar enquanto a sessão ou destino são resolvidos. Usar indicadores acessíveis, mensagem em português e foco/skip link adequados.
+- A única alteração local anterior do Splash era a mensagem neutra “Preparando sua experiência Lyra.”; esta superfície agora está expressamente autorizada para redesenho. As demais mudanças das tarefas pausadas permanecem fora da publicação.
+- Validar a exibição por latência controlada da API real de sessão, sem substituir dados; verificar aparecimento e desaparecimento automáticos do carregamento. Executar gates aplicáveis, revisar no navegador e publicar esta tarefa na main antes de iniciar o login.
+
+- **Implementação real:** nova composição celestial em `SplashScreen`, tema e marca reutilizáveis, fontes disponibilizadas pelo layout raiz e fallback real no `AuthGate`/`app/loading.tsx`. A condição de liberação das rotas continua a mesma. Nenhum atraso artificial ou progresso inventado foi inserido.
+- **Causa corrigida durante a validação:** o primeiro teste identificou que importar o compilador `next/font` pela cadeia de componentes do contexto afetava a execução unitária. As fontes foram centralizadas no layout do Next, sem substituir a autenticação ou criar mocks de funcionamento. A nova rodada completa passou.
+- **Evidências em 2026-11-06:** ESLint e Prettier dos arquivos da tarefa aprovados; 1.017 testes unitários (97 arquivos), nove testes de integração de autenticação/armazenamento com MySQL real e build com TypeScript/138 páginas aprovados. No navegador, resposta real HTTP 200 da sessão temporariamente retida para conferir o estado de espera: conteúdo da rota ausente antes da liberação e carregamento removido automaticamente depois. Visitante em `/profile` redirecionado para `/login`.
+- **Enquadramento real:** 320×719, 390×844, 543×719, 848×719, 1024×600, 1280×720, 1366×768, 1536×864, 1920×1080, 2560×1440 e 3440×1440; sem rolagem horizontal e composição inteira contida na altura em todos esses cenários. Movimento reduzido confirmado com animação desativada. Sem erros de página ou avisos na execução conferida; captura real de desktop revisada.
