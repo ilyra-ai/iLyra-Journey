@@ -1,46 +1,96 @@
-![Logo da Lyra MetaCare](public/icones/lyra-192.png)
+<div align="center">
 
-# Lyra MetaCare
+<img src="./lyra-logo-mockup-2026-11-06.png" alt="Lyra MetaCare — símbolo celestial amarelo e nome em tipografia serifada sobre fundo escuro" width="480">
 
-**Um espaço para cuidar de você, um dia de cada vez. 💚**
+# Um novo olhar para o seu dia.
 
-A Lyra reúne seus registros de bem-estar, conversas e reflexões para ajudar você
-a perceber a própria rotina e escolher pequenos passos de autocuidado.
+**Mapas pessoais · Conversas com a Lyra · Novas perspectivas**
 
-## O que você pode fazer
+[Seu espaço Lyra](#seu-espaço-lyra) · [Experiência visual](#experiência-visual-aprovada) · [Privacidade](#sua-privacidade) · [Documentação](#documentação-do-projeto)
 
-- 💬 **Conversar com a Lyra:** tirar dúvidas, refletir, retomar conversas e ouvir respostas com uma voz local em português, quando disponível no dispositivo.
-- ⭐ **Encontrar orientações:** buscar no texto das suas conversas e guardar respostas favoritas para consultar depois.
-- 📊 **Acompanhar seu dia:** registrar sono, humor, água e movimento e consultar o que mudou.
-- ↩️ **Rever preenchimentos:** consultar alterações manuais e desfazer a última revisão elegível com confirmação. Veja [o histórico de versões](docs/versoes-dos-registros.md).
-- 🌱 **Cuidar dos seus hábitos:** organizar metas e acompanhar seu progresso.
-- ☀️ **Criar suas rotinas:** organizar pequenos passos, pausar e retomar quando fizer sentido.
-- 🌙 **Modo descanso:** pausar convites, preservar registros e escolher uma retomada gradual, com dias neutros e prazos originais guardados. Veja [os efeitos](docs/modo-descanso.md).
-- 📄 **Meu relatório pessoal:** escolher datas e conteúdo, revisar e baixar um PDF privado com dados disponíveis e lacunas explícitas. Veja [os detalhes](docs/relatorio-pessoal.md).
-- 🕰️ **Minha linha do tempo:** escolher um dia e ver juntos registros, práticas, metas e acontecimentos, com filtros por assunto e link para cada origem. Veja [como funciona](docs/linha-do-tempo.md).
-- 🎚️ **Meus acompanhamentos:** criar acompanhamentos como concentração ou motivação, com escala, rótulos e frequência escolhidos por você, e ver a evolução das respostas. Veja [o funcionamento](docs/acompanhamentos-pessoais.md).
-- 🧭 **Acompanhar experiências pessoais:** definir uma pequena mudança, registrar percepções e revisar dados disponíveis, sem concluir causalidade. Veja [o funcionamento](docs/experiencias-pessoais.md).
-- 🗓️ **Anotar acontecimentos:** guardar o contexto do dia e observar seus registros de sono e energia, com limites e lacunas claros.
-- 🎓 **Treinamento por feedback humano (administrador):** ligar o Treinamento no chat, avaliar as respostas da Lyra e, ao desligar, treinar de verdade os pesos do modelo local (KTO com LoRA) e aplicar a nova versão a todos. Veja [como funciona](docs/treinamento-por-feedback.md).
-- 📔 **Diário do dia e `/dia` em abas:** contar por voz ou por escrito como foi o dia, receber o texto organizado e uma leitura que relaciona o relato ao céu do dia e ao seu mapa, e consultar tudo numa agenda mensal; a página Meu dia agora se organiza em abas (Meu Dia, Orientações, Horários e semana, Céu e mapa, Diário). Veja [como funciona](docs/diario-pessoal.md).
-- 🍽️ **Diário alimentar:** registrar refeições, lanches e bebidas por texto ou foto, com horário e como se sentiu, sem cálculo de nutrientes. Veja [como funciona](docs/diario-alimentar.md).
-- 🎧 **Meditações guiadas:** escolher práticas por duração e objetivo, ouvir a narração pela voz do seu dispositivo ou seguir a transcrição, e registrar só o tempo praticado. Veja [os detalhes](docs/meditacoes-guiadas.md).
-- 🌬️ **Fazer uma pausa:** seguir práticas de respiração guiada no seu ritmo.
-- 🔔 **Organizar lembretes:** escolher dias e horários para check-in, respiração e hábitos, com silêncio e adiamento dentro do app.
-- 📝 **Olhar para sua semana:** rever registros e anotar como se sentiu ao fim do dia.
-- ✨ **Explorar o autoconhecimento:** conhecer leituras inspiradas na tradição védica, apresentadas como reflexões pessoais.
+</div>
 
-Você começa com o que sabe sobre o seu dia. O que ainda não foi registrado fica
-indicado como ausente, sem números inventados. Os recursos disponíveis variam
-conforme o seu plano.
+![Mockup aprovado da Lyra MetaCare: painel celestial escuro, detalhes em amarelo suave, navegação superior, mapas, Lyra AI, Linha temporal e signo pessoal](./lyra-design-aprovado-2026-11-06.png)
 
-## Sua privacidade 🔒
+<div align="center">
 
-Ajuste suas preferências de privacidade, controle a memória da Lyra e escolha se
-autoriza o uso de provedores em nuvem. Você também pode baixar seus dados e
-excluir sua conta.
+**Seu céu de nascimento. Suas perguntas. Um espaço para explorar.**
 
-A Lyra apoia o bem-estar e o autoconhecimento. Suas orientações e leituras não
-substituem avaliação, diagnóstico ou tratamento de um profissional de saúde.
+</div>
 
-**Como você está hoje? Esse pode ser o seu primeiro registro. 🌿**
+A Lyra MetaCare reúne leituras pessoais, inteligência artificial e histórico em uma experiência de autoconhecimento. O novo design aprovado combina atmosfera celestial, ilustrações de planetas e signos, títulos editoriais e detalhes em amarelo suave.
+
+**Sobre a imagem:** esta é a referência visual aprovada para o redesign da tarefa 147, detalhada no [painel de tarefas](./claude-gestao.md). A implementação visual ainda não foi iniciada. Nome, datas e leituras apresentados no mockup são ilustrativos.
+
+---
+
+## Seu espaço Lyra
+
+### ✦ Seus mapas, novas perspectivas
+
+Explore leituras pessoais e seus contextos. Na experiência aprovada, **Védico**, **Lyra DM Samādhi** e **Quantum** compartilham um card central: cada seleção apresenta seu próprio resumo, com **Védico como ponto de partida**. Os cálculos e as leituras devem usar os dados reais do perfil.
+
+### ✧ Lyra AI — o que vamos explorar hoje?
+
+Converse com a Lyra, aprofunde suas perguntas e retome conversas anteriores. Consulte o histórico, pesquise mensagens e guarde respostas favoritas. Memória, anexos, leitura em voz alta e recursos de imagem dependem das suas preferências, do dispositivo e dos modelos compatíveis configurados.
+
+### ◷ Histórico e relatórios pessoais
+
+Revisite os dados disponíveis, consulte a revisão semanal e prepare seu relatório pessoal: selecione período e conteúdo, revise a prévia e baixe o PDF. A nova Linha temporal astrológica do mockup complementará essa experiência; ela não substitui o histórico nem elimina os relatórios.
+
+### ◇ Sua conta e assinatura
+
+Gerencie seu perfil e suas preferências. Consulte planos, recursos e utilização; checkout, portal de cobrança e documentos financeiros dependem da configuração dos provedores e da disponibilidade para sua conta.
+
+---
+
+## Experiência visual aprovada
+
+O painel foi pensado para apresentar primeiro o essencial e permitir aprofundar cada leitura.
+
+| Área do painel                | Experiência prevista no redesign                                                                                                                          |
+| :---------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| ☾ **Lua de hoje**             | Fase lunar e signo da Lua, com representação visual e contexto da data.                                                                                   |
+| ✦ **Seu período atual**       | Período e subperíodo do mapa, acompanhados de uma explicação acessível.                                                                                   |
+| ✧ **Destaque do dia**         | Um tema da leitura diária, com imagem relacionada ao seu significado.                                                                                     |
+| **Meus mapas**                | Resumo do mapa selecionado, abas Védico, Lyra DM Samādhi e Quantum e acesso à leitura detalhada.                                                          |
+| **Lyra AI**                   | Conversas e perguntas em um espaço integrado ao painel.                                                                                                   |
+| **Linha temporal**            | Hoje e os próximos seis dias, com ilustrações positivas relacionadas às leituras; ao selecionar uma data, resumo dos três mapas em um diálogo responsivo. |
+| **Signo · seu nome completo** | Imagem do signo e resumo da leitura do dia, com acesso aos detalhes.                                                                                      |
+
+**Atmosfera:** azul-marinho e carvão, amarelo suave, textos claros, bordas delicadas e imagens celestiais relacionadas ao conteúdo. O logo do cabeçalho acompanha a aplicação visual aprovada no mockup.
+
+**Navegação:** barra superior no desktop e organização própria para telas menores, com legibilidade, contraste, foco visível e navegação por teclado.
+
+O GitHub controla as fontes e o tema de exibição deste README. A imagem apresenta a referência completa de cores, tipografia e composição do app; o documento usa títulos, separadores e símbolos discretos para acompanhar essa identidade.
+
+## Sua privacidade
+
+Controle as preferências de privacidade, a memória da Lyra e as autorizações para provedores em nuvem. Você também pode solicitar a exportação dos seus dados e a exclusão da conta. Informações ausentes devem aparecer como ausentes, sem números ou leituras inventados.
+
+As leituras astrológicas são interpretações para reflexão pessoal. As orientações de bem-estar não substituem avaliação, diagnóstico ou tratamento profissional de saúde.
+
+## Documentação do projeto
+
+| Documento                                                      | Conteúdo                                                                                |
+| :------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
+| [Gestão de tarefas](./claude-gestao.md)                        | Andamento, decisões, evidências e escopo completo do redesign.                          |
+| [Mockup aprovado](./lyra-design-aprovado-2026-11-06.png)       | Imagem oficial, em resolução original, usada como referência visual.                    |
+| [Instrução mestra](./CLAUDE.md)                                | Regras de engenharia, validação e publicação.                                           |
+| [Instruções para agentes](./AGENTS.md)                         | Workflow e requisitos do repositório.                                                   |
+| [Relatório pessoal](./docs/relatorio-pessoal.md)               | Seleção de conteúdo, prévia e PDF privado.                                              |
+| [Histórico pessoal](./docs/linha-do-tempo.md)                  | Linha do tempo dos registros existentes, distinta da futura Linha temporal astrológica. |
+| [Memória da Lyra](./docs/memoria-graphiti.md)                  | Funcionamento e controles de memória.                                                   |
+| [Treinamento por feedback](./docs/treinamento-por-feedback.md) | Recurso administrativo e limites dos modelos externos.                                  |
+
+Os oito grupos de registros e rotinas cuja desativação foi solicitada, assim como a página `/dia`, não compõem a apresentação desta nova experiência. O acompanhamento da desativação reversível está na tarefa 144; funcionalidades preservadas e limitações de validação continuam registradas no painel oficial.
+
+---
+
+<div align="center">
+
+**Lyra MetaCare**
+
+Um novo olhar para o seu dia.
+
+</div>

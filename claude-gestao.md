@@ -21,10 +21,10 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **92,5%** (136 de 147)   |
-| Implementações publicadas               | **96,6%** (142 de 147)   |
-| Tarefas totais                          | 147                      |
-| 🟢 Concluídas                           | 136                      |
+| Conclusão integral                      | **92,6%** (137 de 148)   |
+| Implementações publicadas               | **96,6%** (143 de 148)   |
+| Tarefas totais                          | 148                      |
+| 🟢 Concluídas                           | 137                      |
 | 🟡 Implementadas com validação pendente | 6                        |
 | 🔵 Em andamento                         | 2                        |
 | 🔴 Bloqueadas                           | 0                        |
@@ -2933,3 +2933,15 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Próximo passo:** usar a matriz na execução da 142, mediante instrução do usuário. Alterações metodológicas e descontinuações exigem decisão específica.
 - **Publicação da auditoria:** commit `ffeeceb8`, push confirmado `f626df11..ffeeceb8 main -> main` em 2026-11-05. Sete arquivos, exclusivamente a tarefa 143; sem branch, worktree ou force-push. Este registro do SHA segue em commit documental próprio, conforme a regra do painel.
 - **Gates finais reais:** `fix:format`, `fix:lint`, `check:lint`, `check:format` e `check:types` aprovados; 1012 testes unitários em 96 arquivos, 602 integrações MySQL em 67 arquivos e build de produção de 136 páginas aprovados. A primeira checagem de formato detectou o JSON recém-regenerado; a formatação foi aplicada e a nova checagem passou. A tentativa anterior de integração interrompida com o Docker desligado não foi contabilizada. Docker com MySQL, memória, FalkorDB e treinamento saudáveis; produção reiniciada em `localhost:3000`, HTTP 200 conferido no Windows. `@current_problems` não está disponível nas ferramentas da sessão. Revisão do diff e estrutura: 143 tarefas únicas, 136 verdes, seis amarelas e uma a iniciar.
+
+### 148 · Atualizar a apresentação do README com o mockup e o logo celestial aprovado
+
+**Estado: 🟢 concluída · Entrega exclusivamente documental em 2026-11-06.**
+
+- Solicitação: renovar textos, imagens, ícones e organização do README conforme o mockup aprovado, inserir a imagem do app e substituir o logo antigo pela aplicação do logo criada no mockup; publicar na `main` e aguardar instruções.
+- `README.md` reorganizado com cabeçalho centralizado, slogan aprovado, navegação interna, mockup completo, símbolos celestiais discretos, apresentação dos mapas, Lyra AI, histórico, relatórios, assinatura, privacidade e documentação.
+- Imagem completa vinculada a `lyra-design-aprovado-2026-11-06.png`; logo de cabeçalho preparado a partir da referência com a skill `imagegen` e salvo em `lyra-logo-mockup-2026-11-06.png`. A mudança do logo nesta tarefa afeta somente o README; ícones de instalação e identidade do app não foram modificados.
+- O README identifica a imagem como mockup e distingue a experiência prevista da implementação atual. A 147 continua a iniciar; trabalhos funcionais pausados permanecem preservados e não são incluídos nesta publicação.
+- O GitHub controla fontes e tema do Markdown; cores e tipografia completas são apresentadas pelos arquivos de imagem, com estrutura compatível com o renderizador do GitHub, texto alternativo e links relativos versionados.
+- Validação desta entrega: revisão integral do texto e da imagem do logo, checagem de caminhos locais, contagem de tarefas, Prettier e `git diff --check`. Sem alteração de código, API ou banco; não alegar execução de novos testes funcionais ou conclusão do redesign.
+- Publicação: registrar o SHA real e a confirmação do push imediatamente após o commit, conforme a regra 6 deste painel. Ao final, aguardar instruções.
