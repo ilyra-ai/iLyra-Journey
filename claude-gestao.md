@@ -21,18 +21,20 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **95,1%** (136 de 143)   |
-| Implementações publicadas               | **99,3%** (142 de 143)   |
-| Tarefas totais                          | 143                      |
+| Conclusão integral                      | **93,2%** (136 de 146)   |
+| Implementações publicadas               | **97,3%** (142 de 146)   |
+| Tarefas totais                          | 146                      |
 | 🟢 Concluídas                           | 136                      |
 | 🟡 Implementadas com validação pendente | 6                        |
-| 🔵 Em andamento                         | 1                        |
+| 🔵 Em andamento                         | 2                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 0                        |
+| ⚪ A iniciar                            | 2                        |
 | Branch de trabalho                      | `main` (única permitida) |
-| Última atualização                      | 2026-11-05               |
+| Última atualização                      | 2026-11-06               |
 
 > Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os seis estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+
+**Paralisação vigente em 2026-11-06:** por solicitação expressa do usuário, atualizar e publicar somente este painel, interromper os processos de trabalho iniciados neste chat e aguardar novas instruções. As tarefas 142 e 144 continuam classificadas como iniciadas, mas estão **pausadas**, sem autorização para prosseguir agora. As 145 e 146 estão a iniciar. Não publicar as alterações de código ainda não validadas, não iniciar outra tarefa e não apresentar testes anteriores como validação do estado final atual.
 
 **Decisões do usuário registradas em 2026-10-10 (sem tarefa associada):**
 
@@ -116,13 +118,14 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### 142 · Simplificação integral da experiência do usuário e do administrador: arquitetura da informação, jornadas, visual web, CSS, UI e UX
 
-- **Status:** 🔵 em andamento · **Registro:** 2026-11-05 · **Prioridade:** alta, com correção crítica de estados sem dados como primeira frente da execução futura.
+- **Status:** 🔵 iniciada, execução pausada por instrução do usuário, reafirmada em 2026-11-06 · **Registro:** 2026-11-05 · **Prioridade:** alta, com correção crítica de estados sem dados como primeira frente da execução futura. Não retomar sem nova autorização.
 - **Autorização do registro inicial (histórico):** exclusivamente registrar neste arquivo, no máximo de detalhes, a análise aprovada pelo usuário, revisar o registro, fazer commit e push na `main` principal e aguardar novas instruções. Não iniciar implementação, redesenho, migração de navegação, alterações de dados ou testes com participantes nesta etapa. A aprovação do diagnóstico não é aprovação automática de cada solução proposta.
 - **Solicitação de origem:** o usuário considera o app ótimo em recursos, mas extremamente confuso para as pessoas e para ele próprio; pediu análise profissional empresarial de elite, com rigor forense de UI/UX, visual web, CSS, usuário e administrador. Após receber o parecer, aprovou seu registro como nova tarefa e determinou aguardar instruções depois da publicação documental.
 - **Objetivo de negócio e experiência:** diminuir o esforço para entender o produto, localizar funções e concluir tarefas; tornar claros o próximo passo, a origem dos dados e o resultado das ações; facilitar operação administrativa, confiança e continuidade de uso. Preservar integralmente recursos, dados, permissões e identidade da Lyra. Não prometer aumento de retenção, conversão ou produtividade sem medir.
 - **Diagnóstico central aprovado:** a fragilidade predominante é a arquitetura da informação e a orientação das tarefas. A pessoa precisa compreender a organização interna do sistema antes de conseguir utilizá-lo com facilidade. O próximo investimento deve ser clareza de produto e simplificação das jornadas, antes de acrescentar recursos. Não resolver apenas com troca de cores, ícones, biblioteca ou mais submenus.
 
 - **Execução autorizada em 2026-11-05:** continuar após a auditoria 143. Implementar por frente lógica, validar e publicar cada frente na `main` antes da próxima, sem branches/worktrees. Primeiro corrigir a semântica do estado de sincronização, depois a jornada e a separação administrativa. A 141 está funcionalmente concluída; suas limitações qualitativas permanecem documentadas.
+- **Direcionamento explícito do usuário durante a execução:** a 142 deve produzir mudança radical de UI, UX, design e layout do app. Correções de estado, nomes, categorias e espaçamentos são preparação, não cumprimento integral da tarefa. Reformular composição e hierarquia das páginas, estrutura do aplicativo, jornadas e operação administrativa de forma coerente, preservando marca, tema claro, funcionalidades, dados, URLs, permissões e preferências. Não declarar conclusão com uma reorganização superficial da sidebar. As alterações locais da segunda frente ainda estão em desenvolvimento e não foram publicadas.
 - **Frente 142.1 · Estado dos registros:** causa reproduzida no navegador de produção: o selo de sincronização bem-sucedida usava o padrão “Em sintonia” mesmo sem registro do dia. Implementada classificação própria para carregamento, falha, ausência e leitura concluída, sem sugerir avaliação positiva de saúde; erro da consulta tem mensagem segura. Rótulo personalizado de sincronização concluída é contextualizado, sem regravar configurações. Quatro testes específicos, lint e formato dos arquivos alterados e tipos aprovados. Prévia real em `localhost:3001` confirmou “Sem registros hoje” e indicadores ausentes, preservando as abas e o formulário existente. A primeira checagem de tipos revelou erro de tipo desconhecido; corrigido e validado novamente. Gates integrais em execução; não declarados antecipadamente aprovados. A 142 permanece em andamento.
 
 - **Publicação 142.1:** commit `559236c3`, push confirmado `9786bac6..559236c3 main -> main` em 2026-11-05. A publicação cobre somente o estado dos registros; não encerra a reorganização da 142. O lint e o formato integrais passaram antes da normalização da mensagem de erro; a rechecagem focada ainda está em execução no momento deste registro, sem antecipar seu resultado.
@@ -251,13 +254,74 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 - **Critério da publicação atual:** apenas `claude-gestao.md` alterado, tarefa numerada uma vez no Tópico 3, estado **a iniciar**, indicadores recalculados sem reclassificar tarefas anteriores, revisão integral do diff, verificação de estrutura/formatação e publicação na `main`. Após o push, registrar o SHA real em commit documental próprio, conforme a regra deste painel.
 - **Próxima ação:** aguardar instruções do usuário. Este registro não constitui implementação da tarefa 142 nem validação integral das hipóteses de solução.
 
+### 144 · Desativação integral e reversível de oito grupos de funcionalidades
+
+**Estado: 🔵 iniciada, execução pausada pelo usuário em 2026-11-06 · Início autorizado em 2026-11-05.** A tarefa 142 também permanece pausada; suas alterações locais devem ser preservadas, sem retomar o redesenho nesta entrega.
+
+**Solicitação vigente:** desativar, sem remover código nem apagar dados, todos os tópicos e subtópicos dos oito grupos abaixo. Retirar sua exposição nas jornadas e verificar métricas, derivados, sugestões e acessos indiretos. Tornar a reativação simples e centralizada, preservando as regras de plano e autorização.
+
+**Correção explícita de escopo pelo usuário em 2026-11-06:** manter ativos e acessíveis os grupos 2 (painel pessoal, resumo, métricas, gráficos, explicações, atualização e sugestões de cuidados), 12 (Lyra AI, conversas, busca, favoritas, voz, privacidade, memória, anexos e imagens), 14 (linha do tempo, revisão semanal, tendências, comparações, relatórios com prévia/PDF e evolução de peso no perfil) e 16 (planos, cotas, contratação, portal de cobrança, compras, faturas e documentos financeiros pessoais). Desativar formulários e operação dos oito grupos não autoriza ocultar esses quatro grupos nem impedir sua consulta aos dados históricos preservados. Remover bloqueios excessivos já introduzidos; manter as permissões normais de plano e titularidade. Ajustes de composição de cada página ficam para uma etapa posterior.
+
+**Complemento de 2026-11-06:** o usuário pediu desativar também a página `/dia` inteira, sem apagar seu código; retirá-la dos menus e da busca e encaminhar o acesso direto ao dashboard. O card “Meu mapa védico” deverá ficar no dashboard inicial, saindo do Perfil e de `/dia`; preservar os campos de nascimento no Perfil. Publicar a mudança de localização do card separadamente após a 144.
+
+1. **Registro diário de saúde e bem-estar:** registros manuais, edição, versões e desfazer; sono, humor, energia, estresse, meditação, passos, minutos ativos, água, cafeína, proteína, peso, frequência cardíaca, glicose e pressão arterial; entrada e sincronização offline desses registros.
+2. **Diário pessoal e reflexão da noite:** voz, texto, análise, repetição da análise, calendário do diário, edição, exclusão e ingestão desses relatos na memória; reflexão noturna e seus indicadores.
+3. **Outros registros pessoais:** alimentação e fotos, acontecimentos e comparações, acompanhamentos e escalas, experiências e relatos de antes/depois.
+4. **Metas, hábitos e plano do dia:** criação, progresso, sequências, recomendações, hábitos pessoais e geração do plano, incluindo atalhos e ações no chat.
+5. **Rotinas e práticas:** definição, execução e histórico de rotinas; respiração, meditações e narração; foco, pausas e sessões relacionadas.
+6. **Lembretes, notificações e descanso:** lembretes, preferências e agendamentos, avisos, sino, adiamento e descarte, silêncio e modo descanso; interromper também os processamentos pessoais dependentes.
+7. **Dispositivos e monitoramento:** conexão de dispositivos, Bluetooth, sessões, ingestão de sinais e atualizações de monitoramento, incluindo chamadas diretas.
+8. **Calendário e agendamentos:** janelas, exportação e assinatura de calendário, feeds privados, consultas e profissionais vinculados à agenda; distinguir a desativação integral solicitada do interruptor anterior que permitia acesso administrativo.
+
+**Implementação prevista e critérios de aceite:**
+
+- Inventariar os pontos reais antes de alterar; implementar primeiro a política no servidor, com oito controles persistentes e auditados, inicialmente desligados, sem exceção de uso pessoal para administrador.
+- Aplicar a mesma política aos endpoints, serviços, cotas, permissões de plano, páginas, menus, busca, abas, formulários, atalhos e ações indiretas. Bloquear acesso direto e escritas; apenas esconder navegação não atende ao pedido.
+- Conferir painel, revisão semanal, linha do tempo, relatórios/PDF, perfil, índices, dicas, contexto da IA e ferramentas do chat, preservando sua operação e leitura histórica conforme a correção de escopo acima. Bloquear novas gravações e ações dos grupos desativados, sem inventar medições nem ocultar os resultados existentes autorizados pelo usuário.
+- Preservar autenticação, conta, privacidade, exportação e eliminação legal dos dados existentes, assinatura e pagamentos, chat independente e mapas astrológicos. Não apagar dados históricos para obter ausência visual.
+- Disponibilizar controle administrativo claro para reativar cada grupo, com histórico e proteção de concorrência; reativar nunca concede recursos ausentes do plano nem contorna outros controles vigentes.
+- Verificar cofre offline e tarefas periódicas; registrar honestamente a fronteira de clientes antigos sem conexão, sem alegar controle remoto de aparelhos desconectados.
+- Validar desativação e reativação reais, preservação dos registros, acesso negado a usuários e administradores quando desligado, dependências e jornadas remanescentes. Executar os gates obrigatórios, revisar o diff e publicar somente esta tarefa na `main`, sem branches/worktrees; registrar o SHA real em publicação documental subsequente.
+
+**Evidência atual:** instruções e estado local inspecionados; identificado reaproveitamento das tabelas e auditoria de interruptores da tarefa 134. A política anterior de agenda libera administradores e não satisfaz o pedido atual. Implementação e validação da 144 ainda não concluídas; nenhum resultado antecipado.
+
+**Ponto exato de continuidade na paralisação de 2026-11-06:**
+
+- **Implementação local não publicada:** catálogo dos oito grupos; controle persistente e auditado com versão; endpoints administrativos e de disponibilidade; aplicação de restrições no servidor, planos, navegação e componentes. Migração `065_funcionalidades_globais.sql` aplicada no MySQL local, totalizando 67 migrações; os oito controles iniciam desligados. Os dados pessoais existentes não foram apagados. O código modificado permanece no diretório de trabalho, sem commit funcional da 144.
+- **Excesso de escopo reconhecido e em correção:** a primeira abordagem substituiu o dashboard e bloqueou também histórico, dicas, relatórios e indicadores administrativos. O usuário rejeitou esse alcance. O catálogo foi restringido; a substituição do dashboard e os bloqueios administrativos adicionais foram desfeitos. Criada consulta de permissões para histórico que preserva plano e bloqueio da conta sem reativar criação/edição; aplicada na revisão semanal, linha do tempo e relatório. A correção deve ser conferida integralmente antes de qualquer conclusão.
+- **Provas históricas desta execução, com limites:** a primeira regressão terminou com **609 testes de integração aprovados em 68 arquivos**, antes das últimas correções de escopo. Após essas correções, os **sete testes específicos da 144 passaram** com MySQL real, incluindo leitura de registros preservados no chat e opções do relatório. Nenhum desses resultados encerra a validação do código atual. A nova regressão integral foi interrompida por ordem do usuário e não tem resultado final aprovado.
+- **Checagens ainda pendentes:** a execução unitária anterior teve 1.016 aprovados e uma falha na expectativa antiga da sidebar durante carregamento; a expectativa foi ajustada para a disponibilidade global, mas falta a rodada final completa. A verificação de tipos acusou inconsistência nos tipos gerados em `.next/dev/types` e `.next/types` durante a inicialização do servidor; falta regenerar os artefatos de forma controlada e executar tipos novamente. Não declarar fonte aprovada sem essa prova. Formato/lint foram executados em etapas anteriores, mas os gates finais de lint, formato, tipos, unitários, integração, build e QA do escopo corrigido não estão todos concluídos.
+- **Estado do app:** a instância de desenvolvimento iniciada por este chat em `localhost:3000` foi encerrada para preparar a validação do código corrente. A leitura anterior do navegador ainda mostrou a composição antiga; falta reiniciar e confirmar a interface corrigida. MySQL e os serviços Docker do projeto foram preservados. Não alegar que a versão final já está disponível para teste.
+- **Preservação da 142:** alterações locais da frente visual anterior guardadas no stash identificado por `Tarefa 142 pausada: preservar interface antes da tarefa 144`, sem branch/worktree nova. Não aplicar esse stash indiscriminadamente sobre os arquivos da 144: será necessário reconciliar quando houver autorização para retomar a 142.
+- **Publicação autorizada agora:** somente atualização documental deste painel e registro subsequente do SHA real, conforme a regra 6. Nenhum código da 144, migração nova ou teste incompleto deve ser incluído nessa publicação. Depois do push, parar e aguardar instruções.
+
 ### BLOQUEADAS
 
 Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ## Tópico 3 · Tarefas a Iniciar
 
-Nenhuma tarefa a iniciar.
+### 145 · Concentrar o card “Meu mapa védico” no dashboard inicial
+
+**Estado: ⚪ a iniciar · Solicitada em 2026-11-06; execução suspensa pela ordem mais recente de parar tudo.**
+
+- Mostrar o card real “Meu mapa védico”, com seus cálculos e leituras existentes, no dashboard inicial `/`.
+- Retirar sua exibição duplicada do Perfil; preservar o componente, os cálculos e os dados, sem remover a funcionalidade. Os campos de nascimento continuam no Perfil.
+- O usuário inicialmente pediu retirar o card de `/dia` e depois substituiu essa orientação pela desativação da página inteira, tratada na 144. Não reativar `/dia` para atender a esta tarefa.
+- Preservar acesso por plano, estados de dados ausentes, erro/carregamento e responsividade. Não inventar posições planetárias ou leituras; conferir o cálculo real com os dados preenchidos pelo usuário, sem registrar seus dados pessoais neste painel.
+- A prévia intermediária da 144 já exibiu o card no dashboard, mas essa composição foi desfeita para corrigir o excesso de escopo. Não considerar a movimentação definitiva entregue.
+- Após autorização para retomar: concluir/publicar a 144 primeiro, implementar e validar esta movimentação, fazer commit e push próprios na `main`, registrar SHA e somente então iniciar outra tarefa.
+
+### 146 · Navegação horizontal no topo para uso em desktop
+
+**Estado: ⚪ a iniciar · Solicitada em 2026-11-06; execução suspensa pela ordem mais recente de parar tudo.**
+
+- Substituir a posição lateral da navegação por uma barra horizontal na parte superior da tela quando o aplicativo for usado no desktop.
+- A imagem anexada pelo usuário é referência **somente da posição da navegação**. Não copiar seu layout, design, cartões, gráficos, tipografia, identidade, cores ou conteúdo.
+- Preservar a identidade e o logo corretos da Lyra, sem redesenhar o símbolo; respeitar a orientação vigente de salmão `#FD865F` como cor primária e o verde anterior como secundária. Não aproveitar esta solicitação para retomar o redesenho geral pausado da 142.
+- Reutilizar a configuração real de navegação, categorias, submenus, destinos, busca, permissões de plano, papel e controles globais. Não reintroduzir os grupos desativados nem `/dia` na barra superior.
+- Manter uma experiência responsiva adequada no celular; verificar desktop, tablet e mobile, teclado, foco, rótulos acessíveis, submenus e ausência de transbordo ou sobreposição do conteúdo.
+- Nenhuma implementação desta tarefa foi iniciada. Após autorização para retomar e publicação das anteriores, pesquisar as referências aplicáveis, implementar, validar as jornadas reais e publicar em commit e push próprios na `main`, sem branches/worktrees; registrar o SHA e aguardar a orientação vigente.
 
 ---
 
