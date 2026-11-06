@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./lyra-logo-mockup-2026-11-06.png" alt="Lyra MetaCare — símbolo celestial amarelo e nome em tipografia serifada sobre fundo escuro" width="480">
+<img src="./lyra-logo-mockup-2026-11-06.png" alt="Lyra MetaCare — símbolo celestial amarelo e nome em tipografia serifada sobre fundo escuro" width="100%">
 
 # Um novo olhar para o seu dia.
 
