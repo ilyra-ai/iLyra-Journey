@@ -37,7 +37,7 @@ const defaultLandingPageConfig: LandingPageConfig = {
   },
   header: {
     loginLabel: 'Entrar',
-    fullLoginLabel: 'Criar minha conta',
+    fullLoginLabel: 'Criar conta',
   },
   hero: {
     badgeText: 'Seu espaço Lyra',

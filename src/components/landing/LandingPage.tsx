@@ -523,14 +523,11 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
           {config.plans.visible && <Link href="#planos">Planos</Link>}
         </nav>
         <div className={styles.headerActions}>
-          <Link href="/login" className={styles.login}>
-            {config.header.loginLabel}
-          </Link>
-          <Link
-            href={config.hero.primaryCtaHref}
-            className={styles.primaryButton}
-          >
+          <Link href={config.hero.primaryCtaHref} className={styles.login}>
             {config.header.fullLoginLabel}
+          </Link>
+          <Link href="/login" className={styles.primaryButton}>
+            {config.header.loginLabel}
           </Link>
         </div>
       </header>
