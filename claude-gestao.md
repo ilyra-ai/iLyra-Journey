@@ -26,9 +26,9 @@
 | Tarefas totais                          | 153                      |
 | 🟢 Concluídas                           | 139                      |
 | 🟡 Implementadas com validação pendente | 8                        |
-| 🔵 Em andamento                         | 2                        |
+| 🔵 Em andamento                         | 3                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 4                        |
+| ⚪ A iniciar                            | 3                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-06               |
 
@@ -299,6 +299,27 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 - **Preservação da 142:** alterações locais da frente visual anterior guardadas no stash identificado por `Tarefa 142 pausada: preservar interface antes da tarefa 144`, sem branch/worktree nova. Não aplicar esse stash indiscriminadamente sobre os arquivos da 144: será necessário reconciliar quando houver autorização para retomar a 142.
 - **Publicação autorizada agora:** somente atualização documental deste painel e registro subsequente do SHA real, conforme a regra 6. Nenhum código da 144, migração nova ou teste incompleto deve ser incluído nessa publicação. Depois do push, parar e aguardar instruções.
 
+### 153 · Reconstruir o painel celestial com leituras pessoais reais
+
+**Estado: 🔵 em andamento · Iniciada em 2026-11-07 após publicação da navegação 152.**
+
+- **Esclarecimento vigente do usuário:** esta etapa é de design/layout visual. Reaproveitar as funções, APIs, motores e dados existentes; não refazer nem substituir a lógica de negócio. A lista abaixo especifica a apresentação desejada dos recursos reais. Não criar uma função fictícia para completar a imagem; eventuais diferenças entre a referência e as capacidades disponíveis devem ser identificadas na análise e tratadas com transparência.
+- Usar como referência a imagem aprovada nesta conversa e `lyra-design-aprovado-2026-11-06.png`, preservando a identidade celestial, amarelo suave, marca, fontes aprovadas e composição responsiva.
+- Reutilizar os dados reais do perfil autenticado (nome completo, data, hora, local e fuso de nascimento), os cálculos siderais Lahiri, casas por signo inteiro e Vimshottari. Não copiar o nome, signo, datas, períodos ou textos ilustrativos do mockup para o funcionamento do app.
+- Exibir três destaques reais: Lua de hoje (fase e signo), período vigente (mahadasha/antardasha) e destaque derivado da leitura do dia. Mostrar ausência de dados e falhas com ações reais, sem preencher com leitura fictícia.
+- Card de mapas com arte celestial, Védico selecionado ao entrar e abas Védico / Lyra DM Samādhi / Quantum. Cada aba apresenta o resumo pessoal correspondente e ação para leitura completa real. Usar motor de domínio e modelos compatíveis existentes; não inventar posições ou resultados indisponíveis.
+- Integrar card Lyra AI com envio real, atalhos de contexto, anexos disponíveis e navegação para conversas. Não inserir botão sem destino nem simular geração.
+- Linha temporal iniciando no dia atual e avançando sete dias: datas reais no fuso do perfil, ilustrações harmoniosas derivadas dos temas da leitura e modal responsivo com os resumos dos três mapas do dia selecionado. Preservar natureza simbólica das interpretações sem afirmar acontecimentos futuros como fatos.
+- Card “Seu signo” (rótulo atualizado expressamente em 2026-11-07), com imagem correspondente ao signo calculado e leitura pessoal do dia. Ampliar a leitura com Sol natal, Lua natal, contexto lunar calculado para hoje, Tara Bala e período pessoal; não inventar previsões. Imagens de todos os signos devem estar mapeadas corretamente, sem fixar Leão por causa da referência.
+- **Anotações visuais incorporadas em 2026-11-07:** linha temporal em ondas; imagens individuais com alpha transparente e correspondência semântica com os nove temas reais do Tara Bala, distinguindo amizade de grande apoio; remover o bloco opcional de apresentação apenas do painel; fundo do AppShell e cabeçalho igual ao da landing; reduzir altura da navegação e aplicar separadores conforme a referência. No desktop, composição proporcional à área útil; no celular, rolagem vertical aprovada pelo usuário, sem rolagem horizontal. Conferir conteúdo dentro dos limites de cada card, inclusive erro e carregamento.
+- **Chat conforme anotações:** título “Converse com a Lyra”; retirar o rótulo duplicado, parágrafo introdutório e ação “Abrir conversa” deste card, preservando o chat real. Atalhos compactos. Campo cresce com o texto até o limite da área disponível, com rolagem interna quando necessária. Botão ao lado da arte amplia/reduz o card sem perder rascunho ou turnos; clique externo e Escape não reduzem a conversa. Preservar foco, transporte, privacidade, interrupção, histórico e anexos reais.
+- **Pasta oficial:** todas as alterações e imagens desta implementação estão em `D:\02-PROJETOS\Lyra-MetaCare`; não criar ramificação nem árvore paralela. Publicar na main após validação e registrar resultados verdadeiros.
+- **Ativos expressamente solicitados:** gerar individualmente as imagens de Áries, Touro, Gêmeos, Câncer, Leão, Virgem, Libra, Escorpião, Sagitário, Capricórnio, Aquário e Peixes. Cada signo terá seu próprio arquivo, sem atlas coletivo ou recorte de uma imagem única. Manter mesma linguagem celestial dourada, proporções harmoniosas e correspondência real entre arquivo e signo; salvar os ativos no projeto e registrar sua origem e os prompts utilizados. Aplicar a skill imagegen com a ferramenta integrada, sem solicitar chaves para essa geração.
+- **Atividade de ativos concluída em 2026-11-07:** doze signos e nove temas gerados individualmente, inspecionados e salvos em `src/assets/celestial/signos` e `src/assets/celestial/temas`, com prompts integrais em cada `ORIGEM.md`. Validação real pelo Sharp dos 21 PNGs: 1254×1254, canal alpha presente e mínimo zero, comprovando transparência. Publicação desta atividade separada da validação final do painel, que continua em andamento. Lint com correção e tipos passaram nesta rodada; revisão visual, regressão e build final ainda não concluídos.
+- Garantir que os grupos desativados não reapareçam como métricas ou ações do novo painel. Manter o restante das funcionalidades ativas e as autorizações existentes. A posição duplicada do mapa no perfil permanece rastreada na 145; não declarar aquela tarefa concluída sem seu escopo integral.
+- Validar dados/API/MySQL, isolamento por usuário, perfil completo e incompleto, troca de abas, datas/modal, chat, erros/repetição e responsividade. Confrontar capturas reais com o mockup, executar os gates aplicáveis, atualizar documentação e publicar esta tarefa separadamente na main.
+- As demais mudanças pausadas da 142/144 não são automaticamente retomadas por esta autorização; incluir apenas dependências efetivamente necessárias, revisadas e rastreadas.
+
 ### BLOQUEADAS
 
 Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
@@ -405,23 +426,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
-
-### 153 · Reconstruir o painel celestial com leituras pessoais reais
-
-**Estado: ⚪ a iniciar · Autorizada em 2026-11-06; executar após publicar a navegação 152.**
-
-- **Esclarecimento vigente do usuário:** esta etapa é de design/layout visual. Reaproveitar as funções, APIs, motores e dados existentes; não refazer nem substituir a lógica de negócio. A lista abaixo especifica a apresentação desejada dos recursos reais. Não criar uma função fictícia para completar a imagem; eventuais diferenças entre a referência e as capacidades disponíveis devem ser identificadas na análise e tratadas com transparência.
-- Usar como referência a imagem aprovada nesta conversa e `lyra-design-aprovado-2026-11-06.png`, preservando a identidade celestial, amarelo suave, marca, fontes aprovadas e composição responsiva.
-- Reutilizar os dados reais do perfil autenticado (nome completo, data, hora, local e fuso de nascimento), os cálculos siderais Lahiri, casas por signo inteiro e Vimshottari. Não copiar o nome, signo, datas, períodos ou textos ilustrativos do mockup para o funcionamento do app.
-- Exibir três destaques reais: Lua de hoje (fase e signo), período vigente (mahadasha/antardasha) e destaque derivado da leitura do dia. Mostrar ausência de dados e falhas com ações reais, sem preencher com leitura fictícia.
-- Card de mapas com arte celestial, Védico selecionado ao entrar e abas Védico / Lyra DM Samādhi / Quantum. Cada aba apresenta o resumo pessoal correspondente e ação para leitura completa real. Usar motor de domínio e modelos compatíveis existentes; não inventar posições ou resultados indisponíveis.
-- Integrar card Lyra AI com envio real, atalhos de contexto, anexos disponíveis e navegação para conversas. Não inserir botão sem destino nem simular geração.
-- Linha temporal iniciando no dia atual e avançando sete dias: datas reais no fuso do perfil, ilustrações harmoniosas derivadas dos temas da leitura e modal responsivo com os resumos dos três mapas do dia selecionado. Preservar natureza simbólica das interpretações sem afirmar acontecimentos futuros como fatos.
-- Card “Signo · nome completo” com imagem correspondente ao signo calculado e leitura pessoal do dia. Imagens de todos os signos devem estar mapeadas corretamente, sem fixar Leão por causa da referência.
-- **Ativos expressamente solicitados:** gerar individualmente as imagens de Áries, Touro, Gêmeos, Câncer, Leão, Virgem, Libra, Escorpião, Sagitário, Capricórnio, Aquário e Peixes. Cada signo terá seu próprio arquivo, sem atlas coletivo ou recorte de uma imagem única. Manter mesma linguagem celestial dourada, proporções harmoniosas e correspondência real entre arquivo e signo; salvar os ativos no projeto e registrar sua origem e os prompts utilizados. Aplicar a skill imagegen com a ferramenta integrada, sem solicitar chaves para essa geração.
-- Garantir que os grupos desativados não reapareçam como métricas ou ações do novo painel. Manter o restante das funcionalidades ativas e as autorizações existentes. A posição duplicada do mapa no perfil permanece rastreada na 145; não declarar aquela tarefa concluída sem seu escopo integral.
-- Validar dados/API/MySQL, isolamento por usuário, perfil completo e incompleto, troca de abas, datas/modal, chat, erros/repetição e responsividade. Confrontar capturas reais com o mockup, executar os gates aplicáveis, atualizar documentação e publicar esta tarefa separadamente na main.
-- As demais mudanças pausadas da 142/144 não são automaticamente retomadas por esta autorização; incluir apenas dependências efetivamente necessárias, revisadas e rastreadas.
 
 ## Tópico 4 · Implementações Publicadas e Estado da Validação
 
