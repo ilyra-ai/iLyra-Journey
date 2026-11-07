@@ -1,8 +1,10 @@
-.appBackground,
-.header,
-.mobilePanel {
+.appBackground.appBackground,
+.header.header,
+.mobilePanel.mobilePanel {
   background:
-    radial-gradient(ellipse at 8% 32%, #33313e66, transparent 50%), #1d1e2b;
+    radial-gradient(ellipse at 16% 0%, #84602c45, transparent 52%),
+    linear-gradient(155deg, #17130d 0%, #090907 55%, #050505 100%);
+  background-attachment: fixed;
 }
 
 .header {
