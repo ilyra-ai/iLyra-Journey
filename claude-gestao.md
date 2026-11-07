@@ -21,16 +21,16 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **90,8%** (139 de 153)   |
-| Implementações publicadas               | **96,1%** (147 de 153)   |
-| Tarefas totais                          | 153                      |
+| Conclusão integral                      | **80,8%** (139 de 172)   |
+| Implementações publicadas               | **85,5%** (147 de 172)   |
+| Tarefas totais                          | 172                      |
 | 🟢 Concluídas                           | 139                      |
 | 🟡 Implementadas com validação pendente | 8                        |
 | 🔵 Em andamento                         | 3                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 3                        |
+| ⚪ A iniciar                            | 22                       |
 | Branch de trabalho                      | `main` (única permitida) |
-| Última atualização                      | 2026-11-06               |
+| Última atualização                      | 2026-11-07               |
 
 > Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os oito estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
@@ -321,6 +321,18 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 - Validar dados/API/MySQL, isolamento por usuário, perfil completo e incompleto, troca de abas, datas/modal, chat, erros/repetição e responsividade. Confrontar capturas reais com o mockup, executar os gates aplicáveis, atualizar documentação e publicar esta tarefa separadamente na main.
 - As demais mudanças pausadas da 142/144 não são automaticamente retomadas por esta autorização; incluir apenas dependências efetivamente necessárias, revisadas e rastreadas.
 
+**Complemento obrigatório das anotações do usuário em 07-11-2026 — pendente de implementação e QA:**
+
+1. **Enquadramento prioritário:** manter respiro seguro à direita, esquerda, acima e abaixo da janela; logo, menus, cards, textos e ações não podem encostar nas bordas. Usar a composição do mockup como referência de margens e alinhamento. Adaptar ao espaço útil real, inclusive zoom do navegador, nomes longos, carregamento e erros. No desktop, buscar a composição integral enquadrada; não ocultar conteúdo nem reduzir a legibilidade para forçar cabimento em janelas pequenas. No mobile, preservar margens e rolagem vertical autorizada, sem transbordamento horizontal.
+2. **Imagens:** fundo realmente transparente na arte dos mapas e nos três destaques; não confundir transparência do arquivo com CSS. No chat, substituir a esfera pelo logo real do favicon. Preservar as imagens da landing quando a alteração for exclusiva do painel.
+3. **Mapas:** alinhar as abas com o título “Meu mapa védico”, ampliar proporcionalmente a área de leitura, retirar o contorno amarelo externo das abas e usar seleção com cantos levemente arredondados, semelhante à navegação superior. Aprimorar visualmente a ação “Explorar meu mapa”, com destino real preservado.
+4. **Grades inferiores:** alinhar Linha temporal com o card dos mapas e Seu signo com o card da conversa, usando as mesmas colunas. Título da linha: “Linha temporal - Seu mapa nos próximos 7 dias”; substituir o subtítulo separado por indicação perceptível e acessível “Clique na data”. Preservar ondas, datas visíveis e imagens coerentes com a leitura.
+5. **Chat e data:** reduzir mais o botão de ampliar/reduzir, manter o crescimento do campo limitado ao card e preservar o retorno somente pelo botão. Reduzir a data e acrescentar o ano real.
+6. **Navegação — refinamentos da 152:** reduzir altura da barra, logo, fontes e controles harmoniosamente; manter fundo igual ao da landing. Retirar o botão de busca e colocar em seu lugar controle funcional de tema claro/escuro. Acrescentar “Planos”, abrindo modal responsivo com catálogo e contratação reais. O menu móvel deve abrir suspenso como a engrenagem, sem painel lateral esquerdo.
+7. **Administração:** reorganizar categorias sem espaços vazios excessivos e destacar títulos com a cor primária vigente. Preservar destinos e permissões; `/admin/content` continua fora do submenu, sem excluir suas funções.
+8. **Menu do perfil:** fundo amarelo primário, textos de contraste escuro legível, sem bordas nem sombras; badge preenchido com cor distinta por perfil/plano real. Retirar deste menu o grupo Tema e as opções Claro/Escuro/Do sistema, pois o controle vai para o cabeçalho. Acrescentar no máximo três atalhos úteis além dos existentes, somente para funções ativas e permitidas.
+9. **Provas de fechamento:** conferir desktop, tablet, mobile e zoom; menus, tema persistente, modal de planos, seleção de mapas, alinhamentos, imagens transparentes e chat ampliado. Registrar resultados efetivamente executados. Os testes anteriores não comprovam automaticamente os refinamentos posteriores. Publicar código validado por tarefa, sem incluir as alterações independentes pausadas.
+
 ### BLOQUEADAS
 
 Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
@@ -417,6 +429,684 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 **Publicação documental confirmada em 2026-11-06:** commit `1e3c8bfa21264981c989ff158550dc6eb931dc5a`, push `310161b2..1e3c8bfa main -> main`. Incluídos somente este painel e o PNG oficial na raiz; 147 tarefas únicas conferidas, SHA-256 da imagem confirmado, Prettier aprovado e diff sem erros de whitespace. Este registro subsequente atende à regra 6 do painel. O redesign permanece a iniciar e as alterações funcionais locais continuam preservadas fora desta publicação. Aguardar instruções.
 
 ---
+
+#### Programa futuro · tarefas 154–172 · registrado em 07-11-2026
+
+**Estado: ⚪ a iniciar.** Conteúdo acrescentado pelo usuário e reorganizado integralmente no Tópico 3. Este registro não inicia a implementação do programa nem conclui as tarefas 152/153. As dependências e condições comerciais abaixo continuam válidas.
+
+### 154 · Auditoria forense do baseline, compatibilidade e plano de migração · ⚪ PENDENTE
+
+**Prioridade:** crítica. **Natureza:** engenharia instrumental indispensável às melhorias definidas. **Dependências:** nenhuma neste programa. **Não confundir** com retomada das tarefas 142/144 ou com auditoria genérica do app fora deste escopo.
+
+**Objetivo verificável:** congelar uma fotografia honesta do funcionamento atual e demonstrar o impacto das modificações de acesso público, quarto mapa, assinaturas, preço, chat, login social, modal e relacionamentos sobre todas as camadas envolvidas.
+
+**Pontos reais de origem:** `CLAUDE.md`, `AGENTS.md`, `claude-gestao.md`, `docs/auditoria/2026-11-05-portfolio-*`, `src/app/page.tsx`, `AuthContext.tsx`, `src/lib/plans/*`, `src/lib/billing/*`, `src/lib/astrology/*`, `src/lib/lyra/*`, MySQL e componentes públicos.
+
+**Trabalho exigido, sem atalhos:**
+
+1. Verificar HEAD remoto, árvore local, `git diff`, arquivos não rastreados, stashes e testes existentes; estabelecer baseline reproduzível sem tocar em modificações de 142/144. Registrar versão exata dos serviços, Node/pnpm e credenciais **somente quanto à presença e ambiente**, nunca os valores.
+2. Traçar, com código/imports/rotas/tabelas, as sequências atuais: visitante → landing → login → registro → assinatura Free → onboarding → chat/mapas → checkout → webhooks → portal → cancelamento; administrador → planos/usuários/faturamento/IA; titular → privacidade/exportação/exclusão.
+3. Inventariar todas as dependências e referências de `'free' | 'meta' | 'care' | 'admin'`, `plan_key`, `PlanFeatureKey`, `user_subscriptions`, `stripe_plan_prices`, `PlanFeatureGate`, `RECURSOS_DA_ROTA`, assinaturas vigentes, histórico de faturas e planos em versões das APIs; localizar `isPlanFeatureEnabled` em todos os consumidores, inclusive componentes do construtor e jobs.
+4. Identificar todos os consumidores dos três mapas e contratos de serialização. Traçar dependências de `TipoDeMapa`, `TIPOS_DE_MAPA`, enumerações, prompt dos modelos, abas, imagens e APIs; não adicionar `ocidental` apenas à tipagem esquecendo os demais consumidores.
+5. Mapear navegabilidade convidado/autenticado/admin, deep links, serialização da descoberta, rotas públicas, cache, cookies, CSRF, CSP, CORS, `no-store`, limites e mecanismos de consentimento.
+6. Inventariar a publicação visual no banco (`site_page_configs`), rascunhos, `modules/lyra-customaze-ui-ux`, defaults e prévia do construtor para impedir uma mudança que funcione apenas quando nenhuma configuração personalizada existir.
+7. Registrar estado real de APIs de cobrança e chaves test/live; identificar bloqueios legítimos de ambientes e planos antigos; identificar se há usuários reais em Free/Meta/Care e os contratos que não podem ser alterados sem consentimento.
+8. Registrar riscos específicos: menor idade, DOB identificável, expor cálculo ao scraping, inconsistência entre frontend e API, assinaturas anteriores, custo de IA, plano selecionado manipulado pelo cliente, duplicação de contas OAuth, log de dados pessoais, abandono de login.
+9. Criar matriz de rastreabilidade com **ID da melhoria → componentes → endpoints → tabelas → testes → eventos mensuráveis → autorização → risco → evidência final**. Não criar tarefas adicionais de produto.
+10. Executar testes baseline possíveis sem alterar estado do cliente e guardar contagens/resultados exatos; falhas já existentes devem ser distinguidas de regressões introduzidas.
+
+**Entregáveis:** diagnóstico versionado no repositório sob área de auditorias permitida, matriz de impacto, plano de migração/rollback e atualização de gestão. **Sem aplicação de alterações destrutivas neste item.**
+
+**Critérios de aceite:** estado SHA e banco/ambiente identificados; zero dependência omitida nos fluxos atingidos após busca sistemática; conflitos com 142/144/153 registrados; baseline de teste verificável; revisão técnica dos riscos e do plano de rollback.
+
+**Provas obrigatórias:** comandos e SHA, lista de arquivos/rotas, rastreabilidade, resultados reais dos testes, diffs do próprio item, registro de pendências. **Concluída somente** após QA aplicável e publicação no `main`.
+
+### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · ⚪ PENDENTE
+
+**Prioridade:** crítica e anterior à abertura pública. **Dependência:** 154. **Âmbito exato:** medidas imprescindíveis à experiência aberta e ao fluxo afetivo, não auditoria jurídica genérica da empresa.
+
+**Problema comprovado no código:** o onboarding atual aceita **idades de 13 a 120 anos** em `src/lib/perfil/conclusao-onboarding.ts`. Nova experiência gratuita sem conta recebe data de nascimento e poderá ser utilizada por menores. **Isso não prova irregularidade**, mas impõe análise jurídica, segurança e minimização de dados.
+
+**Implementação/avaliação exigida:**
+
+1. Consultar textos oficiais atuais da LGPD, orientações da ANPD e normativos vigentes do ECA Digital; documentar o enquadramento efetivo da Lyra por tipo de serviço, acesso provável de adolescentes, riscos, natureza de conteúdo, perfis/públicos e fluxo de relacionamento. Revisão jurídica qualificada quando exigida; não definir exigências legais apenas por heurística do código.
+2. Definir para visitante anônimo quais dados entram, transitam, são usados no cálculo, ficam em memória volátil, são gravados, por quanto tempo e por qual base legal. A data de nascimento não deve ser enviada a terceiros sem finalidade autorizada nem incluída em URLs, logs, analytics, pixels, OG tags e ferramentas de suporte.
+3. Preferir cálculo determinístico em servidor; não salvar DOB de visitante por padrão. Se houver necessidade técnica de sessão anônima, empregar token assinado, escopo limitado, TTL explícito e dados mínimos; verificar proteção e supressão de armazenamento após expiração.
+4. Projetar verificação/adequação etária **proporcional aos riscos e requisitos vigentes**, não confundir o simples campo de nascimento astrológico com prova de identidade. Definir política legítima para conteúdo de relacionamentos e dados de terceiros; bloquear funcionalidades inadequadas sem gerar exposição de dados sensíveis.
+5. Revisar termos, privacidade, linguagem acessível, tratamento de dados de terceiros, privacidade de chat/IA, consentimento opcional de memória e mensagens comerciais; sincronizar versões e registros com `src/lib/lgpd/documentos.ts` e `consent_records` quando for o caso.
+6. Proibir perfilamento publicitário de dados íntimos ou inferências astrológicas sensíveis de modo não consentido; evitar marcadores de vulnerabilidade ou exploração emocional para venda.
+7. Cobrir proteção contra ataques e abuso do endpoint público, distinção entre limitações de idade e direito à informação geral, proteção contra bots sem penalizar excessivamente usuários legítimos ou dispositivos compartilhados.
+8. Testar casos de adolescentes, menores abaixo da idade permitida conforme política validada, idade limítrofe, alteração de data, cadastro social, contas vinculadas e titularidade. Não gravar informação pessoal nos relatórios de QA.
+
+**Arquivos a inspecionar:** `src/lib/perfil/conclusao-onboarding.ts`, `src/app/api/onboarding/route.ts`, `src/components/onboarding/onboarding-form.tsx`, `src/lib/lgpd/{documentos,conta}.ts`, `src/lib/security/{csrf,rate-limit}.ts`, `src/lib/auth/session.ts`, documentos públicos, novos endpoints convidado e Conexões da Alma.
+
+**Critérios de aceite:** decisão legal e matriz de proteção documentadas, testes automatizados e QA de casos etários reais, minimização auditada, mecanismos sem bypass trivial, textos de política revisados, sem coleta escondida. **Não anunciar conformidade jurídica certificada sem parecer adequado.**
+
+### 156 · Motor científico de posições do Mapa Astrológico Tradicional Ocidental (tropical) · ⚪ PENDENTE
+
+**Prioridade:** crítica. **Dependências:** 154, 155 para exposição pública. **Escopo aprovado:** quarto mapa, sem tocar nem substituir o Védico, Samādhi ou Quantum.
+
+**Causa técnica:** `src/lib/astrology/sideral.ts` já calcula longitude tropical em função **interna** (`longitudeTropical`) e a transforma em longitude sideral Lahiri; `src/lib/astrology/mapa-natal.ts` gera o mapa védico; `TIPOS_DE_MAPA` e `TipoDeMapa` listam somente `vedico | samadhi | quantum`. Rebatizar uma posição sideral como ocidental produziria resultados errados.
+
+**Requisitos completos:**
+
+1. Criar domínio, tipos e testes próprios para astrologia ocidental **tropical**, compartilhando `astronomy-engine`, normalização de longitude e conversão de horário apenas onde o método permitir. Introduzir função tropical pública tipada, isolada da longitude sideral; não alterar assinatura/comportamento dos cálculos védicos existentes.
+2. Para **data sem hora e sem local**, calcular **somente aquilo que é realmente determinável**. O signo solar pode ser identificado com segurança apenas quando não houver troca de signo possível dentro dos instantes compatíveis com aquela data civil e fusos possíveis. Em datas próximas à cúspide, marcar “signo solar pode variar” e solicitar hora/cidade para confirmar; não presumir meio-dia em São Paulo nem deduzir ascendente, casas ou Lua precisa.
+3. Validar data de nascimento rigorosamente: calendário gregoriano, ano bissexto, data futura, datas limite, timezone, anos suportados, valores inválidos e mudanças de signo por instantes UTC. Não confundir signo astronômico e signo zodiacal tropical.
+4. Para versão completa com data, **hora e cidade**, usar fuso IANA histórico (`src/lib/astrology/tempo.ts`) e base local de cidades `src/lib/geo/cidades.ts`. Calcular Sol, Lua, planetas suportados, signo de cada corpo, ascendente, casas conforme sistema explicitamente escolhido e documentado, aspectos e orbes somente se houver algoritmo testado; não anunciar aspectos ou casas não implementados.
+5. Escolher e documentar o sistema de casas ocidental adotado com justificativa, dificuldades em latitudes extremas e ausência de hora. Nunca reaproveitar automaticamente as casas por signo inteiro da tradição védica sem declarar o sistema e testar coerência.
+6. Garantir interfaces serializadas versionáveis que incluam `zodiaco: 'tropical'`, método, data/hora/local usados, `precisao`, `faltando`, dados calculados e indisponibilidades. Nunca adicionar resultados falsos para preencher mockups.
+7. Atualizar definições de quatro mapas em `src/lib/lyra/conhecimento/mapas.ts`, leitores e instruções de modelos, abas, nomes e documentação; preservar a semântica de Samādhi e Quantum, que têm camadas explicitamente indisponíveis.
+8. Comparar efemérides calculadas contra fonte astronômica independente/autorizada para um conjunto de datas históricas, anos bissextos, horários de verão e fronteiras de signo; comparar o **mesmo zodíaco e mesma configuração**. Definir tolerâncias numéricas e provar que o motor sideral original permanece inalterado.
+9. As interpretações são simbólicas, não diagnósticos, medições psicológicas ou provas científicas de destino, saúde e compatibilidade. Separar cálculos de narrativas em tipos e UI.
+10. Cobrir erro de efeméride, dados incompletos, timezone inexistente, cidade homônima, alta latitude, fallback adequado e desempenho do cálculo no servidor. Exigir percentis reais de latência, não metas inventadas.
+
+**Arquivos prioritários:** `src/lib/astrology/{sideral,mapa-natal,tempo,engine,perfil-astrologico,serializacao}.ts`, `src/lib/geo/cidades.ts`, `src/lib/lyra/{conhecimento/mapas,leitura-do-mapa,responder,modelos-como-lyra}.ts`, `src/components/profile/MapaVedicoCard.tsx`, `src/app/api/astrologia/mapa/route.ts`, testes `src/lib/astrology/*.test.ts` e APIs.
+
+**Critérios de aceite:** regressões siderais zero; 12 signos comprovados em casos não limítrofes; fronteiras marcadas corretamente; mapa ocidental com hora/local validado, sem dados fabricados; documentação clara de método, limitações e precisão; testes reais e build.
+
+### 157 · Jornada pública “Quem sou eu?” sem conta, sem plano e sem fricção · ⚪ PENDENTE
+
+**Prioridade:** crítica, principal oportunidade de produto. **Dependências:** 155, 156; coordenação com 158/159/161. **Usuário-alvo:** visitante anônimo, inclusive quem evita formulários e Google/Apple até perceber valor.
+
+**Comportamento esperado:**
+
+1. Landing pública deve oferecer CTA visível **“Descobrir quem sou eu”**, levando a uma experiência real. Não redirecionar imediatamente para `/login?modo=cadastro` como acontece hoje em defaults do construtor.
+2. Página/jornada pública acessível sem `users`, `profiles`, `user_subscriptions`, cookie de sessão de conta ou pagamento. Não registrar Free para um visitante. Campo inicial único de data de nascimento com label legível, formatação pt-BR, suporte a teclado/mobile e validação real.
+3. Fluxo explícito: entrar → informar data → obter cálculo solar tropical → ver leitura inicial útil → conhecer a Lyra → explorar áreas que despertam curiosidade → clicar em recurso premium → abrir modal consciente → escolher contribuição → entrar/criar conta somente nesse momento → checkout → retornar ao destino, sem perder contexto autorizado.
+4. Usar UI celestial existente, componentes realmente instalados, marca e tipografia aprovadas; não renderizar o dashboard autenticado para o visitante. Trabalhar com `src/app/page.tsx`, `AuthContext.tsx`, landing, layouts e nova rota pública se necessário, protegendo todas as demais páginas.
+5. A leitura gratuita precisa entregar valor de fato: signo solar quando comprovável, caracterização simbólica contextualizada com data e metodologia, pontos fortes/desafios apresentados como temas de reflexão e microorientação não determinística. Não esconder informações básicas prometidas só para forçar pagamento.
+6. Exibir estado de nascimento próximo à mudança de signo sem assumir signo errado; convite opcional de hora/local para resolver incerteza, **sem torná-los obrigatórios na primeira interação**.
+7. Mostrar claramente o que é gratuito e o que pertence à assinatura única, sem chamar a exploração pública de “plano Free”. Não incluir avisos de escassez falsa, contagens regressivas, preço inventado ou cartão exigido antes da descoberta.
+8. Projetar integração com `src/lib/site-page-config/service.ts` e `modules/lyra-customaze-ui-ux/src/site-page-config/{schema,defaults}.ts`: CTA, textos e ordem de seções devem permanecer editáveis pelo construtor conforme sua governança. Preservar rascunhos/publicações e comportamento de prévia.
+9. Implementar isolamento de sessão anônima com proteção contra reaproveitamento entre pessoas no mesmo dispositivo, vazamento por cache compartilhado e histórico exposto. Definir estados claros para erro, loading, retry, indisponibilidade e desconexão.
+10. Garantir SEO adequado para landing e abertura via link compartilhável sem indexar dados pessoais; configurar metadados públicos estáticos, nunca DOB do visitante.
+
+**Rotas/arquivos para investigação:** `src/app/page.tsx`, `src/context/AuthContext.tsx`, `src/lib/auth/destino-de-acesso.ts`, `src/components/landing/LandingPage.tsx`, `LandingCelestial.module.css`, `SiteExperienceBuilder.tsx`, `src/app/api/public/*`, `src/lib/security/rate-limit.ts`, novo serviço de descoberta, testes de AuthGate.
+
+**Critérios de aceite:** nova sessão anônima abre a experiência e conclui leitura sem autenticação, sem `user_subscriptions`, sem chamar endpoint privado; dados calculados coerentes; usuário logado não perde sessão; caminhos privados permanecem 401/403; zero vazamento entre visitantes; compatível 320–1920px, zoom 200%, teclado/leitor de tela. Registrar screenshots reais com dados não identificáveis.
+
+### 158 · Experiência gratuita útil com a voz do Motor Lyra · ⚪ PENDENTE
+
+**Prioridade:** alta. **Dependências:** 156, 157, 155, 163 para qualquer consumo de LLM externo. **Proposta estritamente discutida:** reflexão do dia, traços simbólicos e breve apresentação conversacional com Lyra, com limite gratuito racional.
+
+**Distinção forense indispensável:** o Motor Lyra é uma combinação de cálculos e regras determinísticas, base de conhecimentos e personalidade de assistente digital. `src/lib/lyra/responder.ts` já contém lógica local, e `modelos-como-lyra.ts` orienta modelos externos. Não afirmar que um LLM conectado é o próprio motor determinístico nem que o personagem possui subjetividade comprovada.
+
+**Detalhamento de implementação:**
+
+1. Criar um serviço público **especializado** em leitura inicial do signo solar ocidental, independente do endpoint autenticado de mapa védico e do chat autenticado. Receber a data validada e o contexto de precisão vindos do motor 156; construir conteúdos a partir de combinações realmente calculadas e uma base de conhecimento auditável.
+2. Produzir texto curto e claro em pt-BR para visitantes, evitando jargões (“ascendente, ayanamsha, nakshatra”) quando não necessários e evitando “sua vida será…”, “você certamente é…”, “sei suas emoções” ou suposta leitura clínica. Explicar que astrologia é um sistema interpretativo/simbólico.
+3. A leitura inicial deve fornecer: nome e símbolo do signo solar quando calculável; explicação simples da natureza simbólica; forças e pontos de atenção apresentados como possibilidades; uma pergunta aberta de autodescoberta; indicação honesta do que data isolada **não** permite calcular; convite à exploração da Lyra.
+4. A reflexão do dia deve usar **data corrente obtida no servidor e referência temporal declarada**, sem atribuir energia psicológica medida pelo céu. Não derivar eventos pessoais nem prometer que o usuário viverá determinado fato hoje.
+5. A microconversa com Lyra deve estar vinculada ao contexto astronômico realmente obtido, à pergunta efetiva do visitante e aos limites da versão pública. Priorizar regra/motor local quando suficiente; se LLM externo for aprovado, usar o canal/cota controlado da tarefa 163 e nunca integrar a chave do provedor no navegador.
+6. O visitante deve poder **fazer pelo menos a interação definida e aprovada em configuração real**, sem cobrança escondida. Limites devem ser declarados de modo compreensível e mensurável; até haver orçamento autorizado, priorizar caminho determinístico sem token comercial pago.
+7. Não expor histórico de outros visitantes nem oferecer memória persistente por padrão. Se o visitante entrar ou assinar, transportar apenas o que consentiu salvar; não coletar textos íntimos para analytics ou treinamento sem consentimento específico.
+8. Preservar todos os tratamentos de indisponibilidade dos mapas atuais: o Quantum tem camadas de Human Design não calculadas e o Samādhi depende de dados não aferidos. Não fabricar conteúdo para a prévia ou para a assinatura.
+9. Documentar “por que esta frase foi mostrada” com origem de cálculo, regra ou produção por LLM, sem expor segredos ou prompt privado; estados de confiança e origem podem aparecer de forma amigável.
+10. Evitar chamadas idênticas desnecessárias: cache por dados **não identificáveis** e chave de método/versão; jamais cachear perguntas íntimas compartilhadas sem isolamento.
+
+**Arquivos centrais:** `src/lib/lyra/{responder,leitura-do-mapa,personalidade,modelos-como-lyra,conhecimento/mapas}.ts`, `src/lib/astrology/*`, `src/lib/ai/{cliente-de-ia,cadeia-de-modelos}.ts`, `src/app/api/functions/ask-ai-assistant/route.ts` **apenas como referência**, novos serviços/handlers públicos e testes.
+
+**Cenários de teste:** signos não limítrofes; cúspides; pergunta compatível/incompatível com dados; falta de modelo LLM; falha do provedor; prompt injection do visitante; excesso de tentativas; chat vazio; privacidade; paralelismo; respostas não repetitivas quando contexto muda, mas sem valores inventados.
+
+**Aceite:** visita real recebe leitura coerente e pode conhecer a voz da Lyra sem conta e sem dados fabricados; nenhuma rota de chat privado foi aberta; limites configurados funcionam no servidor; fallback local é real; logs não expõem data/resposta; tempos/erros são verificados com testes.
+
+### 159 · Captura progressiva, preservação consentida e retorno ao destino pós-login · ⚪ PENDENTE
+
+**Prioridade:** alta. **Dependências:** 155, 157, 158; integração posterior com 164/165 e 162.
+
+**Objetivo:** não destruir o encanto da descoberta quando uma pessoa decide se cadastrar. Os dados obrigatórios devem surgir somente quando são necessários a funcionalidades contratadas e tecnicamente precisas.
+
+**Fluxo detalhado:**
+
+1. A sessão de visita inicia somente com DOB, sem plano. Depois da primeira leitura, oferecer opcionalmente hora e cidade para precisão; depois de clique premium, mostrar modal de assinatura; depois do CTA de contratação, direcionar ao login/cadastro com Google, Apple ou e-mail, preservando a intenção **sem vincular ou armazenar dados pessoais sem necessidade**.
+2. Criar representação de contexto de descoberta tipada, efêmera e limitada: origem, recurso desejado, data (se consentido), precisão, método e versão, opção comercial selecionada **sem jamais confiar no valor do cliente**. Limitar TTL, tamanho, assinatura contra adulteração e exposição em URL.
+3. A pessoa deve poder fechar modal, voltar ao resultado, navegar para a landing e reabrir a mesma descoberta enquanto válido. Nunca forçar conclusão de onboarding para ler um resultado já calculado anonimamente.
+4. Para continuar o resultado numa conta recém-criada, oferecer ação explícita **“Salvar minha descoberta”** após a identidade ser verificada. Não copiar dado de navegador compartilhado automaticamente para qualquer sessão ativa; verificar titularidade e consentimento.
+5. O onboarding atual (`/api/onboarding`, `onboarding-form.tsx`) precisa reconhecer data eventualmente consentida, mas preservar possibilidade de correção e pedir campos adicionais somente para o mapa completo e outras funções. Não quebrar exigências legais do cadastro atual sem atualizar o contrato com migração e testes.
+6. Em conta existente, evitar sobrescrever `birth_date`, `birth_time`, cidade e fuso com dados anônimos sem confirmação. Se divergir, exibir comparação e decisão inequívoca do titular; atualizar mapa/derivados somente após a gravação efetiva.
+7. Depois de login concluído, retornar ao destino solicitado (por exemplo, Mapa Védico, Conexões da Alma, mapa ocidental completo), apresentar situação da assinatura e, quando necessário, checkout do valor que a pessoa selecionou. Se pagar, voltar ao recurso; se cancelar, voltar à descoberta preservada.
+8. Garantir proteção contra open redirect e `returnTo` manipulado. Usar allowlist de rotas internas/identificadores de recurso; não transportar informações pessoais em query string.
+9. Tratar múltiplas abas, dispositivo compartilhado, expiração, Safari com bloqueio de armazenamento, recarga, back/forward, perda de rede, logout e exclusão de conta sem retenção indevida.
+10. Medir somente etapas consentidas da jornada e desistência agregada; não registrar perguntas íntimas, DOB nem localização exata em plataformas analíticas.
+
+**Pontos reais:** `src/context/AuthContext.tsx`, `src/lib/auth/destino-de-acesso.ts`, `src/lib/auth/session.ts`, `src/app/api/auth/{login,register}/route.ts`, `src/app/api/onboarding/route.ts`, `src/components/onboarding/onboarding-form.tsx`, `src/components/auth/LoginExperience.tsx`, rotas públicas/assinatura, `src/lib/lgpd`.
+
+**Aceite:** fluxo anônimo → modal → login → checkout → recurso funciona em caminho feliz e falhas; conta antiga não sofre sobrescrita; redirecionamento externo malicioso negado; ausência de perda do valor informado quando o usuário consentiu; teste real em duas abas e dispositivo móvel.
+
+### 160 · Migração comercial Free/Meta/Care para UMA ASSINATURA sem perda histórica · ⚪ PENDENTE
+
+**Prioridade:** crítica. **Dependência:** 154. **Decisão aprovada:** uma assinatura comercial única, todos os recursos disponíveis e mesmos limites de tokens; administração exclusiva de `admin`; acesso anônimo não é um plano Free.
+
+**Contratos encontrados:** `PlanKey` e `PlanFeatureKey` em `src/types/subscription.ts`; serviço em `src/lib/plans/service.ts`; permissões em `src/lib/plans/access.ts`, `rotas.ts`, entitlements em tabelas `subscription_plans`, `plan_features`, `plan_entitlements`, `user_subscriptions`, `feature_usage_counters`, `subscription_audit_events`. Registro cria Free na transação. Planos Meta/Care têm assinaturas passadas que precisam de política de transição explícita.
+
+**Implementação exigida:**
+
+1. Inventariar esquema de planos e histórico real antes de migrar: `subscription_plans`, `user_subscriptions`, feature flags, `plan_entitlements`, `stripe_plan_prices`, recibos, evento de webhook e código de autenticação/relatórios. Preservar IDs e referências históricas; não fazer `DELETE`/`TRUNCATE` de planos antigos.
+2. Criar/normalizar **uma única oferta comercial** para novos contratos, com chave estável e documentos de produto. Diferenciar **tipo de visitante**, **papel de usuário** (`admin` ou usuário comum), **estado contratual** (assinante ativo, inadimplente, cancelado, pendente), **preço/contribuição** e **direitos**. `admin` não é um preço nem um produto público; Free de legado não é a oferta anônima.
+3. Planejar migração **expandir → compatibilizar → contrair**: novas colunas/tabelas e catálogo, código compatível com registros antigos, transição contratual segura, retirada da exibição comercial legada só quando backfill e webhooks estiverem consistentes. Não alterar automaticamente valor ou benefício de contrato ativo sem política aprovada.
+4. O plano único terá todos os recursos atualmente autorizados e preservados, respeitando **interruptores globais** da tarefa 144 e limitações técnicas reais; “tudo incluído” não significa reativar as oito famílias desligadas ou acessar administração. Toda feature ativa deve ter entitlement verdadeiro para assinante; tudo que está globalmente desligado deve permanecer indisponível também para assinantes.
+5. Todos os perfis comuns novos devem ter autorização por **estado da assinatura**. Conta criada sem compra pode existir para conclusão de checkout; não chamar isso de assinatura paga nem conceder mapas premium antes de confirmação do pagamento. Definir estados `sem-assinatura`, `aguardando-pagamento`, `ativo`, `inadimplente`, `cancelado`, `expirado` e `admin` conforme modelo real, sem transformar booleano de interface em fonte de segurança.
+6. Os limites de tokens são os mesmos para quem escolhe valor acessível ou de apoio. A assinatura não desbloqueia capacidade administrativa; todas as APIs e menus `/admin` exigem papel real, revalidado no servidor a cada operação.
+7. Revisar `RECURSOS_DA_ROTA`, `PlanFeatureGate`, avisos e navegação. **Melhoria do lead:** área premium visível como item de descoberta/teaser com cadeado, ao clicar abre modal; não desaparecer totalmente do menu para a pessoa interessada. Mesmo assim os handlers continuam exigindo autorização e rejeitando acesso direto sem pagamento.
+8. Atualizar páginas `/planos`, landing, área da assinatura, cards junto ao logo, rotas de usuário, configurações do construtor e API pública de planos para mostrar **somente a nova oferta**, não exibir Free/Meta/Care como opções de compra. Manter relatórios fiscais e telas admin capazes de consultar legados por nome histórico sem vender novamente esses planos.
+9. Garantir reconciliação da mudança de plano com usuários legados: regras de renovação, prorrata, grandfathering, descontos existentes, cancelamentos programados, dunning, faturamento e conformidade com consentimento contratual. **Nenhuma migração financeira irreversível por mera alteração de tabela.**
+10. Especificar rollback de código/banco: nova versão não deve tornar impossível ler assinaturas antigas se revertida; preservar logs de auditoria de cada mudança e fazer migração idempotente em `mysql/migrations/`.
+11. Gerar testes de matriz: visitante/conta sem assinatura/assinante no menor valor/assinante no apoio/assinante legado/admin/assinatura pendente/cancelada; cruzar recursos premium, 8 grupos desativados e APIs administradas; testar navegação e proteção direta por URLs.
+
+**Arquivos obrigatórios:** `src/types/subscription.ts`, `src/lib/plans/{service,access,rotas,dependencias,beneficios-publicos}.ts`, `src/components/subscription/*`, `src/app/api/account/subscription/route.ts`, `src/app/api/public/plans/route.ts`, `src/app/api/auth/register/route.ts`, `src/app/api/admin/plans/[planKey]/route.ts`, `src/components/admin/AdminPlanMatrixContent.tsx`, `mysql/migrations/003_add_saas_plans.sql`, `035_plano_administrador.sql`, `042_cobertura_entitlements.sql` **como precedentes imutáveis**; novo arquivo de migração.
+
+**Aceite:** novo catálogo com uma oferta; visitantes sem Free; duas contribuições produzem **o mesmo conjunto de recursos**; papel admin permanece impenetrável a contratantes; dados/assinaturas históricas preservados; migração testada em banco vazio e cópia isolada de esquema existente; 403/401 reais; rollback documentado; banco/Stripe reconciliáveis.
+
+### 161 · Modal premium “Uma Lyra para todos” e preço consciente em duas contribuições · ⚪ PENDENTE
+
+**Prioridade:** crítica. **Dependências:** 157, 160 e validação de preço/custos da 163; integração a checkout na 162. **Referência visual expressa:** imagem enviada pelo responsável em 07/11/2026, fundo azul-marinho escuro, marca/coração dourados, cards azul-arroxeados, preço acessível em ciano e valor de apoio em dourado, conteúdo em português. Conciliar com os tokens celestiais atuais `--celestial-*`, fontes locais e tema aprovado, preservando acessibilidade.
+
+**Conteúdo comercial aprovado (texto revisado, sem falsa promessa de lucro/filantropia):**
+
+> **LYRA · ASSINATURA CONSCIENTE**
+>
+> **Uma Lyra para todos. 💛**
+>
+> Acreditamos que todos merecem a oportunidade de se conhecer melhor e ter a Lyra ao seu lado.
+>
+> Por isso, oferecemos duas opções de valor para a mesma assinatura. Escolha aquela que melhor se adapta à sua realidade financeira.
+>
+> **Independentemente do valor escolhido, você terá exatamente as mesmas funcionalidades, a mesma experiência e os mesmos limites de uso de IA.**
+>
+> **Valor acessível:** R$ 9,90/mês **(valor em avaliação)**
+>
+> **Valor de apoio:** R$ 19,90/mês **(valor em avaliação)**
+>
+> **Sua assinatura ajuda a Lyra a evoluir.** Os valores das assinaturas ajudam a financiar a manutenção, os custos de operação e inteligência artificial, o crescimento e as melhorias contínuas da Lyra, incluindo novas funcionalidades, segurança e uma experiência cada vez melhor para todos.
+
+**ATENÇÃO:** os R$ 9,90/R$ 19,90 **ainda não foram homologados como preços finais**. Em desenvolvimento, devem aparecer apenas em ambiente de teste/preview, claramente rotulados como em avaliação, até aprovação financeira e configuração real do provedor. Se não houver preço comercial publicado e aprovado, o botão de pagamento real deve apresentar aviso honesto de indisponibilidade, jamais simular contratação ou criar preço falso.
+
+**Superfícies que precisam disparar o modal, sem esquecimento:**
+
+1. Visitante sem plano clica em **Mapa Védico**.
+2. Visitante sem plano clica em **Mapa Lyra DM Samādhi**.
+3. Visitante sem plano clica em **Mapa Quantum**.
+4. Visitante clica na parte não liberada de **Mapa Astrológico Tradicional Ocidental completo**.
+5. Visitante clica em **Conexões da Alma**.
+6. Visitante clica no CTA **“Será que encontrei minha alma gêmea?”**.
+7. Visitante ou usuário autenticado **sem assinatura ativa** clica em qualquer outra função premium que permaneça habilitada no app.
+8. Usuário com contrato ativo **não vê paywall**, vai diretamente ao recurso; usuário admin respeita prerrogativas do papel e configurações globais.
+9. Usuário sem plano após deep link direto para recurso pago encontra controle de autorização no servidor e rota segura que oferece convite de assinatura, sem carregamento de dados privados.
+10. Quando recurso estiver globalmente desativado, **não abrir paywall prometendo reativá-lo**, e sim explicar indisponibilidade real conforme política da plataforma.
+
+**Requisitos de design e interação:**
+
+1. Criar um **único componente reutilizável** de conversão, acionável por API controlada de UI/contexto, para não duplicar textos/valores e não divergir entre landing, cards de mapa, navegação, chat e CTA de relacionamento.
+2. Implementar com Radix `Dialog`/`Sheet` já instalados: modal central em desktop, bottom sheet ou diálogo adaptado para mobile. Desenho mobile-first; largura responsiva, scroll vertical interno seguro e sem scroll horizontal. Sobreposição acessível, foco inicial e retorno de foco, Escape, X, backdrop, `aria-describedby`, navegação por teclado, ARIA live para falhas, `prefers-reduced-motion`.
+3. Cabeçalho com marca Lyra (ícone real) e “ASSINATURA CONSCIENTE”; título “Uma Lyra para todos. 💛”; parágrafos conforme copy; duas opções selecionáveis em cards **com RadioGroup** (radio semântico); rótulos “Valor acessível” e “Valor de apoio”; preços lidos da fonte de cobrança configurada, não texto hardcoded que difira da Stripe.
+4. Seleção de contribuição deve refletir escolha atual com contorno, ícone de seleção e texto acessível. Nenhuma opção vem escondida, desabilitada sem motivo ou empurrada com culpa; **valor acessível é seleção padrão neutra**, a menos que o visitante já tenha escolhido legitimamente outra opção. Botão único “Continuar com minha assinatura” exibe loading real e caminho de login/checkout.
+5. Incluir CTA secundário “Continuar minha descoberta gratuitamente” e fechar, sem impedir que visitante retorne à experiência gratuita. Sem timer, falsa urgência, depoimentos inventados, pré-checagem de consentimento ou aumento de preço ao continuar.
+6. Mensal e anual somente quando **realmente configurados e aprovados**; não inventar desconto anual nem termos. Se anual for ofertado, ambos os valores de contribuição preservam os mesmos direitos, período/renovação/total e cancelamento legíveis.
+7. Regras de cancelamento, renovação automática, cobranças e identidade do fornecedor devem ser acessíveis antes da confirmação da assinatura. Copy financeira explica que as **receitas ajudam a financiar** a operação, sem alegar doação, filantropia formal ou 100% de reinvestimento.
+8. Textos e preços devem integrar catálogo/administrador/construtor sem quebrar rascunho publicado; mostrar mudanças após atualização de plano com cache controlado; não cobrar com preço de cache velho se o preço mudou no servidor.
+9. No modo preview do construtor, renderizar modal com dados **do ambiente e catálogo permitido** e desativar ação externa de cobrança, identificando explicitamente prévia. No app real, toda ação deve executar caminho real, com tratamento de erro e feedback.
+10. Validar contraste dos valores ciano/dourado contra cards, legibilidade de textos em 320px, 390px, 768px, 1024px e desktop, zoom 200%; comparar screenshots com a imagem anexada quanto a hierarquia, composição, espaçamento, alinhamento e copy.
+
+**Pontos de integração:** `src/components/ui/{dialog,sheet,radio-group}.tsx`, `src/components/landing/LandingPage.tsx`, `LandingCelestial.module.css`, `src/components/public/CelestialIdentity.module.css`, `src/components/subscription/{PlanFeatureGate,PlanUpgradeNotice,AccountSubscriptionCard,BillingActionPanel}.tsx`, `src/lib/plans/rotas.ts`, `src/components/layout/navigation.ts`, `src/app/planos/page.tsx`, `src/lib/site-page-config/service.ts`, `modules/lyra-customaze-ui-ux/src/site-page-config/{schema,defaults}.ts`, `src/app/api/public/plans/route.ts`.
+
+**Cenários obrigatórios de QA:** todos os dez gatilhos acima; fechar/voltar/navegar; preços iguais nos cards, servidor e checkout; assinante com preço menor versus preço maior; role admin; usuário sem rede; valor alterado no servidor; error 401/403; Stripe ausente; mobile/teclado; estado desativado; acesso direto por URL; sem logs pessoais; sem modal duplicado por múltiplos cliques.
+
+**Aceite:** modal fiel à referência e integrado ao design, seleção funcional, preços verificáveis, sem paywall para assinantes e admins, sem diferença de direitos entre contribuições; bloqueio premium no backend e UX apropriada para contas sem plano.
+
+### 162 · Integração real de cobrança recorrente Stripe, contribuição escolhida e legado · ⚪ PENDENTE
+
+**Prioridade:** crítica. **Dependências:** 160, 161, 163. **Não ativar live sem autorização financeira.** O projeto possui infraestrutura Stripe existente, mas não possui automaticamente a nova estrutura de dois preços equivalentes.
+
+**Pontos verificados:** `src/lib/billing/service.ts`, `src/lib/billing/config.ts`, `src/lib/pagamentos/precos-stripe.ts`, `src/app/api/billing/checkout/route.ts`, `src/app/api/billing/portal/route.ts`, `src/app/api/webhooks/stripe/route.ts`, `mysql/migrations/004_add_stripe_billing.sql`, `029_ambiente_dos_pagamentos.sql`, `stripe_plan_prices`, `billing_customers`, `billing_webhook_events`, `fiscal_records`, `subscription_audit_events`.
+
+**Subtarefas executáveis:**
+
+1. Investigar Stripe API/SDK realmente instalado (`stripe ^23`) e configuração de ambientes test/live. Confirmar estrutura oficial Product/Price; uma oferta comercial deve ter duas opções de preço recorrente **com o mesmo entitlement**, sem multiplicar planos internos. Definir como representar contribuição no banco sem adulterar o preço da compra.
+2. Planejar estrutura de configuração para preços aprovados por moeda `BRL`, intervalo mensal e, somente se aprovado, anual. Associar `price_id` do provedor ao ID da oferta, ao rótulo de contribuição e ao intervalo; limitar criação de price IDs a ações administrativas auditadas e aos ambientes corretos.
+3. Nunca confiar em preço ou `plan_id` enviados pelo frontend: ele envia apenas escolha tipada/allowlisted; backend resolve `price_id` configurado em servidor, confirma que pertence à assinatura única, está ativo e é do ambiente correto. Aplicar idempotência de sessão, ownership e autorização antes de iniciar checkout.
+4. Implementar jornada completa: visitante escolhe contribuição → autentica → backend confere plano/conta → inicia Stripe Checkout real em test mode → retorno em sucesso/cancelamento → webhook assinado ativa/reconcilia assinatura → API de conta reflete autorização → redirect seguro ao recurso solicitado. Página de sucesso sem webhook **não ativa plano**.
+5. Webhooks: validar assinatura do corpo bruto, mapear evento e ambiente, persistir idempotentemente, lidar com eventos fora de ordem/retry, pagamento inicial, renovação, alteração de preço, invoice.paid, falha de cobrança, cancelamento ao fim do período, fatura, reembolso e status corretamente; não tratar `checkout.session.completed` isolado como prova universal de pagamento.
+6. Garantir que seleção de contribuição altera **somente faturamento**, nunca quotas, acesso ou configurações IA. Testar alternância do preço na mesma assinatura, políticas de prorrata e data de vigência. Não acionar alteração live sem confirmação explícita do titular e termos claros.
+7. Proteger usuários legados Meta/Care/Free, migração de preços antigos e múltiplos ambientes: manter consultas, histórico fiscal e eventos de assinaturas existentes sem sobrescrever. Definir plano de transição contratual e cobranças/grandfathering com decisão do responsável antes de executar mudança de preço em conta real.
+8. Sincronizar landing/modal/catálogo com backend; testar preço não configurado, provider inativo, moeda incorreta, valores discrepantes, ID malicioso, duplicação de checkout, retorno browser, expiração de sessão e gateway indisponível.
+9. Testar portal de cobrança real: acesso do titular, visualização de plano único, preço voluntário, cancelamento, troca de valor e renovação sem perder histórico. Proibir usuário de consultar faturas de outro titular; manter exportação e exclusão LGPD compatíveis.
+10. Garantir observabilidade e conciliação: `external_price_id`, moeda, ambiente, faturamento, status, taxas e tributos quando disponíveis, razão da mudança e identificador de evento de origem; não armazenar PAN/cartão.
+11. Revisar textos de contrato/retenção de documentos e tributação com responsáveis adequados. Não chamar valor de apoio de “doação” quando se trata de assinatura comercial.
+12. Validar em banco MySQL real e Stripe test mode com webhooks oficiais, depois navegador real para cada preço. Se as credenciais estiverem indisponíveis, concluir somente partes locais demonstráveis e **manter integração de ponta a ponta bloqueada**, com instruções de habilitação e prova ausente.
+
+**Aceite:** os dois valores levam a mesmo benefício após **pagamento test mode confirmado por webhook**; divergência de preço é recusada; cancelamento e falha suspendem conforme política; renovação reabre cotas; histórico fiscal intacto; ambiente test não contamina live; reconciliação idempotente verificada; sem preço live implícito.
+
+### 163 · Limites de tokens justos, custos reais de IA e sustentabilidade da assinatura · ⚪ PENDENTE
+
+**Prioridade:** crítica antes de ativar preços e chat público em escala. **Dependências:** 154, integração a 158 e 162.
+
+**Achado técnico:** `src/app/api/functions/ask-ai-assistant/route.ts` consome atualmente `featureKey: 'ai_chat_messages'`; `src/lib/ai/cliente-de-ia.ts` e `cadeia-de-modelos.ts` trabalham com `maximoDeTokens` e fallback. Isso **não comprova medição financeira unificada dos tokens efetivamente cobrados**. O preço menor não é sustentável por intuição; é preciso medir consumo do provedor efetivamente usado.
+
+**Requisitos obrigatórios:**
+
+1. Medir entrada, saída e, quando suportado, tokens de raciocínio/cache e geração de imagens por chamada, modelo, provedor e usuário, com cuidado para não armazenar prompts sensíveis desnecessariamente. Registrar `request_id`, proveniência da medição (resposta oficial do provedor ou estimativa rotulada), tempo, custo unitário vigente e moeda. Respeitar tokenizadores e modelos diferentes.
+2. Instrumentar adaptadores reais do provedor em `cliente-de-ia.ts` e composição da cadeia em `cadeia-de-modelos.ts`, incluindo tentativas malsucedidas, continuação após corte, múltiplos provedores, fallback local, BYOK e geração de imagem, distinguindo o que efetivamente gerou cobrança externa.
+3. Manter quota **igual** para contribuição acessível e de apoio. O valor escolhido **não** pode aumentar tokens, prioridade de atendimento, qualidade de modelo, armazenamento, acesso ou velocidade por regra comercial. Admin tem controles por papel separados.
+4. Preservar limite por requisição e opcionalmente mensagem por antifraude, mas estabelecer **orçamento de tokens/custo** e política de renovação mensal coerentes com contrato. Não vender “ilimitado” quando existe cota ou orçamento. Ler do servidor, com contador transacional no MySQL para corrida de múltiplas abas e requests simultâneos.
+5. Definir regra de uso que não ocasione prejuízo sistemático: receita líquida real após Stripe e tributos conhecidos versus custo marginal de IA, infraestrutura variável e reserva para suporte; executar cenários com predominância de assinantes em R$ 9,90 (incluindo 80/20 e 95/5) claramente marcados como simulações, sem apresentar como comportamento observado.
+6. Tabelar preços oficiais atuais de modelos e infraestrutura somente a partir de fontes verificáveis, com data da consulta. Se o provedor usar custo por volume, cache, raciocínio ou multimodal, respeitar unidade de cada tabela; não presumir que todo token custe o mesmo.
+7. Implementar configuração administrável e auditável de quotas e política de modelos, respeitando recursos realmente conectados. Se orçamento esgotar, mostrar mensagem transparente, data real de renovação e opções permitidas; jamais permitir consumo caro sem autorização por falha no contador.
+8. Para visitante sem cadastro, preferir Motor Lyra determinístico sem custo de tokens externos, com eventual microconversa LLM sujeita a limite independente por identidade efêmera/IP protegido, rate limiting multinível e proteção contra exploração automática. Não tornar data de nascimento “identidade segura” para aumento de cota.
+9. Definir prevenção de abuso de múltiplas sessões, erros de concorrência, desvios por `regenerate`, `retry`, cancelamentos de streaming e falhas no provedor; não cobrar quota indevidamente sem registro e política de compensação; diferenciar limite consumido e chamada cancelada com uso faturável pelo provedor.
+10. Criar painel informativo para assinante de tokens utilizados/restantes, período de renovação e origem de estimativa; incluir explicação simples. Na administração, métricas agregadas de custo e alertas sem vazar conteúdo de usuários.
+11. Implantar testes de concorrência, limites perto do término, virada de período, clock timezone, cotas iguais, modelos de custos distintos, fallback local, usuário antigo sem quota inicial e tentativas de bypass diretamente no endpoint.
+12. Revisar limites que se relacionam à imagem e anexos de IA. Se a infraestrutura da função concreta não contabilizar custo de maneira segura, registrar como risco e **não prometer irrestrição**.
+
+**Arquivos centrais:** `src/app/api/functions/ask-ai-assistant/route.ts`, `src/lib/plans/service.ts`, `src/lib/ai/{cliente-de-ia,cadeia-de-modelos,provedores-da-plataforma}.ts`, `src/lib/security/rate-limit.ts`, `src/components/chat/ChatAssistantContent.tsx`, `src/components/subscription/*`, `feature_usage_counters`, futuras tabelas de uso/custo por moeda e novas APIs.
+
+**Aceite:** quota equivalente entre contribuições comprovada em teste; uso por modelo rastreável; previsão de margem possível sem inventar dados; bloqueio transacional correto; falhas de fornecedor comunicadas; sem tokens ou dados de chat sensíveis em log; proteção contra gasto anônimo descontrolado.
+
+### 164 · Login e cadastro real com Google, vínculo de conta e retorno à descoberta · ⚪ PENDENTE
+
+**Prioridade:** alta. **Dependências:** 154, 155, 159; coordenação com 160 e 162. **Pedido do responsável:** reduzir drasticamente abandono por ausência de Google e Apple, sem eliminar e-mail/senha.
+
+**Estado observado:** a tela de `LoginExperience.tsx` e as rotas `/api/auth/login` e `/api/auth/register` são de e-mail/senha; `src/lib/auth/session.ts` usa JWT de sessão do app; não foi constatado Google OAuth implementado no fluxo inspecionado. **Não criar botão ativo sem provedor homologado.**
+
+**Especificação de implementação:**
+
+1. Pesquisar Google Identity Services e fluxo oficial recomendado para Next.js 16 no momento efetivo da execução. Definir endpoint(s) seguros e método validado de autenticação (OAuth 2.0/OpenID Connect e/ou GIS) evitando bibliotecas obsoletas e implementações manuais frágeis. Documentar escopos mínimos (`openid`, `email`, `profile` quando realmente necessário).
+2. Registrar client ID, segredo e origens/redirect URIs no Google Cloud oficial de **teste e produção**, quando autorizados. Manter segredos no servidor; não utilizar domínio localhost em produção nem callbacks abertos. Não gravar secrets no repositório e não expor código de autorização a terceiros.
+3. Implementar `state` anti-CSRF, `nonce` anti-replay e PKCE quando aplicável; validar `iss`, `aud`, `exp`, nonce, assinatura/JWKS e demais claims oficiais no servidor. Não confiar em `email`, `name`, `picture` ou `role` enviados por cliente.
+4. Criar tabela(s) de identidade externa vinculada ao usuário local por `(provider, subject)` com índice único, revogação/ligação de contas e histórico mínimo auditável. **Não criar admin pelo login social** e não permitir que um e-mail semelhante substitua prova de posse da conta antiga.
+5. Para conta existente só por senha, definir fluxo seguro de **vinculação consciente** mediante autenticação atual ou outra prova suficiente. Não fundir contas por email sem verificação e controle de colisão, case normalization e troca de email do provedor.
+6. Ao criar conta social nova, usar transação para inserir `users`, `profiles`, consentimentos e estado **sem assinatura paga**, respeitando migração da tarefa 160. Sem nome real disponível, permitir complemento voluntário, sem preencher com valor fictício.
+7. Integrar `LoginExperience.tsx` com botão oficial e acessível “Continuar com Google”, loading real, erro recuperável, comportamento ao negar consentimento, recusar pop-up, Safari/Chrome, cookies restritos e eventual FedCM. Preservar login por e-mail e senha existente.
+8. Recuperar contexto da descoberta/valor escolhido e destino premium da tarefa 159; não pedir novamente data de nascimento se usuário consentiu em guardá-la e ela já está confirmada; se faltar dado necessário, onboarding progressivo.
+9. Garantir `AuthProvider`, refresh de sessão, logout, revogação, `userRole`, `blocked_at`, `session_version`, MFA se existente e regras de privacidade. Nunca aceitar `admin` pela resposta do Google.
+10. Testar coexistência de conta Google e senha, contas com e-mails diferentes, email não verificado, OAuth cancelado, resposta adulterada, repetição de callback, token vencido, links falsos e acesso a APIs privadas. Não registrar tokens JWT de identidade nos logs.
+11. Testar com app/configuração real de teste do Google sempre que disponível. Se client ID/credenciais não estiverem disponíveis, implementar apenas a parte verificável local e reportar integração externa não homologada. Não afirmar “Google pronto” com token mockado.
+
+**Arquivos afetados prováveis:** `src/components/auth/LoginExperience.tsx`, `src/context/AuthContext.tsx`, `src/lib/auth/{session,destino-de-acesso}.ts`, `src/app/api/auth/{login,register,session}/route.ts`, `src/lib/mysql/pool.ts`, `mysql/migrations/*`, `src/lib/lgpd/conta.ts`, `src/app/layout.tsx`, `.env.example` **somente nomes de variáveis**, testes HTTP/MySQL/Playwright.
+
+**Aceite:** autenticação Google real no ambiente de teste, mesma identidade local em retornos repetidos, nenhum papel elevado, proteção contra fraude de `sub`/aud, vínculo seguro de conta existente, histórico da descoberta preservado com consentimento, APIs privadas seguras e login por e-mail preservado.
+
+### 165 · Login e cadastro real com Apple, identidade estável e e-mail privado · ⚪ PENDENTE
+
+**Prioridade:** alta. **Dependências:** 154, 155, 159; idealmente compartilhar serviço de identidades externas da 164. **Pedido do responsável:** usuário deve poder escolher Apple como alternativa simples à criação manual de senha.
+
+**Pesquisa e preparação obrigatórias:** verificar **Sign in with Apple** oficial, configuração de Service ID, App ID quando aplicável, domínio, retorno HTTPS, Team ID, Key ID, chave privada assinadora, client secret JWT, disponibilidade e termos aplicáveis à plataforma web. Não presumir que credenciais Apple possam ser obtidas sem conta/programa apropriado.
+
+**Requisitos:**
+
+1. Implementar OIDC/OAuth compatível com o fluxo oficial Apple, incluindo validação de `state`, `nonce`, JWT de `id_token` via chaves oficiais, `iss`, `aud`, `exp`, subject estável e resposta recebida por POST quando aplicável. Validar callback cross-site, SameSite/cookie de estado e anti-CSRF.
+2. Identificar conta local pela tupla `(apple, sub)` e nunca pelo nome ou e-mail apenas. Tratar **Hide My Email**, emails relay e nome retornado apenas no primeiro consentimento; não exigir nome novamente como se o provedor sempre o retornasse.
+3. Compartilhar infraestrutura de identidade externa criada na tarefa 164, mas manter isolamento de credenciais, validação da origem e mensagens do provedor. Email privado não pode ser automaticamente tratado como falha nem exibido publicamente.
+4. Integrar botão “Continuar com Apple” na experiência celestial responsiva, com ícone/nome corretos e acessibilidade; preservar Google e e-mail/ senha; não duplicar identidade ou destruir conta preexistente.
+5. Ao registrar usuário novo, concluir consentimentos válidos e manter `role` comum; associação a admin somente por controles administrativos existentes, nunca pela Apple. Garantir validação de bloqueio, sessão expirada e logout.
+6. Preservar a jornada da tarefa 159 para retorno ao mapa escolhido, compatibilidade com modal e checkout. Não utilizar e-mail privado para atribuição analítica indevida.
+7. Testar Apple ID autorizado, usuário novo, conta vinculada, “Hide My Email”, segundo login sem nome, permissão negada, token expirado, callback repetido, `state` inválido, autenticação interrompida e e-mail no serviço de encaminhamento quando aplicável.
+8. Quando necessário, configurar retorno HTTPS real de teste e requisitos de URL/registro Apple. Não criar código condicional que desabilite produção silenciosamente ou afirme disponibilidade sem configuração real.
+9. Registrar teste de compatibilidade Safari/iOS/macOS e pelo menos Chromium desktop/mobile. Se não houver ambiente Apple configurado, marcar **bloqueio externo comprovado** e documentar precisamente as ações administrativas necessárias.
+
+**Pontos de código:** os mesmos da tarefa 164, estratégia de múltiplos provedores, tabelas novas de `auth_identities`, `src/lib/auth/session.ts`, handlers de callback, `.env.example`, testes de integração e web.
+
+**Aceite:** login Apple real e vinculação segura quando o ambiente oficial estiver disponível; proteção de dados de e-mail privado; sem duplicação de conta e sem bypass admin; retorno pós-assinatura correto; sem botão habilitado que não opere de verdade.
+
+### 166 · “Conexões da Alma”: experiência de afinidades simbólicas, com CTA de alma gêmea · ⚪ PENDENTE
+
+**Prioridade:** alta para conversão após lançamento do mapa ocidental. **Dependências:** 155, 156, 158, 160, 161; continuidade autenticada na 159. **Escopo aprovado:** recurso premium “Conexões da Alma” e chamada “Será que encontrei minha alma gêmea?”, com linguagem ética, sem alegação de prova de predestinação.
+
+**Fluxo completo do usuário:**
+
+1. Criar página/card “Conexões da Alma” visível na experiência de descoberta, com CTA **“Será que encontrei minha alma gêmea?”** ou “Descubra sua conexão com alguém especial”. Se visitante ou usuário sem assinatura clicar, abrir o modal da tarefa 161 **antes de coletar dados sensíveis de terceiro**.
+2. Se assinante, entrar na página real e apresentar formulário de duas pessoas: o perfil autenticado fornece os dados de nascimento que o titular autorizou, com possibilidade de ajuste; para a outra pessoa, solicitar **dados compartilhados legitimamente e com informação clara sobre finalidade e privacidade**. Evitar exigir nome completo quando não for necessário para cálculo.
+3. Definir nível de análise por completude de dados: apenas duas datas = afinidade geral solar simbólica; data/hora/cidade de ambos = mapas completos e análise tecnicamente delimitada de posições e aspectos, se programados; dados incompletos = rótulos de precisão e ausências claras.
+4. A leitura da compatibilidade deve **explicar o que realmente foi comparado**, distinguindo signos solares, posições, casas, aspectos e interpretações. Não afirmar que duas pessoas foram feitas uma para outra, que uma trai, que têm obrigação de continuar relacionamento, que sentimentos do terceiro foram revelados ou que há compatibilidade de 100% sem metodologia.
+5. Não reutilizar o mapa Védico (sideral) no cálculo Ocidental (tropical) sem informar método. Se decidir incluir um recorte védico ou Samādhi, aplicar seus próprios cálculos corretos e limites, explicando que são leituras complementares, nunca combinadas arbitrariamente.
+6. Construir uma narrativa prática e acessível sobre **pontos de afinidade, diferenças de comunicação, possíveis tensões e perguntas para diálogo**, com linguagem não determinista, autonomia das pessoas e respeito a vínculos reais. Não apresentar “alma gêmea” como certificação calculável.
+7. Reutilizar `Motor Lyra` para interpretação simbólica e personalidade, preservando separação dos resultados numéricos; LLM opcional apenas dentro do orçamento 163 e sem inventar informações do relacionamento.
+8. Aplicar controle de acesso no servidor **antes de ler/salvar dados**. Proteger consultas diretas por URL/endpoint, rate limit, orçamento de IA e isolamento por titular; negar usuários sem assinatura com status adequado e CTA amigável no frontend.
+9. Memória e histórico da leitura somente com consentimento explícito e finalidade compatível. Permitir visualizar, exportar e excluir dados próprios; informações da outra pessoa não devem ser submetidas a publicidade, comparação coletiva ou compartilhamento por padrão.
+10. Estados de UX: entrada vazia, dados insuficientes, erro de cidade/timezone, loading real, cálculo pronto, leitura parcial, falha LLM, assinatura expirada durante o uso, token insuficiente e exclusão de resultados.
+11. Criar material de explicação sobre o significado simbólico de compatibilidade e sobre limitações de astrologia em decisões afetivas; a experiência deve orientar reflexão, não prescrever permanecer/romper ou inferir consentimento de outra pessoa.
+12. Projetar responsividade e identidade celestial nos cards, gráficos/representações quando realmente calculados, com hierarquia visual próxima aos demais mapas e CTAs acessíveis.
+
+**Arquivos de origem:** `src/lib/astrology/*`, `src/lib/lyra/conhecimento/mapas.ts`, `src/lib/lyra/leitura-do-mapa.ts`, `src/lib/lyra/modelos-como-lyra.ts`, `src/lib/lgpd/*`, `src/lib/plans/*`, `src/components/profile/MapaVedicoCard.tsx` (padrão de mapa), novos componentes/serviços/rotas de relacionamentos, navegação e novas migrations somente se persistência for consentida.
+
+**Casos de teste:** assinante/visitante/admin, 2 datas, 2 mapas completos, dados conflitantes, fuso horário e horário de verão, dados de menor, consentimento ausente, vínculo da outra pessoa, saída de IA fabricada, cálculos sem correspondência, remoção de histórico e acesso cruzado.
+
+**Aceite:** recurso premium calculável e útil; consentimento/privacidade; nenhum diagnóstico sentimental ou falso determinismo; modal correto para não assinante; mapa real quando dados suficientes; exclusão e acesso por titular testados em MySQL/HTTP/navegador.
+
+### 167 · Autenticação opcional por passkeys/WebAuthn · ⚪ PENDENTE
+
+**Prioridade:** média; **oportunidade identificada no radar**, não obrigação anterior à versão inicial. **Dependências:** 164 e 165 preferencialmente, 155, serviço de identidades da 154. **Escopo estrito:** reduzir fricção de retorno; não criar sistema paralelo de contas.
+
+**Especificação:**
+
+1. Pesquisar recomendações WebAuthn/FIDO2/Passkeys atuais, implementação compatível com navegadores mobile/desktop e Next.js; avaliar biblioteca madura e auditável, suporte à autenticação cross-device e limites de ambiente HTTPS.
+2. Modelar credenciais por usuário com `(credential_id, public_key, counter, transports, created_at, last_used_at, revoked_at)` e demais atributos exigidos pelo padrão. Nunca persistir segredo biométrico do dispositivo ou chave privada.
+3. Registro de passkey apenas com **sessão real autenticada e verificada**, challenge temporário vinculando usuário, RP ID e origin; validar attestation/autenticador conforme política. Login gera novo challenge não reutilizável; verificar assinatura/assertion, counter quando aplicável e binding ao usuário.
+4. Fluxos de UI: “Criar uma chave de acesso” em conta, “Entrar com uma chave de acesso” no login quando compatível, listagem/renomeação/revogação de credenciais, autenticação em novo aparelho e instruções simples. Não obrigar passkey nem retirar e-mail/Google/Apple.
+5. Política segura de recuperação para usuário que perdeu dispositivo, múltiplas credenciais, troca de navegador, conta bloqueada ou ataque por phishing; logs auditáveis sem biometria, cookies de challenge expiram.
+6. Evitar elevar permissão por credencial antiga; validar o mesmo `role`/session_version e bloqueios atuais no banco, como em qualquer login.
+7. Testar desafio vencido, repetido, RP ID errado, credencial revogada, assinatura inválida, contador divergente, dois dispositivos, cadastro sem sessão, tentativas automatizadas, usuário que não possui WebAuthn e fallback.
+
+**Aceite:** login e registro de passkey homologados com autenticador suportado em dispositivo real; revogação efetiva; fallback claro; nenhuma conta/role duplicado; segurança adequada a phishing e replay. **Se não houver ambiente HTTPS/dispositivo, marcar homologação pendente em vez de aprovar por mocks.**
+
+### 168 · Cartões de autodescoberta compartilháveis, opcionais e privados por padrão · ⚪ PENDENTE
+
+**Prioridade:** média/alta após primeira experiência gratuita. **Dependências:** 155, 156, 157, 158. **Oportunidade identificada no radar:** permitir divulgação orgânica com resultado escolhido voluntariamente, sem explorar informações pessoais.
+
+**Implementação:**
+
+1. Após a leitura útil de “Quem sou eu?”, oferecer botão real **“Compartilhar minha descoberta”** e alternativa “Baixar meu cartão”. Não forçar compartilhamento nem condicionar acesso a indicação.
+2. Criar cartão celestial de signo solar com símbolo e texto simbólico correspondente **ao resultado real**. Nas datas limítrofes, não fixar signo incerto; se necessário, gerar cartão sem nome de signo com explicação objetiva ou pedir dados adicionais opcionais.
+3. Empregar `ImageResponse`/OG ou geração de imagem existente conforme compatibilidade com runtime e fontes locais, usando apenas ilustrações licenciadas e a identidade do app. A imagem compartilhável deve **não conter** por padrão DOB completa, nome, local, dados emocionais, chat ou perfil.
+4. Gerar URL pública genérica da experiência, sem parâmetros pessoais ou tokens que revelem dados; a imagem OG genérica pode ser cacheada, mas dados pessoais em URLs nunca devem ser indexados.
+5. Implementar Web Share API quando suportada, fallback para copiar link e baixar imagem, com feedback acessível de conclusão/falha; não afirmar “compartilhado” se a pessoa cancelou o diálogo nativo.
+6. Escolher variações de CTA aprovadas na copy, por exemplo: “Descubra algo novo sobre você” e “Que tal conhecer sua história sob outro olhar?”; evitar falsa ciência, “seu mapa sabe tudo” e marketing agressivo.
+7. Testar imagem por signo, tamanho para WhatsApp/Instagram/Stories quando suportado, Safari/Chrome desktop/mobile, modo offline, download, retorno de compartilhamento, caracteres especiais e nenhum vazamento por metadados.
+8. Instrumentar apenas clique/resultado agregado, com consentimento e sem enviar DOB à plataforma de métricas.
+
+**Aceite:** download e compartilhamento real, visual fiel, zero identificação pessoal involuntária, cards corretos para os signos, fallback funcional, link abrindo a jornada pública e acessibilidade validada.
+
+### 169 · Verificação de viabilidade e integração condicionada do Pix Automático · ⚪ PENDENTE
+
+**Prioridade:** média; **oportunidade investigada**, condicionada à prova técnica e financeira. **Dependências:** 162 e avaliação de mercado da 170. Não vender Pix Automático como já disponível.
+
+**Objetivo:** considerar pessoas que querem assinatura acessível mas não possuem cartão de crédito, sem desenvolver uma integração improvisada ou insegura.
+
+**Etapa 1, due diligence obrigatória:**
+
+1. Consultar **Banco Central** e documentação primária dos provedores na data da implementação. Confirmar se Stripe brasileira contratada disponibiliza Pix Automático recorrente na conta e no ambiente específicos; páginas oficiais podem apresentar informações divergentes, então exigir resposta contratual/API testável.
+2. Identificar modalidade efetiva: Pix Automático (autorização de recorrência), Pix Cobrança, Pix por QR avulso ou cartão. **Pix comum por pagamento avulso não equivale a assinatura recorrente automática**. Não rotular um boleto/Pix mensal manual como “Pix Automático”.
+3. Levantar custos, prazo, autorização/mandato, liquidação, falha, reembolso, reconciliação, experiência do usuário, cancelamento, requisitos do recebedor, webhook e suporte do provedor.
+4. Verificar impacto sobre as duas contribuições voluntárias, preservando **exatamente os mesmos direitos** de assinatura e limites de tokens independentemente do meio de pagamento.
+
+**Etapa 2, somente se houver provedor real compatível e autorização do responsável:**
+
+5. Integrar usando API/SDK oficial do provedor configurado, credenciais seguras e ambiente de teste; respeitar checkout da assinatura única, seleção de valor resolvida no servidor, autorização recorrente explícita e proteção de fraude.
+6. Implementar estados de mandato: solicitado, autorizado, recusado, revogado, cobrança pendente, liquidada, falha de renovação e cancelada, conforme contratos reais. Nunca conceder direito de assinatura com QR mostrado ou autorização pendente **sem prova de pagamento/mandato na política aprovada**.
+7. Tratar webhooks assinados e idempotentes, conciliação por titular, cancelamento no aplicativo e no provedor, troca de contribuição, expirado, inadimplência, devolução, memória de tentativas e auditoria fiscal.
+8. Testar ciclo completo recorrente com sandbox oficial ou conta de teste homologada; registrar prova e limites. Se provedor não suportar recorrência, **não criar falsa simulação funcional**, registrar bloqueio técnico de integração e entregar somente análise comparativa documentada.
+
+**Aceite da avaliação:** parecer verificável de **disponível/inviável/bloqueado** com evidência oficial, custos e riscos; somente rotular integração como concluída se cobrança recorrente real for homologada, cancelamento e webhooks testados. Nenhuma alteração de cobrança live sem autorização.
+
+### 170 · Funil de descoberta, testes de disposição a pagar e melhoria de retenção · ⚪ PENDENTE
+
+**Prioridade:** alta para validar produto/preço; não autoriza coleta invasiva nem modificar valores comerciais sem aprovação. **Dependências:** 155, 157–163; complementar a 164/165 e 168 quando estiverem disponíveis.
+
+**Descoberta discutida:** a preocupação central é **quanto uma pessoa brasileira aceita arriscar para experimentar um produto novo**. Preferência declarada em pesquisa sobre outra plataforma não é compra efetiva pela Lyra. R$ 9,90/R$ 19,90 são alternativas de teste, não resultado estatístico de conversão nem lucro garantido.
+
+**Desenvolvimento e pesquisa necessários:**
+
+1. Definir eventos mínimos da experiência com nomes e payloads permitidos: `visita_landing`, `iniciou_descoberta`, `nascimento_validado` (**sem data em evento**), `leitura_entregue`, `conteudo_premium_clicado`, `modal_visto`, `modal_fechado`, `contribuicao_escolhida` (somente identificador comercial), `login_iniciado`, `login_concluido`, `checkout_iniciado`, `checkout_confirmado_pelo_provedor`, `cancelamento`, `retorno_d7`, `retorno_d30`. Descrever fontes, deduplicação, timezone, duração de atribuição e finalidades.
+2. **Não** registrar DOB, nome completo, dados de outra pessoa, conteúdo de conversa, religião, saúde, sexualidade ou perfil emocional no funil. Se identificadores pseudônimos forem empregados, documentar TTL, consentimento, privacidade, exclusão e restrição de acesso.
+3. Medir jornada antes e depois de login sem vincular visitas ao titular de forma oculta; unificar eventos apenas quando consentido e tecnicamente justificado, com proteção de dupla contagem e identificação de bots.
+4. Implementar painel admin agregado com funil e indicadores: visitas elegíveis, taxa de envio de data, taxa de leitura entregue, clique em premium, modal exibido e fechado, início de login Google/Apple/e-mail, sucesso de cadastro, checkout confirmado por webhook, assinatura ativa, cancelamento, retenção D7/D30, custo marginal por assinante e composição percentual de contribuições. **Não incluir gráficos sem dados reais**; exibir ausência de dados corretamente.
+5. Separar comparação de preço por coorte e contexto de uso. Hipóteses comerciais discutidas: R$ 9,90 e R$ 19,90 por mês, com possível teste exploratório de R$ 7,90/R$ 14,90 **somente mediante decisão comercial explícita**; dois valores não criam dois planos. Não variar benefícios nem gastar valores sem permissão.
+6. Implementar mecanismo de experimento A/B **quando houver autorização**, com exposição persistida e aleatória por visitante, população adequada, consentimento e sem favorecer indevidamente grupos vulneráveis. A/B compara mensagens ou preços aprovados; não altera em segredo o contrato de pessoas que já assinam. Cuidado com acessibilidade e transparência da oferta.
+7. Registrar previamente métricas de decisão: receita média líquida por assinante, taxas do meio de pagamento, margem de contribuição, custo de IA médio e P95, cancelamento D30 e satisfação; usar intervalos de confiança e tamanhos de amostra adequados antes de declarar vencedor. Evitar “conversão aumentou 30%” com amostra pequena ou sem baseline.
+8. Estabelecer cohortes brasileiras sem coleta de **renda individual obrigatória**: proxies agregados consentidos quando lícitos ou pesquisa opcional; nunca exigir comprovante de baixa renda para o valor acessível.
+9. Comparar fontes secundárias com rigor: IAB Brasil/Offerwise 2025 (preferência por gratuito/limites declarados), Mobile Time/Opinion Box 2022 (WhatsApp Premium hipotético e histórico), Vindi/Opinion Box 2026 (comportamento de assinatura), e estudos oficiais recentes quando encontrados. Verificar pergunta original, população, data da coleta, amostra, faixa de renda e contexto. **Não** transplantar conclusões de WhatsApp, streaming ou outros serviços como prova de demanda por astrologia ou Lyra.
+10. Integrar resultados ao radar como indicadores de produto e não como notificações repetitivas. Mensurar melhora de confiança/satisfação com perguntas voluntárias e simples; sem questionários intrusivos antes da primeira leitura.
+11. Implementar documentação de observabilidade, permissão do painel admin, exclusão e retenção, eventos idempotentes e coerência entre total do funil e faturas reais. Logs técnicos e analytics não devem conter tokens de acesso nem segredos.
+
+**Pontos de código:** serviços agregados e APIs admin já existentes (`src/app/api/admin/dashboard`, relatórios), `src/lib/lgpd/*`, `src/lib/plans/*`, `src/lib/billing/*`, landing, login, modal, nova descoberta, novos eventos e dados de cobrança. Criar persistência agregada somente onde houver necessidade comprovada.
+
+**Critérios de aceite:** painéis com dados reais e estados vazios honestos; eventos correspondem a etapas executadas; assinatura confirmada somente com provedor; dados pessoais ausentes dos payloads; exclusão/consentimento testados; A/B se aprovado não muda benefícios nem produz cobranças indevidas; zero números de marketing inventados.
+
+### 171 · QA integral do programa, segurança, regressão e compatibilidade mobile/desktop · ⚪ PENDENTE
+
+**Prioridade:** crítica para fechamento, não substitui QA incremental. **Dependências:** implementações não bloqueadas de 155–170. **Finalidade:** provar os recursos discutidos e todos os pontos de integração, não declarar funcionamento por existência de arquivo.
+
+**Estratégia de testes por camadas:**
+
+**A. Cálculo e domínio**
+
+1. Testar as doze classificações de signo solar em datas inequívocas e datas de cúspide com indeterminação corretamente relatada.
+2. Validar datas civis, fuso IANA, histórico de verão, cidade homônima, ausência de hora, mudança de hemisfério/latitude; motores Védico e Tropical separados.
+3. Regressão dos cálculos de Sol/Lua/casas/dashas védicos; Samādhi e Quantum mantêm indisponibilidades originais; os três mapas existentes não sofrem adulteração ao incluir o quarto.
+4. Verificar geração do texto de descoberta e relatório premium com base calculada, origem da leitura, diferenças reais entre pessoas/datas e tratamento de incompletude. Não aprovar com conteúdo ilustrativo fixo.
+
+**B. Visitante e conversão**
+
+5. Navegação incógnita sem sessão, sem conta, sem plano e sem cartão: aterrissar na landing, informar data, obter resultado, fechar pop-up, retornar, compartilhar cartão opcional e voltar mais tarde dentro da regra de expiração.
+6. Clicar em **cada** mapa premium, CTA de alma gêmea, Conexões da Alma, expansão do mapa ocidental e demais recursos premium preservados. Conferir mesmo modal, mesma oferta e diferenças apenas financeiras; assinante não vê paywall.
+7. Clicar no valor acessível, no valor de apoio, fechar, reabrir, voltar do checkout, perder rede, usar teclado, touchscreen, dispositivo compartilhado e abas paralelas.
+8. Verificar conteúdo que deve continuar gratuito quando modal é fechado; nenhuma cobrança, cadastro ou cookie de plano criado pelo visitante.
+9. Tentar abrir URLs premium e invocar APIs diretamente sem cookie: respostas seguras 401/403, sem dados privados. Tentar spoof de plano/role/priceId, headers, retorno externo e token inválido.
+
+**C. Autenticação e dados pessoais**
+
+10. Cadastro/login e-mail e Google/Apple reais quando homologados; conta existente, ligação de identidades, email oculto Apple, erro de provedor, sessão revogada, logout, expiração, blocked_at e último admin protegido.
+11. Se passkeys estiverem homologadas: registro, login, revogação, challenges inválidos e recuperação em dispositivo real; não chamar teste com mock de autenticação real.
+12. Onboarding progressivo, preservação consentida e correção de data; login feito em outra aba; perfil existente com dados diferentes; política de idade aplicável validada; proteção de criança/adolescente conforme parecer.
+13. Testar isolamento por titular dos mapas, chats, Conexões e histórico de pagamentos. Dados de pessoa 1 não aparecem para pessoa 2; exclusão/exportação LGPD alcança novos registros.
+
+**D. Assinatura, tokens e pagamentos**
+
+14. Matriz inteira: visitante, sem assinatura, plano novo acessível, plano novo apoio, assinante legado, admin, assinatura vencida, cancelada, cobrança pendente, inadimplente, renovada. Uma assinatura e duas contribuições **iguais em benefícios**.
+15. Testar Stripe test mode com **preços válidos aprovados de teste**, webhooks assinados, idempotência, retries, eventos fora de ordem, renovação, cancelamento, troca de preço, recibos, portal e comparação com banco. Falta de credencial = **inconclusivo**, nunca “aprovado”.
+16. Testar cota igual de IA, tokens de input/output e fallback, custo por provedor, concorrência, limites em múltiplas abas, virada de período, gasto da microconversa e requisição cancelada.
+17. Se Pix Automático foi efetivamente integrado, validar mandato e cobranças recorrentes no provedor oficial; caso contrário registrar avaliação e status correto, não incluir Pix não funcional no checkout.
+
+**E. UI/UX e acessibilidade**
+
+18. Testar nas larguras **320, 390, 543, 768, 1024, 1280, 1440, 1920 e 2560px** quando ambiente permitir; viewport baixo de notebook e rolagem segura; zoom 200%; nada cortado, modal visível, cards empilhados no mobile, navegação superior e menu móvel.
+19. Inspecionar todos os botões, links, menus, dropdown de perfil, cards de mapa, menus do admin, navegação por teclado, Escape, foco/retorno de foco, mensagem de erro e leitores de tela. Validação axe-core WCAG 2.2 AA; contraste e alvos de toque adequados. Testar redução de movimento e mudanças de tema aprovadas.
+20. Confrontar screenshots do modal de assinatura com imagem do responsável, da landing/dashboard com mockup real e a fonte do repo `lyra-design-aprovado-2026-11-06.png`; não alterar imagem principal aprovada para encobrir diferença de implementação.
+21. Validar Site Experience Builder com configuração padrão, configuração publicada personalizada e rascunho não publicado; alteração de CTA/preço no construtor não pode quebrar produção, navegação nem duplicar sistema de preços.
+22. Validar todos os destinos principais que o novo programa afeta, não apenas screenshot estática. Para funções antigas preservadas, realizar varredura de regressão e acessar recursos do role admin com sessão verdadeira.
+
+**F. Testes automatizados, infraestrutura e segurança**
+
+23. Rodar `pnpm check:lint`, `pnpm check:format`, `pnpm check:types`, `pnpm test`, `pnpm test:integration`, `pnpm build`, migrations MySQL reais e `pnpm test:launchers` quando pertinente; registrar duração, quantidades reais e detalhes de qualquer falha. Erros pré-existentes precisam de prova no baseline.
+24. Auditar dependências e licenças adicionadas; pesquisa oficial das versões atuais compatíveis, sem upgrade geral fora de escopo. Verificar CSRF/SSR, XSS em texto gerado, SSRF em integrações, rate limit, sessão, cache privado, logging, CSP e manipulação de dados financeiros.
+25. Testar comportamento sem credenciais externas ou sem provedor ativo, com resposta honesta que não destrói o resto do app; falhas de rede, banco, Stripe, Google/Apple, IA, ephemeris e usuário sem dados.
+26. Gerar evidências datadas e limitadas a dados de teste: logs, prints sem PII, contratos HTTP, tabelas de resultados, SHA dos commits, lista de testes e issues corrigidas; não divulgar secrets, e-mails reais ou dados de nascimento reais em artefatos de QA.
+
+**Matriz mínima de aceitação funcional (QA obrigatório por ação)**
+
+| Quem                 | Ação                          | Resultado legítimo                          | Backend/segurança                              |
+| -------------------- | ----------------------------- | ------------------------------------------- | ---------------------------------------------- |
+| Visitante            | Abre “Quem sou eu?”           | Tela real de descoberta sem cadastro        | Não cria usuário nem plano Free                |
+| Visitante            | Informa data inequívoca       | Signo solar tropical e reflexão coerente    | Cálculo servidor, sem dado inventado           |
+| Visitante            | Informa data limítrofe        | Incerteza explicada, hora/cidade opcionais  | Sem signo errado por horário fictício          |
+| Visitante            | Abre Védico/Samādhi/Quantum   | Modal Assinatura Consciente                 | API privada continua 401/403                   |
+| Visitante            | Abre mapa ocidental avançado  | Modal Assinatura Consciente                 | Não entrega mapa integral sem autorização      |
+| Visitante            | Abre “Conexões da Alma”       | Modal Assinatura Consciente                 | Não coleta parceiro antes de autorização       |
+| Visitante            | Clica em “Minha alma gêmea?”  | Modal com destino preservado                | Sem conteúdo premium antes do pagamento        |
+| Visitante            | Fecha modal                   | Volta à descoberta                          | Sem pagamento, cadastro ou bloqueio artificial |
+| Visitante            | Seleciona preço acessível     | Prossegue com mesma oferta única            | Backend resolve preço, ignora preço arbitrário |
+| Visitante            | Seleciona valor de apoio      | Prossegue com mesma oferta única            | Mesmos entitlements e tokens                   |
+| Conta sem assinatura | Acessa recurso premium        | Modal ou orientação contratual clara        | Bloqueio servidor conservado                   |
+| Assinante acessível  | Acessa qualquer recurso ativo | Função premium liberada                     | Cota idêntica à de apoio                       |
+| Assinante apoio      | Acessa qualquer recurso ativo | Função premium liberada                     | Cota idêntica à de acessível                   |
+| Assinante legado     | Entra e consulta histórico    | Direitos contratuais preservados            | Histórico de pagamentos íntegro                |
+| Conta comum paga     | Acessa `/admin`/API admin     | Acesso negado                               | `role` validado no servidor                    |
+| Admin real           | Gerencia planos/provedores    | Área administrativa operante                | Audit trail e permissões próprias              |
+| Qualquer pessoa      | Clica função global desligada | Explicação honesta, sem paywall enganoso    | Restrição do interruptor no servidor           |
+| Usuário Google       | Autentica via provedor real   | Mesma conta local e retorno correto         | Subject/verificação tokens válidos             |
+| Usuário Apple        | Autentica com email oculto    | Conta correta e sessão válida               | Não identifica somente pelo e-mail             |
+| Assinante            | Cancela/renova                | Estado real refletido pelo provedor         | Webhook + banco conciliados                    |
+| Titular              | Exclui dados                  | Novos dados também são excluídos legalmente | Sem dados de terceiros em exportação           |
+
+**Critério de aceite do item 171:** todos os cenários aplicáveis com **evidência real**, diferenças justificadas e falhas bloqueantes corrigidas. Não reclassificar erro como aprovada por mudar teste; UI sem funcionalidade real não é sucesso. Relatório obrigatório com severidade, responsável, SHA, reprodutibilidade, correção e reteste.
+
+### 172 · Publicação controlada, migrações reversíveis e estabilização do novo modelo · ⚪ PENDENTE
+
+**Prioridade:** crítica. **Dependências:** 171 e tarefas relevantes concluídas/homologadas; não promover opções externas condicionais ainda não viáveis como se tivessem sido entregues.
+
+**Escopo autorizado do novo programa:** lançar **somente os recursos validados** de “Quem sou eu?”, quarto mapa ocidental, Motor Lyra público, paywall inclusivo, assinatura única e dois valores **aprovados**, autenticação social se homologada, Conexões, compartilhamento e as melhorias complementares efetivamente autorizadas/viáveis. Não aproveitar release para refazer a tarefa 142 nem executar a 144 pausada.
+
+**Procedimento de entrega:**
+
+1. Conferir `git fetch`, status/diffs/stashes, linha de base da `main`, IDs de tarefas efetivos, migrações já aplicadas e contratos publicados. Não reverter ou incluir alterações pausadas do workspace.
+2. Aprovar preço final com responsável e comprovação de custos do item 163. R$ 9,90/R$ 19,90 permanecem apenas hipóteses até decisão comercial e confirmação de `Price` do provedor. Não anunciar preço que não pode ser efetivamente cobrado.
+3. Garantir rollout por feature flag **com tratamento real de servidor**, para não disponibilizar checkout ou coleta de DOB enquanto subsistemas não estão homologados; flags não substituem permissões. Configurar default seguro e rollback documentado.
+4. Backup restaurável do MySQL antes de migração que afete planos/pagamentos; migrations idempotentes e replay em ambiente descartável. Registrar versão do schema, tempo, resultado e validação de integridade referencial. **Rollback de código não pode apagar ou invalidar pagamento já registrado.**
+5. Fazer publish das tarefas conforme normas existentes de commit/push em `main`, evidências de testes por tarefa e SHA verificado em `origin/main`. Se tarefa implicar integração externa não disponível, registrar bloqueio e não marcar “concluída” por simulação.
+6. Confirmar configuração de domínio e HTTPS para Apple/Google/passkeys, callback, CSP/cookies, política pública, Stripe test/live separados, Webhook de produção e origens permitidas; credenciais jamais aparecem em logs.
+7. Entregar experiência pública em janela controlada e monitorar erros, desempenho, pagamentos, conversão, abandono, custo de IA, anomalias de rate limit e feedback. Monitoramento deve respeitar privacidade e não expor DOB/terceiros.
+8. Publicar notas de mudança e documentação operacional em português: recursos gratuitos, funcionalidades pagas, condições iguais nos dois valores, limites de IA, renovação/cancelamento, privacidade, versões do mapa e diferenças de metodologia.
+9. Validar `README.md` e textos da landing para não descrever Free/Meta/Care como oferta vigente; manter registro histórico técnico/financeiro de legados e só remover referências públicas de forma segura. Não reintroduzir famílias em desativação.
+10. Manter plano de resposta a incidente para duplicação de checkout, falha de webhook, custo inesperado de IA e dado vazado; chaves do gateway/usuários/idade podem precisar de intervenção administrativa. Definir responsável real e gatilhos antes do release.
+11. Rodar QA pós-release em ambiente real com contas de validação legítimas, sem efetuar cobrança live sem autorização; conferir landing, modal, cálculo, login, conta, compra testada, mapa liberado e admin. Registrar limitações do que não pôde ser testado externamente.
+12. Encerrar as tarefas individualmente no gestor oficial `claude-gestao.md`, com SHA/push, log e prints, evidências de cálculos, segurança, pagamentos e decisões. Somente então declarar programa concluído, com lista de pendências remanescentes transparente.
+
+**Critérios de aceite:** oferta real e coerente em UI/API/Stripe; nenhuma assinatura/registro antigo perdido; identidade visual aprovada; dados de visitante protegidos; testes reais e fontes documentadas; migrações reversíveis; anomalias observáveis; `main` remoto atualizado para todas as tarefas concluídas.
+
+---
+
+#### 3. DEFINIÇÃO EXATA DAS SUPERFÍCIES GRATUITAS, PAGAS E ADMINISTRATIVAS
+
+| Superfície                                                                             | Visitante sem conta/plano            | Conta sem assinatura ativa         | Assinante com valor acessível               | Assinante com valor de apoio | Administrador real                                        |
+| -------------------------------------------------------------------------------------- | ------------------------------------ | ---------------------------------- | ------------------------------------------- | ---------------------------- | --------------------------------------------------------- |
+| Landing pública                                                                        | Acesso                               | Acesso                             | Acesso                                      | Acesso                       | Acesso                                                    |
+| “Quem sou eu?”                                                                         | **Acesso real e gratuito**           | Acesso                             | Acesso                                      | Acesso                       | Acesso                                                    |
+| Data de nascimento inicial                                                             | **Único campo obrigatório**          | Dados do titular quando consentido | Dados do titular                            | Dados do titular             | Conforme operação                                         |
+| Signo solar ocidental simplificado                                                     | Disponível, ressalva nas cúspides    | Disponível                         | Disponível                                  | Disponível                   | Disponível                                                |
+| Breve leitura simbólica/reflexão                                                       | Disponível, conforme limite gratuito | Disponível                         | Disponível                                  | Disponível                   | Disponível                                                |
+| Conversa de apresentação da Lyra                                                       | Prévia limitada e real, se viável    | Prévia conforme regra              | Chat completo sob limite tokens             | Mesmo limite de tokens       | Gestão conforme papel                                     |
+| Mapa Ocidental completo                                                                | Modal de assinatura                  | Modal de assinatura                | Disponível com dados necessários            | **Mesmo acesso**             | Acesso autorizado                                         |
+| Mapa Védico completo                                                                   | Modal de assinatura                  | Modal de assinatura                | Disponível                                  | **Mesmo acesso**             | Acesso autorizado                                         |
+| Lyra DM Samādhi                                                                        | Modal de assinatura                  | Modal de assinatura                | Disponível conforme cálculos reais          | **Mesmo acesso**             | Acesso autorizado                                         |
+| Mapa Quantum                                                                           | Modal de assinatura                  | Modal de assinatura                | Disponível conforme cálculos reais          | **Mesmo acesso**             | Acesso autorizado                                         |
+| “Conexões da Alma”                                                                     | Modal de assinatura                  | Modal de assinatura                | Disponível                                  | **Mesmo acesso**             | Acesso autorizado                                         |
+| “Será que encontrei minha alma gêmea?”                                                 | Modal de assinatura                  | Modal de assinatura                | Disponível como CTA da mesma função         | **Mesmo acesso**             | Acesso autorizado                                         |
+| Chat completo / histórico / memória opcional / relatórios e demais funções preservadas | Modal de assinatura                  | Modal de assinatura                | Disponíveis, com limites técnicos legítimos | **Mesmo acesso**             | Conforme funções e papel                                  |
+| Tokens mensais de IA                                                                   | Somente limite de prévia gratuita    | Sem cota de assinatura paga        | Cota definida em contrato                   | **A MESMA cota**             | Política técnica de administrador                         |
+| Painel admin, chaves, preços, gestão de usuários, faturamento                          | **Negado**                           | **Negado**                         | **Negado**                                  | **Negado**                   | **Apenas admin**                                          |
+| Oito grupos previstos para desativação na tarefa 144                                   | Não promover / não reintroduzir      | Idem                               | Idem                                        | Idem                         | Respeitar decisão vigente e estado efetivamente publicado |
+
+**Regra de operação:** os gatilhos de upsell usam **um único componente de modal**, porém os controles de autorização devem existir no backend e o sistema deve distinguir “premium”, “indisponível globalmente”, “dados insuficientes” e “integração não configurada”. O paywall **nunca** deve encobrir problema operacional ou promessa de recurso inexistente.
+
+---
+
+#### 4. MATRIZ DE RASTREABILIDADE E DEPENDÊNCIAS CRUZADAS
+
+| ID  | Entrega comercial/funcional | Backend / dados principais                          | Frontend principal                  | Provas exigidas                                  |
+| --- | --------------------------- | --------------------------------------------------- | ----------------------------------- | ------------------------------------------------ |
+| 154 | Baseline e plano            | Inventário de schemas, rotas, permissão, tarefas    | Inventário landing/login/construtor | SHA, matriz de dependências, regressão           |
+| 155 | Privacidade e idade         | LGPD, DOB, restrição por faixa etária, retenção     | Informação e política do visitante  | Parecer de enquadramento, negativos de segurança |
+| 156 | Quarto mapa ocidental       | Astrologia tropical, timezone, efemérides, leituras | Cards e dados do mapa               | Casos de fronteira, comparação independente      |
+| 157 | Descoberta sem plano        | Endpoint público, proteção, sem conta               | Landing/“Quem sou eu?”              | Login ausente, API real e SEO sem DOB            |
+| 158 | Conteúdo e Lyra inicial     | Motor Lyra local, limites convidado/LLM             | Leitura e microconversa             | Sem alucinação, sem conta e sem vazamento        |
+| 159 | Continuidade da visita      | Contexto transitório assinado, perfil, login        | Fluxo cadastro/volta                | Retorno, consentimento e anti-open-redirect      |
+| 160 | Uma assinatura              | Entitlements, tabelas, migração legado              | Navegação, planos, perfil           | DB regressão, papéis, 403/401                    |
+| 161 | Modal com dois valores      | Catálogo único, valor selecionável                  | Diálogo Radix, pricing, CTA         | Screenshot, foco e gatilhos premium              |
+| 162 | Cobrança real               | Stripe, webhook, price IDs, auditoria               | Checkout/portal/retorno             | Test mode real, idempotência, histórico          |
+| 163 | Limite e custo de IA        | Tokens e custo por provider, quota                  | Consumo e renovação explicados      | Concorrência, equivalência de cotas              |
+| 164 | Google                      | OIDC/GIS, identidade externa, sessão                | Login Google                        | Provedor real, tokens e vinculação               |
+| 165 | Apple                       | OIDC/Apple, identidade externa, sessão              | Login Apple                         | Hide My Email, callback real                     |
+| 166 | Conexões da Alma            | Comparação astrológica, privacy, acesso             | Formulário de 2 pessoas, resultado  | Matemática real, autorização e exclusão          |
+| 167 | Passkeys                    | WebAuthn, desafios, credenciais                     | Login e gerência de dispositivo     | Autenticador real, revogação, replay             |
+| 168 | Compartilhamento            | OG/imagem, privacidade                              | Cartão e Web Share                  | Render e compartilhamento em dispositivo         |
+| 169 | Pix Automático              | Provedor real e mandato, webhooks                   | Meio de pagamento quando homologado | Parecer oficial; integração só se real           |
+| 170 | Métricas e teste de preços  | Eventos minimizados, agregação, billing             | Painel admin e experimentos         | Métricas verdadeiras, privacidade e coorte       |
+| 171 | QA geral                    | Todas APIs, MySQL, segurança, Stripe                | UI em todos papéis/telas            | Relatório de QA sem inconclusivos ocultos        |
+| 172 | Publicação                  | Migrations/rollback, deploy e monitoria             | Landing/app final                   | Commits SHA, smoke tests e validação             |
+
+---
+
+#### 5. PORTAS DE QUALIDADE (QUALITY GATES) E EVIDÊNCIAS DE FECHAMENTO
+
+##### 5.1 Sequência mínima por tarefa
+
+```bash
+# Na raiz real de Lyra-MetaCare, depois de ler integralmente CLAUDE.md/AGENTS.md
+# e de investigar o estado local, sem sobrescrever trabalhos pausados:
+git fetch origin
+git status --short
+git branch --show-current
+git rev-parse HEAD
+git rev-parse origin/main
+
+# Preparar instalação reprodutível somente se ambiente/versões forem compatíveis:
+node --version
+corepack pnpm --version
+pnpm install --frozen-lockfile
+
+# Gates que o projeto já define:
+pnpm check:lint
+pnpm check:format
+pnpm check:types
+pnpm test
+pnpm test:integration
+pnpm build
+
+# Exercícios complementares quando se aplicar:
+pnpm test:launchers
+pnpm db:migrate
+
+# Somente depois de testes reais, diff revisado e atualização do claude-gestao.md:
+git diff --check
+git diff --stat
+git status --short
+# Commit e push em main conforme a instrução mestra, com SHA conferido.
+```
+
+**NOTA:** `pnpm test:integration` requer MySQL real, preferencialmente banco isolado com schema migrado. `pnpm db:migrate` deve respeitar `.env.local` do ambiente e **não** ser executado contra produção por engano. O bloco é uma lista de comandos permitidos sob pré-condições, **não um log de comandos executados**.
+
+##### 5.2 Registro exigido no `claude-gestao.md` oficial
+
+Para cada tarefa, registrar **antes, durante e após**:
+
+- ID definitivo, título, autorização, prioridade e dependências.
+- SHA inicial da `main`, ambiente e comportamento real anterior, com evidência.
+- Arquivos alterados **efetivamente**, migrations e razões do desenho técnico.
+- Testes executados, comandos, quantidades, logs e falhas com causa-raiz; indicar o que NÃO foi possível executar.
+- QA real: perfil/rota/ação, browser, resolução, screenshot, resultado, problema, correção e reteste.
+- Segurança: proteção da rota, sessão, titularidade, consentimento e autorização; registro de custeio de IA/financeiro quando afetado.
+- Revisão de diff, arquivos incluídos/excluídos, segredos inexistentes e trabalho de outras tarefas preservado.
+- SHA do commit e prova de push para `origin/main`; se bloqueado, status sem declaração de conclusão.
+- Efeito visual/comercial e regressões: funcionamento anterior preservado e política sobre grupos pausados intacta.
+
+##### 5.3 Portas objetivas de bloqueio da publicação
+
+1. Uma assinatura concedendo acesso a `/admin` ou bypass por rota/API.
+2. Pagamento ativando recurso sem prova suficiente de status do provedor.
+3. Valores acessível/apoio recebendo tokens/funcionalidades diferentes.
+4. Visitante obrigado a cadastrar-se para ver o signo solar prometido gratuitamente.
+5. Cálculo védico sendo rotulado tropical, ou ascendente inventado sem hora/local.
+6. Modal que abre, mas não leva a fluxo real de adesão quando preço/provedor aprovados e configurados.
+7. Vazamento de DOB, conteúdo de relação, email privado ou dados de terceiro por logs, analytics, URL e cartão compartilhado.
+8. Contrato Meta/Care histórico apagado, cobrança alterada silenciosamente ou migration destrutiva.
+9. Reintrodução ou exclusão não autorizada de grupos pausados da tarefa 144.
+10. Social login sem token real verificado ou conta vinculada por comparação insegura de email.
+11. Passkey marcada como homologada sem autenticador real e challenge validado.
+12. Pix avulso anunciado como recorrente automático.
+13. Custo de IA sem medição suficiente, permitindo prejuízo sem limite acordado e avisos claros.
+14. Falha bloqueante de testes de regressão sem diagnóstico e solução real.
+15. Interface fora do padrão aprovado, com overflow no mobile ou foco inacessível.
+
+---
+
+#### 6. REGISTRO DE DECISÕES COMERCIAIS E DE UX
+
+| Tema                | Decisão nesta conversa                                             | Status no projeto/pendência                          |
+| ------------------- | ------------------------------------------------------------------ | ---------------------------------------------------- |
+| Posicionamento      | Amiga digital de autoconhecimento com Motor Lyra                   | Direção aprovada; implementação gradual              |
+| Primeiro acesso     | “Quem sou eu?” livre, sem plano e sem conta                        | Não implementado no snapshot                         |
+| Primeira entrada    | Somente data de nascimento                                         | A validar precisão, idade e privacidade              |
+| Entrega gratuita    | Parte real do mapa ocidental, signo solar, reflexão e Lyra inicial | Definição de limite técnico pela implementação       |
+| Mapas existentes    | Preservar Védico, Samādhi e Quantum                                | Código e documentação existentes; testar             |
+| Quarto mapa         | Ocidental tropical, completo ao informar dados necessários         | Nova implementação                                   |
+| Recorrência de uso  | Valor cotidiano e diálogo honesto, sem horóscopo genérico          | Integrar Motor Lyra corretamente                     |
+| Recurso afetivo     | Conexões da Alma + pergunta de alma gêmea                          | Premium, simbólico, privacidade de terceiro          |
+| CTA premium         | Qualquer clique premium abre modal inclusivo                       | UI + backend; sem botão sem destino                  |
+| Planos              | Uma única assinatura, sem Free/Meta/Care como catálogo             | Migração do legado, não exclusão de histórico        |
+| Igualdade           | Mesmo acesso e cota para ambas as contribuições                    | Invariante de segurança e cobrança                   |
+| Contribuições       | Valor acessível e valor de apoio                                   | Valores a aprovar após cálculo financeiro            |
+| Preços em avaliação | R$ 9,90 e R$ 19,90 mensais                                         | Não são preço definitivo nem prova de margem         |
+| Transparência       | Receitas ajudam manutenção e evolução                              | Não dizer 100% reinvestido/doação                    |
+| Login               | Google e Apple prioritários; e-mail continua                       | Provedores reais a configurar/homologar              |
+| Login sem senha     | Passkeys opcionais                                                 | Viabilidade técnica e dispositivo real               |
+| Pagamentos          | Stripe existente; Pix Automático em avaliação                      | Pix somente após compatibilidade comprovada          |
+| Compartilhamento    | Cartão celestial compartilhável voluntário                         | Sem DOB ou informações privadas involuntárias        |
+| Medição             | Disposição real a pagar, conversão, retenção                       | Pesquisar e medir sem inferir demanda de outros apps |
+| Privacidade e idade | Avaliar exigências ANPD/ECA Digital                                | Parecer/controles antes de abertura pública          |
+| Identidade visual   | Tema celestial aprovado; modal baseado na imagem                   | Reutilizar CSS/fonts/componentes atuais              |
+| Tarefas 142/144     | Pausadas conforme gestor oficial                                   | Não retomar automaticamente                          |
+| Tarefa 152          | Navegação publicada; QA visual autenticado pendente                | Não marcar como aprovado pela nova iniciativa        |
+| Tarefa 153          | Dashboard celestial em andamento na tarefa 153                     | Não duplicar nem concluir por este programa          |
 
 **Registro desta solicitação:** tarefas 89–95 acrescentadas em 2026-10-22 como **a iniciar**, sem declarar implementação ou validação funcional. A publicação imediata deste registro é documental; cada implementação seguirá com validação, atualização do painel, commit e push próprios na main, sem branches ou worktrees.
 
