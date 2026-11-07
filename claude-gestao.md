@@ -432,6 +432,8 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 #### Programa futuro · tarefas 154–172 · registrado em 07-11-2026
 
+**Publicação da organização documental:** commit `5bb50d61`, push confirmado `9245243a..5bb50d61 main -> main`, em 07-11-2026. Dezenove tarefas futuras movidas integralmente para o Tópico 3, acompanhadas das matrizes, decisões e critérios de qualidade; 172 IDs únicos conferidos, sem duplicidade. Contadores atualizados. Anotações visuais pendentes registradas na 153. Somente este arquivo publicado; código em validação e alterações pausadas preservados fora do commit. Nenhuma tarefa funcional nova declarada concluída nesta organização.
+
 **Estado: ⚪ a iniciar.** Conteúdo acrescentado pelo usuário e reorganizado integralmente no Tópico 3. Este registro não inicia a implementação do programa nem conclui as tarefas 152/153. As dependências e condições comerciais abaixo continuam válidas.
 
 ### 154 · Auditoria forense do baseline, compatibilidade e plano de migração · ⚪ PENDENTE
