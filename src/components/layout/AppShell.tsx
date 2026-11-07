@@ -22,6 +22,9 @@ type AppShellProps = {
   contentClassName?: string;
   /** Mantém o compositor do chat no viewport e a rolagem nas mensagens. */
   ajustarAoViewport?: boolean;
+  /** O painel celestial tem sua própria introdução e assinatura visual. */
+  mostrarApresentacao?: boolean;
+  mostrarRodape?: boolean;
 };
 
 /*
@@ -35,6 +38,8 @@ export function AppShell({
   className,
   contentClassName,
   ajustarAoViewport = false,
+  mostrarApresentacao = true,
+  mostrarRodape = true,
 }: AppShellProps) {
   const { config: appConfig } = usePublicSitePageConfig('app');
   const pathname = usePathname();
@@ -80,14 +85,14 @@ export function AppShell({
               contentClassName
             )}
           >
-            <ApresentacaoOpcional />
+            {mostrarApresentacao ? <ApresentacaoOpcional /> : null}
             <EstadoDoDescanso />
             <PlanFeatureGate features={recursosDaRota(pathname)}>
               {children}
             </PlanFeatureGate>
           </div>
         </main>
-        <MadeWithIlyra />
+        {mostrarRodape ? <MadeWithIlyra /> : null}
       </div>
     </div>
   );

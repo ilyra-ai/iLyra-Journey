@@ -43,6 +43,7 @@ Os testes `sideral.test.ts`, `tempo-e-dia.test.ts` e `engine.test.ts` comparam c
 - `PATCH /api/perfil/localizacao` · `{ tipo: 'nascimento' | 'moradia', cidadeId | null }`.
 - `GET /api/astrologia/mapa` · mapa natal, dasha e o que falta no perfil.
 - `GET /api/astrologia/dia?data=AAAA-MM-DD` · dia védico (padrão: hoje no fuso do lugar).
+- `GET /api/astrologia/painel` · composição privada dos motores existentes para o painel celestial: mapa natal, leitura e sete datas consecutivas a partir de hoje no fuso do perfil. Exige sessão e recurso `vedic_insights`; resposta `private, no-store`, sem aceitar ID de outra pessoa. Datas futuras usam meio-dia local para a referência dos períodos; o dia védico conserva seu cálculo próprio. Perfil incompleto retorna os campos faltantes, sem leitura inventada; indisponibilidade polar é explicitada por dia. O card “Seu signo” representa o Sol natal sideral Lahiri, não o signo tropical de jornais.
 
 ## Limites conhecidos
 

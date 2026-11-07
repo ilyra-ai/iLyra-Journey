@@ -55,4 +55,3 @@ Ilustração 3D premium celestial para Lyra MetaCare. Tema: amizade. Objeto cent
 Prompt integral:
 
 Ilustração 3D premium celestial para Lyra MetaCare. Tema: grande-apoio. Objeto central: duas mãos delicadas douradas amparando uma estrela luminosa, acolhimento e apoio. Arte dourada suave e marfim, luz quente amarela, acabamento sofisticado realista e poético, silhueta claramente legível em miniatura de 80 pixels. Um único conjunto centralizado, quadrado, preenchendo 85% da área com margens de segurança. Fundo inteiramente transparente alpha, inclusive entre os elementos. Sem fundo preto, sem retângulo, sem cenário, sem texto, sem letras, sem legenda, sem moldura. Pequenos brilhos isolados são permitidos, sem névoa opaca nem halo sólido. Mesma família visual dos signos dourados do app. Uso: imagem individual da linha temporal, representar o tema de modo coerente, sem prometer acontecimentos.
-
