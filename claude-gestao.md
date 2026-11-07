@@ -301,6 +301,8 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### 153 · Reconstruir o painel celestial com leituras pessoais reais
 
+**Checkpoint publicado antes do reinício:** `9ef026b8`, push confirmado `2f72d7eb..9ef026b8 main -> main`, em 07-11-2026. Código, imagens, documentação e ponto de retomada preservados; commit explicitamente de continuidade (`wip`), sem alegar validação final. Alterações pausadas preservadas no disco. Aguardar o usuário reiniciar e solicitar a retomada.
+
 **PONTO DE RETOMADA PARA REINÍCIO DO COMPUTADOR — 07-11-2026:** usuário solicitou salvar e aguardar o reinício. A tarefa permanece 🔵 em andamento, sem declaração de conclusão integral. Fundo aprovado e navegação já publicados; refinamentos da 152 em `673a38bf`, registro em `2f72d7eb`. Salvar agora o código atual da 153 em commit de continuidade na main, por solicitação expressa de preservação antes do reinício. Não iniciar 154–173.
 
 - **Estado implementado localmente nesta continuidade:** painel ligado ao perfil e aos motores reais pelo adaptador privado `/api/astrologia/painel`; Védico inicial e três abas, destaque e sete dias reais, signo sideral, conversa real ampliável, compositor crescente, rótulos/anotações atualizados, grades alinhadas, respiro, cards transparentes e três novas artes alpha. Documentação em `docs/astrologia.md`, `docs/design-system.md` e `src/assets/celestial/TRANSPARENCIA.md`.
