@@ -1114,11 +1114,17 @@ Para cada tarefa, registrar **antes, durante e após**:
 
 ### 173 · Rebranding integral da plataforma Lyra MetaCare para iLyra · ⚪ PENDENTE
 
-**Registro:** 07/11/2026  
-**Prioridade:** 🔴 Alta  
-**Categoria:** Identidade da marca, arquitetura de software, UI/UX, comunicação, infraestrutura e compatibilidade.  
-**Repositório de origem:** `https://github.com/ilyra-ai/Lyra-MetaCare`  
-**Branch obrigatória:** `main`  
+**Publicação documental confirmada:** `561c41ae`, push `3fad0bce..561c41ae main -> main`, em 07-11-2026. Anexo integral registrado, 173 tarefas únicas, sem iniciar o rebranding; demais alterações locais fora do commit. Quebras de linha do anexo normalizadas em parágrafos para não manter espaços finais.
+
+**Registro:** 07/11/2026
+
+**Prioridade:** 🔴 Alta
+
+**Categoria:** Identidade da marca, arquitetura de software, UI/UX, comunicação, infraestrutura e compatibilidade.
+
+**Repositório de origem:** `https://github.com/ilyra-ai/Lyra-MetaCare`
+
+**Branch obrigatória:** `main`
 **Dependências:** auditoria da tarefa 154 e compatibilização com as tarefas 155 a 172. Respeitar integralmente as tarefas anteriores que estejam pausadas, bloqueadas ou aguardando aprovação.
 
 **Status:** ⚪ Pendente de implementação. A escolha estratégica do nome não significa que o rebranding já foi executado, testado, publicado ou juridicamente registrado.
