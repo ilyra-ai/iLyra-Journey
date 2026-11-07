@@ -68,8 +68,8 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   const { session } = useAuth();
   // A rota raiz é a landing para visitantes e o painel para quem entrou.
   const publico = pathname === '/login' || (pathname === '/' && !session);
-  const chave = publico ? 'lyra-public-theme' : 'theme';
-  const padrao: Tema = 'light';
+  const chave = publico ? 'lyra-public-theme' : 'lyra-celestial-theme';
+  const padrao: Tema = publico ? 'light' : 'dark';
   const lerTema = React.useCallback(() => lerPreferencia(chave), [chave]);
   const preferencia = React.useSyncExternalStore(
     acompanharPreferencia,

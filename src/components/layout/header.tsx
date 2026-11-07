@@ -2,13 +2,20 @@
 import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import React from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { CelestialBrand } from '@/components/public/CelestialBrand';
 import identidade from '@/components/public/CelestialIdentity.module.css';
 import styles from './CelestialNavigation.module.css';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
-import { LogOut, Search, Settings, ShieldCheck, UserRound } from 'lucide-react';
+import { LogOut, Settings, ShieldCheck, UserRound } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { useAuth } from '@/context/AuthContext';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
@@ -37,7 +44,7 @@ import {
 import { PlanBadge } from '@/components/subscription/PlanBadge';
 import { MobileSidebar } from './MobileSidebar';
 import { NotificationsMenu } from './NotificationsMenu';
-import { ThemeMenuGroup } from '@/components/theme/ThemeControls';
+import { ThemeToggleButton } from '@/components/theme/ThemeControls';
 import { ANCORA_PRIVACIDADE_E_DADOS } from '@/components/profile/PrivacyDataCard';
 import {
   getPageMeta,
@@ -50,6 +57,14 @@ import { usePerfilDoCabecalho } from '@/hooks/use-perfil-do-cabecalho';
 import { toast } from 'sonner';
 import { organizarNavegacaoLateral } from './sidebar-structure';
 
+const PlansContent = dynamic(
+  () =>
+    import('@/components/subscription/PlansContent').then(
+      (modulo) => modulo.PlansContent
+    ),
+  { loading: () => <p role="status">Carregando planos…</p> }
+);
+
 export function Header() {
   const { session, db } = useAuth();
   const { data: subscription } = useAccountSubscription();
@@ -59,6 +74,7 @@ export function Header() {
   const router = useRouter();
   const profile = usePerfilDoCabecalho();
   const [commandOpen, setCommandOpen] = React.useState(false);
+  const [planosAberto, setPlanosAberto] = React.useState(false);
 
   const rotaLiberada = useRotaLiberada();
 
@@ -72,7 +88,9 @@ export function Header() {
     '/planos',
   ];
   const principais = rotasPrincipais.flatMap((href) => {
-    const item = itens.find((candidato) => candidato.href === href);
+    const item = itens.find(
+      (candidato) => candidato.href === href && href !== '/planos'
+    );
     return item ? [item] : [];
   });
   const complementares = groupNavigation(
@@ -83,6 +101,11 @@ export function Header() {
         item.href !== '/profile'
     )
   );
+  const atalhosDoPerfil = itens
+    .filter((item) =>
+      ['/chat', '/linha-do-tempo', '/relatorio-pessoal'].includes(item.href)
+    )
+    .slice(0, 3);
   const administracao = organizarNavegacaoLateral(
     itens.filter((item) => item.adminOnly),
     appConfig
@@ -199,7 +222,7 @@ export function Header() {
           <nav
             aria-label="Navegação principal"
             className={styles.primary}
-            style={{ fontSize: scaleRem(1, appConfig.typography.navLabel) }}
+            style={{ fontSize: scaleRem(0.9, appConfig.typography.navLabel) }}
           >
             {principais.map((item) => (
               <Link
@@ -211,20 +234,18 @@ export function Header() {
                 {rotuloPrincipal(item.href, item.label)}
               </Link>
             ))}
+            <button
+              type="button"
+              className={styles.primaryLink}
+              onClick={() => setPlanosAberto(true)}
+              aria-haspopup="dialog"
+            >
+              Planos
+            </button>
           </nav>
           <div className={styles.actions}>
-            <MobileSidebar />
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              className={styles.iconButton}
-              onClick={() => setCommandOpen(true)}
-              aria-label={appConfig.header.commandPlaceholder}
-              aria-keyshortcuts="Control+K Meta+K"
-            >
-              <Search aria-hidden="true" />
-            </Button>
+            <MobileSidebar aoAbrirPlanos={() => setPlanosAberto(true)} />
+            <ThemeToggleButton className={styles.iconButton} />
             <PlanFeatureGate features={['personal_notifications']} ocultar>
               <NotificationsMenu iconScale={appConfig.sizing.iconScale} />
             </PlanFeatureGate>
@@ -245,7 +266,9 @@ export function Header() {
                   align="end"
                   className={cn(identidade.theme, styles.adminMenu)}
                 >
-                  <DropdownMenuLabel>Administração</DropdownMenuLabel>
+                  <DropdownMenuLabel className="text-primary">
+                    Administração
+                  </DropdownMenuLabel>
                   <div className={styles.adminGrid}>
                     {[
                       { titulo: 'Visão geral', itens: administracao.itens },
@@ -254,7 +277,7 @@ export function Header() {
                       .filter((grupo) => grupo.itens.length > 0)
                       .map((grupo) => (
                         <DropdownMenuGroup key={grupo.titulo}>
-                          <DropdownMenuLabel className="text-muted-foreground">
+                          <DropdownMenuLabel className="text-primary">
                             {grupo.titulo}
                           </DropdownMenuLabel>
                           {grupo.itens.map((item) => (
@@ -312,7 +335,10 @@ export function Header() {
                         {userEmail}
                       </p>
                       {subscription ? (
-                        <div className="mt-2">
+                        <div
+                          className="mt-2"
+                          data-profile-plan={subscription.plan.key}
+                        >
                           <PlanBadge planKey={subscription.plan.key} />
                         </div>
                       ) : null}
@@ -355,8 +381,20 @@ export function Header() {
                     ))}
                   </DropdownMenuGroup>
                 ))}
-                <DropdownMenuSeparator />
-                <ThemeMenuGroup />
+                {atalhosDoPerfil.length > 0 ? (
+                  <DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel>Seus atalhos</DropdownMenuLabel>
+                    {atalhosDoPerfil.map((item) => (
+                      <DropdownMenuItem key={item.href} asChild>
+                        <Link href={item.href}>
+                          <item.icon aria-hidden="true" />
+                          {rotuloPrincipal(item.href, item.label)}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuGroup>
+                ) : null}
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuItem
@@ -373,6 +411,15 @@ export function Header() {
         </div>
       </header>
 
+      <Dialog open={planosAberto} onOpenChange={setPlanosAberto}>
+        <DialogContent className={cn(identidade.theme, styles.plansDialog)}>
+          <DialogTitle>Planos Lyra MetaCare</DialogTitle>
+          <DialogDescription>
+            Compare os planos disponíveis e gerencie sua contratação.
+          </DialogDescription>
+          {planosAberto ? <PlansContent /> : null}
+        </DialogContent>
+      </Dialog>
       <CommandDialog
         open={commandOpen}
         onOpenChange={setCommandOpen}
