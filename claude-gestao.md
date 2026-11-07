@@ -4201,6 +4201,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 152 · Redesenhar a navegação autenticada conforme o mockup celestial
 
+**Publicação dos refinamentos:** `673a38bf`, push confirmado `b99baabd..673a38bf main -> main`, em 07-11-2026. Sete arquivos desta frente publicados, sem alterações pausadas de 142/144. Homologação visual permanece com o usuário.
+
 **Refinamentos de 07-11-2026:** barra e marca compactadas, busca retirada do cabeçalho, controle de tema transferido do perfil ao cabeçalho, menu móvel suspenso, categorias administrativas sem células vazias, títulos amarelos, menu do perfil amarelo sem borda/sombra e badges distintos por plano. Acrescentados até três atalhos existentes e autorizados. “Planos” abre diálogo responsivo reutilizando integralmente o catálogo e as ações reais de assinatura/checkout, também usados pela página `/planos`. Tema autenticado celestial tem preferência própria persistente (`lyra-celestial-theme`), padrão escuro aprovado e alternativa clara; a landing mantém sua preferência independente. A mudança não migra dados comerciais nem implementa a futura oferta da 160.
 
 **Validação técnica desta rodada:** tipos e lint completos aprovados; 1.017 testes unitários em 97 arquivos aprovados. Build de produção aprovado com 139 páginas geradas e recursos offline preparados. A validação no navegador foi expressamente assumida pelo usuário, inclusive administrador, desktop, tablet, celular e zoom; manter esse aceite pendente até retorno dele. Fundo do AppShell/cabeçalho publicado em `b99baabd`, push `a1884b49..b99baabd main -> main`; landing preservada.
