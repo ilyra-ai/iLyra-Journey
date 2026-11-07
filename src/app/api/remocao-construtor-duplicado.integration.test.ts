@@ -48,9 +48,11 @@ it('draft e publicado antigos não reintroduzem a rota e preservam personalizaç
         cfg.sidebar.items.some((i) => i.href === '/admin/page-builder')
       ).toBe(false);
       expect(
-        getVisibleNavigation(true, cfg).find((i) => i.href === '/admin/content')
-          ?.label
+        cfg.sidebar.items.find((i) => i.href === '/admin/content')?.label
       ).toBe('Conteúdo preservado');
+      expect(
+        getVisibleNavigation(true, cfg).some((i) => i.href === '/admin/content')
+      ).toBe(false);
     }
     const raw = await queryRows<{ draft_config: unknown }>(
       "SELECT draft_config FROM site_page_configs WHERE page_key='app'"

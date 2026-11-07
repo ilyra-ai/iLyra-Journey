@@ -21,18 +21,18 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **92,1%** (139 de 151)   |
-| Implementações publicadas               | **96,7%** (146 de 151)   |
-| Tarefas totais                          | 151                      |
+| Conclusão integral                      | **90,8%** (139 de 153)   |
+| Implementações publicadas               | **96,1%** (147 de 153)   |
+| Tarefas totais                          | 153                      |
 | 🟢 Concluídas                           | 139                      |
-| 🟡 Implementadas com validação pendente | 7                        |
+| 🟡 Implementadas com validação pendente | 8                        |
 | 🔵 Em andamento                         | 2                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 3                        |
+| ⚪ A iniciar                            | 4                        |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-06               |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os sete estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os oito estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Escopo vigente em 2026-11-06:** landing 149 aprovada, com aprovação registrada e publicada em `857617a6`. O usuário autorizou redesenhar por completo o carregamento e, depois, o login/cadastro, seguindo a identidade celestial e mantendo enquadramento responsivo em desktop/mobile. Concluir e publicar cada frente individualmente na main antes da próxima. As tarefas 142 e 144 continuam **pausadas**; suas mudanças locais independentes ficam fora destes commits. As 145, 146 e o restante da 147 permanecem a iniciar.
 
@@ -405,6 +405,23 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
+
+### 153 · Reconstruir o painel celestial com leituras pessoais reais
+
+**Estado: ⚪ a iniciar · Autorizada em 2026-11-06; executar após publicar a navegação 152.**
+
+- **Esclarecimento vigente do usuário:** esta etapa é de design/layout visual. Reaproveitar as funções, APIs, motores e dados existentes; não refazer nem substituir a lógica de negócio. A lista abaixo especifica a apresentação desejada dos recursos reais. Não criar uma função fictícia para completar a imagem; eventuais diferenças entre a referência e as capacidades disponíveis devem ser identificadas na análise e tratadas com transparência.
+- Usar como referência a imagem aprovada nesta conversa e `lyra-design-aprovado-2026-11-06.png`, preservando a identidade celestial, amarelo suave, marca, fontes aprovadas e composição responsiva.
+- Reutilizar os dados reais do perfil autenticado (nome completo, data, hora, local e fuso de nascimento), os cálculos siderais Lahiri, casas por signo inteiro e Vimshottari. Não copiar o nome, signo, datas, períodos ou textos ilustrativos do mockup para o funcionamento do app.
+- Exibir três destaques reais: Lua de hoje (fase e signo), período vigente (mahadasha/antardasha) e destaque derivado da leitura do dia. Mostrar ausência de dados e falhas com ações reais, sem preencher com leitura fictícia.
+- Card de mapas com arte celestial, Védico selecionado ao entrar e abas Védico / Lyra DM Samādhi / Quantum. Cada aba apresenta o resumo pessoal correspondente e ação para leitura completa real. Usar motor de domínio e modelos compatíveis existentes; não inventar posições ou resultados indisponíveis.
+- Integrar card Lyra AI com envio real, atalhos de contexto, anexos disponíveis e navegação para conversas. Não inserir botão sem destino nem simular geração.
+- Linha temporal iniciando no dia atual e avançando sete dias: datas reais no fuso do perfil, ilustrações harmoniosas derivadas dos temas da leitura e modal responsivo com os resumos dos três mapas do dia selecionado. Preservar natureza simbólica das interpretações sem afirmar acontecimentos futuros como fatos.
+- Card “Signo · nome completo” com imagem correspondente ao signo calculado e leitura pessoal do dia. Imagens de todos os signos devem estar mapeadas corretamente, sem fixar Leão por causa da referência.
+- **Ativos expressamente solicitados:** gerar individualmente as imagens de Áries, Touro, Gêmeos, Câncer, Leão, Virgem, Libra, Escorpião, Sagitário, Capricórnio, Aquário e Peixes. Cada signo terá seu próprio arquivo, sem atlas coletivo ou recorte de uma imagem única. Manter mesma linguagem celestial dourada, proporções harmoniosas e correspondência real entre arquivo e signo; salvar os ativos no projeto e registrar sua origem e os prompts utilizados. Aplicar a skill imagegen com a ferramenta integrada, sem solicitar chaves para essa geração.
+- Garantir que os grupos desativados não reapareçam como métricas ou ações do novo painel. Manter o restante das funcionalidades ativas e as autorizações existentes. A posição duplicada do mapa no perfil permanece rastreada na 145; não declarar aquela tarefa concluída sem seu escopo integral.
+- Validar dados/API/MySQL, isolamento por usuário, perfil completo e incompleto, troca de abas, datas/modal, chat, erros/repetição e responsividade. Confrontar capturas reais com o mockup, executar os gates aplicáveis, atualizar documentação e publicar esta tarefa separadamente na main.
+- As demais mudanças pausadas da 142/144 não são automaticamente retomadas por esta autorização; incluir apenas dependências efetivamente necessárias, revisadas e rastreadas.
 
 ## Tópico 4 · Implementações Publicadas e Estado da Validação
 
@@ -3019,3 +3036,15 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 - **Prova responsiva:** login e cadastro em 320, 390, 543, 768, 848, 1024, 1280, 1366, 1459, 1536, 1920, 2560 e 3440 px, sem rolagem horizontal nem controles fora da largura. Em 1459×719, login com documento de exatamente 719 px de altura e card de 480×561 px inteiramente enquadrado. A imagem preenche integralmente sua coluna; no mobile/tablet conserva a proporção original. O cadastro permite rolagem vertical nas janelas baixas para preservar todos os campos.
 - **Ampliação e revisão final:** texto ampliado a 200% em 320 px nos dois modos sem transbordamento após corrigir a quebra do botão de senha e de palavras longas. Sem exceções de página na conferência final. Remoção dos blocos visuais solicitados comprovada por busca no componente/CSS e pela ausência no DOM. Aprovação recebida: “ficou lindo”. README e sistema visual atualizados; as demais alterações pausadas continuam fora desta publicação.
 - **Publicação confirmada:** commit `bd2568bd`, push `9bd945d8..bd2568bd main -> main`. Seis arquivos da tarefa 151 publicados, sem branches/worktrees. Login e cadastro disponíveis em localhost:3000; registro subsequente conforme a regra 6. A solicitação seguinte de navegação/painel ainda não foi implementada nesta entrega.
+
+### 152 · Redesenhar a navegação autenticada conforme o mockup celestial
+
+**Estado: 🟡 implementada · Validação visual final do administrador pendente.**
+
+- Substituir a apresentação lateral no uso normal do desktop por navegação superior fiel ao mockup: marca correta, Painel, Lyra AI, Histórico, Relatórios, Minha assinatura, busca e perfil, conforme os destinos efetivamente permitidos. Preservar nomes personalizados do construtor, sessão, plano, atalhos, pesquisa real e saída.
+- Ajustes aprovados: engrenagem junto ao perfil abre Administração por categorias, com todos os destinos administrativos permitidos; retirar somente `/admin/content` da navegação, preservando página e funcionalidades. Fundo da barra, painel móvel e AppShell igual à landing, incluindo cor e gradiente. Não reativar grupos desativados.
+- Composição responsiva com menus acessíveis, foco e rolagem nos overlays. Sidebar lateral preservada na prévia do construtor. Alterações funcionais independentes da 144 permanecem locais e fora desta publicação.
+- **Validação técnica em 2026-11-06:** lint, formato, tipos e build aprovados; 1.017 unitários em 97 arquivos aprovados, incluindo os 24 testes de navegação/estrutura. O build mantém `/admin/content`, comprovando que a página não foi removida. A sessão não disponibiliza `@current_problems`; usados os diagnósticos reais das ferramentas.
+- **QA anterior aos últimos refinamentos:** conta temporária real conferiu busca Perfil, menu do usuário, saída e ausência de transbordamento do cabeçalho em 13 larguras de 320 a 3440 px. A conta foi excluída após o teste. O fechamento móvel precisa de reconferência com espera da animação; a leitura imediata não comprova falha nem aprovação.
+- **Fronteira visual atual:** o Chrome com a sessão do usuário não pôde ser controlado nesta conferência (depurador desconectado/janela minimizada); a aba interna, após atualização, está deslogada. Não houve transferência de cookie nem exposição de credenciais. A engrenagem administrativa e os refinamentos finais ainda exigem conferência visual autenticada; não declarar a tarefa integralmente aprovada.
+- **Integração em 2026-11-07:** regressão integral executada com MySQL: 608 de 609 aprovados; a única falha exigia a presença antiga de Conteúdo no menu. Atualizado o contrato para exigir a configuração preservada e o destino ausente da navegação, conforme pedido atual. Os dois testes desse arquivo passaram na reexecução. Nenhuma lógica de produção foi alterada para satisfazer o teste.

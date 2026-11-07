@@ -31,6 +31,18 @@ export function Sidebar({
 }: {
   configuracaoPrevia?: AppPageConfig;
 } = {}) {
+  // O app usa a navegação superior. A composição lateral continua disponível
+  // na prévia real do construtor, sem montar consultas extras no uso normal.
+  return configuracaoPrevia ? (
+    <SidebarPrevia configuracaoPrevia={configuracaoPrevia} />
+  ) : null;
+}
+
+function SidebarPrevia({
+  configuracaoPrevia,
+}: {
+  configuracaoPrevia?: AppPageConfig;
+} = {}) {
   const { session } = useAuth();
   const isAdminReal = useIsAdmin();
   const { data: subscription } = useAccountSubscription();

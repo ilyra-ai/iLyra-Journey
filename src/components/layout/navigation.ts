@@ -444,6 +444,7 @@ export function getVisibleNavigation(
   return buildConfiguredNavigation(appConfig).filter(
     (item) =>
       item.visible !== false &&
+      item.href !== '/admin/content' &&
       (!item.adminOnly || isAdmin) &&
       (!item.userOnly || !isAdmin) &&
       (rotaLiberada ? rotaLiberada(item.href) : true)

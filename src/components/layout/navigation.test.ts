@@ -127,7 +127,7 @@ describe('navegação com configuração salva', () => {
       chat,
     ];
     const outros = config.sidebar.items
-      .filter((item) => item.href !== '/chat')
+      .filter((item) => !['/chat', '/admin/content'].includes(item.href))
       .map((item) => item.href);
     const itens = getVisibleNavigation(true, config);
     expect(itens[0]).toMatchObject({ href: '/chat', section: 'Principal' });
@@ -163,6 +163,6 @@ it.each([
   });
   const itens = getVisibleNavigation(true, config);
   expect(itens.some((item) => item.href === href)).toBe(false);
-  expect(itens.some((item) => item.href === '/admin/content')).toBe(true);
+  expect(itens.some((item) => item.href === '/admin/content')).toBe(false);
   expect(itens.some((item) => item.href === '/admin/page-builder')).toBe(false);
 });

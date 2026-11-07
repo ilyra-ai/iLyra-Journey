@@ -2,18 +2,24 @@
 import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
 
 import React from 'react';
+import Link from 'next/link';
+import { CelestialBrand } from '@/components/public/CelestialBrand';
+import identidade from '@/components/public/CelestialIdentity.module.css';
+import styles from './CelestialNavigation.module.css';
+import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
-import { LogOut, Search, ShieldCheck, UserRound } from 'lucide-react';
+import { LogOut, Search, Settings, ShieldCheck, UserRound } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
-import { scalePx, scaleRem } from '@/lib/site-page-config/runtime';
+import { scaleRem } from '@/lib/site-page-config/runtime';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -37,12 +43,12 @@ import {
   getPageMeta,
   getVisibleNavigation,
   groupNavigation,
-  rotuloDaLyra,
 } from './navigation';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { usePerfilDoCabecalho } from '@/hooks/use-perfil-do-cabecalho';
 import { toast } from 'sonner';
+import { organizarNavegacaoLateral } from './sidebar-structure';
 
 export function Header() {
   const { session, db } = useAuth();
@@ -57,9 +63,45 @@ export function Header() {
   const rotaLiberada = useRotaLiberada();
 
   const pageMeta = getPageMeta(pathname, appConfig);
-  const navigation = groupNavigation(
-    getVisibleNavigation(isAdmin, appConfig, rotaLiberada)
+  const itens = getVisibleNavigation(isAdmin, appConfig, rotaLiberada);
+  const rotasPrincipais = [
+    '/',
+    '/chat',
+    '/linha-do-tempo',
+    '/relatorio-pessoal',
+    '/planos',
+  ];
+  const principais = rotasPrincipais.flatMap((href) => {
+    const item = itens.find((candidato) => candidato.href === href);
+    return item ? [item] : [];
+  });
+  const complementares = groupNavigation(
+    itens.filter(
+      (item) =>
+        !item.adminOnly &&
+        !rotasPrincipais.includes(item.href) &&
+        item.href !== '/profile'
+    )
   );
+  const administracao = organizarNavegacaoLateral(
+    itens.filter((item) => item.adminOnly),
+    appConfig
+  ).find((secao) => secao.id === 'administracao');
+  const navigation = groupNavigation(itens);
+  const rotuloPrincipal = (href: string, rotulo: string) => {
+    if (
+      href === '/linha-do-tempo' &&
+      ['Minha linha do tempo', 'Linha do tempo'].includes(rotulo)
+    )
+      return 'Histórico';
+    if (
+      href === '/relatorio-pessoal' &&
+      ['Meu relatório pessoal', 'Relatório pessoal'].includes(rotulo)
+    )
+      return 'Relatórios';
+    if (href === '/planos' && rotulo === 'Planos') return 'Minha assinatura';
+    return rotulo;
+  };
 
   // Atalhos "G + letra" exibidos na paleta de comandos (ex.: G D, G H): só
   // das páginas que o plano libera.
@@ -122,7 +164,7 @@ export function Header() {
 
   const userEmail = session.user.email ?? '';
   const firstName =
-    profile?.first_name?.trim() || userEmail.split('@')[0] || 'Paciente';
+    profile?.first_name?.trim() || userEmail.split('@')[0] || 'Você';
   const initial = firstName.charAt(0).toUpperCase();
 
   const handleNavigate = (href: string) => {
@@ -144,83 +186,91 @@ export function Header() {
 
   return (
     <>
-      <header className="@container/cabecalho sticky top-0 z-40 border-b border-border bg-card">
-        <div className="flex min-h-16 items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
-          <MobileSidebar />
-
-          <div className="min-w-0 flex-1">
-            <h1
-              className="truncate font-display font-semibold tracking-tight text-foreground"
-              style={{
-                fontSize: scaleRem(1.125, appConfig.typography.pageTitle),
-              }}
-            >
-              {pageMeta.title}
-            </h1>
-            <p
-              className="hidden truncate text-muted-foreground xl:block"
-              style={{
-                fontSize: scaleRem(0.8125, appConfig.typography.pageBody),
-              }}
-            >
-              {pageMeta.description}
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setCommandOpen(true)}
-            className="command-surface hidden w-[280px] min-w-0 shrink transition-colors hover:border-input @2xl/cabecalho:flex"
-            aria-keyshortcuts="Control+K"
+      <header className={cn(identidade.theme, styles.header)}>
+        <div className={styles.inner}>
+          <Link
+            href="/"
+            className={styles.brandLink}
+            aria-label="Lyra MetaCare — Painel"
           >
-            <Search
-              aria-hidden="true"
-              className="shrink-0"
-              strokeWidth={1.9}
-              style={{
-                height: scalePx(16, appConfig.sizing.iconScale),
-                width: scalePx(16, appConfig.sizing.iconScale),
-              }}
-            />
-            <span className="flex-1 truncate text-left">
-              {appConfig.header.commandPlaceholder}
-            </span>
-            <kbd className="rounded-xs border border-border bg-card px-1.5 py-0.5 font-sans text-xs text-muted-foreground">
-              {appConfig.header.commandShortcutLabel}
-            </kbd>
-          </button>
-
-          <div className="flex shrink-0 items-center gap-2">
+            <CelestialBrand />
+          </Link>
+          <h1 className="sr-only">{pageMeta.title}</h1>
+          <nav
+            aria-label="Navegação principal"
+            className={styles.primary}
+            style={{ fontSize: scaleRem(1, appConfig.typography.navLabel) }}
+          >
+            {principais.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                aria-current={pathname === item.href ? 'page' : undefined}
+                className={styles.primaryLink}
+              >
+                {rotuloPrincipal(item.href, item.label)}
+              </Link>
+            ))}
+          </nav>
+          <div className={styles.actions}>
+            <MobileSidebar />
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="@2xl/cabecalho:hidden"
+              className={styles.iconButton}
               onClick={() => setCommandOpen(true)}
               aria-label={appConfig.header.commandPlaceholder}
+              aria-keyshortcuts="Control+K Meta+K"
             >
-              <Search className="h-[18px] w-[18px]" strokeWidth={1.9} />
+              <Search aria-hidden="true" />
             </Button>
-
             <PlanFeatureGate features={['personal_notifications']} ocultar>
               <NotificationsMenu iconScale={appConfig.sizing.iconScale} />
             </PlanFeatureGate>
-
-            {rotaLiberada('/chat') ? (
-              <Button
-                type="button"
-                variant="secondary"
-                className="hidden @2xl/cabecalho:inline-flex"
-                onClick={() => router.push('/chat')}
-                style={{
-                  fontSize: scaleRem(0.875, appConfig.typography.buttonLabel),
-                }}
-              >
-                <MarcaLyra tamanho={scalePx(22, appConfig.sizing.iconScale)} />
-                {rotuloDaLyra(appConfig.header.assistantLabel)}
-              </Button>
+            {administracao ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className={styles.iconButton}
+                    aria-label="Abrir Administração"
+                  >
+                    <Settings aria-hidden="true" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  align="end"
+                  className={cn(identidade.theme, styles.adminMenu)}
+                >
+                  <DropdownMenuLabel>Administração</DropdownMenuLabel>
+                  <div className={styles.adminGrid}>
+                    {[
+                      { titulo: 'Visão geral', itens: administracao.itens },
+                      ...administracao.submenus,
+                    ]
+                      .filter((grupo) => grupo.itens.length > 0)
+                      .map((grupo) => (
+                        <DropdownMenuGroup key={grupo.titulo}>
+                          <DropdownMenuLabel className="text-muted-foreground">
+                            {grupo.titulo}
+                          </DropdownMenuLabel>
+                          {grupo.itens.map((item) => (
+                            <DropdownMenuItem key={item.href} asChild>
+                              <Link href={item.href}>
+                                <item.icon aria-hidden="true" />
+                                {item.label}
+                              </Link>
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuGroup>
+                      ))}
+                  </div>
+                </DropdownMenuContent>
+              </DropdownMenu>
             ) : null}
-
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -241,7 +291,10 @@ export function Header() {
                 </Button>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent align="end" className="w-[300px]">
+              <DropdownMenuContent
+                align="end"
+                className={cn(identidade.theme, styles.profileMenu)}
+              >
                 <DropdownMenuLabel className="px-3 py-3">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-11 w-11">
@@ -267,37 +320,64 @@ export function Header() {
                   </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => router.push('/profile')}>
-                  <UserRound />
-                  {appConfig.header.profileMenuLabel}
-                </DropdownMenuItem>
-                {/* Antes "Preferências" abria a mesma página de "Meu perfil";
+                <DropdownMenuGroup>
+                  <DropdownMenuItem onClick={() => router.push('/profile')}>
+                    <UserRound />
+                    {appConfig.header.profileMenuLabel}
+                  </DropdownMenuItem>
+                  {/* Antes "Preferências" abria a mesma página de "Meu perfil";
                     agora leva direto à seção de privacidade e dados. */}
-                <DropdownMenuItem
-                  onClick={() =>
-                    router.push(`/profile#${ANCORA_PRIVACIDADE_E_DADOS}`)
-                  }
-                >
-                  <ShieldCheck />
-                  Privacidade e dados
-                </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() =>
+                      router.push(`/profile#${ANCORA_PRIVACIDADE_E_DADOS}`)
+                    }
+                  >
+                    <ShieldCheck />
+                    Privacidade e dados
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                {Object.entries(complementares).map(([section, items]) => (
+                  <DropdownMenuGroup key={section}>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuLabel>{section}</DropdownMenuLabel>
+                    {items.map((item) => (
+                      <DropdownMenuItem key={item.href} asChild>
+                        <Link
+                          href={item.href}
+                          aria-current={
+                            pathname === item.href ? 'page' : undefined
+                          }
+                        >
+                          <item.icon aria-hidden="true" />
+                          {item.label}
+                        </Link>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuGroup>
+                ))}
                 <DropdownMenuSeparator />
                 <ThemeMenuGroup />
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="text-destructive focus:text-destructive"
-                  onClick={handleSignOut}
-                >
-                  <LogOut />
-                  Sair
-                </DropdownMenuItem>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem
+                    className="text-destructive focus:text-destructive"
+                    onClick={handleSignOut}
+                  >
+                    <LogOut />
+                    Sair
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
       </header>
 
-      <CommandDialog open={commandOpen} onOpenChange={setCommandOpen}>
+      <CommandDialog
+        open={commandOpen}
+        onOpenChange={setCommandOpen}
+        contentClassName={cn(identidade.theme, styles.command)}
+      >
         {/* Nome acessível próprio (tarefa 61): antes só o placeholder. */}
         <CommandInput
           aria-label="Buscar páginas do app"

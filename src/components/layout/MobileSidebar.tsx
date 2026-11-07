@@ -4,7 +4,10 @@ import React from 'react';
 import Link from 'next/link';
 import { Menu } from 'lucide-react';
 import { PlanoJuntoAoLogo } from '@/components/subscription/PlanoJuntoAoLogo';
-import { MarcaLyra } from '@/components/marca/MarcaLyra';
+import { CelestialBrand } from '@/components/public/CelestialBrand';
+import identidade from '@/components/public/CelestialIdentity.module.css';
+import styles from './CelestialNavigation.module.css';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
   Sheet,
@@ -20,7 +23,6 @@ import { useAuth } from '@/context/AuthContext';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
-import { scalePx, scaleRem } from '@/lib/site-page-config/runtime';
 
 /*
   Navegação do celular e tablet (abaixo de `lg`): painel lateral com a
@@ -36,9 +38,7 @@ export function MobileSidebar() {
 
   const itens = getVisibleNavigation(isAdmin, appConfig, rotaLiberada);
   const firstName =
-    session?.user?.email?.split('@')[0]?.replace(/\./g, ' ') || 'Paciente';
-  const iconScale = appConfig.sizing.iconScale;
-  const navLabelScale = appConfig.typography.navLabel;
+    session?.user?.email?.split('@')[0]?.replace(/\./g, ' ') || 'Você';
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -49,33 +49,25 @@ export function MobileSidebar() {
           className="lg:hidden"
           aria-label="Abrir navegação"
         >
-          <Menu className="h-5 w-5" strokeWidth={1.8} />
+          <Menu aria-hidden="true" strokeWidth={1.8} />
         </Button>
       </SheetTrigger>
 
-      <SheetContent side="left" className="gap-5">
-        <SheetHeader className="space-y-0 pr-10">
+      <SheetContent
+        side="left"
+        className={cn(identidade.theme, styles.mobilePanel, 'gap-5')}
+      >
+        <SheetHeader className="pr-10">
           <div className="flex flex-wrap items-center gap-1">
             <Link
               href="/"
-              className="flex items-center gap-2.5 rounded px-2.5 py-1"
+              className={styles.mobileBrand}
               onClick={() => setOpen(false)}
             >
-              <MarcaLyra tamanho={scalePx(36, iconScale)} />
-              <span className="min-w-0 text-left">
-                <SheetTitle
-                  className="font-display font-semibold lowercase leading-tight text-foreground"
-                  style={{ fontSize: scaleRem(1.125, navLabelScale) }}
-                >
-                  {appConfig.sidebar.brandTitle}
-                </SheetTitle>
-                <span
-                  className="block truncate text-muted-foreground"
-                  style={{ fontSize: scaleRem(0.75, navLabelScale) }}
-                >
-                  {appConfig.sidebar.brandEyebrow}
-                </span>
-              </span>
+              <CelestialBrand />
+              <SheetTitle className="sr-only">
+                Navegação Lyra MetaCare
+              </SheetTitle>
             </Link>
             <PlanoJuntoAoLogo aoAbrir={() => setOpen(false)} />
           </div>

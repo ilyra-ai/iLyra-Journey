@@ -1,0 +1,188 @@
+.appBackground,
+.header,
+.mobilePanel {
+  background:
+    radial-gradient(ellipse at 8% 32%, #33313e66, transparent 50%), #1d1e2b;
+}
+
+.header {
+  --sidebar-accent: 236 13% 26%;
+  --sidebar-accent-foreground: 48 83% 76%;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  width: 100%;
+  border-bottom: 1px solid hsl(var(--border) / 0.45);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 32px);
+  width: min(100%, 1560px);
+  min-height: 96px;
+  margin-inline: auto;
+  padding: 12px clamp(20px, 3vw, 48px);
+}
+
+.brandLink {
+  display: block;
+  flex: 0 1 300px;
+  min-width: 180px;
+  max-width: 300px;
+  border-radius: 12px;
+}
+
+.brandLink > div {
+  width: 100%;
+  height: 68px;
+}
+
+.primary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  gap: clamp(4px, 0.7vw, 14px);
+}
+
+.primaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px clamp(12px, 1.2vw, 24px);
+  border-radius: 999px;
+  color: hsl(var(--foreground));
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.primaryLink:hover {
+  background: hsl(var(--muted));
+}
+
+.primaryLink[aria-current='page'] {
+  color: hsl(var(--primary-foreground));
+  background: hsl(var(--primary));
+  font-family: var(--font-varela), sans-serif;
+}
+
+.brandLink:focus-visible,
+.primaryLink:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 4px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  gap: 8px;
+}
+
+.iconButton {
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 999px;
+}
+
+.profileMenu {
+  width: min(340px, calc(100vw - 24px));
+  max-height: min(720px, calc(100svh - 100px));
+  overflow-y: auto;
+  border-color: hsl(var(--border));
+  border-radius: 18px;
+}
+
+.adminMenu {
+  width: min(640px, calc(100vw - 24px));
+  max-height: calc(100svh - 100px);
+  overflow-y: auto;
+  border-radius: 18px;
+}
+
+.adminGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 8px;
+}
+
+.command {
+  border-color: hsl(var(--border));
+  border-radius: 20px;
+}
+
+.mobilePanel {
+  width: min(360px, 94vw);
+  max-width: 100%;
+  border-color: hsl(var(--border));
+}
+
+.mobileBrand {
+  display: block;
+  min-width: 0;
+  width: 100%;
+}
+
+.mobileBrand > div {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 1;
+}
+
+@media (max-width: 1199px) {
+  .inner {
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    padding-block: 8px;
+  }
+  .brandLink {
+    margin-right: auto;
+    flex-basis: 250px;
+  }
+  .primary {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 699px) {
+  .adminGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .inner {
+    min-height: 80px;
+    padding-inline: 16px;
+    gap: 8px;
+  }
+  .primary {
+    display: none;
+  }
+  .brandLink {
+    min-width: 0;
+    flex-basis: 180px;
+    flex-shrink: 1;
+  }
+  .brandLink > div {
+    height: auto;
+    aspect-ratio: 4 / 1;
+  }
+  .actions {
+    gap: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header *,
+  .profileMenu *,
+  .mobilePanel * {
+    transition: none;
+    animation: none;
+  }
+}

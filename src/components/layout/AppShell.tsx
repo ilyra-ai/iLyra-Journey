@@ -11,6 +11,8 @@ import { MadeWithIlyra } from '@/components/made-with-ilyra';
 import { usePathname } from 'next/navigation';
 import { recursosDaRota } from '@/lib/plans/rotas';
 import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
+import identidade from '@/components/public/CelestialIdentity.module.css';
+import styles from './CelestialNavigation.module.css';
 
 type AppShellProps = {
   children: ReactNode;
@@ -42,6 +44,8 @@ export function AppShell({
       // Escalas do construtor de UI (tarefa 53): cards, tabelas e botões de
       // todas as páginas autenticadas (regras em globals.css).
       className={cn(
+        identidade.theme,
+        styles.appBackground,
         'lyra-app flex min-h-screen bg-background',
         ajustarAoViewport && 'h-dvh min-h-0 overflow-hidden'
       )}
