@@ -21,14 +21,14 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **80,8%** (139 de 172)   |
-| Implementações publicadas               | **85,5%** (147 de 172)   |
-| Tarefas totais                          | 172                      |
+| Conclusão integral                      | **80,3%** (139 de 173)   |
+| Implementações publicadas               | **85,0%** (147 de 173)   |
+| Tarefas totais                          | 173                      |
 | 🟢 Concluídas                           | 139                      |
 | 🟡 Implementadas com validação pendente | 8                        |
 | 🔵 Em andamento                         | 3                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 22                       |
+| ⚪ A iniciar                            | 23                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-07               |
 
@@ -322,6 +322,8 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 - As demais mudanças pausadas da 142/144 não são automaticamente retomadas por esta autorização; incluir apenas dependências efetivamente necessárias, revisadas e rastreadas.
 
 **Complemento obrigatório das anotações do usuário em 07-11-2026 — pendente de implementação e QA:**
+
+**Atividade isolada — fundo aprovado do app, 07-11-2026:** após comparar as prévias, o usuário substituiu a igualdade com a landing por fundo preto/grafite com iluminação dourada escurecida e suave, conforme `exec-b80e0b50-1982-4ce0-8062-f32ce4c85c2e.png`. Aplicar gradiente contínuo com coordenadas fixas na página e cabeçalho, mantendo a landing inalterada; cards do painel transparentes, com contornos preservados. A prioridade dos seletores impede sobrescrita pela identidade compartilhada. Publicação desta atividade visual separada do fechamento funcional da 153. Por instrução expressa do usuário, a conferência visual no navegador, com administrador, desktop, tablet, celular e zoom, será feita por ele; não declarar essa homologação executada pelo agente.
 
 1. **Enquadramento prioritário:** manter respiro seguro à direita, esquerda, acima e abaixo da janela; logo, menus, cards, textos e ações não podem encostar nas bordas. Usar a composição do mockup como referência de margens e alinhamento. Adaptar ao espaço útil real, inclusive zoom do navegador, nomes longos, carregamento e erros. No desktop, buscar a composição integral enquadrada; não ocultar conteúdo nem reduzir a legibilidade para forçar cabimento em janelas pequenas. No mobile, preservar margens e rolagem vertical autorizada, sem transbordamento horizontal.
 2. **Imagens:** fundo realmente transparente na arte dos mapas e nos três destaques; não confundir transparência do arquivo com CSS. No chat, substituir a esfera pelo logo real do favicon. Preservar as imagens da landing quando a alteração for exclusiva do painel.
@@ -1109,6 +1111,461 @@ Para cada tarefa, registrar **antes, durante e após**:
 | Tarefas 142/144     | Pausadas conforme gestor oficial                                   | Não retomar automaticamente                          |
 | Tarefa 152          | Navegação publicada; QA visual autenticado pendente                | Não marcar como aprovado pela nova iniciativa        |
 | Tarefa 153          | Dashboard celestial em andamento na tarefa 153                     | Não duplicar nem concluir por este programa          |
+
+### 173 · Rebranding integral da plataforma Lyra MetaCare para iLyra · ⚪ PENDENTE
+
+**Registro:** 07/11/2026  
+**Prioridade:** 🔴 Alta  
+**Categoria:** Identidade da marca, arquitetura de software, UI/UX, comunicação, infraestrutura e compatibilidade.  
+**Repositório de origem:** `https://github.com/ilyra-ai/Lyra-MetaCare`  
+**Branch obrigatória:** `main`  
+**Dependências:** auditoria da tarefa 154 e compatibilização com as tarefas 155 a 172. Respeitar integralmente as tarefas anteriores que estejam pausadas, bloqueadas ou aguardando aprovação.
+
+**Status:** ⚪ Pendente de implementação. A escolha estratégica do nome não significa que o rebranding já foi executado, testado, publicado ou juridicamente registrado.
+
+#### 173.1 · Decisão estratégica e identidade oficial
+
+O responsável pelo projeto decidiu substituir o nome comercial **Lyra MetaCare** por **iLyra**, refletindo a evolução da plataforma de saúde e monitoramento para uma experiência ampla de autoconhecimento, inteligência artificial, astrologia, relacionamentos e descoberta pessoal.
+
+A nova identidade deverá seguir estas regras:
+
+- **Nome comercial da plataforma:** `iLyra`.
+- **Grafia oficial:** letra `i` minúscula seguida de `Lyra`, com `L` maiúsculo.
+- **Companheira de inteligência artificial:** continua denominada `Lyra`.
+- **Frase institucional principal:** `Descubra quem você é.`
+- **Experiência pública gratuita:** `Quem sou eu?`
+- **Assinatura comercial:** `Assinatura Consciente iLyra`.
+- **Funcionalidade de relacionamentos:** `Conexões da Alma`.
+- **Chamada de relacionamentos:** `Será que encontrei minha alma gêmea?`
+- **Mapas:** preservar a denominação própria dos métodos, inclusive `Mapa Lyra DM Samādhi`.
+- **Idioma da experiência:** português brasileiro.
+
+O rebranding não autoriza alterar cálculos, personalidade do Motor Lyra, permissões, preços, histórico dos usuários ou funcionalidades por iniciativa própria.
+
+A estrutura de marca deverá distinguir:
+
+1. **iLyra:** nome do aplicativo e da plataforma.
+2. **Lyra:** identidade da companheira digital.
+3. **Motor Lyra:** núcleo tecnológico e de interpretação existente.
+4. **Experiências iLyra:** jornadas, mapas, assinatura e demais funcionalidades da plataforma.
+
+#### 173.2 · Auditoria forense obrigatória antes de modificar o código
+
+Antes de qualquer implementação, o agente deverá:
+
+1. Ler integralmente `CLAUDE.md`, `AGENTS.md`, `claude-gestao.md` e todas as regras e workflows aplicáveis.
+2. Consultar a `main` remota, registrar seu SHA atual e verificar se existem modificações locais não publicadas.
+3. Não sobrescrever, restaurar ou descartar alterações de outras tarefas.
+4. Investigar todos os pontos em que a marca antiga é utilizada, tanto no código quanto na documentação e nos dados persistidos.
+5. Classificar cada ocorrência como:
+   - Marca exibida ao usuário.
+   - Identificador técnico interno.
+   - Referência histórica ou legal.
+   - Configuração administrativa.
+   - Integração externa.
+   - Recurso visual ou arquivo estático.
+   - Texto de teste.
+6. Produzir matriz de impacto com arquivo, ocorrência, tratamento, dependências, risco e evidência.
+7. Confirmar quais valores são configuráveis pelo administrador e quais estão gravados no banco.
+8. Verificar se os nomes antigos são utilizados em integrações, callbacks, webhooks, cookies, variáveis de ambiente, URLs ou identificadores externos.
+9. Não realizar substituições globais indiscriminadas de `Lyra`, `MetaCare` ou `lyra-metacare`.
+10. Preservar referências históricas necessárias para auditoria, rastreabilidade e compatibilidade.
+
+**Áreas e arquivos inicialmente identificados para investigação:**
+
+- `README.md`
+- `package.json`
+- `src/app/layout.tsx`
+- `src/app/page.tsx`
+- `src/app/globals.css`
+- `src/components/landing/LandingPage.tsx`
+- `src/components/landing/LandingCelestial.module.css`
+- `src/components/auth/LoginExperience.tsx`
+- `src/components/public/CelestialIdentity.module.css`
+- `src/components/public/celestial-fonts.ts`
+- `src/components/marca/MarcaLyra.tsx`
+- `src/components/layout/AppShell.tsx`
+- `src/components/layout/navigation.ts`
+- `src/components/layout/sidebar.tsx`
+- `src/components/subscription/`
+- `src/lib/site-page-config/`
+- `modules/lyra-customaze-ui-ux/src/site-page-config/`
+- `src/lib/lgpd/`
+- `src/lib/billing/`
+- `src/lib/plans/`
+- `src/lib/auth/session.ts`
+- `src/app/api/`
+- `src/assets/celestial/`
+- `public/`
+- `docs/design-system.md`
+- `docs/api.md`
+- `docs/guia-operacional.md`
+- `.env.example`
+
+Essa relação é um ponto de partida baseado na arquitetura identificada. **Não é uma lista exaustiva e não autoriza presumir que todos os arquivos precisem ser alterados.**
+
+#### 173.3 · Identidade visual e logotipo iLyra
+
+- Preservar a linguagem visual celestial já aprovada.
+- Manter a composição premium, com fundo escuro, dourado suave, tipografia e elementos visuais existentes.
+- Preservar a hierarquia tipográfica aprovada de **Clicker Script, Imprima e Varela**, de acordo com a função de cada fonte.
+- Não criar uma identidade visual desconectada da landing, do login e da navegação publicados.
+- Adaptar o nome exibido na marca para `iLyra`.
+- Verificar se o símbolo gráfico atual continua visualmente adequado.
+- **Não substituir ou redesenhar automaticamente o símbolo aprovado.** Caso seja necessário alterar sua geometria para comportar a grafia iLyra, registrar proposta comparativa e obter aprovação visual.
+- Reutilizar componentes, tokens, fontes e ativos oficiais.
+- Preservar proporções, alinhamento, legibilidade e contraste.
+- Implementar a identidade de maneira responsiva, inclusive nas menores telas.
+- Verificar favicon, ícones de instalação, imagens Open Graph e demais ativos que contenham a marca anterior.
+- Registrar a origem dos ativos novos e conferir sua licença.
+
+**Critério de aceite:** todas as superfícies públicas e autenticadas exibem a marca iLyra de modo coerente, sem duplicar logotipos, distorcer componentes ou deixar textos da marca antiga em elementos comerciais ativos.
+
+#### 173.4 · Atualização de todas as superfícies do aplicativo
+
+Inspecionar e adaptar, quando aplicável:
+
+**Experiências públicas:**
+
+- Landing page.
+- Cabeçalho e rodapé.
+- Títulos e textos institucionais.
+- CTAs e seções de descoberta.
+- Catálogo comercial.
+- Login e cadastro.
+- Splash screen e estados de carregamento.
+- Páginas de erro e estados vazios.
+- Privacidade e Termos de Uso.
+- Metadados para mecanismos de busca.
+- Descrição de instalação do aplicativo.
+
+**Experiências autenticadas:**
+
+- Dashboard.
+- Navegação superior e móvel.
+- Menu de perfil.
+- Identificação do aplicativo no cabeçalho.
+- Conversas e histórico.
+- Mapas.
+- Conexões da Alma, quando implementadas.
+- Perfil e configurações.
+- Assinatura e faturamento.
+- Relatórios e documentos gerados.
+- Mensagens de confirmação, alerta e erro.
+
+**Experiências administrativas:**
+
+- Dashboard administrativo.
+- Identificação institucional do painel.
+- Gestão de usuários.
+- Gestão comercial.
+- Configurações de conteúdo.
+- Site Experience Builder.
+- Pré-visualizações.
+- Modelos de IA.
+- Pagamentos e relatórios.
+
+As páginas referentes a funcionalidades desativadas deverão manter seu código e seus dados conforme as decisões anteriores, sem serem reativadas por causa da mudança de marca.
+
+#### 173.5 · Persistência e configurações publicadas
+
+O aplicativo possui um sistema real de configuração e publicação de conteúdo.
+
+A mudança de nome deverá considerar:
+
+- Configurações padrão do aplicativo.
+- Configurações já publicadas.
+- Rascunhos administrativos.
+- Textos personalizados pelo administrador.
+- Pré-visualizações do construtor.
+- Campos institucionais persistidos no MySQL.
+- Mensagens comerciais que utilizem o nome antigo.
+
+**Regra crítica:** alterar apenas os textos padrão não é suficiente se a aplicação continuar lendo valores antigos publicados no banco.
+
+O agente deverá:
+
+1. Identificar as fontes de verdade.
+2. Distinguir textos padrão dos personalizados pelo administrador.
+3. Definir migração segura, idempotente e reversível dos valores cuja atualização seja necessária.
+4. Preservar personalizações legítimas.
+5. Não substituir conteúdo arbitrário escrito pelos usuários.
+6. Registrar a versão anterior para recuperação.
+7. Testar a publicação, edição, reversão e restauração dos conteúdos.
+8. Validar o comportamento entre sessões e dispositivos.
+
+#### 173.6 · Identificadores técnicos, infraestrutura e compatibilidade
+
+A atualização de marca **não exige renomear automaticamente todos os identificadores técnicos**.
+
+Investigar separadamente:
+
+- Nome do pacote no `package.json`.
+- Identificação interna do aplicativo.
+- Cookie de sessão `lyra_metacare_session`.
+- Variáveis de ambiente.
+- Banco de dados MySQL.
+- Nomes de tabelas e colunas.
+- IDs de usuários e assinaturas.
+- IDs e referências da Stripe.
+- URLs e callbacks de autenticação.
+- Webhooks.
+- Integrações administrativas.
+- Logs, monitoramento e rastreamento de erros.
+- Arquivos offline, PWA e caches.
+- Scripts e launchers.
+- CI/CD e caminhos de deploy.
+
+**Preservação obrigatória:**
+
+- Sessões existentes, sempre que tecnicamente viável e seguro.
+- Histórico de contas.
+- Memórias autorizadas.
+- Conversas.
+- Dados pessoais e preferências.
+- Assinaturas ativas.
+- Histórico fiscal.
+- Relações entre usuários, planos e pagamentos.
+- Dados e recursos de administração.
+
+Renomear cookies, bancos, tabelas ou IDs sem necessidade pode quebrar integrações e sessões. Qualquer alteração desse tipo deverá demonstrar justificativa técnica, estratégia de transição, compatibilidade e testes de recuperação.
+
+#### 173.7 · Repositório GitHub e endereços
+
+O repositório atualmente utilizado é:
+
+`https://github.com/ilyra-ai/Lyra-MetaCare`
+
+A eventual alteração do nome do repositório para `iLyra` deverá ser tratada como **operação separada e dependente de autorização explícita**, após:
+
+- Verificar a disponibilidade do nome no GitHub.
+- Verificar dependências de URLs existentes.
+- Inspecionar workflows do GitHub Actions.
+- Conferir integrações e webhooks vinculados ao repositório.
+- Verificar referências em scripts, documentação e deploy.
+- Estabelecer procedimento de recuperação.
+- Documentar impacto sobre links antigos.
+
+**Não renomear o repositório automaticamente durante esta tarefa.**
+
+Todas as alterações autorizadas de código deverão ser realizadas diretamente na `main`, sem novas branches, forks ou worktrees, respeitando as regras de versionamento do projeto.
+
+#### 173.8 · Comunicação comercial e assinatura
+
+Aplicar a identidade iLyra à nova estratégia comercial, sem duplicar as tarefas de implementação da assinatura.
+
+**Terminologia:**
+
+- Marca: `iLyra`.
+- Assinatura: `Assinatura Consciente iLyra`.
+- Experiência gratuita: `Quem sou eu?`.
+- Companheira digital: `Lyra`.
+
+Preservar:
+
+- Experiência gratuita sem cadastro ou assinatura obrigatórios, conforme a implementação prevista.
+- Uma única assinatura comercial.
+- Dois valores de contribuição para os mesmos direitos.
+- Mesmas funcionalidades e mesmas cotas para todos os assinantes.
+- Modal de conversão inspirado na referência visual aprovada.
+- Exclusividade das funções administrativas.
+- Clareza sobre benefícios, preços e condições.
+
+**Importante:** os valores R$ 9,90 e R$ 19,90 continuam sujeitos à validação econômica e à aprovação comercial estabelecidas nas tarefas anteriores.
+
+O rebranding não autoriza criar planos adicionais, mudar preços, modificar contratos ou atualizar dados cadastrais do estabelecimento comercial nos provedores sem validação e autorização.
+
+#### 173.9 · Motor Lyra e nomenclatura dos mapas
+
+A mudança de marca não deverá descaracterizar a inteligência digital existente.
+
+- A personagem e companheira digital continuará sendo **Lyra**.
+- Preservar a personalidade, a voz, os princípios e os limites já definidos no Motor Lyra.
+- Preservar as nomenclaturas dos quatro mapas definidos para a plataforma.
+- Não renomear indevidamente o método `Mapa Lyra DM Samādhi`.
+- Não alterar resultados astronômicos, fórmulas, motores, interpretação ou critérios de indisponibilidade de dados.
+- Não modificar prompts de IA por simples substituição global da palavra Lyra.
+- Garantir que os modelos continuem reconhecendo Lyra como a identidade da companheira digital, sem confundi-la com o nome comercial do aplicativo.
+
+**Critério de aceite:** o usuário acessa a plataforma iLyra e conversa com Lyra, mantendo o comportamento já previsto para cada função.
+
+#### 173.10 · Validação jurídica e disponibilidade da marca
+
+Antes de divulgar a nova marca como juridicamente protegida:
+
+1. Pesquisar a situação do nome `iLyra` no INPI.
+2. Investigar marcas semelhantes e classes pertinentes.
+3. Verificar nomes de domínio e identificadores públicos relevantes.
+4. Avaliar conflitos comerciais e riscos de confusão.
+5. Registrar os resultados e suas fontes.
+6. Identificar o que exige parecer profissional especializado.
+7. Não afirmar que a marca está registrada ou disponível sem comprovação.
+
+A implementação visual e técnica não constitui registro de marca.
+
+Qualquer decisão de alterar razão social, nome empresarial, dados fiscais, informações de cobrança ou entidade contratante dependerá de aprovação específica.
+
+#### 173.11 · Testes técnicos obrigatórios
+
+Executar os quality gates estabelecidos no repositório, incluindo, quando aplicável:
+
+```bash
+pnpm fix:format
+pnpm fix:lint
+pnpm check:lint
+pnpm check:format
+pnpm check:types
+pnpm test
+pnpm test:integration
+pnpm build
+```
+
+Investigar e corrigir a causa raiz de falhas introduzidas pela alteração.
+
+Não remover testes, silenciar erros ou inventar resultados.
+
+**Testes de regressão obrigatórios:**
+
+- Usuário visitante.
+- Usuário autenticado sem assinatura paga.
+- Assinante.
+- Administrador.
+- Cadastro.
+- Login e logout.
+- Sessão persistente.
+- Onboarding.
+- Dashboard.
+- Mapas.
+- Chat da Lyra.
+- Memória autorizada.
+- Assinatura.
+- Checkout e retorno, no ambiente de teste.
+- Webhooks e referências financeiras.
+- Perfil e privacidade.
+- Relatórios.
+- Área administrativa.
+- Configurações de conteúdo.
+- Pré-visualização e publicação do construtor.
+- Recursos desativados.
+- Rotas protegidas.
+- Rotas diretas e navegação interna.
+
+Nenhum resultado desses testes poderá ser declarado aprovado sem execução e evidência.
+
+#### 173.12 · QA real de interface e acessibilidade
+
+Executar navegação real no navegador, em build de produção, cobrindo as telas modificadas e regressões relevantes.
+
+**Larguras mínimas de referência:**
+
+- 320 px.
+- 390 px.
+- 768 px.
+- 1024 px.
+- 1366 px.
+- 1920 px.
+
+Verificar também janelas com altura reduzida e ampliação de texto a 200%.
+
+Avaliar:
+
+- Apresentação correta da marca iLyra.
+- Identidade preservada da companheira Lyra.
+- Hierarquia tipográfica.
+- Contraste.
+- Alinhamento.
+- Espaçamentos.
+- Integridade do logo.
+- Responsividade.
+- Ausência de estouro horizontal.
+- Foco visível.
+- Navegação por teclado.
+- Semântica e nomes acessíveis.
+- Compatibilidade com leitores de tela, quando houver ambiente.
+- Menus e diálogos.
+- Links, botões e CTAs.
+- Carregamento e erros reais.
+- Console do navegador.
+- Falhas de rede.
+- Ausência de textos institucionais antigos em superfícies comerciais ativas.
+
+Registrar capturas reais de antes e depois.
+
+#### 173.13 · Documentação e rastreabilidade
+
+Atualizar a documentação efetivamente impactada, preservando registros históricos.
+
+Documentar:
+
+1. Motivo da mudança de identidade.
+2. Nome anterior e novo nome.
+3. Distinção entre iLyra e Lyra.
+4. Arquivos alterados.
+5. Referências técnicas preservadas por compatibilidade.
+6. Configurações e dados migrados.
+7. Mudanças de comunicação.
+8. Alterações de metadados e recursos visuais.
+9. Testes executados.
+10. Resultados de QA.
+11. Limitações.
+12. Procedimento de recuperação.
+13. Pendências de marca, domínio ou integração.
+14. SHA de publicação.
+
+Atualizar o `README.md` para refletir a nova marca e a estratégia do aplicativo, sem prometer recursos que ainda estejam pendentes de implementação.
+
+#### 173.14 · Versionamento e publicação
+
+Ao concluir integralmente a implementação autorizada:
+
+1. Confirmar a versão atual da `main`.
+2. Inspecionar o diff e identificar somente alterações desta tarefa.
+3. Preservar arquivos de tarefas pausadas ou de outras execuções.
+4. Atualizar o registro desta tarefa no `claude-gestao.md`.
+5. Executar os testes técnicos e funcionais obrigatórios.
+6. Corrigir falhas até obter resultado aceitável e comprovado.
+7. Realizar commit específico da tarefa 173.
+8. Fazer push diretamente para `origin/main`.
+9. Confirmar o SHA remoto publicado.
+10. Registrar a publicação e as evidências.
+11. Não criar branch, worktree, fork ou árvore paralela.
+12. Não usar force push.
+13. Não agrupar mudanças de outras tarefas no commit.
+14. Se alguma etapa depender de serviço externo ou autorização indisponível, registrar o bloqueio real e não declarar conclusão integral.
+
+**Mensagem de commit sugerida:**
+
+`feat(branding): adota identidade iLyra preservando a companheira Lyra`
+
+#### 173.15 · Critérios finais de aceite
+
+A tarefa somente poderá ser considerada concluída e homologada quando:
+
+- [ ] A marca comercial iLyra estiver aplicada corretamente em todas as superfícies ativas abrangidas pelo escopo.
+- [ ] A companheira digital continuar identificada como Lyra.
+- [ ] A identidade visual celestial aprovada estiver preservada.
+- [ ] Não houver substituições globais que tenham danificado nomes de métodos, dados ou lógica de negócio.
+- [ ] Landing, login, painel, navegação, perfil, assinatura e administração apresentarem identidade coerente.
+- [ ] As configurações publicadas e os rascunhos forem tratados sem perda de personalizações.
+- [ ] Os metadados públicos e ativos de marca forem atualizados.
+- [ ] As sessões e os dados existentes estiverem preservados ou houver migração validada e documentada.
+- [ ] O Motor Lyra e os cálculos dos mapas mantiverem comportamento correto.
+- [ ] O histórico de faturamento, usuários e assinaturas estiver íntegro.
+- [ ] As funcionalidades desativadas não forem reativadas.
+- [ ] Os testes unitários, integrações e quality gates aplicáveis estiverem aprovados.
+- [ ] O QA real de navegação, acessibilidade e responsividade estiver documentado.
+- [ ] A auditoria jurídica da marca tiver resultados e limitações registrados, sem alegar registro inexistente.
+- [ ] Não houver mudança de repositório, domínio ou identidade legal sem autorização específica.
+- [ ] O commit individual e o push para `main` estiverem comprovados por SHA remoto.
+- [ ] O `claude-gestao.md` apresentar fielmente os resultados reais e eventuais pendências.
+
+**Resultado esperado:** a plataforma passa a apresentar a identidade comercial **iLyra**, preservando integralmente a companheira **Lyra**, os motores e funcionalidades existentes, os dados, as integrações e a identidade celestial aprovada.
+
+**Regra final:** esta tarefa é exclusivamente de rebranding e adequação dos pontos associados. Ela não autoriza executar automaticamente as demais tarefas pendentes, alterar a estratégia comercial aprovada ou realizar mudanças fora do escopo.
+
+**Observação de gestão:** registrar como **tarefa 173**, pois a `main` consultada em 07/11/2026 já contém as tarefas 154 a 172. Esta instrução foi preparada para inserção manual e não foi adicionada ao repositório.
+
+**Registro documental em 07-11-2026:** conteúdo integral do anexo `TAREFA_173_REBRANDING_iLyra.md` incorporado como tarefa futura no Tópico 3. A observação final do anexo descreve seu estado anterior à importação. Este registro não inicia o rebranding nem renomeia o repositório; a frente atual de navegação/painel continua em execução. A conferência visual desta frente permanece com o usuário conforme sua instrução mais recente.
 
 **Registro desta solicitação:** tarefas 89–95 acrescentadas em 2026-10-22 como **a iniciar**, sem declarar implementação ou validação funcional. A publicação imediata deste registro é documental; cada implementação seguirá com validação, atualização do painel, commit e push próprios na main, sem branches ou worktrees.
 
