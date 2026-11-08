@@ -23,6 +23,8 @@
 
 **Registro integral das novas anotações — 08-11-2026, execução autorizada e incremental:**
 
+**152, borda do perfil publicada:** `a89efdc1`, push `126bd739..a89efdc1 main -> main`; borda externa branca de 1 px no menu, preservando degradê, legibilidade e badge. Prettier aprovado. Registro da regra 6; conferência visual pelo usuário.
+
 **153, alinhamento do signo publicado:** `4854de38`, push `2a5d0dda..4854de38 main -> main`. Trilha do corpo limitada ao espaço real e coluna da leitura organizada com título e ação preservados e resumo flexível; removidas margens verticais acumuladas no modo desktop compacto. Prettier, parser PostCSS e diff sem erros aprovados. Conferência visual pelo usuário; build consolidado a seguir. Registro da regra 6.
 
 **153, cinco atalhos publicados:** `97d2d7f7`, push `875749fe..97d2d7f7 main -> main`. Acrescentados Meu ponto cego, Padrões no amor, Talento esquecido, Virada de ciclo e Coragem de mudar; cada um preenche o compositor e mantém o envio explícito pelo transporte real existente. Sete atalhos com quebra de linha também no desktop compacto. Prettier, ESLint do componente e diff sem erros aprovados; build consolidado a seguir. Sem resposta simulada ou promessa de previsão. Registro imediato da regra 6.
