@@ -9,6 +9,7 @@ import { z } from 'zod';
 import { toast } from 'sonner';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   Form,
   FormControl,
@@ -69,7 +70,6 @@ import { AccountEmailCard } from './AccountEmailCard';
 import { PrivacyDataCard } from './PrivacyDataCard';
 import { PurchaseHistoryCard } from './PurchaseHistoryCard';
 import { LocaisDoPerfil } from './LocaisDoPerfil';
-import { MapaVedicoCard } from './MapaVedicoCard';
 import { avisarMapaAtualizado } from '@/lib/astrology/evento-do-mapa';
 import type { CidadeEscolhida } from '@/components/geo/SeletorDeCidade';
 import { Slider } from '@/components/ui/slider';
@@ -508,7 +508,7 @@ export function ProfileForm() {
         </Button>
         {isPlanFeatureEnabled(subscription, 'vedic_insights') ? (
           <Button asChild variant="outline" className="min-h-11">
-            <a href="#perfil-contexto">Mapa e evolução</a>
+            <Link href="/">Meu mapa no Painel</Link>
           </Button>
         ) : null}
       </nav>
@@ -858,15 +858,6 @@ export function ProfileForm() {
         </section>
         <PrivacyDataCard />
         <PurchaseHistoryCard />
-        {isPlanFeatureEnabled(subscription, 'vedic_insights') ? (
-          <section
-            id="perfil-contexto"
-            aria-label="Meu mapa védico"
-            className="min-w-0 scroll-mt-24"
-          >
-            <MapaVedicoCard />
-          </section>
-        ) : null}
         {session?.user &&
           isPlanFeatureEnabled(subscription, 'metrics_history_days') && (
             <ProgressChart userId={session.user.id} db={db} />
