@@ -24,17 +24,17 @@
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
 | Conclusão integral                      | **80,3%** (139 de 173)   |
-| Implementações publicadas               | **85,5%** (148 de 173)   |
+| Implementações publicadas               | **86,1%** (149 de 173)   |
 | Tarefas totais                          | 173                      |
 | 🟢 Concluídas                           | 139                      |
-| 🟡 Implementadas com validação pendente | 9                        |
+| 🟡 Implementadas com validação pendente | 10                       |
 | 🔵 Em andamento                         | 3                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 22                       |
+| ⚪ A iniciar                            | 21                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-08               |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os nove estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os dez estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Escopo vigente em 2026-11-06:** landing 149 aprovada, com aprovação registrada e publicada em `857617a6`. O usuário autorizou redesenhar por completo o carregamento e, depois, o login/cadastro, seguindo a identidade celestial e mantendo enquadramento responsivo em desktop/mobile. Concluir e publicar cada frente individualmente na main antes da próxima. As tarefas 142 e 144 continuam **pausadas**; suas mudanças locais independentes ficam fora destes commits. As 145, 146 e o restante da 147 permanecem a iniciar.
 
@@ -353,17 +353,6 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ## Tópico 3 · Tarefas a Iniciar
-
-### 146 · Navegação horizontal no topo para uso em desktop
-
-**Estado: ⚪ a iniciar · Solicitada em 2026-11-06; execução suspensa pela ordem mais recente de parar tudo.**
-
-- Substituir a posição lateral da navegação por uma barra horizontal na parte superior da tela quando o aplicativo for usado no desktop.
-- A imagem anexada pelo usuário é referência **somente da posição da navegação**. Não copiar seu layout, design, cartões, gráficos, tipografia, identidade, cores ou conteúdo.
-- Preservar a identidade e o logo corretos da Lyra, sem redesenhar o símbolo; respeitar a orientação vigente de salmão `#FD865F` como cor primária e o verde anterior como secundária. Não aproveitar esta solicitação para retomar o redesenho geral pausado da 142.
-- Reutilizar a configuração real de navegação, categorias, submenus, destinos, busca, permissões de plano, papel e controles globais. Não reintroduzir os grupos desativados nem `/dia` na barra superior.
-- Manter uma experiência responsiva adequada no celular; verificar desktop, tablet e mobile, teclado, foco, rótulos acessíveis, submenus e ausência de transbordo ou sobreposição do conteúdo.
-- Nenhuma implementação desta tarefa foi iniciada. Após autorização para retomar e publicação das anteriores, pesquisar as referências aplicáveis, implementar, validar as jornadas reais e publicar em commit e push próprios na `main`, sem branches/worktrees; registrar o SHA e aguardar a orientação vigente.
 
 ---
 
@@ -4172,6 +4161,16 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - Histórico: a primeira prévia da 144 foi desfeita por excesso de escopo. A nova autorização explícita manda executar 145 antes de 146/153/152/150; substitui a antiga dependência de publicar a 144 primeiro.
 - Verificação em 08-11-2026: lint, formato, TypeScript, 1.017 testes unitários em 97 arquivos (incluindo 21 do Perfil), 611 integrações MySQL em 69 arquivos e build de 139 páginas/134 recursos offline aprovados. A suíte inclui os dois testes reais do painel celestial. A homologação visual não foi reexecutada: permanece com o usuário. Alterações locais independentes da 144 preservadas fora do commit.
 - **Publicação confirmada:** `744f5291`, push `26ae3832..744f5291 main -> main`. Somente os trechos da 145 em `ProfileForm.tsx` publicados; este registro documental atende à regra 6.
+
+### 146 · Navegação horizontal no topo para uso em desktop
+
+**Estado: 🟡 implementada · Homologação visual pelo usuário pendente. Reconciliação em 08-11-2026.**
+
+- Escopo atendido pela navegação autenticada da 152, já publicada em `88abc53f` e refinada em `673a38bf`; não recriar uma segunda barra. `Header.tsx` usa navegação horizontal superior, configuração real e permissões; administração fica na engrenagem, junto ao perfil. Sidebar lateral permanece somente na prévia do construtor.
+- Histórico: a imagem inicial indicava somente a posição superior. A aprovação celestial posterior substituiu as antigas cores salmão/verde; prevalecem marca aprovada, amarelo suave e fundo escuro dourado mais recente. A auditoria geral 142 e redesign conjunto 147 não são retomados por esta reconciliação.
+- Menu móvel suspenso reutiliza destinos autorizados, sem gaveta lateral; Planos abre o diálogo do catálogo real. Busca retirada da barra conforme anotação mais recente, sem eliminar a infraestrutura de pesquisa. Preservados destinos, papéis, assinaturas e grupos desativados; `/admin/content` permanece funcional, fora do submenu.
+- Verificação atual: inspeção dos componentes/estilos, lint, formato, TypeScript, 1.017 testes unitários (incluindo navegação e estrutura), 611 integrações MySQL e build de 139 páginas aprovados em 08-11-2026. Não houve nova implementação funcional nesta reconciliação; as evidências cobrem o estado local com alterações independentes pausadas preservadas, não um checkout limpo apenas dos commits publicados.
+- Aceite de desktop/tablet/mobile, zoom, enquadramento, foco e menus administrativos permanece com o usuário por instrução explícita. Não declarar aprovação visual automática nem duplicar implementação da 152.
 
 ### 148 · Atualizar a apresentação do README com o mockup e o logo celestial aprovado
 
