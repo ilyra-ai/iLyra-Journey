@@ -23,6 +23,8 @@
 
 **Registro integral das novas anotações — 08-11-2026, execução autorizada e incremental:**
 
+**Marca transparente publicada:** `62b5d1da`, push `167987c7..62b5d1da main -> main`. Novo ativo `src/assets/celestial/marca-transparente.png` aplicado no componente compartilhado CelestialBrand, incluindo login e navegação autenticada. Original preservado. Edição pela skill imagegen/ferramenta nativa; instrução: retirar somente o fundo azul, conservar símbolo dourado, texto “lyra metacare”, proporções e cores, com alpha real. Sharp confirmou 2172×724 e alpha; Prettier e ESLint aprovados. Validação visual da fidelidade pelo usuário. Registro da regra 6.
+
 **152, borda do perfil publicada:** `a89efdc1`, push `126bd739..a89efdc1 main -> main`; borda externa branca de 1 px no menu, preservando degradê, legibilidade e badge. Prettier aprovado. Registro da regra 6; conferência visual pelo usuário.
 
 **153, alinhamento do signo publicado:** `4854de38`, push `2a5d0dda..4854de38 main -> main`. Trilha do corpo limitada ao espaço real e coluna da leitura organizada com título e ação preservados e resumo flexível; removidas margens verticais acumuladas no modo desktop compacto. Prettier, parser PostCSS e diff sem erros aprovados. Conferência visual pelo usuário; build consolidado a seguir. Registro da regra 6.
