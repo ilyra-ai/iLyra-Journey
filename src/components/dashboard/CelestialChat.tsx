@@ -135,6 +135,61 @@ export function CelestialChat() {
             >
               Próximos dias
             </button>
+            <button
+              type="button"
+              className={styles.outlineButton}
+              onClick={() =>
+                sugerir(
+                  'Que ponto cego posso explorar a partir dos meus mapas? Use apenas os dados disponíveis, diferencie leitura simbólica de fatos e faça uma pergunta que me ajude a reconhecer esse padrão na minha vida.'
+                )
+              }
+            >
+              Meu ponto cego
+            </button>
+            <button
+              type="button"
+              className={styles.outlineButton}
+              onClick={() =>
+                sugerir(
+                  'Que padrões de relacionamento meus mapas convidam a observar? Não presuma minha situação amorosa. Relacione a leitura disponível com reciprocidade, limites e uma pergunta de reflexão.'
+                )
+              }
+            >
+              Padrões no amor
+            </button>
+            <button
+              type="button"
+              className={styles.outlineButton}
+              onClick={() =>
+                sugerir(
+                  'Há algum talento que eu possa estar deixando em segundo plano? Explore as indicações simbólicas dos meus mapas disponíveis, sem afirmar que conhece minha história, e sugira uma experiência pequena para eu descobrir.'
+                )
+              }
+            >
+              Talento esquecido
+            </button>
+            <button
+              type="button"
+              className={styles.outlineButton}
+              onClick={() =>
+                sugerir(
+                  'O que meu período atual pode me convidar a encerrar ou começar? Use os ciclos e datas realmente disponíveis nos meus mapas, explique os limites da interpretação e proponha um próximo passo possível, sem prever acontecimentos como certos.'
+                )
+              }
+            >
+              Virada de ciclo
+            </button>
+            <button
+              type="button"
+              className={styles.outlineButton}
+              onClick={() =>
+                sugerir(
+                  'Como posso encontrar coragem para uma mudança que faça sentido para mim? Relacione meus mapas disponíveis a possibilidades de reflexão, pergunte qual mudança estou considerando e ajude a explorar um primeiro passo reversível.'
+                )
+              }
+            >
+              Coragem de mudar
+            </button>
           </div>
           <div
             className={styles.chatMessages}
