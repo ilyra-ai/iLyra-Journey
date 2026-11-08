@@ -19,20 +19,22 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Retomada autorizada em 08-11-2026:** executar 145 → 146 → 153 → 152 → 150, com commit e push individuais na `main`. As tarefas 142 e 147 ficam reservadas para execução conjunta com o usuário e não serão iniciadas nesta rodada. A 144 permanece pausada; suas alterações locais são preservadas e não entram nas publicações destas tarefas. Esta ordem substitui a dependência histórica da 145 em relação à publicação prévia da 144. A homologação visual no navegador será realizada pelo usuário, incluindo administrador, desktop, tablet, celular e zoom; não confundir implementação técnica com essa aprovação.
+
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
 | Conclusão integral                      | **80,3%** (139 de 173)   |
-| Implementações publicadas               | **85,0%** (147 de 173)   |
+| Implementações publicadas               | **85,5%** (148 de 173)   |
 | Tarefas totais                          | 173                      |
 | 🟢 Concluídas                           | 139                      |
-| 🟡 Implementadas com validação pendente | 8                        |
+| 🟡 Implementadas com validação pendente | 9                        |
 | 🔵 Em andamento                         | 3                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 23                       |
+| ⚪ A iniciar                            | 22                       |
 | Branch de trabalho                      | `main` (única permitida) |
-| Última atualização                      | 2026-11-07               |
+| Última atualização                      | 2026-11-08               |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os oito estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os nove estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Escopo vigente em 2026-11-06:** landing 149 aprovada, com aprovação registrada e publicada em `857617a6`. O usuário autorizou redesenhar por completo o carregamento e, depois, o login/cadastro, seguindo a identidade celestial e mantendo enquadramento responsivo em desktop/mobile. Concluir e publicar cada frente individualmente na main antes da próxima. As tarefas 142 e 144 continuam **pausadas**; suas mudanças locais independentes ficam fora destes commits. As 145, 146 e o restante da 147 permanecem a iniciar.
 
@@ -351,17 +353,6 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ## Tópico 3 · Tarefas a Iniciar
-
-### 145 · Concentrar o card “Meu mapa védico” no dashboard inicial
-
-**Estado: ⚪ a iniciar · Solicitada em 2026-11-06; execução suspensa pela ordem mais recente de parar tudo.**
-
-- Mostrar o card real “Meu mapa védico”, com seus cálculos e leituras existentes, no dashboard inicial `/`.
-- Retirar sua exibição duplicada do Perfil; preservar o componente, os cálculos e os dados, sem remover a funcionalidade. Os campos de nascimento continuam no Perfil.
-- O usuário inicialmente pediu retirar o card de `/dia` e depois substituiu essa orientação pela desativação da página inteira, tratada na 144. Não reativar `/dia` para atender a esta tarefa.
-- Preservar acesso por plano, estados de dados ausentes, erro/carregamento e responsividade. Não inventar posições planetárias ou leituras; conferir o cálculo real com os dados preenchidos pelo usuário, sem registrar seus dados pessoais neste painel.
-- A prévia intermediária da 144 já exibiu o card no dashboard, mas essa composição foi desfeita para corrigir o excesso de escopo. Não considerar a movimentação definitiva entregue.
-- Após autorização para retomar: concluir/publicar a 144 primeiro, implementar e validar esta movimentação, fazer commit e push próprios na `main`, registrar SHA e somente então iniciar outra tarefa.
 
 ### 146 · Navegação horizontal no topo para uso em desktop
 
@@ -4121,6 +4112,17 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Próximo passo:** usar a matriz na execução da 142, mediante instrução do usuário. Alterações metodológicas e descontinuações exigem decisão específica.
 - **Publicação da auditoria:** commit `ffeeceb8`, push confirmado `f626df11..ffeeceb8 main -> main` em 2026-11-05. Sete arquivos, exclusivamente a tarefa 143; sem branch, worktree ou force-push. Este registro do SHA segue em commit documental próprio, conforme a regra do painel.
 - **Gates finais reais:** `fix:format`, `fix:lint`, `check:lint`, `check:format` e `check:types` aprovados; 1012 testes unitários em 96 arquivos, 602 integrações MySQL em 67 arquivos e build de produção de 136 páginas aprovados. A primeira checagem de formato detectou o JSON recém-regenerado; a formatação foi aplicada e a nova checagem passou. A tentativa anterior de integração interrompida com o Docker desligado não foi contabilizada. Docker com MySQL, memória, FalkorDB e treinamento saudáveis; produção reiniciada em `localhost:3000`, HTTP 200 conferido no Windows. `@current_problems` não está disponível nas ferramentas da sessão. Revisão do diff e estrutura: 143 tarefas únicas, 136 verdes, seis amarelas e uma a iniciar.
+
+### 145 · Concentrar o card “Meu mapa védico” no dashboard inicial
+
+**Estado: 🟡 implementada · Homologação visual pelo usuário pendente. Retomada autorizada em 08-11-2026.**
+
+- Card real concentrado no dashboard inicial `/`, integrado ao perfil e aos motores existentes pela tarefa 153; mantidos acesso por plano, erro, carregamento e orientação para dados ausentes.
+- Retirada somente a exibição duplicada do Perfil e seu import. O atalho passa a “Meu mapa no Painel”, usando o Link do Next. Os campos de nascimento, componente de leitura completa e cálculos são preservados. Busca em `ProfileForm.tsx` confirmou ausência de `MapaVedicoCard` e do antigo destino `perfil-contexto`.
+- O pedido de retirar o card de `/dia` foi substituído pelo pedido de desativar a página inteira na 144. Esta entrega não reativa `/dia` nem publica os controles globais pausados.
+- Histórico: a primeira prévia da 144 foi desfeita por excesso de escopo. A nova autorização explícita manda executar 145 antes de 146/153/152/150; substitui a antiga dependência de publicar a 144 primeiro.
+- Verificação em 08-11-2026: lint, formato, TypeScript, 1.017 testes unitários em 97 arquivos (incluindo 21 do Perfil), 611 integrações MySQL em 69 arquivos e build de 139 páginas/134 recursos offline aprovados. A suíte inclui os dois testes reais do painel celestial. A homologação visual não foi reexecutada: permanece com o usuário. Alterações locais independentes da 144 preservadas fora do commit.
+- **Publicação confirmada:** `744f5291`, push `26ae3832..744f5291 main -> main`. Somente os trechos da 145 em `ProfileForm.tsx` publicados; este registro documental atende à regra 6.
 
 ### 148 · Atualizar a apresentação do README com o mockup e o logo celestial aprovado
 
