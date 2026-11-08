@@ -4232,6 +4232,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 152 · Redesenhar a navegação autenticada conforme o mockup celestial
 
+**Novo acabamento do perfil publicado em 08-11-2026:** `786a5bd5`, push `e7f55cdb..786a5bd5 main -> main`, somente CSS da navegação. Menu com degradê preto/dourado escurecido, textos claros e tokens de hover/foco/separadores ajustados; badge Administrador `#D9F5F2` com texto preto, demais badges preservados. Regra compartilhada nos três modos de dispositivo. Prettier e análise sintática PostCSS aprovados; nenhuma lógica ou permissão alterada. Build completo será reconferido após a próxima atividade visual autorizada, sem alegar nova validação no navegador. Este registro atende à regra 6; substitui o acabamento amarelo sólido histórico.
+
 **Publicação da reconferência:** `a7e3c336`, push `29d567d8..a7e3c336 main -> main`, somente este painel. Registro subsequente conforme a regra 6; aprovação visual do administrador ainda não declarada.
 
 **Reconferência técnica em 08-11-2026:** implementação dos refinamentos já publicada em `673a38bf`; revisados Header, menu móvel suspenso, controle de tema, catálogo compartilhado e estilos. Mantidos engrenagem administrativa, três atalhos no máximo, perfil amarelo e badges por plano. O fundo vigente é o gradiente preto/dourado aprovado posteriormente, não a antiga igualdade com a landing. Lint, formato, tipos, 1.017 unitários, 611 integrações MySQL e build de 139 páginas passaram na rodada atual. Não foram refeitos componentes ou testes sem necessidade. Homologação visual autenticada, responsividade e zoom continuam com o usuário; estado 🟡 preservado. Esta reconferência não valida pagamento externo nem os requisitos futuros da 147.
