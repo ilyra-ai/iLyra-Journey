@@ -4171,6 +4171,7 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - Menu móvel suspenso reutiliza destinos autorizados, sem gaveta lateral; Planos abre o diálogo do catálogo real. Busca retirada da barra conforme anotação mais recente, sem eliminar a infraestrutura de pesquisa. Preservados destinos, papéis, assinaturas e grupos desativados; `/admin/content` permanece funcional, fora do submenu.
 - Verificação atual: inspeção dos componentes/estilos, lint, formato, TypeScript, 1.017 testes unitários (incluindo navegação e estrutura), 611 integrações MySQL e build de 139 páginas aprovados em 08-11-2026. Não houve nova implementação funcional nesta reconciliação; as evidências cobrem o estado local com alterações independentes pausadas preservadas, não um checkout limpo apenas dos commits publicados.
 - Aceite de desktop/tablet/mobile, zoom, enquadramento, foco e menus administrativos permanece com o usuário por instrução explícita. Não declarar aprovação visual automática nem duplicar implementação da 152.
+- **Publicação desta reconciliação:** `9910482f`, push `8d6b540d..9910482f main -> main`, somente `claude-gestao.md`. Nenhuma branch ou worktree criada. Registro subsequente conforme a regra 6.
 
 ### 148 · Atualizar a apresentação do README com o mockup e o logo celestial aprovado
 
