@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import marca from '@/assets/celestial/marca.png';
+import marca from '@/assets/celestial/marca-transparente.png';
 import styles from './CelestialIdentity.module.css';
 
 export function CelestialBrand() {
