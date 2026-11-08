@@ -156,7 +156,7 @@
 }
 .lyra-login .login-arte {
   display: block;
-  width: min(100%, clamp(180px, 26svh, 280px));
+  width: min(100%, clamp(300px, 45svh, 420px));
   height: auto;
   margin: 0 auto 12px;
 }
@@ -201,10 +201,38 @@
 }
 @media (max-width: 1100px) {
   .lyra-login {
-    row-gap: 24px;
+    align-content: center;
+    grid-template-rows: max-content auto max-content;
+    row-gap: 10px;
+    padding-block: 12px;
   }
   .lyra-login .login-marca {
     justify-content: center;
+  }
+  .lyra-login .login-marca > div {
+    width: min(100%, 240px);
+    height: 48px;
+  }
+  .lyra-login .login-acesso {
+    padding: 16px 20px;
+  }
+  .lyra-login .login-acesso > div > p:first-child {
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+  .lyra-login .login-acesso h2 {
+    line-height: 1;
+  }
+  .lyra-login .login-acesso h2 + p {
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+  .lyra-login .login-acesso > div > div,
+  .lyra-login .login-acesso [role='tabpanel'] {
+    margin-top: 10px;
+  }
+  .lyra-login .login-acesso form {
+    gap: 8px;
   }
   .lyra-login .login-rodape {
     justify-content: center;
@@ -214,7 +242,8 @@
     justify-content: center;
   }
   .lyra-login .login-detalhes,
-  .lyra-login .login-lembrete {
+  .lyra-login .login-lembrete,
+  .lyra-login .login-rodape > a {
     display: none;
   }
 }
@@ -223,7 +252,7 @@
     padding-inline: 16px;
   }
   .lyra-login .login-acesso {
-    padding: 22px 18px;
+    padding: 16px 18px;
   }
   .lyra-login .login-acesso [role='tab'] {
     font-size: 14px;
@@ -238,7 +267,7 @@
     row-gap: 12px;
   }
   .lyra-login .login-arte {
-    width: min(100%, 180px);
+    width: min(100%, clamp(300px, 45svh, 360px));
     margin-bottom: 12px;
   }
   .lyra-login .login-destaques {
