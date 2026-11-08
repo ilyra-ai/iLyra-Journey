@@ -4214,6 +4214,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 152 · Redesenhar a navegação autenticada conforme o mockup celestial
 
+**Publicação da reconferência:** `a7e3c336`, push `29d567d8..a7e3c336 main -> main`, somente este painel. Registro subsequente conforme a regra 6; aprovação visual do administrador ainda não declarada.
+
 **Reconferência técnica em 08-11-2026:** implementação dos refinamentos já publicada em `673a38bf`; revisados Header, menu móvel suspenso, controle de tema, catálogo compartilhado e estilos. Mantidos engrenagem administrativa, três atalhos no máximo, perfil amarelo e badges por plano. O fundo vigente é o gradiente preto/dourado aprovado posteriormente, não a antiga igualdade com a landing. Lint, formato, tipos, 1.017 unitários, 611 integrações MySQL e build de 139 páginas passaram na rodada atual. Não foram refeitos componentes ou testes sem necessidade. Homologação visual autenticada, responsividade e zoom continuam com o usuário; estado 🟡 preservado. Esta reconferência não valida pagamento externo nem os requisitos futuros da 147.
 
 **Publicação dos refinamentos:** `673a38bf`, push confirmado `b99baabd..673a38bf main -> main`, em 07-11-2026. Sete arquivos desta frente publicados, sem alterações pausadas de 142/144. Homologação visual permanece com o usuário.
