@@ -108,21 +108,23 @@
 }
 
 .profileMenu {
-  --foreground: 240 8% 9%;
-  --muted-foreground: 240 8% 24%;
-  --muted: 46 77% 68%;
-  --accent: 46 77% 68%;
-  --accent-foreground: 240 8% 9%;
-  --primary: 240 8% 9%;
-  --destructive: 0 74% 28%;
-  --border: 44 45% 48%;
+  --foreground: 43 50% 94%;
+  --muted-foreground: 39 30% 77%;
+  --muted: 38 28% 20%;
+  --accent: 38 28% 24%;
+  --accent-foreground: 43 50% 94%;
+  --primary: 46 77% 76%;
+  --destructive: 0 85% 80%;
+  --border: 39 28% 36%;
   width: min(340px, calc(100vw - 24px));
   max-height: min(720px, calc(100svh - 100px));
   overflow-y: auto;
   border: 0;
   border-radius: 18px;
-  background: #f1df94;
-  color: #151518;
+  background:
+    radial-gradient(ellipse at top left, #543a16 0%, transparent 65%),
+    linear-gradient(155deg, #17130d, #090907 70%);
+  color: hsl(var(--foreground));
   box-shadow: none;
 }
 
@@ -130,8 +132,8 @@
   border: 0;
 }
 .profileMenu :global([data-profile-plan='admin']) > span {
-  background: #593b76;
-  color: #fff;
+  background: #d9f5f2;
+  color: #000;
 }
 .profileMenu :global([data-profile-plan='free']) > span {
   background: #36545d;
