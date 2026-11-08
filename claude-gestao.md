@@ -23,6 +23,8 @@
 
 **Registro integral das novas anotações — 08-11-2026, execução autorizada e incremental:**
 
+**151, rodapé desktop publicado:** `ea61773e`, push `5ae3685d..ea61773e main -> main`. Links legais centralizados na coluna do card Acesso seguro; retorno alinhado à largura configurável da apresentação, sem margem negativa. Mobile/tablet mantém links legais e oculta retorno conforme pedido. Prettier aprovado; sem mudanças em rotas, termos ou autenticação. Registro da regra 6. Build de produção consolidado em execução após parada controlada do servidor local; reiniciar e conferir HTTP antes da entrega.
+
 **Marca transparente publicada:** `62b5d1da`, push `167987c7..62b5d1da main -> main`. Novo ativo `src/assets/celestial/marca-transparente.png` aplicado no componente compartilhado CelestialBrand, incluindo login e navegação autenticada. Original preservado. Edição pela skill imagegen/ferramenta nativa; instrução: retirar somente o fundo azul, conservar símbolo dourado, texto “lyra metacare”, proporções e cores, com alpha real. Sharp confirmou 2172×724 e alpha; Prettier e ESLint aprovados. Validação visual da fidelidade pelo usuário. Registro da regra 6.
 
 **152, borda do perfil publicada:** `a89efdc1`, push `126bd739..a89efdc1 main -> main`; borda externa branca de 1 px no menu, preservando degradê, legibilidade e badge. Prettier aprovado. Registro da regra 6; conferência visual pelo usuário.
