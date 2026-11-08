@@ -4235,6 +4235,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 **Estado: 🟡 implementada · Validação visual pelo usuário pendente. Verificação técnica final em 08-11-2026.**
 
+**Publicação da verificação técnica:** `1bf5fdad`, push `d0ef57ff..1bf5fdad main -> main`, somente gestão e evidências da 153. Implementação e ativos já estavam na main nos commits abaixo. Registro subsequente conforme regra 6; homologação visual permanece pendente.
+
 - Retomada autorizada após reinício; implementações preservadas em `9ef026b8`, ativos em `79da795f` e fundo em `a1884b49`/`b99baabd`. A duplicação do mapa no Perfil foi resolvida e publicada separadamente na 145 (`744f5291`). Não há necessidade de reimplementar esses recursos.
 - Verificação atual do estado local: lint, formato, TypeScript, 1.017 testes unitários/97 arquivos, 611 integrações MySQL/69 arquivos e build de 139 páginas/134 recursos offline aprovados. Os dois testes de `/api/astrologia/painel` passaram com cálculo natal e sete dias reais, fuso e isolamento por titular.
 - Produção reiniciada em `http://localhost:3000`; `/api/health` respondeu `status: ok`, `database: ok`, 68 migrações. MySQL, memória, FalkorDB e treinamento saudáveis. As alterações locais pausadas da 144 permanecem no ambiente e fora da publicação; os gates não representam instalação limpa somente dos commits desta tarefa.
