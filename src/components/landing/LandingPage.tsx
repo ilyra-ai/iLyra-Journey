@@ -557,12 +557,6 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
                 {config.hero.primaryCtaLabel}
                 <ArrowRight aria-hidden="true" />
               </Link>
-              <Link
-                href={config.hero.secondaryCtaHref}
-                className={styles.textLink}
-              >
-                {config.hero.secondaryCtaLabel}
-              </Link>
             </div>
           </div>
           <div className={styles.heroVisual}>
