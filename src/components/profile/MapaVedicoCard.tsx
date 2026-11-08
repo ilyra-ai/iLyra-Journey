@@ -196,7 +196,7 @@ export function MapaVedicoCard() {
         </CardTitle>
         <CardDescription>
           Zodíaco sideral (ayanamsha Lahiri), casas por signo inteiro e
-          Vimshottari Dasha. Base do coach diário.
+          Vimshottari Dasha.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-5">

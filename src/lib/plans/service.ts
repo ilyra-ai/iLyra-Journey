@@ -25,6 +25,11 @@ import {
 import { AppSession } from '@/types/app-session';
 import { capacidadeDisponivel } from './dependencias';
 import {
+  lerEstadoDosGrupos,
+  recursoAtivoNaPlataforma,
+} from '@/lib/plataforma/funcionalidades';
+import { gruposDoRecurso } from '@/lib/plataforma/grupos';
+import {
   RECURSOS_DE_AGENDAMENTO,
   agendamentosLiberadosParaUsuarios,
 } from '@/lib/plataforma/interruptores';
@@ -632,8 +637,16 @@ export async function getAccountSubscriptionSummary(
     current = (await fetchCurrentSubscriptionRow(userId))!;
   }
   const features = await buildFeatureAccessList(userId, current.plan_id);
+  const gruposFuncionais = await lerEstadoDosGrupos();
+  const aplicarGrupos = (itens: PlanFeatureAccess[]) =>
+    itens.map((item) =>
+      gruposDoRecurso(item.key).some((grupo) => !gruposFuncionais[grupo])
+        ? { ...item, enabled: false, globalmenteDesativado: true }
+        : item
+    );
 
   return {
+    gruposFuncionais,
     administrativeAccess: role === 'admin',
     subscriptionId: current.subscription_id,
     status: current.status,
@@ -644,7 +657,7 @@ export async function getAccountSubscriptionSummary(
     currentPeriodEnd: current.current_period_end,
     cancelAtPeriodEnd: current.cancel_at_period_end === 1,
     plan: toPlanSummary(current),
-    features:
+    features: aplicarGrupos(
       role === 'admin'
         ? features.map((f) => ({
             ...f,
@@ -652,7 +665,8 @@ export async function getAccountSubscriptionSummary(
             quotaValue: null,
             remainingValue: null,
           }))
-        : await aplicarInterruptoresGlobais(features),
+        : await aplicarInterruptoresGlobais(features)
+    ),
   };
 }
 
@@ -1170,6 +1184,7 @@ export async function recursoHabilitado(
   role: string,
   featureKey: PlanFeatureKey
 ) {
+  if (!(await recursoAtivoNaPlataforma(featureKey))) return false;
   if (role === 'admin') {
     return true;
   }
@@ -1179,6 +1194,16 @@ export async function recursoHabilitado(
 
 /** Rotinas e links privados sem cookie também usam papel/bloqueio atuais. */
 export async function contaTemRecurso(
+  userId: string,
+  key: PlanFeatureKey,
+  connection?: PoolConnection
+) {
+  if (!(await recursoAtivoNaPlataforma(key, connection))) return false;
+  return contaTemRecursoParaHistorico(userId, key, connection);
+}
+
+/** Consulta de dados já guardados: mantém plano e bloqueio, sem reativar criação ou edição. */
+export async function contaTemRecursoParaHistorico(
   userId: string,
   key: PlanFeatureKey,
   connection?: PoolConnection
@@ -1201,6 +1226,7 @@ export async function contaTemRecurso(
 }
 
 export async function limiteDeMetricasDaConta(userId: string) {
+  if (!(await recursoAtivoNaPlataforma('metrics_history_days'))) return 0;
   const [conta] = await queryRows<{ role: string; blocked_at: string | null }>(
     'SELECT p.role,u.blocked_at FROM users u JOIN profiles p ON p.id=u.id WHERE u.id=?',
     [userId]
@@ -1229,6 +1255,12 @@ export async function requireFeatureEnabled(
   featureKey: PlanFeatureKey,
   connection?: PoolConnection
 ) {
+  if (!(await recursoAtivoNaPlataforma(featureKey, connection))) {
+    throw new HttpError(
+      'Esta funcionalidade está desativada na plataforma.',
+      403
+    );
+  }
   if (session.user.role === 'admin') {
     return;
   }
@@ -1258,6 +1290,11 @@ export async function assertActiveRowsQuota(options: {
   increment?: number;
   connection?: PoolConnection;
 }) {
+  await requireFeatureEnabled(
+    options.session,
+    options.featureKey,
+    options.connection
+  );
   if (options.session.user.role === 'admin') {
     return;
   }
@@ -1296,6 +1333,11 @@ export async function consumeUsageQuota(options: {
   amount?: number;
   connection?: PoolConnection;
 }) {
+  await requireFeatureEnabled(
+    options.session,
+    options.featureKey,
+    options.connection
+  );
   if (options.session.user.role === 'admin') {
     return;
   }
@@ -1404,6 +1446,7 @@ export async function consumeUsageQuota(options: {
 }
 
 export async function getMetricsHistoryLimit(session: AppSession) {
+  if (!(await recursoAtivoNaPlataforma('metrics_history_days'))) return 0;
   if (session.user.role === 'admin') {
     return null;
   }

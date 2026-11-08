@@ -1,5 +1,6 @@
 import { apagarNotificacoesAntigas } from '@/lib/notificacoes/servico';
 import { registrarErroInterno } from '@/lib/observability/log-seguro';
+import { lerEstadoDosGrupos } from '@/lib/plataforma/funcionalidades';
 
 import { executarRotinaDoCoach } from './servico';
 
@@ -25,8 +26,13 @@ export function rotinaDoCoachAtiva() {
 }
 
 export async function executarRotinaCompleta(agora: Date = new Date()) {
-  const resultado = await executarRotinaDoCoach(agora);
-  const notificacoesApagadas = await apagarNotificacoesAntigas();
+  const grupos = await lerEstadoDosGrupos();
+  const resultado = grupos.registros_saude
+    ? await executarRotinaDoCoach(agora)
+    : { verificados: 0, gerados: 0, falhas: 0, briefingsApagados: 0 };
+  const notificacoesApagadas = grupos.lembretes_descanso
+    ? await apagarNotificacoesAntigas()
+    : 0;
   return { ...resultado, notificacoesApagadas };
 }
 

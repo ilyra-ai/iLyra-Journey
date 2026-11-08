@@ -1,4 +1,5 @@
 import { queryRows } from '@/lib/mysql/pool';
+import { recursoAtivoNaPlataforma } from '@/lib/plataforma/funcionalidades';
 import { contaTemRecurso, limiteDeMetricasDaConta } from '@/lib/plans/service';
 import { corteDoHistorico } from '@/lib/plans/historico';
 import { painelDoChatSchema, type ParteDoChat } from './partes';
@@ -7,6 +8,7 @@ import { painelDoChatSchema, type ParteDoChat } from './partes';
 export async function montarPainelDoChat(
   usuario: string
 ): Promise<ParteDoChat[]> {
+  if (!(await recursoAtivoNaPlataforma('metrics_history_days'))) return [];
   const limite = await limiteDeMetricasDaConta(usuario);
   const corte = corteDoHistorico(limite);
   const comEscores = await contaTemRecurso(usuario, 'ai_scores');
@@ -47,6 +49,7 @@ export async function filtrarPaineisDoChat(
   partes: ParteDoChat[]
 ): Promise<ParteDoChat[]> {
   if (!partes.length) return partes;
+  if (!(await recursoAtivoNaPlataforma('metrics_history_days'))) return [];
   const limite = await limiteDeMetricasDaConta(usuario),
     corte = corteDoHistorico(limite);
   const comEscores = await contaTemRecurso(usuario, 'ai_scores');

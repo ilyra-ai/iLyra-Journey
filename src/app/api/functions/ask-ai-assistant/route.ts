@@ -62,6 +62,8 @@ import {
   recuperarMemorias,
 } from '@/lib/memoria/servico';
 import { queryRows } from '@/lib/mysql/pool';
+import { lerEstadoDosGrupos } from '@/lib/plataforma/funcionalidades';
+import { CHAVES_DOS_GRUPOS, GRUPOS_FUNCIONAIS } from '@/lib/plataforma/grupos';
 import { requireServerSession } from '@/lib/mysql/server-auth';
 import { registrarErroInterno } from '@/lib/observability/log-seguro';
 import {
@@ -196,6 +198,7 @@ export async function POST(request: Request) {
 
     const gerarResposta = async (aoTexto?: (texto: string) => void) => {
       request.signal.throwIfAborted();
+      const grupos = await lerEstadoDosGrupos();
       const [profile] = await queryRows<{
         first_name: string | null;
         nickname: string | null;
@@ -263,6 +266,7 @@ export async function POST(request: Request) {
       let seuDia: BriefingDoDia | null = null;
       try {
         if (
+          grupos.registros_saude &&
           comVedico &&
           (await recursoHabilitado(
             session.user.id,
@@ -316,6 +320,7 @@ export async function POST(request: Request) {
       const fallbackResponse =
         tratamento.confirmacao ??
         generateLocalAssistantReply(query, {
+          gruposFuncionais: grupos,
           lyra: {
             mapa: mapaNatal,
             faltando: perfilAstrologico.faltando,
@@ -324,7 +329,9 @@ export async function POST(request: Request) {
           profile: profile
             ? {
                 first_name: profile.first_name,
-                goals: listaDeTextos(profile.goals),
+                goals: grupos.metas_habitos_plano
+                  ? listaDeTextos(profile.goals)
+                  : [],
               }
             : null,
           latestMetric: latestMetric ?? null,
@@ -353,6 +360,11 @@ export async function POST(request: Request) {
           tratamento,
           voltaParaCasa,
         }) +
+        '\nFuncionalidades atualmente desativadas na plataforma: ' +
+        CHAVES_DOS_GRUPOS.filter((chave) => !grupos[chave])
+          .map((chave) => GRUPOS_FUNCIONAIS[chave].nome)
+          .join('; ') +
+        '. Não ofereça, execute ou recomende acesso a esses recursos do aplicativo, nem invente métricas deles. A desativação não impede responder perguntas gerais ou calcular o mapa astrológico com os recursos disponíveis.\n' +
         (!comVedico
           ? '\nO plano não inclui leituras védicas pessoais: não calcule nem apresente mapa natal, céu pessoal ou índices integrativos; explique a indisponibilidade quando solicitado.'
           : '');

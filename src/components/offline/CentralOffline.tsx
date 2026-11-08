@@ -1,4 +1,5 @@
 'use client';
+import type { EstadoDosGrupos } from '@/lib/plataforma/grupos';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
@@ -74,6 +75,63 @@ const estados = {
   sincronizado: 'Sincronizado com o servidor',
 };
 export function CentralOffline() {
+  const [permitido, setPermitido] = useState(false);
+  useEffect(() => {
+    let ativa = true;
+    const chave = 'lyra:disponibilidade-offline';
+    const aplicar = (grupos: Partial<EstadoDosGrupos> | null) => {
+      if (ativa)
+        setPermitido(
+          grupos?.registros_saude === true && grupos?.diario_reflexao === true
+        );
+    };
+    const verificar = async () => {
+      try {
+        const resposta = await fetch('/api/plataforma/funcionalidades', {
+          cache: 'no-store',
+        });
+        if (!resposta.ok) {
+          aplicar(null);
+          return;
+        }
+        const grupos = (await resposta.json()) as EstadoDosGrupos;
+        aplicar(grupos);
+        try {
+          localStorage.setItem(chave, JSON.stringify(grupos));
+        } catch {
+          /* A restrição do servidor continua valendo. */
+        }
+      } catch {
+        if (navigator.onLine) {
+          aplicar(null);
+          return;
+        }
+        try {
+          aplicar(JSON.parse(localStorage.getItem(chave) ?? 'null'));
+        } catch {
+          aplicar(null);
+        }
+      }
+    };
+    void verificar();
+    window.addEventListener('online', verificar);
+    const intervalo = window.setInterval(() => void verificar(), 30_000);
+    return () => {
+      ativa = false;
+      clearInterval(intervalo);
+      window.removeEventListener('online', verificar);
+    };
+  }, []);
+  return permitido ? (
+    <CofreOfflineAtivo />
+  ) : (
+    <main className="mx-auto max-w-xl p-6">
+      <Link href="/">Voltar ao aplicativo</Link>
+    </main>
+  );
+}
+
+function CofreOfflineAtivo() {
   const [cofre, setCofre] = useState<CofreAberto | null>(null),
     atual = useRef<CofreAberto | null>(null),
     geracao = useRef(0),

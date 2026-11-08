@@ -2,6 +2,10 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 import { SESSION_COOKIE_NAME, verifySessionToken } from '@/lib/auth/session';
 import { requisicaoDeMesmaOrigem } from '@/lib/security/csrf';
+import { gruposDoCaminho } from '@/lib/plataforma/grupos';
+import { exigirGruposAtivos } from '@/lib/plataforma/funcionalidades';
+import { respostaDeErro } from '@/lib/http/api';
+import { HttpError } from '@/lib/http-error';
 
 /**
  * Proxy (antigo middleware):
@@ -16,7 +20,8 @@ export async function proxy(request: NextRequest) {
   const caminho = request.nextUrl.pathname;
 
   if (caminho === '/admin' || caminho.startsWith('/admin/')) {
-    return protegerAreaAdministrativa(request);
+    const resposta = await protegerAreaAdministrativa(request);
+    if (resposta.headers.has('location')) return resposta;
   }
 
   const permitido = requisicaoDeMesmaOrigem({
@@ -33,6 +38,21 @@ export async function proxy(request: NextRequest) {
     return NextResponse.json(
       { error: 'Requisição de outra origem recusada.' },
       { status: 403 }
+    );
+  }
+  try {
+    await exigirGruposAtivos(gruposDoCaminho(caminho));
+  } catch (erro) {
+    if (
+      !caminho.startsWith('/api/') &&
+      erro instanceof HttpError &&
+      erro.statusCode === 403
+    ) {
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+    return respostaDeErro(
+      erro,
+      'Não foi possível verificar a disponibilidade desta função.'
     );
   }
   return NextResponse.next();
@@ -53,5 +73,8 @@ async function protegerAreaAdministrativa(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/api/:path*', '/admin', '/admin/:path*'],
+  matcher: [
+    '/api/:path*',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|svg|webp|ico|woff2?|mp3|mp4)$).*)',
+  ],
 };

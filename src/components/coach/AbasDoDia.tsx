@@ -1,4 +1,5 @@
 'use client';
+import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { LucideIcon } from 'lucide-react';
@@ -45,6 +46,22 @@ function rolarPara(id: string) {
  * andamento e âncoras continuam vivos ao alternar.
  */
 export function AbasDoDia({ abas }: { abas: AbaDoDia[] }) {
+  const { data } = useAccountSubscription();
+  const permitidas = abas.filter(
+    (aba) =>
+      (aba.chave !== 'diario' || data?.gruposFuncionais?.diario_reflexao) &&
+      (aba.chave !== 'horarios' || data?.gruposFuncionais?.calendario_agenda)
+  );
+  if (!permitidas.length) return null;
+  return (
+    <AbasAtivas
+      key={permitidas.map((aba) => aba.chave).join(':')}
+      abas={permitidas}
+    />
+  );
+}
+
+function AbasAtivas({ abas }: { abas: AbaDoDia[] }) {
   const [ativa, setAtiva] = useState(() => abaDaUrl(abas));
 
   // Mapa âncora → aba como texto: estável entre renderizações.

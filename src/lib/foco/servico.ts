@@ -1,4 +1,5 @@
 import { estaEmSilencio } from '@/lib/lembretes/horarios';
+import { exigirGruposAtivos } from '@/lib/plataforma/funcionalidades';
 import { resumoDoDescanso } from '@/lib/descanso/repositorio';
 import type { PoolConnection } from 'mysql2/promise';
 import type { AppSession } from '@/types/app-session';
@@ -51,7 +52,8 @@ function converter(r: Linha, agora: Date): SessaoDeFoco {
     versao: Number(r.version),
   };
 }
-function exigir(s: AppSession) {
+async function exigir(s: AppSession) {
+  await exigirGruposAtivos(['rotinas_praticas']);
   if (!s.user.onboarding_completed)
     throw new HttpError('Conclua o cadastro antes de iniciar uma sessão.', 403);
 }
@@ -84,7 +86,7 @@ export async function lerCentralDeFoco(
   cursor: string | null = null,
   agora = new Date()
 ): Promise<CentralDeFoco> {
-  exigir(s);
+  await exigir(s);
   let antes: { started_at: string; id: string } | null = null;
   if (cursor) {
     const [r] = await queryRows<{ started_at: string; id: string }>(
@@ -134,7 +136,7 @@ export async function iniciarFoco(
   p: z.infer<typeof inicioSchema>,
   agora = new Date()
 ) {
-  exigir(s);
+  await exigir(s);
   return withTransaction(async (c) => {
     await titular(s.user.id, c);
     const [anterior] = await queryRows<Linha>(
@@ -179,7 +181,7 @@ export async function agirNoFoco(
   p: z.infer<typeof acaoSchema>,
   agora = new Date()
 ) {
-  exigir(s);
+  await exigir(s);
   return withTransaction(async (c) => {
     await titular(s.user.id, c);
     const r = await linha(s.user.id, id, c);
@@ -222,7 +224,7 @@ export async function perceberFoco(
   p: z.infer<typeof percepcaoSchema>,
   agora = new Date()
 ) {
-  exigir(s);
+  await exigir(s);
   return withTransaction(async (c) => {
     await titular(s.user.id, c);
     const r = await linha(s.user.id, id, c);
@@ -241,7 +243,7 @@ export async function perceberFoco(
   });
 }
 export async function excluirFoco(s: AppSession, id: string, v: number) {
-  exigir(s);
+  await exigir(s);
   await withTransaction(async (c) => {
     await titular(s.user.id, c);
     const r = await linha(s.user.id, id, c);
@@ -265,7 +267,7 @@ export async function reservarAviso(
   id: string,
   agora = new Date()
 ) {
-  exigir(s);
+  await exigir(s);
   return withTransaction(async (c) => {
     await titular(s.user.id, c);
     const r = await linha(s.user.id, id, c);

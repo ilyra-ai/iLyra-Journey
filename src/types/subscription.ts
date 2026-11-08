@@ -80,6 +80,7 @@ export interface SubscriptionPlanSummary {
 }
 
 export interface AccountSubscriptionSummary {
+  gruposFuncionais?: import('@/lib/plataforma/grupos').EstadoDosGrupos;
   administrativeAccess?: boolean;
   subscriptionId: string;
   status: string;

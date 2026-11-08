@@ -5,7 +5,10 @@ import { queryRows, withTransaction } from '@/lib/mysql/pool';
 import { dataLocal, horaLocal } from '@/lib/astrology/tempo';
 import { contextoDoDiario } from '@/lib/acontecimentos/servico';
 import { somarDias } from '@/lib/acontecimentos/analise';
-import { contaTemRecurso, requireFeatureEnabled } from '@/lib/plans/service';
+import {
+  contaTemRecursoParaHistorico as contaTemRecurso,
+  requireFeatureEnabled,
+} from '@/lib/plans/service';
 import {
   CAMPOS_DO_REGISTRO,
   NOMES_DOS_CAMPOS,

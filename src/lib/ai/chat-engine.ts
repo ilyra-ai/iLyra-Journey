@@ -1,5 +1,6 @@
 import { AstrologicalData } from '@/lib/astrology/engine';
 import type { BriefingDoDia } from '@/lib/coach/tipos';
+import type { EstadoDosGrupos } from '@/lib/plataforma/grupos';
 import { calculateDynamicDosha } from '@/lib/ayurveda/dosha-engine';
 import { calculateQuantumCoherence } from '@/lib/quantum/coherence-engine';
 import { calculateChakraAlignment } from '@/lib/chakra/alignment-engine';
@@ -41,6 +42,7 @@ export interface AiSkillDocument {
 }
 
 interface ChatContext {
+  gruposFuncionais?: EstadoDosGrupos;
   profile: {
     first_name: string | null;
     goals: string[] | null;
@@ -209,7 +211,7 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
   }
   const goals = context.profile?.goals?.length
     ? context.profile.goals.join(', ')
-    : 'longevidade geral e bem-estar sistêmico';
+    : 'seus mapas e suas perguntas';
 
   const metrics = context.latestMetric;
   const astro = context.astrology;
@@ -428,7 +430,9 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
       responses.push(`- Fisiologia: você registrou ${fisiologia.join(', ')}.`);
     } else {
       responses.push(
-        `- Fisiologia: Não encontrei métricas recentes vinculadas à sua conta. Conecte um wearable ou registre manualmente.`
+        context.gruposFuncionais?.registros_saude === false
+          ? '- Fisiologia: não encontrei métricas recentes vinculadas à sua conta. Novos registros estão desativados na plataforma.'
+          : '- Fisiologia: não encontrei métricas recentes vinculadas à sua conta. Conecte um wearable ou registre manualmente.'
       );
     }
 
@@ -542,7 +546,7 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
   }
 
   // 8.1. O dia de hoje pelo coach diário
-  if (isDayQuery) {
+  if (isDayQuery && context.gruposFuncionais?.registros_saude !== false) {
     if (context.seuDia) {
       responses.push(resumoDoDia(context.seuDia));
       responses.push(
@@ -558,17 +562,19 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
   // 9. Agendamentos
   if (isConsultationQuery) {
     responses.push(
-      `Para organizar sua saúde e atacar metas como ${goals}, nosso hub de profissionais e orquestração clínica está disponível no módulo 'Consultas' na barra lateral. Lá você pode gerenciar os horários de forma centralizada.`
+      context.gruposFuncionais?.calendario_agenda === false
+        ? 'Os agendamentos estão desativados na plataforma. Posso conversar sobre sua pergunta sem criar consultas ou reservar horários.'
+        : `Para organizar sua saúde e atacar metas como ${goals}, nosso hub de profissionais e orquestração clínica está disponível no módulo 'Consultas' na barra lateral. Lá você pode gerenciar os horários de forma centralizada.`
     );
   }
 
   // 10. Fallback Deterministico
   if (responses.length === 0) {
     responses.push(
-      `${name}, o motor de análise estruturou seu contexto: Sua meta principal foca em ${goals}. ${astro ? `O céu atual (Lua em ${astro.moonSign}, ${astro.tithi}) e suas métricas fisiológicas são monitorados para lhe orientar.` : 'Podemos conversar a partir das informações disponíveis e dos sinais que você registrar.'}`
+      `${name}, podemos explorar ${goals}. ${astro ? `O contexto astrológico disponível indica Lua em ${astro.moonSign}, ${astro.tithi}.` : 'Podemos conversar a partir das informações disponíveis.'}`
     );
     responses.push(
-      `Você pode me perguntar sobre o seu sono, glicose, recuperação (HRV), exercícios, o resumo do dia ou o céu de hoje. Também leio o seu mapa védico (Ascendente, Lua, dasha, casas), o seu Mapa Lyra DM Samādhi e o Score de Ação do Mapa Quantum, e explico Vedanta, Upanishads, Ayurveda, Vastu, música védica e os Vedangas.`
+      `Você pode perguntar sobre seus mapas e as leituras disponíveis, ou retomar uma conversa. Também explico Vedanta, Upanishads, Ayurveda, Vastu, música védica e os Vedangas. Os dados históricos já guardados continuam disponíveis conforme seu plano.`
     );
     if (skills.length > 0) {
       responses.push(

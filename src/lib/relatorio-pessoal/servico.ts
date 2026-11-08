@@ -2,7 +2,10 @@ import { createHash } from 'node:crypto';
 import type { AppSession } from '@/types/app-session';
 import { HttpError } from '@/lib/http-error';
 import { queryRows, withTransaction } from '@/lib/mysql/pool';
-import { contaTemRecurso, requireFeatureEnabled } from '@/lib/plans/service';
+import {
+  contaTemRecursoParaHistorico as contaTemRecurso,
+  requireFeatureEnabled,
+} from '@/lib/plans/service';
 import { contextoDoDiario } from '@/lib/acontecimentos/servico';
 import { mediana, somarDias } from '@/lib/acontecimentos/analise';
 import {

@@ -450,11 +450,15 @@ export function ProfileForm() {
 
   const onSubmit = async (data: ProfileValues) => {
     if (!session?.user) return;
+    const { goals, ...perfil } = buildProfileUpdatePayload(data);
 
     const { error } = await db
       .from('profiles')
       .update({
-        ...buildProfileUpdatePayload(data),
+        ...perfil,
+        ...(subscription?.gruposFuncionais?.metas_habitos_plano
+          ? { goals }
+          : {}),
       })
       .eq('id', session.user.id);
 
@@ -738,73 +742,75 @@ export function ProfileForm() {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="goals"
-                    render={() => (
-                      <FormItem className="md:col-span-2">
-                        <p
-                          id="perfil-objetivos-titulo"
-                          className="text-sm font-medium leading-none text-foreground"
-                        >
-                          Objetivos
-                        </p>
-                        <FormDescription>
-                          Os mesmos do onboarding; marque quantos quiser.
-                        </FormDescription>
-                        <div
-                          role="group"
-                          aria-labelledby="perfil-objetivos-titulo"
-                          className="grid grid-cols-1 gap-2 sm:grid-cols-2"
-                        >
-                          {METAS_DO_PERFIL.map((meta) => {
-                            const IconeDaMeta = meta.icon;
-                            return (
-                              <FormField
-                                key={meta.id}
-                                control={form.control}
-                                name="goals"
-                                render={({ field }) => (
-                                  <FormItem className="flex min-w-0 flex-row items-center gap-3 space-y-0 rounded-md border border-border bg-card px-3 transition-colors hover:bg-muted has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={
-                                          field.value?.includes(meta.id) ??
-                                          false
-                                        }
-                                        onCheckedChange={(marcado) =>
-                                          field.onChange(
-                                            marcado
-                                              ? [
-                                                  ...(field.value ?? []),
-                                                  meta.id,
-                                                ]
-                                              : (field.value ?? []).filter(
-                                                  (id) => id !== meta.id
-                                                )
-                                          )
-                                        }
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="flex min-h-11 min-w-0 flex-1 cursor-pointer items-center gap-2.5 py-2 text-sm font-medium">
-                                      <IconeDaMeta
-                                        className="h-4 w-4 shrink-0 text-primary"
-                                        aria-hidden
-                                      />
-                                      <span className="min-w-0">
-                                        {meta.label}
-                                      </span>
-                                    </FormLabel>
-                                  </FormItem>
-                                )}
-                              />
-                            );
-                          })}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {subscription?.gruposFuncionais?.metas_habitos_plano && (
+                    <FormField
+                      control={form.control}
+                      name="goals"
+                      render={() => (
+                        <FormItem className="md:col-span-2">
+                          <p
+                            id="perfil-objetivos-titulo"
+                            className="text-sm font-medium leading-none text-foreground"
+                          >
+                            Objetivos
+                          </p>
+                          <FormDescription>
+                            Os mesmos do onboarding; marque quantos quiser.
+                          </FormDescription>
+                          <div
+                            role="group"
+                            aria-labelledby="perfil-objetivos-titulo"
+                            className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+                          >
+                            {METAS_DO_PERFIL.map((meta) => {
+                              const IconeDaMeta = meta.icon;
+                              return (
+                                <FormField
+                                  key={meta.id}
+                                  control={form.control}
+                                  name="goals"
+                                  render={({ field }) => (
+                                    <FormItem className="flex min-w-0 flex-row items-center gap-3 space-y-0 rounded-md border border-border bg-card px-3 transition-colors hover:bg-muted has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/5">
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={
+                                            field.value?.includes(meta.id) ??
+                                            false
+                                          }
+                                          onCheckedChange={(marcado) =>
+                                            field.onChange(
+                                              marcado
+                                                ? [
+                                                    ...(field.value ?? []),
+                                                    meta.id,
+                                                  ]
+                                                : (field.value ?? []).filter(
+                                                    (id) => id !== meta.id
+                                                  )
+                                            )
+                                          }
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="flex min-h-11 min-w-0 flex-1 cursor-pointer items-center gap-2.5 py-2 text-sm font-medium">
+                                        <IconeDaMeta
+                                          className="h-4 w-4 shrink-0 text-primary"
+                                          aria-hidden
+                                        />
+                                        <span className="min-w-0">
+                                          {meta.label}
+                                        </span>
+                                      </FormLabel>
+                                    </FormItem>
+                                  )}
+                                />
+                              );
+                            })}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
                 </CardContent>
                 <CardFooter>
                   <Button

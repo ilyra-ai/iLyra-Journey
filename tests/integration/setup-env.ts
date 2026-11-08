@@ -3,9 +3,10 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 
-import { afterAll, inject, vi } from 'vitest';
+import { afterAll, beforeAll, inject, vi } from 'vitest';
 
-import { closeMysqlPool } from '@/lib/mysql/pool';
+import { closeMysqlPool, executeStatement } from '@/lib/mysql/pool';
+import { CHAVES_DOS_GRUPOS } from '@/lib/plataforma/grupos';
 
 import { cookieJar, tarefasDepoisDaResposta } from './http';
 import './provided-context';
@@ -63,6 +64,15 @@ vi.mock('next/server', async (importOriginal) => ({
     );
   },
 }));
+
+// As suítes existentes exercitam funcionalidades preservadas e reativáveis.
+// A suíte da tarefa 144 desliga os controles explicitamente para testar a política.
+beforeAll(async () => {
+  await executeStatement(
+    `UPDATE platform_feature_switches SET enabled=1 WHERE switch_key IN (${CHAVES_DOS_GRUPOS.map(() => '?').join(',')})`,
+    CHAVES_DOS_GRUPOS
+  );
+});
 
 afterAll(async () => {
   await closeMysqlPool();

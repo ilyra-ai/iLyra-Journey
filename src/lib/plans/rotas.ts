@@ -1,4 +1,5 @@
 import { isPlanFeatureEnabled } from '@/lib/plans/access';
+import { caminhoAtivo } from '@/lib/plataforma/grupos';
 import type {
   AccountSubscriptionSummary,
   PlanFeatureKey,
@@ -18,7 +19,7 @@ export const RECURSOS_DA_ROTA: Readonly<
   Record<string, readonly PlanFeatureKey[]>
 > = {
   '/': ['dashboard_access'],
-  '/dia': ['ai_tips_feed', 'vedic_insights', 'ai_scores'],
+  '/dia': ['vedic_insights'],
   '/semana': ['weekly_review', 'vedic_insights'],
   '/respiracao': ['guided_breathing'],
   '/meditacoes': ['guided_breathing'],
@@ -60,6 +61,7 @@ export function rotaLiberadaNoPlano(
   assinatura: AccountSubscriptionSummary | null,
   administrador: boolean
 ): boolean {
+  if (!caminhoAtivo(href, assinatura?.gruposFuncionais)) return false;
   if (administrador) {
     return true;
   }

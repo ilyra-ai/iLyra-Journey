@@ -9,6 +9,7 @@ import type { TestProject } from 'vitest/node';
 import { parseEnvContents } from '../../scripts/lib/env-file.mjs';
 
 import type { LyraMysqlTestConfig } from './provided-context';
+import { CHAVES_DOS_GRUPOS } from '../../src/lib/plataforma/grupos';
 
 const raiz = path.resolve(import.meta.dirname, '..', '..');
 
@@ -133,6 +134,23 @@ export default async function setup(project: TestProject) {
   ]);
 
   await aplicarMigrations(env, config);
+  const verificacao = await mysql.createConnection(config);
+  try {
+    const [linhas] = await verificacao.query<mysql.RowDataPacket[]>(
+      'SELECT switch_key,enabled FROM platform_feature_switches WHERE switch_key IN (?)',
+      [CHAVES_DOS_GRUPOS]
+    );
+    if (
+      linhas.length !== CHAVES_DOS_GRUPOS.length ||
+      linhas.some((linha) => Number(linha.enabled) !== 0)
+    ) {
+      throw new Error(
+        'A migração não desativou integralmente os oito grupos funcionais.'
+      );
+    }
+  } finally {
+    await verificacao.end();
+  }
   project.provide('lyraMysqlTest', config);
 
   return async () => {

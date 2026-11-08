@@ -1,4 +1,7 @@
-import { limiteDeMetricasDaConta, contaTemRecurso } from '@/lib/plans/service';
+import {
+  limiteDeMetricasDaConta,
+  contaTemRecursoParaHistorico as contaTemRecurso,
+} from '@/lib/plans/service';
 import { corteDoHistorico } from '@/lib/plans/historico';
 import { LocalSemNascerDoSolError } from '@/lib/astrology/panchang';
 import {

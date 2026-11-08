@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 import { isPlanFeatureEnabled } from '@/lib/plans/access';
+import { gruposDoRecurso } from '@/lib/plataforma/grupos';
 import type { PlanFeatureKey } from '@/types/subscription';
 import { PlanUpgradeNotice } from './PlanUpgradeNotice';
 
@@ -19,7 +20,21 @@ export function PlanFeatureGate({
 }) {
   const { data, loading } = useAccountSubscription();
   const admin = useIsAdmin();
-  if (admin || features.length === 0) return children;
+  if (features.length === 0) return children;
+  const controlado = features.some(
+    (feature) => gruposDoRecurso(feature).length > 0
+  );
+  if (
+    controlado &&
+    (!data?.gruposFuncionais ||
+      features.some((feature) =>
+        gruposDoRecurso(feature).some(
+          (grupo) => !data.gruposFuncionais?.[grupo]
+        )
+      ))
+  )
+    return null;
+  if (admin && data) return children;
   if (loading)
     return ocultar ? null : (
       <p role="status">Conferindo os recursos do seu plano…</p>

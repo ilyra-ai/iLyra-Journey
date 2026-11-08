@@ -1,4 +1,7 @@
 'use client';
+import { GrupoFuncionalGate } from '@/components/plataforma/GrupoFuncionalGate';
+import { useAccountSubscription } from '@/hooks/use-account-subscription';
+import { cn } from '@/lib/utils';
 
 import * as React from 'react';
 import { useAuth } from '@/context/AuthContext';
@@ -63,6 +66,9 @@ type AITipPayload = Pick<AITip, 'title' | 'detail' | 'is_active'> & {
 };
 
 export function AdminContentManagement() {
+  const { data: assinatura } = useAccountSubscription();
+  const habitosAtivos =
+    assinatura?.gruposFuncionais?.metas_habitos_plano === true;
   const { db } = useAuth();
   const [habits, setHabits] = React.useState<SuggestedHabit[]>([]);
   const [tips, setTips] = React.useState<AITip[]>([]);
@@ -134,16 +140,17 @@ export function AdminContentManagement() {
 
   React.useEffect(() => {
     let active = true;
-    queryHabits().then((result) => {
-      if (active) applyHabits(result);
-    });
+    if (habitosAtivos)
+      queryHabits().then((result) => {
+        if (active) applyHabits(result);
+      });
     queryTips().then((result) => {
       if (active) applyTips(result);
     });
     return () => {
       active = false;
     };
-  }, [applyHabits, applyTips, queryHabits, queryTips]);
+  }, [applyHabits, applyTips, queryHabits, queryTips, habitosAtivos]);
 
   const handleSaveHabit = async (
     data: SuggestedHabitPayload,
@@ -206,15 +213,22 @@ export function AdminContentManagement() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="experience">
-            <TabsList className="flex h-auto w-full flex-wrap justify-start sm:grid sm:grid-cols-3">
+            <TabsList
+              className={cn(
+                'flex h-auto w-full flex-wrap justify-start sm:grid',
+                habitosAtivos ? 'sm:grid-cols-3' : 'sm:grid-cols-2'
+              )}
+            >
               <TabsTrigger value="experience">
                 <Sparkles className="mr-2 h-4 w-4" aria-hidden="true" />{' '}
                 Experiência Web
               </TabsTrigger>
-              <TabsTrigger value="habits">
-                <ListChecks className="mr-2 h-4 w-4" aria-hidden="true" />{' '}
-                Hábitos Sugeridos
-              </TabsTrigger>
+              <GrupoFuncionalGate grupos={['metas_habitos_plano']}>
+                <TabsTrigger value="habits">
+                  <ListChecks className="mr-2 h-4 w-4" aria-hidden="true" />{' '}
+                  Hábitos Sugeridos
+                </TabsTrigger>
+              </GrupoFuncionalGate>
               <TabsTrigger value="tips">
                 <Lightbulb className="mr-2 h-4 w-4" aria-hidden="true" /> Dicas
                 de IA
@@ -223,84 +237,88 @@ export function AdminContentManagement() {
             <TabsContent value="experience" className="mt-6">
               <SiteExperienceBuilder />
             </TabsContent>
-            <TabsContent value="habits" className="mt-6">
-              <div className="mb-4 flex justify-end">
-                <Button
-                  size="sm"
-                  onClick={() => {
-                    setHabitToEdit(null);
-                    setIsHabitModalOpen(true);
-                  }}
-                >
-                  <Plus className="mr-2 h-4 w-4" /> Adicionar Hábito
-                </Button>
-              </div>
-              {loading.habits ? (
-                <Skeleton className="h-64 w-full" />
-              ) : (
-                <Table caption="Hábitos cadastrados">
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Nome</TableHead>
-                      <TableHead>Frequência</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Ações</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {habits.map((habit) => (
-                      <TableRow key={habit.id}>
-                        <TableCell>{habit.name}</TableCell>
-                        <TableCell>{habit.frequency}</TableCell>
-                        <TableCell>
-                          <Badge
-                            variant={habit.is_active ? 'success' : 'secondary'}
-                          >
-                            {habit.is_active ? 'Ativo' : 'Inativo'}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                aria-label={`Ações do hábito ${habit.name}`}
-                              >
-                                <MoreVertical className="h-4 w-4" />
-                              </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                              <DropdownMenuItem
-                                onClick={() => {
-                                  setHabitToEdit(habit);
-                                  setIsHabitModalOpen(true);
-                                }}
-                              >
-                                <Edit className="mr-2 h-4 w-4" /> Editar
-                              </DropdownMenuItem>
-                              <DropdownMenuItem
-                                className="text-destructive focus:text-destructive"
-                                onSelect={() => {
-                                  setItemToDelete({
-                                    id: habit.id,
-                                    name: habit.name,
-                                    type: 'habit',
-                                  });
-                                  setIsDeleteDialogOpen(true);
-                                }}
-                              >
-                                <Trash2 className="mr-2 h-4 w-4" /> Remover
-                              </DropdownMenuItem>
-                            </DropdownMenuContent>
-                          </DropdownMenu>
-                        </TableCell>
+            <GrupoFuncionalGate grupos={['metas_habitos_plano']}>
+              <TabsContent value="habits" className="mt-6">
+                <div className="mb-4 flex justify-end">
+                  <Button
+                    size="sm"
+                    onClick={() => {
+                      setHabitToEdit(null);
+                      setIsHabitModalOpen(true);
+                    }}
+                  >
+                    <Plus className="mr-2 h-4 w-4" /> Adicionar Hábito
+                  </Button>
+                </div>
+                {loading.habits ? (
+                  <Skeleton className="h-64 w-full" />
+                ) : (
+                  <Table caption="Hábitos cadastrados">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Nome</TableHead>
+                        <TableHead>Frequência</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead className="text-right">Ações</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-            </TabsContent>
+                    </TableHeader>
+                    <TableBody>
+                      {habits.map((habit) => (
+                        <TableRow key={habit.id}>
+                          <TableCell>{habit.name}</TableCell>
+                          <TableCell>{habit.frequency}</TableCell>
+                          <TableCell>
+                            <Badge
+                              variant={
+                                habit.is_active ? 'success' : 'secondary'
+                              }
+                            >
+                              {habit.is_active ? 'Ativo' : 'Inativo'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  aria-label={`Ações do hábito ${habit.name}`}
+                                >
+                                  <MoreVertical className="h-4 w-4" />
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent>
+                                <DropdownMenuItem
+                                  onClick={() => {
+                                    setHabitToEdit(habit);
+                                    setIsHabitModalOpen(true);
+                                  }}
+                                >
+                                  <Edit className="mr-2 h-4 w-4" /> Editar
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  className="text-destructive focus:text-destructive"
+                                  onSelect={() => {
+                                    setItemToDelete({
+                                      id: habit.id,
+                                      name: habit.name,
+                                      type: 'habit',
+                                    });
+                                    setIsDeleteDialogOpen(true);
+                                  }}
+                                >
+                                  <Trash2 className="mr-2 h-4 w-4" /> Remover
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </TabsContent>
+            </GrupoFuncionalGate>
             <TabsContent value="tips" className="mt-6">
               <div className="mb-4 flex justify-end">
                 <Button
@@ -383,12 +401,14 @@ export function AdminContentManagement() {
         </CardContent>
       </Card>
 
-      <SuggestedHabitFormModal
-        open={isHabitModalOpen}
-        onOpenChange={setIsHabitModalOpen}
-        onSave={handleSaveHabit}
-        habitToEdit={habitToEdit}
-      />
+      <GrupoFuncionalGate grupos={['metas_habitos_plano']}>
+        <SuggestedHabitFormModal
+          open={isHabitModalOpen}
+          onOpenChange={setIsHabitModalOpen}
+          onSave={handleSaveHabit}
+          habitToEdit={habitToEdit}
+        />
+      </GrupoFuncionalGate>
       <AITipFormModal
         open={isTipModalOpen}
         onOpenChange={setIsTipModalOpen}

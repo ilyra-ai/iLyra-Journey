@@ -62,15 +62,15 @@ describe('categorias reais da navegação lateral', () => {
     );
     expect(destinos(secoes)).not.toContain('/chat');
     expect(destinos(secoes)).not.toContain('/appointments');
-    // Foco e descanso não exigem recurso comercial; continuam acessíveis.
+    // Sem disponibilidade global confirmada, práticas e descanso ficam ocultos.
     expect(
       secoes
         .find((secao) => secao.id === 'jornada')
         ?.submenus.map((submenu) => submenu.id)
-    ).toEqual(['bem-estar']);
+    ).toBeUndefined();
     expect(
       destinos(secoes).filter((href) => ['/foco', '/descanso'].includes(href))
-    ).toEqual(['/foco', '/descanso']);
+    ).toEqual([]);
     expect(destinos(secoes)).toContain('/profile');
   });
 

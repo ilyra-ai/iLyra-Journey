@@ -469,7 +469,7 @@ export function Dashboard() {
           : `${glicoseHoje.toLocaleString('pt-BR')} mg/dL`,
       description:
         glicoseHoje === null
-          ? 'Sem leitura hoje: registre no check-in ou conecte o sensor.'
+          ? 'Nenhuma leitura de glicose disponível hoje.'
           : 'Leitura disponível do metabolismo do dia.',
       tone: 'golden',
       icon: Sparkles,
@@ -808,8 +808,7 @@ export function Dashboard() {
                     </p>
                     {pulseValue === null ? (
                       <p className="text-caption text-muted-foreground">
-                        Sem VFC nem prontidão hoje: faça o check-in ou conecte a
-                        pulseira.
+                        Nenhuma leitura de VFC ou prontidão disponível hoje.
                       </p>
                     ) : null}
                     {pulseValue !== null && pulseUnit === '/100' ? (
@@ -1173,8 +1172,9 @@ export function Dashboard() {
                     </p>
                     {readinessScore === null ? (
                       <p className="text-caption text-muted-foreground">
-                        Registre ao menos dois sinais hoje (sono, energia,
-                        humor, estresse ou a pulseira).
+                        {subscription.gruposFuncionais?.registros_saude
+                          ? 'Registre ao menos dois sinais hoje (sono, energia, humor, estresse ou a pulseira).'
+                          : 'Não há sinais suficientes para calcular a prontidão. Os registros históricos disponíveis continuam preservados.'}
                       </p>
                     ) : null}
                     {readinessScore !== null ? (

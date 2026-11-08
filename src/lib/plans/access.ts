@@ -4,6 +4,7 @@ import {
   PlanFeatureKey,
 } from '@/types/subscription';
 import { capacidadeDisponivel } from './dependencias';
+import { gruposDoRecurso } from '@/lib/plataforma/grupos';
 
 export function getPlanFeature(
   summary: AccountSubscriptionSummary | null,
@@ -20,6 +21,13 @@ export function isPlanFeatureEnabled(
   summary: AccountSubscriptionSummary | null,
   featureKey: PlanFeatureKey
 ) {
+  if (
+    gruposDoRecurso(featureKey).some(
+      (grupo) => summary?.gruposFuncionais?.[grupo] === false
+    )
+  )
+    return false;
+  if (getPlanFeature(summary, featureKey)?.globalmenteDesativado) return false;
   if (summary?.administrativeAccess) return true;
   if (summary && featureKey !== 'profile_management' && !summary.plan.isActive)
     return false;

@@ -29,9 +29,18 @@ async function requisicao(caminho: string, papel?: 'admin' | 'patient') {
 
 describe('proxy · área administrativa', () => {
   it('cobre /admin e as subrotas no matcher', () => {
-    expect(config.matcher).toEqual(
-      expect.arrayContaining(['/admin', '/admin/:path*', '/api/:path*'])
-    );
+    expect(config.matcher).toContain('/api/:path*');
+    const matcher = new RegExp('^' + config.matcher[1] + '$');
+    for (const caminho of [
+      '/admin',
+      '/admin/users',
+      '/api/foco',
+      '/foco',
+      '/alimentacao',
+    ])
+      expect(matcher.test(caminho)).toBe(true);
+    for (const caminho of ['/_next/static/app.js', '/favicon.ico', '/logo.png'])
+      expect(matcher.test(caminho)).toBe(false);
   });
 
   it('manda visitante sem sessão para o login', async () => {

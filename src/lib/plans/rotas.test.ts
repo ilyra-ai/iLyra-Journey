@@ -1,4 +1,9 @@
 import { describe, expect, it } from 'vitest';
+import {
+  CHAVES_DOS_GRUPOS,
+  gruposDoCaminho,
+  type EstadoDosGrupos,
+} from '@/lib/plataforma/grupos';
 
 import { getVisibleNavigation } from '@/components/layout/navigation';
 import { getDefaultPageConfig } from '@/lib/site-page-config/defaults';
@@ -18,6 +23,9 @@ function assinaturaCom(
   habilitados: readonly PlanFeatureKey[]
 ): AccountSubscriptionSummary {
   return {
+    gruposFuncionais: Object.fromEntries(
+      CHAVES_DOS_GRUPOS.map((chave) => [chave, true])
+    ) as EstadoDosGrupos,
     subscriptionId: 'sub_1',
     status: 'active',
     billingInterval: 'monthly',
@@ -92,11 +100,7 @@ describe('rotas do app conforme o plano', () => {
   });
 
   it('ignora consulta e âncora ao identificar a rota', () => {
-    expect(recursosDaRota('/dia#reflexao')).toEqual([
-      'ai_tips_feed',
-      'vedic_insights',
-      'ai_scores',
-    ]);
+    expect(recursosDaRota('/dia#reflexao')).toEqual(['vedic_insights']);
     expect(recursosDaRota('/chat?origem=painel')).toEqual(['ai_chat_messages']);
     expect(recursosDaRota('/semana')).toEqual([
       'weekly_review',
@@ -160,9 +164,27 @@ describe('rotas do app conforme o plano', () => {
     expect(hrefs).toContain('/profile');
   });
 
-  it('administrador vê tudo, mesmo sem assinatura carregada', () => {
+  it('administrador aguarda estado global para oferecer rotas controladas', () => {
     for (const href of Object.keys(RECURSOS_DA_ROTA)) {
-      expect(rotaLiberadaNoPlano(href, null, true)).toBe(true);
+      expect(rotaLiberadaNoPlano(href, null, true)).toBe(
+        gruposDoCaminho(href).length === 0
+      );
     }
+  });
+  it('grupo desligado prevalece sobre acesso administrativo e sobre o plano', () => {
+    const resumo = assinaturaCom(PLAN_FEATURE_KEYS);
+    resumo.gruposFuncionais!.rotinas_praticas = false;
+    for (const admin of [false, true]) {
+      for (const caminho of [
+        '/foco',
+        '/meditacoes?origem=chat',
+        '/respiracao#sessao',
+        '/rotinas',
+      ]) {
+        expect(rotaLiberadaNoPlano(caminho, resumo, admin)).toBe(false);
+      }
+      expect(rotaLiberadaNoPlano('/chat', resumo, admin)).toBe(true);
+    }
+    expect(gruposDoCaminho('/api/focoutro')).toEqual([]);
   });
 });

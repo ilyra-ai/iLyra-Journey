@@ -7,6 +7,7 @@ import { useAuth } from '@/context/AuthContext';
 import { SplashScreen } from '@/components/SplashScreen';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 import { AdminDashboardContent } from '@/components/admin/AdminDashboardContent';
+import { ControlesFuncionais } from '@/components/admin/ControlesFuncionais';
 
 export default function AdminDashboardPage() {
   const { session } = useAuth();
@@ -23,6 +24,7 @@ export default function AdminDashboardPage() {
   return (
     <AppShell>
       <PageIntro title="Visão geral" />
+      <ControlesFuncionais />
       <AdminDashboardContent />
     </AppShell>
   );

@@ -62,17 +62,17 @@
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
 | Conclusão integral                      | **80,3%** (139 de 173)   |
-| Implementações publicadas               | **86,7%** (150 de 173)   |
+| Implementações publicadas               | **87,3%** (151 de 173)   |
 | Tarefas totais                          | 173                      |
 | 🟢 Concluídas                           | 139                      |
-| 🟡 Implementadas com validação pendente | 11                       |
-| 🔵 Em andamento                         | 2                        |
+| 🟡 Implementadas com validação pendente | 12                       |
+| 🔵 Em andamento                         | 1                        |
 | 🔴 Bloqueadas                           | 0                        |
 | ⚪ A iniciar                            | 21                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-08               |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os onze estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os doze estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Escopo vigente em 2026-11-06:** landing 149 aprovada, com aprovação registrada e publicada em `857617a6`. O usuário autorizou redesenhar por completo o carregamento e, depois, o login/cadastro, seguindo a identidade celestial e mantendo enquadramento responsivo em desktop/mobile. Concluir e publicar cada frente individualmente na main antes da próxima. As tarefas 142 e 144 continuam **pausadas**; suas mudanças locais independentes ficam fora destes commits. As 145, 146 e o restante da 147 permanecem a iniciar.
 
@@ -297,47 +297,6 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 - **Documentos internos de referência:** `docs/design-system.md`, `docs/acessibilidade.md` e `CLAUDE.md`; considerar o histórico vigente e a aprovação do usuário antes de modificar decisões de produto.
 - **Critério da publicação atual:** apenas `claude-gestao.md` alterado, tarefa numerada uma vez no Tópico 3, estado **a iniciar**, indicadores recalculados sem reclassificar tarefas anteriores, revisão integral do diff, verificação de estrutura/formatação e publicação na `main`. Após o push, registrar o SHA real em commit documental próprio, conforme a regra deste painel.
 - **Próxima ação:** aguardar instruções do usuário. Este registro não constitui implementação da tarefa 142 nem validação integral das hipóteses de solução.
-
-### 144 · Desativação integral e reversível de oito grupos de funcionalidades
-
-**Estado: 🔵 em execução, retomada autorizada em 08-11-2026 · Início original em 2026-11-05.** A pausa anterior foi revogada somente para a 144. A tarefa 142 permanece pausada e preservada.
-
-**Solicitação vigente:** desativar, sem remover código nem apagar dados, todos os tópicos e subtópicos dos oito grupos abaixo. Retirar sua exposição nas jornadas e verificar métricas, derivados, sugestões e acessos indiretos. Tornar a reativação simples e centralizada, preservando as regras de plano e autorização.
-
-**Correção explícita de escopo pelo usuário em 2026-11-06:** manter ativos e acessíveis os grupos 2 (painel pessoal, resumo, métricas, gráficos, explicações, atualização e sugestões de cuidados), 12 (Lyra AI, conversas, busca, favoritas, voz, privacidade, memória, anexos e imagens), 14 (linha do tempo, revisão semanal, tendências, comparações, relatórios com prévia/PDF e evolução de peso no perfil) e 16 (planos, cotas, contratação, portal de cobrança, compras, faturas e documentos financeiros pessoais). Desativar formulários e operação dos oito grupos não autoriza ocultar esses quatro grupos nem impedir sua consulta aos dados históricos preservados. Remover bloqueios excessivos já introduzidos; manter as permissões normais de plano e titularidade. Ajustes de composição de cada página ficam para uma etapa posterior.
-
-**Complemento de 2026-11-06:** o usuário pediu desativar também a página `/dia` inteira, sem apagar seu código; retirá-la dos menus e da busca e encaminhar o acesso direto ao dashboard. O card “Meu mapa védico” deverá ficar no dashboard inicial, saindo do Perfil e de `/dia`; preservar os campos de nascimento no Perfil. Publicar a mudança de localização do card separadamente após a 144.
-
-1. **Registro diário de saúde e bem-estar:** registros manuais, edição, versões e desfazer; sono, humor, energia, estresse, meditação, passos, minutos ativos, água, cafeína, proteína, peso, frequência cardíaca, glicose e pressão arterial; entrada e sincronização offline desses registros.
-2. **Diário pessoal e reflexão da noite:** voz, texto, análise, repetição da análise, calendário do diário, edição, exclusão e ingestão desses relatos na memória; reflexão noturna e seus indicadores.
-3. **Outros registros pessoais:** alimentação e fotos, acontecimentos e comparações, acompanhamentos e escalas, experiências e relatos de antes/depois.
-4. **Metas, hábitos e plano do dia:** criação, progresso, sequências, recomendações, hábitos pessoais e geração do plano, incluindo atalhos e ações no chat.
-5. **Rotinas e práticas:** definição, execução e histórico de rotinas; respiração, meditações e narração; foco, pausas e sessões relacionadas.
-6. **Lembretes, notificações e descanso:** lembretes, preferências e agendamentos, avisos, sino, adiamento e descarte, silêncio e modo descanso; interromper também os processamentos pessoais dependentes.
-7. **Dispositivos e monitoramento:** conexão de dispositivos, Bluetooth, sessões, ingestão de sinais e atualizações de monitoramento, incluindo chamadas diretas.
-8. **Calendário e agendamentos:** janelas, exportação e assinatura de calendário, feeds privados, consultas e profissionais vinculados à agenda; distinguir a desativação integral solicitada do interruptor anterior que permitia acesso administrativo.
-
-**Implementação prevista e critérios de aceite:**
-
-- Inventariar os pontos reais antes de alterar; implementar primeiro a política no servidor, com oito controles persistentes e auditados, inicialmente desligados, sem exceção de uso pessoal para administrador.
-- Aplicar a mesma política aos endpoints, serviços, cotas, permissões de plano, páginas, menus, busca, abas, formulários, atalhos e ações indiretas. Bloquear acesso direto e escritas; apenas esconder navegação não atende ao pedido.
-- Conferir painel, revisão semanal, linha do tempo, relatórios/PDF, perfil, índices, dicas, contexto da IA e ferramentas do chat, preservando sua operação e leitura histórica conforme a correção de escopo acima. Bloquear novas gravações e ações dos grupos desativados, sem inventar medições nem ocultar os resultados existentes autorizados pelo usuário.
-- Preservar autenticação, conta, privacidade, exportação e eliminação legal dos dados existentes, assinatura e pagamentos, chat independente e mapas astrológicos. Não apagar dados históricos para obter ausência visual.
-- Disponibilizar controle administrativo claro para reativar cada grupo, com histórico e proteção de concorrência; reativar nunca concede recursos ausentes do plano nem contorna outros controles vigentes.
-- Verificar cofre offline e tarefas periódicas; registrar honestamente a fronteira de clientes antigos sem conexão, sem alegar controle remoto de aparelhos desconectados.
-- Validar desativação e reativação reais, preservação dos registros, acesso negado a usuários e administradores quando desligado, dependências e jornadas remanescentes. Executar os gates obrigatórios, revisar o diff e publicar somente esta tarefa na `main`, sem branches/worktrees; registrar o SHA real em publicação documental subsequente.
-
-**Evidência atual:** instruções e estado local inspecionados; identificado reaproveitamento das tabelas e auditoria de interruptores da tarefa 134. A política anterior de agenda libera administradores e não satisfaz o pedido atual. Implementação e validação da 144 ainda não concluídas; nenhum resultado antecipado.
-
-**Ponto exato de continuidade na paralisação de 2026-11-06:**
-
-- **Implementação local não publicada:** catálogo dos oito grupos; controle persistente e auditado com versão; endpoints administrativos e de disponibilidade; aplicação de restrições no servidor, planos, navegação e componentes. Migração `065_funcionalidades_globais.sql` aplicada no MySQL local, totalizando 67 migrações; os oito controles iniciam desligados. Os dados pessoais existentes não foram apagados. O código modificado permanece no diretório de trabalho, sem commit funcional da 144.
-- **Excesso de escopo reconhecido e em correção:** a primeira abordagem substituiu o dashboard e bloqueou também histórico, dicas, relatórios e indicadores administrativos. O usuário rejeitou esse alcance. O catálogo foi restringido; a substituição do dashboard e os bloqueios administrativos adicionais foram desfeitos. Criada consulta de permissões para histórico que preserva plano e bloqueio da conta sem reativar criação/edição; aplicada na revisão semanal, linha do tempo e relatório. A correção deve ser conferida integralmente antes de qualquer conclusão.
-- **Provas históricas desta execução, com limites:** a primeira regressão terminou com **609 testes de integração aprovados em 68 arquivos**, antes das últimas correções de escopo. Após essas correções, os **sete testes específicos da 144 passaram** com MySQL real, incluindo leitura de registros preservados no chat e opções do relatório. Nenhum desses resultados encerra a validação do código atual. A nova regressão integral foi interrompida por ordem do usuário e não tem resultado final aprovado.
-- **Checagens ainda pendentes:** a execução unitária anterior teve 1.016 aprovados e uma falha na expectativa antiga da sidebar durante carregamento; a expectativa foi ajustada para a disponibilidade global, mas falta a rodada final completa. A verificação de tipos acusou inconsistência nos tipos gerados em `.next/dev/types` e `.next/types` durante a inicialização do servidor; falta regenerar os artefatos de forma controlada e executar tipos novamente. Não declarar fonte aprovada sem essa prova. Formato/lint foram executados em etapas anteriores, mas os gates finais de lint, formato, tipos, unitários, integração, build e QA do escopo corrigido não estão todos concluídos.
-- **Estado do app:** a instância de desenvolvimento iniciada por este chat em `localhost:3000` foi encerrada para preparar a validação do código corrente. A leitura anterior do navegador ainda mostrou a composição antiga; falta reiniciar e confirmar a interface corrigida. MySQL e os serviços Docker do projeto foram preservados. Não alegar que a versão final já está disponível para teste.
-- **Preservação da 142:** alterações locais da frente visual anterior guardadas no stash identificado por `Tarefa 142 pausada: preservar interface antes da tarefa 144`, sem branch/worktree nova. Não aplicar esse stash indiscriminadamente sobre os arquivos da 144: será necessário reconciliar quando houver autorização para retomar a 142.
-- **Publicação autorizada agora:** somente atualização documental deste painel e registro subsequente do SHA real, conforme a regra 6. Nenhum código da 144, migração nova ou teste incompleto deve ser incluído nessa publicação. Depois do push, parar e aguardar instruções.
 
 ### BLOQUEADAS
 
@@ -4143,6 +4102,53 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Próximo passo:** usar a matriz na execução da 142, mediante instrução do usuário. Alterações metodológicas e descontinuações exigem decisão específica.
 - **Publicação da auditoria:** commit `ffeeceb8`, push confirmado `f626df11..ffeeceb8 main -> main` em 2026-11-05. Sete arquivos, exclusivamente a tarefa 143; sem branch, worktree ou force-push. Este registro do SHA segue em commit documental próprio, conforme a regra do painel.
 - **Gates finais reais:** `fix:format`, `fix:lint`, `check:lint`, `check:format` e `check:types` aprovados; 1012 testes unitários em 96 arquivos, 602 integrações MySQL em 67 arquivos e build de produção de 136 páginas aprovados. A primeira checagem de formato detectou o JSON recém-regenerado; a formatação foi aplicada e a nova checagem passou. A tentativa anterior de integração interrompida com o Docker desligado não foi contabilizada. Docker com MySQL, memória, FalkorDB e treinamento saudáveis; produção reiniciada em `localhost:3000`, HTTP 200 conferido no Windows. `@current_problems` não está disponível nas ferramentas da sessão. Revisão do diff e estrutura: 143 tarefas únicas, 136 verdes, seis amarelas e uma a iniciar.
+
+### 144 · Desativação integral e reversível de oito grupos de funcionalidades
+
+**Estado: 🟡 implementação e validação técnica concluídas em 08-11-2026; homologação visual pelo usuário pendente · Início original em 2026-11-05.** A tarefa 142 permanece pausada e preservada.
+
+**Validação atual:** controles persistentes dos oito grupos, bloqueio no servidor inclusive para uso pessoal administrativo, navegação e formulários condicionais, preservação de histórico e reativação auditada implementados. Integração integral: 611 testes/69 arquivos; após revisão final do chat, oito testes específicos aprovados. Unitários: 1.018 testes/97 arquivos com timeout de 15 segundos devido à contenção do WSL, sem reduzir asserções ou custo criptográfico. Gates de formato, lint e tipos aprovados; build de produção aprovado com 139 páginas e 134 recursos offline. Banco local com 68 migrações. Evidências e limites em `docs/auditoria/2026-11-08-tarefa-144.md`. Publicação funcional e SHA serão registrados na sequência; não contabilizar homologação visual como executada.
+
+**Histórico preservado:** os registros datados abaixo descrevem a implementação e a paralisação anteriores; não substituem a validação atual.
+
+**Reforço de escopo recebido em 08-11-2026:** não implementar nem reintroduzir funções que deixarão de fazer parte do produto. Os oito grupos permanecem desligados e preservados apenas para eventual reativação deliberada. Aplicar essa restrição também aos planos, descrições comerciais, atalhos, sugestões e contexto da IA nas tarefas 154–172; não converter especificações históricas em autorização para recuperar recursos desativados.
+
+**Solicitação vigente:** desativar, sem remover código nem apagar dados, todos os tópicos e subtópicos dos oito grupos abaixo. Retirar sua exposição nas jornadas e verificar métricas, derivados, sugestões e acessos indiretos. Tornar a reativação simples e centralizada, preservando as regras de plano e autorização.
+
+**Correção explícita de escopo pelo usuário em 2026-11-06:** manter ativos e acessíveis os grupos 2 (painel pessoal, resumo, métricas, gráficos, explicações, atualização e sugestões de cuidados), 12 (Lyra AI, conversas, busca, favoritas, voz, privacidade, memória, anexos e imagens), 14 (linha do tempo, revisão semanal, tendências, comparações, relatórios com prévia/PDF e evolução de peso no perfil) e 16 (planos, cotas, contratação, portal de cobrança, compras, faturas e documentos financeiros pessoais). Desativar formulários e operação dos oito grupos não autoriza ocultar esses quatro grupos nem impedir sua consulta aos dados históricos preservados. Remover bloqueios excessivos já introduzidos; manter as permissões normais de plano e titularidade. Ajustes de composição de cada página ficam para uma etapa posterior.
+
+**Complemento de 2026-11-06:** o usuário pediu desativar também a página `/dia` inteira, sem apagar seu código; retirá-la dos menus e da busca e encaminhar o acesso direto ao dashboard. O card “Meu mapa védico” deverá ficar no dashboard inicial, saindo do Perfil e de `/dia`; preservar os campos de nascimento no Perfil. Publicar a mudança de localização do card separadamente após a 144.
+
+1. **Registro diário de saúde e bem-estar:** registros manuais, edição, versões e desfazer; sono, humor, energia, estresse, meditação, passos, minutos ativos, água, cafeína, proteína, peso, frequência cardíaca, glicose e pressão arterial; entrada e sincronização offline desses registros.
+2. **Diário pessoal e reflexão da noite:** voz, texto, análise, repetição da análise, calendário do diário, edição, exclusão e ingestão desses relatos na memória; reflexão noturna e seus indicadores.
+3. **Outros registros pessoais:** alimentação e fotos, acontecimentos e comparações, acompanhamentos e escalas, experiências e relatos de antes/depois.
+4. **Metas, hábitos e plano do dia:** criação, progresso, sequências, recomendações, hábitos pessoais e geração do plano, incluindo atalhos e ações no chat.
+5. **Rotinas e práticas:** definição, execução e histórico de rotinas; respiração, meditações e narração; foco, pausas e sessões relacionadas.
+6. **Lembretes, notificações e descanso:** lembretes, preferências e agendamentos, avisos, sino, adiamento e descarte, silêncio e modo descanso; interromper também os processamentos pessoais dependentes.
+7. **Dispositivos e monitoramento:** conexão de dispositivos, Bluetooth, sessões, ingestão de sinais e atualizações de monitoramento, incluindo chamadas diretas.
+8. **Calendário e agendamentos:** janelas, exportação e assinatura de calendário, feeds privados, consultas e profissionais vinculados à agenda; distinguir a desativação integral solicitada do interruptor anterior que permitia acesso administrativo.
+
+**Implementação prevista e critérios de aceite:**
+
+- Inventariar os pontos reais antes de alterar; implementar primeiro a política no servidor, com oito controles persistentes e auditados, inicialmente desligados, sem exceção de uso pessoal para administrador.
+- Aplicar a mesma política aos endpoints, serviços, cotas, permissões de plano, páginas, menus, busca, abas, formulários, atalhos e ações indiretas. Bloquear acesso direto e escritas; apenas esconder navegação não atende ao pedido.
+- Conferir painel, revisão semanal, linha do tempo, relatórios/PDF, perfil, índices, dicas, contexto da IA e ferramentas do chat, preservando sua operação e leitura histórica conforme a correção de escopo acima. Bloquear novas gravações e ações dos grupos desativados, sem inventar medições nem ocultar os resultados existentes autorizados pelo usuário.
+- Preservar autenticação, conta, privacidade, exportação e eliminação legal dos dados existentes, assinatura e pagamentos, chat independente e mapas astrológicos. Não apagar dados históricos para obter ausência visual.
+- Disponibilizar controle administrativo claro para reativar cada grupo, com histórico e proteção de concorrência; reativar nunca concede recursos ausentes do plano nem contorna outros controles vigentes.
+- Verificar cofre offline e tarefas periódicas; registrar honestamente a fronteira de clientes antigos sem conexão, sem alegar controle remoto de aparelhos desconectados.
+- Validar desativação e reativação reais, preservação dos registros, acesso negado a usuários e administradores quando desligado, dependências e jornadas remanescentes. Executar os gates obrigatórios, revisar o diff e publicar somente esta tarefa na `main`, sem branches/worktrees; registrar o SHA real em publicação documental subsequente.
+
+**Evidência atual:** instruções e estado local inspecionados; identificado reaproveitamento das tabelas e auditoria de interruptores da tarefa 134. A política anterior de agenda libera administradores e não satisfaz o pedido atual. Implementação e validação da 144 ainda não concluídas; nenhum resultado antecipado.
+
+**Ponto exato de continuidade na paralisação de 2026-11-06:**
+
+- **Implementação local não publicada:** catálogo dos oito grupos; controle persistente e auditado com versão; endpoints administrativos e de disponibilidade; aplicação de restrições no servidor, planos, navegação e componentes. Migração `065_funcionalidades_globais.sql` aplicada no MySQL local, totalizando 67 migrações; os oito controles iniciam desligados. Os dados pessoais existentes não foram apagados. O código modificado permanece no diretório de trabalho, sem commit funcional da 144.
+- **Excesso de escopo reconhecido e em correção:** a primeira abordagem substituiu o dashboard e bloqueou também histórico, dicas, relatórios e indicadores administrativos. O usuário rejeitou esse alcance. O catálogo foi restringido; a substituição do dashboard e os bloqueios administrativos adicionais foram desfeitos. Criada consulta de permissões para histórico que preserva plano e bloqueio da conta sem reativar criação/edição; aplicada na revisão semanal, linha do tempo e relatório. A correção deve ser conferida integralmente antes de qualquer conclusão.
+- **Provas históricas desta execução, com limites:** a primeira regressão terminou com **609 testes de integração aprovados em 68 arquivos**, antes das últimas correções de escopo. Após essas correções, os **sete testes específicos da 144 passaram** com MySQL real, incluindo leitura de registros preservados no chat e opções do relatório. Nenhum desses resultados encerra a validação do código atual. A nova regressão integral foi interrompida por ordem do usuário e não tem resultado final aprovado.
+- **Checagens ainda pendentes:** a execução unitária anterior teve 1.016 aprovados e uma falha na expectativa antiga da sidebar durante carregamento; a expectativa foi ajustada para a disponibilidade global, mas falta a rodada final completa. A verificação de tipos acusou inconsistência nos tipos gerados em `.next/dev/types` e `.next/types` durante a inicialização do servidor; falta regenerar os artefatos de forma controlada e executar tipos novamente. Não declarar fonte aprovada sem essa prova. Formato/lint foram executados em etapas anteriores, mas os gates finais de lint, formato, tipos, unitários, integração, build e QA do escopo corrigido não estão todos concluídos.
+- **Estado do app:** a instância de desenvolvimento iniciada por este chat em `localhost:3000` foi encerrada para preparar a validação do código corrente. A leitura anterior do navegador ainda mostrou a composição antiga; falta reiniciar e confirmar a interface corrigida. MySQL e os serviços Docker do projeto foram preservados. Não alegar que a versão final já está disponível para teste.
+- **Preservação da 142:** alterações locais da frente visual anterior guardadas no stash identificado por `Tarefa 142 pausada: preservar interface antes da tarefa 144`, sem branch/worktree nova. Não aplicar esse stash indiscriminadamente sobre os arquivos da 144: será necessário reconciliar quando houver autorização para retomar a 142.
+- **Publicação autorizada agora:** somente atualização documental deste painel e registro subsequente do SHA real, conforme a regra 6. Nenhum código da 144, migração nova ou teste incompleto deve ser incluído nessa publicação. Depois do push, parar e aguardar instruções.
 
 ### 145 · Concentrar o card “Meu mapa védico” no dashboard inicial
 

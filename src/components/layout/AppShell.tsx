@@ -1,6 +1,7 @@
 'use client';
 import { ApresentacaoOpcional } from '@/components/apresentacao/ApresentacaoOpcional';
 import { EstadoDoDescanso } from '@/components/descanso/EstadoDoDescanso';
+import { GrupoFuncionalGate } from '@/components/plataforma/GrupoFuncionalGate';
 
 import type { CSSProperties, ReactNode } from 'react';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
@@ -86,7 +87,9 @@ export function AppShell({
             )}
           >
             {mostrarApresentacao ? <ApresentacaoOpcional /> : null}
-            <EstadoDoDescanso />
+            <GrupoFuncionalGate grupos={['lembretes_descanso']}>
+              <EstadoDoDescanso />
+            </GrupoFuncionalGate>
             <PlanFeatureGate features={recursosDaRota(pathname)}>
               {children}
             </PlanFeatureGate>

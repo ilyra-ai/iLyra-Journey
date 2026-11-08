@@ -26,6 +26,30 @@ function responder(
 }
 
 describe('assistente local', () => {
+  it('respeita grupos desligados sem perder leitura dos registros históricos', () => {
+    const gruposFuncionais = {
+      registros_saude: false,
+      diario_reflexao: false,
+      outros_registros: false,
+      metas_habitos_plano: false,
+      rotinas_praticas: false,
+      lembretes_descanso: false,
+      dispositivos: false,
+      calendario_agenda: false,
+    };
+    const consultar = (pergunta: string) =>
+      responder(pergunta, { gruposFuncionais });
+    expect(consultar('agendar consulta')).toContain(
+      'agendamentos estão desativados'
+    );
+    expect(consultar('resumo de hoje')).not.toContain('"Meu dia"');
+    expect(
+      responder('resumo', { gruposFuncionais, latestMetric: null })
+    ).not.toContain('Conecte um wearable');
+    expect(consultar('meu sono')).toContain('6h 20m');
+    expect(consultar('teste')).not.toContain('são monitorados');
+  });
+
   it('continua respondendo com os sinais disponíveis sem calcular leituras védicas desativadas', () => {
     const texto = responder('Como está meu sono?', { astrology: null });
     expect(texto).toContain('6h 20m');
@@ -151,7 +175,7 @@ describe('assistente local', () => {
 
   it('informa ausência de dados em vez de inventar valores', () => {
     const resposta = responder('resumo de hoje', { latestMetric: null });
-    expect(resposta).toMatch(/Não encontrei métricas recentes/);
+    expect(resposta).toMatch(/não encontrei métricas recentes/i);
     expect(responder('meu sono', { latestMetric: null })).toMatch(
       /Ainda não tenho dados recentes do seu sono/
     );
@@ -183,7 +207,12 @@ describe('assistente local', () => {
   });
 
   it('cai no resumo determinístico quando não reconhece a intenção', () => {
-    expect(responder('xyz')).toMatch(/^✨ xuxu, o motor de análise estruturou/);
+    const resposta = responder('xyz');
+    expect(resposta).toMatch(/^✨ xuxu, podemos explorar sono profundo\./);
+    expect(resposta).toContain(
+      'O contexto astrológico disponível indica Lua em'
+    );
+    expect(resposta).not.toContain('são monitorados');
   });
 });
 

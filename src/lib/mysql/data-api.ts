@@ -25,6 +25,8 @@ import {
   recursoHabilitado,
 } from '@/lib/plans/service';
 import { PlanFeatureKey } from '@/types/subscription';
+import { exigirGruposAtivos } from '@/lib/plataforma/funcionalidades';
+import { gruposDoCaminho } from '@/lib/plataforma/grupos';
 
 type SingleMode = 'single' | 'maybeSingle' | null;
 
@@ -303,12 +305,15 @@ function assertNonNegativeInteger(
 // - colunas exclusivas de administradores (profiles.role);
 // - o e-mail do perfil acompanha o da conta e não muda por aqui;
 // - a coluna de dono não pode transferir a linha para outro usuário.
-function protectWriteColumns(
+async function protectWriteColumns(
   table: TableName,
   session: AppSession,
   payload: Record<string, unknown>,
   mode: 'insert' | 'update' | 'upsert'
 ) {
+  if (table === 'profiles' && Object.hasOwn(payload, 'goals')) {
+    await exigirGruposAtivos(['metas_habitos_plano']);
+  }
   const config = TABLE_CONFIG[table];
   const admin = isAdmin(session);
   if (
@@ -512,6 +517,7 @@ async function ensurePlanFeatureAccessForTable(
   mode: 'read' | 'write',
   connection?: PoolConnection
 ) {
+  await exigirGruposAtivos(gruposDoCaminho('/api/data/' + table), connection);
   if (!session || isAdmin(session)) {
     return;
   }
@@ -1155,9 +1161,11 @@ export async function runInsertQuery(options: {
       nextPayload.email = session.user.email;
     }
 
-    protectWriteColumns(table, session, nextPayload, 'insert');
     return nextPayload;
   });
+  for (const payload of preparedPayloads) {
+    await protectWriteColumns(table, session, payload, 'insert');
+  }
 
   if (table === 'appointments')
     await validarProfissionaisDaConsulta(
@@ -1319,7 +1327,7 @@ export async function runUpsertQuery(options: {
   } else if (config.userScopedBy && config.userScopedBy !== 'id') {
     payload[config.userScopedBy] = session.user.id;
   }
-  protectWriteColumns(table, session, payload, 'upsert');
+  await protectWriteColumns(table, session, payload, 'upsert');
   if (table === 'appointments')
     await validarProfissionaisDaConsulta(
       [payload],
@@ -1480,7 +1488,7 @@ export async function runUpdateQuery(options: {
       payload[column] = preparedValue;
     }
   }
-  protectWriteColumns(table, session, payload, 'update');
+  await protectWriteColumns(table, session, payload, 'update');
   if (table === 'appointments')
     await validarProfissionaisDaConsulta(
       [payload],
