@@ -19,6 +19,10 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Nova autorização em 08-11-2026:** executar 144 e, em seguida, 154–172, com commit e push por tarefa na main, sem branches/worktrees. Esta instrução revoga a pausa da 144; 142 e 147 continuam reservadas para execução conjunta e 173 não foi incluída. Conferir e aproveitar a implementação local da 144 sem retrabalho. As condições comerciais, legais e de credenciais explicitadas em 154–172 permanecem aplicáveis: não inventar preços aprovados, provedores homologados nem testes externos. Solicitados ao usuário os dois valores mensais aprovados, domínio HTTPS e configuração segura de credenciais Google/Apple/Stripe; avançar nas partes independentes enquanto aguarda.
+
+**Decisões confirmadas pelo usuário nesta retomada:** domínio oficial `ilyra.com.br`; contribuições mensais aprovadas de **R$ 9,90** e **R$ 19,90**, ambas com os mesmos acessos funcionais do Care e sem privilégios administrativos. Implementar botões Google e Apple no login e área administrativa para configurar client IDs, segredos, identificadores e demais parâmetros OAuth necessários. Credencial Stripe restrita de teste fornecida para uso autorizado, sem registrar seu valor neste gestor, no código ou nos logs. OAuth real e publicação HTTPS dependem da configuração e homologação com os provedores; não simular autenticação. Estes valores substituem as hipóteses financeiras anteriores de 161/172, preservando benefícios iguais, limites justos e direitos dos assinantes legados.
+
 **Retomada autorizada em 08-11-2026:** executar 145 → 146 → 153 → 152 → 150, com commit e push individuais na `main`. As tarefas 142 e 147 ficam reservadas para execução conjunta com o usuário e não serão iniciadas nesta rodada. A 144 permanece pausada; suas alterações locais são preservadas e não entram nas publicações destas tarefas. Esta ordem substitui a dependência histórica da 145 em relação à publicação prévia da 144. A homologação visual no navegador será realizada pelo usuário, incluindo administrador, desktop, tablet, celular e zoom; não confundir implementação técnica com essa aprovação.
 
 **Registro integral das novas anotações — 08-11-2026, execução autorizada e incremental:**
@@ -294,7 +298,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ### 144 · Desativação integral e reversível de oito grupos de funcionalidades
 
-**Estado: 🔵 iniciada, execução pausada pelo usuário em 2026-11-06 · Início autorizado em 2026-11-05.** A tarefa 142 também permanece pausada; suas alterações locais devem ser preservadas, sem retomar o redesenho nesta entrega.
+**Estado: 🔵 em execução, retomada autorizada em 08-11-2026 · Início original em 2026-11-05.** A pausa anterior foi revogada somente para a 144. A tarefa 142 permanece pausada e preservada.
 
 **Solicitação vigente:** desativar, sem remover código nem apagar dados, todos os tópicos e subtópicos dos oito grupos abaixo. Retirar sua exposição nas jornadas e verificar métricas, derivados, sugestões e acessos indiretos. Tornar a reativação simples e centralizada, preservando as regras de plano e autorização.
 
@@ -629,7 +633,9 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 ### 161 · Modal premium “Uma Lyra para todos” e preço consciente em duas contribuições · ⚪ PENDENTE
 
-**Prioridade:** crítica. **Dependências:** 157, 160 e validação de preço/custos da 163; integração a checkout na 162. **Referência visual expressa:** imagem enviada pelo responsável em 07/11/2026, fundo azul-marinho escuro, marca/coração dourados, cards azul-arroxeados, preço acessível em ciano e valor de apoio em dourado, conteúdo em português. Conciliar com os tokens celestiais atuais `--celestial-*`, fontes locais e tema aprovado, preservando acessibilidade.
+**Prioridade:** crítica. **Dependências:** 157, 160 e validação de preço/custos da 163; integração a checkout na 162. **Referência atualizada pelo usuário em 08/11/2026:** usar a composição da imagem `codex-clipboard-5a57dd0c-2abf-44a7-82eb-f96cea5ae522.png`: apresentação da assinatura consciente, duas opções lado a lado no desktop e empilhadas quando necessário, estado selecionado evidente e faixa explicando benefícios idênticos. Adaptar ao visual preto e dourado vigente do app, com fontes locais e tokens `--celestial-*`; a imagem é referência de organização, não autorização para substituir a identidade pela paleta azul.
+
+**Abertura expressamente solicitada:** a assinatura deve abrir no mesmo padrão de pop-up utilizado ao clicar em um dia da linha temporal do painel inicial. Reutilizar a estrutura visual e acessível desse diálogo, incluindo enquadramento, margens seguras, responsividade, sobreposição, foco e fechamento; não navegar para uma página diferente ao abrir a oferta.
 
 **Conteúdo comercial aprovado (texto revisado, sem falsa promessa de lucro/filantropia):**
 
@@ -643,13 +649,13 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 >
 > **Independentemente do valor escolhido, você terá exatamente as mesmas funcionalidades, a mesma experiência e os mesmos limites de uso de IA.**
 >
-> **Valor acessível:** R$ 9,90/mês **(valor em avaliação)**
+> **Valor acessível:** R$ 9,90/mês
 >
-> **Valor de apoio:** R$ 19,90/mês **(valor em avaliação)**
+> **Valor de apoio:** R$ 19,90/mês
 >
 > **Sua assinatura ajuda a Lyra a evoluir.** Os valores das assinaturas ajudam a financiar a manutenção, os custos de operação e inteligência artificial, o crescimento e as melhorias contínuas da Lyra, incluindo novas funcionalidades, segurança e uma experiência cada vez melhor para todos.
 
-**ATENÇÃO:** os R$ 9,90/R$ 19,90 **ainda não foram homologados como preços finais**. Em desenvolvimento, devem aparecer apenas em ambiente de teste/preview, claramente rotulados como em avaliação, até aprovação financeira e configuração real do provedor. Se não houver preço comercial publicado e aprovado, o botão de pagamento real deve apresentar aviso honesto de indisponibilidade, jamais simular contratação ou criar preço falso.
+**Decisão comercial confirmada em 08/11/2026:** R$ 9,90 e R$ 19,90 são os valores mensais aprovados pelo usuário, com os mesmos acessos funcionais do Care, os mesmos limites de IA e nenhum privilégio administrativo. O rodapé ilustrativo da imagem enviada não se aplica à implementação real: não apresentar preços como indefinidos nem simular contratação. Configurar e verificar os preços no provedor; testes usam o ambiente Stripe de teste. Ativação live permanece sujeita à autorização e homologação previstas na tarefa 162. Se o provedor estiver indisponível ou sem configuração, informar a condição real e preservar a seleção, sem cobrança fictícia.
 
 **Superfícies que precisam disparar o modal, sem esquecimento:**
 
