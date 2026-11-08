@@ -3,7 +3,8 @@
 import { CSSProperties, SubmitEvent, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import ceuVedico from '@/assets/celestial/ceu-vedico.png';
+import ceuVedico from '@/assets/celestial/ceu-vedico-transparente.png';
+import logoLyra from '@/app/icon.png';
 import { CelestialBrand } from '@/components/public/CelestialBrand';
 import identidade from '@/components/public/CelestialIdentity.module.css';
 import { toast } from 'sonner';
@@ -566,19 +567,19 @@ export function LoginExperience({
             <Image
               src={ceuVedico}
               alt=""
-              sizes="(min-width: 1024px) 640px, 100vw"
+              sizes="280px"
               className="login-arte"
               loading="eager"
             />
             <p
               className="font-display font-medium tracking-tight text-foreground/80"
-              style={escalaFluida(1.25, typography.introTitle)}
+              style={escalaFluida(1.125, typography.introTitle)}
             >
               {intro.accentTitle}
             </p>
             <p
               className="mt-3 leading-relaxed text-muted-foreground"
-              style={escalaFluida(1.0625, typography.introBody)}
+              style={escalaFluida(0.9375, typography.introBody)}
             >
               {intro.description}
             </p>
@@ -591,19 +592,29 @@ export function LoginExperience({
                     <li
                       key={highlight.id}
                       className="flex items-start gap-3 leading-6"
-                      style={escalaFluida(1, typography.highlightBody)}
+                      style={escalaFluida(0.875, typography.highlightBody)}
                     >
-                      <HighlightIcon
-                        className={cn(
-                          'mt-0.5 h-5 w-5 shrink-0',
-                          corDoIconeDestaque(highlight.tone)
-                        )}
-                        aria-hidden
-                      />
+                      {highlight.icon === 'bot' ? (
+                        <Image
+                          src={logoLyra}
+                          alt=""
+                          width={20}
+                          height={20}
+                          className="mt-0.5 h-5 w-5 shrink-0"
+                        />
+                      ) : (
+                        <HighlightIcon
+                          className={cn(
+                            'mt-0.5 h-5 w-5 shrink-0',
+                            corDoIconeDestaque(highlight.tone)
+                          )}
+                          aria-hidden
+                        />
+                      )}
                       <span className="min-w-0">
                         <strong
                           className="font-semibold text-foreground"
-                          style={escalaFluida(1, typography.highlightTitle)}
+                          style={escalaFluida(0.875, typography.highlightTitle)}
                         >
                           {highlight.title}
                         </strong>
@@ -648,7 +659,7 @@ export function LoginExperience({
         </nav>
         <p
           className="login-lembrete text-muted-foreground"
-          style={escalaFluida(0.8125, typography.footerText)}
+          style={escalaFluida(0.75, typography.footerText)}
         >
           {auth.footerEyebrow} · {auth.footerText}
         </p>
