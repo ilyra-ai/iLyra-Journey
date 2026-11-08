@@ -4180,6 +4180,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 **Estado: 🟡 implementada · Validação visual final do usuário pendente.**
 
+- **Publicação da reconferência da 150:** `8322ca38`, push `cc961f28..8322ca38 main -> main`, somente gestão desta tarefa. Registro subsequente conforme regra 6; homologação visual continua com o usuário.
+
 - **Reconferência em 08-11-2026:** SplashScreen, AuthGate e fallback `app/loading.tsx` preservam a espera real da sessão/navegação, sem temporizador ou percentual inventado; CSS mantém preferência por movimento reduzido. Nenhuma nova implementação foi necessária. Lint, formato, tipos, 1.017 unitários, 611 integrações MySQL (incluindo autenticação/armazenamento) e build de 139 páginas aprovados na rodada atual. Produção acessível em localhost:3000; HTTP 200 confirmado em landing, login, planos e catálogo; adaptador privado do painel retorna 401 sem sessão. O QA visual e a observação do carregamento no navegador ficam com o usuário, conforme sua decisão; não repetir como atual a prova de latência registrada em 06-11-2026. Estado 🟡 mantido até aprovação.
 
 - Aplicar a identidade celestial aprovada: fundo escuro, amarelo suave, logo correto e hierarquia Clicker Script / Imprima / Varela. Reutilizar os ativos existentes com origem e licenças verificadas.
