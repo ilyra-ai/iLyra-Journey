@@ -23,6 +23,8 @@
 
 **Registro integral das novas anotações — 08-11-2026, execução autorizada e incremental:**
 
+**153, alinhamento do signo publicado:** `4854de38`, push `2a5d0dda..4854de38 main -> main`. Trilha do corpo limitada ao espaço real e coluna da leitura organizada com título e ação preservados e resumo flexível; removidas margens verticais acumuladas no modo desktop compacto. Prettier, parser PostCSS e diff sem erros aprovados. Conferência visual pelo usuário; build consolidado a seguir. Registro da regra 6.
+
 **153, cinco atalhos publicados:** `97d2d7f7`, push `875749fe..97d2d7f7 main -> main`. Acrescentados Meu ponto cego, Padrões no amor, Talento esquecido, Virada de ciclo e Coragem de mudar; cada um preenche o compositor e mantém o envio explícito pelo transporte real existente. Sete atalhos com quebra de linha também no desktop compacto. Prettier, ESLint do componente e diff sem erros aprovados; build consolidado a seguir. Sem resposta simulada ou promessa de previsão. Registro imediato da regra 6.
 
 **Novas anotações recebidas na sequência:** menu do perfil com borda externa branca, conservando o degradê e a badge aprovados. No login desktop, centralizar Política de privacidade e Termos de uso abaixo do card Acesso seguro e alinhar o link de retorno à coluna de apresentação, mantendo a ocultação móvel já pedida. Corrigir o ativo do logo para transparência real tanto no login quanto na navegação do app, preservando sua geometria e tipografia. Esses pedidos complementam os anteriores e serão publicados separadamente por atividade lógica.
