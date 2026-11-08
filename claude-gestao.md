@@ -418,6 +418,8 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 **Critério de conclusão:** implementação real comprovada nas duas experiências, dados auditáveis, compatibilidade, segurança, testes, documentação e publicação confirmadas, com aprovação visual quando exigida. Enquanto não houver execução autorizada, todas as oito subtarefas permanecem ⚪. Este cadastro não declara implementações nem altera os contadores principais.
 
+**Publicação documental confirmada em 08-11-2026:** `9d31039d`, push `fe484d9f..9d31039d main -> main`. Incluídos somente o cadastro na 147 e os dois documentos completos em `docs/tarefas/`. Conferidos 173 IDs principais únicos, oito subtarefas, caminhos locais existentes, formato Prettier e diff sem erros de whitespace. Sem implementação dos novos requisitos; execução reservada ao trabalho conjunto. Este registro subsequente cumpre a regra 6.
+
 **Solicitação e limite desta etapa**
 
 - Refazer por completo o design do app de forma fidedigna à imagem aprovada. Antes de implementar, registrar esta tarefa, salvar a imagem na raiz do projeto, vinculá-la aqui, fazer commit e push na `main` e aguardar instruções.
