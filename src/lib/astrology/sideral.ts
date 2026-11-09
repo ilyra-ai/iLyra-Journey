@@ -145,7 +145,7 @@ export function ayanamshaLahiri(instante: Date) {
 }
 
 /** Longitude eclíptica tropical verdadeira (de data), geocêntrica. */
-function longitudeTropical(graha: Graha, instante: Date) {
+export function longitudeTropical(graha: Graha, instante: Date) {
   const corpo = CORPO[graha];
   if (!corpo) throw new Error(`Sem corpo astronômico para ${graha}.`);
   return Ecliptic(GeoVector(corpo, MakeTime(instante), true)).elon;

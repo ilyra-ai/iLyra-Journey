@@ -364,7 +364,11 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 **Início em 09-11-2026:** motor astronômico independente; não expor publicamente enquanto a 155 não estiver validada. Fontes técnicas primárias: documentação do Astronomy Engine e JPL Horizons. Manter regressões siderais, contratos e geometrias existentes. Nenhuma função desativada será reintroduzida.
 
+**Avanço técnico em 09-11-2026, sem conclusão integral:** motor tropical, leitura ocidental própria, adaptador dos dados do perfil e `GET /api/astrologia/ocidental` autenticado implementados. A rota lê somente o titular e usa `private, no-store`; a experiência anônima não foi aberta. Passaram 71 testes unitários (38 tropicais, 24 siderais, 9 do leitor) e 4 integrações com MySQL real (401 anônimo, mapa do titular, isolamento entre contas e horário repetido). ESLint dos novos fontes e TypeScript aprovados. Medição local de 100 amostras, sem rede/banco: mapa completo p50 0,687 ms / p95 1,158 ms / p99 1,835 ms; solar p50 0,226 ms / p95 0,870 ms / p99 0,923 ms. Método e limites documentados em `docs/mapa-ocidental.md`. Build em conferência. Permanecem a integração nas quatro abas, o contexto dos modelos/chat e a validação visual; esta etapa não recebe status verde.
+
 ### BLOQUEADAS
+
+**Verificação da etapa técnica da 156 em 09-11-2026:** `pnpm build` concluído com código 0, incluindo TypeScript, 140 páginas e 134 recursos offline. Publicar motor, leitor, adaptador, API privada, testes e documentação como uma etapa técnica da própria 156; a tarefa integral continua em execução até integrar interface e chat. Não incluir arquivos de outras atividades.
 
 Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
