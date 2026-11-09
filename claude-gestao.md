@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Publicação da 154 em 09-11-2026:** commit `bbc6cf43`, push confirmado `c585867f..bbc6cf43 main -> main`. Auditoria, inventário sanitizado e script somente leitura publicados; execução no MySQL, sintaxe Node, ESLint do script, Prettier dos quatro arquivos e diff sem erros aprovados. Nenhuma funcionalidade de produto adicionada ou reativada. As lacunas externas ficam explicitamente nas tarefas responsáveis, não foram simuladas. Registro imediato da regra 6; próxima tarefa autorizada: 155.
+
 **Publicação funcional da 144 em 08-11-2026:** commit `253c692c`, push confirmado `a8b1408a..253c692c main -> main`. Quarenta arquivos da desativação reversível publicados separadamente; oito grupos confirmados desligados no HTTP local, histórico preservado, integração integral 611/69, revalidação específica 8/1, unitários 1.018/97 com timeout de 15 segundos documentado, lint/formato/tipos e build aprovados. App de produção disponível em localhost:3000. Homologação visual pendente pelo usuário. Nenhum código da 142/147 ou segredo publicado; `package-lock.json` não rastreado ficou fora do commit. Registro subsequente obrigatório da regra 6; seguir para a 154.
 
 **Publicação documental em 08-11-2026:** commit `54f48eef`, push confirmado para `origin/main`, registra a retomada da 144, as decisões comerciais e OAuth e a referência atualizada do modal 161 com abertura igual à linha temporal. Prettier e diff sem erros de whitespace aprovados. Este registro não declara concluída a implementação do modal nem as tarefas 144/154–172.
