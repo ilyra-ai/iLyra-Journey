@@ -70,9 +70,9 @@
 | Tarefas totais                          | 173                      |
 | 🟢 Concluídas                           | 140                      |
 | 🟡 Implementadas com validação pendente | 12                       |
-| 🔵 Em andamento                         | 1                        |
+| 🔵 Em andamento                         | 2                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 20                       |
+| ⚪ A iniciar                            | 19                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-09               |
 
@@ -302,6 +302,31 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 - **Critério da publicação atual:** apenas `claude-gestao.md` alterado, tarefa numerada uma vez no Tópico 3, estado **a iniciar**, indicadores recalculados sem reclassificar tarefas anteriores, revisão integral do diff, verificação de estrutura/formatação e publicação na `main`. Após o push, registrar o SHA real em commit documental próprio, conforme a regra deste painel.
 - **Próxima ação:** aguardar instruções do usuário. Este registro não constitui implementação da tarefa 142 nem validação integral das hipóteses de solução.
 
+### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · 🔵 EM EXECUÇÃO
+
+**Prioridade:** crítica e anterior à abertura pública. **Dependência:** 154. **Âmbito exato:** medidas imprescindíveis à experiência aberta e ao fluxo afetivo, não auditoria jurídica genérica da empresa.
+
+**Problema comprovado no código:** o onboarding atual aceita **idades de 13 a 120 anos** em `src/lib/perfil/conclusao-onboarding.ts`. Nova experiência gratuita sem conta recebe data de nascimento e poderá ser utilizada por menores. **Isso não prova irregularidade**, mas impõe análise jurídica, segurança e minimização de dados.
+
+**Implementação/avaliação exigida:**
+
+1. Consultar textos oficiais atuais da LGPD, orientações da ANPD e normativos vigentes do ECA Digital; documentar o enquadramento efetivo da Lyra por tipo de serviço, acesso provável de adolescentes, riscos, natureza de conteúdo, perfis/públicos e fluxo de relacionamento. Revisão jurídica qualificada quando exigida; não definir exigências legais apenas por heurística do código.
+2. Definir para visitante anônimo quais dados entram, transitam, são usados no cálculo, ficam em memória volátil, são gravados, por quanto tempo e por qual base legal. A data de nascimento não deve ser enviada a terceiros sem finalidade autorizada nem incluída em URLs, logs, analytics, pixels, OG tags e ferramentas de suporte.
+3. Preferir cálculo determinístico em servidor; não salvar DOB de visitante por padrão. Se houver necessidade técnica de sessão anônima, empregar token assinado, escopo limitado, TTL explícito e dados mínimos; verificar proteção e supressão de armazenamento após expiração.
+4. Projetar verificação/adequação etária **proporcional aos riscos e requisitos vigentes**, não confundir o simples campo de nascimento astrológico com prova de identidade. Definir política legítima para conteúdo de relacionamentos e dados de terceiros; bloquear funcionalidades inadequadas sem gerar exposição de dados sensíveis.
+5. Revisar termos, privacidade, linguagem acessível, tratamento de dados de terceiros, privacidade de chat/IA, consentimento opcional de memória e mensagens comerciais; sincronizar versões e registros com `src/lib/lgpd/documentos.ts` e `consent_records` quando for o caso.
+6. Proibir perfilamento publicitário de dados íntimos ou inferências astrológicas sensíveis de modo não consentido; evitar marcadores de vulnerabilidade ou exploração emocional para venda.
+7. Cobrir proteção contra ataques e abuso do endpoint público, distinção entre limitações de idade e direito à informação geral, proteção contra bots sem penalizar excessivamente usuários legítimos ou dispositivos compartilhados.
+8. Testar casos de adolescentes, menores abaixo da idade permitida conforme política validada, idade limítrofe, alteração de data, cadastro social, contas vinculadas e titularidade. Não gravar informação pessoal nos relatórios de QA.
+
+**Arquivos a inspecionar:** `src/lib/perfil/conclusao-onboarding.ts`, `src/app/api/onboarding/route.ts`, `src/components/onboarding/onboarding-form.tsx`, `src/lib/lgpd/{documentos,conta}.ts`, `src/lib/security/{csrf,rate-limit}.ts`, `src/lib/auth/session.ts`, documentos públicos, novos endpoints convidado e Conexões da Alma.
+
+**Critérios de aceite:** decisão legal e matriz de proteção documentadas, testes automatizados e QA de casos etários reais, minimização auditada, mecanismos sem bypass trivial, textos de política revisados, sem coleta escondida. **Não anunciar conformidade jurídica certificada sem parecer adequado.**
+
+**Início em 09-11-2026:** auditoria 154 publicada em `bbc6cf43`, registro `f85dac80`. Pesquisa em fontes oficiais da ANPD, Câmara/Senado e legislação; implementar minimização e controles reais antes da exposição pública, sem reativar os oito grupos. Não tratar nascimento autodeclarado como identidade verificada.
+
+**Pesquisa inicial, sem conclusão da tarefa:** fontes e matriz de tratamento em `docs/auditoria/2026-11-09-privacidade-155.md`. Pergunta de definição do público dos novos fluxos enviada ao usuário; resposta ainda pendente. Não alterar o cadastro de 13–120 anos por inferência nem abrir o novo endpoint público enquanto faltarem os controles. Avançar no motor astronômico independente da 156, cuja exposição pública depende desta tarefa. Esta publicação documental não é implementação concluída da 155.
+
 ### BLOQUEADAS
 
 Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
@@ -431,27 +456,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 **Publicação da organização documental:** commit `5bb50d61`, push confirmado `9245243a..5bb50d61 main -> main`, em 07-11-2026. Dezenove tarefas futuras movidas integralmente para o Tópico 3, acompanhadas das matrizes, decisões e critérios de qualidade; 172 IDs únicos conferidos, sem duplicidade. Contadores atualizados. Anotações visuais pendentes registradas na 153. Somente este arquivo publicado; código em validação e alterações pausadas preservados fora do commit. Nenhuma tarefa funcional nova declarada concluída nesta organização.
 
 **Estado: ⚪ a iniciar.** Conteúdo acrescentado pelo usuário e reorganizado integralmente no Tópico 3. Este registro não inicia a implementação do programa nem conclui as tarefas 152/153. As dependências e condições comerciais abaixo continuam válidas.
-
-### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · ⚪ PENDENTE
-
-**Prioridade:** crítica e anterior à abertura pública. **Dependência:** 154. **Âmbito exato:** medidas imprescindíveis à experiência aberta e ao fluxo afetivo, não auditoria jurídica genérica da empresa.
-
-**Problema comprovado no código:** o onboarding atual aceita **idades de 13 a 120 anos** em `src/lib/perfil/conclusao-onboarding.ts`. Nova experiência gratuita sem conta recebe data de nascimento e poderá ser utilizada por menores. **Isso não prova irregularidade**, mas impõe análise jurídica, segurança e minimização de dados.
-
-**Implementação/avaliação exigida:**
-
-1. Consultar textos oficiais atuais da LGPD, orientações da ANPD e normativos vigentes do ECA Digital; documentar o enquadramento efetivo da Lyra por tipo de serviço, acesso provável de adolescentes, riscos, natureza de conteúdo, perfis/públicos e fluxo de relacionamento. Revisão jurídica qualificada quando exigida; não definir exigências legais apenas por heurística do código.
-2. Definir para visitante anônimo quais dados entram, transitam, são usados no cálculo, ficam em memória volátil, são gravados, por quanto tempo e por qual base legal. A data de nascimento não deve ser enviada a terceiros sem finalidade autorizada nem incluída em URLs, logs, analytics, pixels, OG tags e ferramentas de suporte.
-3. Preferir cálculo determinístico em servidor; não salvar DOB de visitante por padrão. Se houver necessidade técnica de sessão anônima, empregar token assinado, escopo limitado, TTL explícito e dados mínimos; verificar proteção e supressão de armazenamento após expiração.
-4. Projetar verificação/adequação etária **proporcional aos riscos e requisitos vigentes**, não confundir o simples campo de nascimento astrológico com prova de identidade. Definir política legítima para conteúdo de relacionamentos e dados de terceiros; bloquear funcionalidades inadequadas sem gerar exposição de dados sensíveis.
-5. Revisar termos, privacidade, linguagem acessível, tratamento de dados de terceiros, privacidade de chat/IA, consentimento opcional de memória e mensagens comerciais; sincronizar versões e registros com `src/lib/lgpd/documentos.ts` e `consent_records` quando for o caso.
-6. Proibir perfilamento publicitário de dados íntimos ou inferências astrológicas sensíveis de modo não consentido; evitar marcadores de vulnerabilidade ou exploração emocional para venda.
-7. Cobrir proteção contra ataques e abuso do endpoint público, distinção entre limitações de idade e direito à informação geral, proteção contra bots sem penalizar excessivamente usuários legítimos ou dispositivos compartilhados.
-8. Testar casos de adolescentes, menores abaixo da idade permitida conforme política validada, idade limítrofe, alteração de data, cadastro social, contas vinculadas e titularidade. Não gravar informação pessoal nos relatórios de QA.
-
-**Arquivos a inspecionar:** `src/lib/perfil/conclusao-onboarding.ts`, `src/app/api/onboarding/route.ts`, `src/components/onboarding/onboarding-form.tsx`, `src/lib/lgpd/{documentos,conta}.ts`, `src/lib/security/{csrf,rate-limit}.ts`, `src/lib/auth/session.ts`, documentos públicos, novos endpoints convidado e Conexões da Alma.
-
-**Critérios de aceite:** decisão legal e matriz de proteção documentadas, testes automatizados e QA de casos etários reais, minimização auditada, mecanismos sem bypass trivial, textos de política revisados, sem coleta escondida. **Não anunciar conformidade jurídica certificada sem parecer adequado.**
 
 ### 156 · Motor científico de posições do Mapa Astrológico Tradicional Ocidental (tropical) · ⚪ PENDENTE
 
