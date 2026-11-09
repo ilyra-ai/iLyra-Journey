@@ -552,9 +552,12 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
             <div className={styles.heroActions}>
               <Link
                 href={config.hero.primaryCtaHref}
-                className={styles.primaryButton}
+                className={`${styles.primaryButton} ${styles.trialButton}`}
               >
-                {config.hero.primaryCtaLabel}
+                <Sparkles aria-hidden="true" />
+                {config.hero.primaryCtaLabel === 'Começar minha jornada'
+                  ? 'Experimente Grátis'
+                  : config.hero.primaryCtaLabel}
                 <ArrowRight aria-hidden="true" />
               </Link>
             </div>

@@ -45,7 +45,7 @@ const defaultLandingPageConfig: LandingPageConfig = {
     accentTitle: 'para o seu dia.',
     description:
       'Explore seus mapas, encontre novas perspectivas e converse com a Lyra.',
-    primaryCtaLabel: 'Começar minha jornada',
+    primaryCtaLabel: 'Experimente Grátis',
     primaryCtaHref: '/login?modo=cadastro',
     secondaryCtaLabel: 'Conhecer a Lyra',
     secondaryCtaHref: '#lyra-ai',
