@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Registro das solicitações publicado em 09-11-2026:** commit `9df244b8`, push confirmado `3f8a369a..9df244b8 main -> main`. Modernização 2027, persistência natal por assinante e reutilização diária integral registradas com invalidação, privacidade, concorrência e provas exigidas. A documentação distingue a lacuna atual de implementação concluída. Prettier do gestor aprovado. Registro imediato da publicação conforme regra 6.
+
 **Requisitos adicionais do Motor Lyra · 09-11-2026 · solicitados e ainda não concluídos:**
 
 1. Investigar profundamente fontes primárias na internet e modernizar o motor com horizonte 2027, distinguindo tecnologias disponíveis de projeções. Priorizar cálculo rápido, precisão verificável e interpretação própria de cada mapa. Medir antes/depois, sem prometer resposta instantânea de rede ou IA com base apenas em microbenchmark.
