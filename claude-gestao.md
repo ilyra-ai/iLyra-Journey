@@ -72,9 +72,9 @@
 | Tarefas totais                          | 173                      |
 | 🟢 Concluídas                           | 140                      |
 | 🟡 Implementadas com validação pendente | 12                       |
-| 🔵 Em andamento                         | 2                        |
+| 🔵 Em andamento                         | 3                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 19                       |
+| ⚪ A iniciar                            | 18                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-09               |
 
@@ -329,6 +329,33 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 **Pesquisa inicial, sem conclusão da tarefa:** fontes e matriz de tratamento em `docs/auditoria/2026-11-09-privacidade-155.md`. Pergunta de definição do público dos novos fluxos enviada ao usuário; resposta ainda pendente. Não alterar o cadastro de 13–120 anos por inferência nem abrir o novo endpoint público enquanto faltarem os controles. Avançar no motor astronômico independente da 156, cuja exposição pública depende desta tarefa. Esta publicação documental não é implementação concluída da 155.
 
+**Resposta do usuário em 09-11-2026:** Experimente Grátis recebe somente nome completo e data de nascimento, usados exclusivamente na sessão e não salvos. Aplicar idade mínima de 13 anos completos no servidor; abaixo disso não entra na experiência do app. Isso é filtro de idade declarada, não verificação de identidade. Somente o mapa astrológico tradicional ocidental é liberado gratuitamente; Védico, Lyra DM Samādhi e Quantum Arkáico dependem da assinatura. A política específica de Conexões da Alma não foi definida por essa resposta e não deve ser inferida. Requisitos detalhados incorporados à 157 e à atualização da landing.
+
+### 156 · Motor científico de posições do Mapa Astrológico Tradicional Ocidental (tropical) · 🔵 EM EXECUÇÃO
+
+**Prioridade:** crítica. **Dependências:** 154, 155 para exposição pública. **Escopo aprovado:** quarto mapa, sem tocar nem substituir o Védico, Samādhi ou Quantum.
+
+**Causa técnica:** `src/lib/astrology/sideral.ts` já calcula longitude tropical em função **interna** (`longitudeTropical`) e a transforma em longitude sideral Lahiri; `src/lib/astrology/mapa-natal.ts` gera o mapa védico; `TIPOS_DE_MAPA` e `TipoDeMapa` listam somente `vedico | samadhi | quantum`. Rebatizar uma posição sideral como ocidental produziria resultados errados.
+
+**Requisitos completos:**
+
+1. Criar domínio, tipos e testes próprios para astrologia ocidental **tropical**, compartilhando `astronomy-engine`, normalização de longitude e conversão de horário apenas onde o método permitir. Introduzir função tropical pública tipada, isolada da longitude sideral; não alterar assinatura/comportamento dos cálculos védicos existentes.
+2. Para **data sem hora e sem local**, calcular **somente aquilo que é realmente determinável**. O signo solar pode ser identificado com segurança apenas quando não houver troca de signo possível dentro dos instantes compatíveis com aquela data civil e fusos possíveis. Em datas próximas à cúspide, marcar “signo solar pode variar” e solicitar hora/cidade para confirmar; não presumir meio-dia em São Paulo nem deduzir ascendente, casas ou Lua precisa.
+3. Validar data de nascimento rigorosamente: calendário gregoriano, ano bissexto, data futura, datas limite, timezone, anos suportados, valores inválidos e mudanças de signo por instantes UTC. Não confundir signo astronômico e signo zodiacal tropical.
+4. Para versão completa com data, **hora e cidade**, usar fuso IANA histórico (`src/lib/astrology/tempo.ts`) e base local de cidades `src/lib/geo/cidades.ts`. Calcular Sol, Lua, planetas suportados, signo de cada corpo, ascendente, casas conforme sistema explicitamente escolhido e documentado, aspectos e orbes somente se houver algoritmo testado; não anunciar aspectos ou casas não implementados.
+5. Escolher e documentar o sistema de casas ocidental adotado com justificativa, dificuldades em latitudes extremas e ausência de hora. Nunca reaproveitar automaticamente as casas por signo inteiro da tradição védica sem declarar o sistema e testar coerência.
+6. Garantir interfaces serializadas versionáveis que incluam `zodiaco: 'tropical'`, método, data/hora/local usados, `precisao`, `faltando`, dados calculados e indisponibilidades. Nunca adicionar resultados falsos para preencher mockups.
+7. Atualizar definições de quatro mapas em `src/lib/lyra/conhecimento/mapas.ts`, leitores e instruções de modelos, abas, nomes e documentação; preservar a semântica de Samādhi e Quantum, que têm camadas explicitamente indisponíveis.
+8. Comparar efemérides calculadas contra fonte astronômica independente/autorizada para um conjunto de datas históricas, anos bissextos, horários de verão e fronteiras de signo; comparar o **mesmo zodíaco e mesma configuração**. Definir tolerâncias numéricas e provar que o motor sideral original permanece inalterado.
+9. As interpretações são simbólicas, não diagnósticos, medições psicológicas ou provas científicas de destino, saúde e compatibilidade. Separar cálculos de narrativas em tipos e UI.
+10. Cobrir erro de efeméride, dados incompletos, timezone inexistente, cidade homônima, alta latitude, fallback adequado e desempenho do cálculo no servidor. Exigir percentis reais de latência, não metas inventadas.
+
+**Arquivos prioritários:** `src/lib/astrology/{sideral,mapa-natal,tempo,engine,perfil-astrologico,serializacao}.ts`, `src/lib/geo/cidades.ts`, `src/lib/lyra/{conhecimento/mapas,leitura-do-mapa,responder,modelos-como-lyra}.ts`, `src/components/profile/MapaVedicoCard.tsx`, `src/app/api/astrologia/mapa/route.ts`, testes `src/lib/astrology/*.test.ts` e APIs.
+
+**Critérios de aceite:** regressões siderais zero; 12 signos comprovados em casos não limítrofes; fronteiras marcadas corretamente; mapa ocidental com hora/local validado, sem dados fabricados; documentação clara de método, limitações e precisão; testes reais e build.
+
+**Início em 09-11-2026:** motor astronômico independente; não expor publicamente enquanto a 155 não estiver validada. Fontes técnicas primárias: documentação do Astronomy Engine e JPL Horizons. Manter regressões siderais, contratos e geometrias existentes. Nenhuma função desativada será reintroduzida.
+
 ### BLOQUEADAS
 
 Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
@@ -459,30 +486,18 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 
 **Estado: ⚪ a iniciar.** Conteúdo acrescentado pelo usuário e reorganizado integralmente no Tópico 3. Este registro não inicia a implementação do programa nem conclui as tarefas 152/153. As dependências e condições comerciais abaixo continuam válidas.
 
-### 156 · Motor científico de posições do Mapa Astrológico Tradicional Ocidental (tropical) · ⚪ PENDENTE
-
-**Prioridade:** crítica. **Dependências:** 154, 155 para exposição pública. **Escopo aprovado:** quarto mapa, sem tocar nem substituir o Védico, Samādhi ou Quantum.
-
-**Causa técnica:** `src/lib/astrology/sideral.ts` já calcula longitude tropical em função **interna** (`longitudeTropical`) e a transforma em longitude sideral Lahiri; `src/lib/astrology/mapa-natal.ts` gera o mapa védico; `TIPOS_DE_MAPA` e `TipoDeMapa` listam somente `vedico | samadhi | quantum`. Rebatizar uma posição sideral como ocidental produziria resultados errados.
-
-**Requisitos completos:**
-
-1. Criar domínio, tipos e testes próprios para astrologia ocidental **tropical**, compartilhando `astronomy-engine`, normalização de longitude e conversão de horário apenas onde o método permitir. Introduzir função tropical pública tipada, isolada da longitude sideral; não alterar assinatura/comportamento dos cálculos védicos existentes.
-2. Para **data sem hora e sem local**, calcular **somente aquilo que é realmente determinável**. O signo solar pode ser identificado com segurança apenas quando não houver troca de signo possível dentro dos instantes compatíveis com aquela data civil e fusos possíveis. Em datas próximas à cúspide, marcar “signo solar pode variar” e solicitar hora/cidade para confirmar; não presumir meio-dia em São Paulo nem deduzir ascendente, casas ou Lua precisa.
-3. Validar data de nascimento rigorosamente: calendário gregoriano, ano bissexto, data futura, datas limite, timezone, anos suportados, valores inválidos e mudanças de signo por instantes UTC. Não confundir signo astronômico e signo zodiacal tropical.
-4. Para versão completa com data, **hora e cidade**, usar fuso IANA histórico (`src/lib/astrology/tempo.ts`) e base local de cidades `src/lib/geo/cidades.ts`. Calcular Sol, Lua, planetas suportados, signo de cada corpo, ascendente, casas conforme sistema explicitamente escolhido e documentado, aspectos e orbes somente se houver algoritmo testado; não anunciar aspectos ou casas não implementados.
-5. Escolher e documentar o sistema de casas ocidental adotado com justificativa, dificuldades em latitudes extremas e ausência de hora. Nunca reaproveitar automaticamente as casas por signo inteiro da tradição védica sem declarar o sistema e testar coerência.
-6. Garantir interfaces serializadas versionáveis que incluam `zodiaco: 'tropical'`, método, data/hora/local usados, `precisao`, `faltando`, dados calculados e indisponibilidades. Nunca adicionar resultados falsos para preencher mockups.
-7. Atualizar definições de quatro mapas em `src/lib/lyra/conhecimento/mapas.ts`, leitores e instruções de modelos, abas, nomes e documentação; preservar a semântica de Samādhi e Quantum, que têm camadas explicitamente indisponíveis.
-8. Comparar efemérides calculadas contra fonte astronômica independente/autorizada para um conjunto de datas históricas, anos bissextos, horários de verão e fronteiras de signo; comparar o **mesmo zodíaco e mesma configuração**. Definir tolerâncias numéricas e provar que o motor sideral original permanece inalterado.
-9. As interpretações são simbólicas, não diagnósticos, medições psicológicas ou provas científicas de destino, saúde e compatibilidade. Separar cálculos de narrativas em tipos e UI.
-10. Cobrir erro de efeméride, dados incompletos, timezone inexistente, cidade homônima, alta latitude, fallback adequado e desempenho do cálculo no servidor. Exigir percentis reais de latência, não metas inventadas.
-
-**Arquivos prioritários:** `src/lib/astrology/{sideral,mapa-natal,tempo,engine,perfil-astrologico,serializacao}.ts`, `src/lib/geo/cidades.ts`, `src/lib/lyra/{conhecimento/mapas,leitura-do-mapa,responder,modelos-como-lyra}.ts`, `src/components/profile/MapaVedicoCard.tsx`, `src/app/api/astrologia/mapa/route.ts`, testes `src/lib/astrology/*.test.ts` e APIs.
-
-**Critérios de aceite:** regressões siderais zero; 12 signos comprovados em casos não limítrofes; fronteiras marcadas corretamente; mapa ocidental com hora/local validado, sem dados fabricados; documentação clara de método, limitações e precisão; testes reais e build.
-
 ### 157 · Jornada pública “Quem sou eu?” sem conta, sem plano e sem fricção · ⚪ PENDENTE
+
+#### Refinamento explícito de 09-11-2026 · Experimente Grátis
+
+1. Criar CTA em destaque **Experimente Grátis** na landing, mantendo **Entrar** como acesso funcional à conta existente e oferecendo a jornada gratuita sem exigir cadastro. Não substituir autenticação por uma sessão fictícia.
+2. Ao iniciar o gratuito, abrir a experiência do app com modal responsivo no mesmo padrão do popup da linha temporal/chat ampliado. O modal fecha **somente pelo botão X**; clique fora e Escape não devem dispensá-lo. Preservar foco, teclado, nome acessível e enquadramento desktop/tablet/mobile.
+3. Solicitar **somente nome completo e data de nascimento**. Usar os dados exclusivamente durante aquela sessão. Não gravar no banco, localStorage, sessionStorage, cookies legíveis, URLs, logs, analytics, OG tags ou ferramentas externas. Memória transitória se perde ao encerrar/recarregar a experiência; eventual persistência futura exige nova decisão explícita.
+4. Validar nome e calendário no servidor e aplicar **idade mínima de 13 anos completos**. **Correção reafirmada pelo usuário em 09-11-2026: quem ainda não completou 13 anos não consegue acessar o app.** Impedir também acesso direto aos endpoints e à experiência gratuita, sem depender apenas do formulário ou de estado no navegador. Não afirmar que a autodeclaração é verificação de identidade/maioridade. A landing informativa e os documentos legais não constituem acesso à experiência do app.
+5. A experiência gratuita libera **apenas o mapa astrológico tradicional ocidental tropical** e sua leitura real pelo Motor Lyra. Não liberar Védico, Lyra DM Samādhi ou Quantum Arkáico por rota direta, API, abas, atalhos ou manipulação de estado do cliente; esses três mapas dependem de assinatura.
+6. Informar em destaque no próprio modal, antes de prosseguir: o gratuito inclui somente o mapa ocidental; o acesso aos outros três mapas exige contratação. Mensagem clara, sem anúncio de funcionalidades desativadas.
+7. **Ordem solicitada:** concluir primeiro a 156 por inteiro, incluindo cálculo tropical, Motor Lyra, contratos, referências astronômicas, testes e apresentação equivalente aos mapas existentes; depois implementar o fluxo gratuito e atualizar a landing com a explicação e imagem do mapa ocidental. Preservar os três mapas atuais e as funções desativadas.
+8. Atualizar as decisões anteriores da própria 157 que falavam em apenas data, três mapas gratuitos ou coleta posterior: este refinamento exige nome completo temporário e restringe a gratuidade ao ocidental. Não criar tarefa duplicada. Provar ausência de persistência e controle de acesso real em testes, além de QA visual pelo usuário.
 
 **Prioridade:** crítica, principal oportunidade de produto. **Dependências:** 155, 156; coordenação com 158/159/161. **Usuário-alvo:** visitante anônimo, inclusive quem evita formulários e Google/Apple até perceber valor.
 
