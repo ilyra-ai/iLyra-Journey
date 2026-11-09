@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { montarPainelCelestial } from '@/lib/astrology/painel-celestial';
-import { lerPerfilAstrologico } from '@/lib/astrology/perfil-astrologico';
+import { carregarNatalDoTitular } from '@/lib/astrology/persistencia-natal';
 import { requireServerSession } from '@/lib/mysql/server-auth';
 import { requireFeatureEnabled } from '@/lib/plans/service';
 import { respostaDeErro } from '@/lib/http/api';
@@ -12,8 +12,12 @@ export async function GET() {
   try {
     const session = await requireServerSession();
     await requireFeatureEnabled(session, 'vedic_insights');
-    const perfil = await lerPerfilAstrologico(session.user.id);
-    return NextResponse.json(montarPainelCelestial(perfil), {
+    const agora = new Date();
+    const { perfil, mapa } = await carregarNatalDoTitular(
+      session.user.id,
+      agora
+    );
+    return NextResponse.json(montarPainelCelestial(perfil, agora, mapa), {
       headers: { 'Cache-Control': 'private, no-store' },
     });
   } catch (erro) {

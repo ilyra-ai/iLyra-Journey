@@ -265,6 +265,7 @@ const TABELAS_DO_TITULAR = [
   ['personal_tracker_definitions', 'user_id'],
   ['personal_tracker_entries', 'user_id'],
   ['lyra_address_preferences', 'user_id'],
+  ['astrological_natal_bases', 'user_id'],
   ['memory_preferences', 'user_id'],
   ['memory_episodes', 'user_id'],
   ['appointments', 'user_id'],

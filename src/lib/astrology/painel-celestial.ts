@@ -4,15 +4,16 @@ import { diaParaJson, mapaParaJson } from './serializacao';
 import { dataLocal, localParaUtc } from './tempo';
 import { lerMapaComoLyra } from '@/lib/lyra/leitura-do-mapa';
 import { LocalSemNascerDoSolError } from './panchang';
-import { mapaNatalNaData } from './mapa-natal';
+import { mapaNatalNaData, type MapaNatal } from './mapa-natal';
 
 /** Composição de apresentação: reutiliza integralmente os motores existentes. */
 export function montarPainelCelestial(
   perfil: PerfilAstrologico,
-  agora = new Date()
+  agora = new Date(),
+  baseNatal: MapaNatal | null = mapaDoPerfil(perfil, agora)
 ) {
   const local = perfil.localDoDia;
-  const mapa = mapaDoPerfil(perfil, agora);
+  const mapa = baseNatal;
   const hoje = local ? dataLocal(agora, local.fuso) : null;
   const dias =
     hoje && local

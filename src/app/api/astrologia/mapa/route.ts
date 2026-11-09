@@ -1,10 +1,7 @@
 import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 
-import {
-  lerPerfilAstrologico,
-  mapaDoPerfil,
-} from '@/lib/astrology/perfil-astrologico';
+import { carregarNatalDoTitular } from '@/lib/astrology/persistencia-natal';
 import { mapaParaJson } from '@/lib/astrology/serializacao';
 import { respostaDeErro } from '@/lib/http/api';
 import { lerMapaComoLyra } from '@/lib/lyra/leitura-do-mapa';
@@ -22,15 +19,17 @@ export async function GET() {
     const session = await requireServerSession();
     await requireFeatureEnabled(session, 'vedic_insights');
 
-    const perfil = await lerPerfilAstrologico(session.user.id);
-    const mapa = mapaDoPerfil(perfil);
-    return NextResponse.json({
-      mapa: mapa ? mapaParaJson(mapa) : null,
-      // Leitura do motor da Lyra (tarefa 55), separada por tipo de mapa.
-      leitura: mapa ? lerMapaComoLyra(mapa) : null,
-      faltando: perfil.faltando,
-      localDeNascimento: perfil.nascimento.local?.rotulo ?? null,
-    });
+    const { perfil, mapa } = await carregarNatalDoTitular(session.user.id);
+    return NextResponse.json(
+      {
+        mapa: mapa ? mapaParaJson(mapa) : null,
+        // Leitura do motor da Lyra (tarefa 55), separada por tipo de mapa.
+        leitura: mapa ? lerMapaComoLyra(mapa) : null,
+        faltando: perfil.faltando,
+        localDeNascimento: perfil.nascimento.local?.rotulo ?? null,
+      },
+      { headers: { 'Cache-Control': 'private, no-store' } }
+    );
   } catch (error) {
     return respostaDeErro(error, 'Falha ao calcular o mapa natal.');
   }

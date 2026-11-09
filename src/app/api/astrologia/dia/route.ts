@@ -2,11 +2,8 @@ import { requireFeatureEnabled } from '@/lib/plans/service';
 import { NextResponse } from 'next/server';
 
 import { LocalSemNascerDoSolError } from '@/lib/astrology/panchang';
-import {
-  diaVedicoDoPerfil,
-  lerPerfilAstrologico,
-  mapaDoPerfil,
-} from '@/lib/astrology/perfil-astrologico';
+import { diaVedicoDoPerfil } from '@/lib/astrology/perfil-astrologico';
+import { carregarNatalDoTitular } from '@/lib/astrology/persistencia-natal';
 import { diaParaJson } from '@/lib/astrology/serializacao';
 import { HttpError } from '@/lib/http-error';
 import { respostaDeErro } from '@/lib/http/api';
@@ -38,20 +35,23 @@ export async function GET(request: Request) {
     ) {
       throw new HttpError('Data inválida: use AAAA-MM-DD.', 400);
     }
-    const perfil = await lerPerfilAstrologico(session.user.id);
+    const { perfil, mapa } = await carregarNatalDoTitular(session.user.id);
     let dia;
     try {
-      dia = diaVedicoDoPerfil(perfil, mapaDoPerfil(perfil), data);
+      dia = diaVedicoDoPerfil(perfil, mapa, data);
     } catch (erro) {
       if (erro instanceof LocalSemNascerDoSolError) {
         throw new HttpError(erro.message, 422);
       }
       throw erro;
     }
-    return NextResponse.json({
-      dia: dia ? diaParaJson(dia) : null,
-      faltando: perfil.localDoDia ? [] : ['local'],
-    });
+    return NextResponse.json(
+      {
+        dia: dia ? diaParaJson(dia) : null,
+        faltando: perfil.localDoDia ? [] : ['local'],
+      },
+      { headers: { 'Cache-Control': 'private, no-store' } }
+    );
   } catch (error) {
     return respostaDeErro(error, 'Falha ao calcular o dia védico.');
   }

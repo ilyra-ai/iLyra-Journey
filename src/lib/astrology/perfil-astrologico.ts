@@ -1,4 +1,5 @@
 import { queryRows } from '@/lib/mysql/pool';
+import type { PoolConnection } from 'mysql2/promise';
 
 import {
   chandraBala,
@@ -76,14 +77,16 @@ function dataIso(valor: string | Date | null) {
 }
 
 export async function lerPerfilAstrologico(
-  userId: string
+  userId: string,
+  connection?: PoolConnection
 ): Promise<PerfilAstrologico> {
   const [linha] = await queryRows<LinhaDoPerfil>(
     `SELECT birth_date, birth_time, birth_location, birth_latitude,
             birth_longitude, birth_timezone, residence_location,
             residence_latitude, residence_longitude, residence_timezone
        FROM profiles WHERE id = ? LIMIT 1`,
-    [userId]
+    [userId],
+    connection
   );
   const nascimentoLocal = linha
     ? local(
