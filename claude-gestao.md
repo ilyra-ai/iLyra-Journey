@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Ampliação tecnológica publicada em 09-11-2026:** commit `90646e8b`, push confirmado `a10666bc..90646e8b main -> main`. Registradas 24 frentes do Motor de Inteligência da Lyra na 156, com critérios de aceite, fontes primárias, ordem de execução e distinção entre implementação, pesquisa e proposta. Não houve implementação automática de tecnologias experimentais nem início das tarefas conjuntas 142/147. Prettier e diff aprovados. Registro da publicação conforme regra 6; retomada da otimização natal local para publicação própria.
+
 **Registro das solicitações publicado em 09-11-2026:** commit `9df244b8`, push confirmado `3f8a369a..9df244b8 main -> main`. Modernização 2027, persistência natal por assinante e reutilização diária integral registradas com invalidação, privacidade, concorrência e provas exigidas. A documentação distingue a lacuna atual de implementação concluída. Prettier do gestor aprovado. Registro imediato da publicação conforme regra 6.
 
 **Requisitos adicionais do Motor Lyra · 09-11-2026 · solicitados e ainda não concluídos:**
