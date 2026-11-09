@@ -63,16 +63,16 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **80,3%** (139 de 173)   |
-| Implementações publicadas               | **87,3%** (151 de 173)   |
+| Conclusão integral                      | **80,9%** (140 de 173)   |
+| Implementações publicadas               | **87,9%** (152 de 173)   |
 | Tarefas totais                          | 173                      |
-| 🟢 Concluídas                           | 139                      |
+| 🟢 Concluídas                           | 140                      |
 | 🟡 Implementadas com validação pendente | 12                       |
 | 🔵 Em andamento                         | 1                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 21                       |
+| ⚪ A iniciar                            | 20                       |
 | Branch de trabalho                      | `main` (única permitida) |
-| Última atualização                      | 2026-11-08               |
+| Última atualização                      | 2026-11-09               |
 
 > Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os doze estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
@@ -429,33 +429,6 @@ Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
 **Publicação da organização documental:** commit `5bb50d61`, push confirmado `9245243a..5bb50d61 main -> main`, em 07-11-2026. Dezenove tarefas futuras movidas integralmente para o Tópico 3, acompanhadas das matrizes, decisões e critérios de qualidade; 172 IDs únicos conferidos, sem duplicidade. Contadores atualizados. Anotações visuais pendentes registradas na 153. Somente este arquivo publicado; código em validação e alterações pausadas preservados fora do commit. Nenhuma tarefa funcional nova declarada concluída nesta organização.
 
 **Estado: ⚪ a iniciar.** Conteúdo acrescentado pelo usuário e reorganizado integralmente no Tópico 3. Este registro não inicia a implementação do programa nem conclui as tarefas 152/153. As dependências e condições comerciais abaixo continuam válidas.
-
-### 154 · Auditoria forense do baseline, compatibilidade e plano de migração · ⚪ PENDENTE
-
-**Prioridade:** crítica. **Natureza:** engenharia instrumental indispensável às melhorias definidas. **Dependências:** nenhuma neste programa. **Não confundir** com retomada das tarefas 142/144 ou com auditoria genérica do app fora deste escopo.
-
-**Objetivo verificável:** congelar uma fotografia honesta do funcionamento atual e demonstrar o impacto das modificações de acesso público, quarto mapa, assinaturas, preço, chat, login social, modal e relacionamentos sobre todas as camadas envolvidas.
-
-**Pontos reais de origem:** `CLAUDE.md`, `AGENTS.md`, `claude-gestao.md`, `docs/auditoria/2026-11-05-portfolio-*`, `src/app/page.tsx`, `AuthContext.tsx`, `src/lib/plans/*`, `src/lib/billing/*`, `src/lib/astrology/*`, `src/lib/lyra/*`, MySQL e componentes públicos.
-
-**Trabalho exigido, sem atalhos:**
-
-1. Verificar HEAD remoto, árvore local, `git diff`, arquivos não rastreados, stashes e testes existentes; estabelecer baseline reproduzível sem tocar em modificações de 142/144. Registrar versão exata dos serviços, Node/pnpm e credenciais **somente quanto à presença e ambiente**, nunca os valores.
-2. Traçar, com código/imports/rotas/tabelas, as sequências atuais: visitante → landing → login → registro → assinatura Free → onboarding → chat/mapas → checkout → webhooks → portal → cancelamento; administrador → planos/usuários/faturamento/IA; titular → privacidade/exportação/exclusão.
-3. Inventariar todas as dependências e referências de `'free' | 'meta' | 'care' | 'admin'`, `plan_key`, `PlanFeatureKey`, `user_subscriptions`, `stripe_plan_prices`, `PlanFeatureGate`, `RECURSOS_DA_ROTA`, assinaturas vigentes, histórico de faturas e planos em versões das APIs; localizar `isPlanFeatureEnabled` em todos os consumidores, inclusive componentes do construtor e jobs.
-4. Identificar todos os consumidores dos três mapas e contratos de serialização. Traçar dependências de `TipoDeMapa`, `TIPOS_DE_MAPA`, enumerações, prompt dos modelos, abas, imagens e APIs; não adicionar `ocidental` apenas à tipagem esquecendo os demais consumidores.
-5. Mapear navegabilidade convidado/autenticado/admin, deep links, serialização da descoberta, rotas públicas, cache, cookies, CSRF, CSP, CORS, `no-store`, limites e mecanismos de consentimento.
-6. Inventariar a publicação visual no banco (`site_page_configs`), rascunhos, `modules/lyra-customaze-ui-ux`, defaults e prévia do construtor para impedir uma mudança que funcione apenas quando nenhuma configuração personalizada existir.
-7. Registrar estado real de APIs de cobrança e chaves test/live; identificar bloqueios legítimos de ambientes e planos antigos; identificar se há usuários reais em Free/Meta/Care e os contratos que não podem ser alterados sem consentimento.
-8. Registrar riscos específicos: menor idade, DOB identificável, expor cálculo ao scraping, inconsistência entre frontend e API, assinaturas anteriores, custo de IA, plano selecionado manipulado pelo cliente, duplicação de contas OAuth, log de dados pessoais, abandono de login.
-9. Criar matriz de rastreabilidade com **ID da melhoria → componentes → endpoints → tabelas → testes → eventos mensuráveis → autorização → risco → evidência final**. Não criar tarefas adicionais de produto.
-10. Executar testes baseline possíveis sem alterar estado do cliente e guardar contagens/resultados exatos; falhas já existentes devem ser distinguidas de regressões introduzidas.
-
-**Entregáveis:** diagnóstico versionado no repositório sob área de auditorias permitida, matriz de impacto, plano de migração/rollback e atualização de gestão. **Sem aplicação de alterações destrutivas neste item.**
-
-**Critérios de aceite:** estado SHA e banco/ambiente identificados; zero dependência omitida nos fluxos atingidos após busca sistemática; conflitos com 142/144/153 registrados; baseline de teste verificável; revisão técnica dos riscos e do plano de rollback.
-
-**Provas obrigatórias:** comandos e SHA, lista de arquivos/rotas, rastreabilidade, resultados reais dos testes, diffs do próprio item, registro de pendências. **Concluída somente** após QA aplicável e publicação no `main`.
 
 ### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · ⚪ PENDENTE
 
@@ -4351,3 +4324,34 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 7. **Administração:** reorganizar categorias sem espaços vazios excessivos e destacar títulos com a cor primária vigente. Preservar destinos e permissões; `/admin/content` continua fora do submenu, sem excluir suas funções.
 8. **Menu do perfil:** fundo amarelo primário, textos de contraste escuro legível, sem bordas nem sombras; badge preenchido com cor distinta por perfil/plano real. Retirar deste menu o grupo Tema e as opções Claro/Escuro/Do sistema, pois o controle vai para o cabeçalho. Acrescentar no máximo três atalhos úteis além dos existentes, somente para funções ativas e permitidas.
 9. **Provas de fechamento:** conferir desktop, tablet, mobile e zoom; menus, tema persistente, modal de planos, seleção de mapas, alinhamentos, imagens transparentes e chat ampliado. Registrar resultados efetivamente executados. Os testes anteriores não comprovam automaticamente os refinamentos posteriores. Publicar código validado por tarefa, sem incluir as alterações independentes pausadas.
+
+### 154 · Auditoria forense do baseline, compatibilidade e plano de migração · 🟢 CONCLUÍDA
+
+**Prioridade:** crítica. **Natureza:** engenharia instrumental indispensável às melhorias definidas. **Dependências:** nenhuma neste programa. **Não confundir** com retomada das tarefas 142/144 ou com auditoria genérica do app fora deste escopo.
+
+**Objetivo verificável:** congelar uma fotografia honesta do funcionamento atual e demonstrar o impacto das modificações de acesso público, quarto mapa, assinaturas, preço, chat, login social, modal e relacionamentos sobre todas as camadas envolvidas.
+
+**Pontos reais de origem:** `CLAUDE.md`, `AGENTS.md`, `claude-gestao.md`, `docs/auditoria/2026-11-05-portfolio-*`, `src/app/page.tsx`, `AuthContext.tsx`, `src/lib/plans/*`, `src/lib/billing/*`, `src/lib/astrology/*`, `src/lib/lyra/*`, MySQL e componentes públicos.
+
+**Trabalho exigido, sem atalhos:**
+
+1. Verificar HEAD remoto, árvore local, `git diff`, arquivos não rastreados, stashes e testes existentes; estabelecer baseline reproduzível sem tocar em modificações de 142/144. Registrar versão exata dos serviços, Node/pnpm e credenciais **somente quanto à presença e ambiente**, nunca os valores.
+2. Traçar, com código/imports/rotas/tabelas, as sequências atuais: visitante → landing → login → registro → assinatura Free → onboarding → chat/mapas → checkout → webhooks → portal → cancelamento; administrador → planos/usuários/faturamento/IA; titular → privacidade/exportação/exclusão.
+3. Inventariar todas as dependências e referências de `'free' | 'meta' | 'care' | 'admin'`, `plan_key`, `PlanFeatureKey`, `user_subscriptions`, `stripe_plan_prices`, `PlanFeatureGate`, `RECURSOS_DA_ROTA`, assinaturas vigentes, histórico de faturas e planos em versões das APIs; localizar `isPlanFeatureEnabled` em todos os consumidores, inclusive componentes do construtor e jobs.
+4. Identificar todos os consumidores dos três mapas e contratos de serialização. Traçar dependências de `TipoDeMapa`, `TIPOS_DE_MAPA`, enumerações, prompt dos modelos, abas, imagens e APIs; não adicionar `ocidental` apenas à tipagem esquecendo os demais consumidores.
+5. Mapear navegabilidade convidado/autenticado/admin, deep links, serialização da descoberta, rotas públicas, cache, cookies, CSRF, CSP, CORS, `no-store`, limites e mecanismos de consentimento.
+6. Inventariar a publicação visual no banco (`site_page_configs`), rascunhos, `modules/lyra-customaze-ui-ux`, defaults e prévia do construtor para impedir uma mudança que funcione apenas quando nenhuma configuração personalizada existir.
+7. Registrar estado real de APIs de cobrança e chaves test/live; identificar bloqueios legítimos de ambientes e planos antigos; identificar se há usuários reais em Free/Meta/Care e os contratos que não podem ser alterados sem consentimento.
+8. Registrar riscos específicos: menor idade, DOB identificável, expor cálculo ao scraping, inconsistência entre frontend e API, assinaturas anteriores, custo de IA, plano selecionado manipulado pelo cliente, duplicação de contas OAuth, log de dados pessoais, abandono de login.
+9. Criar matriz de rastreabilidade com **ID da melhoria → componentes → endpoints → tabelas → testes → eventos mensuráveis → autorização → risco → evidência final**. Não criar tarefas adicionais de produto.
+10. Executar testes baseline possíveis sem alterar estado do cliente e guardar contagens/resultados exatos; falhas já existentes devem ser distinguidas de regressões introduzidas.
+
+**Entregáveis:** diagnóstico versionado no repositório sob área de auditorias permitida, matriz de impacto, plano de migração/rollback e atualização de gestão. **Sem aplicação de alterações destrutivas neste item.**
+
+**Critérios de aceite:** estado SHA e banco/ambiente identificados; zero dependência omitida nos fluxos atingidos após busca sistemática; conflitos com 142/144/153 registrados; baseline de teste verificável; revisão técnica dos riscos e do plano de rollback.
+
+**Provas obrigatórias:** comandos e SHA, lista de arquivos/rotas, rastreabilidade, resultados reais dos testes, diffs do próprio item, registro de pendências. **Concluída somente** após QA aplicável e publicação no `main`.
+
+**Início em 08-11-2026:** baseline funcional `253c692c`, registro `c585867f`; 144 publicada, oito grupos desligados. Auditoria somente leitura, sem reativação nem mudanças de produto. Preservar stash da 142, não iniciar 147 ou 173.
+
+**Fechamento técnico em 09-11-2026:** auditoria somente leitura entregue em `docs/auditoria/2026-11-09-programa-154.md`, inventário sanitizado em `docs/auditoria/2026-11-08-baseline-154.json` e script reproduzível `scripts/auditar-programa-154.mjs`. HEAD e remoto conferidos; 95 referências de planos, 23 de mapas, 47 de publicação visual e 25 de proteções inventariadas. Matriz 155–172, riscos, migração e rollback documentados. Banco local: apenas assinatura administrativa, Stripe test sem webhook/preços e OAuth ausente. Nenhum segredo ou dado pessoal exportado. Execução real do script aprovada; baseline técnico da 144 referenciado com data e sem alegar reexecução. Sem mudanças de produto, sem reativação dos oito grupos e sem homologação externa simulada. SHA da publicação será registrado imediatamente após o push.
