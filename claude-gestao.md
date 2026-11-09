@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Decisão do gratuito publicada em 09-11-2026:** commit `48f6cf5d`, push confirmado `9bc7928a..48f6cf5d main -> main`. Nome/nascimento apenas na sessão; menores de 13 anos não acessam o app; somente mapa ocidental gratuito; demais mapas mediante assinatura; modal fecha pelo X; concluir mapa ocidental antes da jornada e atualização da landing. Documentação de 155/157 atualizada sem declarar a implementação pronta. Código em andamento da 156 ficou fora da publicação. Registro imediato da regra 6.
+
 **Pesquisa da 155 preservada em 09-11-2026:** commit documental `a4752089`, push confirmado `f85dac80..a4752089 main -> main`. Fontes oficiais e minimização registradas; definição do público perguntada ao usuário e ainda pendente. Nenhuma abertura pública ou conclusão integral da 155 declarada. Prettier e diff aprovados. Registro subsequente da regra 6.
 
 **Publicação da 154 em 09-11-2026:** commit `bbc6cf43`, push confirmado `c585867f..bbc6cf43 main -> main`. Auditoria, inventário sanitizado e script somente leitura publicados; execução no MySQL, sintaxe Node, ESLint do script, Prettier dos quatro arquivos e diff sem erros aprovados. Nenhuma funcionalidade de produto adicionada ou reativada. As lacunas externas ficam explicitamente nas tarefas responsáveis, não foram simuladas. Registro imediato da regra 6; próxima tarefa autorizada: 155.
