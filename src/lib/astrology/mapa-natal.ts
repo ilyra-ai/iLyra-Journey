@@ -128,3 +128,14 @@ export function calcularMapaNatal(
     dasha: dashaVigente(calcularVimshottari(lua.longitude, instante), agora),
   };
 }
+
+/** Projeta os períodos sem repetir a astronomia imutável do nascimento. */
+export function mapaNatalNaData(mapa: MapaNatal, agora: Date): MapaNatal {
+  return {
+    ...mapa,
+    dasha: dashaVigente(
+      calcularVimshottari(mapa.lua.longitude, mapa.nascimentoUtc),
+      agora
+    ),
+  };
+}

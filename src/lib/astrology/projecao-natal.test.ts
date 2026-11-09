@@ -1,0 +1,77 @@
+import { describe, expect, it } from 'vitest';
+import { performance } from 'node:perf_hooks';
+import { calcularMapaNatal, mapaNatalNaData } from './mapa-natal';
+import { calcularVimshottari } from './vimshottari';
+
+const nascimento = {
+  data: '1990-06-15',
+  hora: '10:30',
+  latitude: -23.5505,
+  longitude: -46.6333,
+  fuso: 'America/Sao_Paulo',
+};
+
+describe('projeção natal sem repetir efemérides', () => {
+  it('preserva o resultado integral antes, durante e depois de cada transição', () => {
+    const mapa = calcularMapaNatal(nascimento);
+    const periodos = calcularVimshottari(
+      mapa.lua.longitude,
+      mapa.nascimentoUtc
+    );
+    for (const periodo of periodos) {
+      for (const subperiodo of periodo.antardashas) {
+        for (const deslocamento of [-1, 0, 1]) {
+          const referencia = new Date(
+            subperiodo.inicio.getTime() + deslocamento
+          );
+          expect(mapaNatalNaData(mapa, referencia)).toEqual(
+            calcularMapaNatal(nascimento, referencia)
+          );
+        }
+      }
+    }
+  });
+
+  it('não altera a leitura anterior nem inventa períodos fora da cobertura', () => {
+    const mapa = calcularMapaNatal(
+      nascimento,
+      new Date('2026-11-09T12:00:00Z')
+    );
+    const anterior = structuredClone(mapa);
+    expect(mapaNatalNaData(mapa, new Date('2300-01-01')).dasha).toBeNull();
+    expect(mapa).toEqual(anterior);
+  });
+
+  it('mede oito referências com recálculo e com reutilização local equivalente', () => {
+    const referencias = Array.from(
+      { length: 8 },
+      (_, indice) => new Date(Date.UTC(2026, 10, 9 + indice, 12))
+    );
+    const recalcular = () =>
+      referencias.map((data) => calcularMapaNatal(nascimento, data));
+    const reutilizar = () => {
+      const mapa = calcularMapaNatal(nascimento, referencias[0]);
+      return referencias.map((data) => mapaNatalNaData(mapa, data));
+    };
+    expect(reutilizar()).toEqual(recalcular());
+    for (let i = 0; i < 20; i++) {
+      recalcular();
+      reutilizar();
+    }
+    const medidas = (executar: () => unknown) => {
+      const amostras = Array.from({ length: 100 }, () => {
+        const inicio = performance.now();
+        executar();
+        return performance.now() - inicio;
+      }).sort((a, b) => a - b);
+      return { p50: amostras[50], p95: amostras[95], p99: amostras[99] };
+    };
+    console.info(
+      'Benchmark natal local em ms (sem banco, rede ou geração de texto)',
+      {
+        recalculo: medidas(recalcular),
+        reutilizacao: medidas(reutilizar),
+      }
+    );
+  });
+});
