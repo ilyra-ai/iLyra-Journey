@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Checks do cache publicados:** `bba13cd5`, push confirmado `326a1088..bba13cd5 main -> main`, com exclusões restritas aos artefatos gerados e documentação correspondente. Registro imediato da regra 6; 174 ainda em execução.
+
 **Checks e documentação do cache da 174 · 10-11-2026:** a primeira execução Windows do lint encontrou arquivos gerados dentro do cache Linux preservado. Corrigida a causa: `.lyra-run` é excluído das entradas ESLint, Prettier, TypeScript e descoberta Vitest, mantendo as fontes reais verificadas. Reexecução Windows: lint, formato, tipos e 1.068 testes unitários/100 arquivos aprovados; integrações com MySQL em execução. Documentação dos cinco artefatos, lease, adoção e recuperação atualizada em `docs/launchers.md` e `docs/guia-operacional.md`. Subida/login/idempotência/parada reais aprovados tanto em WSL quanto Windows; as novas operações de backup completo seguem em desenvolvimento.
 
 **Diagnóstico Windows publicado:** `385dec23`, push confirmado na `main` após `b36bd819`. 33 testes reexecutados pelo principal em 7,366 s, todos aprovados; cenários negativos de HTTP/banco usaram dublês identificados. Requisitos adicionais de backup/restauração completos registrados na mesma tarefa 174, ainda a implementar. Registro imediato da regra 6.
