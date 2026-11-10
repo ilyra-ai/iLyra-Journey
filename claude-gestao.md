@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Revisão WSL publicada:** `7247b08f`, push confirmado `6b535dfa..7247b08f main -> main`, em 10-11-2026. Incluídos launcher, testes focados e gestor. Registro imediato da regra 6; isolamento serial de artefatos está em desenvolvimento separado, sem ativação no checkout em uso nem aprovação integral da 174.
+
 **Revisão de dependências WSL da 174 · 10-11-2026:** porta efetiva planejada antes da memória e callback transmitido ao Compose por ambiente, sem editar `.env.local`; daemon sem banco visível e porta ocupada é recusado antes de criar banco ou realocar configuração. Identidade dos descendentes é revalidada antes de TERM/KILL. Sintaxe Bash e quatro testes novos passaram no WSL2 (0,031 s), com sockets/processo descartáveis reais e fronteiras Docker interceptadas explicitamente. Persistem janela entre consulta e sinal, filhos tardios e a necessidade de validar daemon/callback/subida integrada; esta revisão não fecha a 174.
 
 **Parada Windows publicada:** `bdbe76f2`, push confirmado `ed8e3bab..bdbe76f2 main -> main`, em 10-11-2026. Reexecução pelo principal: 24 testes aprovados em 6,011 s. Registro imediato da regra 6; 174 permanece em execução.
