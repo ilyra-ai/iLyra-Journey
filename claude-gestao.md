@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Parada Windows publicada:** `bdbe76f2`, push confirmado `ed8e3bab..bdbe76f2 main -> main`, em 10-11-2026. Reexecução pelo principal: 24 testes aprovados em 6,011 s. Registro imediato da regra 6; 174 permanece em execução.
+
 **Revisão de parada Windows da 174 · 10-11-2026:** árvore conferida antes da primeira parada, identidade CIM/handle revalidada e saída confirmada antes de apagar estado; logs propagam falhas. Passaram 24 testes Windows, incluindo encerramento real apenas de processo descartável criado pelo teste. Callback incompatível da memória continua recusado sem recriar serviço, editar ambiente ou separar histórico. Nenhum app/banco ativo foi parado; a prova de shutdown descartável não substitui startup/restart integral da 174.
 
 **Windows nativo publicado em 10-11-2026:** commit `e0c5fafa`, push confirmado `b0aacd16..e0c5fafa main -> main`; registro imediato da regra 6. Incluídos launcher Windows, 18 testes, dois guias e gestor, sem alterações independentes do app. A validação integral da 174 permanece pendente nas fronteiras detalhadas acima; `run.py` não foi removido antes da migração comprovada.
