@@ -7,6 +7,7 @@ de ramificação são identificados e não equivalem à prova de subida integral
 from __future__ import annotations
 
 import os
+import json
 import platform
 import socket
 import subprocess
@@ -307,6 +308,71 @@ class TestShutdownRealIsolado(unittest.TestCase):
             if filho.poll() is None:
                 filho.terminate()
             filho.wait(timeout=10)
+
+
+class TestLogsOperacionais(unittest.TestCase):
+    def test_comando_real_registra_saida_erro_exit_e_oculta_segredos(self) -> None:
+        with tempfile.TemporaryDirectory() as pasta, \
+             mock.patch.object(run_windows, "LOGS", Path(pasta)), \
+             mock.patch.object(run_windows, "ler_env", return_value={"MYSQL_PASSWORD": "credencial-fixture-banco"}):
+            comando = [sys.executable, "-c", "import os,sys; print(os.environ['MYSQL_PASSWORD']); print(os.environ['CHAVE_TOKEN'],file=sys.stderr); sys.exit(7)"]
+            with self.assertRaises(run_windows.Falha) as erro:
+                run_windows.executar(comando, extra={"CHAVE_TOKEN": "credencial-fixture-extra"})
+            arquivo = next(Path(pasta).glob("comandos-*.jsonl"))
+            texto = arquivo.read_text(encoding="utf-8")
+            entradas = [json.loads(linha) for linha in texto.splitlines()]
+            self.assertEqual([e["evento"] for e in entradas], ["início", "fim"])
+            self.assertEqual(entradas[-1]["codigo"], 7)
+            self.assertIn("[segredo oculto]", entradas[-1]["stdout"])
+            self.assertIn("[segredo oculto]", entradas[-1]["stderr"])
+            for segredo in ("credencial-fixture-banco", "credencial-fixture-extra"):
+                self.assertNotIn(segredo, texto + str(erro.exception))
+            self.assertNotIn("import os,sys", texto)
+
+    def test_identidades_cim_e_inspect_nao_persistem_argumentos_ou_ambientes(self) -> None:
+        with tempfile.TemporaryDirectory() as pasta, mock.patch.object(run_windows, "LOGS", Path(pasta)):
+            for comando in (["powershell.exe", "-EncodedCommand", "programa-fixture"], ["docker.exe", "inspect", "container"]):
+                run_windows.registrar_comando(comando, "fim", {}, codigo=0,
+                    stdout="credencial-desconhecida-de-terceiro", stderr="ambiente-de-terceiro")
+            texto = next(Path(pasta).glob("comandos-*.jsonl")).read_text(encoding="utf-8")
+            self.assertNotIn("credencial-desconhecida", texto)
+            self.assertNotIn("ambiente-de-terceiro", texto)
+            self.assertNotIn("programa-fixture", texto)
+
+    def test_timeout_nao_expoe_argv(self) -> None:
+        with tempfile.TemporaryDirectory() as pasta, mock.patch.object(run_windows, "LOGS", Path(pasta)), \
+             mock.patch.object(run_windows.subprocess, "run", side_effect=subprocess.TimeoutExpired(["fixture", "segredo-nao-configurado"], 1)):
+            with self.assertRaises(run_windows.Falha) as erro:
+                run_windows.executar(["fixture", "segredo-nao-configurado"], tempo=1)
+            texto = next(Path(pasta).glob("comandos-*.jsonl")).read_text(encoding="utf-8")
+            self.assertNotIn("segredo-nao-configurado", texto + str(erro.exception))
+            self.assertIn("Tempo limite", texto)
+
+
+class TestDoctorComDubles(unittest.TestCase):
+    def diagnosticar(self, codigo: int, banco_falha: bool = False):
+        with mock.patch.object(run_windows, "windows_nativo"), \
+             mock.patch.object(run_windows, "node", return_value="node.exe"), \
+             mock.patch.object(run_windows, "pnpm"), \
+             mock.patch.object(run_windows, "docker"), \
+             mock.patch.object(run_windows, "verificar_artefatos"), \
+             mock.patch.object(run_windows, "containers", return_value=[]), \
+             mock.patch.object(run_windows, "estado_app", return_value={"port": 3001, "pid": 999}), \
+             mock.patch.object(run_windows, "consultar_http", return_value=(codigo, "")) as http, \
+             mock.patch.object(run_windows, "executar", side_effect=run_windows.Falha("migrations pendentes") if banco_falha else None,
+                 return_value=subprocess.CompletedProcess([], 0, "migrations conferidas", "")) as executar:
+            resultado = run_windows.diagnostico()
+            executar.assert_called_once_with(["node.exe", str(RAIZ / "scripts/verificar-banco.mjs")],
+                tempo=30, extra={"LYRA_IGNORAR_VERIFICACAO_DO_BANCO": "0"})
+            http.assert_called_once_with("http://127.0.0.1:3001/api/health")
+            return resultado
+
+    def test_doctor_confere_migrations_e_saude_http(self) -> None:
+        self.assertEqual(self.diagnosticar(200), 0)
+
+    def test_doctor_falha_com_http_indisponivel_ou_migrations_pendentes(self) -> None:
+        self.assertEqual(self.diagnosticar(503), 1)
+        self.assertEqual(self.diagnosticar(200, banco_falha=True), 1)
 
 
 class TestIntegracaoLease(unittest.TestCase):

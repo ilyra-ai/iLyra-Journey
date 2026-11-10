@@ -136,22 +136,60 @@ def ambiente(extra: dict[str, str] | None = None) -> dict[str, str]:
     return {**os.environ, **ler_env(), "COREPACK_ENABLE_DOWNLOAD_PROMPT": "0", **(extra or {})}
 
 
+def sanitizar(texto: str, variaveis: dict[str, str]) -> str:
+    """Oculta credenciais herdadas, configuradas e estruturas usuais de autenticação."""
+    valores = {str(valor) for chave, valor in variaveis.items() if valor
+        and re.search(r"PASSWORD|SECRET|TOKEN|KEY|SENHA|SEGREDO|CREDENTIAL", chave, re.I)}
+    for valor in sorted(valores, key=len, reverse=True):
+        texto = texto.replace(valor, "[segredo oculto]")
+    texto = re.sub(r"(https?://)[^\s/@:]+:[^\s/@]+@", r"\1[segredo oculto]@", texto)
+    texto = re.sub(r"(?i)(authorization\s*[:=]\s*(?:bearer|basic)\s+)\S+", r"\1[segredo oculto]", texto)
+    return texto
+
+
+def registrar_comando(comando: Sequence[str], evento: str, variaveis: dict[str, str],
+                      *, codigo: int | None = None, stdout: str = "", stderr: str = "") -> None:
+    # Não persiste argv: PowerShell pode carregar programas codificados e CIM/
+    # inspect podem devolver argumentos ou ambientes de processos de terceiros.
+    executavel = Path(comando[0]).name
+    sensivel = executavel.lower() in ("powershell.exe", "pwsh.exe") or (
+        executavel.lower() in ("docker", "docker.exe") and "inspect" in comando)
+    etapa = executavel
+    if executavel.lower() in ("node", "node.exe") and len(comando) > 1:
+        alvo = Path(comando[1])
+        if alvo.parent == RAIZ / "scripts" and alvo.suffix == ".mjs":
+            etapa += " · " + alvo.name
+    entrada = {"instante": datetime.now(timezone.utc).isoformat(), "etapa": etapa,
+        "evento": evento, "codigo": codigo,
+        "stdout": "[saída de identidade omitida]" if sensivel else sanitizar(stdout, variaveis),
+        "stderr": "[saída de identidade omitida]" if sensivel and stderr else sanitizar(stderr, variaveis)}
+    try:
+        LOGS.mkdir(parents=True, exist_ok=True)
+        with (LOGS / f"comandos-{datetime.now().strftime('%Y%m%d')}-{os.getpid()}.jsonl").open(
+                "a", encoding="utf-8") as arquivo:
+            arquivo.write(json.dumps(entrada, ensure_ascii=False) + "\n")
+    except OSError as erro:
+        raise Falha("Não foi possível persistir o log operacional Windows.") from erro
+
+
 def executar(comando: Sequence[str], *, exigir: bool = True, tempo: int = 600,
              extra: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
     variaveis = ambiente(extra)
     if Path(comando[0]).name.lower() == "node.exe":
         variaveis["PATH"] = str(Path(comando[0]).parent) + os.pathsep + variaveis.get("PATH", "")
+    registrar_comando(comando, "início", variaveis)
     try:
         resultado = subprocess.run(list(comando), cwd=RAIZ, env=variaveis,
             stdin=subprocess.DEVNULL, capture_output=True, encoding="utf-8", errors="replace",
             timeout=tempo, check=False, creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0))
     except (OSError, subprocess.TimeoutExpired) as erro:
-        raise Falha(f"Falha em {Path(comando[0]).name}: {erro}") from erro
+        detalhe = f"Tempo limite de {tempo}s excedido." if isinstance(erro, subprocess.TimeoutExpired) else f"Falha de execução ({type(erro).__name__})."
+        registrar_comando(comando, "falha", variaveis, stderr=detalhe)
+        raise Falha(f"Falha em {Path(comando[0]).name}: {detalhe}") from erro
+    registrar_comando(comando, "fim", variaveis, codigo=resultado.returncode,
+        stdout=resultado.stdout, stderr=resultado.stderr)
     if exigir and resultado.returncode:
-        texto = resultado.stdout + resultado.stderr
-        for chave, valor in ler_env().items():
-            if valor and re.search(r"PASSWORD|SECRET|TOKEN|KEY|SENHA|SEGREDO", chave, re.I):
-                texto = texto.replace(valor, "[segredo oculto]")
+        texto = sanitizar(resultado.stdout + resultado.stderr, variaveis)
         raise Falha(f"{Path(comando[0]).name}: código {resultado.returncode}\n{texto[-5000:]}")
     return resultado
 
@@ -584,10 +622,29 @@ def diagnostico() -> int:
                 falhas += 1
                 mensagem("ERRO", f"{servico}: {erro}")
     else:
+        falhas += 1
         mensagem("AVISO", ".env.local ausente; doctor não cria configuração.")
+    if ENV_LOCAL.exists():
+        try:
+            # O verificador consulta SELECT/migrations; não instala, não migra e
+            # não aceita a opção de ignorar a verificação herdada do ambiente.
+            script = RAIZ / "scripts/verificar-banco.mjs"
+            if not script.is_file():
+                raise Falha("Verificador somente leitura do banco ausente.")
+            resultado = executar([node(), str(script)], tempo=30,
+                extra={"LYRA_IGNORAR_VERIFICACAO_DO_BANCO": "0"})
+            mensagem("OK", sanitizar(resultado.stdout.strip(), ambiente()))
+        except Falha as erro:
+            falhas += 1
+            mensagem("ERRO", f"Banco e migrations: {erro}")
     try:
         app = estado_app()
         mensagem("INFO", f"App Windows: http://localhost:{app['port']} · PID {app['pid']}" if app else "App Windows próprio parado.")
+        if app:
+            codigo, _ = consultar_http(f"http://127.0.0.1:{app['port']}/api/health")
+            if codigo != 200:
+                raise Falha(f"App Windows próprio sem saúde HTTP: código {codigo}.")
+            mensagem("OK", "App Windows próprio respondeu HTTP 200 em /api/health.")
     except Falha as erro:
         falhas += 1
         mensagem("ERRO", str(erro))
@@ -595,6 +652,11 @@ def diagnostico() -> int:
 
 
 def logs(args: argparse.Namespace) -> None:
+    if args.alvo == "todos" and not args.seguir:
+        comandos = sorted(LOGS.glob("comandos-*.jsonl"), key=lambda p: p.stat().st_mtime) if LOGS.exists() else []
+        if comandos:
+            mensagem("INFO", "Últimas etapas operacionais Windows (saídas sanitizadas).")
+            print(sanitizar("\n".join(comandos[-1].read_text(encoding="utf-8").splitlines()[-120:]), ambiente()))
     if args.alvo in ("app", "todos"):
         candidatos = sorted(LOGS.glob("app-*.log"), key=lambda p: p.stat().st_mtime) if LOGS.exists() else []
         if candidatos:
