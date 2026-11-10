@@ -8,6 +8,8 @@ isso não constitui uma validação da subida integrada do ambiente.
 from __future__ import annotations
 
 import re
+import json
+import shutil
 import socket
 import subprocess
 import sys
@@ -129,6 +131,43 @@ class TestDependenciasRunSh(unittest.TestCase):
         for nome in ("cmd_up", "cmd_app"):
             corpo = self.funcao(nome)
             self.assertLess(corpo.index("planejar_app"), corpo.index("etapa_memoria"))
+
+    def test_selecao_docker_exporta_host_e_contexto_para_node(self):
+        if not shutil.which("node") or not shutil.which("docker"):
+            self.skipTest("Node e Docker necessários para provar herança")
+        for variavel, valor in (
+            ("DOCKER_HOST", "unix:///tmp/lyra-teste-socket-inexistente"),
+            ("DOCKER_CONTEXT", "default"),
+        ):
+            resultado = self.executar(
+                ("configurar_docker",),
+                'unset DOCKER_HOST DOCKER_CONTEXT\n'
+                'LYRA_DOCKER_BIN="$(type -P docker)"\n'
+                'printf -v "$1" "%s" "$2"\n'
+                'erro() { printf "%s\\n" "$*" >&2; }\n'
+                'configurar_docker || exit 1\n'
+                "node -e 'console.log(JSON.stringify({host:process.env.DOCKER_HOST,contexto:process.env.DOCKER_CONTEXT,cli:require(\"node:child_process\").execFileSync(\"which\",[\"docker\"],{encoding:\"utf8\"}).trim()}))'",
+                variavel,
+                valor,
+            )
+            self.assertEqual(resultado.returncode, 0, resultado.stderr)
+            dados = json.loads(resultado.stdout)
+            self.assertEqual(dados["host" if variavel == "DOCKER_HOST" else "contexto"], valor)
+            self.assertEqual(dados["cli"], shutil.which("docker"))
+
+    def test_selecao_docker_recusa_ambiguidade_e_binario_inconsistente(self):
+        for configuracao in (
+            'DOCKER_HOST=unix:///tmp/nao-usado; DOCKER_CONTEXT=default',
+            'LYRA_DOCKER_BIN=./docker',
+            'LYRA_DOCKER_BIN=/usr/bin/true',
+        ):
+            resultado = self.executar(
+                ("configurar_docker",),
+                'unset DOCKER_HOST DOCKER_CONTEXT LYRA_DOCKER_BIN\n'
+                'erro() { printf "%s\\n" "$*"; }\n'
+                + configuracao + '\nconfigurar_docker',
+            )
+            self.assertEqual(resultado.returncode, 1, resultado.stderr)
 
 
 if __name__ == "__main__":

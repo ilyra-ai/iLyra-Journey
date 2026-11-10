@@ -30,6 +30,9 @@
 #  .lyra-run/linux/app.json e .lyra-run/linux/app.pid, logs em .logs/linux/.
 #  Nenhuma operação destrutiva automática
 #  e nenhum processo de terceiros é encerrado.
+#  Docker: DOCKER_HOST ou DOCKER_CONTEXT seleciona o daemon só nesta execução.
+#  LYRA_DOCKER_BIN aceita caminho absoluto para um executável chamado docker;
+#  PATH e seleção são herdados também pelos scripts Node. Não altera context use.
 # =============================================================================
 
 set -uo pipefail
@@ -233,6 +236,33 @@ compose() {
   fi
 }
 pnpm_cmd() { corepack pnpm "$@"; }
+
+configurar_docker() {
+  # Não usar função wrapper: execFile('docker') no Node deve resolver a mesma CLI.
+  local binario="${LYRA_DOCKER_BIN:-}" resolvido
+  if [[ -n "${DOCKER_HOST:-}" && -n "${DOCKER_CONTEXT:-}" ]]; then
+    erro "Defina somente DOCKER_HOST ou DOCKER_CONTEXT para selecionar o daemon sem ambiguidade."
+    return 1
+  fi
+  if [[ -n "$binario" ]]; then
+    if [[ "$binario" != /* || "${binario##*/}" != docker || ! -x "$binario" || -d "$binario" ]]; then
+      erro "LYRA_DOCKER_BIN deve apontar para um executável absoluto chamado docker, acessível também aos scripts Node Linux."
+      return 1
+    fi
+    export PATH="$(dirname "$binario"):$PATH"
+    hash -r
+    resolvido="$(type -P docker)"
+    if [[ "$(readlink -f "$resolvido")" != "$(readlink -f "$binario")" ]]; then
+      erro "A CLI Docker resolvida no PATH difere de LYRA_DOCKER_BIN."
+      return 1
+    fi
+  fi
+  # Variáveis padrão do Docker evitam que Bash, Compose e subprocessos Node
+  # escolham daemons distintos. Nenhuma configuração global é escrita.
+  [[ -z "${DOCKER_HOST:-}" ]] || export DOCKER_HOST
+  [[ -z "${DOCKER_CONTEXT:-}" ]] || export DOCKER_CONTEXT
+  return 0
+}
 
 # -----------------------------------------------------------------------------
 # Configuração (.env.local)
@@ -1378,6 +1408,7 @@ readonly -a MENU_ROTULOS=(
 readonly -a MENU_COMANDOS=("" "up" "up --prod" "db" "app" "migrate" "doctor" "fix" "status" "logs" "stop" "repair")
 
 menu() {
+  configurar_docker || return 1
   local escolha i
   while true; do
     estado_app
@@ -1433,6 +1464,7 @@ executar_comando() {
   limpar_verif
   verificar_node
   if (( $(contar_erros) > 0 )); then mostrar_verificacoes; return 1; fi
+  configurar_docker || return 1
   abrir_registro "$comando"
   local codigo inicio=$SECONDS
   case "$comando" in
