@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Diagnóstico Windows publicado:** `385dec23`, push confirmado na `main` após `b36bd819`. 33 testes reexecutados pelo principal em 7,366 s, todos aprovados; cenários negativos de HTTP/banco usaram dublês identificados. Requisitos adicionais de backup/restauração completos registrados na mesma tarefa 174, ainda a implementar. Registro imediato da regra 6.
+
 **Ampliação explícita da 174 · 10-11-2026:** acrescentar nos dois orquestradores operações reais de **backup do banco, migrações, restauração do banco, backup completo (app + banco) e restauração completa desse conjunto**. Os arquivos de backup devem ser gravados **na raiz do projeto**, identificados e excluídos do versionamento; não bastam volumes Docker sem artefato exportável nessa localização. Organizar o menu do orquestrador por tópicos e ordenar os itens pela sequência de uso. Preservar dados, comprovar integridade, exigir seleção inequívoca do backup e validar restauração em ambiente isolado antes do aceite; não declarar essas novas operações prontas antes de implementá-las e testá-las.
 
 **Paridade de diagnóstico Windows da 174 · 10-11-2026:** logs operacionais JSONL persistentes registram início/fim, saídas e códigos sanitizados sem argv; CIM e inspect não despejam argumentos/ambientes de terceiros. Diagnóstico lê banco/migrations e saúde HTTP; logs agregados incluem as etapas. 33 testes Windows aprovados pelo agente, incluindo subprocesso real para sanitização. A rodada real do principal comprovou build/start/login, repetição idempotente e parada Windows; o novo diagnóstico será reexecutado. Esta entrega não encerra a 174.
