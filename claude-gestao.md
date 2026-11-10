@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Prioridade 174 registrada e publicada em 10-11-2026:** commit `94624884`, push confirmado `2f6daff1..94624884 main -> main`. Somente o gestor foi alterado; Prettier e diff aprovados. Total atualizado para 174 tarefas, 34 não encerradas. A nova arquitetura WSL2/Windows, isolamento de Node.js, portas livres sem matar processos e remoção condicionada de `run.py` estão documentados como prioridade máxima; ainda não implementados. Esta orientação substitui a ordem de implementação anterior. O principal assume a 174 enquanto o limite de uso impedir o apoio dos subagentes.
+
 **Publicação da distribuição em 10-11-2026:** commit `40535ddb`, push confirmado `326b8d08..40535ddb main -> main`. Prettier e `git diff --check` aprovados; somente o gestor publicado. Os três subagentes receberam as atribuições, mas todos encerraram antes de produzir resultados por limite de uso do serviço. A distribuição é planejada, não execução comprovada; o principal assume a continuidade enquanto essa limitação persistir. Nenhuma tarefa recebeu aprovação com base na delegação.
 
 **Distribuição autorizada pelo usuário em 10-11-2026 · quatro agentes no total:** agente principal e três subagentes. A delegação abaixo atribui responsáveis e verificações, não altera estados nem declara tarefas concluídas. Os subagentes começaram somente inspeções e diagnósticos independentes, sem editar arquivos, publicar commits, usar o Chrome ou iniciar/parar serviços. O principal centraliza alterações, QA no Chrome e commit/push individual na main. Preservar o limite de três tarefas em andamento; atribuição futura não equivale a início de implementação. As tarefas 142 e 147 continuam reservadas para execução conjunta com o usuário.
