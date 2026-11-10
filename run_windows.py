@@ -42,6 +42,10 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from scripts.launcher_artifacts import (
+    ComprovacaoOrigem, ErroArtefatos, GerenciadorArtefatos, sha256,
+)
+
 RAIZ = Path(__file__).resolve().parent
 ESTADO = RAIZ / ".lyra-run/windows"
 LOGS = ESTADO / "logs"
@@ -189,6 +193,9 @@ def estado_app() -> dict[str, Any]:
     meta = ler_json(APP_META)
     if not meta:
         return {}
+    if (not isinstance(meta.get("pid"), int) or isinstance(meta.get("pid"), bool)
+            or meta["pid"] <= 0 or not identidade_valida(meta, meta)):
+        raise Falha("Metadado de aplicação não comprova host, raiz e plataforma Windows próprios; estado preservado.")
     atual = next((p for p in processos() if p["pid"] == meta.get("pid")), None)
     if atual is None:
         return {}
@@ -200,6 +207,18 @@ def estado_app() -> dict[str, Any]:
 def parar_app() -> None:
     meta = estado_app()
     if not meta:
+        registro = ler_json(APP_META)
+        if registro:
+            if (not isinstance(registro.get("pid"), int) or isinstance(registro.get("pid"), bool)
+                    or registro["pid"] <= 0 or not identidade_valida(registro, registro)):
+                raise Falha("Registro sem propriedade Windows comprovada; estado preservado.")
+            if any(p["pid"] == registro["pid"] for p in processos()):
+                raise Falha("PID reapareceu durante a conferência de parada; processo e registro preservados.")
+            if ler_json(APP_META) != registro:
+                raise Falha("Registro mudou durante a conferência de parada; estado preservado.")
+            APP_META.unlink()
+            mensagem("OK", "Registro Windows próprio obsoleto liberado após comprovar PID ausente; nenhum processo encerrado.")
+            return
         mensagem("OK", "Nenhum app Windows próprio em execução.")
         return
     todos = processos()
@@ -326,7 +345,11 @@ def consultar_http(url: str) -> tuple[int, str]:
         return 0, ""
 
 
-def verificar_artefatos() -> None:
+def verificar_artefatos(gerenciador: GerenciadorArtefatos | None = None) -> None:
+    gerenciador = gerenciador or GerenciadorArtefatos(RAIZ)
+    if gerenciador.manifesto.exists():
+        gerenciador.exigir_plataforma_ativa("windows")
+        return
     for estrangeiro in (RAIZ / ".lyra-run/linux/app.json", RAIZ / ".lyra-run/app.json", RAIZ / ".lyra-run-windows/app.pid"):
         if estrangeiro.exists():
             raise Falha(f"Estado estrangeiro/legado em {estrangeiro}. Confira e encerre pelo launcher de origem antes de compartilhar artefatos. Nenhum PID foi usado.")
@@ -367,8 +390,8 @@ def preparar_ambiente() -> None:
         raise Falha("Ambiente incompleto: " + ", ".join(faltam))
 
 
-def dependencias(forcar: bool = False) -> None:
-    verificar_artefatos()
+def dependencias(forcar: bool = False, gerenciador: GerenciadorArtefatos | None = None) -> None:
+    verificar_artefatos(gerenciador)
     lock = RAIZ / "pnpm-lock.yaml"
     instalado = RAIZ / "node_modules/.pnpm/lock.yaml"
     iguais = instalado.is_file() and hashlib.sha256(lock.read_bytes()).digest() == hashlib.sha256(instalado.read_bytes()).digest()
@@ -505,10 +528,10 @@ def iniciar_app(prod: bool) -> None:
         reserva.close()
 
 
-def remover_artefato(nome: str) -> None:
+def remover_artefato(nome: str, gerenciador: GerenciadorArtefatos | None = None) -> None:
     if nome not in (".next", "node_modules"):
         raise Falha("Remoção restrita aos artefatos recriáveis do projeto.")
-    verificar_artefatos()
+    verificar_artefatos(gerenciador)
     if ler_json(ARTEFATOS).get("host") != platform.node():
         raise Falha("Sem prova de propriedade Windows deste host; artefatos preservados.")
     caminho = RAIZ / nome
@@ -602,7 +625,7 @@ def confirmar(texto: str, palavra: str = "SIM") -> None:
         raise Falha("Operação cancelada; confirmação explícita necessária.")
 
 
-def despachar(args: argparse.Namespace) -> int:
+def despachar(args: argparse.Namespace, gerenciador: GerenciadorArtefatos | None = None) -> int:
     comando = args.comando
     if comando in ("doctor", "status"):
         return diagnostico()
@@ -617,9 +640,8 @@ def despachar(args: argparse.Namespace) -> int:
                 docker("stop", "--time", "60", item["Id"])
         return 0
     preflight()
-    if comando in ("up", "app", "repair"):
-        verificar_artefatos()
     if comando in ("up", "app") and estado_app():
+        verificar_artefatos(gerenciador)
         iniciar_app(args.prod)
         return 0
     if comando == "purge":
@@ -643,15 +665,27 @@ def despachar(args: argparse.Namespace) -> int:
         docker("volume", "rm", montagem["Name"])
         mensagem("OK", f"Banco removido; backup preservado: {encontrado.group(1)}")
         return 0
+    if gerenciador is not None:
+        if comando == "repair":
+            parar_app()
+        prova = None
+        plano = gerenciador.planejar("windows")
+        if plano["exige_comprovacao"]:
+            evidencias = ("node_modules/.modules.yaml", "node_modules/.pnpm/lock.yaml")
+            if not all((RAIZ / nome).is_file() for nome in evidencias):
+                raise Falha("Instalação inicial sem evidências pnpm; artefatos preservados para diagnóstico.")
+            prova = ComprovacaoOrigem("windows", node(), sha256(RAIZ / "pnpm-lock.yaml"),
+                {nome: sha256(RAIZ / nome) for nome in evidencias})
+        gerenciador.ativar("windows", prova)
     preparar_ambiente()
     if comando == "repair":
         if not args.sim:
             confirmar("Reinstalar artefatos Windows próprios, preservando MySQL?")
         parar_app()
-        remover_artefato(".next")
-        remover_artefato("node_modules")
+        remover_artefato(".next", gerenciador)
+        remover_artefato("node_modules", gerenciador)
     if comando in ("up", "app", "repair"):
-        dependencias(forcar=comando == "repair")
+        dependencias(forcar=comando == "repair", gerenciador=gerenciador)
     else:
         dependencias_banco()
     banco(criar=comando not in ("app", "migrate"))
@@ -718,10 +752,11 @@ def main(argumentos: Sequence[str]) -> int:
         if args.comando is None:
             return menu()
         if args.comando in MUTACOES:
-            with exclusao_mutua():
-                return despachar(args)
+            gerenciador = GerenciadorArtefatos(RAIZ)
+            with gerenciador.transacao(), exclusao_mutua():
+                return despachar(args, gerenciador)
         return despachar(args)
-    except Falha as erro:
+    except (Falha, ErroArtefatos) as erro:
         mensagem("ERRO", str(erro))
         return 1
     except (KeyboardInterrupt, EOFError):

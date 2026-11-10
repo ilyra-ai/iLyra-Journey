@@ -601,6 +601,7 @@ total_migrations() { find mysql/migrations -maxdepth 1 -name '*.sql' | wc -l | t
 # -----------------------------------------------------------------------------
 APP_PID_ATUAL=""; APP_PORTA=""; APP_MODO=""; APP_INICIO=""; APP_LOG=""; APP_ORIGEM=""; APP_WINPID=""
 APP_ESTADO_ALHEIO=""
+SUPERVISAO_LEASE_VALIDADA=0
 
 inicio_processo() {
   [[ "$1" =~ ^[1-9][0-9]*$ && -r "/proc/$1/stat" ]] || return 1
@@ -1507,6 +1508,15 @@ executar_comando() {
   verificar_node
   if (( $(contar_erros) > 0 )); then mostrar_verificacoes; return 1; fi
   configurar_docker || return 1
+  case "$comando" in
+    up|app|db|migrate|fix|repair|purge|stop)
+      if [[ "$SUPERVISAO_LEASE_VALIDADA" != 1 ]]; then
+        have python3 || { erro "Python 3 Linux é necessário para a exclusão global dos artefatos."; return 1; }
+        python3 "$RAIZ/scripts/launcher_supervisor.py" --raiz "$RAIZ" executar -- "$comando" "$@"
+        return $?
+      fi
+      ;;
+  esac
   abrir_registro "$comando"
   local codigo inicio=$SECONDS
   case "$comando" in
@@ -1536,6 +1546,12 @@ encerrar() {
 }
 trap encerrar EXIT
 trap 'printf "\n"; aviso "Interrompido pelo operador."; exit 130' INT
+
+if [[ "${1:-}" == --interno-lease ]]; then
+  shift
+  python3 "$RAIZ/scripts/launcher_supervisor.py" --raiz "$RAIZ" --pai "$PPID" validar-filho || exit 1
+  SUPERVISAO_LEASE_VALIDADA=1
+fi
 
 if [[ $# -eq 0 ]]; then
   if [[ -t 0 && -t 1 ]]; then

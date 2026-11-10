@@ -106,6 +106,45 @@ class TestIdentidade(unittest.TestCase):
                 run_windows.parar_app()
             encerrar.assert_not_called()
 
+    def test_consulta_preserva_estado_obsoleto_e_stop_explicito_libera(self) -> None:
+        with tempfile.TemporaryDirectory() as pasta:
+            arquivo = Path(pasta) / "app.json"
+            run_windows.gravar_json(arquivo, self.meta)
+            with mock.patch.object(run_windows, "APP_META", arquivo), \
+                 mock.patch.object(run_windows, "processos", return_value=[]), \
+                 mock.patch.object(run_windows, "powershell") as encerrar:
+                self.assertEqual(run_windows.estado_app(), {})
+                self.assertTrue(arquivo.exists())
+                run_windows.parar_app()
+                self.assertFalse(arquivo.exists())
+                encerrar.assert_not_called()
+
+    def test_estado_estrangeiro_sem_pid_ativo_nunca_e_apagado(self) -> None:
+        for chave, valor in (("host", "outro-host"), ("platform", "linux"), ("root", "D:/outra-raiz"), ("pid", True)):
+            with self.subTest(chave=chave), tempfile.TemporaryDirectory() as pasta:
+                arquivo = Path(pasta) / "app.json"
+                run_windows.gravar_json(arquivo, {**self.meta, chave: valor})
+                anterior = arquivo.read_bytes()
+                with mock.patch.object(run_windows, "APP_META", arquivo), \
+                     mock.patch.object(run_windows, "processos", return_value=[]), \
+                     mock.patch.object(run_windows, "powershell") as encerrar:
+                    with self.assertRaisesRegex(run_windows.Falha, "estado preservado"):
+                        run_windows.parar_app()
+                    encerrar.assert_not_called()
+                    self.assertEqual(arquivo.read_bytes(), anterior)
+
+    def test_pid_reaparece_antes_de_limpar_registro_obsoleto(self) -> None:
+        with tempfile.TemporaryDirectory() as pasta:
+            arquivo = Path(pasta) / "app.json"
+            run_windows.gravar_json(arquivo, self.meta)
+            with mock.patch.object(run_windows, "APP_META", arquivo), \
+                 mock.patch.object(run_windows, "processos", side_effect=[[], [self.processo]]), \
+                 mock.patch.object(run_windows, "powershell") as encerrar:
+                with self.assertRaisesRegex(run_windows.Falha, "PID reapareceu"):
+                    run_windows.parar_app()
+                self.assertTrue(arquivo.exists())
+                encerrar.assert_not_called()
+
     def test_shutdown_rejeita_arvore_incompleta_sem_parada_parcial(self) -> None:
         filho = {**self.processo, "pid": 124, "parent": 123, "command": None}
         with mock.patch.object(run_windows, "estado_app", return_value=self.meta), \
@@ -268,6 +307,25 @@ class TestShutdownRealIsolado(unittest.TestCase):
             if filho.poll() is None:
                 filho.terminate()
             filho.wait(timeout=10)
+
+
+class TestIntegracaoLease(unittest.TestCase):
+    def test_verificacao_reusa_o_mesmo_lease_sem_deadlock(self) -> None:
+        # Inventário externo interceptado; arquivos, rename e lock são reais.
+        with tempfile.TemporaryDirectory() as pasta:
+            raiz = Path(pasta)
+            gerenciador = run_windows.GerenciadorArtefatos(raiz)
+            with mock.patch("scripts.launcher_artifacts.processos_checkout", return_value=[]), \
+                 mock.patch.object(run_windows, "RAIZ", raiz):
+                with gerenciador.transacao():
+                    gerenciador.ativar("windows")
+                    run_windows.verificar_artefatos(gerenciador)
+                    self.assertTrue(gerenciador.lock.exists())
+                    concorrente = run_windows.GerenciadorArtefatos(raiz)
+                    with self.assertRaises(run_windows.ErroArtefatos):
+                        with concorrente.transacao():
+                            self.fail("Operação concorrente entrou durante o preparo")
+                self.assertFalse(gerenciador.lock.exists())
 
 
 if __name__ == "__main__":
