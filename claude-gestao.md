@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Revisão de dependências WSL da 174 · 10-11-2026:** porta efetiva planejada antes da memória e callback transmitido ao Compose por ambiente, sem editar `.env.local`; daemon sem banco visível e porta ocupada é recusado antes de criar banco ou realocar configuração. Identidade dos descendentes é revalidada antes de TERM/KILL. Sintaxe Bash e quatro testes novos passaram no WSL2 (0,031 s), com sockets/processo descartáveis reais e fronteiras Docker interceptadas explicitamente. Persistem janela entre consulta e sinal, filhos tardios e a necessidade de validar daemon/callback/subida integrada; esta revisão não fecha a 174.
+
 **Parada Windows publicada:** `bdbe76f2`, push confirmado `ed8e3bab..bdbe76f2 main -> main`, em 10-11-2026. Reexecução pelo principal: 24 testes aprovados em 6,011 s. Registro imediato da regra 6; 174 permanece em execução.
 
 **Revisão de parada Windows da 174 · 10-11-2026:** árvore conferida antes da primeira parada, identidade CIM/handle revalidada e saída confirmada antes de apagar estado; logs propagam falhas. Passaram 24 testes Windows, incluindo encerramento real apenas de processo descartável criado pelo teste. Callback incompatível da memória continua recusado sem recriar serviço, editar ambiente ou separar histórico. Nenhum app/banco ativo foi parado; a prova de shutdown descartável não substitui startup/restart integral da 174.

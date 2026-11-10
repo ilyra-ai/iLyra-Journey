@@ -225,7 +225,13 @@ consultar() {
   return "$codigo"
 }
 
-compose() { docker compose --env-file "$ENV_LOCAL" "$@"; }
+compose() {
+  if [[ -n "${RETORNO_MEMORIA_APP:-}" ]]; then
+    LYRA_MEMORIA_APP_URL="$RETORNO_MEMORIA_APP" docker compose --env-file "$ENV_LOCAL" "$@"
+  else
+    docker compose --env-file "$ENV_LOCAL" "$@"
+  fi
+}
 pnpm_cmd() { corepack pnpm "$@"; }
 
 # -----------------------------------------------------------------------------
@@ -571,6 +577,18 @@ inicio_processo() {
   awk '{ sub(/.*\) /, ""); print $20 }' "/proc/$1/stat"
 }
 
+processo_identificado_vivo() {
+  local pid="$1" inicio="$2"
+  [[ -n "$inicio" && "$(inicio_processo "$pid" 2>/dev/null)" == "$inicio" ]] && pid_vivo "$pid"
+}
+
+sinalizar_processo_identificado() {
+  local pid="$1" inicio="$2" sinal="$3"
+  [[ "$sinal" == TERM || "$sinal" == KILL ]] || return 1
+  processo_identificado_vivo "$pid" "$inicio" || return 1
+  kill "-$sinal" "$pid" 2>/dev/null
+}
+
 validar_identidade_app() {
   local pid="$1" inicio="$2" raiz="$3" plataforma="$4"
   [[ "$plataforma" == linux && "$raiz" == "$RAIZ" && -n "$inicio" ]] || return 1
@@ -715,10 +733,22 @@ etapa_porta_banco() {
   local desejada dono nova
   desejada="$(env_valor MYSQL_HOST_PORT "$PORTA_DB_PADRAO")"
   estado_banco --sem-sql
+  if [[ -n "$DB_INDISPONIVEL" ]]; then
+    erro "Não foi possível identificar o MySQL no daemon atual; banco e configuração preservados: $DB_INDISPONIVEL"
+    return 1
+  fi
   if [[ "$DB_ESTADO" == "running" && "$DB_PORTA" == "$desejada" ]]; then
     return 0
   fi
   dono="$(dono_da_porta "$desejada")"
+  if [[ -z "$DB_ESTADO" ]] && porta_em_uso "$desejada"; then
+    local contexto motor
+    contexto="$(docker context show 2>/dev/null)"
+    motor="$(docker info --format '{{.ID}} {{.Name}}' 2>/dev/null)"
+    erro "A porta $desejada está ocupada, mas $CONTAINER_DB não existe no daemon atual (${contexto:-desconhecido}; ${motor:-identidade indisponível}). Possível divergência entre Docker do WSL e Docker Desktop."
+    erro "Selecione o daemon que já contém o banco. Nenhum banco duplicado será criado e nenhuma porta ou .env.local será alterado."
+    return 1
+  fi
   if [[ -z "$dono" || "$dono" == "container Docker $CONTAINER_DB" ]]; then
     if [[ "$(env_valor MYSQL_PORT)" != "$desejada" ]]; then
       definir_env MYSQL_PORT "$desejada"
@@ -797,6 +827,32 @@ url_local() {  # ajusta URLs locais para a porta efetiva (URLs externas são man
   fi
 }
 
+planejar_app() {
+  estado_app
+  if [[ -n "$APP_ESTADO_ALHEIO" ]]; then erro "$APP_ESTADO_ALHEIO"; return 1; fi
+  ler_env
+  local desejada="${LYRA_APP_PORT:-$PORTA_APP_PADRAO}" dono origem
+  APP_PORTA_PLANEJADA="$APP_PORTA"
+  if [[ -n "$APP_PID_ATUAL" ]]; then
+    if [[ -z "$APP_PORTA" || "$(consultar_http "http://127.0.0.1:$APP_PORTA/api/health")" != 200 ]]; then
+      erro "A aplicação registrada não está saudável; memória e processos preservados."
+      return 1
+    fi
+  else
+    APP_PORTA_PLANEJADA="$desejada"
+    if porta_em_uso "$desejada"; then
+      dono="$(dono_da_porta "$desejada")"
+      APP_PORTA_PLANEJADA="$(porta_livre_a_partir "$((desejada + 1))" "${DB_PORTA:-}")" || return 1
+      aviso "Porta $desejada ocupada por ${dono:-processo não identificado}; preservada. Aplicação planejada em $APP_PORTA_PLANEJADA."
+    fi
+  fi
+  origem="$(env_valor LYRA_MEMORIA_APP_URL 'http://host.docker.internal:3000')"
+  RETORNO_MEMORIA_APP="$origem"
+  if [[ "$origem" =~ ^(https?://(host\.docker\.internal|localhost|127\.0\.0\.1))(:[0-9]+)?(/.*)?$ ]]; then
+    RETORNO_MEMORIA_APP="${BASH_REMATCH[1]}:$APP_PORTA_PLANEJADA${BASH_REMATCH[4]}"
+  fi
+}
+
 etapa_app() {  # etapa_app <dev|prod>
   local modo="$1"
   etapa "Aplicação Next.js ($([[ "$modo" == prod ]] && echo produção || echo desenvolvimento))"
@@ -816,13 +872,11 @@ etapa_app() {  # etapa_app <dev|prod>
   fi
 
   ler_env
-  local desejada="${LYRA_APP_PORT:-$PORTA_APP_PADRAO}" porta dono
-  porta="$desejada"
-  dono="$(dono_da_porta "$desejada")"
-  if [[ -n "$dono" ]]; then
-    estado_banco --sem-sql
-    porta="$(porta_livre_a_partir "$((desejada + 1))" "$DB_PORTA")" || { erro "Nenhuma porta livre para a aplicação."; return 1; }
-    aviso "Porta $desejada ocupada por $dono; esse processo não será tocado. Usando a porta $porta."
+  [[ -n "${APP_PORTA_PLANEJADA:-}" ]] || planejar_app || return 1
+  local porta="$APP_PORTA_PLANEJADA"
+  if porta_em_uso "$porta"; then
+    erro "A porta planejada $porta foi ocupada após configurar a memória. Processo preservado; repita o comando para replanejar o retorno da memória."
+    return 1
   fi
 
   local log_app="$LOGS/app-$modo.log" subcomando=dev
@@ -830,11 +884,7 @@ etapa_app() {  # etapa_app <dev|prod>
   local base_url public_url
   base_url="$(env_valor APP_BASE_URL)"; public_url="$(env_valor NEXT_PUBLIC_APP_URL)"
   local -a ambiente=("PORT=$porta")
-  local origem_memoria
-  origem_memoria="$(env_valor LYRA_MEMORIA_APP_URL)"
-  if [[ "$origem_memoria" =~ ^(https?://(host\.docker\.internal|localhost|127\.0\.0\.1))(:[0-9]+)?/?$ ]]; then
-    ambiente+=("LYRA_MEMORIA_APP_URL=${BASH_REMATCH[1]}:$porta")
-  fi
+  ambiente+=("LYRA_MEMORIA_APP_URL=$RETORNO_MEMORIA_APP")
   [[ -n "$base_url" ]] && ambiente+=("APP_BASE_URL=$(url_local "$base_url" "$porta")")
   [[ -n "$public_url" ]] && ambiente+=("NEXT_PUBLIC_APP_URL=$(url_local "$public_url" "$porta")")
 
@@ -933,21 +983,24 @@ parar_app() {
   else
     local -a arvore=()
     mapfile -t arvore < <(arvore_de_processos "$pid")
+    local -A inicios=()
+    local membro
+    for membro in "${arvore[@]}"; do inicios["$membro"]="$(inicio_processo "$membro" 2>/dev/null)"; done
     info "SIGTERM para ${#arvore[@]} processo(s) da aplicação (PID $pid)."
-    kill -TERM "${arvore[@]}" 2>/dev/null || true
-    local limite=$((SECONDS + TEMPO_PARADA_APP)) vivos membro
+    for membro in "${arvore[@]}"; do sinalizar_processo_identificado "$membro" "${inicios[$membro]}" TERM || true; done
+    local limite=$((SECONDS + TEMPO_PARADA_APP)) vivos
     while (( SECONDS < limite )); do
       vivos=0
-      for membro in "${arvore[@]}"; do pid_vivo "$membro" && vivos=$((vivos + 1)); done
+      for membro in "${arvore[@]}"; do processo_identificado_vivo "$membro" "${inicios[$membro]}" && vivos=$((vivos + 1)); done
       (( vivos == 0 )) && break
       sleep 0.5
     done
     if (( vivos > 0 )); then
       aviso "$vivos processo(s) não encerraram em ${TEMPO_PARADA_APP}s; enviando SIGKILL."
-      kill -KILL "${arvore[@]}" 2>/dev/null || true
+      for membro in "${arvore[@]}"; do sinalizar_processo_identificado "$membro" "${inicios[$membro]}" KILL || true; done
       sleep 1
       vivos=0
-      for membro in "${arvore[@]}"; do pid_vivo "$membro" && vivos=$((vivos + 1)); done
+      for membro in "${arvore[@]}"; do processo_identificado_vivo "$membro" "${inicios[$membro]}" && vivos=$((vivos + 1)); done
       if (( vivos > 0 )); then
         erro "$vivos processo(s) da aplicação continuam ativos após SIGKILL."
         return 1
@@ -1021,6 +1074,7 @@ cmd_up() {
   etapa_dependencias || return 1
   etapa_banco || return 1
   etapa_migrations || return 1
+  planejar_app || return 1
   etapa_memoria || return 1
   estado_app
   if [[ "$modo" == prod && -z "$APP_PID_ATUAL" ]]; then etapa_build || return 1; fi
@@ -1046,6 +1100,7 @@ cmd_app() {
     return 1
   fi
   etapa_dependencias || return 1
+  planejar_app || return 1
   etapa_memoria || return 1
   estado_app
   if [[ "$modo" == prod && -z "$APP_PID_ATUAL" ]]; then etapa_build || return 1; fi
@@ -1107,7 +1162,7 @@ cmd_doctor() {
   else
     dono="$(dono_da_porta "$porta_db")"
     if [[ -n "$dono" ]]; then
-      verif "Porta $porta_db (MySQL)" aviso "$dono" "O \`db\`/\`up\` realocará o MySQL para uma porta livre."
+      verif "Porta $porta_db (MySQL)" aviso "$dono" "Confirme o daemon que contém o banco; sem identidade do container, \`db\`/\`up\` preservará a porta e recusará criar outro banco."
     else
       verif "Porta $porta_db (MySQL)" ok "livre"
     fi
