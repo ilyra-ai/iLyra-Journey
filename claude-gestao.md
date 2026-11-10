@@ -114,16 +114,16 @@
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **80,9%** (140 de 173)   |
-| Implementações publicadas               | **87,9%** (152 de 173)   |
-| Tarefas totais                          | 173                      |
+| Conclusão integral                      | **80,5%** (140 de 174)   |
+| Implementações publicadas               | **87,4%** (152 de 174)   |
+| Tarefas totais                          | 174                      |
 | 🟢 Concluídas                           | 140                      |
 | 🟡 Implementadas com validação pendente | 12                       |
 | 🔵 Em andamento                         | 3                        |
 | 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 18                       |
+| ⚪ A iniciar                            | 19                       |
 | Branch de trabalho                      | `main` (única permitida) |
-| Última atualização                      | 2026-11-09               |
+| Última atualização                      | 2026-11-10               |
 
 > Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os doze estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
@@ -1662,6 +1662,22 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 ---
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
+
+### 174 · Prioridade máxima: orquestradores independentes WSL2/Ubuntu e Windows 11 · ⚪ PENDENTE
+
+**Solicitação explícita de 10-11-2026. Responsável:** principal; apoio de diagnóstico do subagente A quando disponível. **Ordem:** próxima implementação prioritária, antes das demais frentes. Registro solicitado agora; nenhuma remoção ou migração executada nesta atividade documental. Os números 174–181 do anexo de evolução do chat permanecem sub-requisitos da 147, não tarefas globais concorrentes com este ID.
+
+1. Auditar os três arquivos da raiz e todos os consumidores antes de alterar: `run.sh`, `run_windows.py` e `run.py`. Aproveitar a lógica real já entregue; mapear CLI, TUI, bootstrap, logs, banco, migrations, portas, estado e shutdown.
+2. Tornar `run.sh` o orquestrador completo do **WSL2/Ubuntu**, com experiência premium funcional, diagnóstico claro, preparação reproduzível, início da aplicação e banco, logs, estado, parada controlada, reinício e tratamento real de falhas.
+3. Tornar `run_windows.py` o orquestrador completo e equivalente para **Windows 11**, usando ferramentas nativas desse ambiente. Oferecer paridade funcional e qualidade de interação com `run.sh`; não depender do antigo wrapper de Git Bash/WSL para simular suporte Windows.
+4. **Node.js rigorosamente separado:** WSL2 usa seu próprio binário Linux, pnpm/Corepack e dependências compatíveis com Linux; Windows usa seu próprio binário Windows e ferramentas compatíveis com Windows. Validar plataforma, resolução do executável e versão; rejeitar reutilização cruzada por PATH ou montagem. Compartilhar fontes/configuração apropriada não autoriza compartilhar o runtime nem artefatos nativos incompatíveis.
+5. **Nunca derrubar processos para liberar portas.** Identificar ocupação, procurar e reservar porta disponível, tratar disputa concorrente e atualizar coerentemente a URL efetiva, healthcheck, configuração e conexão entre serviços. Não matar PID alheio nem parar containers existentes para abrir uma porta. Encerrar somente processos comprovadamente pertencentes à instância do orquestrador ao solicitar sua parada.
+6. Migrar todas as responsabilidades e referências necessárias antes de **remover `run.py`**. Atualizar README, instruções, scripts, testes e chamadas internas. A retirada depende de comprovação de que os dois substitutos funcionam; preservar dados e configurações existentes. Executar busca de referências e justificar registros históricos que precisem permanecer.
+7. A arquitetura solicitada agora substitui as instruções anteriores que definiam `run.py` como orquestrador oficial WSL2 e `run.sh` como launcher Git Bash. Atualizar a documentação normativa correspondente durante a implementação, sem apagar o histórico de evidências de 13/14/15. Revalidar essas tarefas contra a nova arquitetura.
+8. Provar em cada sistema: help/doctor, startup completo com banco existente, migrations, HTTP e MySQL saudáveis, logs, status, parada, reinício e segunda execução idempotente. Provar também porta ocupada por processo de teste preservado, escolha de outra porta, Node do sistema correto, falhas diagnosticadas sem destruição e interação TTY/sem TTY. Não declarar equivalência baseada apenas em sintaxe, mocks ou `doctor`.
+9. Entregar logs sanitizados, matriz de paridade por comando, provas de isolamento dos runtimes e de preservação das portas ocupadas, quality gates aplicáveis e revisão final. Publicar a entrega lógica em commit/push próprios na main, sem branches/worktrees, e registrar o SHA imediatamente no gestor.
+
+**Aceite:** dois orquestradores reais e completos nos respectivos ambientes, `run.py` retirado após migração comprovada, nenhuma porta liberada à força, documentação coerente e validação real publicada. Esta nova tarefa eleva o total para 174 e as pendências para 34 (12 em validação, três em andamento, 19 a iniciar); a implementação não foi antecipadamente aprovada.
 
 ## Tópico 4 · Implementações Publicadas e Estado da Validação
 
