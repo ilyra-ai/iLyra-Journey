@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Publicação da distribuição em 10-11-2026:** commit `40535ddb`, push confirmado `326b8d08..40535ddb main -> main`. Prettier e `git diff --check` aprovados; somente o gestor publicado. Os três subagentes receberam as atribuições, mas todos encerraram antes de produzir resultados por limite de uso do serviço. A distribuição é planejada, não execução comprovada; o principal assume a continuidade enquanto essa limitação persistir. Nenhuma tarefa recebeu aprovação com base na delegação.
+
 **Distribuição autorizada pelo usuário em 10-11-2026 · quatro agentes no total:** agente principal e três subagentes. A delegação abaixo atribui responsáveis e verificações, não altera estados nem declara tarefas concluídas. Os subagentes começaram somente inspeções e diagnósticos independentes, sem editar arquivos, publicar commits, usar o Chrome ou iniciar/parar serviços. O principal centraliza alterações, QA no Chrome e commit/push individual na main. Preservar o limite de três tarefas em andamento; atribuição futura não equivale a início de implementação. As tarefas 142 e 147 continuam reservadas para execução conjunta com o usuário.
 
 | Responsável                      | Verificações simples delegadas agora                                                                                                                                | Frentes complexas atribuídas para execução posterior                                                                                                                                                               |
