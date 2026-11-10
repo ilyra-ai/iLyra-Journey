@@ -6,6 +6,8 @@ do README na tarefa 116. A apresentação para quem usa o app está no
 [README](../README.md). As evidências atuais de cada entrega ficam no
 [painel de gestão](../claude-gestao.md) e nas auditorias indicadas nele.
 
+**Transição operacional da tarefa 174 · 10-11-2026:** a arquitetura definida passa a usar `run.sh` no WSL2/Ubuntu e `run_windows.py` nativo no Windows 11. A migração está em execução; os comandos abaixo descrevem o contrato de destino, sem antecipar aprovação de startup, parada, reinício ou paridade. Consulte o gestor para os resultados efetivamente executados. As provas históricas dos launchers anteriores permanecem em [Launchers](./launchers.md), identificadas como anteriores à 174.
+
 ## 🧰 Stack tecnológica
 
 | Camada              | Tecnologias                                                                                                                             |
@@ -19,7 +21,7 @@ do README na tarefa 116. A apresentação para quem usa o app está no
 | **IA**              | Motores determinísticos próprios · modelo da plataforma local (Ollama, LM Studio, Jan, llama.cpp) ou em nuvem · Gemini via BYOK no chat |
 | **Observabilidade** | Sentry                                                                                                                                  |
 | **Qualidade**       | Vitest · ESLint · Prettier · TypeScript estrito                                                                                         |
-| **Infra local**     | Docker Compose (MySQL) · pnpm (via Corepack) · `run.py` (WSL2) · `run.sh` (Git Bash)                                                    |
+| **Infra local**     | Docker Compose (MySQL) · pnpm (via Corepack) · destino 174: `run.sh` (WSL2/Ubuntu) e `run_windows.py` (Windows nativo)                  |
 
 ---
 
@@ -30,41 +32,44 @@ do README na tarefa 116. A apresentação para quem usa o app está no
 - **Node.js 24 LTS** (versão exata em `.nvmrc` e `.node-version`, hoje 24.21.0; o `pnpm install` recusa versões fora de `^24.18.1`). Com nvm: `nvm install && nvm use`; fnm e nodenv leem o `.node-version` automaticamente.
 - **Docker** (Engine/Desktop) com Docker Compose
 - **pnpm 11** via Corepack, incluído no Node.js 24: `corepack enable && corepack install` ativa a versão exata do campo `packageManager`, sem instalação global.
-- **Python 3.10+** para o launcher `run.py` (WSL2 Ubuntu / Linux) ou **Bash** (Git Bash no Windows) para o `run.sh`
+- **Bash 4+ no WSL2/Ubuntu** para `run.sh`; **Python nativo do Windows** para `run_windows.py`, conforme a versão exigida por esse arquivo. O Windows não deve delegar a Git Bash/WSL para executar a orquestração.
+- **Runtimes separados:** instale Node.js/Corepack/pnpm Linux no WSL2 e Node.js/Corepack/pnpm Windows no Windows. Não reutilize `node.exe` no WSL2 nem artefatos nativos de `node_modules`/build de um ambiente no outro. O diagnóstico deve conferir plataforma, caminho e versão dos executáveis antes da subida.
 
 ### Caminho recomendado — um único comando
 
-Os launchers fazem o preflight do ambiente, preparam o `.env.local`, instalam as dependências conforme o lockfile, sobem o **MySQL via Docker Compose**, aplicam as **migrations + administrador inicial**, iniciam a **aplicação** e verificam a saúde ponta a ponta (`/api/health`, páginas e login). Comandos, garantias de segurança e matriz de paridade: [`docs/launchers.md`](./launchers.md).
+O contrato dos dois launchers exige preflight do ambiente, preservação do `.env.local`, instalação conforme o lockfile, **MySQL via Docker Compose**, **migrations + administrador inicial**, memória necessária ao app e **aplicação**, com saúde ponta a ponta (`/api/health`, páginas e login). Comandos, garantias e provas exigidas: [`docs/launchers.md`](./launchers.md). A conclusão depende da validação real em cada sistema, registrada no gestor.
 
-**WSL2 Ubuntu / Linux** — `run.py`:
-
-```bash
-python3 run.py              # menu interativo
-python3 run.py up           # tudo, em desenvolvimento (use --prod para build + start)
-python3 run.py doctor       # diagnóstico (somente leitura)
-python3 run.py fix          # correções seguras e idempotentes
-python3 run.py status       # estado consolidado
-python3 run.py stop         # para aplicação e banco (dados preservados)
-```
-
-**Windows 11 (Git Bash)** — `run.sh` (mesmos comandos e garantias do `run.py`; abra o Git Bash na pasta do projeto, pois CMD e PowerShell não executam `.sh`):
+**WSL2/Ubuntu** — `run.sh`:
 
 ```bash
-./run.sh            # menu interativo
-./run.sh up         # tudo, em desenvolvimento (use --prod para build + start)
-./run.sh doctor     # diagnóstico (somente leitura)
-./run.sh fix        # correções seguras e idempotentes
-./run.sh status     # estado consolidado
-./run.sh stop       # para aplicação e banco (dados preservados)
+./run.sh                   # menu interativo; ajuda sem TTY
+./run.sh up                # tudo, em desenvolvimento; --prod inclui build + start
+./run.sh doctor            # diagnóstico
+./run.sh fix               # correções seguras e idempotentes
+./run.sh status            # estado consolidado
+./run.sh logs app          # logs da aplicação
+./run.sh stop app          # para somente a aplicação da própria instância
 ```
 
-No PowerShell ou CMD, `py run_windows.py <comando>` localiza o Git Bash e executa o mesmo `run.sh`.
+**Windows 11, PowerShell/CMD** — `run_windows.py` nativo:
 
-Ao final, a aplicação responde em **http://localhost:3000** e o MySQL em **127.0.0.1:3307**. Se uma dessas portas estiver ocupada por outro programa, os launchers não o encerram: usam a próxima porta livre e informam qual. O `doctor` também avisa variáveis do `.env.local` que o app não usa mais (ex.: `GEMINI_API_KEY`), sem apagá-las.
+```powershell
+py run_windows.py             # menu interativo; ajuda sem TTY
+py run_windows.py up          # tudo, em desenvolvimento; --prod inclui build + start
+py run_windows.py doctor      # diagnóstico
+py run_windows.py fix         # correções seguras e idempotentes
+py run_windows.py status      # estado consolidado
+py run_windows.py logs app    # logs da aplicação
+py run_windows.py stop app    # para somente a aplicação da própria instância
+```
+
+O estado passa a ser separado em `.lyra-run/linux/` e `.lyra-run/windows/`. PID, identidade do processo, porta e logs pertencem à plataforma e à instância que os criou. A existência de `.lyra-run/app.json` ou `.lyra-run-windows/` legados não autoriza apagar o estado nem encerrar um processo sem conferir sua identidade. `run.py` é retirado somente após a migração comprovada; não é o ponto de entrada da arquitetura nova.
+
+As portas preferidas são **http://localhost:3000** para o app e **127.0.0.1:3307** para MySQL; o endereço real deve ser lido na saída do launcher. **Nunca matar processos nem parar containers para liberar portas.** Identificar ocupação, escolher e reservar outra porta e tratar disputa concorrente, atualizando URLs, conexão e healthchecks coerentemente. A parada só alcança processos comprovadamente pertencentes à instância. Preservar serviços existentes, volumes, segredos e variáveis locais; o diagnóstico deve explicar incompatibilidades sem apagar configuração.
 
 ### Painel TUI-WEBNOVA (WSL2 Ubuntu)
 
-O `tui-webnova.sh` é um orquestrador **independente** com painel web local: não chama `run.py`, `run.sh` nem outros scripts do projeto, e depende só de Bash e Python 3.10+ (biblioteca padrão). Ele mostra a saída de cada comando **ao vivo** em um terminal real (PTY + xterm.js), onde você digita, responde perguntas (`s`/`y`/`n`, Ctrl+C) e abre um shell na raiz do projeto.
+O `tui-webnova.sh` é um orquestrador **independente** com painel web local: não chama os launchers nem outros scripts do projeto, e depende só de Bash e Python 3.10+ (biblioteca padrão). Ele mostra a saída de cada comando **ao vivo** em um terminal real (PTY + xterm.js), onde você digita, responde perguntas (`s`/`y`/`n`, Ctrl+C) e abre um shell na raiz do projeto. Sua existência não comprova a migração da tarefa 174.
 
 ```bash
 ./tui-webnova.sh                       # abre o painel (o endereço com token aparece no terminal)
@@ -155,26 +160,26 @@ O `.env.local` é a **fonte única de configuração**, lida pelo Next.js, pelos
 
 ## 📜 Scripts disponíveis
 
-| Comando                                              | Descrição                                                            |
-| ---------------------------------------------------- | -------------------------------------------------------------------- |
-| `pnpm dev`                                           | Servidor de desenvolvimento (Next.js)                                |
-| `pnpm build` / `pnpm start`                          | Build de produção / execução                                         |
-| `pnpm test`                                          | Testes unitários (Vitest), sem infraestrutura externa                |
-| `pnpm test:integration`                              | Testes contra o MySQL real em um banco isolado `<banco>_test`        |
-| `pnpm test:coverage`                                 | Unitários + integração com relatório de cobertura (`coverage/`)      |
-| `pnpm test:launchers`                                | Testes do `run.py` e do `run_windows.py` (unittest do Python)        |
-| `pnpm check:types`                                   | Verificação de tipos (`tsc --noEmit`)                                |
-| `pnpm check:lint` / `pnpm fix:lint`                  | Lint (ESLint) — checar / corrigir                                    |
-| `pnpm check:format` / `pnpm fix:format`              | Formatação (Prettier) — checar / corrigir                            |
-| `pnpm env:init`                                      | Cria ou completa o `.env.local` a partir do `.env.example`           |
-| `pnpm db:start` / `pnpm db:migrate` / `pnpm db:stop` | Banco: subir+migrar / migrar / parar                                 |
-| `pnpm db:logs`                                       | Acompanha o log do MySQL                                             |
-| `pnpm geo:cidades`                                   | Regenera a base local de cidades (GeoNames)                          |
-| `pnpm db:upgrade`                                    | Upgrade controlado do volume MySQL (8.0 → 8.4 → 9.7 LTS) com backup  |
-| `pnpm db:backup`                                     | Backup a frio verificado do volume do MySQL (`BACKUP_VOLUME=<nome>`) |
-| `pnpm db:restore <volume_de_backup>`                 | Restaura o volume a partir de um backup                              |
+| Comando                                              | Descrição                                                                      |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `pnpm dev`                                           | Servidor de desenvolvimento (Next.js)                                          |
+| `pnpm build` / `pnpm start`                          | Build de produção / execução                                                   |
+| `pnpm test`                                          | Testes unitários (Vitest), sem infraestrutura externa                          |
+| `pnpm test:integration`                              | Testes contra o MySQL real em um banco isolado `<banco>_test`                  |
+| `pnpm test:coverage`                                 | Unitários + integração com relatório de cobertura (`coverage/`)                |
+| `pnpm test:launchers`                                | Suíte de contratos dos launchers; não substitui provas reais em WSL2 e Windows |
+| `pnpm check:types`                                   | Verificação de tipos (`tsc --noEmit`)                                          |
+| `pnpm check:lint` / `pnpm fix:lint`                  | Lint (ESLint) — checar / corrigir                                              |
+| `pnpm check:format` / `pnpm fix:format`              | Formatação (Prettier) — checar / corrigir                                      |
+| `pnpm env:init`                                      | Cria ou completa o `.env.local` a partir do `.env.example`                     |
+| `pnpm db:start` / `pnpm db:migrate` / `pnpm db:stop` | Banco: subir+migrar / migrar / parar                                           |
+| `pnpm db:logs`                                       | Acompanha o log do MySQL                                                       |
+| `pnpm geo:cidades`                                   | Regenera a base local de cidades (GeoNames)                                    |
+| `pnpm db:upgrade`                                    | Upgrade controlado do volume MySQL (8.0 → 8.4 → 9.7 LTS) com backup            |
+| `pnpm db:backup`                                     | Backup a frio verificado do volume do MySQL (`BACKUP_VOLUME=<nome>`)           |
+| `pnpm db:restore <volume_de_backup>`                 | Restaura o volume a partir de um backup                                        |
 
-- Launchers `run.py`, `run.sh` e `run_windows.py` (comandos, garantias, paridade e validações): [`docs/launchers.md`](./launchers.md).
+- Launchers `run.sh` (WSL2/Ubuntu) e `run_windows.py` (Windows nativo), contrato da tarefa 174 e histórico da arquitetura anterior: [`docs/launchers.md`](./launchers.md).
 - Mapa das rotas da API (autenticação, entrada, saída, erros e tabelas): [`docs/api.md`](./api.md).
 - Mapa védico e dia védico (método, base de cidades e validação contra o Swiss Ephemeris): [`docs/astrologia.md`](./astrologia.md).
 - Coach diário "Seu dia" (regras, rotina automática, notificações e privacidade): [`docs/coach.md`](./coach.md).
@@ -216,9 +221,8 @@ src/
 mysql/migrations/      # Migrações versionadas e idempotentes (checksum)
 scripts/               # migrações, env-init, upgrade/backup do MySQL e verificação da app
 tests/                 # integração (MySQL real), launchers e servidor de IA compatível com a OpenAI
-run.py                 # Launcher oficial do WSL2 Ubuntu / Linux
-run.sh                 # Launcher do Windows 11 com Git Bash (mesmos comandos do run.py)
-run_windows.py         # Atalho para PowerShell/CMD que executa o run.sh
+run.sh                 # Orquestrador WSL2/Ubuntu definido pela tarefa 174
+run_windows.py         # Orquestrador Windows 11 nativo definido pela tarefa 174
 tui-webnova.sh         # Painel TUI-WEBNOVA (WSL2): orquestrador independente com terminal ao vivo
 ```
 
@@ -227,6 +231,8 @@ tui-webnova.sh         # Painel TUI-WEBNOVA (WSL2): orquestrador independente co
 ---
 
 ## 🧪 Testes & Qualidade
+
+As contagens do parágrafo seguinte são o registro histórico preservado da tarefa 116. Não representam reexecução nem aprovação da tarefa 174. Para esta migração, exigir em ambos os sistemas startup com banco existente, migrations, saúde HTTP/MySQL, logs, estado, parada, reinício, idempotência, processo ocupante preservado, isolamento de Node e interação TTY/sem TTY. Os resultados atuais ficam no gestor e no relatório específico da entrega.
 
 - **655 testes unitários** (motores de domínio, mapa védico, coach e leitura, linguagem simples das leituras, leitura da semana, cliente de IA, cifra, autenticação, segurança, configuração, contraste WCAG dos temas, iCalendar, respiração guiada, reflexão, retrospectiva da semana e detecção da saída da página) e **453 testes de integração** contra um MySQL real isolado (API de dados, rotas administrativas, coach, modelos de IA, metas, métricas, reflexão, respiração, agenda no calendário, semana, lembretes pessoais, busca nas conversas, favoritos, rotinas pessoais, acontecimentos e comparações descritivas, LGPD, planos, billing e webhook da Stripe), além de **30 testes dos launchers** (`pnpm test:launchers`). As integrações de IA usam contratos HTTP controlados compatíveis com a OpenAI (`tests/support`); elas não comprovam inferência de um modelo externo.
 - Portões de qualidade obrigatórios antes de cada entrega:

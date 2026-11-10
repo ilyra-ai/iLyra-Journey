@@ -1,5 +1,44 @@
 # Launchers da Lyra MetaCare
 
+## Arquitetura definida pela tarefa 174 · 10-11-2026
+
+A tarefa 174 substitui a arquitetura anterior por **dois orquestradores independentes**. A tabela abaixo define o contrato de destino; não é uma declaração de que a migração ou seus testes ponta a ponta já terminaram. O estado e as evidências da entrega ficam no [gestor de tarefas](../claude-gestao.md).
+
+| Entrada             | Ambiente                   | Responsabilidade                                                      |
+| ------------------- | -------------------------- | --------------------------------------------------------------------- |
+| `./run.sh`          | WSL2/Ubuntu                | Orquestração Bash completa com ferramentas Linux.                     |
+| `py run_windows.py` | Windows 11, PowerShell/CMD | Orquestração Python nativa do Windows, sem delegar a Git Bash ou WSL. |
+
+O `run.py` deixa de ser o ponto de entrada oficial. Sua retirada exige migrar antes as responsabilidades, testes, diagnósticos e documentação, além de comprovar o funcionamento dos dois substitutos. Não apagar dados, estado de processos ou configurações para facilitar a migração.
+
+### Runtime e estado separados
+
+- **WSL2/Ubuntu:** Node.js Linux na versão fixada em `.nvmrc`/`.node-version`, Corepack e pnpm Linux. Recusar `node.exe`, executáveis Windows herdados pelo PATH e versões incompatíveis com `package.json`.
+- **Windows 11:** Node.js Windows e Corepack/pnpm Windows. Recusar execução por ferramentas Linux ou delegação ao WSL. A resolução do executável e sua plataforma devem aparecer no diagnóstico sem expor segredos.
+- Fontes, lockfile e configuração apropriada podem ser compartilhados; `node_modules`, saídas nativas e artefatos de build de um sistema não devem ser reutilizados cegamente pelo outro. A implementação deve detectar incompatibilidade antes de executar o app.
+- Estado da aplicação separado em **`.lyra-run/linux/`** e **`.lyra-run/windows/`**, incluindo metadados e PID da própria instância. Um PID Linux nunca identifica um processo Windows, nem o inverso. Estado legado em `.lyra-run/app.json`, `.lyra-run/app.pid` ou `.lyra-run-windows/` exige identificação e migração segura; sua presença não autoriza encerrar processos.
+- Manter logs sanitizados com plataforma e instância identificáveis. Segredos de `.env.local`, credenciais e dados pessoais não entram nos registros.
+
+### Contrato funcional exigido
+
+Os comandos de destino são `help`, `doctor`, `up [--prod]`, `app [--prod]`, `db`, `migrate`, `fix`, `repair [--sim]`, `purge --confirmar-purge`, `status`, `logs [app|db] [--seguir]` e `stop [app|db]`. Sem argumentos, oferecer menu em TTY e ajuda legível sem TTY. Preservar aliases compatíveis do Windows quando existirem, sem transformar o launcher nativo em wrapper.
+
+`up` deve preparar o ambiente de forma reproduzível, preservar `.env.local`, instalar conforme o lockfile, preparar MySQL e migrations, iniciar a memória Graphiti/FalkorDB necessária ao app e aguardar saúde real antes da verificação HTTP. `--prod` inclui build e execução de produção. `app` exige banco saudável; `db` e `migrate` mantêm suas responsabilidades específicas. `stop app` encerra somente a aplicação pertencente à instância; operações de banco preservam volumes e dados. Reparação e exclusão exigem confirmação explícita e backup verificável quando aplicável.
+
+### Portas e propriedade dos processos
+
+**Nunca derrubar um processo ou container para liberar uma porta.** Identificar o ocupante e escolher outra porta disponível, tratando também a disputa entre a sondagem e o início do serviço. Atualizar coerentemente porta efetiva, URLs, healthcheck e conexão com MySQL/memória. Se já houver serviço saudável do projeto, verificar identidade e compatibilidade antes de reutilizá-lo; não parar container existente apenas por conflito de porta.
+
+Parada e reinício só podem atuar na árvore comprovadamente pertencente à instância registrada. Conferir plataforma, identidade do processo e metadados; um PID antigo, reutilizado ou de outro ambiente não basta. Confirmar encerramento real e preservar qualquer ocupante alheio.
+
+### Provas necessárias para fechar a migração
+
+Executar separadamente em WSL2/Ubuntu e Windows 11: ajuda e diagnóstico, startup com banco existente, migrations, saúde HTTP/MySQL, logs, estado, parada, reinício e segunda subida idempotente. Acrescentar provas de Node da plataforma correta, porta ocupada por processo de teste preservado, escolha de outra porta, falhas diagnosticadas e comportamento TTY/sem TTY. Sintaxe, mocks e `doctor` isolados não comprovam paridade operacional. Registrar comandos, exit codes e limitações reais; não converter os resultados históricos abaixo em validação da tarefa 174.
+
+## Histórico anterior à tarefa 174
+
+As seções seguintes preservam a arquitetura e as evidências das tarefas 13–15 e verificações posteriores explicitamente datadas. Referências a `run.py` oficial, Git Bash como launcher principal do Windows, wrapper e estado compartilhado descrevem **o desenho anterior**, substituído pelo contrato acima; não são instruções para a nova instalação.
+
 Três pontos de entrada sobem o ambiente local, com duas implementações: `run.py` (WSL2/Linux) e `run.sh` (Git Bash); o `run_windows.py` delega ao `run.sh`. Todos usam a mesma configuração (`.env.local`, criado por `pnpm env:init` a partir do `.env.example`), o mesmo banco (serviço `mysql` do `compose.yaml`, via `docker compose --env-file .env.local`) e os mesmos scripts (`scripts/mysql-migrate.mjs` e `scripts/mysql-upgrade.mjs`).
 
 | Launcher         | Ambiente suportado                       | Situação                                   |
