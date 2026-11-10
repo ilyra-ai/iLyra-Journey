@@ -1,15 +1,12 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  Lyra MetaCare · launcher para Windows 11 (Git Bash) e Linux (bash 4+)
+#  Lyra MetaCare · launcher Linux / WSL2 Ubuntu (bash 4+)
 # -----------------------------------------------------------------------------
 #  Ambiente suportado:
-#    - Windows 11 com Git Bash (MINGW64/MSYS), Docker Desktop e Node.js 24 LTS
-#      para Windows. É o ambiente principal deste launcher.
-#    - Linux com bash 4+ (ambiente equivalente; no WSL2 o launcher oficial é
-#      o run.py).
-#    - Cygwin é detectado e recusado: o Node.js e o Docker Desktop do Windows
-#      esperam caminhos Win32, que o Cygwin não converte de forma confiável.
-#    - CMD e PowerShell não executam .sh; use o Git Bash.
+#    - WSL2 Ubuntu é o ambiente oficial, com Node e Corepack Linux.
+#    - Linux com bash 4+ é aceito como ambiente equivalente.
+#    - No Windows, execute py run_windows.py.
+#      Git Bash, Cygwin e Node Windows não executam a aplicação diretamente.
 #
 #  Uso:
 #    ./run.sh                         menu interativo (com terminal) ou ajuda
@@ -28,17 +25,17 @@
 #    ./run.sh stop [app|db]           para aplicação e banco (padrão: ambos)
 #    ./run.sh help
 #
-#  Contrato comum com o run.py (docs/launchers.md): configuração única no
-#  .env.local (scripts/env-init.mjs), banco pelo compose.yaml com
-#  `docker compose --env-file .env.local`, estado em .lyra-run/app.json e
-#  .lyra-run/app.pid, logs em .logs/. Nenhuma operação destrutiva automática
+#  Configuração única no .env.local (scripts/env-init.mjs), banco pelo
+#  compose.yaml com `docker compose --env-file .env.local`, estado em
+#  .lyra-run/linux/app.json e .lyra-run/linux/app.pid, logs em .logs/linux/.
+#  Nenhuma operação destrutiva automática
 #  e nenhum processo de terceiros é encerrado.
 # =============================================================================
 
 set -uo pipefail
 
 if (( BASH_VERSINFO[0] < 4 )); then
-  printf '[ERRO] O run.sh requer bash 4 ou superior (atual: %s). No Windows, use o Git Bash.\n' \
+  printf '[ERRO] O run.sh requer bash 4 ou superior (atual: %s). No Windows, use py run_windows.py.\n' \
     "${BASH_VERSION}" >&2
   exit 2
 fi
@@ -48,8 +45,8 @@ fi
 # -----------------------------------------------------------------------------
 RAIZ="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 readonly RAIZ
-readonly ESTADO=".lyra-run"
-readonly LOGS=".logs"
+readonly ESTADO=".lyra-run/linux"
+readonly LOGS=".logs/linux"
 readonly ENV_LOCAL=".env.local"
 readonly ENV_EXEMPLO=".env.example"
 readonly APP_PID="$ESTADO/app.pid"
@@ -65,8 +62,21 @@ readonly LOGS_MANTIDOS=40
 readonly COMPOSE_MINIMO="2.20.0"
 readonly DOCKER_MINIMO="25.0.0"
 
-# Todos os caminhos são relativos à raiz do projeto: no Git Bash, isso evita a
-# conversão de caminhos /c/... ao chamar executáveis nativos do Windows.
+# Recusa antes de criar estado/logs: nunca mistura artefatos de Windows e Linux.
+case "$(uname -s 2>/dev/null)" in
+  Linux*) ;;
+  *) printf '[ERRO] Execute no Linux/WSL2 Ubuntu. No Windows, use py run_windows.py.\n' >&2; exit 2 ;;
+esac
+
+# Runtime reproduzível já preparado pelo operador; nenhum download implícito.
+VERSAO_NODE="$(tr -d '\r\n' <"$RAIZ/.nvmrc")"
+RUNTIME_NODE="${LYRA_NODE_BIN:-${HOME}/.local/share/lyra-tools/node-v${VERSAO_NODE}-linux-x64/bin}"
+if [[ -x "$RUNTIME_NODE/node" && -x "$RUNTIME_NODE/corepack" ]]; then
+  export PATH="$RUNTIME_NODE:$PATH"
+fi
+readonly VERSAO_NODE RUNTIME_NODE
+
+# Os caminhos permanecem relativos à raiz; o estado Linux não sobrescreve o legado.
 cd "$RAIZ" || exit 1
 mkdir -p "$ESTADO" "$LOGS"
 
@@ -277,45 +287,29 @@ versao_ge() {  # versao_ge <atual> <mínima>
 }
 
 verificar_plataforma() {
-  case "$PLATAFORMA" in
-    windows)
-      local ver build
-      ver="$(cmd.exe //c ver 2>/dev/null | tr -d '\r')"
-      build="$(printf '%s' "$ver" | sed -nE 's/.*Version [0-9]+\.[0-9]+\.([0-9]+).*/\1/p')"
-      if [[ -n "$build" ]] && (( build >= 22000 )); then
-        verif "Plataforma" ok "Windows 11 (build $build) · Git Bash ($(uname -s))"
-      elif [[ -n "$build" ]]; then
-        verif "Plataforma" aviso "Windows build $build (o ambiente de referência é o Windows 11)" \
-          "Atualize para o Windows 11."
-      else
-        verif "Plataforma" aviso "Windows (build não identificada) · $(uname -s)"
-      fi
-      ;;
-    linux)
-      if grep -qi microsoft /proc/version 2>/dev/null; then
-        verif "Plataforma" ok "WSL · bash $BASH_VERSION (no WSL2 o launcher oficial é o run.py)"
-      else
-        verif "Plataforma" ok "Linux · bash $BASH_VERSION (equivalente)"
-      fi
-      ;;
-    cygwin)
-      verif "Plataforma" erro "Cygwin não é suportado" \
-        "Use o Git Bash (Git for Windows): o Node.js e o Docker Desktop esperam caminhos Win32."
-      ;;
-    macos)
-      verif "Plataforma" aviso "macOS · bash $BASH_VERSION (fora dos ambientes de referência)"
-      ;;
-    *)
-      verif "Plataforma" erro "sistema não reconhecido: $(uname -s)" \
-        "Use o Git Bash no Windows 11 ou o run.py no WSL2."
-      ;;
-  esac
+  if grep -qi microsoft /proc/version 2>/dev/null; then
+    local identidade
+    identidade="$(. /etc/os-release; printf '%s' "${ID:-}")"
+    if [[ "$identidade" != ubuntu ]]; then
+      verif "Plataforma" erro "WSL fora do Ubuntu" "Execute na distribuição Ubuntu do WSL2."
+    elif ! grep -qi 'microsoft-standard-WSL2' /proc/sys/kernel/osrelease; then
+      verif "Plataforma" erro "WSL2 não identificado" "Atualize a distribuição Ubuntu para WSL2."
+    else
+      verif "Plataforma" ok "WSL2 Ubuntu · bash $BASH_VERSION"
+    fi
+  else
+    verif "Plataforma" ok "Linux · bash $BASH_VERSION (equivalente)"
+  fi
 }
 
 verificar_node() {
   if ! have node; then
     verif "Node.js" erro "não encontrado no PATH" \
       "Instale o Node.js $(cat .nvmrc 2>/dev/null) (versão do .nvmrc) e reabra o terminal."
+    return
+  fi
+  if [[ "$(node -p 'process.platform' 2>/dev/null)" != linux ]]; then
+    verif "Node.js" erro "binário não Linux no PATH" "Use Node Linux no WSL2; Node Windows não é aceito."
     return
   fi
   # Comparação de versões feita pelo próprio Node (semver do engines).
@@ -340,6 +334,12 @@ verificar_node() {
 
   if ! have corepack; then
     verif "Corepack/pnpm" erro "Corepack ausente" "Instale o Node.js 24 LTS (inclui o Corepack)."
+    return
+  fi
+  local caminho_corepack
+  caminho_corepack="$(readlink -f "$(command -v corepack)")"
+  if [[ "$caminho_corepack" == /mnt/* || "$caminho_corepack" == *.exe || "$caminho_corepack" == *.cmd ]]; then
+    verif "Corepack/pnpm" erro "Corepack Windows encontrado no PATH" "Use o Corepack da mesma instalação Linux do Node."
     return
   fi
   local fixado versao
@@ -427,6 +427,8 @@ dependencias_sincronizadas() {
 verificar_dependencias() {
   if [[ ! -d node_modules ]]; then
     verif "Dependências" aviso "node_modules ausente" "\`./run.sh fix\`."
+  elif ! verificar_artefatos_linux; then
+    verif "Dependências" erro "artefatos Windows incompatíveis" "Prepare node_modules no Linux, preservando antes os artefatos necessários do outro ambiente."
   elif ! dependencias_sincronizadas; then
     verif "Dependências" aviso "node_modules diferente do pnpm-lock.yaml" "\`./run.sh fix\` (pnpm install --frozen-lockfile)."
   else
@@ -562,6 +564,21 @@ total_migrations() { find mysql/migrations -maxdepth 1 -name '*.sql' | wc -l | t
 # Aplicação: estado e processos
 # -----------------------------------------------------------------------------
 APP_PID_ATUAL=""; APP_PORTA=""; APP_MODO=""; APP_INICIO=""; APP_LOG=""; APP_ORIGEM=""; APP_WINPID=""
+APP_ESTADO_ALHEIO=""
+
+inicio_processo() {
+  [[ "$1" =~ ^[1-9][0-9]*$ && -r "/proc/$1/stat" ]] || return 1
+  awk '{ sub(/.*\) /, ""); print $20 }' "/proc/$1/stat"
+}
+
+validar_identidade_app() {
+  local pid="$1" inicio="$2" raiz="$3" plataforma="$4"
+  [[ "$plataforma" == linux && "$raiz" == "$RAIZ" && -n "$inicio" ]] || return 1
+  [[ "$(inicio_processo "$pid")" == "$inicio" ]] || return 1
+  [[ "$(readlink -f "/proc/$pid/cwd" 2>/dev/null)" == "$RAIZ" ]] || return 1
+  [[ -r "/proc/$pid/cmdline" ]] || return 1
+  tr '\0' ' ' <"/proc/$pid/cmdline" | grep -Eq 'next|pnpm|corepack|node'
+}
 
 ler_meta() {  # ler_meta <campo>
   [[ -f "$APP_META" ]] || return 0
@@ -587,21 +604,17 @@ winpid_vivo() {
 
 estado_app() {
   APP_PID_ATUAL=""; APP_PORTA=""; APP_MODO=""; APP_INICIO=""; APP_LOG=""; APP_ORIGEM=""; APP_WINPID=""
+  APP_ESTADO_ALHEIO=""
   local pid
   pid="$(ler_meta pid)"
   [[ -z "$pid" && -f "$APP_PID" ]] && pid="$(tr -dc '0-9' <"$APP_PID")"
   [[ -z "$pid" ]] && return
-  local winpid
-  winpid="$(ler_meta winpid)"
-  if [[ "$PLATAFORMA" == "windows" && -n "$winpid" ]]; then
-    winpid_vivo "$winpid" || return
-  else
-    pid_vivo "$pid" || return
-    if [[ -r "/proc/$pid/cmdline" ]] && ! tr '\0' ' ' <"/proc/$pid/cmdline" | grep -Eq 'next|pnpm|corepack|node'; then
-      return  # PID reutilizado por outro programa
-    fi
+  pid_vivo "$pid" || return
+  if ! validar_identidade_app "$pid" "$(ler_meta inicio_processo)" "$(ler_meta raiz)" "$(ler_meta plataforma)"; then
+    APP_ESTADO_ALHEIO="Estado sem prova integral de identidade do PID $pid; processo e metadados preservados."
+    return
   fi
-  APP_PID_ATUAL="$pid"; APP_WINPID="$winpid"
+  APP_PID_ATUAL="$pid"
   APP_PORTA="$(ler_meta porta)"
   APP_MODO="$(ler_meta modo)"; APP_MODO="${APP_MODO:-dev}"
   APP_INICIO="$(ler_meta iniciado_em)"
@@ -673,6 +686,7 @@ etapa_env() {
 
 etapa_dependencias() {  # etapa_dependencias [--forcar]
   etapa "Dependências do projeto (pnpm, conforme o lockfile)"
+  verificar_artefatos_linux || return 1
   if [[ "${1:-}" != "--forcar" ]] && dependencias_sincronizadas; then
     ok "node_modules já corresponde ao pnpm-lock.yaml; nada a instalar."
     return 0
@@ -683,6 +697,17 @@ etapa_dependencias() {  # etapa_dependencias [--forcar]
     return 1
   fi
   ok "Dependências instaladas conforme o pnpm-lock.yaml."
+}
+
+verificar_artefatos_linux() {
+  local manifesto="node_modules/.modules.yaml"
+  if [[ -f "$manifesto" ]] && grep -Eq 'storeDir["[:space:]]*:?[[:space:]]*["\x27]?[A-Za-z]:[\\/]' "$manifesto"; then
+    erro "node_modules aponta para um store Windows. A execução Linux foi bloqueada sem apagar artefatos."
+    return 1
+  fi
+  # Shims .cmd podem permanecer em uma instalação Linux legítima. O caminho
+  # do store, e não a mera presença de um shim, determina a incompatibilidade.
+  return 0
 }
 
 etapa_porta_banco() {
@@ -776,6 +801,7 @@ etapa_app() {  # etapa_app <dev|prod>
   local modo="$1"
   etapa "Aplicação Next.js ($([[ "$modo" == prod ]] && echo produção || echo desenvolvimento))"
   estado_app
+  if [[ -n "$APP_ESTADO_ALHEIO" ]]; then erro "$APP_ESTADO_ALHEIO"; return 1; fi
   if [[ -n "$APP_PID_ATUAL" ]]; then
     if [[ -n "$APP_PORTA" && "$(consultar_http "http://127.0.0.1:$APP_PORTA/api/health")" == "200" ]]; then
       if [[ "$APP_MODO" != "$modo" ]]; then
@@ -827,10 +853,10 @@ etapa_app() {  # etapa_app <dev|prod>
   local winpid=""
   [[ "$PLATAFORMA" == "windows" && -r "/proc/$pid/winpid" ]] && winpid="$(cat "/proc/$pid/winpid")"
   printf '%s\n' "$pid" >"$APP_PID"
-  APP_META_PID="$pid" APP_META_WINPID="$winpid" APP_META_PORTA="$porta" APP_META_MODO="$modo" APP_META_LOG="$log_app" \
+  APP_META_PID="$pid" APP_META_WINPID="$winpid" APP_META_PORTA="$porta" APP_META_MODO="$modo" APP_META_LOG="$log_app" APP_META_INICIO="$(inicio_processo "$pid")" \
     node -e '
       const e = process.env;
-      // Hora local com offset (mesmo formato do run.py, ex.: 2026-10-06T11:58:11-03:00).
+      // Hora local com offset explícito, preservando o formato do estado.
       const d = new Date();
       const offset = -d.getTimezoneOffset();
       const dois = (n) => String(Math.trunc(Math.abs(n))).padStart(2, "0");
@@ -839,6 +865,7 @@ etapa_app() {  # etapa_app <dev|prod>
       require("fs").writeFileSync(process.argv[1], JSON.stringify({
         pid: Number(e.APP_META_PID), winpid: e.APP_META_WINPID ? Number(e.APP_META_WINPID) : null,
         porta: Number(e.APP_META_PORTA), modo: e.APP_META_MODO,
+        plataforma: process.platform, raiz: process.cwd(), inicio_processo: e.APP_META_INICIO,
         iniciado_em: iniciado, log: e.APP_META_LOG,
         comando: ["corepack", "pnpm", "exec", "next", e.APP_META_MODO === "prod" ? "start" : "dev", "-p", e.APP_META_PORTA],
         origem: "run.sh" }, null, 2) + "\n");
@@ -886,6 +913,7 @@ etapa_verificacao() {  # etapa_verificacao <porta>
 parar_app() {
   etapa "Parando a aplicação"
   estado_app
+  if [[ -n "$APP_ESTADO_ALHEIO" ]]; then erro "$APP_ESTADO_ALHEIO"; return 1; fi
   if [[ -z "$APP_PID_ATUAL" ]]; then
     rm -f -- "$APP_PID" "$APP_META"
     ok "Nenhuma aplicação em execução."
@@ -1010,6 +1038,7 @@ cmd_app() {
   local modo=dev
   [[ "${1:-}" == "--prod" ]] && modo=prod
   titulo "Lyra MetaCare · app"
+  etapa_preflight || return 1
   etapa_env || return 1
   estado_banco --sem-sql
   if [[ "$DB_SAUDE" != "healthy" ]]; then
@@ -1346,6 +1375,9 @@ executar_comando() {
     info "Use ./run.sh help."
     return 2
   fi
+  limpar_verif
+  verificar_node
+  if (( $(contar_erros) > 0 )); then mostrar_verificacoes; return 1; fi
   abrir_registro "$comando"
   local codigo inicio=$SECONDS
   case "$comando" in
