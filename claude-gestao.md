@@ -19,6 +19,14 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Novos ativos oficiais e execução autorizada da 173 · 10-11-2026:** o usuário definiu o nome público **iLyra** e o slogan **“Decifrando o Cosmos, Iluminando Destinos.”**, fornecendo os seguintes ativos originais:
+
+- **Logo e slogan:** `C:/Users/DOUGLA~1/AppData/Local/Temp/codex-clipboard-2d17ca4b-3800-411a-85ab-04c4e316ea30.png`.
+- **Favicon oficial:** `C:/Users/DOUGLA~1/AppData/Local/Temp/codex-clipboard-b84c7df9-eb70-439a-a912-473195402b48.png`.
+- **Fundo oficial do app e da landing:** `C:/Users/DOUGLA~1/AppData/Local/Temp/codex-clipboard-2db45d92-779d-4aa5-974a-faf76a3fa8b0.png`, céu azul-escuro com Via Láctea e constelações. Esta orientação substitui o fundo preto/dourado anterior nessas superfícies.
+
+**Entregas obrigatórias da 173 nesta rodada:** preservar os originais no repositório; atualizar por completo o `README.md`, com nome, slogan, imagens e descrição fiel do estado funcional; aplicar logo e favicon em todas as superfícies do app, landing, login, carregamento, navegação, ícones de instalação e metadados pertinentes; aplicar o fundo fornecido ao app e à landing com enquadramento responsivo e contraste legível. Reutilizar os ativos enviados, sem redesenhar ou alterar sua geometria. Conferir referências antigas visíveis e caches, testar e publicar esta atividade separadamente na `main`, sem branches/worktrees. Não confundir esta autorização específica de identidade com início integral das tarefas 142/147 reservadas para execução conjunta. **Registro solicitado imediatamente; implementação e validação desses novos ativos ainda pendentes.**
+
 **Checks do cache publicados:** `bba13cd5`, push confirmado `326a1088..bba13cd5 main -> main`, com exclusões restritas aos artefatos gerados e documentação correspondente. Registro imediato da regra 6; 174 ainda em execução.
 
 **Checks e documentação do cache da 174 · 10-11-2026:** a primeira execução Windows do lint encontrou arquivos gerados dentro do cache Linux preservado. Corrigida a causa: `.lyra-run` é excluído das entradas ESLint, Prettier, TypeScript e descoberta Vitest, mantendo as fontes reais verificadas. Reexecução Windows: lint, formato, tipos e 1.068 testes unitários/100 arquivos aprovados; integrações com MySQL em execução. Documentação dos cinco artefatos, lease, adoção e recuperação atualizada em `docs/launchers.md` e `docs/guia-operacional.md`. Subida/login/idempotência/parada reais aprovados tanto em WSL quanto Windows; as novas operações de backup completo seguem em desenvolvimento.
