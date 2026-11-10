@@ -19,7 +19,9 @@
 
 ## Tópico 1 · Andamento Geral
 
-**Seleção coerente do Docker WSL da 174 · 10-11-2026:** `run.sh` passou a aceitar seleção explícita por `DOCKER_HOST` ou `DOCKER_CONTEXT`, recusando combinação ambígua, e CLI absoluta por `LYRA_DOCKER_BIN`. O ambiente é herdado pelos scripts Node sem alterar o contexto global. Dez testes focados e sintaxe Bash aprovados. Após o usuário habilitar a integração Ubuntu, a consulta real do WSL confirmou o engine `docker-desktop` e os quatro serviços MySQL, memória, FalkorDB e treinamento saudáveis; nenhum serviço foi recriado ou parado por esta verificação. A integração serial dos artefatos e a validação completa dos dois launchers continuam em andamento; esta etapa não encerra a 174.
+**Seleção Docker publicada:** `bd189f24`, push confirmado `40a99f37..bd189f24 main -> main`. A reexecução pelo principal executou **seis testes** do arquivo específico em 0,205 s, todos aprovados, além da sintaxe Bash. Registro imediato da regra 6.
+
+**Seleção coerente do Docker WSL da 174 · 10-11-2026:** `run.sh` passou a aceitar seleção explícita por `DOCKER_HOST` ou `DOCKER_CONTEXT`, recusando combinação ambígua, e CLI absoluta por `LYRA_DOCKER_BIN`. O ambiente é herdado pelos scripts Node sem alterar o contexto global. Seis testes focados e sintaxe Bash aprovados na reexecução pelo principal. Após o usuário habilitar a integração Ubuntu, a consulta real do WSL confirmou o engine `docker-desktop` e os quatro serviços MySQL, memória, FalkorDB e treinamento saudáveis; nenhum serviço foi recriado ou parado por esta verificação. A integração serial dos artefatos e a validação completa dos dois launchers continuam em andamento; esta etapa não encerra a 174.
 
 **Revisão WSL publicada:** `7247b08f`, push confirmado `6b535dfa..7247b08f main -> main`, em 10-11-2026. Incluídos launcher, testes focados e gestor. Registro imediato da regra 6; isolamento serial de artefatos está em desenvolvimento separado, sem ativação no checkout em uso nem aprovação integral da 174.
 
