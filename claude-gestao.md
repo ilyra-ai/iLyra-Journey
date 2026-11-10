@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Purge restrito publicado:** `4976986c`, push confirmado `b5d097cd..4976986c main -> main`. Launcher, quatro testes e registro da etapa publicados separadamente da integração de artefatos ainda em execução. Registro imediato da regra 6.
+
 **Proteção do purge MySQL na 174 · 10-11-2026:** corrigida a remoção abrangente do Compose: a operação explícita agora comprova container, checkout, projeto e volume MySQL, exige backup distinto existente e reinspeciona a identidade antes de remover somente esse container e volume. Memória, treinamento, redes e backups ficam preservados. Quatro testes no WSL aprovados em 0,572 s, com Bash/Node reais e Docker interceptado; nenhum purge real executado. A retirada do comando abrangente foi conferida por busca em `run.sh`. Demais integrações da 174 permanecem em andamento.
 
 **Seleção Docker publicada:** `bd189f24`, push confirmado `40a99f37..bd189f24 main -> main`. A reexecução pelo principal executou **seis testes** do arquivo específico em 0,205 s, todos aprovados, além da sintaxe Bash. Registro imediato da regra 6.
