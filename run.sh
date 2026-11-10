@@ -1283,12 +1283,46 @@ cmd_purge() {
     erro "O purge apaga TODOS os dados do MySQL local deste projeto. Repita com --confirmar-purge."
     return 2
   fi
-  info "Será feito: parar a aplicação, backup verificado do volume do MySQL, remoção do container, da rede e do volume do projeto e do cache .next. Nada fora do projeto é alterado."
+  info "Será feito: comprovar o MySQL deste checkout, parar a aplicação, verificar seu backup e remover somente esse container, seu volume de dados e o cache .next. Memória, treinamento, redes e backups serão preservados."
   if [[ -t 0 ]]; then
     confirmar "Os dados do banco serão apagados após o backup." APAGAR "--confirmar-purge" || return 1
   fi
   etapa_preflight || return 1
   etapa_env || return 1
+  local container configuracao dados volume_dados projeto prova
+  container="$(compose ps -a -q "$SERVICO_DB")" || return 1
+  if [[ ! "$container" =~ ^[a-f0-9]{12,64}$ ]]; then
+    erro "Purge exige exatamente um container MySQL identificado pelo Compose deste checkout."
+    return 1
+  fi
+  configuracao="$(compose config --format json | node -e '
+    let entrada=""; process.stdin.on("data", p=>entrada+=p); process.stdin.on("end",()=>{
+      try {
+        const c=JSON.parse(entrada), v=c.services.mysql.volumes.filter(v=>v.target==="/var/lib/mysql");
+        if(v.length!==1 || v[0].type!=="volume") throw Error("montagem MySQL ambígua");
+        const nome=c.volumes[v[0].source].name;
+        if(!/^[a-zA-Z0-9][a-zA-Z0-9_.-]*$/.test(nome)) throw Error("nome de volume inválido");
+        process.stdout.write(nome);
+      } catch(e) { console.error("Configuração MySQL recusada: "+e.message); process.exitCode=1; }
+    });')" || return 1
+  prova='let entrada=""; process.stdin.on("data", p=>entrada+=p); process.stdin.on("end",()=>{
+    try {
+      const normalizar=p=>p.replace(/\\/g,"/").replace(/^([a-zA-Z]):/,(_,d)=>"/mnt/"+d.toLowerCase()).replace(/\/$/,"");
+      const itens=JSON.parse(entrada); if(itens.length!==1) throw Error("container ambíguo");
+      const c=itens[0], l=c.Config.Labels||{}, m=c.Mounts.filter(m=>m.Destination==="/var/lib/mysql");
+      if(c.Id!==process.argv[1] || l["com.docker.compose.service"]!=="mysql" ||
+        normalizar(l["com.docker.compose.project.working_dir"]||"")!==normalizar(process.argv[2]) ||
+        m.length!==1 || m[0].Type!=="volume" || m[0].Name!==process.argv[3] ||
+        !/^[a-zA-Z0-9][a-zA-Z0-9_.-]*$/.test(l["com.docker.compose.project"]||"")) throw Error("propriedade do MySQL não comprovada");
+      process.stdout.write(c.Id+"|"+m[0].Name+"|"+l["com.docker.compose.project"]);
+    } catch(e) { console.error("Purge recusado: "+e.message); process.exitCode=1; }
+  });'
+  dados="$(docker inspect "$container" | node -e "$prova" "$container" "$RAIZ" "$configuracao")" || return 1
+  IFS='|' read -r container volume_dados projeto <<<"$dados"
+  if [[ "$(docker volume inspect --format '{{index .Labels "com.docker.compose.project"}}' "$volume_dados")" != "$projeto" ]]; then
+    erro "O volume MySQL não pertence ao projeto Compose comprovado; purge recusado."
+    return 1
+  fi
   parar_app || return 1
   etapa "Backup a frio do volume do MySQL"
   executar "Backup do volume" node scripts/mysql-upgrade.mjs --backup || return 1
@@ -1296,12 +1330,20 @@ cmd_purge() {
   volume="$(grep -oE 'BACKUP_VOLUME=[^[:space:]]+' "$ULTIMA_SAIDA" | head -n 1 | cut -d= -f2)"
   if [[ -n "$volume" ]]; then
     ok "Backup verificado: $volume"
-  elif ! grep -q "inexistente" "$ULTIMA_SAIDA"; then
+  else
     erro "O backup não informou o volume gerado; purge interrompido."
     return 1
   fi
-  etapa "Removendo container, rede e volume do projeto"
-  executar "Remoção do banco" compose down --volumes --remove-orphans || return 1
+  if [[ "$volume" == "$volume_dados" ]]; then
+    erro "O backup não pode ser o próprio volume de dados; purge recusado."
+    return 1
+  fi
+  consultar docker volume inspect "$volume" >/dev/null || return 1
+  # Reconfere a identidade após o backup, antes da primeira remoção.
+  [[ "$(docker inspect "$container" | node -e "$prova" "$container" "$RAIZ" "$configuracao")" == "$dados" ]] || return 1
+  etapa "Removendo somente o container MySQL e seu volume comprovado"
+  executar "Remoção do container MySQL" docker rm -f "$container" || return 1
+  executar "Remoção do volume MySQL" docker volume rm "$volume_dados" || return 1
   remover_artefato .next || return 1
   ok "Purge concluído."
   [[ -n "$volume" ]] && info "Para restaurar: node scripts/mysql-upgrade.mjs --restaurar $volume"

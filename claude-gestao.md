@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Proteção do purge MySQL na 174 · 10-11-2026:** corrigida a remoção abrangente do Compose: a operação explícita agora comprova container, checkout, projeto e volume MySQL, exige backup distinto existente e reinspeciona a identidade antes de remover somente esse container e volume. Memória, treinamento, redes e backups ficam preservados. Quatro testes no WSL aprovados em 0,572 s, com Bash/Node reais e Docker interceptado; nenhum purge real executado. A retirada do comando abrangente foi conferida por busca em `run.sh`. Demais integrações da 174 permanecem em andamento.
+
 **Seleção Docker publicada:** `bd189f24`, push confirmado `40a99f37..bd189f24 main -> main`. A reexecução pelo principal executou **seis testes** do arquivo específico em 0,205 s, todos aprovados, além da sintaxe Bash. Registro imediato da regra 6.
 
 **Seleção coerente do Docker WSL da 174 · 10-11-2026:** `run.sh` passou a aceitar seleção explícita por `DOCKER_HOST` ou `DOCKER_CONTEXT`, recusando combinação ambígua, e CLI absoluta por `LYRA_DOCKER_BIN`. O ambiente é herdado pelos scripts Node sem alterar o contexto global. Seis testes focados e sintaxe Bash aprovados na reexecução pelo principal. Após o usuário habilitar a integração Ubuntu, a consulta real do WSL confirmou o engine `docker-desktop` e os quatro serviços MySQL, memória, FalkorDB e treinamento saudáveis; nenhum serviço foi recriado ou parado por esta verificação. A integração serial dos artefatos e a validação completa dos dois launchers continuam em andamento; esta etapa não encerra a 174.
