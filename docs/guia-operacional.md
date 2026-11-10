@@ -67,6 +67,18 @@ O estado passa a ser separado em `.lyra-run/linux/` e `.lyra-run/windows/`. PID,
 
 As portas preferidas são **http://localhost:3000** para o app e **127.0.0.1:3307** para MySQL; o endereço real deve ser lido na saída do launcher. **Nunca matar processos nem parar containers para liberar portas.** Identificar ocupação, escolher e reservar outra porta e tratar disputa concorrente, atualizando URLs, conexão e healthchecks coerentemente. A parada só alcança processos comprovadamente pertencentes à instância. Preservar serviços existentes, volumes, segredos e variáveis locais; o diagnóstico deve explicar incompatibilidades sem apagar configuração.
 
+### Trocar entre Windows e WSL2 no mesmo checkout
+
+A troca é **serial**, mantendo uma única cópia das fontes. `scripts/launcher_artifacts.py` preserva os cinco artefatos de cada plataforma em `.lyra-run/artifacts/linux/` ou `.lyra-run/artifacts/windows/`: `node_modules`, `.next`, `next-env.d.ts`, `tsconfig.tsbuildinfo` e `public/offline-assets.json`. Não execute simultaneamente os dois runtimes nessa pasta nem copie a instalação de dependências de um sistema para o outro.
+
+O lease global `.lyra-run/artifacts/lock.json` protege a sequência ativação → instalação → build → início → registro da aplicação. Na integração Python, `transacao()` deve permanecer aberta durante toda essa sequência; `exigir_plataforma_ativa(destino)` permite conferir o runtime para reutilização ou parada sem mover arquivos. Comandos manuais de pnpm/Next fora da transação não ficam automaticamente protegidos.
+
+Para conferir sem alterar: no Windows, execute `py scripts/launcher_artifacts.py status` ou `py scripts/launcher_artifacts.py planejar --destino windows`; no WSL2, use `python3` e `--destino linux`. Antes da troca, pare somente a instância cuja propriedade esteja comprovada. Estado atual/legado ou processos do checkout sem estado impedem movimentos; o inventário cobre Windows e distros WSL já em execução, sem iniciá-las. Uma consulta indisponível exige diagnóstico, não exclusão de arquivos.
+
+Artefatos iniciais sem origem confirmada exigem adoção explícita no próprio sistema de origem, com comprovação do Node e hashes do lockfile e da instalação pnpm. Não remova `active.json`, `identity.json`, `journal.json` ou `lock.json` para contornar uma recusa. O gerenciador nunca remove automaticamente lock alheio. Falhas de rename preservam o journal e bloqueiam outra ativação; a API explícita `recuperar()` reverte apenas movimentos verificáveis, sob lease e sem aplicação ativa. Ambiguidades preservam os arquivos para análise. A CLI não oferece ativação nem recuperação automática.
+
+O contrato completo e as limitações do inventário estão em [Alternância serial dos artefatos](./launchers.md#alternância-serial-dos-artefatos--implementação-da-tarefa-174). Esta implementação e seus testes isolados não significam conclusão integral da tarefa 174; consulte o gestor para a validação real de cada sistema e de cada comando.
+
 ### Painel TUI-WEBNOVA (WSL2 Ubuntu)
 
 O `tui-webnova.sh` é um orquestrador **independente** com painel web local: não chama os launchers nem outros scripts do projeto, e depende só de Bash e Python 3.10+ (biblioteca padrão). Ele mostra a saída de cada comando **ao vivo** em um terminal real (PTY + xterm.js), onde você digita, responde perguntas (`s`/`y`/`n`, Ctrl+C) e abre um shell na raiz do projeto. Sua existência não comprova a migração da tarefa 174.

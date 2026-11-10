@@ -19,6 +19,34 @@ O `run.py` deixa de ser o ponto de entrada oficial. Sua retirada exige migrar an
 - Estado da aplicação separado em **`.lyra-run/linux/`** e **`.lyra-run/windows/`**, incluindo metadados e PID da própria instância. Um PID Linux nunca identifica um processo Windows, nem o inverso. Estado legado em `.lyra-run/app.json`, `.lyra-run/app.pid` ou `.lyra-run-windows/` exige identificação e migração segura; sua presença não autoriza encerrar processos.
 - Manter logs sanitizados com plataforma e instância identificáveis. Segredos de `.env.local`, credenciais e dados pessoais não entram nos registros.
 
+### Alternância serial dos artefatos · implementação da tarefa 174
+
+O checkout mantém uma única cópia das fontes. O gerenciador `scripts/launcher_artifacts.py` alterna **serialmente** os artefatos entre a raiz e os caches `.lyra-run/artifacts/linux/` e `.lyra-run/artifacts/windows/`. Não cria links, não copia fontes e não apaga um build para trocar de sistema. Os cinco artefatos controlados são:
+
+| Artefato                     | Motivo do isolamento                                  |
+| ---------------------------- | ----------------------------------------------------- |
+| `node_modules`               | Instalação pnpm e dependências nativas da plataforma. |
+| `.next`                      | Build, caches e declarações geradas pelo Next.js.     |
+| `next-env.d.ts`              | Referências geradas para o build ativo.               |
+| `tsconfig.tsbuildinfo`       | Estado incremental do TypeScript.                     |
+| `public/offline-assets.json` | Inventário de recursos do build ativo.                |
+
+**Não executar os dois runtimes simultaneamente nesse checkout.** O lock global `.lyra-run/artifacts/lock.json` é criado com exclusão atômica e identifica token, PID, plataforma e instante de criação do processo. A API `transacao()` mantém esse lease durante a ativação, instalação, build, início e registro do estado da aplicação. A reentrada do mesmo gerenciador só é aceita no mesmo processo e thread. Outra instância recusa a operação; não espera indefinidamente nem remove automaticamente lock alheio, mesmo aparentemente antigo. Uma exceção libera somente o lock comprovadamente próprio e preserva os artefatos e o journal.
+
+Antes de mover qualquer artefato, `ativar()` recusa estado de aplicação atual ou legado em qualquer plataforma. O inventário também verifica processos sem estado: `/proc` no Linux e nas distros WSL já em execução, mais CIM no Windows. As consultas não iniciam distros e não encerram processos. No Windows, CIM não fornece o diretório de trabalho: comandos com a raiz explícita bloqueiam; candidatos Next/pnpm/Corepack relativos sem origem atribuível também bloqueiam. Processos Node externos sem assinatura da aplicação não são tratados como prova de uso deste checkout. Falha de inventário recusa a alternância.
+
+#### Adoção inicial e recuperação
+
+1. Pare somente a aplicação cuja propriedade esteja comprovada, pelo launcher que a iniciou. Não apague metadados de PID para forçar a troca; processos vivos sem estado continuam impedindo a operação.
+2. Consulte `status` ou `planejar`, que são somente leitura. No Windows: `py scripts/launcher_artifacts.py status` e `py scripts/launcher_artifacts.py planejar --destino windows`. No WSL2, use `python3` e `--destino linux`.
+3. Se a raiz contém artefatos sem manifesto de origem, a adoção automática é recusada. A integração deve fornecer `ComprovacaoOrigem` no próprio sistema de origem: executável Node absoluto com plataforma verificada, SHA-256 do `pnpm-lock.yaml` e evidências da instalação pnpm (`.modules.yaml` e `.pnpm/lock.yaml`). Um nome de pasta ou um PID, isoladamente, não comprova a origem.
+4. Os movimentos usam rename sem sobrescrita. Uma identidade UUID vincula os metadados ao checkout, permitindo sua representação Windows e WSL sem confundir caches de outro projeto. Caminhos com traversal, links ou junções na raiz/controle são recusados; conteúdo existente no destino nunca é sobrescrito.
+5. Se houver interrupção, `journal.json` registra a operação e impede nova ativação. A API explícita `recuperar()`, sob o mesmo lease e com a aplicação parada, reverte os movimentos verificáveis. Ambiguidades preservam os caminhos e o journal para diagnóstico. A CLI pública oferece apenas `status` e `planejar`; não há comando de remoção automática do journal ou do lock.
+
+Para reuso idempotente ou parada, `exigir_plataforma_ativa(destino)` valida manifesto e ausência de journal sob lease, sem mover artefatos e sem exigir que o app já esteja parado. Chamadores devem manter a transação aberta até concluir a operação protegida. Comandos manuais de pnpm/Next fora dessa transação não recebem automaticamente a proteção do gerenciador.
+
+Os testes de filesystem, lease, falhas e processo descartável estão em `tests/launchers/test_launcher_artifacts.py`. Essas provas não encerram a tarefa 174: startup, parada, reinício, idempotência e paridade reais dos dois orquestradores continuam sujeitos às evidências registradas no gestor.
+
 ### Contrato funcional exigido
 
 Os comandos de destino são `help`, `doctor`, `up [--prod]`, `app [--prod]`, `db`, `migrate`, `fix`, `repair [--sim]`, `purge --confirmar-purge`, `status`, `logs [app|db] [--seguir]` e `stop [app|db]`. Sem argumentos, oferecer menu em TTY e ajuda legível sem TTY. Preservar aliases compatíveis do Windows quando existirem, sem transformar o launcher nativo em wrapper.

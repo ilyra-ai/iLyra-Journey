@@ -32,7 +32,12 @@ export default defineConfig({
           // leituras extensas; preserva os limites de tempo dos testes.
           maxWorkers: 4,
           include: ['**/*.test.{ts,tsx,mjs}'],
-          exclude: ['**/node_modules/**', '.next/**', INTEGRATION_GLOB],
+          exclude: [
+            '**/node_modules/**',
+            '.next/**',
+            '.lyra-run/**',
+            INTEGRATION_GLOB,
+          ],
         },
       },
       {
@@ -40,7 +45,7 @@ export default defineConfig({
         test: {
           name: 'integration',
           include: [INTEGRATION_GLOB],
-          exclude: ['**/node_modules/**', '.next/**'],
+          exclude: ['**/node_modules/**', '.next/**', '.lyra-run/**'],
           globalSetup: ['./tests/integration/global-setup.ts'],
           setupFiles: ['./tests/integration/setup-env.ts'],
           // Um único arquivo por vez: os testes compartilham o banco de teste.

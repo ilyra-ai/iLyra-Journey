@@ -16,6 +16,7 @@ const eslintConfig = defineConfig([
   ...fixupConfigRules([...nextVitals, ...nextTypescript]),
   globalIgnores([
     '.next/**',
+    '.lyra-run/**',
     'out/**',
     'build/**',
     'dist/**',
