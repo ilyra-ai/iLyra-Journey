@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Isolamento publicado:** `7a5f77bc`, push confirmado `a9949969..7a5f77bc main -> main`. A integração compartilhada dos artefatos, os dois launchers e seus testes foram publicados como uma entrega lógica; a homologação integral da 174 permanece em execução. Registro imediato da regra 6.
+
 **Isolamento serial integrado na 174 · 10-11-2026:** gerenciador recuperável dos cinco artefatos nativos (`node_modules`, `.next`, `next-env.d.ts`, `tsconfig.tsbuildinfo` e manifesto offline), sem cópia de fontes, links ou árvores Git paralelas. Lease global cobre preparação, instalação, build e registro do app; supervisor Linux comprova a cadeia de processos e aguarda o Bash ao receber interrupções. Windows usa a mesma transação e mantém parada explícita segura para registros próprios obsoletos. Inventário de processos consulta Windows e distros WSL já ativas; `docker-desktop` é inspecionado com POSIX, sem exigir Python nessa distro. Passaram 23 testes de artefatos em cada sistema, 28 testes Windows e quatro do supervisor WSL; inventário externo interceptado nos testes de arquivos é explicitamente identificado. Adoção Linux real comprovada sem movimentos, `doctor` WSL aprovado com MySQL 9.7.2 e 69 migrations; subida de produção ainda em validação. Não declarar a 174 concluída nem retirar `run.py` antes da prova integral.
 
 **Purge restrito publicado:** `4976986c`, push confirmado `b5d097cd..4976986c main -> main`. Launcher, quatro testes e registro da etapa publicados separadamente da integração de artefatos ainda em execução. Registro imediato da regra 6.
