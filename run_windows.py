@@ -216,15 +216,29 @@ def parar_app() -> None:
         ids.update(novos)
     # Filhos somente pertencem à árvore se foram criados depois do pai.
     alvos = [p for p in todos if p["pid"] in ids and p["created"] >= meta["created"]]
+    # Valida toda a árvore antes do primeiro encerramento, evitando parar parte
+    # dela para só depois descobrir um filho sem prova de identidade.
+    if any(not p.get("command") or not p.get("executable") for p in alvos):
+        raise Falha("Árvore com processo sem identidade verificável; processos preservados.")
     for alvo in sorted(alvos, key=lambda p: p["pid"] == meta["pid"]):
-        if not alvo.get("command") or not alvo.get("executable"):
-            raise Falha("Filho sem identidade verificável; encerramento interrompido.")
         powershell("$p=Get-CimInstance Win32_Process -Filter ('ProcessId='+$env:LYRA_PID); "
             "if($p){if($p.CreationDate.ToUniversalTime().ToString('o') -ne $env:LYRA_CREATED "
             "-or $p.CommandLine -cne $env:LYRA_COMMAND -or $p.ExecutablePath -cne $env:LYRA_EXECUTABLE)"
-            "{throw 'Identidade alterada; processo preservado'}; Stop-Process -Id $p.ProcessId -Force}",
+            "{throw 'Identidade alterada; processo preservado'}; "
+            "$owned=[Diagnostics.Process]::GetProcessById($p.ProcessId); try {"
+            "$null=$owned.Handle; "
+            "$expected=[DateTime]::Parse($env:LYRA_CREATED).ToUniversalTime().Ticks; "
+            "$actual=$owned.StartTime.ToUniversalTime().Ticks; "
+            "if(($actual-($actual%10)) -ne ($expected-($expected%10)))"
+            "{throw 'PID reciclado antes de adquirir o handle; preservado'}; "
+            "$owned.Kill(); if(-not $owned.WaitForExit(20000)){throw 'Processo não encerrou em 20s'}"
+            "} finally {$owned.Dispose()}}",
             {"LYRA_PID": str(alvo["pid"]), "LYRA_CREATED": alvo["created"],
              "LYRA_COMMAND": alvo["command"], "LYRA_EXECUTABLE": alvo["executable"]})
+    restantes = processos()
+    if any(any(p["pid"] == alvo["pid"] and p["created"] == alvo["created"]
+               for p in restantes) for alvo in alvos):
+        raise Falha("Processos próprios ainda presentes após encerramento; estado mantido para diagnóstico.")
     APP_META.unlink(missing_ok=True)
     mensagem("OK", "App Windows próprio encerrado após conferência CIM.")
 
@@ -429,7 +443,7 @@ def memoria(porta_app: int) -> None:
         atual = servicos[0]
         configuracao = dict(i.split("=", 1) for i in atual["Config"].get("Env", []) if "=" in i)
         if configuracao.get("LYRA_MEMORIA_APP_URL") != f"http://host.docker.internal:{porta_app}":
-            raise Falha("Memória existente usa outra porta de retorno; preservada. Alinhe sua configuração antes de mudar a porta do app.")
+            raise Falha(f"Memória existente usa callback {configuracao.get('LYRA_MEMORIA_APP_URL', '(ausente)')}, mas o app usaria a porta {porta_app}. Serviço e histórico preservados. A troca serial exige provar que o app anterior parou e reconfigurar somente o serviço memoria, mantendo o mesmo FalkorDB.")
         porta = porta_container(atual, "8000/tcp")
         if saude_container(atual) and porta and consultar_http(f"http://127.0.0.1:{porta}/saude")[0] == 200:
             mensagem("OK", "Memória saudável reutilizada.")
@@ -572,6 +586,8 @@ def logs(args: argparse.Namespace) -> None:
         else:
             mensagem("INFO", "Nenhum log de app Windows disponível.")
     if args.alvo in ("db", "todos"):
+        if args.seguir and args.alvo == "todos":
+            raise Falha("Para seguir logs continuamente escolha `logs app --seguir` ou `logs db --seguir`.")
         for item in containers("mysql"):
             comando = [shutil.which("docker.exe") or "docker.exe", "logs", "--tail", "100"]
             if args.seguir and args.alvo == "db":

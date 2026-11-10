@@ -98,6 +98,23 @@ class TestIdentidade(unittest.TestCase):
             self.assertFalse(run_windows.identidade_valida({**self.meta, chave: valor}, self.processo))
         self.assertFalse(run_windows.identidade_valida(self.meta, None))
 
+    def test_shutdown_rejeita_raiz_reciclada_antes_de_encerrar(self) -> None:
+        with mock.patch.object(run_windows, "estado_app", return_value=self.meta), \
+             mock.patch.object(run_windows, "processos", return_value=[{**self.processo, "created": "outro-instante"}]), \
+             mock.patch.object(run_windows, "powershell") as encerrar:
+            with self.assertRaisesRegex(run_windows.Falha, "raiz mudou"):
+                run_windows.parar_app()
+            encerrar.assert_not_called()
+
+    def test_shutdown_rejeita_arvore_incompleta_sem_parada_parcial(self) -> None:
+        filho = {**self.processo, "pid": 124, "parent": 123, "command": None}
+        with mock.patch.object(run_windows, "estado_app", return_value=self.meta), \
+             mock.patch.object(run_windows, "processos", return_value=[self.processo, filho]), \
+             mock.patch.object(run_windows, "powershell") as encerrar:
+            with self.assertRaisesRegex(run_windows.Falha, "sem identidade"):
+                run_windows.parar_app()
+            encerrar.assert_not_called()
+
     @unittest.skipUnless(sys.platform == "win32", "CIM real exige Windows")
     def test_cim_processo_deste_teste(self) -> None:
         atual = next((p for p in run_windows.processos() if p["pid"] == os.getpid()), None)
@@ -161,6 +178,32 @@ class TestArquivosIsolados(unittest.TestCase):
 
 
 class TestBancoComDubles(unittest.TestCase):
+    def test_callback_memoria_incompativel_preserva_servico_e_env(self) -> None:
+        memoria = {"Config": {"Env": ["LYRA_MEMORIA_APP_URL=http://host.docker.internal:3000"]}}
+        with mock.patch.object(run_windows, "containers", return_value=[memoria]), \
+             mock.patch.object(run_windows, "compose") as compose, \
+             mock.patch.object(run_windows, "atualizar_env") as atualizar:
+            with self.assertRaisesRegex(run_windows.Falha, "porta 3001"):
+                run_windows.memoria(3001)
+            compose.assert_not_called()
+            atualizar.assert_not_called()
+
+    def test_logs_propaga_exit_docker(self) -> None:
+        args = run_windows.criar_parser().parse_args(["logs", "db"])
+        with mock.patch.object(run_windows, "containers", return_value=[{"Id": "container-de-teste"}]), \
+             mock.patch.object(run_windows.subprocess, "run", return_value=subprocess.CompletedProcess([], 19)):
+            with self.assertRaisesRegex(run_windows.Falha, "código 19"):
+                run_windows.logs(args)
+
+    def test_logs_seguir_todos_nao_finge_seguir(self) -> None:
+        args = run_windows.criar_parser().parse_args(["logs", "todos", "--seguir"])
+        with tempfile.TemporaryDirectory() as pasta:
+            with mock.patch.object(run_windows, "LOGS", Path(pasta)), \
+                 mock.patch.object(run_windows, "containers") as containers:
+                with self.assertRaisesRegex(run_windows.Falha, "escolha"):
+                    run_windows.logs(args)
+                containers.assert_not_called()
+
     def test_migrate_nao_exige_artefatos_next(self) -> None:
         with mock.patch.object(run_windows, "preflight"), \
              mock.patch.object(run_windows, "preparar_ambiente"), \
@@ -204,6 +247,27 @@ class TestConcorrenciaReal(unittest.TestCase):
                             self.fail("Duas operações receberam o lock exclusivo")
                 with run_windows.exclusao_mutua():
                     self.assertTrue((Path(pasta) / "operation.lock").is_file())
+
+
+@unittest.skipUnless(sys.platform == "win32", "Shutdown real por CIM exige Windows")
+class TestShutdownRealIsolado(unittest.TestCase):
+    def test_encerra_somente_filho_descartavel_criado_por_este_teste(self) -> None:
+        # Este processo não é app nem serviço: é uma fixture privada do teste.
+        filho = subprocess.Popen([sys.executable, "-c", "import time; time.sleep(60)", str(RAIZ)])
+        try:
+            identidade = next((p for p in run_windows.processos() if p["pid"] == filho.pid), None)
+            self.assertIsNotNone(identidade)
+            with tempfile.TemporaryDirectory() as pasta:
+                estado = Path(pasta) / "app.json"
+                run_windows.gravar_json(estado, {**identidade, "root": str(RAIZ), "platform": "windows", "host": platform.node()})
+                with mock.patch.object(run_windows, "APP_META", estado):
+                    run_windows.parar_app()
+                self.assertIsNotNone(filho.poll())
+                self.assertFalse(estado.exists())
+        finally:
+            if filho.poll() is None:
+                filho.terminate()
+            filho.wait(timeout=10)
 
 
 if __name__ == "__main__":
