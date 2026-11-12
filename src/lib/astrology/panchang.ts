@@ -288,15 +288,44 @@ export class LocalSemNascerDoSolError extends Error {
   }
 }
 
-/**
- * Panchang do dia `data` (AAAA-MM-DD, calendário local do fuso) para o local.
- */
-export function calcularPanchang(local: {
+type LocalDoPanchang = {
   data: string;
   latitude: number;
   longitude: number;
   fuso: string;
-}): Panchang {
+};
+
+const limiteDeDiasEmMemoria = 256;
+const panchangPorDiaELocal = new Map<string, Panchang>();
+
+/**
+ * Panchang do dia `data` (AAAA-MM-DD, calendário local do fuso) para o local.
+ * O resultado astronômico independe do titular e da hora da consulta.
+ */
+export function calcularPanchang(local: LocalDoPanchang): Panchang {
+  const chave = JSON.stringify([
+    local.data,
+    local.latitude,
+    local.longitude,
+    local.fuso,
+  ]);
+  const existente = panchangPorDiaELocal.get(chave);
+  if (existente) {
+    panchangPorDiaELocal.delete(chave);
+    panchangPorDiaELocal.set(chave, existente);
+    return structuredClone(existente);
+  }
+
+  const calculado = calcularPanchangDoLocal(local);
+  if (panchangPorDiaELocal.size >= limiteDeDiasEmMemoria) {
+    const maisAntigo = panchangPorDiaELocal.keys().next();
+    if (!maisAntigo.done) panchangPorDiaELocal.delete(maisAntigo.value);
+  }
+  panchangPorDiaELocal.set(chave, calculado);
+  return structuredClone(calculado);
+}
+
+function calcularPanchangDoLocal(local: LocalDoPanchang): Panchang {
   const observador = new Observer(local.latitude, local.longitude, 0);
   const meiaNoite = localParaUtc(local.data, '00:00', local.fuso);
   const nascer = SearchRiseSet(Body.Sun, observador, +1, meiaNoite, 1.2);

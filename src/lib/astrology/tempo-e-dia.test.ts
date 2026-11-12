@@ -98,6 +98,40 @@ describe('períodos do dia (São Paulo, segunda 12/10/2026)', () => {
   });
 });
 
+describe('reutilização do Panchang', () => {
+  it('preserva os instantes entre consultas e distingue data, coordenadas e fuso', () => {
+    const local = {
+      data: '2026-11-12',
+      latitude: -23.5475,
+      longitude: -46.6361,
+      fuso: 'America/Sao_Paulo',
+    };
+    const primeira = calcularPanchang(local);
+    const nascer = primeira.nascerDoSol.toISOString();
+    primeira.nascerDoSol.setUTCFullYear(2000);
+
+    expect(calcularPanchang(local).nascerDoSol.toISOString()).toBe(nascer);
+    expect(
+      calcularPanchang({
+        ...local,
+        data: '2026-11-13',
+      }).nascerDoSol.toISOString()
+    ).not.toBe(nascer);
+    expect(
+      calcularPanchang({ ...local, longitude: -43 }).nascerDoSol.toISOString()
+    ).not.toBe(nascer);
+    expect(
+      calcularPanchang({ ...local, latitude: -15 }).nascerDoSol.toISOString()
+    ).not.toBe(nascer);
+    expect(
+      calcularPanchang({
+        ...local,
+        fuso: 'Pacific/Honolulu',
+      }).nascerDoSol.toISOString()
+    ).not.toBe(nascer);
+  });
+});
+
 describe('dia pessoal', () => {
   it('Tara Bala conta a partir do nakshatra natal', () => {
     // Natal Krittika (2); dia Swati (14): 13ª contagem → 4ª tara (Kshema).
