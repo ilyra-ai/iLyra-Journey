@@ -41,6 +41,8 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 
 **Identidade oficial registrada na main:** `aadaa2f8`. Publicação documental conferida na sincronização de 12-11-2026. A aplicação dos ativos permanece na etapa 11 da sequência acima.
 
+**Etapa do Panchang publicada:** `b4763c00`, push confirmado de `7923ab67` para `b4763c00` na `main`.
+
 **156 · Reutilização do Panchang · 12-11-2026:** o cálculo astronômico diário usa cache em memória limitado por processo, com chave de data civil, latitude, longitude e fuso. O retorno preserva os objetos de data e protege o cache contra alterações dos consumidores. O ponto de cálculo é compartilhado pela linha temporal, dia védico, calendário, semana e coach. Passaram 297 testes focados, incluindo a regressão de datas, coordenadas, fusos e isolamento do retorno. Esta etapa não cobre persistência entre reinícios ou processos, reutilização do resultado pessoal completo, persistência tropical nem QA integral.
 
 **Novos ativos oficiais e execução autorizada da 173 · 10-11-2026:** o usuário definiu o nome público **iLyra** e o slogan **“Decifrando o Cosmos, Iluminando Destinos.”**, fornecendo os seguintes ativos originais:
