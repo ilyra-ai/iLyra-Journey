@@ -21,6 +21,8 @@
 
 **Ordem de execução definida pelo usuário · 12-11-2026**
 
+Registro publicado em `198b4611`, confirmado na `main` remota em 12-11-2026.
+
 1. **156 · Motor Lyra:** concluir o mapa astrológico tradicional ocidental, com interpretação própria, e a reutilização dos cálculos diários, inclusive da linha temporal.
 2. **157 · Experimente Grátis:** abrir a experiência sem cadastro diretamente pelo botão da landing. Aplicar a verificação de idade e as garantias de privacidade da 155 como dependências desse fluxo.
 3. **158 · Experiência gratuita:** disponibilizar as leituras reais do mapa ocidental.
