@@ -31,6 +31,7 @@ import { ouvirMapaAtualizado } from '@/lib/astrology/evento-do-mapa';
 import { dataLocal } from '@/lib/astrology/tempo';
 import type { PainelCelestial } from '@/lib/astrology/painel-celestial';
 import type { LeituraDaLyra } from '@/lib/lyra/leitura-do-mapa';
+import type { LeituraTropical } from '@/lib/lyra/leitura-tropical';
 import identidade from '@/components/public/CelestialIdentity.module.css';
 import { cn } from '@/lib/utils';
 import { CelestialChat } from './CelestialChat';
@@ -50,7 +51,12 @@ const TIPOS = [
   { id: 'samadhi', nome: 'Lyra DM Samādhi', arte: lotus },
   { id: 'quantum', nome: 'Quantum', arte: esfera },
 ] as const;
+const ABAS = [
+  ...TIPOS,
+  { id: 'ocidental', nome: 'Ocidental', arte: ceu },
+] as const;
 type Tipo = (typeof TIPOS)[number]['id'];
+type Aba = (typeof ABAS)[number]['id'];
 type Dia = PainelCelestial['dias'][number];
 const registrarErro = (erro: unknown) =>
   console.error('Falha ao carregar o painel celestial:', erro);
@@ -108,8 +114,10 @@ export function CelestialDashboard() {
   const { profile } = useProfile();
   const acesso = usePlanFeatureAccess('vedic_insights');
   const [versao, setVersao] = useState(0);
-  const [tipo, setTipo] = useState<Tipo>('vedico');
-  const [modal, setModal] = useState<'mapa' | 'dia' | 'signo' | null>(null);
+  const [tipo, setTipo] = useState<Aba>('vedico');
+  const [modal, setModal] = useState<
+    'mapa' | 'ocidental' | 'dia' | 'signo' | null
+  >(null);
   const [diaSelecionado, setDiaSelecionado] = useState<string | null>(null);
   const ler = useCallback(async (): Promise<PainelCelestial | null> => {
     const resposta = await buscarJson('/api/astrologia/painel', {
@@ -125,6 +133,21 @@ export function CelestialDashboard() {
       registrarErro,
       null
     );
+  const lerOcidental = useCallback(async () => {
+    const resposta = await buscarJson('/api/astrologia/ocidental', {
+      cache: 'no-store',
+    });
+    if (!resposta.ok) throw new Error(resposta.falha.message);
+    return (resposta.corpo as { leitura: LeituraTropical | null }).leitura;
+  }, []);
+  const ocidental = useKeyedResource<LeituraTropical | null>(
+    session && acesso.enabled && tipo === 'ocidental'
+      ? `${session.user.id}:${versao}`
+      : null,
+    lerOcidental,
+    registrarErro,
+    null
+  );
   useEffect(() => ouvirMapaAtualizado(() => setVersao((v) => v + 1)), []);
   useEffect(() => {
     if (!data?.fuso || !data.hoje) return;
@@ -150,7 +173,7 @@ export function CelestialDashboard() {
   const nome = [profile?.first_name, profile?.last_name]
     .filter(Boolean)
     .join(' ');
-  const arte = TIPOS.find((item) => item.id === tipo)!.arte;
+  const aba = ABAS.find((item) => item.id === tipo)!;
   return (
     <div className={styles.panel}>
       <section
@@ -268,7 +291,8 @@ export function CelestialDashboard() {
               <Tabs
                 className={styles.mapLayout}
                 value={tipo}
-                onValueChange={(valor) => setTipo(valor as Tipo)}
+                activationMode="manual"
+                onValueChange={(valor) => setTipo(valor as Aba)}
               >
                 <div className={styles.mapHeading}>
                   <h2 id="titulo-meus-mapas">
@@ -276,22 +300,24 @@ export function CelestialDashboard() {
                       ? 'Meu mapa védico'
                       : tipo === 'samadhi'
                         ? 'Meu mapa Lyra DM Samādhi'
-                        : 'Meu mapa Quantum'}
+                        : tipo === 'ocidental'
+                          ? 'Meu mapa ocidental'
+                          : 'Meu mapa Quantum'}
                   </h2>
                   <p className={styles.subtitle}>
                     Seu céu de nascimento, novas perspectivas.
                   </p>
                 </div>
                 <TabsList className={styles.tabs} aria-label="Tipo de mapa">
-                  {TIPOS.map((item) => (
+                  {ABAS.map((item) => (
                     <TabsTrigger value={item.id} key={item.id}>
                       {item.nome}
                     </TabsTrigger>
                   ))}
                 </TabsList>
                 <Image
-                  src={arte}
-                  alt={`Ilustração da perspectiva ${TIPOS.find((item) => item.id === tipo)!.nome}`}
+                  src={aba.arte}
+                  alt={`Ilustração da perspectiva ${aba.nome}`}
                   className={styles.mapArt}
                   sizes="(max-width: 699px) 90vw, (max-width: 1199px) 45vw, 430px"
                   priority
@@ -313,16 +339,41 @@ export function CelestialDashboard() {
                       </p>
                     </TabsContent>
                   ))}
-                  {data.mapa ? (
+                  <TabsContent value="ocidental" className={styles.summary}>
+                    <p className={styles.readingLabel}>
+                      Ocidental · zodíaco tropical
+                    </p>
+                    {ocidental.loading ? (
+                      <p role="status">Calculando sua leitura ocidental…</p>
+                    ) : ocidental.error instanceof Error ? (
+                      <p role="alert">{ocidental.error.message}</p>
+                    ) : (
+                      <p>
+                        {ocidental.data?.resumo ??
+                          'Informe sua data de nascimento no perfil.'}
+                      </p>
+                    )}
+                  </TabsContent>
+                  {(tipo === 'ocidental' ? ocidental.data : data.mapa) ? (
                     <button
                       type="button"
                       className={styles.primaryButton}
-                      onClick={() => setModal('mapa')}
+                      onClick={() =>
+                        setModal(tipo === 'ocidental' ? 'ocidental' : 'mapa')
+                      }
                     >
                       <Orbit aria-hidden="true" /> Explorar meu mapa{' '}
                       <ChevronRight aria-hidden="true" />
                     </button>
-                  ) : (
+                  ) : tipo === 'ocidental' && ocidental.error ? (
+                    <button
+                      type="button"
+                      className={styles.primaryButton}
+                      onClick={() => void ocidental.refresh()}
+                    >
+                      <RefreshCw aria-hidden="true" /> Tentar novamente
+                    </button>
+                  ) : tipo === 'ocidental' && ocidental.loading ? null : (
                     <Link className={styles.primaryButton} href="/profile">
                       Completar meu perfil
                     </Link>
@@ -443,18 +494,47 @@ export function CelestialDashboard() {
       >
         <DialogContent className={cn(identidade.theme, styles.dialog)}>
           <DialogTitle>
-            {modal === 'mapa'
-              ? 'Seus mapas pessoais'
-              : modal === 'signo'
-                ? `${sol?.signo ?? 'Signo'} · ${nome}`
-                : `Linha temporal · ${dia ? formatarData(dia.data) : ''}`}
+            {modal === 'ocidental'
+              ? 'Mapa astrológico tradicional ocidental'
+              : modal === 'mapa'
+                ? 'Seus mapas pessoais'
+                : modal === 'signo'
+                  ? `${sol?.signo ?? 'Signo'} · ${nome}`
+                  : `Linha temporal · ${dia ? formatarData(dia.data) : ''}`}
           </DialogTitle>
           <DialogDescription>
             {modal === 'dia'
               ? 'Três perspectivas do seu mapa e o contexto calculado para a data selecionada.'
               : 'Leituras pessoais calculadas com seus dados. Imagens ilustrativas; interpretações simbólicas para reflexão.'}
           </DialogDescription>
-          {modal === 'mapa' ? (
+          {modal === 'ocidental' ? (
+            ocidental.data ? (
+              <section>
+                <h3>Zodíaco tropical</h3>
+                <p>{ocidental.data.resumo}</p>
+                {ocidental.data.ascendente ? (
+                  <p>{ocidental.data.ascendente}</p>
+                ) : null}
+                {ocidental.data.planetas
+                  .filter(({ planeta }) => planeta !== 'sol')
+                  .map(({ planeta, texto }) => (
+                    <p key={planeta}>{texto}</p>
+                  ))}
+                {ocidental.data.aspectos.map((aspecto) => (
+                  <p key={aspecto}>{aspecto}</p>
+                ))}
+                {ocidental.data.limites.map((limite) => (
+                  <p key={limite}>{limite}</p>
+                ))}
+              </section>
+            ) : (
+              <p role="status">
+                {ocidental.loading
+                  ? 'Atualizando a leitura ocidental…'
+                  : 'A leitura ocidental não está disponível no momento.'}
+              </p>
+            )
+          ) : modal === 'mapa' ? (
             <MapaCompleto />
           ) : modal === 'signo' ? (
             <section>
