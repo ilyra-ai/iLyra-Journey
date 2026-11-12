@@ -43,6 +43,8 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 
 **Etapa do Panchang publicada:** `b4763c00`, push confirmado de `7923ab67` para `b4763c00` na `main`.
 
+**Base natal tropical publicada:** `8b6f7858`, push confirmado de `3e242138` para `8b6f7858` na `main`.
+
 **156 · Base natal tropical privada · 12-11-2026:** a API ocidental reaproveita no MySQL as longitudes e o ascendente do titular. A base é versionada, invalidada por alterações do nascimento e calculada sob bloqueio do perfil para impedir gravações concorrentes duplicadas. O modo somente solar continua calculado sem persistência. A revisão no banco permaneceu em 1 após quatro chamadas simultâneas e passou a 2 após alteração da hora de nascimento. Formato, lint, tipos, 1.069 testes unitários, 624 integrações e build de produção aprovados. A etapa não conclui o cache persistente da linha temporal nem a integração ocidental nas superfícies do app e do chat.
 
 **156 · Reutilização do Panchang · 12-11-2026:** o cálculo astronômico diário usa cache em memória limitado por processo, com chave de data civil, latitude, longitude e fuso. O retorno preserva os objetos de data e protege o cache contra alterações dos consumidores. O ponto de cálculo é compartilhado pela linha temporal, dia védico, calendário, semana e coach. Passaram 297 testes focados, incluindo a regressão de datas, coordenadas, fusos e isolamento do retorno. Esta etapa não cobre persistência entre reinícios ou processos, reutilização do resultado pessoal completo, persistência tropical nem QA integral.
