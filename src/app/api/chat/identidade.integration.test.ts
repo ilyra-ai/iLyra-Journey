@@ -12,6 +12,29 @@ import { PUT } from '../admin/ia/route';
 import { POST } from '../functions/ask-ai-assistant/route';
 
 describe('identidade global do Motor Lyra com MySQL real', () => {
+  it('lê o mapa ocidental do titular sem misturar a leitura védica', async () => {
+    const titular = await criarUsuario('admin');
+    await executeStatement('UPDATE profiles SET birth_date = ? WHERE id = ?', [
+      '1990-12-01',
+      titular.id,
+    ]);
+    const resposta = await chamar(POST, {
+      usuario: titular,
+      method: 'POST',
+      body: {
+        query: 'Leia meu mapa astrológico tradicional ocidental.',
+        conversationId: randomUUID(),
+        turnId: randomUUID(),
+        privacyMode: true,
+      },
+    });
+    expect(resposta.status).toBe(200);
+    const texto = (resposta.json as { response: string }).response;
+    expect(texto).toContain('Sagitário');
+    expect(texto).toContain('Leitura solar geral');
+    expect(texto).not.toMatch(/dasha|nakshatra|sideral/iu);
+  });
+
   it('envia a identidade ao provedor por HTTP e grava a expressão uma única vez', async () => {
     const servidor = await iniciarServidorOpenAiCompativel();
     const admin = await criarUsuario('admin');

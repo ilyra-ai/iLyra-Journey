@@ -41,10 +41,9 @@ import {
   respostaJaGravada,
   type TurnoEmExecucao,
 } from '@/lib/chat/servico';
-import {
-  lerPerfilAstrologico,
-  mapaDoPerfil,
-} from '@/lib/astrology/perfil-astrologico';
+import { lerPerfilAstrologico } from '@/lib/astrology/perfil-astrologico';
+import { carregarNatalDoTitular } from '@/lib/astrology/persistencia-natal';
+import { tropicalDoTitular } from '@/lib/astrology/tropical-do-perfil';
 import { obterBriefingDoDia } from '@/lib/coach/servico';
 import type { BriefingDoDia } from '@/lib/coach/tipos';
 import { lerJson, respostaDeErro } from '@/lib/http/api';
@@ -261,11 +260,17 @@ export async function POST(request: Request) {
       `
       );
 
+      const perguntaOcidental =
+        /\b(?:mapa(?:\s+(?:astral|natal|astrológico|tradicional)){0,3}|astrologia|leitura)\s+(?:ocidental|tropical)\b/iu.test(
+          query
+        );
+
       // "Seu dia" do coach (o mesmo da página "Meu dia"), quando o plano inclui
       // o coach e o perfil tem cidade. Falha aqui não derruba o chat.
       let seuDia: BriefingDoDia | null = null;
       try {
         if (
+          !perguntaOcidental &&
           grupos.registros_saude &&
           comVedico &&
           (await recursoHabilitado(
@@ -288,8 +293,13 @@ export async function POST(request: Request) {
 
       // Mapa natal para o motor da Lyra (tarefa 55); sem dados de nascimento,
       // a Lyra diz o que falta em vez de inventar.
-      const perfilAstrologico = await lerPerfilAstrologico(session.user.id);
-      const mapaNatal = comVedico ? mapaDoPerfil(perfilAstrologico) : null;
+      const { perfil: perfilAstrologico, mapa: mapaNatal } =
+        comVedico && !perguntaOcidental
+          ? await carregarNatalDoTitular(session.user.id)
+          : {
+              perfil: await lerPerfilAstrologico(session.user.id),
+              mapa: null,
+            };
 
       const [opcoesDoTurno] = turno
         ? await queryRows<{ memory_excluded: number }>(
@@ -317,8 +327,31 @@ export async function POST(request: Request) {
         profile?.nickname
       );
       const voltaParaCasa = turno?.voltaParaCasa ?? pediuVoltaParaCasa(query);
+      let respostaOcidental: string | null = null;
+      if (perguntaOcidental && !tratamento.confirmacao) {
+        try {
+          const { leitura } = await tropicalDoTitular(session.user.id);
+          respostaOcidental = leitura
+            ? [
+                leitura.resumo,
+                leitura.ascendente,
+                ...leitura.planetas
+                  .filter(({ planeta }) => planeta !== 'sol')
+                  .map(({ texto }) => texto),
+                ...leitura.aspectos,
+                ...leitura.limites,
+              ]
+                .filter(Boolean)
+                .join('\n\n')
+            : 'Informe sua data de nascimento no perfil para consultar a leitura ocidental.';
+        } catch (erro) {
+          if (!(erro instanceof RangeError)) throw erro;
+          respostaOcidental = erro.message;
+        }
+      }
       const fallbackResponse =
         tratamento.confirmacao ??
+        respostaOcidental ??
         generateLocalAssistantReply(query, {
           gruposFuncionais: grupos,
           lyra: {
@@ -355,6 +388,7 @@ export async function POST(request: Request) {
           pergunta: query,
           respostaDoMotor: fallbackResponse,
           mapa: mapaNatal,
+          ocidental: perguntaOcidental,
           faltando: perfilAstrologico.faltando,
           habilidades: buildSkillsContext(skills),
           tratamento,
@@ -366,7 +400,7 @@ export async function POST(request: Request) {
           .join('; ') +
         '. Não ofereça, execute ou recomende acesso a esses recursos do aplicativo, nem invente métricas deles. A desativação não impede responder perguntas gerais ou calcular o mapa astrológico com os recursos disponíveis.\n' +
         (!comVedico
-          ? '\nO plano não inclui leituras védicas pessoais: não calcule nem apresente mapa natal, céu pessoal ou índices integrativos; explique a indisponibilidade quando solicitado.'
+          ? '\nO plano não inclui leituras védicas pessoais, céu védico pessoal ou índices integrativos; explique a indisponibilidade quando solicitado.'
           : '');
       const pedido = {
         sistema: lembrancas.length
