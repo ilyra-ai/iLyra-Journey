@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { lerPerfilAstrologico } from '@/lib/astrology/perfil-astrologico';
-import { tropicalDoPerfil } from '@/lib/astrology/tropical-do-perfil';
+import { tropicalDoTitular } from '@/lib/astrology/tropical-do-perfil';
 import { respostaDeErro } from '@/lib/http/api';
 import { HttpError } from '@/lib/http-error';
 import { requireServerSession } from '@/lib/mysql/server-auth';
@@ -18,9 +17,12 @@ export async function GET(request: Request) {
       parametro !== 'posterior'
     )
       throw new HttpError('Ocorrência deve ser anterior ou posterior.', 400);
-    const perfil = await lerPerfilAstrologico(session.user.id);
     return NextResponse.json(
-      tropicalDoPerfil(perfil, new Date(), parametro ?? undefined),
+      await tropicalDoTitular(
+        session.user.id,
+        new Date(),
+        parametro ?? undefined
+      ),
       {
         headers: { 'Cache-Control': 'private, no-store' },
       }

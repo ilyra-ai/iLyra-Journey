@@ -29,6 +29,16 @@ const EXTERIORES = {
 export type PlanetaTropical =
   (typeof CLASSICOS)[number] | keyof typeof EXTERIORES;
 
+export const planetasTropicais = [
+  ...CLASSICOS,
+  ...Object.keys(EXTERIORES),
+] as readonly PlanetaTropical[];
+
+export interface BaseNatalTropical {
+  planetas: Record<PlanetaTropical, number>;
+  ascendente: number | null;
+}
+
 export interface PosicaoTropical {
   longitude: number;
   signo: (typeof SIGNOS)[number];
@@ -200,6 +210,14 @@ export function calcularMapaTropical(
 
 /** Coordenadas verificadas do perfil; não depende de reidentificar cidades homônimas. */
 export function calcularMapaTropicalPorLocal(
+  entrada: Parameters<typeof prepararNascimentoTropical>[0],
+  agora = new Date()
+) {
+  const nascimento = prepararNascimentoTropical(entrada, agora);
+  return montarMapaTropical(nascimento, calcularBaseTropical(nascimento));
+}
+
+export function prepararNascimentoTropical(
   entrada: {
     data: string;
     hora: string;
@@ -226,23 +244,52 @@ export function calcularMapaTropicalPorLocal(
   );
   if (instante > agora)
     throw new RangeError('O instante de nascimento não pode estar no futuro.');
-  const planetas: { planeta: PlanetaTropical; posicao: PosicaoTropical }[] =
-    CLASSICOS.map((planeta) => ({
+  return {
+    data: entrada.data,
+    hora: entrada.hora,
+    instanteUtc: instante.toISOString(),
+    cidade: { ...cidade },
+  };
+}
+
+type NascimentoTropical = ReturnType<typeof prepararNascimentoTropical>;
+
+export function calcularBaseTropical(
+  nascimento: NascimentoTropical
+): BaseNatalTropical {
+  const instante = new Date(nascimento.instanteUtc);
+  const { cidade } = nascimento;
+  const planetas = Object.fromEntries(
+    planetasTropicais.map((planeta) => [
       planeta,
-      posicao: posicaoTropical(longitudeTropical(planeta, instante)),
-    }));
-  for (const [planeta, corpo] of Object.entries(EXTERIORES)) {
-    planetas.push({
-      planeta: planeta as keyof typeof EXTERIORES,
-      posicao: posicaoTropical(
-        Ecliptic(GeoVector(corpo, MakeTime(instante), true)).elon
+      normalizarGraus(
+        planeta === 'urano' || planeta === 'netuno' || planeta === 'plutao'
+          ? Ecliptic(GeoVector(EXTERIORES[planeta], MakeTime(instante), true))
+              .elon
+          : longitudeTropical(planeta, instante)
       ),
-    });
-  }
+    ])
+  ) as BaseNatalTropical['planetas'];
   const polar = Math.abs(cidade.latitude) >= 66.56;
-  const ascendente = polar
-    ? null
-    : ascendenteTropical(instante, cidade.latitude, cidade.longitude);
+  return {
+    planetas,
+    ascendente: polar
+      ? null
+      : ascendenteTropical(instante, cidade.latitude, cidade.longitude)
+          .longitude,
+  };
+}
+
+export function montarMapaTropical(
+  nascimento: NascimentoTropical,
+  base: BaseNatalTropical
+) {
+  const planetas = planetasTropicais.map((planeta) => ({
+    planeta,
+    posicao: posicaoTropical(base.planetas[planeta]),
+  }));
+  const ascendente =
+    base.ascendente === null ? null : posicaoTropical(base.ascendente);
   const casas = ascendente
     ? Array.from({ length: 12 }, (_, indice) => ({
         numero: indice + 1,
@@ -288,17 +335,7 @@ export function calcularMapaTropicalPorLocal(
     zodiaco: 'tropical' as const,
     metodo:
       'astronomy-engine/geocentrico-ecliptica-verdadeira-da-data' as const,
-    nascimento: {
-      data: entrada.data,
-      hora: entrada.hora,
-      instanteUtc: instante.toISOString(),
-      cidade: {
-        nome: cidade.nome,
-        fuso: cidade.fuso,
-        latitude: cidade.latitude,
-        longitude: cidade.longitude,
-      },
-    },
+    nascimento,
     precisao: 'horario-local-informado' as const,
     sistemaDeCasas: 'iguais-a-partir-do-ascendente' as const,
     planetas,
@@ -306,7 +343,7 @@ export function calcularMapaTropicalPorLocal(
     casas,
     aspectos,
     faltando: [],
-    indisponivel: polar
+    indisponivel: !ascendente
       ? [
           'ascendente e casas não calculados nesta implementação em latitude polar',
         ]
