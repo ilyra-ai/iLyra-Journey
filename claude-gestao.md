@@ -19,6 +19,26 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Ordem de execução definida pelo usuário · 12-11-2026**
+
+1. **156 · Motor Lyra:** concluir o mapa astrológico tradicional ocidental, com interpretação própria, e a reutilização dos cálculos diários, inclusive da linha temporal.
+2. **157 · Experimente Grátis:** abrir a experiência sem cadastro diretamente pelo botão da landing. Aplicar a verificação de idade e as garantias de privacidade da 155 como dependências desse fluxo.
+3. **158 · Experiência gratuita:** disponibilizar as leituras reais do mapa ocidental.
+4. **147 · Redesign integral:** redesenhar o app e evoluir o chat, incluindo a interface generativa conforme os requisitos registrados nesta tarefa.
+5. **142 · Simplificação:** reorganizar as jornadas e a experiência do usuário e do administrador.
+6. **160 · Migração comercial:** migrar Free, Meta e Care para o novo modelo de assinatura, preservando o histórico.
+7. **161 · Modal e gestão dos planos:** oferecer duas opções mensais de R$ 9,90 e R$ 19,90 com os mesmos benefícios do Care, sem acesso administrativo por assinatura. Incluir nas configurações do administrador um controle de opções do tipo rádio para desativar planos. Deixar Free, Meta e Care desativados para novas contratações e manter disponíveis apenas as duas novas opções. Preservar assinaturas e histórico conforme a migração da 160.
+8. **166 · Conexões da Alma:** implementar a experiência de afinidades simbólicas.
+9. **168 · Compartilhamento:** criar os cartões de autodescoberta compartilháveis.
+10. **172 · Publicação e estabilização:** publicar e estabilizar o novo modelo com migrações reversíveis.
+11. **173 · Identidade iLyra:** aplicar nome, slogan, logo, favicon e fundo oficiais e atualizar integralmente o README. O pedido cita 73, mas o escopo corresponde à 173 neste gestor.
+12. **164 · Google:** implementar login e cadastro reais.
+13. **165 · Apple:** implementar login e cadastro reais.
+
+Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das tarefas 147 e 142. Preservar o trabalho local da 174. A ordem trata a 160 como migração de dados e histórico e a 161 como ativação comercial das duas opções, evitando indisponibilidade durante a transição. Conferir as dependências técnicas, especialmente cobrança e QA antes da publicação da 172. Validar CRUD e jornadas reais em navegador e em desktop, tablet e celular. Publicar cada tarefa validada em commit próprio na `main`, registrar o SHA e avisar o usuário ao concluir o conjunto.
+
+**Identidade oficial registrada na main:** `aadaa2f8`. Publicação documental conferida na sincronização de 12-11-2026. A aplicação dos ativos permanece na etapa 11 da sequência acima.
+
 **Novos ativos oficiais e execução autorizada da 173 · 10-11-2026:** o usuário definiu o nome público **iLyra** e o slogan **“Decifrando o Cosmos, Iluminando Destinos.”**, fornecendo os seguintes ativos originais:
 
 - **Logo e slogan:** `C:/Users/DOUGLA~1/AppData/Local/Temp/codex-clipboard-2d17ca4b-3800-411a-85ab-04c4e316ea30.png`.
