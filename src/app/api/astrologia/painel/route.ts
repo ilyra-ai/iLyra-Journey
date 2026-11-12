@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
-import { montarPainelCelestial } from '@/lib/astrology/painel-celestial';
-import { carregarNatalDoTitular } from '@/lib/astrology/persistencia-natal';
+import { carregarPainelDoTitular } from '@/lib/astrology/persistencia-painel';
 import { requireServerSession } from '@/lib/mysql/server-auth';
 import { requireFeatureEnabled } from '@/lib/plans/service';
 import { respostaDeErro } from '@/lib/http/api';
@@ -12,12 +11,8 @@ export async function GET() {
   try {
     const session = await requireServerSession();
     await requireFeatureEnabled(session, 'vedic_insights');
-    const agora = new Date();
-    const { perfil, mapa } = await carregarNatalDoTitular(
-      session.user.id,
-      agora
-    );
-    return NextResponse.json(montarPainelCelestial(perfil, agora, mapa), {
+    const painel = await carregarPainelDoTitular(session.user.id);
+    return NextResponse.json(painel, {
       headers: { 'Cache-Control': 'private, no-store' },
     });
   } catch (erro) {

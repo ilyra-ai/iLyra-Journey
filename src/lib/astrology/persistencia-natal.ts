@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
+import type { PoolConnection } from 'mysql2/promise';
 import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
 import { HttpError } from '@/lib/http-error';
 import { lerPerfilAstrologico, mapaDoPerfil } from './perfil-astrologico';
@@ -90,9 +91,10 @@ function restaurar(base: z.infer<typeof baseSchema>, agora: Date): MapaNatal {
  */
 export async function carregarNatalDoTitular(
   userId: string,
-  agora = new Date()
+  agora = new Date(),
+  transacao?: PoolConnection
 ) {
-  return withTransaction(async (connection) => {
+  const carregar = async (connection: PoolConnection) => {
     const [titular] = await queryRows<{ id: string }>(
       'SELECT id FROM profiles WHERE id = ? FOR UPDATE',
       [userId],
@@ -148,5 +150,6 @@ export async function carregarNatalDoTitular(
       connection
     );
     return { perfil, mapa, reutilizado: false };
-  });
+  };
+  return transacao ? carregar(transacao) : withTransaction(carregar);
 }
