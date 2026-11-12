@@ -45,6 +45,8 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 
 **Base natal tropical publicada:** `8b6f7858`, push confirmado de `3e242138` para `8b6f7858` na `main`.
 
+**Linha temporal persistida e publicada:** `67737c9c`, push confirmado de `817f1d78` para `67737c9c` na `main`.
+
 **156 · Linha temporal persistida · 12-11-2026:** o painel reutiliza no MySQL a leitura pessoal de sete dias por titular. A chave usa a data civil no fuso do perfil, os dados de entrada, os períodos vigentes e a versão do painel. A migração 068 foi aplicada ao MySQL local. O teste de integração comprovou reutilização até 23h59min59s no fuso local, renovação à meia-noite e recuperação de conteúdo corrompido. Foram aprovados 1.069 testes unitários, 625 integrações, formato, lint e build com TypeScript. A tela de login renderizou em navegador com localhost. A validação autenticada da linha temporal no navegador e a integração do mapa ocidental com painel e chat permanecem abertas.
 
 **156 · Base natal tropical privada · 12-11-2026:** a API ocidental reaproveita no MySQL as longitudes e o ascendente do titular. A base é versionada, invalidada por alterações do nascimento e calculada sob bloqueio do perfil para impedir gravações concorrentes duplicadas. O modo somente solar continua calculado sem persistência. A revisão no banco permaneceu em 1 após quatro chamadas simultâneas e passou a 2 após alteração da hora de nascimento. Formato, lint, tipos, 1.069 testes unitários, 624 integrações e build de produção aprovados. A etapa não conclui o cache persistente da linha temporal nem a integração ocidental nas superfícies do app e do chat.
