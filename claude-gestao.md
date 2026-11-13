@@ -1135,6 +1135,8 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 - W3C WCAG 2.2: https://www.w3.org/TR/WCAG22/
 - Referências internas: docs/{motor-da-lyra,astrologia,mapa-ocidental}.md; src/lib/{astrology,lyra,coach,ai}; seções L, M, N da tarefa 142 e tarefas 147,155–157,171,173.
 
+**Publicação documental verificada:** commit `90dbde00717a2dc2ca5554f9c6b8daf2c3daefc2` na `main` em 13/11/2026. Foram acrescentadas as cinco propostas, especificações anti-duplicidade e correção do contrato de filtro; somente `claude-gestao.md` foi modificado, sem implementar o aplicativo. O SHA é registrado neste commit documental de rastreabilidade, conforme regra 6 do gestor.
+
 **Situação desta ampliação O: APENAS DOCUMENTAÇÃO; CINCO PROPOSTAS NOVAS NO ESCOPO AUDITADO, ZERO IMPLEMENTADAS; filtro 1 reordenado documentalmente, seis filtros principais preservados. Aguardar instruções.**
 
 ### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · 🔵 EM EXECUÇÃO
