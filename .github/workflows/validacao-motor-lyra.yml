@@ -1,0 +1,51 @@
+name: Validação do Motor da Lyra
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/lib/astrology/inovacoes/**'
+      - 'src/app/api/astrologia/inovacoes/**'
+      - 'src/app/inovacoes/**'
+      - 'src/components/layout/navigation.ts'
+      - 'src/components/layout/sidebar-structure.ts'
+      - 'src/lib/plans/rotas.ts'
+      - 'public/world-countries.svg'
+      - '.github/workflows/validacao-motor-lyra.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  qualidade:
+    name: Lint, tipos, cálculos e build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Obter o código da main
+        uses: actions/checkout@v4
+      - name: Preparar pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.28.4
+      - name: Preparar Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+      - name: Instalar dependências reprodutíveis
+        run: pnpm install --frozen-lockfile
+      - name: Conferir formatação oficial
+        run: pnpm check:format
+      - name: Conferir regras ESLint
+        run: pnpm check:lint
+      - name: Conferir tipos TypeScript
+        run: pnpm check:types
+      - name: Testar cinco módulos matemáticos sem banco ou LLM
+        run: pnpm exec vitest run --project unit src/lib/astrology/inovacoes/inovacoes.test.ts
+      - name: Testar regressões unitárias do aplicativo
+        run: pnpm test
+      - name: Construir aplicação de produção
+        run: pnpm build
