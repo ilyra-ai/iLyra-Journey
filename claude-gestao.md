@@ -458,7 +458,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 | Nº | Painel | Filtro | Opções e comportamento obrigatório | Resultado esperado |
 | --- | --- | --- | --- | --- |
-| **1** | Funcionalidades existentes | **Perfil / grupo** | Seletor com primeira opção **Radar PREMIUM · Inovações 2026**, seguida de **Usuários**, **Administrador** e **Desativadas**; uma seleção ativa por vez; Radar mostra propostas pesquisadas com cinco tópicos locais, mantendo os demais grupos reservados a funcionalidades existentes; ao mudar, manter layout e mostrar somente itens do grupo solicitado. | Lista, descrições e contagem do primeiro painel se atualizam sem alterar o segundo; propostas não aparecem como funcionalidades implementadas. |
+| **1** | Funcionalidades existentes | **Perfil / grupo** | Seletor com primeira opção **Radar PREMIUM · Inovações 2026**, segunda opção **Motor da Lyra**, seguidas de **Usuários**, **Administrador** e **Desativadas**; uma seleção ativa por vez; Radar mostra propostas pesquisadas com cinco tópicos locais, mantendo os demais grupos reservados a funcionalidades existentes; ao mudar, manter layout e mostrar somente itens do grupo solicitado. | Lista, descrições e contagem do primeiro painel se atualizam sem alterar o segundo; propostas não aparecem como funcionalidades implementadas. |
 | **2** | Funcionalidades existentes | **Pesquisa de funcionalidade** | Campo de texto com busca sem diferenciar maiúsculas, minúsculas ou acentos, por nome, categoria e descrição. Oferecer limpar pesquisa. | Resultado cumulativo com o filtro 1, contagem atualizada e estado vazio compreensível. |
 | **3** | Roadmap `claude-gestao.md` | **Situação** | Todas; **A iniciar**, **Em execução**, **Pausada**, **Parcialmente implementada**, **Validação/Homologação pendente** e **Bloqueada** quando ocorrer. Não confundir 🟡 com 🟢, nem tarefas pausadas com a iniciar. | Somente tarefas com situação canônica correspondente, mantendo exceções explicitadas. |
 | **4** | Roadmap `claude-gestao.md` | **Categoria relacionada** | Todas ou categoria real derivada dos itens, como **UI/UX**, **Mapas**, **Descoberta gratuita**, **Autenticação**, **Assinaturas**, **Pagamentos**, **IA**, **Relacionamentos**, **Analytics**, **Marca**, **Privacidade**, **Compartilhamento**, **Qualidade** e **Infraestrutura**. | Redução dos resultados por assunto, com categorias provenientes das tarefas, não de um catálogo ornamental. |
@@ -525,7 +525,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ##### M.1 · Primeiro tópico dos filtros: organização e contrato visual
 
-1. **Nova primeira opção visível do Filtro 1 do Painel 1:** **“Radar PREMIUM · Inovações 2026”**, exibida **ANTES** de **Usuários**, **Administrador** e **Desativadas**. Não eliminar as três opções existentes e não deslocar o Painel 2 de tarefas.
+1. **Nova primeira opção visível do Filtro 1 do Painel 1:** **“Radar PREMIUM · Inovações 2026”**, exibida como primeira opção, seguida de **Motor da Lyra**, **Usuários**, **Administrador** e **Desativadas**. Não eliminar as três opções existentes e não deslocar o Painel 2 de tarefas.
 2. Quando essa primeira opção estiver ativa, mostrar exatamente **cinco tópicos de navegação locais**, na ordem do usuário: **(1) Top 3 UI/UX, (2) Top 3 para a IA, (3) Top 3 para Administrador, (4) Top 3 para Usuários, (5) Top 3 Inovações autorais**. Cada tópico possui **três cartões**, com índice 1–3 interno, categoria, nome, benefício, situação, código-alvo, implementação, dependências, riscos, QA e fontes clicáveis. Seleção “Todas” apresenta os 15. A ordem acima é fixa da apresentação, mas ranking interno pode ser revisado com evidência nova.
 3. O **Filtro 2 (Pesquisa)** já existente procura também nome, identificador, descrição, referência e categoria das propostas **quando Premium estiver selecionado**; caso contrário, continua filtrando o inventário real. Busca sem distinção de acentos/maiúsculas e com contagem coerente. **Não** incluir propostas nos resultados dos filtros Usuários/Administrador/Desativadas, que permanecem inventário do código.
 4. Os tópicos locais do Radar são **chips/abas internas de exploração**, e não aumento silencioso da contagem dos **6 filtros principais** aprovados antes. A estrutura principal segue com **dois painéis e seis filtros**: Filtro 1 (com Radar Premium em primeiro), Filtro 2 (Pesquisa) e filtros 3–6 (Roadmap por situação, categoria, público e pesquisa). Caso uma futura UX exija filtros adicionais independentes, documentar e solicitar nova decisão antes da mudança da métrica oficial.
@@ -685,6 +685,236 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 **PUBLICAÇÃO DOCUMENTAL DO RADAR PREMIUM:** commit `aa5e8c60f058fd7008b6991359d3fb03fe6f7910` publicado na branch `main` em 13-11-2026, contendo a investigação de 15 itens, alteração documental da primeira opção de filtro e preservação dos seis filtros principais. O único arquivo de conteúdo modificado neste commit foi `claude-gestao.md`; nenhuma funcionalidade foi implementada. **Registro de SHA:** este campo foi adicionado no commit documental subsequente, conforme a regra 6 do gestor.
 
 **STATUS FINAL DESTA AMPLIAÇÃO:** registro forense e especificação apenas; nenhum dos 15 itens foi implementado ou homologado nesta solicitação. **Preservar tarefa 142 pausada e aguardar instruções.**
+
+#### N · Inventário forense do Motor da Lyra, tópicos funcionais e filtro dedicado · 13-11-2026
+
+> [!IMPORTANT]
+> **Escopo autorizado: somente investigar, inventariar, documentar e aguardar instruções.** A tarefa **142 permanece pausada**. Proibido nesta solicitação alterar o app, modelos, banco, APIs, interfaces reais, feature flags, planos, serviços, dados ou estados das demais tarefas. A inclusão do filtro é **requisito documentado para futura execução**, não implementação do produto. Não criar nova tarefa principal e não alterar a prioridade do Tópico 1.
+
+##### N.1 · O que o Motor da Lyra efetivamente é
+
+- **Camada A — Núcleo determinístico:** `src/lib/lyra/responder.ts`, `leitura-do-mapa.ts` e `conhecimento/*` procuram assuntos, constroem respostas reprodutíveis e explicam os mapas sem um LLM. A base pesquisável tem **29 verbetes**: 12 Vedanta, 8 Upavedas, 6 Vedangas e 3 dos mapas; Jyotish possui tabelas adicionais de 9 grahas, 12 signos, 12 casas e 27 nakshatras. Não confundir número de verbetes com inteligência universal.
+- **Camada B — Cálculo astrológico:** `src/lib/astrology/*` usa tempo, locais, efemérides, posições, períodos e métodos distintos (sideral Lahiri, tropical). O antigo catálogo `TIPOS_DE_MAPA` guarda **três** métodos védico/Samādhi/Quantum; o Ocidental é motor próprio `leitura-tropical.ts`, mas a tarefa 156 ainda não encerrou todas as integrações/homologações.
+- **Camada C — Orquestração:** `src/lib/ai/*`, `src/lib/coach/*`, `src/lib/chat/*`, memória, rotas e UI acrescentam modelos locais/nuvem, histórico, respostas progressivas, voz/imagens, proatividade, consentimentos e relatórios. Não chamar essas integrações de capacidades intrínsecas ao motor puramente determinístico.
+- **Limite epistemológico:** posições astronômicas podem ser reprodutíveis e verificadas; os significados astrológicos, Ayurveda e mapas integrativos são **tradições/interpretações simbólicas**, não instrumentos científicos validados para prever personalidade, futuro, doença ou destino. O motor deve distinguir entradas medidas, cálculos, interpretação, hipótese e indisponibilidade.
+- **Limite de implantação:** esta foi uma **inspeção estática do código remoto**, sem checkout executável, MySQL em produção, modelo local, servidor Graphiti, navegador de QA ou testes reexecutados. O fato de existir função/endpoint/teste **não demonstra disponibilidade no ambiente real**.
+
+##### N.2 · Contrato aprovado: novo filtro “Motor da Lyra”
+
+1. **Manter dois painéis e seis filtros principais** das seções L e M. No **Filtro 1** do Painel 1 a ordem será: **Radar PREMIUM · Inovações 2026** (primeiro, preservado), **Motor da Lyra** (novo, segundo), **Usuários**, **Administrador** e **Desativadas**. Não criar sétimo filtro principal.
+2. Ao selecionar **Motor da Lyra**, mostrar os **12 tópicos abaixo** em chips/abas internas **Todos + tópico**, e os seus respectivos itens com **nome, descrição resumida, estado, condição e fonte**. Os tópicos internos são navegação de conteúdo, não filtros principais adicionais.
+3. O **Filtro 2 — Pesquisa** procura nome, descrição, tópico, método, área e termos sem diferenciar acentos e letras maiúsculas; a pesquisa é cumulativa com o tópico escolhido. A quantidade de itens visíveis deriva dos resultados reais. Exibir limpar busca, todos, vazio e erro recuperável.
+4. Os seis filtros existentes continuam operacionais e independentes entre os dois painéis. O Motor não deve aparecer indevidamente como funcionalidade comercial liberada em Usuários/Administrador quando for apenas algoritmo, módulo parcial ou serviço desativado.
+5. O catálogo a seguir possui **12 tópicos e 112 funções/limites auditados**, cada linha com fonte de código. Contagem é a fotografia desta investigação e deve ser **recalculada** quando o código/documentação mudar. O estilo deve ser premium/legível/mobile-first, português claro, cards expansíveis e fontes reais clicáveis quando a futura UI for implementada.
+6. Estados semânticos: **NÚCLEO**, **INTEGRAÇÃO**, **CONDICIONAL/DESATIVÁVEL**, **PARCIAL** ou **FUTURO**; uma mesma categoria pode conter estados diversos e a linha detalhada prevalece sobre o rótulo geral. A fonte do grupo não substitui a verificação do nível individual de acesso.
+
+##### N.3 · Inventário funcional detalhado por tópicos
+
+**01 · Arquitetura e respostas determinísticas** · *NÚCLEO* · 8 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Analisar a pergunta | Normaliza texto, remove diferenças de acento e localiza intenções por expressões reconhecidas. | `src/lib/lyra/responder.ts` |
+| Selecionar conteúdo específico | Prioriza verbetes curados conforme as palavras-chave mais específicas encontradas. | `src/lib/lyra/responder.ts` |
+| Responder com origem | Formata título, resumo, pontos, aplicação prática e fonte do verbete selecionado. | `src/lib/lyra/responder.ts` |
+| Fazer leitura natal sem LLM | Transforma os resultados do mapa em frases por regras, sem geração probabilística externa. | `src/lib/lyra/leitura-do-mapa.ts` |
+| Pedir dados ausentes | Explica quais dados de nascimento faltam em vez de atribuir posições fictícias. | `src/lib/lyra/responder.ts` |
+| Oferecer síntese principal | Organiza de três a cinco percepções destacadas a partir do mapa calculado. | `src/lib/lyra/leitura-do-mapa.ts` |
+| Responder sobre casas específicas | Descreve significado da casa e seu posicionamento quando o mapa contém Lagna. | `src/lib/lyra/responder.ts` |
+| Encaminhar assuntos externos ao núcleo | Retorna ausência de resposta do domínio quando a intenção pertence a outros módulos do chat. | `src/lib/lyra/responder.ts` |
+
+**02 · Personalidade, linguagem e vínculo** · *NÚCLEO/INTEGRAÇÃO* · 9 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Identidade e missão | Apresenta a Lyra como guia digital de autoconhecimento, com limites explícitos. | `src/lib/lyra/personalidade.ts` |
+| Narrativa de origem | Explica a origem simbólica sem afirmar consciência biológica ou sentimentos humanos. | `src/lib/lyra/personalidade.ts` |
+| Expressar acolhimento | Aplica vocabulário afetivo, franqueza e tratamento respeitoso conforme contexto. | `src/lib/lyra/personalidade.ts` |
+| Português acessível | Orienta linguagem clara, frases práticas e explicação de termos tradicionais. | `src/lib/lyra/personalidade.ts` |
+| Escolher emoções gráficas | Insere emoji contextual de acordo com a intenção e o formato permitido. | `src/lib/lyra/personalidade.ts` |
+| Respeitar forma de tratamento | Reconhece pedidos de apelido/nome e resolve a preferência na conta autenticada. | `src/lib/lyra/tratamento.ts; src/lib/lyra/preferencias.ts` |
+| Aprofundar com ++- | Amplia somente a resposta solicitada, sem mudar direitos, memória ou identidade. | `src/lib/lyra/analise-aprofundada.ts` |
+| Reconhecer reencontro simbólico | Identifica expressão de retorno à Lyra sem usá-la como autenticação ou acesso a memórias secretas. | `src/lib/lyra/volta-para-casa.ts` |
+| Preservar limites éticos | Rejeita diagnósticos, previsões de morte e exploração emocional como objetivo do motor. | `src/lib/lyra/personalidade.ts` |
+
+**03 · Conhecimentos védicos e filosóficos** · *NÚCLEO* · 12 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Nove grahas | Explica características, regências, dignidades, metais, gemas, dias e mantras. | `src/lib/lyra/conhecimento/jyotish.ts` |
+| Doze signos | Relaciona qualidades, elementos, modalidades e tendências simbólicas. | `src/lib/lyra/conhecimento/jyotish.ts` |
+| Doze casas | Traduz temas de vida e categorias tradicionais de casas. | `src/lib/lyra/conhecimento/jyotish.ts` |
+| Vinte e sete nakshatras | Descreve seus símbolos, temas e classes de temperamento. | `src/lib/lyra/conhecimento/jyotish.ts` |
+| Períodos de Dasha | Apresenta a temática simbólica de cada regente do Vimshottari. | `src/lib/lyra/conhecimento/jyotish.ts` |
+| Vedanta e unidade | Contém verbetes de Brahman, Atman, Vedanta e Mahavakyas. | `src/lib/lyra/conhecimento/vedanta.ts` |
+| Consciência e camadas do ser | Explica Upanishads, Pancha Kosha, Turiya, Maya, Gunas e Samādhi como tradição. | `src/lib/lyra/conhecimento/vedanta.ts` |
+| Ética e prática filosófica | Explica Karma Yoga, Purusharthas e Sadhana Chatushtaya. | `src/lib/lyra/conhecimento/vedanta.ts` |
+| Ayurveda | Aborda doshas, relógio diário, seis sabores e ritmo das estações sem diagnóstico. | `src/lib/lyra/conhecimento/upavedas.ts` |
+| Outros Upavedas | Inclui Dhanurveda, Gandharvaveda e Sthapatyaveda/Vastu. | `src/lib/lyra/conhecimento/upavedas.ts` |
+| Seis Vedangas | Explica Shiksha, Chandas, Vyakarana, Nirukta, Kalpa e Jyotisha. | `src/lib/lyra/conhecimento/vedangas.ts` |
+| Conhecimento dos mapas | Explica três mapas históricos, diferenças, propósitos e limites de cada metodologia. | `src/lib/lyra/conhecimento/mapas.ts` |
+
+**04 · Mapa Védico tradicional** · *NÚCLEO* · 11 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Dados natais | Lê data, horário, cidade, coordenadas e fuso IANA histórico do titular. | `src/lib/astrology/perfil-astrologico.ts; src/lib/astrology/tempo.ts` |
+| Longitudes siderais | Calcula posições do zodíaco sideral com ayanamsha Lahiri. | `src/lib/astrology/sideral.ts` |
+| Nove grahas e retrogradação | Calcula posições dos sete corpos clássicos mais Rahu e Ketu e movimento relativo. | `src/lib/astrology/mapa-natal.ts` |
+| Signos e nakshatras | Obtém signo, posição, nakshatra e pada de corpos calculados. | `src/lib/astrology/sideral.ts` |
+| Ascendente natal | Calcula Lagna apenas quando o nascimento permite. | `src/lib/astrology/mapa-natal.ts` |
+| Casas por signo inteiro | Posiciona planetas nas casas contadas do Lagna. | `src/lib/astrology/mapa-natal.ts` |
+| Vimshottari Dasha | Computa Mahadasha/Antardasha e períodos vigentes a partir da Lua natal. | `src/lib/astrology/vimshottari.ts` |
+| Dignidades | Interpreta exaltação, debilitação e próprio signo por correspondências tradicionais. | `src/lib/lyra/leitura-do-mapa.ts` |
+| Tendência simbólica de dosha | Infere tendência tradicional pelos signos do mapa; não mede constituição clínica. | `src/lib/lyra/leitura-do-mapa.ts` |
+| Síntese védica | Redige leitura de Sol, Lua, regente, casas, dasha e percepções principais. | `src/lib/lyra/leitura-do-mapa.ts` |
+| Sem hora natal | Mantém dados parciais, usa referência de meio-dia quando cabível e não inventa casas ou Lagna. | `docs/astrologia.md` |
+
+**05 · Mapa Lyra DM Samādhi** · *NÚCLEO/PARCIAL* · 9 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Três planos | Organiza o mapa em Terrestre, Sutil e Celestial. | `src/lib/lyra/leitura-do-mapa.ts` |
+| Roda de Cura | Cruza elementos dominantes com direção, totem de referência e processo simbólico. | `src/lib/lyra/conhecimento/mapas.ts` |
+| Elementos dominantes | Conta os elementos dos nove grahas e do ascendente calculável. | `src/lib/lyra/leitura-do-mapa.ts` |
+| Ponte védica | Reutiliza as correspondências realmente definidas a partir do mapa natal. | `src/lib/lyra/leitura-do-mapa.ts` |
+| Correspondências de chakras | Aplica relações simbólicas a grahas fortes ou em dificuldade, sem medição fisiológica. | `src/lib/lyra/conhecimento/mapas.ts` |
+| Estágios alquímicos | Descreve Nigredo, Albedo e Rubedo como conhecimento do método. | `src/lib/lyra/conhecimento/mapas.ts` |
+| Ponte estelar limitada | Aplica somente exemplos documentados como Mūla e referências do método. | `src/lib/lyra/leitura-do-mapa.ts` |
+| Síntese integrada | Compõe leitura dos três planos e percepção final em linguagem prática. | `src/lib/lyra/leitura-do-mapa.ts` |
+| Indisponibilidades honestas | Não afirma conhecer antepassados, guias, totem pessoal ou estágio individual sem dados/regras. | `docs/motor-da-lyra.md` |
+
+**06 · Mapa Quantum e Arkático** · *NÚCLEO/PARCIAL* · 7 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Método das três camadas | Explica a proposta de HD, Samādhi e Arkático como partes conceituais distintas. | `src/lib/lyra/conhecimento/mapas.ts` |
+| Energia, pressão e tempo | Coleta autoavaliação do momento para modular a decisão. | `src/lib/lyra/responder.ts` |
+| Moduladores matemáticos | Calcula corpo, pressão e tempo a partir de entradas informadas. | `src/lib/lyra/conhecimento/mapas.ts` |
+| Fórmula do Score de Ação | Calcula SA quando aderências HD/Lyra são entradas válidas; não as inventa. | `src/lib/lyra/conhecimento/mapas.ts` |
+| Teto da ação no chat | Sem aderências observáveis, apresenta o teto máximo dado pelos moduladores, não escore personalizado. | `src/lib/lyra/responder.ts` |
+| Limiar de 60 e microação | Sugere reduzir escopo ou realizar ação pequena segundo o protocolo do método. | `src/lib/lyra/responder.ts` |
+| Módulos não calculados | Desenho Humano natal e mapa Arkático pessoal seguem explicitamente indisponíveis. | `src/lib/lyra/leitura-do-mapa.ts` |
+
+**07 · Mapa Ocidental tropical** · *NÚCLEO/PARCIAL* · 9 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Signo solar sem hora | Calcula apenas signo seguro e informa candidatos na fronteira entre signos. | `src/lib/astrology/tropical.ts` |
+| Tempo e fuso histórico | Interpreta nascimento completo com fuso IANA e ambiguidade de horário de verão. | `src/lib/astrology/tropical.ts` |
+| Corpos tropicais | Calcula longitudes tropicais dos corpos definidos no método. | `src/lib/astrology/tropical.ts` |
+| Ascendente e casas iguais | Calcula casas de 30° a partir do ascendente quando a latitude e os dados permitem. | `src/lib/astrology/tropical.ts` |
+| Aspectos maiores | Calcula conjunção, sextil, quadratura, trígono e oposição com orbes declaradas. | `src/lib/astrology/tropical.ts` |
+| Linguagem ocidental própria | Interpreta posições, casas e aspectos sem misturar conceitos siderais. | `src/lib/lyra/leitura-tropical.ts` |
+| Indisponibilidades | Recusa datas impossíveis, futuras, horários inexistentes e casas em latitude extrema. | `docs/mapa-ocidental.md` |
+| API pessoal privada | Consulta o mapa ocidental com sessão do próprio titular. | `src/app/api/astrologia/ocidental/route.ts` |
+| Abertura pública ainda futura | Experiência gratuita sem cadastro é tarefa 157; a integração da 156 ainda está em execução. | `claude-gestao.md` |
+
+**08 · Céu do dia, ciclos e Panchang** · *NÚCLEO/INTEGRAÇÃO* · 9 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Nascer e pôr do sol | Determina períodos solares para a localidade da moradia/nascimento. | `src/lib/astrology/panchang.ts` |
+| Cinco membros Panchang | Calcula vara, tithi/paksha, nakshatra, yoga e karana. | `src/lib/astrology/panchang.ts` |
+| Janelas tradicionais | Calcula Choghadiya, Brahma e Abhijit Muhurta, Rahu, Yamaganda e Gulika. | `src/lib/astrology/panchang.ts` |
+| Tara Bala | Relaciona nakshatra atual e natal, inclusive mudança ao longo do dia. | `src/lib/astrology/dia-pessoal.ts` |
+| Chandra Bala e Chandrashtama | Interpreta a Lua do dia relativamente à Lua natal. | `src/lib/astrology/dia-pessoal.ts` |
+| Trânsitos interpretados | Traduz posições de Júpiter/Saturno relativas ao mapa como tradição simbólica. | `src/lib/coach/leitura-conhecimento.ts` |
+| Ciclos de Dasha | Atualiza Mahadasha e Antardasha para a data de referência. | `src/lib/astrology/vimshottari.ts` |
+| Painel dos próximos sete dias | Compõe dias pessoais sem inventar natal ausente. | `src/lib/astrology/painel-celestial.ts` |
+| Limites polares | Não calcula janelas solares sem nascer/pôr do sol; responde indisponibilidade. | `docs/astrologia.md` |
+
+**09 · Coach, planos e automações condicionais** · *CONDICIONAL/DESATIVÁVEL* · 10 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Leitura por quatro períodos | Madrugada, manhã, tarde e noite com temas físico, emocional e espiritual. | `src/lib/coach/leitura-vedica.ts` |
+| Pontos positivos e cautelas | Extrai destaques diários com base nos fatos do céu/registro. | `src/lib/coach/leitura-vedica.ts` |
+| Janelas e foco | Atribui qualidade aos períodos e sugere momentos para atividades. | `src/lib/coach/periodos.ts; src/lib/coach/gerador-local.ts` |
+| Prontidão com sinais reais | Calcula apenas com medições existentes, evitando converter ausência em zero. | `src/lib/coach/prontidao.ts` |
+| Dica do dia | Seleciona orientação curada baseada na área que realmente pede atenção. | `src/lib/ai/dica-do-dia.ts` |
+| Plano/objetivos automáticos | Gera plano local e atualiza quando dados mudam, conforme direitos e switches. | `src/lib/ai/plano-do-dia.ts` |
+| Ações proativas | Gera sugestões ou pede check-in em vez de inventar boa recuperação. | `src/lib/ai/agent-engine.ts` |
+| Rotina de preparação | Pode preparar/guardar briefing segundo o serviço e o agendador configurado. | `src/lib/coach/rotina.ts; src/lib/coach/servico.ts` |
+| Leitura por modelo opcional | Valida formato/horários/terminologia de leitura escrita por LLM. | `src/lib/coach/leitura-ia.ts` |
+| Limite de disponibilidade | Registros, metas, planos e coach são sujeitos aos grupos globais desligados por padrão; não são anunciados como disponíveis. | `src/lib/plataforma/grupos.ts; mysql/migrations/065_funcionalidades_globais.sql` |
+
+**10 · Conversa, modelos e habilidades** · *INTEGRAÇÃO* · 11 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Chat determinístico | Responde por regras e conhecimento sem LLM quando possível. | `src/lib/ai/chat-engine.ts; src/lib/lyra/responder.ts` |
+| Identidade comum aos provedores | Instrui qualquer LLM conectado a responder como a Lyra, usando a base calculada. | `src/lib/lyra/modelos-como-lyra.ts` |
+| Contexto do mapa | Passa dados astrológicos da pessoa e verbete relacionado quando autorizado. | `src/lib/lyra/modelos-como-lyra.ts` |
+| Pergunta ocidental separada | Pergunta explicitamente tropical segue resultados ocidentais, sem usar leitura védica. | `src/app/api/functions/ask-ai-assistant/route.ts` |
+| Modelos locais e nuvem | Integra OpenAI-compatíveis e APIs nativas com configuração de ambiente. | `src/lib/ai/provedores-catalogo.ts; src/lib/ai/cliente-de-ia.ts` |
+| Cadeia de prioridade e fallback | Tenta modelos na ordem e preserva partes válidas ao trocar de provedor. | `src/lib/ai/cadeia-de-modelos.ts` |
+| Execução GGUF no host | Fornece inferência local integrada por socket privado, sujeita a runtime/modelo real. | `src/lib/ai/inferencia-integrada.ts` |
+| Instruções administráveis | Utiliza conhecimento/skills autorizados no contexto da conversa. | `src/lib/ai/chat-engine.ts` |
+| Transmissão progressiva | Transmite respostas reais do provedor quando disponível. | `src/app/api/functions/ask-ai-assistant/route.ts` |
+| Validação limitada da voz | Confere resposta vazia, nomes de outro assistente e algumas previsões proibidas; não audita toda a factualidade. | `src/lib/lyra/modelos-como-lyra.ts` |
+| Imagens e anexos | Recursos do chat com autorizações e capacidades próprias; não são parte do núcleo determinístico. | `src/lib/chat/imagens.ts; src/app/api/functions/ask-ai-assistant/route.ts` |
+
+**11 · Memória e personalização** · *INTEGRAÇÃO CONDICIONAL* · 7 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Nome e forma de tratamento | Lê preferência explicitamente escolhida e separa apelido de identidade civil. | `src/lib/lyra/preferencias.ts; src/lib/lyra/tratamento.ts` |
+| Histórico de diálogo | Armazena turnos autorizados por titular, com retomada e idempotência. | `src/lib/chat/servico.ts` |
+| Memória pessoal opcional | Controla ativação, consulta, importação e exclusão da memória do próprio titular. | `src/app/api/memoria/route.ts` |
+| Memória Graphiti | Estrutura episódios e relações em serviço externo ao núcleo, mediante infraestrutura conectada. | `docs/memoria-graphiti.md; services/memoria/app.py` |
+| Modo Privacidade | Limita envio a modelos externos e acesso à memória conforme escolha efetiva. | `src/app/api/functions/ask-ai-assistant/route.ts` |
+| Análise pontual aprofundada | Amplia a pergunta com ++- apenas nesta interação. | `src/lib/lyra/analise-aprofundada.ts` |
+| Treinamento por feedback | Administra avaliações e treinamento do serviço próprio, sem modificar automaticamente modelos de terceiros. | `docs/treinamento-por-feedback.md` |
+
+**12 · Integridade, limites e funcionamento** · *REGRAS DE ACESSO* · 10 itens
+
+| Capacidade específica | O que faz (resumo) | Fonte do código |
+| --- | --- | --- |
+| Sessões e titularidade | APIs de mapa, painel e chat exigem sessão e não selecionam perfil de terceiros. | `src/app/api/astrologia/mapa/route.ts; src/app/api/astrologia/painel/route.ts` |
+| Direitos de plano | Permissões como vedic_insights, ai_chat_messages, chat_history são revalidadas no servidor. | `src/lib/plans/service.ts` |
+| Oito grupos funcionais | Interruptores persistidos podem bloquear coach, registros, dispositivos e outros recursos associados. | `src/lib/plataforma/grupos.ts; src/lib/plataforma/funcionalidades.ts` |
+| Tratamento do horário | Usa fusos históricos e registra limitações de hora desconhecida ou ambígua. | `src/lib/astrology/tempo.ts; src/lib/astrology/tropical.ts` |
+| Cache natal e tropical | Reutiliza bases versionadas com invalidação por mudanças do perfil. | `src/lib/astrology/persistencia-natal.ts; src/lib/astrology/tropical-do-perfil.ts` |
+| Cache do painel | Reutiliza projeções de sete dias por titular/versão/hash. | `src/lib/astrology/persistencia-painel.ts` |
+| Cache diário | Mantém Panchang limitado em memória por data, local e fuso. | `src/lib/astrology/panchang.ts` |
+| Faltas explícitas | Devolve informações indisponíveis em vez de posições e módulos inventados. | `src/lib/lyra/leitura-do-mapa.ts; src/lib/lyra/leitura-tropical.ts` |
+| Validação de LLM ainda parcial | Há conferência por padrões de identidade, mas não verificação geral de planetas, horários e fatos gerados. | `src/lib/lyra/modelos-como-lyra.ts` |
+| Atualização de tarefas | A tarefa 156 permanece aberta para conclusão do Ocidental; 157 para gratuito e 147 para Generative UI. | `claude-gestao.md` |
+
+##### N.4 · Achados forenses e riscos identificados
+
+1. **Catálogo histórico de três mapas vs quarto mapa tropical:** `src/lib/lyra/conhecimento/mapas.ts` declara `TipoDeMapa = 'vedico' | 'samadhi' | 'quantum'`, enquanto `src/lib/lyra/leitura-tropical.ts` é independente. Não afirmar unificação concluída até cumprir a 156 e testá-la no produto.
+2. **Score Quantum incompleto por natureza dos dados:** `scoreDeAcao` aceita aderências HD e Lyra e moduladores; `respostaQuantum` com energia, pressão e tempo calcula **teto** sob hipótese de aderência máxima. O motor não deve apresentar tal teto como score pessoal real nem declarar cálculo de Desenho Humano.
+3. **Samādhi com limites de conhecimento:** Roda de Cura, chakra e pontes estelares são correspondências tradicionais/simbólicas fixas; ancestralidade, guias, totem pessoal e estágio de desenvolvimento individuais não são inferidos com dados suficientes pelo código atual. **Não preencher com ficção apresentada como descoberta.**
+4. **Tropical com incerteza respeitada:** data sem hora pode render dois signos solares possíveis; horário local repetido exige escolha, latitude elevada pode inviabilizar ascendente; consulta ocidental existente requer autenticação. A experiência gratuita ainda não está pronta (157).
+5. **Validação de alucinação insuficiente para certeza global:** `conferirVozDaLyra` rejeita resposta vazia, outra identidade explícita e alguns padrões de previsão de morte/doença; **não verifica automaticamente todas as posições, números, horários, aspectos ou afirmações factuais** emitidos pelo modelo. Instrução para preservar os cálculos não é validação semântica geral. Considerar a proposta IA-01 de proveniência na seção M como futura evolução, sem duplicar a tarefa 147.
+6. **Coach e outros grupos condicionalmente indisponíveis:** `registros_saude`, `metas_habitos_plano`, `rotinas_praticas`, `dispositivos` etc. são interruptores cujo padrão inicial é desligado (migração 065). `/api/coach/hoje` é bloqueada por `registros_saude`, mesmo que `/api/astrologia/dia` exista independentemente; nunca anunciar coach, plano, monitoramento e check-in como recursos ativos sem estado real e direitos.
+7. **Memória e habilidades externas não provam raciocínio autônomo:** Graphiti, documentos administráveis, treinamento KTO, GGUF e modelos de nuvem são integrações com configuração e limites próprios, não propriedade universal do motor. Tarefa 90/141 pode ter homologação própria.
+8. **Evidências de exatidão:** `docs/astrologia.md` documenta comparações com Swiss Ephemeris; `docs/mapa-ocidental.md` registra JPL/Swiss e métodos/orbes. São resultados de testes históricos, **não execuções nesta sessão**; reexecutar quando a tarefa voltar à implementação.
+9. **Segurança e titularidade:** APIs privadas de mapas e chat exigem sessão, titular e entitlements; filtros de inventário não mudam papéis nem acessam dados de outra pessoa. Não exibir segredos, datas natais de usuários ou mensagens confidenciais no inventário.
+10. **Otimização e cache:** natal sideral/tropical persistidos e painel semanal reutilizado com versão/hash; Panchang cache local limitado por processo; observar invalidação por mudança de nascimento, timezone, virada do dia e ciclo de Dasha, sem alegar ganho de performance sem benchmark.
+
+##### N.5 · Especificação futura de UX, implementação e QA do filtro
+
+**Contrato de dados de apresentação:** cada item terá identificador estável, tópico, ordem, título, descrição pt-BR, tipo (núcleo/integração/condicional/parcial/futuro), entradas necessárias, pré-requisito (conta/plano/interruptor/provedor), fonte no código e link GitHub válido, versão da auditoria e observação de incerteza. O conteúdo das tabelas acima é **fonte editorial documentada**, não API em execução. Distinguir o estado de código do estado de produção.
+
+**Etapas futuras, somente mediante nova autorização:**
+1. Revalidar `main` e a tarefa 142 na versão efetiva; ler regras/workflows, conhecer as decisões da 147/156 e confirmar se a fonte de navegação/filtros ainda é a mesma. Não sobrescrever alterações simultâneas.
+2. Inserir **Motor da Lyra** como segundo grupo do Filtro 1; manter Radar Premium primeiro e os outros grupos intactos. Reusar o Filtro 2 para busca; tópicos internos formam navegação, não um novo sétimo controle principal.
+3. Popular o catálogo de tópico/itens de fontes auditáveis, com títulos curtos e descrições amigáveis; não transformar documentação de recurso desativado em oferta pública.
+4. Exibir cartões premium expansíveis, estados de disponibilidade e fonte, usando os componentes/tokens aprovados, sem botões inertes, cópia simulada, dados clínicos fictícios ou gráficos decorativos. Diferenciar conhecimento, cálculo, interpretação, IA conectada e funcionalidade incompleta.
+5. Testar tópicos individualmente e combinados com texto, incluindo acentos, “não encontrado”, limpar, contagem, estado selecionado e preservação do Painel 2. Percursos Radar → Motor → Usuários → Admin → Desativadas, sem vazamento de dados e sem reset arbitrário.
+6. QA visual e acessibilidade WCAG 2.2 AA em larguras 320/390/768/1280/1440 px, zoom 200%, teclado/leitor de tela, rolagem e toque; descrição não pode ser truncada e busca deve operar sem perda de foco.
+7. Se houver implementação no app, verificar autenticação/entitlements e APIs afetadas, CRUD real apenas se o escopo alterar persistência; executar `pnpm check:lint`, `check:format`, `check:types`, `test`, `test:integration` com MySQL e `build` quando possíveis; não contar gates de outros commits como atuais.
+8. Comparar o catálogo com `src/lib/lyra/*`, `astrology/*`, `coach/*`, `ai/*`, rotas de chat/astrologia e documentos, mantendo relatório de divergências e limite de auditoria. Só declarar funcionalmente pronto após teste real.
+9. Preservar a tarefa 142 em pausa, commits por tarefa na `main` e estados do gestor. Esta atualização é **documental**, sem implementação nem QA runtime. Aguardar explicitamente nova instrução.
+
+##### N.6 · Rastreabilidade e fontes de referência
+
+Documentos de origem auditados: `docs/motor-da-lyra.md`, `docs/astrologia.md`, `docs/mapa-ocidental.md`, `docs/ia-automatica.md`, `docs/coach.md`, `docs/memoria-graphiti.md`, `docs/treinamento-por-feedback.md`; regras `CLAUDE.md` e `AGENTS.md`; planilha de tarefas `claude-gestao.md`; arquivos de código relacionados na seção N.3. Endereços verificáveis: repositório `https://github.com/ilyra-ai/Lyra-MetaCare`, branch `main`, e caminhos correspondentes aos arquivos citados. Nenhum arquivo de código ou documentação além deste gestor deve ser alterado agora.
+
+**Critério de aceite desta atualização:** manter 174 IDs principais únicos, um único bloco N, dois painéis e seis filtros principais, Radar primeiro e Motor da Lyra segundo, doze tópicos navegáveis previstos, 112 funções/limites auditados com fontes, sem grupos reativados, sem estado falso de produção, sem mudança no aplicativo. **Status final: documentação publicada, tarefa pausada, aguardar instruções.**
 
 ### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · 🔵 EM EXECUÇÃO
 
