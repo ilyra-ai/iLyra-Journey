@@ -15,6 +15,7 @@ import {
   History,
   LayoutDashboard,
   Moon,
+  Orbit,
   Radio,
   Settings2,
   SlidersHorizontal,
@@ -59,6 +60,15 @@ export const navigationItems: NavigationDefinition[] = [
     section: 'Principal',
     sectionKey: 'principal',
     shortcut: 'G C',
+  },
+  {
+    href: '/inovacoes',
+    label: 'Meu céu avançado',
+    description:
+      'Trânsitos exatos, D9/D10, astrocartografia, retornos e eclipses calculados pela Lyra.',
+    icon: Orbit,
+    section: 'Principal',
+    sectionKey: 'principal',
   },
   {
     href: '/',
