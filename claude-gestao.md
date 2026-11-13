@@ -682,6 +682,8 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 7. **Aceite técnico futuro:** componentes clicáveis fazem operações reais; CRUD e histórico atual não sofrem regressão; ausência de dados permanece ausência; nenhum placeholder/hardcode de negócio; testes de contrato, concorrência, perfil e permissão; qualidade mobile-first e WCAG AA; instrumentação sem exposição sensível. A aparição de um cartão não prova que sua função funciona.
 8. **Entregas da futura execução:** matriz de 15 especificações e status atualizados, protótipos apenas quando autorizados e explicitamente marcados, arquitetura, código/SQL/API, testes reais, screenshots QA e relatórios, diff/commit/push por tarefa em main, atualização imediata do gestor com SHA verificável. Não publicar itens não homologados como concluídos.
 
+**PUBLICAÇÃO DOCUMENTAL DO RADAR PREMIUM:** commit `aa5e8c60f058fd7008b6991359d3fb03fe6f7910` publicado na branch `main` em 13-11-2026, contendo a investigação de 15 itens, alteração documental da primeira opção de filtro e preservação dos seis filtros principais. O único arquivo de conteúdo modificado neste commit foi `claude-gestao.md`; nenhuma funcionalidade foi implementada. **Registro de SHA:** este campo foi adicionado no commit documental subsequente, conforme a regra 6 do gestor.
+
 **STATUS FINAL DESTA AMPLIAÇÃO:** registro forense e especificação apenas; nenhum dos 15 itens foi implementado ou homologado nesta solicitação. **Preservar tarefa 142 pausada e aguardar instruções.**
 
 ### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · 🔵 EM EXECUÇÃO
