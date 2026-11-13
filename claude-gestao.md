@@ -458,7 +458,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 | Nº | Painel | Filtro | Opções e comportamento obrigatório | Resultado esperado |
 | --- | --- | --- | --- | --- |
-| **1** | Funcionalidades existentes | **Perfil / grupo** | Seletor com primeira opção **Radar PREMIUM · Inovações 2026**, segunda opção **Motor da Lyra**, seguidas de **Usuários**, **Administrador** e **Desativadas**; uma seleção ativa por vez; Radar mostra propostas pesquisadas com cinco tópicos locais, mantendo os demais grupos reservados a funcionalidades existentes; ao mudar, manter layout e mostrar somente itens do grupo solicitado. | Lista, descrições e contagem do primeiro painel se atualizam sem alterar o segundo; propostas não aparecem como funcionalidades implementadas. |
+| **1** | Funcionalidades existentes | **Perfil / grupo** | Seletor com primeira opção **Radar PREMIUM · Inovações 2026**, segunda opção **Motor da Lyra**, terceira opção **Inovações para o Motor Lyra**, seguidas de **Usuários**, **Administrador** e **Desativadas**; uma seleção ativa por vez; Radar mostra propostas pesquisadas com cinco tópicos locais, mantendo os demais grupos reservados a funcionalidades existentes; ao mudar, manter layout e mostrar somente itens do grupo solicitado. | Lista, descrições e contagem do primeiro painel se atualizam sem alterar o segundo; propostas não aparecem como funcionalidades implementadas. |
 | **2** | Funcionalidades existentes | **Pesquisa de funcionalidade** | Campo de texto com busca sem diferenciar maiúsculas, minúsculas ou acentos, por nome, categoria e descrição. Oferecer limpar pesquisa. | Resultado cumulativo com o filtro 1, contagem atualizada e estado vazio compreensível. |
 | **3** | Roadmap `claude-gestao.md` | **Situação** | Todas; **A iniciar**, **Em execução**, **Pausada**, **Parcialmente implementada**, **Validação/Homologação pendente** e **Bloqueada** quando ocorrer. Não confundir 🟡 com 🟢, nem tarefas pausadas com a iniciar. | Somente tarefas com situação canônica correspondente, mantendo exceções explicitadas. |
 | **4** | Roadmap `claude-gestao.md` | **Categoria relacionada** | Todas ou categoria real derivada dos itens, como **UI/UX**, **Mapas**, **Descoberta gratuita**, **Autenticação**, **Assinaturas**, **Pagamentos**, **IA**, **Relacionamentos**, **Analytics**, **Marca**, **Privacidade**, **Compartilhamento**, **Qualidade** e **Infraestrutura**. | Redução dos resultados por assunto, com categorias provenientes das tarefas, não de um catálogo ornamental. |
@@ -525,7 +525,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ##### M.1 · Primeiro tópico dos filtros: organização e contrato visual
 
-1. **Nova primeira opção visível do Filtro 1 do Painel 1:** **“Radar PREMIUM · Inovações 2026”**, exibida como primeira opção, seguida de **Motor da Lyra**, **Usuários**, **Administrador** e **Desativadas**. Não eliminar as três opções existentes e não deslocar o Painel 2 de tarefas.
+1. **Nova primeira opção visível do Filtro 1 do Painel 1:** **“Radar PREMIUM · Inovações 2026”**, exibida como primeira opção, seguida de **Motor da Lyra**, **Inovações para o Motor Lyra**, **Usuários**, **Administrador** e **Desativadas**. Não eliminar as três opções existentes e não deslocar o Painel 2 de tarefas.
 2. Quando essa primeira opção estiver ativa, mostrar exatamente **cinco tópicos de navegação locais**, na ordem do usuário: **(1) Top 3 UI/UX, (2) Top 3 para a IA, (3) Top 3 para Administrador, (4) Top 3 para Usuários, (5) Top 3 Inovações autorais**. Cada tópico possui **três cartões**, com índice 1–3 interno, categoria, nome, benefício, situação, código-alvo, implementação, dependências, riscos, QA e fontes clicáveis. Seleção “Todas” apresenta os 15. A ordem acima é fixa da apresentação, mas ranking interno pode ser revisado com evidência nova.
 3. O **Filtro 2 (Pesquisa)** já existente procura também nome, identificador, descrição, referência e categoria das propostas **quando Premium estiver selecionado**; caso contrário, continua filtrando o inventário real. Busca sem distinção de acentos/maiúsculas e com contagem coerente. **Não** incluir propostas nos resultados dos filtros Usuários/Administrador/Desativadas, que permanecem inventário do código.
 4. Os tópicos locais do Radar são **chips/abas internas de exploração**, e não aumento silencioso da contagem dos **6 filtros principais** aprovados antes. A estrutura principal segue com **dois painéis e seis filtros**: Filtro 1 (com Radar Premium em primeiro), Filtro 2 (Pesquisa) e filtros 3–6 (Roadmap por situação, categoria, público e pesquisa). Caso uma futura UX exija filtros adicionais independentes, documentar e solicitar nova decisão antes da mudança da métrica oficial.
@@ -699,14 +699,15 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 - **Limite epistemológico:** posições astronômicas podem ser reprodutíveis e verificadas; os significados astrológicos, Ayurveda e mapas integrativos são **tradições/interpretações simbólicas**, não instrumentos científicos validados para prever personalidade, futuro, doença ou destino. O motor deve distinguir entradas medidas, cálculos, interpretação, hipótese e indisponibilidade.
 - **Limite de implantação:** esta foi uma **inspeção estática do código remoto**, sem checkout executável, MySQL em produção, modelo local, servidor Graphiti, navegador de QA ou testes reexecutados. O fato de existir função/endpoint/teste **não demonstra disponibilidade no ambiente real**.
 
-##### N.2 · Contrato aprovado: novo filtro “Motor da Lyra”
+##### N.2 · Contrato final: filtro “Motor da Lyra” como inventário do que já faz
 
-1. **Manter dois painéis e seis filtros principais** das seções L e M. No **Filtro 1** do Painel 1 a ordem será: **Radar PREMIUM · Inovações 2026** (primeiro, preservado), **Motor da Lyra** (novo, segundo), **Usuários**, **Administrador** e **Desativadas**. Não criar sétimo filtro principal.
-2. Ao selecionar **Motor da Lyra**, mostrar exclusivamente **NOVAS funcionalidades ausentes da implementação atual**, em **3 tópicos e 9 propostas** da seção N.7. Os 12 tópicos e 112 itens já existentes são BASELINE DE AUDITORIA INTERNA, terminantemente excluídos desse filtro. Os chips internos não somam um sétimo filtro principal.
-3. O **Filtro 2 — Pesquisa** procura SOMENTE as propostas NOV-MOT-* da N.7 quando o filtro Motor estiver selecionado. Combina nome, tema, identificador e descrição com normalização de acentos/caixa, tópico interno e contagem exata; não busca no baseline N.3.
-4. Os seis filtros existentes continuam operacionais e independentes entre os dois painéis. O Motor não deve aparecer indevidamente como funcionalidade comercial liberada em Usuários/Administrador quando for apenas algoritmo, módulo parcial ou serviço desativado.
-5. As **112 funções/limites existentes em 12 tópicos** na N.3 permanecem documentadas **apenas como prova de baseline e mecanismo antiduplicação**, e não devem ser exibidas no filtro Motor. Esse filtro deve calcular e mostrar somente os itens de proposta N.7. Exigir apresentação premium/mobile-first e fontes verificáveis.
-6. Estados semânticos: **NÚCLEO**, **INTEGRAÇÃO**, **CONDICIONAL/DESATIVÁVEL**, **PARCIAL** ou **FUTURO**; uma mesma categoria pode conter estados diversos e a linha detalhada prevalece sobre o rótulo geral. A fonte do grupo não substitui a verificação do nível individual de acesso.
+1. Manter **DOIS painéis e SEIS filtros principais** das seções L/M. A ordem de opções do Filtro 1 será: **1 Radar PREMIUM · Inovações 2026; 2 Motor da Lyra; 3 Inovações para o Motor Lyra; 4 Usuários; 5 Administrador; 6 Desativadas**. São **seis opções do mesmo primeiro filtro**, não filtros principais adicionais; o segundo painel conserva quatro filtros de tarefas.
+2. **“Motor da Lyra” deve mostrar o inventário EXISTENTE**, com as **12 categorias e 112 capacidades/limites catalogados na N.3**, porque o pedido original foi listar “cada coisa que ela faz”, com uma descrição breve por tópico. Cada item conserva fonte de código e situação NÚCLEO / INTEGRAÇÃO / CONDICIONAL / PARCIAL. Recursos desligados por padrão não podem ser descritos como disponíveis em produção.
+3. **“Inovações para o Motor Lyra” deve mostrar somente as CINCO propostas novas** da seção O, que não executam hoje no núcleo nem são meras renomeações de capacidades existentes. O pedido corretivo “não pode trazer coisas que o motor da Lyra já tem” funciona como **critério eliminatório neste grupo de novidades**, não como proibição de mostrar a auditoria de funcionalidades existentes no filtro anterior.
+4. Os nove itens NOV-MOT-01 a NOV-MOT-09 da N.7 são **registro histórico de ideias anteriormente formuladas**, muitos ligados ao backlog M e às tarefas existentes; preservar a rastreabilidade histórica, mas **não misturá-los aos cinco itens novos, não contá-los como implementados e não mostrá-los automaticamente como parte do Top 5 da seção O**. Propostas repetidas do backlog devem ser vinculadas a suas tarefas de origem, e não criadas novamente.
+5. O **Filtro 2, Pesquisa**, procura nomes, categorias, funções e descrições no grupo atualmente selecionado, ignorando acentos/caixa; no grupo Motor pesquisa apenas os 112 itens, e no grupo Inovações pesquisa as cinco propostas. Contagem real, limpar, estado vazio e chips internos por tópico. A seleção de um grupo não altera filtros do Painel 2.
+6. Os chips por 12 categorias do Motor e por cinco categorias de inovação são **navegação interna**, não um sétimo filtro principal. Rotular conteúdo como “já implementado em código”, “condicional/desligado” ou “a implementar” de acordo com evidência; não inferir produção, não usar placeholders e não instalar UI no app nesta etapa.
+7. A implantação eventual exige aprovação posterior e respeito a identidade UI/UX oficial, WCAG 2.2 AA, mobile-first (320/390/768/1280/1440 px), teclado, leitor de tela, zoom 200%, responsividade e links verificáveis.
 
 ##### N.3 · BASELINE INTERNO ANTIDUPLICAÇÃO (NÃO EXIBIR no filtro Motor da Lyra)
 
@@ -1025,7 +1026,116 @@ Documentos de origem auditados: `docs/motor-da-lyra.md`, `docs/astrologia.md`, `
 
 **Registro de publicação documental da correção (13/11/2026):** o commit `9f931d84854326ed65ecbf34118507534835732f` registra no gestor o novo critério “somente funcionalidades ainda não implementadas” e as nove propostas NOV-MOT-01–09, preservando a auditoria anterior apenas para deduplicação. Só `claude-gestao.md` foi alterado; nenhum código de aplicação mudou. O SHA é registrado em commit documental posterior conforme a regra de rastreabilidade.
 
-**Aceite desta retificação:** o filtro Motor da Lyra NÃO mostra nenhum dos 112 itens do inventário existente; mostra somente novas propostas verificáveis, incluindo suas lacunas e detalhes técnicos. Estado do projeto não muda. **Aguardar instruções.**
+**Aceite histórico retificado:** o filtro Motor da Lyra mostra as 112 capacidades existentes catalogadas na N.3; o filtro independente Inovações para o Motor Lyra mostra somente as cinco novas propostas da seção O. As nove ideias N.7 ficam como histórico não exibido nesses dois conjuntos. A classificação por estado preserva a disponibilidade real. **Aguardar instruções.**
+
+##### N.8 · Reconciliação com pedido posterior do usuário (não misturar os dois filtros)
+
+A redação histórica da seção N.7, que pedia mostrar apenas propostas no filtro Motor, fica **SUPERADA** por este contrato, pois o pedido “trazer cada coisa que ela faz” refere-se ao **inventário das 112 capacidades existentes**. A instrução posterior “Não pode trazer coisas que o motor da Lyra já tem” aplica-se **exclusivamente ao filtro de inovações**, que passa a ter cinco cálculos novos, sem repetir as capacidades do Motor. N.7 permanece no histórico do gestor para rastreabilidade, não integra o Top 5 novo nem o filtro de funcionalidades existentes. A seção N.2 revisada prevalece para UI futura.
+
+
+#### O · Inovações para o Motor Lyra: cinco cálculos inéditos no escopo auditado · 13-11-2026
+
+> [!IMPORTANT]
+> **Solicitação do usuário:** “Novo filtro chamado Inovações para o Motor Lyra deverá ficar depois de Motor da Lyra”, apresentar **TOP 5 com descrições curtas, como implementar e fonte**, investigação profunda e não limitada à primeira página, sem repetir qualquer recurso que o Motor já tenha, documentar **com todos os detalhes no gestor e aguardar instruções**. Esta ampliação é **DOCUMENTAL**: nenhum dos cinco módulos está autorizado para execução, nenhuma UI do app/SQL/API/código/feature flag foi alterada por este registro, e a tarefa 142 permanece pausada. O novo grupo é OPÇÃO DO Filtro 1 já existente, e não um sétimo filtro principal.
+
+##### O.1 · Objetivo e regras eliminatórias
+
+- O verdadeiro produto é autodescoberta astrológica guiada pela Lyra com distinção entre posições e eventos matematicamente calculados, significados simbólicos, conteúdos culturais e hipóteses incertas. Novo recurso premium precisa criar um **tipo novo e verificável de cálculo**, enriquecer o mapa e permitir leitura clara por pessoas leigas.
+- **PROIBIDO duplicar**: grahas/sideral D1, ascendente e casas básicas, Lua/tithi/nakshatra/Panchang, período Vimshottari, trânsitos gerais de Júpiter e Saturno por posição relativa à Lua, linha temporal já existente de sete dias, quatro leituras atuais, Score de Ação, personalidade, conhecimentos curados, Graphiti, fallback de modelos, voz, Generative UI, permissões, relatórios, compatibilidade ou entrada sem cadastro.
+- Excluir também ideias já expressamente **planejadas** no backlog como IA-01 (proveniência), IA-02 (voz-viva), IA-03 (agente), ADM-01 (laboratório de qualidade), INV-01 (Atlas entre quatro mapas), 166 (Conexões da Alma), 170 (funil), 147 (Generative UI) e 156 (terminar tropical). Um novo módulo não é “inovação” se apenas renomeia algo já implementado ou reservado.
+- **Estado verificado:** análise estática em main dos módulos src/lib/astrology/{sideral,mapa-natal,tropical,vimshottari,panchang,dia-pessoal,perfil-astrologico,painel-celestial}.ts, src/lib/lyra/{responder,leitura-do-mapa,leitura-tropical,conhecimento/mapas}.ts e src/lib/coach/{leitura-vedica,leitura-conhecimento,gerador-local}.ts, docs e gestor. Busca dirigida nos 14 módulos centrais por retorno solar/lunar, Navamsa, Dashamsa, astrocartografia e aspectos exatos não encontrou essas implementações. A busca genérica de código do GitHub sinalizou resultados incompletos; portanto a conclusão correta é **não identificado no escopo de código auditado**, a revalidar antes de implementar, e nunca garantia universal de inexistência em todo o repositório.
+- **Pesquisa em camadas, além de resultados iniciais:** consultar descrição matemática em Astronomy Engine, Astrodienst, guias Parāśari com fórmula, contratos de geometria, produtos reais AstroClick Travel, NavAstra, Astrovarg, AstroWebApp, Sky Today e fontes NASA; verificar antecedentes, falhas conhecidas e limites. Essas técnicas são conhecidas fora da Lyra, logo **não afirmar “primeiro do mundo”**. Rankings são recomendação contextual de qualidade premium para 2026, não ranking objetivo universal.
+- **Portas de aceite:** função não existente, matemática/algoritmo definido, fonte rastreável, comparador independente, condições de acesso, limites de entrada, custo e testes reais; se a próxima auditoria mostrar duplicata, **descartar ou substituir**, nunca criar código redundante.
+
+##### O.2 · Ranking e detalhes das CINCO propostas exclusivas
+
+**INOV-LYRA-01 · Cronologia de trânsitos NATAIS por grau exato · PRIORIDADE 1**
+
+- **O que entrega:** agenda interativa dos instantes em que planetas em trânsito formam **aspectos geométricos exatos aos graus dos planetas/ângulos do nascimento da pessoa**, incluindo orbe, aproximação/afastamento e eventuais repetições por movimento retrógrado. Não confundir evento astronômico com previsão do que a pessoa viverá.
+- **Por que NÃO é função atual:** Panchang, fases, trânsitos tradicionais de Júpiter/Saturno por signo relativo à Lua natal e resumo de sete dias são distintos de encontrar **raízes temporais de longitude móvel em relação a ponto natal** para conjunções, sextis, quadraturas, trígonos e oposições. Não foi localizado indexador de aspectos natais exatos no escopo auditado.
+- **Como implementar:** (1) obter longitudes natais versionadas, com método tropical ou sideral explícito; (2) calcular efemérides por UTC e detectar cruzamento do ângulo-alvo, lidando com 0°/360°; (3) refinar por bisseção ou busca robusta de raízes com subdivisão adaptativa; (4) separar múltiplas passagens e janelas de orbe, sem perder retrogradação; (5) persistir eventos derivados e cache privado por versão do nascimento, horizonte e método, sem dados íntimos nos logs; (6) apresentar cartões por período e interpretação simbólica com a fonte do evento; (7) permitir filtros e exportação somente se as ações forem reais e autorizadas.
+- **Risco/QA:** Lua rápida, Júpiter lento, Marte retrógrado, estacionamentos, repetição tripla, limite do intervalo, fuso de verão, ano bissexto, input incompleto, CPU e quotas. Testes de ângulos/orbes com referência externa independente e navegação real.
+- **Fontes:** funções e efemérides https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md ; referência de Transit Search/linha Gantt https://astrowebapp.com/?lang=en ; Sky Today 2026 https://play.google.com/store/apps/details?id=com.myoracular.skytoday .
+- **Dependências e aceite:** 156; motor retorna eventos reais, sem sobreposição funcional com Panchang/linha temporal; 171 QA. Usuário vê hora exata e origem dos graus ou “indisponível”, jamais uma data fictícia.
+
+**INOV-LYRA-02 · Novos mapas divisionais védicos D9 Navamsa e D10 Dashamsa · PRIORIDADE 2**
+
+- **O que entrega:** duas cartas védicas derivadas matematicamente da posição sideral natal: **D9 (Navamsa)** e **D10 (Dashamsa)**, permitindo aprofundamentos interpretativos tradicionais sem substituir D1.
+- **Por que NÃO é função atual:** o motor calcula D1, Lagna e Vimshottari, mas não transforma cada posição em **signo divisional D9/D10 segundo as regras distintas de cada varga**. Um D1 com 12 casas não é D9 ou D10.
+- **Como implementar:** (1) reutilizar longitudes siderais Lahiri canônicas; (2) calcular D9 em 9 setores de 3°20’ com início variável por signos móveis, fixos e duplos, conforme convenção Parāśari documentada; (3) calcular D10 em 10 setores de 3° com início no próprio signo para ímpares e nono signo contado inclusivamente para pares; (4) versionar convenção exata e tabelas de teste; (5) calcular Lagna divisional somente com horário suficientemente preciso; (6) gerar leitura que declara explicitamente “interpretação tradicional”, sem afirmar emprego ou parceiro como destino.
+- **Risco/QA:** cúspides de divisão, signo duplo/fixo/móvel, zero e 30 graus, fuso natal, hora imprecisa, diferenças entre tradições, nodos e arredondamento; comparar graus conhecidos com duas implementações independentes. Teste manual D10: 7° Áries corresponde à terceira parte e ao signo Gêmeos.
+- **Fontes:** métodos/vargas https://astrovarg.com/astrology/parashara/divisional-charts ; regra D10 e ressalvas históricas https://www.kismo.app/astrologers/technique/dasamsa-d10 ; software de referência https://navastra.kashilabs.ai/features ; projeto técnico de comparação https://github.com/srinidhi-git/astro-app .
+- **Dependências e aceite:** motor sideral de 156/estrutura natal, revisão da tradição e 171; novos campos representam divisões realmente calculadas, nenhum Lagna presumido.
+
+**INOV-LYRA-03 · Astrocartografia calculada com linhas planetárias e relocação · PRIORIDADE 3**
+
+- **O que entrega:** um **mapa mundial real** que traça, no instante do nascimento, as regiões onde corpos estavam associados aos quatro ângulos AS/DS/MC/IC, com seleção de país/cidade e carta relocalizada no **mesmo UTC natal**, sem alterar o lugar de nascimento original.
+- **Por que NÃO é função atual:** a Lyra já usa coordenadas de cidades e fuso para cálculo do mapa e nascer/pôr do sol. Não localizei produção de **geometrias de linhas globais dos planetas sobre ângulos** nem recálculo de carta relocada para ponto selecionado.
+- **Como implementar:** (1) reutilizar data/hora natal e efemérides; (2) calcular ascensão reta/declinação, tempo sideral e pontos angulares; (3) MC/IC a partir da relação entre ascensão reta e meridianos, e AS/DS por raiz de altitude/horizonte ao longo das latitudes; (4) dividir trajetos no antimeridiano e tratar circumpolaridade/latitudes extremas; (5) gerar GeoJSON com versão do método e incertezas; (6) renderizar no mapa interativo acessível, com legenda textual e comparador de carta original/relocada; (7) distância da linha é propriedade geométrica, **não previsão de felicidade/sucesso**.
+- **Risco/QA:** horário ausente, resolução de linhas, memória/CPU, cruzamento ±180°, fuso, polos, licença dos dados de mapa, privacidade de localização; comparar geometria contra referência externa e explicar divergências.
+- **Fontes:** AstroClick Travel da Astrodienst https://www.astro.com/cgi/aclch.cgi?btyp=acm ; contrato da geometria/antimeridiano https://docs.morphemeris.com/docs/reference/astrocartography ; Zorya Astro https://zorya-astro.com/en/ ; cautela de não usar interpretação isolada para mudar de cidade https://www.astro.com/faq/fq_fh_ac_trav_p.htm?lang=t&nhor=67 .
+- **Dependências e aceite:** nascimento completo, autorização de consulta local/cidade, 156, mapa real, 171; coordenadas nunca expostas a terceiros; nenhuma promessa de decisão de vida fundamentada em astrologia.
+
+**INOV-LYRA-04 · Revoluções Solar e Lunar, cartas de retorno reais · PRIORIDADE 4**
+
+- **O que entrega:** carta anual do exato **retorno do Sol à longitude natal** e carta de cerca de 27–28 dias do **retorno lunar à longitude natal**, com horários precisos, mapa daquele instante, contextualização de ciclo e leitura simbólica separada da carta natal.
+- **Por que NÃO é função atual:** o motor atual usa natal sideral/tropical e projeção diária/semanal. Não foi encontrado procedimento de **encontrar o instante de retorno** e criar uma nova carta específica da revolução; aniversário civil, dasha e fase lunar não são carta de retorno.
+- **Como implementar:** (1) escolher método tropical ou sideral e nunca misturar longitudes; (2) localizar passagem pelo grau natal com busca numérica circular em intervalos anual/lunar; (3) registrar UTC, fuso, cidade de referência explicitamente escolhida e versão do método; (4) recomputar posições, ângulos e casas do instante de retorno, preservando natal original; (5) contratos de explicação editorial e visualização comparativa; (6) cache privado por natal/método/cidade/horizonte.
+- **Risco/QA:** retorno solar pode ocorrer antes/depois do aniversário local; Lua volta aproximadamente cada 27–28 dias sem coincidir com mês civil; métodos sideral/tropical distintos, DST, longitude 0/360, latitude polar, evento no limite do ano, local escolhido; confirmar contra duas calculadoras.
+- **Fontes:** definição técnica de Solar/Lunar Return https://www.astro.com/faq/fq_fh_owtype_s.htm?lang=e&nho2=8 ; Astronomy Engine https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md ; AstroWebApp https://astrowebapp.com/?lang=en .
+- **Dependências e aceite:** natal correto, 156 e 171; data exata calculada, carta reproduzível e não atribuída a “previsão factual”.
+
+**INOV-LYRA-05 · Eclipses localizados: ciência observável e simbolismo separados · PRIORIDADE 5**
+
+- **O que entrega:** calendário **astronômico verdadeiro** de eclipses solares/lunares com tipo, UTC/hora local, magnitude/obscuração quando fornecida, circunstâncias do observador e visibilidade para a cidade, com explicação simbólica **opcional e claramente separada** do fenômeno observável.
+- **Por que NÃO é função atual:** o motor já computa fases, tithi, nakshatra, nascer/pôr solar e Panchang; não encontrei **busca global/local de eclipses**, cálculo da visibilidade/obscuração por observador ou eventos vinculados ao local.
+- **Como implementar:** (1) reutilizar astronomy-engine atual e suas funções SearchGlobalSolarEclipse, SearchLocalSolarEclipse, SearchLunarEclipse e Next...; (2) modelar eventos com tipo, contato, pico e campos condicionais realmente disponíveis; (3) visibilidade local exige coordenadas, elevação do Sol e céu livre, e retorno da lib deve ser interpretado com cuidado; (4) comparar catálogo NASA GSFC, incluindo eventos de 2026; (5) cache por local/horizonte/método; (6) representar status “não visível da sua região” em vez de prever observação impossível; (7) manter astrologia e astronomia em painéis de proveniência separados.
+- **Risco/QA:** solar total/anular/parcial, lunar total/parcial/penumbral, pico abaixo do horizonte, data em fuso local, magnitude versus obscurecimento (métricas diferentes), horizonte sem evento, delta-T histórico, CORS/licença de mapas e performance; confrontar datas e condições locais com NASA.
+- **Fontes:** funções reais do projeto Astronomy Engine https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md ; NASA catálogo oficial de eclipses 2026 https://eclipse.gsfc.nasa.gov/OH/OH2026.html ; NASA circunstâncias e visibilidade https://eclipse.gsfc.nasa.gov/SEgoogle/SEgoogle2001/SE2026Aug12Tgoogle.html ; NASA explorador por local https://eclipse.gsfc.nasa.gov/JSEX/JSEX-SA.html .
+- **Dependências e aceite:** coordenadas permitidas e 171; nenhum eclipse inventado; o cálculo básico deve funcionar sem LLM externo.
+
+##### O.3 · Quadro de antiduplicação, requisitos de decisão e concorrência
+
+| Já disponível na Lyra | Não sugerir novamente | Proposta efetivamente NOVA |
+| --- | --- | --- |
+| Graus natais e carta tropical ou sideral D1 | Leitura natal comum, posição do dia | INOV-LYRA-01: instantes de aspectos exatos ao grau natal e múltiplas passagens |
+| Nove grahas, casas por signo inteiro e Mahadasha | Repetir mapa Védico como novidade | INOV-LYRA-02: divisões D9/D10 com regras matemáticas adicionais |
+| Cidade natal, coordenadas, fuso e nascer do sol | Mostrar cidade ou mapa geográfico simples | INOV-LYRA-03: linhas AS/DS/MC/IC globais e carta relocalizada |
+| Mapa natal, linha de 7 dias e dasha | Renomear dia ou aniversário como “retorno” | INOV-LYRA-04: busca do instante exato solar/lunar e carta própria do retorno |
+| Tithi, fase lunar, nascer/pôr, Panchang | Mostrar Lua Nova/cheia ou aviso genérico | INOV-LYRA-05: busca de eclipses com visibilidade local, tipo e circunstâncias |
+| Proveniência, voz, agentes, comparação de mapas e avaliação de modelos já planejados | Duplicar roadmap das seções M e N.7 | Todos excluídos deste novo Top 5 |
+
+**Recomendação de prioridade técnica, sem violar o Tópico 1:** 01 após concluir o cálculo do mapa da 156; 02 como módulo matemático isolado na sideral; 03 como motor geográfico independente; 04 reutilizando a infraestrutura numérica da 01; 05 reutilizando biblioteca astronomy-engine já instalada. A ordem real de execução deve ser aprovada, e o registro não altera prioridades anteriores.
+
+##### O.4 · Entregáveis obrigatórios, QA forense e gates futuros
+
+1. **Auditoria de duplicidade ANTES DE CADA IMPLEMENTAÇÃO:** ler estado atual do repositório na main, documentação completa de cada método, código ASTRO/LYRA/API/TESTES e gestor; consultar busca de código integral e, caso já exista funcionalidade equivalente, **eliminar imediatamente o item** sem fazer duplicata ou novo CRUD. Não basta conferir nome do arquivo.
+2. **Definição de algoritmo com fontes:** registrar método escolhido, convenção de casas, zodíaco, ayanamsha, época, calendário, parâmetros de orbe, UTC/fuso IANA, unidades, entradas, limites, exemplos de cálculo e método de checagem. Citar páginas e versões consultadas, com comparação independente dos resultados.
+3. **Contrato de dados e autorização:** separar resultado determinístico, explicação simbólica e saída de modelo; payload tipado/versionado com IDs por titular, época UTC, localização, fonte e status; endpoints validam sessão, planos/entitlements e consentimento; não logar nomes, DOB, coordenadas precisas e perguntas íntimas. Caches privados devem invalidar ao mudar nascimento/metodologia.
+4. **Economia do cálculo e performance:** limitar janelas e profundidade de busca, cache de eventos globais quando não pessoais, batching controlado, abortar cálculo custoso, medição P50/P95 real, trabalho assíncrono no servidor somente quando arquiteturalmente correto e sem declarar execução nesta etapa.
+5. **Portas de qualidade:** testes de fórmula, limites 0/360 e datas, oráculos independentes, diferenças por zodíaco, múltiplas passagens, DST e meia-noite, locais polares/antimeridiano, estado desconhecido, nenhum dado natal, indisponibilidade do provedor, erro e recuperação, isolamento por titular, tentativas não autorizadas, mobile-first, WCAG 2.2 AA e testes reais no navegador.
+6. **Integração por etapas:** funções puras e testes → API autorizada → armazenamento derivado quando necessário → apresentação UI por perfil/plano → integração conversacional com contexto tipado e sem permitir que LLM altere números → homologação → commit/push individual em main, gestor atualizado com SHA verificado. Não juntar cinco implementações no mesmo commit.
+7. **Não reativar os grupos globais desligados:** a adição de técnicas astrológicas não depende de reabrir saúde, diários, hábitos, dispositivos ou agenda. Respeitar acesso sem cadastro apenas se tarefas 155/157 permitirem e com minimização de dados.
+8. **Decisão final reservada ao usuário:** nenhum destes cinco itens foi aprovado para codificação, pagamento, publicação ou habilitação de serviços. Esta tarefa permanece **PAUSADA, aguardando instruções**.
+
+##### O.5 · Fontes completas de referência e riscos
+
+- Base astronômica (Astronomy Engine): https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md
+- Pesquisa de eventos de trânsito e retornos (referência concorrencial): https://astrowebapp.com/?lang=en
+- Sky Today, cronologia exata e retrogradação: https://play.google.com/store/apps/details?id=com.myoracular.skytoday
+- Varga D9/D10 (método e catálogo): https://astrovarg.com/astrology/parashara/divisional-charts
+- D10, regra odd/even e ressalvas: https://www.kismo.app/astrologers/technique/dasamsa-d10
+- NavAstra (controle determinístico e mapas divisionais): https://navastra.kashilabs.ai/features
+- AstroClick Travel, linhas e disclaimers: https://www.astro.com/cgi/aclch.cgi?btyp=acm
+- Morphemeris, geometria e casos polares: https://docs.morphemeris.com/docs/reference/astrocartography
+- Zorya Astro, locação, relocação e mapa: https://zorya-astro.com/en/
+- Astrodienst, retornos Solar/Lunar: https://www.astro.com/faq/fq_fh_owtype_s.htm?lang=e&nho2=8
+- NASA/GSFC, eclipses 2026: https://eclipse.gsfc.nasa.gov/OH/OH2026.html
+- NASA/GSFC, circunstâncias locais: https://eclipse.gsfc.nasa.gov/JSEX/JSEX-SA.html
+- W3C WCAG 2.2: https://www.w3.org/TR/WCAG22/
+- Referências internas: docs/{motor-da-lyra,astrologia,mapa-ocidental}.md; src/lib/{astrology,lyra,coach,ai}; seções L, M, N da tarefa 142 e tarefas 147,155–157,171,173.
+
+**Situação desta ampliação O: APENAS DOCUMENTAÇÃO; CINCO PROPOSTAS NOVAS NO ESCOPO AUDITADO, ZERO IMPLEMENTADAS; filtro 1 reordenado documentalmente, seis filtros principais preservados. Aguardar instruções.**
 
 ### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · 🔵 EM EXECUÇÃO
 
