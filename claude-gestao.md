@@ -1023,6 +1023,8 @@ Documentos de origem auditados: `docs/motor-da-lyra.md`, `docs/astrologia.md`, `
 
 **Critérios eliminatórios:** (a) se a funcionalidade já existir integralmente em código, removê-la do Radar do Motor; (b) se parcialmente implementada, exibir somente o diferencial novo com dependência explícita, nunca rebatizar o todo; (c) classificar planejado vs. implementado, sem alegar funcionamento em produção; (d) revisão de `src/lib/lyra`, `src/lib/astrology`, `src/lib/ai`, APIs, componentes, docs e tarefas antes de autorizar; (e) proibir uso de dados fictícios ou placeholders em produção; (f) preservar grupos desligados e privacidade, acesso por plano e cálculo separado de interpretação; (g) páginas/abas/categorias devem ter filtro real, carregamento, vazio, pesquisa e fontes válidas; (h) nenhum commit de código ou deploy nesta etapa.
 
+**Registro de publicação documental da correção (13/11/2026):** o commit `9f931d84854326ed65ecbf34118507534835732f` registra no gestor o novo critério “somente funcionalidades ainda não implementadas” e as nove propostas NOV-MOT-01–09, preservando a auditoria anterior apenas para deduplicação. Só `claude-gestao.md` foi alterado; nenhum código de aplicação mudou. O SHA é registrado em commit documental posterior conforme a regra de rastreabilidade.
+
 **Aceite desta retificação:** o filtro Motor da Lyra NÃO mostra nenhum dos 112 itens do inventário existente; mostra somente novas propostas verificáveis, incluindo suas lacunas e detalhes técnicos. Estado do projeto não muda. **Aguardar instruções.**
 
 ### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · 🔵 EM EXECUÇÃO
