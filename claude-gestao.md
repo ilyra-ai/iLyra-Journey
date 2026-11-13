@@ -702,13 +702,13 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 ##### N.2 · Contrato aprovado: novo filtro “Motor da Lyra”
 
 1. **Manter dois painéis e seis filtros principais** das seções L e M. No **Filtro 1** do Painel 1 a ordem será: **Radar PREMIUM · Inovações 2026** (primeiro, preservado), **Motor da Lyra** (novo, segundo), **Usuários**, **Administrador** e **Desativadas**. Não criar sétimo filtro principal.
-2. Ao selecionar **Motor da Lyra**, mostrar os **12 tópicos abaixo** em chips/abas internas **Todos + tópico**, e os seus respectivos itens com **nome, descrição resumida, estado, condição e fonte**. Os tópicos internos são navegação de conteúdo, não filtros principais adicionais.
-3. O **Filtro 2 — Pesquisa** procura nome, descrição, tópico, método, área e termos sem diferenciar acentos e letras maiúsculas; a pesquisa é cumulativa com o tópico escolhido. A quantidade de itens visíveis deriva dos resultados reais. Exibir limpar busca, todos, vazio e erro recuperável.
+2. Ao selecionar **Motor da Lyra**, mostrar exclusivamente **NOVAS funcionalidades ausentes da implementação atual**, em **3 tópicos e 9 propostas** da seção N.7. Os 12 tópicos e 112 itens já existentes são BASELINE DE AUDITORIA INTERNA, terminantemente excluídos desse filtro. Os chips internos não somam um sétimo filtro principal.
+3. O **Filtro 2 — Pesquisa** procura SOMENTE as propostas NOV-MOT-* da N.7 quando o filtro Motor estiver selecionado. Combina nome, tema, identificador e descrição com normalização de acentos/caixa, tópico interno e contagem exata; não busca no baseline N.3.
 4. Os seis filtros existentes continuam operacionais e independentes entre os dois painéis. O Motor não deve aparecer indevidamente como funcionalidade comercial liberada em Usuários/Administrador quando for apenas algoritmo, módulo parcial ou serviço desativado.
-5. O catálogo a seguir possui **12 tópicos e 112 funções/limites auditados**, cada linha com fonte de código. Contagem é a fotografia desta investigação e deve ser **recalculada** quando o código/documentação mudar. O estilo deve ser premium/legível/mobile-first, português claro, cards expansíveis e fontes reais clicáveis quando a futura UI for implementada.
+5. As **112 funções/limites existentes em 12 tópicos** na N.3 permanecem documentadas **apenas como prova de baseline e mecanismo antiduplicação**, e não devem ser exibidas no filtro Motor. Esse filtro deve calcular e mostrar somente os itens de proposta N.7. Exigir apresentação premium/mobile-first e fontes verificáveis.
 6. Estados semânticos: **NÚCLEO**, **INTEGRAÇÃO**, **CONDICIONAL/DESATIVÁVEL**, **PARCIAL** ou **FUTURO**; uma mesma categoria pode conter estados diversos e a linha detalhada prevalece sobre o rótulo geral. A fonte do grupo não substitui a verificação do nível individual de acesso.
 
-##### N.3 · Inventário funcional detalhado por tópicos
+##### N.3 · BASELINE INTERNO ANTIDUPLICAÇÃO (NÃO EXIBIR no filtro Motor da Lyra)
 
 **01 · Arquitetura e respostas determinísticas** · *NÚCLEO* · 8 itens
 
@@ -902,7 +902,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 **Etapas futuras, somente mediante nova autorização:**
 1. Revalidar `main` e a tarefa 142 na versão efetiva; ler regras/workflows, conhecer as decisões da 147/156 e confirmar se a fonte de navegação/filtros ainda é a mesma. Não sobrescrever alterações simultâneas.
 2. Inserir **Motor da Lyra** como segundo grupo do Filtro 1; manter Radar Premium primeiro e os outros grupos intactos. Reusar o Filtro 2 para busca; tópicos internos formam navegação, não um novo sétimo controle principal.
-3. Popular o catálogo de tópico/itens de fontes auditáveis, com títulos curtos e descrições amigáveis; não transformar documentação de recurso desativado em oferta pública.
+3. Popular o catálogo **somente com novas funcionalidades de N.7**, com título, diferencial, evidência de ausência, implementação sugerida e fontes reais. N.3 serve somente para eliminar repetições. Nunca chamar funcionalidade já implementada ou grupo desativado de novidade.
 4. Exibir cartões premium expansíveis, estados de disponibilidade e fonte, usando os componentes/tokens aprovados, sem botões inertes, cópia simulada, dados clínicos fictícios ou gráficos decorativos. Diferenciar conhecimento, cálculo, interpretação, IA conectada e funcionalidade incompleta.
 5. Testar tópicos individualmente e combinados com texto, incluindo acentos, “não encontrado”, limpar, contagem, estado selecionado e preservação do Painel 2. Percursos Radar → Motor → Usuários → Admin → Desativadas, sem vazamento de dados e sem reset arbitrário.
 6. QA visual e acessibilidade WCAG 2.2 AA em larguras 320/390/768/1280/1440 px, zoom 200%, teclado/leitor de tela, rolagem e toque; descrição não pode ser truncada e busca deve operar sem perda de foco.
@@ -916,7 +916,114 @@ Documentos de origem auditados: `docs/motor-da-lyra.md`, `docs/astrologia.md`, `
 
 **Publicação documental do Motor da Lyra:** auditoria e filtro registrados no commit `c4c2193d139d8ed856b5d8422a8f30d64109fc15` na branch `main`; somente `claude-gestao.md` foi alterado. Este registro do SHA é publicado em commit documental próprio, segundo a regra 6, sem modificar código, interfaces, banco ou serviços. **Aguardar instruções.**
 
-**Critério de aceite desta atualização:** manter 174 IDs principais únicos, um único bloco N, dois painéis e seis filtros principais, Radar primeiro e Motor da Lyra segundo, doze tópicos navegáveis previstos, 112 funções/limites auditados com fontes, sem grupos reativados, sem estado falso de produção, sem mudança no aplicativo. **Status final: documentação publicada, tarefa pausada, aguardar instruções.**
+**Critério de aceite retificado em 13/11/2026:** manter 174 IDs principais únicos, dois painéis e seis filtros principais, Radar primeiro e Motor segundo; os 112 itens preexistentes permanecem exclusivamente como baseline interno, enquanto o filtro Motor apresenta apenas **9 novas propostas em 3 tópicos** da seção N.7, sem implementação nem falsa alegação de exclusividade mundial. **Estado: tarefa pausada; aguardar instruções.**
+
+
+##### N.7 · CORREÇÃO DE ESCOPO: filtro Motor da Lyra somente com melhorias não implementadas
+
+> **Instrução posterior do usuário, prevalecente:** “Não pode trazer coisas que o motor da Lyra já tem”. A auditoria N.3 fica **somente como base interna de comparação e evidência negativa de repetição**; nenhum dos seus 112 recursos/capacidades existentes pode ser apresentado como melhoria nova. Nenhuma alteração do produto foi autorizada. A tarefa 142 continua pausada.
+
+**Contrato novo do filtro Motor da Lyra:** 3 tópicos internos de propostas (Precisão, tempo e cálculos; Raciocínio simbólico e aprendizado; Qualidade e segurança do Motor) e 9 propostas iniciais. Os 6 filtros principais não mudam: Radar Premium segue em primeiro lugar e Motor em segundo, com pesquisa cumulativa no segundo controle. Quando Motor estiver selecionado, a lista deve mostrar **somente NOV-MOT-***, com nome, resumo curto, lacuna demonstrada por código, implementação futura, testes, dependências, referências e situação de planejamento. As contagens devem ser derivadas da consulta atual, não fixadas como resultado de execução futura. Propostas relacionadas a IA-01/ADM-01 são incrementos **não entregues** de tarefas existentes, não novos IDs executivos. “Não foi encontrado no código auditado” é distinto de “nunca existiu em qualquer software”.
+
+**PRECISÃO, TEMPO E CÁLCULOS**
+
+**NOV-MOT-01 · Janela Natal de Precisão**
+
+- **O que realmente falta (código existente excluído):** O projeto considera hora ausente e incerteza solar; NÃO foi localizada análise intervalar completa de estabilidade de ascendente, casas, Lua e nakshatra.
+- **Como implementar, quando autorizado:** Receber intervalo de nascimento declarado pelo titular; calcular múltiplos instantes com amostragem adaptativa e refinamento de transições, classificar cada dado como estável, variável ou não calculável, apresentar intervalo e método, sem selecionar um horário fictício.
+- **Arquivos e contratos de referência:** `src/lib/astrology/{tropical,mapa-natal,tempo,sideral}.ts; src/lib/lyra/{leitura-do-mapa,leitura-tropical}.ts`.
+- **QA de aceite e falhas:** Cúspides, DST, intervalo atravessando dia, latitudes extremas, limites de custo e precisão.
+- **Relação com tarefas anteriores:** 156, 171. **Não duplicar tarefa nem afirmar entrega.**
+- **Fontes de apoio:** https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md ; https://www.w3.org/TR/WCAG22/.
+- **Status:** proposta ainda não implementada conforme a auditoria estática de 13/11/2026.
+
+**NOV-MOT-02 · Radar de Viradas Astronômicas**
+
+- **O que realmente falta (código existente excluído):** Há Panchang e projeção de sete dias, mas não existe motor geral demonstrado para localizar com precisão temporal os próximos cruzamentos de signo, aspecto e mudança de estado para seleção do titular.
+- **Como implementar, quando autorizado:** Implementar busca numérica limitada de cruzamentos do cálculo por período configurado, refinar raízes, devolver início, fim, fuso, tolerância e comparação do estado antes/depois. Interpretação permanece simbólica, sem prometer acontecimentos pessoais.
+- **Arquivos e contratos de referência:** `src/lib/astrology/{sideral,tropical,panchang,vimshottari,painel-celestial}.ts`.
+- **QA de aceite e falhas:** Retrógrados, múltiplas passagens, períodos sem evento, cronologia, timeout e convergência numérica.
+- **Relação com tarefas anteriores:** 156, 171. **Não duplicar tarefa nem afirmar entrega.**
+- **Fontes de apoio:** https://www.npmjs.com/package/astronomy-engine ; https://github.com/cosinekitty/astronomy.
+- **Status:** proposta ainda não implementada conforme a auditoria estática de 13/11/2026.
+
+**NOV-MOT-03 · Comparador de Revisões do Nascimento**
+
+- **O que realmente falta (código existente excluído):** Há recálculo/caches versionados, mas não há comparação explicável dos resultados quando a pessoa corrige dados natais.
+- **Como implementar, quando autorizado:** Produzir diff privado antes/depois de posições, aspectos, casas e períodos entre duas versões calculadas com consentimento. Explicar a causa de cada diferença e não persistir dado anterior sem autorização.
+- **Arquivos e contratos de referência:** `src/lib/astrology/{persistencia-natal,tropical-do-perfil,mapa-natal}.ts; src/lib/lyra/leitura-do-mapa.ts`.
+- **QA de aceite e falhas:** Troca de fuso, múltiplas alterações, dado antigo inexistente, eliminação e acesso entre titulares.
+- **Relação com tarefas anteriores:** 155,156,171. **Não duplicar tarefa nem afirmar entrega.**
+- **Fontes de apoio:** https://www.w3.org/TR/prov-o/ ; https://www.w3.org/TR/WCAG22/.
+- **Status:** proposta ainda não implementada conforme a auditoria estática de 13/11/2026.
+
+**RACIOCÍNIO SIMBÓLICO E APRENDIZADO**
+
+**NOV-MOT-04 · Contraleitura Fundamentada**
+
+- **O que realmente falta (código existente excluído):** O motor fornece percepções simbólicas mas não devolve contrapontos tradicionais estruturados que mostrem os limites de cada interpretação.
+- **Como implementar, quando autorizado:** Para cada posição realmente calculada, buscar duas leituras autorizadas com referências e perguntas de reflexão. Identificar divergência de escolas, limites e ausência de evidência causal sem produzir prognósticos absolutos.
+- **Arquivos e contratos de referência:** `src/lib/lyra/{leitura-do-mapa,leitura-tropical,responder}.ts; src/lib/lyra/conhecimento/*`.
+- **QA de aceite e falhas:** Alternativas ligadas à mesma posição, citações completas, nenhuma generalização clínica e resultado determinístico.
+- **Relação com tarefas anteriores:** 147,156,171. **Não duplicar tarefa nem afirmar entrega.**
+- **Fontes de apoio:** https://www.w3.org/TR/prov-o/ ; https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence.
+- **Status:** proposta ainda não implementada conforme a auditoria estática de 13/11/2026.
+
+**NOV-MOT-05 · Desambiguação Conversacional entre Mapas**
+
+- **O que realmente falta (código existente excluído):** O reconhecimento atual depende de termos e padrões; não foi verificado um fluxo que pergunta qual método usar sem assumir védico ou tropical quando o pedido é ambíguo.
+- **Como implementar, quando autorizado:** Criar roteamento de intenção tipado com estado restrito à conversa; se houver ambiguidade, pedir uma única escolha entre métodos realmente disponíveis e reenviar a pergunta original ao leitor correto; não usar seleção como autorização de outro perfil.
+- **Arquivos e contratos de referência:** `src/lib/lyra/responder.ts; src/lib/ai/chat-engine.ts; src/app/api/functions/ask-ai-assistant/route.ts`.
+- **QA de aceite e falhas:** Linguagem coloquial, troca de método, sessão reiniciada, valores sem acentos e prompt injection.
+- **Relação com tarefas anteriores:** 147,156,171. **Não duplicar tarefa nem afirmar entrega.**
+- **Fontes de apoio:** https://developers.openai.com/api/docs/guides/structured-outputs ; https://github.com/GenAI-Security-Project/GenAI-LLM-Top10.
+- **Status:** proposta ainda não implementada conforme a auditoria estática de 13/11/2026.
+
+**NOV-MOT-06 · Laboratório de Interpretações por Hipóteses**
+
+- **O que realmente falta (código existente excluído):** Verbetes e chat existem; não foi localizado um fluxo guiado de comparação voluntária de hipóteses sobre um símbolo calculado, sem confundir adesão subjetiva com precisão astrológica.
+- **Como implementar, quando autorizado:** Oferecer ponto de mapa calculado, duas ou três hipóteses curadas e espaço para a pessoa explorar o que faz sentido; manter sessão efêmera por padrão, sem reativar diário/metas ou gravar impressões não consentidas.
+- **Arquivos e contratos de referência:** `src/lib/lyra/conhecimento/*; src/lib/lyra/leitura-do-mapa.ts; src/components/chat/*`.
+- **QA de aceite e falhas:** Nenhuma hipótese transformada em dado natal, acessibilidade e ausência de escrita permanente.
+- **Relação com tarefas anteriores:** 155,147,171. **Não duplicar tarefa nem afirmar entrega.**
+- **Fontes de apoio:** https://www.w3.org/TR/WCAG22/ ; https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence.
+- **Status:** proposta ainda não implementada conforme a auditoria estática de 13/11/2026.
+
+**QUALIDADE E SEGURANÇA DO MOTOR**
+
+**NOV-MOT-07 · Conferidor de Fatos das Respostas LLM**
+
+- **O que realmente falta (código existente excluído):** conferirVozDaLyra detecta poucos padrões, mas não verifica todos os planetas, signos, casas, datas e aspectos acrescentados pelo modelo externo. O Radar IA-01 já prevê proveniência: usar o mesmo programa, não duplicar tarefas.
+- **Como implementar, quando autorizado:** Fornecer fatos canônicos versionados, solicitar IDs tipados, validar toda afirmação astrológica estruturada contra cálculos do servidor; ao divergir, descartar trecho, corrigir com cálculo real ou usar fallback determinístico. Nunca substituir números inventados por outros inventados.
+- **Arquivos e contratos de referência:** `src/lib/lyra/modelos-como-lyra.ts; src/lib/ai/{cliente-de-ia,cadeia-de-modelos}.ts; src/app/api/functions/ask-ai-assistant/route.ts`.
+- **QA de aceite e falhas:** LLM troca signo, data, dasha, inventa corpo, streaming truncado e provedores sem structured outputs.
+- **Relação com tarefas anteriores:** M.4 IA-01,147,156,171. **Não duplicar tarefa nem afirmar entrega.**
+- **Fontes de apoio:** https://developers.openai.com/api/docs/guides/structured-outputs ; https://github.com/GenAI-Security-Project/GenAI-LLM-Top10.
+- **Status:** proposta ainda não implementada conforme a auditoria estática de 13/11/2026.
+
+**NOV-MOT-08 · Detector Editorial de Lacunas do Conhecimento**
+
+- **O que realmente falta (código existente excluído):** A base encontra verbetes por palavras-chave, mas não foi localizado sistema de cobertura por tópico que sinaliza lacunas sem registrar dados privados do chat.
+- **Como implementar, quando autorizado:** Registrar somente indicadores de tema categorizados e consentidos, sem conteúdo de mensagens; mapear termos sem verbete ou fontes insuficientes e encaminhar ao administrador para curadoria, teste editorial e publicação versionada.
+- **Arquivos e contratos de referência:** `src/lib/lyra/{responder,conhecimento/tipos}.ts; src/lib/ai/chat-engine.ts; src/components/admin/*`.
+- **QA de aceite e falhas:** Privacidade, deduplicação, falsos positivos, ausência de PII e rollback de verbete publicado.
+- **Relação com tarefas anteriores:** 155,170,171. **Não duplicar tarefa nem afirmar entrega.**
+- **Fontes de apoio:** https://www.w3.org/TR/prov-o/ ; https://github.com/GenAI-Security-Project/GenAI-LLM-Top10.
+- **Status:** proposta ainda não implementada conforme a auditoria estática de 13/11/2026.
+
+**NOV-MOT-09 · Conselho de Confiabilidade dos Modelos**
+
+- **O que realmente falta (código existente excluído):** A cadeia faz fallback sequencial, mas não existe comparação simultânea comprovada de modelos sobre o mesmo conjunto de fatos astrológicos por fidelidade e custo. Relacionar ao painel ADM-01 já planejado.
+- **Como implementar, quando autorizado:** Em laboratório exclusivo admin, executar modelos autorizados com o mesmo snapshot sem PII, avaliar respostas por rubricas verificáveis e custos reais, apresentar divergências e recomendação de prioridade. Nunca mudar automaticamente produção nem enviar dados sensíveis sem consentimento.
+- **Arquivos e contratos de referência:** `src/lib/ai/{cadeia-de-modelos,cliente-de-ia}.ts; src/lib/lyra/modelos-como-lyra.ts; src/components/admin/*`.
+- **QA de aceite e falhas:** Mesmo contexto, teto de custo, reprodutibilidade, diferentes modelos e nenhum dado privado exposto.
+- **Relação com tarefas anteriores:** M.5 ADM-01,163,171. **Não duplicar tarefa nem afirmar entrega.**
+- **Fontes de apoio:** https://developers.openai.com/api/docs/guides/agent-evals ; https://github.com/GenAI-Security-Project/GenAI-LLM-Top10.
+- **Status:** proposta ainda não implementada conforme a auditoria estática de 13/11/2026.
+
+**Critérios eliminatórios:** (a) se a funcionalidade já existir integralmente em código, removê-la do Radar do Motor; (b) se parcialmente implementada, exibir somente o diferencial novo com dependência explícita, nunca rebatizar o todo; (c) classificar planejado vs. implementado, sem alegar funcionamento em produção; (d) revisão de `src/lib/lyra`, `src/lib/astrology`, `src/lib/ai`, APIs, componentes, docs e tarefas antes de autorizar; (e) proibir uso de dados fictícios ou placeholders em produção; (f) preservar grupos desligados e privacidade, acesso por plano e cálculo separado de interpretação; (g) páginas/abas/categorias devem ter filtro real, carregamento, vazio, pesquisa e fontes válidas; (h) nenhum commit de código ou deploy nesta etapa.
+
+**Aceite desta retificação:** o filtro Motor da Lyra NÃO mostra nenhum dos 112 itens do inventário existente; mostra somente novas propostas verificáveis, incluindo suas lacunas e detalhes técnicos. Estado do projeto não muda. **Aguardar instruções.**
 
 ### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · 🔵 EM EXECUÇÃO
 
