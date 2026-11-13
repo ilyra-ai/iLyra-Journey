@@ -20,6 +20,7 @@ export const RECURSOS_DA_ROTA: Readonly<
 > = {
   '/': ['dashboard_access'],
   '/dia': ['vedic_insights'],
+  '/inovacoes': ['vedic_insights'],
   '/semana': ['weekly_review', 'vedic_insights'],
   '/respiracao': ['guided_breathing'],
   '/meditacoes': ['guided_breathing'],
