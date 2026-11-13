@@ -914,6 +914,8 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 Documentos de origem auditados: `docs/motor-da-lyra.md`, `docs/astrologia.md`, `docs/mapa-ocidental.md`, `docs/ia-automatica.md`, `docs/coach.md`, `docs/memoria-graphiti.md`, `docs/treinamento-por-feedback.md`; regras `CLAUDE.md` e `AGENTS.md`; planilha de tarefas `claude-gestao.md`; arquivos de código relacionados na seção N.3. Endereços verificáveis: repositório `https://github.com/ilyra-ai/Lyra-MetaCare`, branch `main`, e caminhos correspondentes aos arquivos citados. Nenhum arquivo de código ou documentação além deste gestor deve ser alterado agora.
 
+**Publicação documental do Motor da Lyra:** auditoria e filtro registrados no commit `c4c2193d139d8ed856b5d8422a8f30d64109fc15` na branch `main`; somente `claude-gestao.md` foi alterado. Este registro do SHA é publicado em commit documental próprio, segundo a regra 6, sem modificar código, interfaces, banco ou serviços. **Aguardar instruções.**
+
 **Critério de aceite desta atualização:** manter 174 IDs principais únicos, um único bloco N, dois painéis e seis filtros principais, Radar primeiro e Motor da Lyra segundo, doze tópicos navegáveis previstos, 112 funções/limites auditados com fontes, sem grupos reativados, sem estado falso de produção, sem mudança no aplicativo. **Status final: documentação publicada, tarefa pausada, aguardar instruções.**
 
 ### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · 🔵 EM EXECUÇÃO
