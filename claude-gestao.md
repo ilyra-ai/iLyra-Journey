@@ -507,7 +507,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 - Comparar inventário apresentado com leitura recente da `main` e com o gestor; registrar SHA de referência, data da coleta, critérios de classificação, limites da verificação e mudanças desde a leitura anterior.
 - **Critério absoluto de aceite:** a apresentação não pode confundir o usuário com promessas futuras descritas como existentes, nem esconder funções desligadas sob o grupo de ativos. O conteúdo do relatório deve permanecer independente de cosmética, e todos os seis filtros devem afetar de verdade seus respectivos resultados.
 
-**Situação desta ampliação em 13-11-2026:** requisitos documentados para futura execução mediante instrução expressa. **Não iniciar agora** componentes, layout, testes de navegador, modificações funcionais, migrations, deploy ou atualizações de outras tarefas. Preservar o estado pausado da 142 e os trabalhos em andamento 155/156. Após o registro documental e publicação na `main`, **aguardar instruções do usuário**.
+**Publicação documental desta ampliação:** commit `738b5aefdddb6b33211746438d1d19441a555851` confirmado na `main` em 13-11-2026; somente este gestor foi atualizado, sem alteração funcional. **Situação desta ampliação em 13-11-2026:** requisitos documentados para futura execução mediante instrução expressa. **Não iniciar agora** componentes, layout, testes de navegador, modificações funcionais, migrations, deploy ou atualizações de outras tarefas. Preservar o estado pausado da 142 e os trabalhos em andamento 155/156. Após o registro documental e publicação na `main`, **aguardar instruções do usuário**.
 
 ### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · 🔵 EM EXECUÇÃO
 
