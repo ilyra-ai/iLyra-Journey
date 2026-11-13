@@ -19,6 +19,15 @@
 
 ## Tópico 1 · Andamento Geral
 
+**Execução independente de 13/11/2026 · 11h20 (America/Sao_Paulo) · INOV-LYRA-01–05**
+
+- **Origem:** pedidos explícitos do usuário nesta conversa para implementar integralmente o **TOP 5 Inovações para o Motor Lyra**, em atividade independente da 142; preservar funcionamento **sem qualquer LLM conectado**, corrigir falhas reais, testar antes de chamar pronto, publicar na **main sem branches/worktrees** e registrar SHA, data/hora e motivo. Depois o usuário acrescentou a solicitação de registrar **10 tarefas futuras** de UI/UX, Administradores, Usuários e Teatro dos Futuros Revisáveis. Esses dez itens não foram autorizados para implementação.
+- **Motivo e valor:** adicionar cinco métodos matemáticos não encontrados no núcleo atual: trânsitos exatos, D9/D10, astrocartografia, revoluções Solar/Lunar e eclipses localizados; manter o cálculo original da Lyra sem provedor de IA; integrações são autenticadas, não expõem nascimento alheio e não reativam oito grupos desligados.
+- **Entregas efetivamente publicadas:** novas bibliotecas em `src/lib/astrology/inovacoes/`, API `/api/astrologia/inovacoes`, página `/inovacoes`, mapa mundial vetorial Natural Earth, navegação, autorização de plano, suíte Vitest e workflow GitHub Actions. SHAs individuais discriminados nas tarefas **175–179** do Tópico 4.
+- **Validação comprovada:** testes independentes no sandbox das funções circulares e das subdivisões D9/D10; Swiss Ephemeris `2.10.03` confirmou o eclipse astronômico de 12/08/2026. **Não** confundir com execução do conjunto React/Next ou dos cinco módulos TypeScript com `astronomy-engine`.
+- **CI real e limitação:** <https://github.com/ilyra-ai/Lyra-MetaCare/actions/runs/43441320684> executou no commit `bac3dc94f93a0b524742c2457930b7c8222abb32` e terminou **failure**; job `131939361610` não expôs passos e os logs retornaram `BlobNotFound`. Causa raiz ainda não confirmada. O sandbox falhou ao clonar por DNS e o Corepack não alcançou o registro do pnpm, enquanto o Node local é v22 e o projeto exige v24; portanto não houve build, lint completo, QA real do navegador, integração MySQL/CRUD ou teste Vitest dos cinco módulos nesta execução. **Nenhuma validação não executada está marcada como aprovada.**
+- **Classificação:** 175–179 = **🟡 implementação publicada, homologação pendente**; 190 = **🔴 bloqueada após tentativa real de validação**, aguardando runner/ambiente e investigação; 180–189 = **⚪ tarefas futuras documentais**. NÃO aumentar percentual de tarefas 🟢. A prioridade histórica de 156→157 etc. não é substituída por estas anotações.
+
 **Ordem de execução definida pelo usuário · 12-11-2026**
 
 Registro publicado em `198b4611`, confirmado na `main` remota em 12-11-2026.
@@ -202,18 +211,18 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **80,5%** (140 de 174)   |
-| Implementações publicadas               | **87,4%** (152 de 174)   |
-| Tarefas totais                          | 174                      |
+| Conclusão integral                      | **73,7%** (140 de 190)   |
+| Implementações publicadas               | **82,6%** (157 de 190)   |
+| Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 12                       |
+| 🟡 Implementadas com validação pendente | 17                       |
 | 🔵 Em andamento                         | 3                        |
-| 🔴 Bloqueadas                           | 0                        |
-| ⚪ A iniciar                            | 19                       |
+| 🔴 Bloqueadas                           | 1                        |
+| ⚪ A iniciar                            | 29                       |
 | Branch de trabalho                      | `main` (única permitida) |
-| Última atualização                      | 2026-11-10               |
+| Última atualização                      | 2026-11-13 · 11h20 BRT  |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os doze estados 🟡 preservam a entrega existente sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os 17 estados 🟡 preservam entregas publicadas com homologação incompleta sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Escopo vigente em 2026-11-06:** landing 149 aprovada, com aprovação registrada e publicada em `857617a6`. O usuário autorizou redesenhar por completo o carregamento e, depois, o login/cadastro, seguindo a identidade celestial e mantendo enquadramento responsivo em desktop/mobile. Concluir e publicar cada frente individualmente na main antes da próxima. As tarefas 142 e 144 continuam **pausadas**; suas mudanças locais independentes ficam fora destes commits. As 145, 146 e o restante da 147 permanecem a iniciar.
 
@@ -1236,7 +1245,14 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 ### BLOQUEADAS
 
-Nenhuma tarefa bloqueada desde 2026-10-30, por decisão do usuário.
+### 190 · Homologação integral pendente do TOP 5 Motor Lyra e GitHub Actions · 🔴 BLOQUEADA APÓS TENTATIVA REAL
+
+- **Origem:** exigência expressa de tentar validações antes de criar qualquer tarefa pendente. Registrada em 13/11/2026, 11h20 (America/Sao_Paulo) somente após tentativas documentadas no sandbox e Actions.
+- **O que foi tentado:** `git ls-remote https://github.com/ilyra-ai/Lyra-MetaCare HEAD` falhou com `Could not resolve host: github.com`; `corepack pnpm --version` falhou por indisponibilidade de `https://registry.npmjs.org/pnpm/latest`; v22.16.0 disponível localmente não atende Node ^24.18.1 do repositório. O GitHub Actions executou em `bac3dc94`, run `43441320684`, job `131939361610`: status completed/failure 13/11/2026T14:17:30Z, nenhum passo retornado e logs indisponíveis (`BlobNotFound`). Não atribuir a causa a billing/minutos sem prova.
+- **O que de fato passou:** `tsc` das funções numéricas, `node tests/validar-numerica.cjs` (raízes e ângulos), `node tests/validar-divisionais.cjs` (casos D9/D10), e cálculo real do eclipse de 12/08/2026 pela biblioteca independente Swiss Ephemeris Python 2.10.03. Estes testes NÃO executam as dependências completas da aplicação.
+- **Para desbloquear:** (1) verificar a disponibilidade de runner, permissões, limites de minutos e eventuais políticas de Actions com acesso administrativo; (2) obter logs da execução ou rodar novo workflow e identificar causa raiz; (3) executar `pnpm install --frozen-lockfile`, `pnpm check:format`, `pnpm check:lint`, `pnpm check:types`, `pnpm test` e `pnpm build` no Node 24 com astronomy-engine 2.1.19; (4) verificar a suíte `inovacoes.test.ts`, segurança da API e cálculos nos cinco métodos; (5) testar navegação autenticada e UI em 320/390/768/1280/1440 px; (6) integração MySQL/CRUD somente onde o fluxo de titularidade persistida exigir, sem impedir testes matemáticos puros; (7) Ruff é não aplicável ao novo núcleo TS, mas verificar Python se houver futuras alterações nele; (8) corrigir erros reais e repetir gates até passar, sem desabilitar regras.
+- **Critério de saída:** CI success com logs de passos, cálculos confrontados com referência independente, QA de navegador e segurança, sem regressões; mover esta tarefa do Tópico 2 para Tópico 4 com resultados reais, elevar 175–179 a 🟢 somente depois de homologação, não por mera publicação.
+
 
 ## Tópico 3 · Tarefas a Iniciar
 
@@ -2466,6 +2482,138 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 9. Entregar logs sanitizados, matriz de paridade por comando, provas de isolamento dos runtimes e de preservação das portas ocupadas, quality gates aplicáveis e revisão final. Publicar a entrega lógica em commit/push próprios na main, sem branches/worktrees, e registrar o SHA imediatamente no gestor.
 
 **Aceite:** dois orquestradores reais e completos nos respectivos ambientes, `run.py` retirado após migração comprovada, nenhuma porta liberada à força, documentação coerente e validação real publicada. Esta nova tarefa eleva o total para 174 e as pendências para 34 (12 em validação, três em andamento, 19 a iniciar); a implementação não foi antecipadamente aprovada.
+
+
+
+### 180 · Generative UI com A2UI 1.0 para respostas interativas · ⚪ A INICIAR
+
+- **Origem do pedido:** Top 3 UI/UX PREMIUM · item 1; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
+- **Finalidade premium e escopo funcional:** Respostas do chat são transformadas em componentes nativos React apenas quando ajudam a explorar mapas, resultados, período e comparações.
+- **Procedimento detalhado para futura implementação real:**
+  1. Inspecionar e estender o contrato estruturado e as duas experiências de chat da tarefa 147, sem criar uma segunda arquitetura; analisar maturidade/licença da A2UI 1.0 e comparar com renderer já implementado.
+  2. Criar catálogo local de componentes versionados, schemas Zod estritos, streaming com replay idempotente, paginação, estados e fallbacks acessíveis; nunca executar JavaScript ou JSX enviado por LLM.
+  3. Revalidar permissões/entitlements em cada ação; cálculo astrológico continua exclusivamente no servidor, independente de LLM.
+- **QA e aceite exigidos:** Mensagens e anexos hostis, saída truncada, carga longa, cross-user, compatibilidade sem LLM, mobile/teclado/leitor de tela, latência e custos reais. Não usar placeholders funcionais, dados hardcoded do titular, modelos para inventar cálculos, API simulada ou validação narrada.
+- **Dependências/antiduplicação:** 147, 156, 163, 171; consultar `main` e `claude-gestao.md` atuais e adaptar o escopo para não duplicar recursos existentes.
+- **Referência primária ou antecedente para investigação:** https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
+- **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
+
+### 181 · Navegação espacial contextual entre mapas e Lyra · ⚪ A INICIAR
+
+- **Origem do pedido:** Top 3 UI/UX PREMIUM · item 2; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
+- **Finalidade premium e escopo funcional:** Transições contínuas entre o planeta selecionado, seu aspecto, a leitura e a pergunta à Lyra, sem perda de contexto.
+- **Procedimento detalhado para futura implementação real:**
+  1. Amarrar IDs reais de mapa, planeta, aspecto e data em um estado navegável e em deep-links seguros, sem DOB, coordenadas precisas ou segredos na URL.
+  2. Reutilizar AppShell, CelestialDashboard e navegação do chat; empregar View Transitions quando suportado, com fallback e prefers-reduced-motion; preservar foco, scroll e botão Voltar.
+  3. Não criar sidebars gigantes que reduzam o compositor; adaptar estados vazios, loading, retorno e contexto sem dados.
+- **QA e aceite exigidos:** Back/Forward, duas abas, sessão expirada, rota alterada, teclado, leitor de tela, zoom 200%, iOS/Android e desktop. Não usar placeholders funcionais, dados hardcoded do titular, modelos para inventar cálculos, API simulada ou validação narrada.
+- **Dependências/antiduplicação:** 142, 147, 152, 153, 156; consultar `main` e `claude-gestao.md` atuais e adaptar o escopo para não duplicar recursos existentes.
+- **Referência primária ou antecedente para investigação:** https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
+- **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
+
+### 182 · Material editorial expressivo e microinterações premium · ⚪ A INICIAR
+
+- **Origem do pedido:** Top 3 UI/UX PREMIUM · item 3; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
+- **Finalidade premium e escopo funcional:** Design celestial premium expressivo mas funcional, com hierarquia editorial, controles legíveis e microinterações que comuniquem resultado.
+- **Procedimento detalhado para futura implementação real:**
+  1. Partir dos tokens Lyra Clean e docs/design-system.md vigentes; não substituir tema claro aprovado por vidro, orbes ou aparência decorativa sem autorização.
+  2. Refinar ações primárias, headings, cards, tipografia, tabs, loading real e vazios; movimento responsivo com reduced-motion e estados de foco rigorosos.
+  3. Instrumentar comparações de clareza e taxa de conclusão com participantes reais, sem assumir números de ganho de estudos externos.
+- **QA e aceite exigidos:** WCAG 2.2 AA, contraste, toque 44px, zoom 200%, 320/390/768/1280/1440px, foco e responsividade. Não usar placeholders funcionais, dados hardcoded do titular, modelos para inventar cálculos, API simulada ou validação narrada.
+- **Dependências/antiduplicação:** 142, 147, 173; consultar `main` e `claude-gestao.md` atuais e adaptar o escopo para não duplicar recursos existentes.
+- **Referência primária ou antecedente para investigação:** https://design.google/library/expressive-material-design-google-research. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
+- **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
+
+### 183 · Centro de qualidade verificável da IA e dos mapas · ⚪ A INICIAR
+
+- **Origem do pedido:** Top 3 Administradores · item 1; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
+- **Finalidade premium e escopo funcional:** Painel de QA com evidências de cálculos, fidelidade das respostas, regressões por versão e custo de provedor.
+- **Procedimento detalhado para futura implementação real:**
+  1. Criar datasets de referência e oráculos independentes para mapa tropical/sideral, retornos, D9/D10, eclipses e astrocartografia, separando determinismo de interpretação simbólica.
+  2. Registrar versão de algoritmo/modelo, taxa de resposta sem proveniência, desvios numéricos, latência, falhas e custos, sem DOB/mensagens sensíveis em logs.
+  3. Incluir gates de publicação e comparador admin de versões e modelos sem treinamento automático nem alteração da seleção em produção.
+- **QA e aceite exigidos:** Golden tests, versionamento e reprodutibilidade, permissionamento admin, sem exposição de PII, custo real, regressões e exportações autorizadas. Não usar placeholders funcionais, dados hardcoded do titular, modelos para inventar cálculos, API simulada ou validação narrada.
+- **Dependências/antiduplicação:** 156, 163, 171; complementar ADM-01 da seção M sem duplicação; consultar `main` e `claude-gestao.md` atuais e adaptar o escopo para não duplicar recursos existentes.
+- **Referência primária ou antecedente para investigação:** https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
+- **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
+
+### 184 · Estúdio de publicação segura, aprovação e rollback · ⚪ A INICIAR
+
+- **Origem do pedido:** Top 3 Administradores · item 2; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
+- **Finalidade premium e escopo funcional:** Fluxo administrativo real para inspecionar, aprovar, publicar e reverter experiências versionadas sem perder dados.
+- **Procedimento detalhado para futura implementação real:**
+  1. Reusar SiteExperienceBuilder, plano, matrizes e interruptores existentes; mapear operações de publicação que já existem, sem recriar CRUD.
+  2. Implementar diff semântico, prévia autenticada, trilha de aprovação, checagem de dependências e alterações idempotentes por versão.
+  3. Fazer rollback somente onde a operação seja reversível; migrations incompatíveis exigem estratégia específica e backup verificado.
+- **QA e aceite exigidos:** Admin concorrente, conflito de revisão, rollback parcial, interrupção e recuperação, tela oculta mas rota acessível, consistência de permissões. Não usar placeholders funcionais, dados hardcoded do titular, modelos para inventar cálculos, API simulada ou validação narrada.
+- **Dependências/antiduplicação:** 142, 147, 160, 163, 172; consultar `main` e `claude-gestao.md` atuais e adaptar o escopo para não duplicar recursos existentes.
+- **Referência primária ou antecedente para investigação:** https://openfeature.dev/docs/reference/concepts/evaluation-api/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
+- **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
+
+### 185 · Cockpit de jornada, conversão, retenção e custo · ⚪ A INICIAR
+
+- **Origem do pedido:** Top 3 Administradores · item 3; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
+- **Finalidade premium e escopo funcional:** Medições consentidas do início da autodescoberta, aprofundamento, checkout e retenção, com denominadores e custos reais.
+- **Procedimento detalhado para futura implementação real:**
+  1. Ampliar a tarefa 170 e os relatórios existentes: eventos versionados sem nome, nascimento, conteúdo de chat ou dados íntimos.
+  2. Conciliar conversões com webhooks financeiros reais, consentimento e retenção; deduplicar, distinguir produção/teste e reembolso.
+  3. Painéis e filtros por período, jornada e resultado financeiro, com coortes mínimas e ausência explícita de dados.
+- **QA e aceite exigidos:** Bot/duplicidade, conversão incorreta, faturas de teste, conta eliminada, consentimento retirado, latência e faturamento real. Não usar placeholders funcionais, dados hardcoded do titular, modelos para inventar cálculos, API simulada ou validação narrada.
+- **Dependências/antiduplicação:** 157–163, 170, 171; não duplicar escopo já planejado; consultar `main` e `claude-gestao.md` atuais e adaptar o escopo para não duplicar recursos existentes.
+- **Referência primária ou antecedente para investigação:** https://www.nngroup.com/articles/state-of-ux-2026/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
+- **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
+
+### 186 · Astrolábio Vivo: mapa explorável e contextual · ⚪ A INICIAR
+
+- **Origem do pedido:** Top 3 Usuários · item 1; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
+- **Finalidade premium e escopo funcional:** Exploração acessível do próprio céu em que cada planeta, casa, aspecto e período abre o cálculo e explicação contextual.
+- **Procedimento detalhado para futura implementação real:**
+  1. Reutilizar os módulos do Motor e CelestialDashboard; gerar SVG tipado com posições/links reais, não desenho ornamental estático.
+  2. Interagir por clique, teclado, leitor de tela e seleção textual equivalente; abrir detalhes de fonte, método, precisão e limitações do cálculo.
+  3. Vincular ação opcional de pergunta à Lyra sem obrigar LLM; preservar motor determinístico de resposta.
+- **QA e aceite exigidos:** Correspondência exata de dados por ID, mapa incompleto, alterações de nascimento, sem travar mobile ou perder foco, WCAG 2.2. Não usar placeholders funcionais, dados hardcoded do titular, modelos para inventar cálculos, API simulada ou validação narrada.
+- **Dependências/antiduplicação:** 145, 147, 153, 156; integrar cálculos independentes sem duplicar telas; consultar `main` e `claude-gestao.md` atuais e adaptar o escopo para não duplicar recursos existentes.
+- **Referência primária ou antecedente para investigação:** https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
+- **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
+
+### 187 · Pergunte ao ponto do mapa com contexto verificável · ⚪ A INICIAR
+
+- **Origem do pedido:** Top 3 Usuários · item 2; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
+- **Finalidade premium e escopo funcional:** A partir de qualquer posição calculada, perguntar à Lyra e obter resposta conectada àquela posição e sua origem.
+- **Procedimento detalhado para futura implementação real:**
+  1. Enviar somente identificadores autorizados, versão do mapa, planeta/aspecto e período; não inserir DOB em link ou query pública.
+  2. Validar IDs e entitlements no backend, carregar cálculo determinístico e oferecer resposta própria sem LLM, com ampliação opcional por modelo conectado.
+  3. Retorno bidirecional da resposta para ponto original, histórico autorizado e estado de erro quando contexto expirar.
+- **QA e aceite exigidos:** MapId adulterado, conta de terceiro, dados incompletos, API indisponível, histórico, navegador Voltar e fallback sem provedor. Não usar placeholders funcionais, dados hardcoded do titular, modelos para inventar cálculos, API simulada ou validação narrada.
+- **Dependências/antiduplicação:** 147, 156, 159, 171; consultar `main` e `claude-gestao.md` atuais e adaptar o escopo para não duplicar recursos existentes.
+- **Referência primária ou antecedente para investigação:** https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
+- **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
+
+### 188 · Trilha de Autodescoberta Progressiva gratuita e premium · ⚪ A INICIAR
+
+- **Origem do pedido:** Top 3 Usuários · item 3; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
+- **Finalidade premium e escopo funcional:** Uma descoberta inicial realmente calculada, com escolhas progressivas e acesso premium solicitado apenas quando necessário.
+- **Procedimento detalhado para futura implementação real:**
+  1. Integrar as tarefas 155/157/158/159, sem criar cadastro artificial ou reabrir outros mapas gratuitamente.
+  2. Usar data e nome temporários conforme última decisão de consentimento, proteger acesso de menores e mostrar resultado solar estável ou incerteza de cúspide.
+  3. Permitir aprofundar e guardar leitura só depois de consentimento e login; modal da 161 mostra duas contribuições com mesmos direitos.
+- **QA e aceite exigidos:** Menor de 13 anos, nascimento incompleto, sem armazenamento anônimo indevido, modal fechável, acesso gratuito, erros de API, conversão consentida. Não usar placeholders funcionais, dados hardcoded do titular, modelos para inventar cálculos, API simulada ou validação narrada.
+- **Dependências/antiduplicação:** 155, 157–161, 171; não duplicar a implementação já prevista; consultar `main` e `claude-gestao.md` atuais e adaptar o escopo para não duplicar recursos existentes.
+- **Referência primária ou antecedente para investigação:** https://www.nngroup.com/articles/state-of-ux-2026/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
+- **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
+
+### 189 · Teatro dos Futuros Revisáveis: três cenários sem fatalismo · ⚪ A INICIAR
+
+- **Origem do pedido:** Inovação autoral · Teatro dos Futuros Revisáveis; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
+- **Finalidade premium e escopo funcional:** Pessoa explora três histórias hipotéticas condicionadas a escolhas próprias, altera premissas e compara como as narrativas mudam.
+- **Procedimento detalhado para futura implementação real:**
+  1. Pedir uma dúvida e premissas deliberadamente informadas pelo titular, sem inventar eventos futuros e sem inferir saúde ou personalidade clínica.
+  2. Separar fatos do mapa calculado, símbolos tradicionais e cenários ficcionais; gerar três ramos versionados com opções realmente editáveis, trilha de hipóteses e rótulo visível NÃO É PREVISÃO.
+  3. Preferir sessão efêmera e permitir persistência só com consentimento; não reativar Diário, Metas ou demais grupos desativados nem prometer exclusividade mundial.
+- **QA e aceite exigidos:** Rótulos de hipótese versus fato, alteração de premissas com mudança verdadeira da narrativa, IA desconectada e fallback, privacidade, exclusão e temas sensíveis. Não usar placeholders funcionais, dados hardcoded do titular, modelos para inventar cálculos, API simulada ou validação narrada.
+- **Dependências/antiduplicação:** 147, 155, 156, 163, 171; conceito autoral não pressupõe exclusividade no mundo; consultar `main` e `claude-gestao.md` atuais e adaptar o escopo para não duplicar recursos existentes.
+- **Referência primária ou antecedente para investigação:** https://news.mit.edu/2024/ai-simulation-gives-people-glimpse-potential-future-self-1001. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
+- **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
 
 ## Tópico 4 · Implementações Publicadas e Estado da Validação
 
@@ -5272,3 +5420,55 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 **Início em 08-11-2026:** baseline funcional `253c692c`, registro `c585867f`; 144 publicada, oito grupos desligados. Auditoria somente leitura, sem reativação nem mudanças de produto. Preservar stash da 142, não iniciar 147 ou 173.
 
 **Fechamento técnico em 09-11-2026:** auditoria somente leitura entregue em `docs/auditoria/2026-11-09-programa-154.md`, inventário sanitizado em `docs/auditoria/2026-11-08-baseline-154.json` e script reproduzível `scripts/auditar-programa-154.mjs`. HEAD e remoto conferidos; 95 referências de planos, 23 de mapas, 47 de publicação visual e 25 de proteções inventariadas. Matriz 155–172, riscos, migração e rollback documentados. Banco local: apenas assinatura administrativa, Stripe test sem webhook/preços e OAuth ausente. Nenhum segredo ou dado pessoal exportado. Execução real do script aprovada; baseline técnico da 144 referenciado com data e sem alegar reexecução. Sem mudanças de produto, sem reativação dos oito grupos e sem homologação externa simulada. SHA da publicação será registrado imediatamente após o push.
+
+
+### 175 · Motor de trânsitos exatos aos pontos natais · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** solicitação independente do usuário sobre TOP 5 Inovações para o Motor Lyra, em 13/11/2026, aproximadamente 11h20 (America/Sao_Paulo); não é execução da tarefa 142.
+- **Motivo e implementação real:** Funções matemáticas puras de busca angular e eventos de trânsito a posições natais, zodíaco sideral ou tropical e passagens diretas/retrógradas em janelas limitadas.
+- **Commit(s) publicados e visíveis na main:** `bd049a31136c5374c709d743b56fd7d59a84d866`, `2d36b6cdc806598d512543d4ed45ecfac5311664`.
+- **Arquivos:** `src/lib/astrology/inovacoes/numerica.ts`, `src/lib/astrology/inovacoes/transitos.ts`.
+- **Testes tentados/resultados comprováveis:** Sandbox: tsc --target ES2022 src/lib/astrology/inovacoes/numerica.ts, node tests/validar-numerica.cjs passou três raízes e ângulos. Teste completo dependente de astronomy-engine ainda não executado.
+- **Integração e dependências:** usar o motor determinístico sem LLM; sessão e plano vedic_insights no endpoint comum; não alterar o mapa natal existente; frontend /inovacoes e página condicional protegida por AppShell. Validação integrada e de acesso real ainda exigida na tarefa 190.
+- **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
+
+### 176 · Mapas divisionais védicos D9 e D10 · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** solicitação independente do usuário sobre TOP 5 Inovações para o Motor Lyra, em 13/11/2026, aproximadamente 11h20 (America/Sao_Paulo); não é execução da tarefa 142.
+- **Motivo e implementação real:** Transformação Parāśari das longitudes siderais natais em Navamsa e Dashamsa, casas derivadas apenas com Lagna conhecido, indicação de imprecisão sem hora.
+- **Commit(s) publicados e visíveis na main:** `860aee0f9c294eea67ae7fdf3ca1a69ad6d1f460`.
+- **Arquivos:** `src/lib/astrology/inovacoes/divisionais.ts`.
+- **Testes tentados/resultados comprováveis:** Sandbox: node tests/validar-divisionais.cjs aprovado, casos de referência e 108 porções D9. Teste end-to-end ainda não executado.
+- **Integração e dependências:** usar o motor determinístico sem LLM; sessão e plano vedic_insights no endpoint comum; não alterar o mapa natal existente; frontend /inovacoes e página condicional protegida por AppShell. Validação integrada e de acesso real ainda exigida na tarefa 190.
+- **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
+
+### 177 · Linhas de astrocartografia e ascendente relocalizado · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** solicitação independente do usuário sobre TOP 5 Inovações para o Motor Lyra, em 13/11/2026, aproximadamente 11h20 (America/Sao_Paulo); não é execução da tarefa 142.
+- **Motivo e implementação real:** Linhas MC/IC/AS/DS geocêntricas de 7 planetas com segmentação no antimeridiano; comparação de ascendente com UTC natal constante e mapa de contornos geográficos naturais.
+- **Commit(s) publicados e visíveis na main:** `d749302ddb27c933032faee9c40181eb7811860e`, `d65b5c3e22b9d64d5b2b05f76deb79fabcd0de60`.
+- **Arquivos:** `src/lib/astrology/inovacoes/astrocartografia.ts`, `public/world-countries.svg`.
+- **Testes tentados/resultados comprováveis:** Amostra externa Swisseph consultável no sandbox, mas teste do módulo TS dependente de astronomy-engine e QA visual não executados.
+- **Integração e dependências:** usar o motor determinístico sem LLM; sessão e plano vedic_insights no endpoint comum; não alterar o mapa natal existente; frontend /inovacoes e página condicional protegida por AppShell. Validação integrada e de acesso real ainda exigida na tarefa 190.
+- **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
+
+### 178 · Cálculo de cartas de revolução solar e lunar · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** solicitação independente do usuário sobre TOP 5 Inovações para o Motor Lyra, em 13/11/2026, aproximadamente 11h20 (America/Sao_Paulo); não é execução da tarefa 142.
+- **Motivo e implementação real:** Pesquisa do retorno circular exato à longitude natal, carta do instante por local explícito e casas siderais ou tropicais com rejeição de local polar.
+- **Commit(s) publicados e visíveis na main:** `206e28acd4a9c121948ad05f48f9486cac21a7fc`.
+- **Arquivos:** `src/lib/astrology/inovacoes/retornos.ts`.
+- **Testes tentados/resultados comprováveis:** Algoritmo de busca numérica puro testado no sandbox. Conferência com astronomy-engine e oráculo independente por eventos segue aguardando CI.
+- **Integração e dependências:** usar o motor determinístico sem LLM; sessão e plano vedic_insights no endpoint comum; não alterar o mapa natal existente; frontend /inovacoes e página condicional protegida por AppShell. Validação integrada e de acesso real ainda exigida na tarefa 190.
+- **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
+
+### 179 · Motor de eclipses geolocalizados e interface das cinco inovações · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** solicitação independente do usuário sobre TOP 5 Inovações para o Motor Lyra, em 13/11/2026, aproximadamente 11h20 (America/Sao_Paulo); não é execução da tarefa 142.
+- **Motivo e implementação real:** Busca de eclipses solares globais e locais e eclipses lunares, com horizonte geométrico; REST autenticado, página com seis abas para cinco módulos, menu e entitlement vedic_insights. Calculadora independente de LLM.
+- **Commit(s) publicados e visíveis na main:** `be2021ce5aec72dfbdda5cf115afb5c5ab9f564c`, `0c04071a071b8600e19a39ea5f479ee175b02afe`, `8a25f0f4a1d61bc13283d57aa5d24d6e37ced8c2`, `f97ef6eabca5e388ecd124bd7c40f319b5c91422`, `656e2b6b4e306c929c99744cb4c2beb3aa1379cb`, `6f7d222f4a46b9fd9446129263601094dd592052`, `625cfa04c813eb49d3f1381f0b2a20a85101bdce`, `bac3dc94f93a0b524742c2457930b7c8222abb32`.
+- **Arquivos:** `src/lib/astrology/inovacoes/eclipses.ts`, `src/app/api/astrologia/inovacoes/route.ts`, `src/app/inovacoes/page.tsx`, `src/components/layout/navigation.ts`, `src/components/layout/sidebar-structure.ts`, `src/lib/plans/rotas.ts`, `src/lib/astrology/inovacoes/inovacoes.test.ts`, `.github/workflows/validacao-motor-lyra.yml`.
+- **Testes tentados/resultados comprováveis:** Swiss Ephemeris 2.10.03 localizou eclipse de 12/08/2026, mas a CI não executou os testes JS: run 43441320684 falhou em 3 segundos sem logs úteis. Código publicado, homologação incompleta.
+- **Integração e dependências:** usar o motor determinístico sem LLM; sessão e plano vedic_insights no endpoint comum; não alterar o mapa natal existente; frontend /inovacoes e página condicional protegida por AppShell. Validação integrada e de acesso real ainda exigida na tarefa 190.
+- **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
+
