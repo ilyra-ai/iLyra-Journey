@@ -32,6 +32,7 @@ describe('categorias reais da navegação lateral', () => {
       expect(secoes[0].itens.map((item) => item.href)).toEqual([
         '/chat',
         '/',
+        '/inovacoes',
         '/dia',
       ]);
     }

@@ -14,6 +14,17 @@ const INICIO_DA_NAVEGACAO = [
   '/plan',
 ];
 
+// Com uma configuração salva, "Meu céu avançado" (rota posterior ao registro)
+// entra logo depois do Painel, sua antecessora na navegação.
+const INICIO_COM_CEU_AVANCADO = [
+  '/chat',
+  '/',
+  '/inovacoes',
+  '/dia',
+  '/semana',
+  '/respiracao',
+];
+
 function semAsPaginas(hrefs: string[]): AppPageConfig {
   const config: AppPageConfig = getDefaultPageConfig('app');
   return {
@@ -103,7 +114,7 @@ describe('navegação com configuração salva', () => {
     const hrefs = getVisibleNavigation(false, semAsPaginas(['/dia'])).map(
       (i) => i.href
     );
-    expect(hrefs.slice(0, 6)).toEqual(INICIO_DA_NAVEGACAO);
+    expect(hrefs.slice(0, 6)).toEqual(INICIO_COM_CEU_AVANCADO);
     expect(hrefs.filter((h) => h === '/dia')).toHaveLength(1);
     expect(hrefs.some((h) => h.startsWith('/admin'))).toBe(false);
   });
@@ -113,7 +124,9 @@ describe('navegação com configuração salva', () => {
       false,
       semAsPaginas(['/semana', '/respiracao'])
     );
-    expect(itens.map((i) => i.href).slice(0, 6)).toEqual(INICIO_DA_NAVEGACAO);
+    expect(itens.map((i) => i.href).slice(0, 6)).toEqual(
+      INICIO_COM_CEU_AVANCADO
+    );
     expect(itens.find((i) => i.href === '/semana')?.label).toBe('Sua semana');
     expect(itens.find((i) => i.href === '/respiracao')?.label).toBe(
       'Respiração'

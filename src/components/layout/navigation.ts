@@ -62,15 +62,6 @@ export const navigationItems: NavigationDefinition[] = [
     shortcut: 'G C',
   },
   {
-    href: '/inovacoes',
-    label: 'Meu céu avançado',
-    description:
-      'Trânsitos exatos, D9/D10, astrocartografia, retornos e eclipses calculados pela Lyra.',
-    icon: Orbit,
-    section: 'Principal',
-    sectionKey: 'principal',
-  },
-  {
     href: '/',
     label: 'Painel',
     description: 'Seu dia em um olhar: sono, movimento e reflexões.',
@@ -78,6 +69,15 @@ export const navigationItems: NavigationDefinition[] = [
     section: 'Principal',
     sectionKey: 'principal',
     shortcut: 'G D',
+  },
+  {
+    href: '/inovacoes',
+    label: 'Meu céu avançado',
+    description:
+      'Trânsitos exatos, D9/D10, astrocartografia, retornos e eclipses calculados pela Lyra.',
+    icon: Orbit,
+    section: 'Principal',
+    sectionKey: 'principal',
   },
   {
     href: '/dia',
