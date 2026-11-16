@@ -225,7 +225,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
 | 🟡 Implementadas com validação pendente | 21                       |
-| 🔵 Em andamento                         | 3                        |
+| 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
 | Branch de trabalho                      | `main` (única permitida) |
@@ -5529,3 +5529,11 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes e resultados comprováveis:** 5 testes de integração novos (prévia, recusas, conclusão com janela, janela inválida sem concluir, hora digitada). Unitários: 1103 aprovados; integração: 640 aprovados; ESLint sem avisos, `tsc --noEmit`, Prettier e `next build` aprovados. O diálogo do perfil foi exercitado no navegador em 16/11/2026 (13 opções, escolha de "Liberdade 07:16 às 09:29" gravou 08:22 como estimada e a leitura passou a avisar a estimativa).
 - **Não validado:** a etapa do onboarding e o cartão do mapa não foram abertos no navegador depois da alteração; responsivo e leitor de tela não foram conferidos. O horário escolhido no onboarding não entra no rascunho da aba: ao recarregar, a pessoa escolhe de novo. Gates em Node v26.13.0 (Node 24 ausente na estação).
 - **Banco local:** migration 069 aplicada após backup de `profiles` com restauração conferida; permanece a conta de teste `qa-hora-estimada@lyra.test`.
+
+### 195 · Entendimento por significado no Motor da Lyra: régua de avaliação · 🔵 EM ANDAMENTO
+
+- **Origem e data:** solicitação do usuário em 16/11/2026 para o motor da Lyra passar a ser uma inteligência artificial, sem mudar regras e workflows dos outros modelos.
+- **Entregue nesta etapa:** conjunto de avaliação com 100 perguntas rotuladas em `src/lib/lyra/avaliacao/perguntas.json` (60 com verbete esperado, 15 de temas da Lyra sem verbete, 25 fora do assunto) e teste de integridade e de linha de base em `perguntas.test.ts`.
+- **Medições reais (contêiner descartável da imagem de memória, CPU):** palavras-chave atuais acham o verbete certo em 30% das perguntas com verbete e recusam corretamente 95% das demais (acerto total 56%). `potion-multilingual-128M` (já no projeto): 1º lugar correto em 68%, acerto total máximo 70%. `intfloat/multilingual-e5-small` (revisão `614241f6`): 1º lugar correto em 83%, acerto total máximo 77%, 13 ms por pergunta.
+- **Limites da medição:** os cortes foram escolhidos no próprio conjunto, portanto os acertos totais dos modelos são otimistas; as perguntas foram escritas por quem conhece os verbetes. Nenhum modelo foi adotado e nenhum contêiner do projeto foi alterado.
+- **Pendente:** medir o EmbeddingGemma 2, escolher o modelo, definir a recusa de perguntas fora do assunto e ligar a busca ao elo `lyra` da cadeia; ampliar a base curada (hoje 30 verbetes).

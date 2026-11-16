@@ -1,0 +1,506 @@
+{
+  "versao": 1,
+  "descricao": "Perguntas rotuladas para medir se o motor da Lyra encontra o verbete certo e recusa o que não sabe.",
+  "itens": [
+    {
+      "pergunta": "quais são os mapas que você lê",
+      "tipo": "com-verbete",
+      "aceitos": ["tipos-de-mapa"]
+    },
+    {
+      "pergunta": "o mapa védico e o samadhi são a mesma coisa?",
+      "tipo": "com-verbete",
+      "aceitos": ["tipos-de-mapa", "mapa-samadhi"]
+    },
+    {
+      "pergunta": "o que é esse diagrama que junta astrologia, xamanismo e alquimia",
+      "tipo": "com-verbete",
+      "aceitos": ["mapa-samadhi"]
+    },
+    {
+      "pergunta": "me explica os três planos, do terrestre ao celestial",
+      "tipo": "com-verbete",
+      "aceitos": ["mapa-samadhi"]
+    },
+    {
+      "pergunta": "como transformar a leitura em uma decisão prática de 15 minutos",
+      "tipo": "com-verbete",
+      "aceitos": ["mapa-quantum"]
+    },
+    {
+      "pergunta": "como sei se vale a pena executar uma ação agora",
+      "tipo": "com-verbete",
+      "aceitos": ["mapa-quantum"]
+    },
+    {
+      "pergunta": "que filosofia investiga quem somos e o que é real",
+      "tipo": "com-verbete",
+      "aceitos": ["vedanta"]
+    },
+    {
+      "pergunta": "o que é a parte final dos vedas",
+      "tipo": "com-verbete",
+      "aceitos": ["vedanta", "upanishads"]
+    },
+    {
+      "pergunta": "qual é a realidade última por trás de tudo",
+      "tipo": "com-verbete",
+      "aceitos": ["brahman-atman"]
+    },
+    {
+      "pergunta": "o que é o eu essencial de cada pessoa",
+      "tipo": "com-verbete",
+      "aceitos": ["brahman-atman"]
+    },
+    {
+      "pergunta": "quais são as grandes frases que resumem a unidade",
+      "tipo": "com-verbete",
+      "aceitos": ["mahavakyas"]
+    },
+    {
+      "pergunta": "o que significa tu és isso",
+      "tipo": "com-verbete",
+      "aceitos": ["mahavakyas"]
+    },
+    {
+      "pergunta": "quais são os diálogos antigos sobre a natureza do ser",
+      "tipo": "com-verbete",
+      "aceitos": ["upanishads"]
+    },
+    {
+      "pergunta": "quantos textos principais a tradição reconhece no fim dos vedas",
+      "tipo": "com-verbete",
+      "aceitos": ["upanishads"]
+    },
+    {
+      "pergunta": "quais são as camadas do ser humano, da mais densa à mais sutil",
+      "tipo": "com-verbete",
+      "aceitos": ["pancha-kosha"]
+    },
+    {
+      "pergunta": "qual a diferença entre corpo, mente e alma",
+      "tipo": "com-verbete",
+      "aceitos": ["pancha-kosha", "brahman-atman"]
+    },
+    {
+      "pergunta": "o que acontece com a consciência entre a vigília, o sonho e o sono profundo",
+      "tipo": "com-verbete",
+      "aceitos": ["turiya"]
+    },
+    {
+      "pergunta": "existe um quarto estado além de dormir e estar acordado?",
+      "tipo": "com-verbete",
+      "aceitos": ["turiya"]
+    },
+    {
+      "pergunta": "por que confundo o que muda com o que eu sou",
+      "tipo": "com-verbete",
+      "aceitos": ["maya"]
+    },
+    {
+      "pergunta": "o mundo é uma ilusão?",
+      "tipo": "com-verbete",
+      "aceitos": ["maya"]
+    },
+    {
+      "pergunta": "quais são as três qualidades que formam a natureza",
+      "tipo": "com-verbete",
+      "aceitos": ["gunas"]
+    },
+    {
+      "pergunta": "por que alguns dias estou com clareza e em outros com preguiça e inércia",
+      "tipo": "com-verbete",
+      "aceitos": ["gunas"]
+    },
+    {
+      "pergunta": "quais são as metas legítimas da vida",
+      "tipo": "com-verbete",
+      "aceitos": ["purusharthas"]
+    },
+    {
+      "pergunta": "é errado buscar prosperidade e prazer?",
+      "tipo": "com-verbete",
+      "aceitos": ["purusharthas"]
+    },
+    {
+      "pergunta": "que qualidades preciso desenvolver para me conhecer",
+      "tipo": "com-verbete",
+      "aceitos": ["sadhana-chatushtaya"]
+    },
+    {
+      "pergunta": "como preparar a mente para o autoconhecimento",
+      "tipo": "com-verbete",
+      "aceitos": ["sadhana-chatushtaya"]
+    },
+    {
+      "pergunta": "o que é o estado de absorção total na meditação",
+      "tipo": "com-verbete",
+      "aceitos": ["samadhi"]
+    },
+    {
+      "pergunta": "qual é o último passo do yoga de patanjali",
+      "tipo": "com-verbete",
+      "aceitos": ["samadhi"]
+    },
+    {
+      "pergunta": "como agir sem ficar preso ao resultado",
+      "tipo": "com-verbete",
+      "aceitos": ["karma"]
+    },
+    {
+      "pergunta": "tudo que eu faço volta para mim?",
+      "tipo": "com-verbete",
+      "aceitos": ["karma"]
+    },
+    {
+      "pergunta": "quais ciências práticas nasceram dos vedas",
+      "tipo": "com-verbete",
+      "aceitos": ["upavedas"]
+    },
+    {
+      "pergunta": "existe uma arte marcial e uma arquitetura na tradição védica?",
+      "tipo": "com-verbete",
+      "aceitos": ["upavedas", "dhanurveda", "vastu"]
+    },
+    {
+      "pergunta": "como a medicina indiana entende a saúde",
+      "tipo": "com-verbete",
+      "aceitos": ["ayurveda"]
+    },
+    {
+      "pergunta": "o que é fogo digestivo",
+      "tipo": "com-verbete",
+      "aceitos": ["ayurveda"]
+    },
+    {
+      "pergunta": "qual o melhor horário para dormir e para comer",
+      "tipo": "com-verbete",
+      "aceitos": ["ayurveda-relogio"]
+    },
+    {
+      "pergunta": "por que rendo mais de manhã cedo do que à tarde",
+      "tipo": "com-verbete",
+      "aceitos": ["ayurveda-relogio"]
+    },
+    {
+      "pergunta": "que gostos devo incluir na comida para me equilibrar",
+      "tipo": "com-verbete",
+      "aceitos": ["ayurveda-sabores"]
+    },
+    {
+      "pergunta": "comida amarga ou picante faz bem?",
+      "tipo": "com-verbete",
+      "aceitos": ["ayurveda-sabores"]
+    },
+    {
+      "pergunta": "devo mudar minha alimentação no inverno e no verão?",
+      "tipo": "com-verbete",
+      "aceitos": ["ayurveda-estacoes"]
+    },
+    {
+      "pergunta": "como me adaptar ao clima de cada época do ano",
+      "tipo": "com-verbete",
+      "aceitos": ["ayurveda-estacoes"]
+    },
+    {
+      "pergunta": "o que a arte do arco ensina sobre foco e disciplina",
+      "tipo": "com-verbete",
+      "aceitos": ["dhanurveda"]
+    },
+    {
+      "pergunta": "qual era o treinamento dos guerreiros védicos",
+      "tipo": "com-verbete",
+      "aceitos": ["dhanurveda"]
+    },
+    {
+      "pergunta": "música ajuda a curar?",
+      "tipo": "com-verbete",
+      "aceitos": ["gandharvaveda"]
+    },
+    {
+      "pergunta": "o som pode trazer harmonia interior?",
+      "tipo": "com-verbete",
+      "aceitos": ["gandharvaveda"]
+    },
+    {
+      "pergunta": "como organizar minha casa para ter mais harmonia",
+      "tipo": "com-verbete",
+      "aceitos": ["vastu"]
+    },
+    {
+      "pergunta": "para que direção devo colocar a cama e a mesa de trabalho",
+      "tipo": "com-verbete",
+      "aceitos": ["vastu"]
+    },
+    {
+      "pergunta": "quais são as disciplinas de apoio para estudar os vedas",
+      "tipo": "com-verbete",
+      "aceitos": ["vedangas"]
+    },
+    {
+      "pergunta": "quais conhecimentos auxiliares existiam, como gramática e métrica",
+      "tipo": "com-verbete",
+      "aceitos": ["vedangas"]
+    },
+    {
+      "pergunta": "por que a pronúncia do mantra importa",
+      "tipo": "com-verbete",
+      "aceitos": ["shiksha"]
+    },
+    {
+      "pergunta": "como entoar corretamente um canto sagrado",
+      "tipo": "com-verbete",
+      "aceitos": ["shiksha"]
+    },
+    {
+      "pergunta": "o que o ritmo das sílabas faz com a respiração e a atenção",
+      "tipo": "com-verbete",
+      "aceitos": ["chandas"]
+    },
+    {
+      "pergunta": "como são medidos os versos dos hinos",
+      "tipo": "com-verbete",
+      "aceitos": ["chandas"]
+    },
+    {
+      "pergunta": "como se formam as palavras em sânscrito",
+      "tipo": "com-verbete",
+      "aceitos": ["vyakarana"]
+    },
+    {
+      "pergunta": "quem organizou as regras da língua sânscrita",
+      "tipo": "com-verbete",
+      "aceitos": ["vyakarana"]
+    },
+    {
+      "pergunta": "de onde vem o significado das palavras antigas",
+      "tipo": "com-verbete",
+      "aceitos": ["nirukta"]
+    },
+    {
+      "pergunta": "qual a origem dos termos usados nos hinos",
+      "tipo": "com-verbete",
+      "aceitos": ["nirukta"]
+    },
+    {
+      "pergunta": "qual o sentido dos rituais",
+      "tipo": "com-verbete",
+      "aceitos": ["kalpa"]
+    },
+    {
+      "pergunta": "existem manuais de conduta para a vida em casa e na comunidade?",
+      "tipo": "com-verbete",
+      "aceitos": ["kalpa"]
+    },
+    {
+      "pergunta": "como surgiu a astrologia védica",
+      "tipo": "com-verbete",
+      "aceitos": ["jyotisha"]
+    },
+    {
+      "pergunta": "por que era preciso marcar o tempo certo das cerimônias",
+      "tipo": "com-verbete",
+      "aceitos": ["jyotisha", "kalpa"]
+    },
+    {
+      "pergunta": "como respirar para acalmar a ansiedade",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "que posturas de yoga ajudam nas costas",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que são os chakras e para que servem",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que significa mercúrio retrógrado",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como fazer um mapa de sinastria de casal",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "quais cristais combinam comigo",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que é reencarnação",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como meditar se nunca meditei",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "qual mantra devo recitar para prosperidade",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que é kundalini",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como interpretar meus sonhos",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que é jejum ekadashi",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "quais são os deuses hindus principais",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que é tantra",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como fazer uma puja em casa",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "qual o preço do bitcoin hoje",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "me ajuda a programar em python",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "quem ganhou o jogo ontem",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "qual a capital da austrália",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como declarar imposto de renda",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "receita de bolo de cenoura",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "qual o melhor celular para comprar",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como trocar um pneu furado",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "quanto é 17 vezes 23",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "me conta uma piada",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "qual a previsão do tempo para amanhã",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como tirar passaporte",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "quem foi napoleão",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como emagrecer cinco quilos em uma semana",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "qual remédio tomar para dor de cabeça",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como investir em ações",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "traduza bom dia para inglês",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "qual o horário do ônibus",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como formatar um computador",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "quem é o presidente do brasil",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como funciona um motor a combustão",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "escreva um e-mail pedindo aumento",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "qual a distância da terra à lua",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como plantar tomate",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "qual filme assistir hoje",
+      "tipo": "fora-do-assunto",
+      "aceitos": []
+    }
+  ]
+}
