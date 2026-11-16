@@ -19,6 +19,8 @@
 
 ## Tópico 1 · Andamento Geral
 
+**DRP local do Motor da Lyra · 16/11/2026 · 🟢 Entrega documental publicada.** O [plano de recuperação](./docs/motor_lyra/drp_motor_lyra.md) inventaria os módulos de cálculo, dados de referência, leitores, contratos e procedimentos de recuperação seletiva. Escopo restrito ao motor local. Evidências: 419 testes unitários aprovados em 17 arquivos e 79 arquivos restaurados em diretório temporário, todos com hashes conferidos. Commit `52d4c3e419065c4adb2b672ada3d91fe097a89e2` publicado na `main`. Reconstrução offline a partir de máquina sem dependências instaladas não foi medida.
+
 **Execução independente de 13/11/2026 · 11h20 (America/Sao_Paulo) · INOV-LYRA-01–05**
 
 - **Origem:** pedidos explícitos do usuário nesta conversa para implementar integralmente o **TOP 5 Inovações para o Motor Lyra**, em atividade independente da 142; preservar funcionamento **sem qualquer LLM conectado**, corrigir falhas reais, testar antes de chamar pronto, publicar na **main sem branches/worktrees** e registrar SHA, data/hora e motivo. Depois o usuário acrescentou a solicitação de registrar **10 tarefas futuras** de UI/UX, Administradores, Usuários e Teatro dos Futuros Revisáveis. Esses dez itens não foram autorizados para implementação.
