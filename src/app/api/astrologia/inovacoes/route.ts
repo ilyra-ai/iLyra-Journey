@@ -56,10 +56,7 @@ function periodo(parametros: URLSearchParams, tipo: string) {
   const bruto = parametros.get('dias');
   const dias = bruto === null ? padrao : Number(bruto);
   if (!Number.isInteger(dias) || dias < 1 || dias > limite)
-    throw new HttpError(
-      'Período deve conter de 1 a ' + limite + ' dias.',
-      400
-    );
+    throw new HttpError('Período deve conter de 1 a ' + limite + ' dias.', 400);
   return { inicio, fim: new Date(inicio.getTime() + dias * DIA_MS) };
 }
 

@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { calcularMapaNatal } from '../mapa-natal';
-import {
-  calcularMapaDivisional,
-  signoDivisional,
-} from './divisionais';
+import { calcularMapaDivisional, signoDivisional } from './divisionais';
 import { calcularTransitosNatais } from './transitos';
 import { calcularRetornos } from './retornos';
 import {
@@ -25,12 +22,8 @@ const nascimento = {
   longitude: -46.6361,
   fuso: 'America/Sao_Paulo',
 };
-const mapa = calcularMapaNatal(
-  nascimento,
-  new Date('2026-11-13T12:00:00Z')
-);
-const distancia = (a: number, b: number) =>
-  Math.abs(diferencaAngular(a - b));
+const mapa = calcularMapaNatal(nascimento, new Date('2026-11-13T12:00:00Z'));
+const distancia = (a: number, b: number) => Math.abs(diferencaAngular(a - b));
 
 describe('Inovações matemáticas da Lyra sem provedores de IA', () => {
   it('encontra raízes circulares e três passagens com reversão', () => {
@@ -39,8 +32,7 @@ describe('Inovações matemáticas da Lyra sem provedores de IA', () => {
     const curva = (data: Date) =>
       30 *
       Math.sin(
-        ((data.getTime() - inicio.getTime()) / 86_400_000) *
-          (Math.PI / 2)
+        ((data.getTime() - inicio.getTime()) / 86_400_000) * (Math.PI / 2)
       );
     const passagens = procurarPassagens(
       curva,
@@ -60,10 +52,7 @@ describe('Inovações matemáticas da Lyra sem provedores de IA', () => {
     expect(signoDivisional(60, 9).nome).toBe('Libra');
     for (let signo = 0; signo < 12; signo += 1) {
       for (let parte = 0; parte < 9; parte += 1) {
-        const valor = signoDivisional(
-          signo * 30 + ((parte + 0.5) * 30) / 9,
-          9
-        );
+        const valor = signoDivisional(signo * 30 + ((parte + 0.5) * 30) / 9, 9);
         expect(valor.porcao).toBe(parte + 1);
         expect(valor.indice).toBeGreaterThanOrEqual(0);
         expect(valor.indice).toBeLessThan(12);
@@ -130,8 +119,7 @@ describe('Inovações matemáticas da Lyra sem provedores de IA', () => {
     expect(lunar.retornos.length).toBeGreaterThan(0);
     expect(
       lunar.retornos.every(
-        (e) =>
-          distancia(e.longitudeNatal, e.longitudeDoRetorno) < 0.005
+        (e) => distancia(e.longitudeNatal, e.longitudeDoRetorno) < 0.005
       )
     ).toBe(true);
   });
@@ -199,8 +187,8 @@ describe('Inovações matemáticas da Lyra sem provedores de IA', () => {
         (e) => e.tipo === 'solar' && e.utc.slice(0, 10) === '2026-08-12'
       )
     ).toBe(true);
-    expect(
-      resultado.eventos.every((e) => typeof e.visivel === 'boolean')
-    ).toBe(true);
+    expect(resultado.eventos.every((e) => typeof e.visivel === 'boolean')).toBe(
+      true
+    );
   });
 });

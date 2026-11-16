@@ -30,7 +30,9 @@ export function conferirInstantes(inicio: Date, fim: Date, maxDias: number) {
     fim.getTime() <= inicio.getTime() ||
     fim.getTime() - inicio.getTime() > maxDias * DIA_MS
   ) {
-    throw new RangeError('Informe um intervalo positivo de no máximo ' + maxDias + ' dias.');
+    throw new RangeError(
+      'Informe um intervalo positivo de no máximo ' + maxDias + ' dias.'
+    );
   }
 }
 
@@ -79,7 +81,10 @@ export function procurarPassagens(
       for (let it = 0; it < 45 && b - a > toleranciaMs; it += 1) {
         const meio = Math.floor((a + b) / 2);
         const valor = erro(meio);
-        if ((sinalInicial <= 0 && valor >= 0) || (sinalInicial >= 0 && valor <= 0)) {
+        if (
+          (sinalInicial <= 0 && valor >= 0) ||
+          (sinalInicial >= 0 && valor <= 0)
+        ) {
           b = meio;
         } else {
           a = meio;

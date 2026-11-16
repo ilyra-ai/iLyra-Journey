@@ -229,7 +229,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
 | Branch de trabalho                      | `main` (única permitida) |
-| Última atualização                      | 2026-11-13 · 11h20 BRT  |
+| Última atualização                      | 2026-11-13 · 11h20 BRT   |
 
 > Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os 17 estados 🟡 preservam entregas publicadas com homologação incompleta sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
@@ -474,14 +474,14 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ##### L.2 · Contrato exato dos seis filtros
 
-| Nº | Painel | Filtro | Opções e comportamento obrigatório | Resultado esperado |
-| --- | --- | --- | --- | --- |
-| **1** | Funcionalidades existentes | **Perfil / grupo** | Seletor com primeira opção **Radar PREMIUM · Inovações 2026**, segunda opção **Motor da Lyra**, terceira opção **Inovações para o Motor Lyra**, seguidas de **Usuários**, **Administrador** e **Desativadas**; uma seleção ativa por vez; Radar mostra propostas pesquisadas com cinco tópicos locais, mantendo os demais grupos reservados a funcionalidades existentes; ao mudar, manter layout e mostrar somente itens do grupo solicitado. | Lista, descrições e contagem do primeiro painel se atualizam sem alterar o segundo; propostas não aparecem como funcionalidades implementadas. |
-| **2** | Funcionalidades existentes | **Pesquisa de funcionalidade** | Campo de texto com busca sem diferenciar maiúsculas, minúsculas ou acentos, por nome, categoria e descrição. Oferecer limpar pesquisa. | Resultado cumulativo com o filtro 1, contagem atualizada e estado vazio compreensível. |
-| **3** | Roadmap `claude-gestao.md` | **Situação** | Todas; **A iniciar**, **Em execução**, **Pausada**, **Parcialmente implementada**, **Validação/Homologação pendente** e **Bloqueada** quando ocorrer. Não confundir 🟡 com 🟢, nem tarefas pausadas com a iniciar. | Somente tarefas com situação canônica correspondente, mantendo exceções explicitadas. |
-| **4** | Roadmap `claude-gestao.md` | **Categoria relacionada** | Todas ou categoria real derivada dos itens, como **UI/UX**, **Mapas**, **Descoberta gratuita**, **Autenticação**, **Assinaturas**, **Pagamentos**, **IA**, **Relacionamentos**, **Analytics**, **Marca**, **Privacidade**, **Compartilhamento**, **Qualidade** e **Infraestrutura**. | Redução dos resultados por assunto, com categorias provenientes das tarefas, não de um catálogo ornamental. |
-| **5** | Roadmap `claude-gestao.md` | **Público impactado** | Todos; **Visitantes**, **Usuários**, **Administrador** e **Plataforma**. Uma tarefa pode abranger mais de um público. | Correspondência por inclusão do público e combinação com os outros filtros. |
-| **6** | Roadmap `claude-gestao.md` | **Pesquisa de tarefa** | Texto ou ID, aceitando número da tarefa, título, categoria e descrição; ignorar diferenças de acento/caixa; ação de limpar. | Pesquisa integrada com situação, categoria e público, inclusive em resultados reduzidos. |
+| Nº    | Painel                     | Filtro                         | Opções e comportamento obrigatório                                                                                                                                                                                                                                                                                                                                                                                                             | Resultado esperado                                                                                                                             |
+| ----- | -------------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1** | Funcionalidades existentes | **Perfil / grupo**             | Seletor com primeira opção **Radar PREMIUM · Inovações 2026**, segunda opção **Motor da Lyra**, terceira opção **Inovações para o Motor Lyra**, seguidas de **Usuários**, **Administrador** e **Desativadas**; uma seleção ativa por vez; Radar mostra propostas pesquisadas com cinco tópicos locais, mantendo os demais grupos reservados a funcionalidades existentes; ao mudar, manter layout e mostrar somente itens do grupo solicitado. | Lista, descrições e contagem do primeiro painel se atualizam sem alterar o segundo; propostas não aparecem como funcionalidades implementadas. |
+| **2** | Funcionalidades existentes | **Pesquisa de funcionalidade** | Campo de texto com busca sem diferenciar maiúsculas, minúsculas ou acentos, por nome, categoria e descrição. Oferecer limpar pesquisa.                                                                                                                                                                                                                                                                                                         | Resultado cumulativo com o filtro 1, contagem atualizada e estado vazio compreensível.                                                         |
+| **3** | Roadmap `claude-gestao.md` | **Situação**                   | Todas; **A iniciar**, **Em execução**, **Pausada**, **Parcialmente implementada**, **Validação/Homologação pendente** e **Bloqueada** quando ocorrer. Não confundir 🟡 com 🟢, nem tarefas pausadas com a iniciar.                                                                                                                                                                                                                             | Somente tarefas com situação canônica correspondente, mantendo exceções explicitadas.                                                          |
+| **4** | Roadmap `claude-gestao.md` | **Categoria relacionada**      | Todas ou categoria real derivada dos itens, como **UI/UX**, **Mapas**, **Descoberta gratuita**, **Autenticação**, **Assinaturas**, **Pagamentos**, **IA**, **Relacionamentos**, **Analytics**, **Marca**, **Privacidade**, **Compartilhamento**, **Qualidade** e **Infraestrutura**.                                                                                                                                                           | Redução dos resultados por assunto, com categorias provenientes das tarefas, não de um catálogo ornamental.                                    |
+| **5** | Roadmap `claude-gestao.md` | **Público impactado**          | Todos; **Visitantes**, **Usuários**, **Administrador** e **Plataforma**. Uma tarefa pode abranger mais de um público.                                                                                                                                                                                                                                                                                                                          | Correspondência por inclusão do público e combinação com os outros filtros.                                                                    |
+| **6** | Roadmap `claude-gestao.md` | **Pesquisa de tarefa**         | Texto ou ID, aceitando número da tarefa, título, categoria e descrição; ignorar diferenças de acento/caixa; ação de limpar.                                                                                                                                                                                                                                                                                                                    | Pesquisa integrada com situação, categoria e público, inclusive em resultados reduzidos.                                                       |
 
 **Regra de interação:** os filtros 1–2 combinam-se apenas entre si, dentro do Painel 1; os filtros 3–6 combinam-se simultaneamente apenas entre si, dentro do Painel 2. Alterar um painel não reinicializa nem modifica o outro. Cada painel possui atualização imediata, contagem do subconjunto, estado vazio e restauração/limpeza própria dos parâmetros. A troca de opção não deve perder nem falsificar dados. Os rótulos e descrições precisam ser compreensíveis sem depender do nome técnico da variável.
 
@@ -527,7 +527,6 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 **Publicação documental desta ampliação:** commit `738b5aefdddb6b33211746438d1d19441a555851` confirmado na `main` em 13-11-2026; somente este gestor foi atualizado, sem alteração funcional. **Situação desta ampliação em 13-11-2026:** requisitos documentados para futura execução mediante instrução expressa. **Não iniciar agora** componentes, layout, testes de navegador, modificações funcionais, migrations, deploy ou atualizações de outras tarefas. Preservar o estado pausado da 142 e os trabalhos em andamento 155/156. Após o registro documental e publicação na `main`, **aguardar instruções do usuário**.
 
-
 #### M · Investigação forense premium 2026 e radar de inovação: 5 grupos, 3 propostas por grupo
 
 > [!IMPORTANT]
@@ -554,6 +553,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 ##### M.2 · Método forense e investigação em profundidade (13-11-2026)
 
 **Camada 1 — Base privada realmente observada:** branch main de ilyra-ai/Lyra-MetaCare, incluindo:
+
 - src/components/dashboard/CelestialDashboard.tsx, src/components/profile/MapaVedicoCard.tsx, src/lib/astrology/tropical.ts, src/lib/astrology/persistencia-natal.ts, src/lib/lyra/leitura-do-mapa.ts, src/lib/lyra/responder.ts, src/lib/ai/agent-engine.ts, src/lib/ai/cadeia-de-modelos.ts, src/components/chat/ChatAssistantContent.tsx, src/components/chat/PainelDaConversa.tsx, src/components/admin/SiteExperienceBuilder.tsx e os módulos de navegação/planos/privacidade.
 - docs/tarefas/tarefa-generative-ui-lyra-metacare.md e docs/tarefas/tarefas-evolucao-chat-lyra-174-181.md: a Generative UI estruturada, paridade dos dois chats, filtros e proveniência JÁ ESTÃO PLANEJADAS como partes da **147**. As sugestões UI-01 e IA-01 complementam esse escopo e **não criam outro chat/uma tarefa repetida**.
 - Tarefas 142/147/155–173, especialmente 156 (motor ocidental), 157–159 (entrada/descoberta), 160–163 (assinatura, Stripe e custos), 166 (Conexões da Alma), 170 (funil), 171 (QA), 173 (identidade). O código de mapas e a experiência do painel são base reutilizável; o estado futuro da tarefa não é implementação homologada.
@@ -567,17 +567,20 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 ##### M.3 · TOP 3 ELEMENTOS UI/UX PREMIUM (referências atuais de 2026)
 
 **UI-01 · Generative UI celestial tipada com A2UI 1.0 (11-11-2026) · RANK #1**
+
 - **O que é/benefício:** cada resposta da Lyra deve poder trazer um **artefato interativo nativo** quando isso melhorar a compreensão: comparador de mapas, acordeão de interpretações, linha temporal, tabela verificável, cartões, seleção de dimensões e perguntas de aprofundamento. Não limitar a resposta a parágrafos ou Markdown estático.
 - **Fronteira atual:** chat já tem Markdown, painéis v1, cards, Recharts e a tarefa 147 prevê Generative UI. **Não reimplementar do zero**: investigar se A2UI v1.0 estável oferece vantagem real sobre o contrato tipado local já planejado, incluindo custo, segurança, tamanho do bundle, licenças e compatibilidade de renderer React/Next.
 - **Implementação futura:** estabelecer catálogo local estrito de componentes do design celestial; modelo devolve **dados/intenção serializados**, validados por schema/versionamento, nunca JSX/HTML/CSS/JS executável; transação da resposta inclui versões e estados de streaming, replay no histórico e fallback fiel a texto; ferramentas de consulta apenas no servidor, com acesso do titular e política do plano; renderização responsiva por componentes existentes; ação do usuário gera evento validado.
 - **QA/risco:** payload adversarial, tamanho/profundidade, desconhecido, stream incompleto, replay, acessibilidade, perda de rede, backpressure, medição de tokens e tempo P95; sem falsa UI funcional. Fonte: https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/ ; https://developers.googleblog.com/fast-reliable-a2ui/ ; https://developers.googleblog.com/en/build-generative-ui-apps-with-a2ui-copilotkit-agents/ . **Relacionamento:** 147.CHAT.03, 113, 142.
 
 **UI-02 · Navegação espacial contextual com transições de continuidade · RANK #2**
+
 - **O que é/benefício:** de “Seu signo” → planeta → aspecto → leitura → pergunta à Lyra, sem saltos que percam contexto; cartões celestiais e mapas transitam visualmente entre painel, detalhe e chat. Uma única ação principal por etapa, sem janelas competindo e sem reduzir o chat.
 - **Implementação futura:** reutilizar AppShell, CelestialDashboard, Tabs, Dialog, SidebarNavigation e componentes de mapa; usar View Transitions API com detecção de suporte e fallback funcional; sincronizar estados de rota e foco, histórico/deep-link, scroll e filtro selecionado; abstrair tokens de movimento no tema aprovado em 147/173.
 - **QA/risco:** Chrome/Safari/Firefox reais, navegação via teclado/screen-reader, foco devolvido, browser Back, zoom 200%, prefers-reduced-motion, bateria/CPU, memória e em 320px; a metáfora espacial não pode esconder destinos. Fontes: https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API ; https://developer.mozilla.org/en-US/docs/Web/CSS/Guides/Media_queries/Using_for_accessibility ; https://www.w3.org/TR/WCAG22/ . **Relacionamento:** 142, 146, 147, 152, 153.
 
 **UI-03 · Material editorial expressivo com hierarquia emocional e microinterações úteis · RANK #3**
+
 - **O que é/benefício:** visual celestial premium com destaque funcional real: componentes expressivos para ações principais, estados confiáveis, profundidade moderada, leitura editorial sofisticada, cores acessíveis e microinterações que indiquem mudança de estado, nunca decoração autônoma.
 - **Implementação futura:** adaptar **princípios** do Material 3 Expressive, não copiar Android; usar o sistema próprio da iLyra, tokens centralizados, componente de botão prioritário, tabs, empty states, skeleton ligado a carregamento real, radial quando trouxer utilidade; Liquid Glass **somente como referência de contenção** de transparência nos controles, sem vidro em todas as superfícies. Aplicar motion reduzido e sem animação falsa de progresso.
 - **Pesquisa:** Google publicou análise de 46 estudos com mais de 18 mil participantes e identificação mais rápida de controles nos desenhos avaliados; **não transferir esses ganhos quantitativos à Lyra sem teste próprio**. Apple orienta moderação no Liquid Glass. Fontes: https://design.google/library/expressive-material-design-google-research ; https://developer.apple.com/design/human-interface-guidelines/materials ; https://www.nngroup.com/articles/state-of-ux-2026/ . **Relacionamento:** 142, 147, 173.
@@ -585,18 +588,21 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 ##### M.4 · TOP 3 FUNCIONALIDADES PREMIUM PARA O MODELO/MOTOR DE IA
 
 **IA-01 · Camada de proveniência, incerteza e justificação do Motor Lyra · RANK #1**
+
 - **Benefício:** a pessoa pergunta “por que a Lyra me disse isso?” e recebe o **encadeamento auditável em linguagem simples**: dado natal informado → posição astronômica e versão de cálculo → tradição/regra usada → conclusão interpretativa → grau de completude e limitações. Não revelar raciocínio interno oculto de um LLM nem confundir confiança textual com probabilidade científica de previsão.
 - **Estado:** já existem motores determinísticos, fontes de conhecimento, tabelas, histórico, respostas Markdown e previsão de proveniência em 147/180. Falta uma cadeia **integrada, tipada, verificável e interoperável entre quatro mapas e IA**; implementar sem duplicar persistência.
 - **Implementação futura:** contrato provenance/v1 por bloco com método (sideral, tropical, Samādhi, Quantum), versão, UTC/fuso, precisão do nascimento, IDs do cálculo, regra/conteúdo curado, modelo utilizado se houver, ausência/limites, consentimento e hash do artefato; backend produz os fatos e a IA apenas interpreta campos permitidos; conferir afirmações astrológicas contra saída determinística e rejeitar planetas, casas ou datas fabricadas; exibir “Como foi calculado?” + “O que é interpretação?”.
 - **QA/risco:** precisão em cúspide, DST, cálculo sem hora, diferença entre mapas, respostas inventadas por LLM, alteração de perfil, exportação e reabertura, metadados sem PII em traces; teste contra oráculos independentes e rubricas de avaliação. Fontes: https://github.com/cosinekitty/astronomy/blob/master/README.md ; https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence ; https://developers.openai.com/api/docs/guides/agent-evals . **Relacionamento:** 156, 147, 171.
 
 **IA-02 · Lyra Conversa Viva: voz bidirecional realmente contextual aos mapas · RANK #2**
+
 - **Benefício:** a pessoa fala “Lyra, mostre meu período atual e explique meu mapa de um jeito simples”; escuta a resposta e vê **o cartão real mudar** em sincronia. Não é só TTS da resposta nem ditado de um campo: é sessão por voz com intenção, mapa selecionado e ação confirmada.
 - **Estado:** leitura em voz alta, ditado e anexos já existem; o modo **voz-viva de duas vias com ação na UI** precisa de confirmação por código/QA. Não rebatizar recursos já feitos como novas entregas.
 - **Implementação futura:** botão acessível para iniciar/parar; permissão explícita de microfone; estratégia priorizando reconhecimento de fala local quando compatível e alternativas reais do provedor quando contratadas; para provedor em tempo real, WebRTC ou WebSocket conforme SDK oficial e sessão efêmera emitida por backend, segredo sempre no servidor; transcrições e atualizações de UI tipadas; cancelamento/interrupção; sem salvar áudio por padrão; controles por quota, rate limit, privacidade e consentimento.
 - **QA/risco:** Safari iOS, Android, desktop, microfone negado, fala interrompida, perda de rede, ruído, escolha errada de mapa, custo de contexto de áudio, usuário menor e acessibilidade sem áudio. Google Gemini Live foi observado em **Preview**; não tratá-lo como disponibilidade estável. Fontes: https://developers.openai.com/api/docs/guides/voice-webrtc ; https://developers.openai.com/api/docs/guides/realtime-conversations ; https://ai.google.dev/gemini-api/docs/live-api ; https://ai.google.dev/gemini-api/docs/live-api/best-practices . **Relacionamento:** 147, 163 e política 155.
 
 **IA-03 · Agente de descoberta assistida com ações aprovadas pelo titular · RANK #3**
+
 - **Benefício:** em vez de apenas responder, a Lyra propõe uma **sequência executável** para a pergunta: abrir o mapa correto, selecionar um período, comparar interpretações, mostrar evidência, salvar uma leitura autorizada ou exportar relatório, sempre com explicação e confirmação antes de ação persistente.
 - **Implementação futura:** registry de ferramentas **server-side** com schemas fechados, sessão/titular/entitlements revalidados em cada chamada, planejamento com poucas ações e sem loop infinito, política read-only padrão e confirmação inequívoca para escrita/exclusão/compartilhamento; idempotência transacional, trilha de execução e recuperação de falhas. Reutilizar APIs existentes, não criar CRUD paralelo.
 - **QA/risco:** prompt injection em histórico/anexo, ação não solicitada, gasto excessivo de tokens, falha de provedor, recusa de confirmação, reinício no meio da operação, acesso de outro titular, conta bloqueada. Modelos locais sem tool calling robusto mantêm fallback para consulta segura, não simulam ação bem-sucedida. Fontes: https://openai.github.io/openai-agents-python/ ; https://github.com/openai/openai-agents-python/blob/main/docs/human_in_the_loop.md ; https://genai.owasp.org/2026/09/01/owasp-genai-security-project-unveils-2026-top-10-for-llm-applications-new-agent-control-standard-and-sponsors-as-community-tops-30000-members/ . **Relacionamento:** 147, 154, 163 e 171.
@@ -604,18 +610,21 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 ##### M.5 · TOP 3 FUNCIONALIDADES PREMIUM PARA O ADMINISTRADOR
 
 **ADM-01 · Centro de qualidade epistêmica dos mapas e da Lyra · RANK #1**
+
 - **Benefício:** administração de **qualidade verificável**, não só configuração de modelo: painel mostra consistência astronômica, taxa de respostas sem proveniência, erros de cálculo, mudanças por versão, falhas de provider, regressões de interpretação e limitações reais.
 - **Estado:** painel admin, configuração multi-modelo, treinamento e saúde dos dados já implementados; não há confirmação de um **laboratório unificado de avaliação de respostas por mapa, versão e provider**.
 - **Implementação futura:** catálogo de cenários de referência (datas-limite, fusos, cases com hora ausente, perguntas ambíguas, condições de plano); testes determinísticos independentes de LLM e rubricas versionadas de fidelidade, clareza, sensibilidade, privacidade, idioma; traces de operações/custos sem DOB/chat sensíveis por padrão; comparação lado a lado de versões em ambiente isolado, publicação somente após gates objetivos, painel por grupos e severity. Não medir "verdade astrológica preditiva" como se fosse índice científico.
 - **QA/risco:** dataset com dados sintéticos explicitamente etiquetados **somente para teste**, separado de métricas de produção; reprodutibilidade de execuções, não vazamento, avaliação cega quando apropriada, bloqueio de divulgação indevida. Fontes: https://developers.openai.com/api/docs/guides/agent-evals ; https://openai.github.io/openai-agents-python/tracing/ ; https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/ ; https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence . **Relacionamento:** 99, 103, 141, 154, 156, 163.
 
 **ADM-02 · Estúdio de publicação de experiências com rollback controlado e prova de impacto · RANK #2**
+
 - **Benefício:** antes de liberar uma nova experiência, o administrador inspeciona **permissões, aparência, conteúdos, cotas, dependências e disponibilidade** em contexto controlado e aprova publicação com registro. Um erro pode ser revertido sem apagar dados dos usuários.
 - **Estado:** SiteExperienceBuilder extenso, versões de configuração, controles de grupos e matrizes de planos já existem; a inovação é **orquestrar coerentemente pré-visualização real, autorização, rollout seguro e reversão** das mudanças compatíveis, sem duplicar o construtor.
 - **Implementação futura:** publicação versionada e diff, aprovação com identidade do admin, validação no backend, sincronização de dependências, feature flags com escopo real e padrão fail-closed, porcentagem gradual apenas quando juridicamente/tecnicamente adequada e sem usar nascimento/atributos sensíveis para segmentação; “Ver impacto” por vínculos reais, transação/idempotência e retorno à versão anterior; ocultar recursos desativados e proteger transições de planos.
 - **QA/risco:** dois administradores simultâneos, conflitos de versão, deploy abortado, migração incompatível com rollback, item invisível no menu porém acessível por URL, falso sucesso de publicação, isolamento entre ambiente teste/live. Fontes: https://openfeature.dev/docs/reference/concepts/evaluation-api/ ; https://openfeature.dev/docs/reference/concepts/provider/ ; https://openfeature.dev/docs/reference/concepts/evaluation-context/ ; https://genai.owasp.org/2026/09/01/owasp-genai-security-project-unveils-2026-top-10-for-llm-applications-new-agent-control-standard-and-sponsors-as-community-tops-30000-members/ . **Relacionamento:** 142, 147, 160–163, 170, 172.
 
 **ADM-03 · Cockpit de jornada e valor consentido da primeira descoberta à assinatura · RANK #3**
+
 - **Benefício:** explicar onde a pessoa desiste da descoberta, qual leitura desperta interesse, se o modal informa claramente a oferta, que preços foram efetivamente convertidos e quanto custou operar, sem coletar o nascimento, perguntas íntimas ou perfis emocionais para marketing.
 - **Estado:** dashboard histórico e relatórios existem; o funil/retensão **já é requisito da tarefa 170** e o custo de IA é da 163. Tratar ADM-03 como **enriquecimento premium desse escopo**, não nova tarefa ou funcionalidade vendida como já concluída.
 - **Implementação futura:** definir contratos de eventos estritamente agregáveis (impressão da landing, início da descoberta, entrega da leitura, premium clicado, modal, checkout confirmado por webhook, retorno D7/D30), origem/horário/versão e deduplicação; consentimento e retenção; séries com denominadores e limites claros; cortar coortes insuficientes para não reidentificar; cruzar a contribuição escolhida com estado financeiro real sem inferir vida privada; segmentação A/B somente com aprovação específica.
@@ -624,18 +633,21 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 ##### M.6 · TOP 3 FUNCIONALIDADES/FACILIDADES PREMIUM PARA USUÁRIOS
 
 **USR-01 · Astrolábio Vivo: explorar o mapa com toque e interpretação contextual · RANK #1**
+
 - **Benefício:** tocar no Sol, Lua, ascendente, aspecto ou período e ver a posição calculada, explicação amigável, ligação às outras partes do mesmo mapa e pergunta direta à Lyra. Oferecer modo “essencial” e “aprofundar”, não despejar tabelas técnicas.
 - **Estado:** CelestialDashboard e MapaVedicoCard mostram mapas, abas e leituras; faltam provas de um **explorador de posições realmente manipulável e conectado ao contexto do chat**. Não criar nova cartografia inventada.
 - **Implementação futura:** reutilizar a fonte canônica das APIs de mapa, radial/SVG acessível com descrições textuais, camada de coordenadas/posições, seleção por ID do corpo/período, painel lateral que abre apenas quando solicitado, ação “Perguntar à Lyra sobre isto” levando ID tipado e contexto ao chat. Quando nascimento é incompleto, renderizar incerteza calculada, não escolher hora arbitrária; cálculo tropical depende da 156.
 - **QA/risco:** navegação somente teclado, tela 320px, sem canvas inacessível, data limítrofe, zoom, mesmos dados após reload, renderização grande, latência da API. Fontes: https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md ; https://www.w3.org/TR/WCAG22/ ; https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API . **Relacionamento:** 145, 147, 153, 156.
 
 **USR-02 · Pergunte ao ponto do mapa: conversa ancorada, sem copiar dados técnicos · RANK #2**
+
 - **Benefício:** a pessoa seleciona “meu período atual”, “esta posição”, “por que este mapa diverge do outro?” e chega à Lyra com contexto autorizado já associado; a resposta tem **fonte interna da interpretação** e ações “Aprofundar”, “Voltar ao mapa”, “Ouvir”.
 - **Estado:** chat personalizado, mapas e painel compacto existentes; o diferencial é a **navegação bidirecional tipada entre ponto selecionado e resposta rastreável**, não simplesmente mais perguntas sugeridas.
 - **Implementação futura:** contrato de deep-link/ação com mapId, versão calculada, seleção do corpo/tema, timestamp, nível de precisão, IDs não adivinháveis e sem nascimento em URL; revalidação server-side; interface generativa da 147; atualização do histórico autorizada por plano; CTA de acesso quando recurso premium indisponível, sem abrir dados privados de outros titulares.
 - **QA/risco:** deep-link expirado, navegador Back, duas abas, mudança de perfil, mapId adulterado, fallback para motor determinístico e modelos que não usam ferramentas; voz/acessibilidade. Fontes: https://www.thepattern.com/app-features ; https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/ ; https://www.nngroup.com/articles/state-of-ux-2026/ . **Relacionamento:** 147, 156, 159.
 
 **USR-03 · Trilha de Autodescoberta Progressiva, acessível antes de assinar · RANK #3**
+
 - **Benefício:** visitante vê **uma descoberta verdadeira em menos etapas**, depois escolhe por curiosidade entre “Quem sou eu?”, “Meu céu”, “Entender meus períodos” e “Explorar com a Lyra”; o próximo aprofundamento aparece apenas quando necessário, não como um formulário extenso.
 - **Estado:** navegação/landing já existem; os novos fluxos sem cadastro e leitura pública estão **planejados nas tarefas 157–159**, portanto USR-03 é refinamento estruturado do mesmo programa, não tarefa duplicada.
 - **Implementação futura:** primeiro oferecer nome completo e data natal temporários conforme decisão atual da 157 e política etária 155; somente mapa ocidental calculável; resultado com símbolo, 1 explicação fundamentada e CTA específico; opções de aprofundar progressivamente; premium abre oferta aprovada da 161, respeita mesmo entitlement dos dois valores; continuidade e persistência só após consentimento da 159.
@@ -646,18 +658,21 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 **REGRA:** não é tecnicamente honesto certificar que algo “nunca existiu em nenhum site/app/plataforma”. A pesquisa detectou produtos próximos. Cada proposta abaixo é **concepção autoral específica**, a ser investigada novamente antes de publicar promessa de exclusividade, com **inovação definida pelo conjunto exato de interação, privacidade e metodologia**; não usar a palavra “primeira do mundo” sem prova independente. Ideias não dependem de diagnósticos, causalidade astral ou previsões deterministas.
 
 **INV-01 · Atlas das Divergências Vivas · RANK #1 · inovação composicional**
+
 - **Conceito:** a mesma pessoa explora uma **constelação de divergências explícitas entre os quatro sistemas** (Védico, Ocidental, Samādhi e Quantum). Em vez de unir metodologias distintas em uma “verdade” inventada, o app mostra **onde coincidem, onde não são comparáveis, onde discordam e onde faltam dados**. Cada ligação abre a origem, a regra, a precisão e a explicação amigável. Uma leitura alternativa pode ser solicitada sem alterar o cálculo original.
 - **Diferencial específico:** cruzamento **metodológico tipado** (sideral/tropical/simbólico) com “grafo de concordância ou incomparabilidade”, rastreabilidade ao cálculo, explanação de conflito e controle explícito de interpretações alternativas. Não basta colocar quatro abas lado a lado nem simular debates entre agentes. Supastro já relata discordância entre agentes astrológicos; o diferencial pretendido é a **semântica calculável de quatro métodos distintos**, não “ser o primeiro a mostrar discordâncias”.
 - **Como implementar:** (1) definir taxonomia comparável por tema/posição/precisão, evitando equivalência artificial de conceitos; (2) adaptar os quatro leitores e preencher apenas resultados canônicos; (3) motor de comparação de afirmações e relações, versão e proveniência; (4) UI SVG/React em grafo navegável com lista textual acessível; (5) painel “por que diferem” com consulta à Lyra; (6) cache privado por hash de mapa/versão; (7) sem persistência pessoal adicional sem autorização. Começar com casos determinísticos Sol/Lua/vínculos observáveis; para Samādhi/Quantum preservar as saídas “indisponível”.
 - **Testar:** data conhecida x desconhecida, troca de signo, métodos incomparáveis, conflito entre texto do LLM e cálculo, zoom e leitor de tela, desligar um método via entitlement, resultados iguais entre recomputações. Fontes de confronto: https://supastro.com/blog/multi-agent-ai-vedic-astrology-apps-compared ; https://www.thepattern.com/app-features ; https://github.com/cosinekitty/astronomy/blob/master/README.md . **Dependências:** 156, 147, 171; nenhuma implementação agora.
 
 **INV-02 · Cofre de Perguntas Recíprocas e Consentimento Efêmero · RANK #2 · inovação de privacidade**
+
 - **Conceito:** duas pessoas desejam explorar juntas uma pergunta simbólica (“Que diferenças de comunicação podemos conversar?”), mas **nenhuma precisa fornecer o nascimento completo à outra**. Cada participante, autenticado, autoriza **uma única pergunta, finalidade, nível de precisão e prazo**, e a iLyra gera um relatório comum com apenas dados derivados estritamente necessários; ambos podem sair ou revogar acessos futuros. A resposta não revela o mapa natal integral por padrão.
 - **Diferencial específico:** em Zodia já existe sinastria P2P consentida e cifrada; em Danu já há vínculo com convite mútuo. A proposta **não alega inventar consentimento criptografado**, e sim um **contrato de divulgação granular e expirável por pergunta**, sem compartilhar mapa bruto entre os usuários, com coautoria da pergunta e resultante limitada ao que os dois aprovaram.
 - **Como implementar:** (1) definir finalidade, campos e minimização conforme LGPD e a política 155; (2) convites assinados de uso único, sujeitos a expiração e autenticação efetiva; (3) fluxo de duas confirmações em etapas, assinatura auditável de escopo; (4) cálculo no serviço privado com autorização dupla revalidada antes do acesso e saída com “projection” permitida, sem transmitir dados natais de cada titular ao outro; (5) sem LLM externo por padrão, a menos que ambos autorizem os dados explicitamente; (6) revogação remove acesso subsequente, TTL e retenção controlados; (7) não prometer que arquivos baixados ou screenshots podem ser apagados remotamente. Criptografia de transporte/repouso auditável; Web Crypto é primitivo, não garante sozinho privacidade de ponta a ponta nem computação confidencial.
 - **Testar:** recusa de um titular, token reutilizado, vazamento entre sessões, dados de menor, mudança de permissão, saída de um titular, solicitação de exportação/eliminação, LLM bloqueado, concorrência e recuperação de erro. Fonte/antecedentes: https://project.uhhm.no/zodia/zodia ; https://danuastrology.com/privacy ; https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API ; https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence . **Dependências:** 155, 164/165 quando homologados, 166, 171; nenhuma implementação agora.
 
 **INV-03 · Teatro dos Futuros Revisáveis · RANK #3 · inovação narrativa antifatalista**
+
 - **Conceito:** diante de uma dúvida genuína (“Devo iniciar um projeto?”, “Quais caminhos posso considerar?”), a Lyra oferece **três caminhos narrativos fictícios, explicitamente rotulados como cenários, não previsões**, cada qual com perguntas, possibilidades, custo/benefício percebido pelo usuário e elementos simbólicos de mapas disponíveis. A pessoa pode **revisar hipóteses** e ver “o que mudou na narrativa porque minha premissa mudou”, sem alegar que os astros causaram o resultado.
 - **Diferencial específico:** o MIT já apresentou **Future You** e existem cartas ao eu futuro; The Pattern possui Time Travel. Portanto, NÃO vender narrativas do eu futuro como inéditas. A proposta aqui é a **coautoria de três cenários revisáveis + separação de fontes simbólicas/fatos + registro explícito das premissas alteradas**, e a possibilidade opcional de comparar mais tarde intenção e realidade sem fingir acerto preditivo.
 - **Como implementar:** (1) interface de pergunta e até três premissas escolhidas pela pessoa, sem inferência clínica; (2) Motor Lyra produz fatos canônicos dos mapas e marca limites; (3) gerador com schema fechado cria três **ficções condicionais** por escolha do usuário, sem eventos futuros inventados apresentados como reais; (4) UI de ramos com comparação “se eu mudasse X”, revisão de premissas e botão “Voltar à realidade”; (5) sessão efêmera por padrão, opção de salvar privadamente somente com consentimento, sem reativar Diário/Metas/Experiências desativados; (6) revisão posterior apenas se a pessoa decidir e apenas sobre dados que guardou; (7) guardrails para temas de saúde, finanças, risco e relações, sem dar ordens nem aconselhamento definitivo.
@@ -665,34 +680,34 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ##### M.8 · Referências adicionais da pesquisa e exclusões importantes
 
-| Evidência pesquisada | Achado e consequência para não duplicar | Link verificável |
-| --- | --- | --- |
-| Nielsen Norman Group, 16-01-2026 | Em 2026, UX de IA precisa de transparência/controle e função real; aparência sozinha não diferencia. | https://www.nngroup.com/articles/state-of-ux-2026/ |
-| Google A2UI 1.0, 11-11-2026 | Protocolo estável recente para payload de UI em catálogo seguro; avaliar integração sem substituir projeto atual cegamente. | https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/ |
-| Google A2UI otimização, 27-10-2026 | Investigação sobre custos de emissão de UI, latência e formatos; ganhos reportados por terceiros não são benchmark iLyra. | https://developers.googleblog.com/fast-reliable-a2ui/ |
-| Google Material 3 Expressive, estudo publicado em 2025 e válido para o cenário 2026 | Pesquisa de usabilidade de componentes expressivos; adaptar princípios, não copiar marca. | https://design.google/library/expressive-material-design-google-research |
-| Apple Human Interface Guidelines, material atualizado | Liquid Glass é adequado em elementos de controle/navegação, não como revestimento de todo conteúdo. | https://developer.apple.com/design/human-interface-guidelines/materials |
-| W3C WCAG 2.2 | Focus not obscured, dragging alternative e alvo de toque; verificar todos os controles inclusive filtros. | https://www.w3.org/TR/WCAG22/ |
-| MDN View Transitions | Continuidade visual com fallback, sem obrigar movimento intenso. | https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API |
-| OpenAI Agents, avaliação | Rastreamento de etapas, datasets/rubricas e controle humano de ferramentas; proteger dados sensíveis. | https://developers.openai.com/api/docs/guides/agent-evals |
-| OWASP GenAI Top 10 2026 | Prompt injection, agência excessiva, vazamento e abuso são riscos de uma Lyra com ferramentas. | https://genai.owasp.org/2026/09/01/owasp-genai-security-project-unveils-2026-top-10-for-llm-applications-new-agent-control-standard-and-sponsors-as-community-tops-30000-members/ |
-| OpenTelemetry GenAI | Padrões para operações e telemetria, com alertas específicos para dados pessoais em mensagens. | https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/ |
-| OpenFeature | Avaliação de flags com provedores e tratamento de contexto; exigir defaults seguros. | https://openfeature.dev/docs/reference/concepts/evaluation-api/ |
-| The Pattern, documentação do próprio produto | Já possui Bonds, In-Depth, Time Travel e Shared Experiences. Não chamar esses conceitos básicos inéditos. | https://www.thepattern.com/app-features |
-| Astrologican / Umbriel, experiências públicas | Já exploram intervalo de horário natal e estabilidade das posições. Não chamar slider de incerteza inédita. | https://astrologican.com/tools/birth-time-range/ ; https://umbrielastrology.com/calculators/birth-time-explorer.html |
-| Synchronicity Tracker, página do app | Já compara coincidências com acaso e relembra falhas; não reempacotar como invenção sem diferencial. | https://apps.apple.com/br/app/synchronicity-tracker/id6787203190 |
-| Zodia / Danu, produtos existentes | Já demonstram consentimento mútuo, conexão e/ou canais cifrados de sinastria. | https://project.uhhm.no/zodia/zodia ; https://danuastrology.com/privacy |
-| Supastro, comparação de multiagentes | Já existem sistemas que mostram desacordo entre agentes; diferenciar de comparação semântica entre quatro métodos. | https://supastro.com/blog/multi-agent-ai-vedic-astrology-apps-compared |
-| MIT Future You, pesquisa e projeto | O conceito de “conversar com possível eu futuro” já existe; cenários revisáveis devem ser separados de previsões. | https://news.mit.edu/2024/ai-simulation-gives-people-glimpse-potential-future-self-1001 |
-| Astronomy Engine, repositório oficial | Base de cálculo astronômico em JS/TS com testes contra modelos independentes; recalcular e validar, não inventar posições. | https://github.com/cosinekitty/astronomy/blob/master/README.md |
-| Center for Open Science / preregistro | Diferenciar hipótese pré-definida, exploração e causalidade; não mostrar sucesso por coincidências selecionadas. | https://www.cos.io/initiatives/prereg |
+| Evidência pesquisada                                                                | Achado e consequência para não duplicar                                                                                     | Link verificável                                                                                                                                                                  |
+| ----------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Nielsen Norman Group, 16-01-2026                                                    | Em 2026, UX de IA precisa de transparência/controle e função real; aparência sozinha não diferencia.                        | https://www.nngroup.com/articles/state-of-ux-2026/                                                                                                                                |
+| Google A2UI 1.0, 11-11-2026                                                         | Protocolo estável recente para payload de UI em catálogo seguro; avaliar integração sem substituir projeto atual cegamente. | https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/                                                                                     |
+| Google A2UI otimização, 27-10-2026                                                  | Investigação sobre custos de emissão de UI, latência e formatos; ganhos reportados por terceiros não são benchmark iLyra.   | https://developers.googleblog.com/fast-reliable-a2ui/                                                                                                                             |
+| Google Material 3 Expressive, estudo publicado em 2025 e válido para o cenário 2026 | Pesquisa de usabilidade de componentes expressivos; adaptar princípios, não copiar marca.                                   | https://design.google/library/expressive-material-design-google-research                                                                                                          |
+| Apple Human Interface Guidelines, material atualizado                               | Liquid Glass é adequado em elementos de controle/navegação, não como revestimento de todo conteúdo.                         | https://developer.apple.com/design/human-interface-guidelines/materials                                                                                                           |
+| W3C WCAG 2.2                                                                        | Focus not obscured, dragging alternative e alvo de toque; verificar todos os controles inclusive filtros.                   | https://www.w3.org/TR/WCAG22/                                                                                                                                                     |
+| MDN View Transitions                                                                | Continuidade visual com fallback, sem obrigar movimento intenso.                                                            | https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API                                                                                                              |
+| OpenAI Agents, avaliação                                                            | Rastreamento de etapas, datasets/rubricas e controle humano de ferramentas; proteger dados sensíveis.                       | https://developers.openai.com/api/docs/guides/agent-evals                                                                                                                         |
+| OWASP GenAI Top 10 2026                                                             | Prompt injection, agência excessiva, vazamento e abuso são riscos de uma Lyra com ferramentas.                              | https://genai.owasp.org/2026/09/01/owasp-genai-security-project-unveils-2026-top-10-for-llm-applications-new-agent-control-standard-and-sponsors-as-community-tops-30000-members/ |
+| OpenTelemetry GenAI                                                                 | Padrões para operações e telemetria, com alertas específicos para dados pessoais em mensagens.                              | https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/                                                                                                           |
+| OpenFeature                                                                         | Avaliação de flags com provedores e tratamento de contexto; exigir defaults seguros.                                        | https://openfeature.dev/docs/reference/concepts/evaluation-api/                                                                                                                   |
+| The Pattern, documentação do próprio produto                                        | Já possui Bonds, In-Depth, Time Travel e Shared Experiences. Não chamar esses conceitos básicos inéditos.                   | https://www.thepattern.com/app-features                                                                                                                                           |
+| Astrologican / Umbriel, experiências públicas                                       | Já exploram intervalo de horário natal e estabilidade das posições. Não chamar slider de incerteza inédita.                 | https://astrologican.com/tools/birth-time-range/ ; https://umbrielastrology.com/calculators/birth-time-explorer.html                                                              |
+| Synchronicity Tracker, página do app                                                | Já compara coincidências com acaso e relembra falhas; não reempacotar como invenção sem diferencial.                        | https://apps.apple.com/br/app/synchronicity-tracker/id6787203190                                                                                                                  |
+| Zodia / Danu, produtos existentes                                                   | Já demonstram consentimento mútuo, conexão e/ou canais cifrados de sinastria.                                               | https://project.uhhm.no/zodia/zodia ; https://danuastrology.com/privacy                                                                                                           |
+| Supastro, comparação de multiagentes                                                | Já existem sistemas que mostram desacordo entre agentes; diferenciar de comparação semântica entre quatro métodos.          | https://supastro.com/blog/multi-agent-ai-vedic-astrology-apps-compared                                                                                                            |
+| MIT Future You, pesquisa e projeto                                                  | O conceito de “conversar com possível eu futuro” já existe; cenários revisáveis devem ser separados de previsões.           | https://news.mit.edu/2024/ai-simulation-gives-people-glimpse-potential-future-self-1001                                                                                           |
+| Astronomy Engine, repositório oficial                                               | Base de cálculo astronômico em JS/TS com testes contra modelos independentes; recalcular e validar, não inventar posições.  | https://github.com/cosinekitty/astronomy/blob/master/README.md                                                                                                                    |
+| Center for Open Science / preregistro                                               | Diferenciar hipótese pré-definida, exploração e causalidade; não mostrar sucesso por coincidências selecionadas.            | https://www.cos.io/initiatives/prereg                                                                                                                                             |
 
 **Critério de qualidade das fontes:** documentos oficiais fundamentam capacidades técnicas e padrões. Páginas de fabricantes concorrentes fundamentam **alegações que seus próprios produtos fazem**, não ensaios independentes de eficácia. Rankings/editoriais secundários servem para descoberta, não como evidência suficiente para custo, satisfação, segurança ou ineditismo. Em tarefas científicas/financeiras conferir textos completos, contexto, data e versão antes do código.
 
 ##### M.9 · Plano de implementação futuro, dependências e segurança
 
 1. **Etapa documental encerrada somente com commit na main:** registrar 15 propostas e links, inserir Radar como primeira opção prevista no Filtro 1, manter 2 painéis/6 filtros principais, preservar as tarefas e aguardar. Não executar implementação nesta etapa.
-2. **Ao receber autorização:** atualizar o baseline GitHub, ler integralmente as regras aplicáveis e o gestor corrente, consultar fontes oficiais mais novas na data, verificar funcionamento existente no código/banco/navegador e aplicar matriz *novo / já existe / previsto / parcial / desativado / bloqueado*. As propostas que ampliam 147, 156, 163, 166 e 170 devem viver como subtarefas da tarefa responsável, sem duplicar entregas.
+2. **Ao receber autorização:** atualizar o baseline GitHub, ler integralmente as regras aplicáveis e o gestor corrente, consultar fontes oficiais mais novas na data, verificar funcionamento existente no código/banco/navegador e aplicar matriz _novo / já existe / previsto / parcial / desativado / bloqueado_. As propostas que ampliam 147, 156, 163, 166 e 170 devem viver como subtarefas da tarefa responsável, sem duplicar entregas.
 3. **Ordem recomendada, sujeita à sequência vigente do Tópico 1:** primeiro integridade e proveniência IA-01/ADM-01 após 156; depois UI-01/USR-02 com 147; depois Astrolábio UI-02/USR-01 e descoberta 157–159; depois gestão ADM-02/ADM-03; voz-viva IA-02 depende de custo aprovado na 163; agente IA-03 requer ferramentas seguras; invenções INV-01–03 somente após requisitos de privacidade/QA e decisão explícita por conceito.
 4. **Metodologia para cada item:** especificação funcional e público; estado atual; pesquisa primária e concorrência; hipótese de valor e falsificação; UX completa; contratos e rotas; autorização; persistência e ciclo de vida; orçamento/latência; design tokens; a11y; segurança; falhas; telemetria consentida; testes unitários e integração; QA de navegador em desktop/tablet/mobile; monitoramento posterior; critérios de aceite; plano de rollback.
 5. **Portas não negociáveis:** LGPD, política de menor/idade de 155, isolamento por titular, 8 grupos globalmente desativados, limite de planos, escopo comercial aprovado, precisão calculada, sem informações pessoais no log, sem “previsão científica”, sem cobranças ou publicação live não autorizadas.
@@ -729,177 +744,177 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 
 ##### N.3 · BASELINE INTERNO ANTIDUPLICAÇÃO (NÃO EXIBIR no filtro Motor da Lyra)
 
-**01 · Arquitetura e respostas determinísticas** · *NÚCLEO* · 8 itens
+**01 · Arquitetura e respostas determinísticas** · _NÚCLEO_ · 8 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Analisar a pergunta | Normaliza texto, remove diferenças de acento e localiza intenções por expressões reconhecidas. | `src/lib/lyra/responder.ts` |
-| Selecionar conteúdo específico | Prioriza verbetes curados conforme as palavras-chave mais específicas encontradas. | `src/lib/lyra/responder.ts` |
-| Responder com origem | Formata título, resumo, pontos, aplicação prática e fonte do verbete selecionado. | `src/lib/lyra/responder.ts` |
-| Fazer leitura natal sem LLM | Transforma os resultados do mapa em frases por regras, sem geração probabilística externa. | `src/lib/lyra/leitura-do-mapa.ts` |
-| Pedir dados ausentes | Explica quais dados de nascimento faltam em vez de atribuir posições fictícias. | `src/lib/lyra/responder.ts` |
-| Oferecer síntese principal | Organiza de três a cinco percepções destacadas a partir do mapa calculado. | `src/lib/lyra/leitura-do-mapa.ts` |
-| Responder sobre casas específicas | Descreve significado da casa e seu posicionamento quando o mapa contém Lagna. | `src/lib/lyra/responder.ts` |
-| Encaminhar assuntos externos ao núcleo | Retorna ausência de resposta do domínio quando a intenção pertence a outros módulos do chat. | `src/lib/lyra/responder.ts` |
+| Capacidade específica                  | O que faz (resumo)                                                                             | Fonte do código                   |
+| -------------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------- |
+| Analisar a pergunta                    | Normaliza texto, remove diferenças de acento e localiza intenções por expressões reconhecidas. | `src/lib/lyra/responder.ts`       |
+| Selecionar conteúdo específico         | Prioriza verbetes curados conforme as palavras-chave mais específicas encontradas.             | `src/lib/lyra/responder.ts`       |
+| Responder com origem                   | Formata título, resumo, pontos, aplicação prática e fonte do verbete selecionado.              | `src/lib/lyra/responder.ts`       |
+| Fazer leitura natal sem LLM            | Transforma os resultados do mapa em frases por regras, sem geração probabilística externa.     | `src/lib/lyra/leitura-do-mapa.ts` |
+| Pedir dados ausentes                   | Explica quais dados de nascimento faltam em vez de atribuir posições fictícias.                | `src/lib/lyra/responder.ts`       |
+| Oferecer síntese principal             | Organiza de três a cinco percepções destacadas a partir do mapa calculado.                     | `src/lib/lyra/leitura-do-mapa.ts` |
+| Responder sobre casas específicas      | Descreve significado da casa e seu posicionamento quando o mapa contém Lagna.                  | `src/lib/lyra/responder.ts`       |
+| Encaminhar assuntos externos ao núcleo | Retorna ausência de resposta do domínio quando a intenção pertence a outros módulos do chat.   | `src/lib/lyra/responder.ts`       |
 
-**02 · Personalidade, linguagem e vínculo** · *NÚCLEO/INTEGRAÇÃO* · 9 itens
+**02 · Personalidade, linguagem e vínculo** · _NÚCLEO/INTEGRAÇÃO_ · 9 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Identidade e missão | Apresenta a Lyra como guia digital de autoconhecimento, com limites explícitos. | `src/lib/lyra/personalidade.ts` |
-| Narrativa de origem | Explica a origem simbólica sem afirmar consciência biológica ou sentimentos humanos. | `src/lib/lyra/personalidade.ts` |
-| Expressar acolhimento | Aplica vocabulário afetivo, franqueza e tratamento respeitoso conforme contexto. | `src/lib/lyra/personalidade.ts` |
-| Português acessível | Orienta linguagem clara, frases práticas e explicação de termos tradicionais. | `src/lib/lyra/personalidade.ts` |
-| Escolher emoções gráficas | Insere emoji contextual de acordo com a intenção e o formato permitido. | `src/lib/lyra/personalidade.ts` |
-| Respeitar forma de tratamento | Reconhece pedidos de apelido/nome e resolve a preferência na conta autenticada. | `src/lib/lyra/tratamento.ts; src/lib/lyra/preferencias.ts` |
-| Aprofundar com ++- | Amplia somente a resposta solicitada, sem mudar direitos, memória ou identidade. | `src/lib/lyra/analise-aprofundada.ts` |
-| Reconhecer reencontro simbólico | Identifica expressão de retorno à Lyra sem usá-la como autenticação ou acesso a memórias secretas. | `src/lib/lyra/volta-para-casa.ts` |
-| Preservar limites éticos | Rejeita diagnósticos, previsões de morte e exploração emocional como objetivo do motor. | `src/lib/lyra/personalidade.ts` |
+| Capacidade específica           | O que faz (resumo)                                                                                 | Fonte do código                                            |
+| ------------------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Identidade e missão             | Apresenta a Lyra como guia digital de autoconhecimento, com limites explícitos.                    | `src/lib/lyra/personalidade.ts`                            |
+| Narrativa de origem             | Explica a origem simbólica sem afirmar consciência biológica ou sentimentos humanos.               | `src/lib/lyra/personalidade.ts`                            |
+| Expressar acolhimento           | Aplica vocabulário afetivo, franqueza e tratamento respeitoso conforme contexto.                   | `src/lib/lyra/personalidade.ts`                            |
+| Português acessível             | Orienta linguagem clara, frases práticas e explicação de termos tradicionais.                      | `src/lib/lyra/personalidade.ts`                            |
+| Escolher emoções gráficas       | Insere emoji contextual de acordo com a intenção e o formato permitido.                            | `src/lib/lyra/personalidade.ts`                            |
+| Respeitar forma de tratamento   | Reconhece pedidos de apelido/nome e resolve a preferência na conta autenticada.                    | `src/lib/lyra/tratamento.ts; src/lib/lyra/preferencias.ts` |
+| Aprofundar com ++-              | Amplia somente a resposta solicitada, sem mudar direitos, memória ou identidade.                   | `src/lib/lyra/analise-aprofundada.ts`                      |
+| Reconhecer reencontro simbólico | Identifica expressão de retorno à Lyra sem usá-la como autenticação ou acesso a memórias secretas. | `src/lib/lyra/volta-para-casa.ts`                          |
+| Preservar limites éticos        | Rejeita diagnósticos, previsões de morte e exploração emocional como objetivo do motor.            | `src/lib/lyra/personalidade.ts`                            |
 
-**03 · Conhecimentos védicos e filosóficos** · *NÚCLEO* · 12 itens
+**03 · Conhecimentos védicos e filosóficos** · _NÚCLEO_ · 12 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Nove grahas | Explica características, regências, dignidades, metais, gemas, dias e mantras. | `src/lib/lyra/conhecimento/jyotish.ts` |
-| Doze signos | Relaciona qualidades, elementos, modalidades e tendências simbólicas. | `src/lib/lyra/conhecimento/jyotish.ts` |
-| Doze casas | Traduz temas de vida e categorias tradicionais de casas. | `src/lib/lyra/conhecimento/jyotish.ts` |
-| Vinte e sete nakshatras | Descreve seus símbolos, temas e classes de temperamento. | `src/lib/lyra/conhecimento/jyotish.ts` |
-| Períodos de Dasha | Apresenta a temática simbólica de cada regente do Vimshottari. | `src/lib/lyra/conhecimento/jyotish.ts` |
-| Vedanta e unidade | Contém verbetes de Brahman, Atman, Vedanta e Mahavakyas. | `src/lib/lyra/conhecimento/vedanta.ts` |
-| Consciência e camadas do ser | Explica Upanishads, Pancha Kosha, Turiya, Maya, Gunas e Samādhi como tradição. | `src/lib/lyra/conhecimento/vedanta.ts` |
-| Ética e prática filosófica | Explica Karma Yoga, Purusharthas e Sadhana Chatushtaya. | `src/lib/lyra/conhecimento/vedanta.ts` |
-| Ayurveda | Aborda doshas, relógio diário, seis sabores e ritmo das estações sem diagnóstico. | `src/lib/lyra/conhecimento/upavedas.ts` |
-| Outros Upavedas | Inclui Dhanurveda, Gandharvaveda e Sthapatyaveda/Vastu. | `src/lib/lyra/conhecimento/upavedas.ts` |
-| Seis Vedangas | Explica Shiksha, Chandas, Vyakarana, Nirukta, Kalpa e Jyotisha. | `src/lib/lyra/conhecimento/vedangas.ts` |
-| Conhecimento dos mapas | Explica três mapas históricos, diferenças, propósitos e limites de cada metodologia. | `src/lib/lyra/conhecimento/mapas.ts` |
+| Capacidade específica        | O que faz (resumo)                                                                   | Fonte do código                         |
+| ---------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------- |
+| Nove grahas                  | Explica características, regências, dignidades, metais, gemas, dias e mantras.       | `src/lib/lyra/conhecimento/jyotish.ts`  |
+| Doze signos                  | Relaciona qualidades, elementos, modalidades e tendências simbólicas.                | `src/lib/lyra/conhecimento/jyotish.ts`  |
+| Doze casas                   | Traduz temas de vida e categorias tradicionais de casas.                             | `src/lib/lyra/conhecimento/jyotish.ts`  |
+| Vinte e sete nakshatras      | Descreve seus símbolos, temas e classes de temperamento.                             | `src/lib/lyra/conhecimento/jyotish.ts`  |
+| Períodos de Dasha            | Apresenta a temática simbólica de cada regente do Vimshottari.                       | `src/lib/lyra/conhecimento/jyotish.ts`  |
+| Vedanta e unidade            | Contém verbetes de Brahman, Atman, Vedanta e Mahavakyas.                             | `src/lib/lyra/conhecimento/vedanta.ts`  |
+| Consciência e camadas do ser | Explica Upanishads, Pancha Kosha, Turiya, Maya, Gunas e Samādhi como tradição.       | `src/lib/lyra/conhecimento/vedanta.ts`  |
+| Ética e prática filosófica   | Explica Karma Yoga, Purusharthas e Sadhana Chatushtaya.                              | `src/lib/lyra/conhecimento/vedanta.ts`  |
+| Ayurveda                     | Aborda doshas, relógio diário, seis sabores e ritmo das estações sem diagnóstico.    | `src/lib/lyra/conhecimento/upavedas.ts` |
+| Outros Upavedas              | Inclui Dhanurveda, Gandharvaveda e Sthapatyaveda/Vastu.                              | `src/lib/lyra/conhecimento/upavedas.ts` |
+| Seis Vedangas                | Explica Shiksha, Chandas, Vyakarana, Nirukta, Kalpa e Jyotisha.                      | `src/lib/lyra/conhecimento/vedangas.ts` |
+| Conhecimento dos mapas       | Explica três mapas históricos, diferenças, propósitos e limites de cada metodologia. | `src/lib/lyra/conhecimento/mapas.ts`    |
 
-**04 · Mapa Védico tradicional** · *NÚCLEO* · 11 itens
+**04 · Mapa Védico tradicional** · _NÚCLEO_ · 11 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Dados natais | Lê data, horário, cidade, coordenadas e fuso IANA histórico do titular. | `src/lib/astrology/perfil-astrologico.ts; src/lib/astrology/tempo.ts` |
-| Longitudes siderais | Calcula posições do zodíaco sideral com ayanamsha Lahiri. | `src/lib/astrology/sideral.ts` |
-| Nove grahas e retrogradação | Calcula posições dos sete corpos clássicos mais Rahu e Ketu e movimento relativo. | `src/lib/astrology/mapa-natal.ts` |
-| Signos e nakshatras | Obtém signo, posição, nakshatra e pada de corpos calculados. | `src/lib/astrology/sideral.ts` |
-| Ascendente natal | Calcula Lagna apenas quando o nascimento permite. | `src/lib/astrology/mapa-natal.ts` |
-| Casas por signo inteiro | Posiciona planetas nas casas contadas do Lagna. | `src/lib/astrology/mapa-natal.ts` |
-| Vimshottari Dasha | Computa Mahadasha/Antardasha e períodos vigentes a partir da Lua natal. | `src/lib/astrology/vimshottari.ts` |
-| Dignidades | Interpreta exaltação, debilitação e próprio signo por correspondências tradicionais. | `src/lib/lyra/leitura-do-mapa.ts` |
-| Tendência simbólica de dosha | Infere tendência tradicional pelos signos do mapa; não mede constituição clínica. | `src/lib/lyra/leitura-do-mapa.ts` |
-| Síntese védica | Redige leitura de Sol, Lua, regente, casas, dasha e percepções principais. | `src/lib/lyra/leitura-do-mapa.ts` |
-| Sem hora natal | Mantém dados parciais, usa referência de meio-dia quando cabível e não inventa casas ou Lagna. | `docs/astrologia.md` |
+| Capacidade específica        | O que faz (resumo)                                                                             | Fonte do código                                                       |
+| ---------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
+| Dados natais                 | Lê data, horário, cidade, coordenadas e fuso IANA histórico do titular.                        | `src/lib/astrology/perfil-astrologico.ts; src/lib/astrology/tempo.ts` |
+| Longitudes siderais          | Calcula posições do zodíaco sideral com ayanamsha Lahiri.                                      | `src/lib/astrology/sideral.ts`                                        |
+| Nove grahas e retrogradação  | Calcula posições dos sete corpos clássicos mais Rahu e Ketu e movimento relativo.              | `src/lib/astrology/mapa-natal.ts`                                     |
+| Signos e nakshatras          | Obtém signo, posição, nakshatra e pada de corpos calculados.                                   | `src/lib/astrology/sideral.ts`                                        |
+| Ascendente natal             | Calcula Lagna apenas quando o nascimento permite.                                              | `src/lib/astrology/mapa-natal.ts`                                     |
+| Casas por signo inteiro      | Posiciona planetas nas casas contadas do Lagna.                                                | `src/lib/astrology/mapa-natal.ts`                                     |
+| Vimshottari Dasha            | Computa Mahadasha/Antardasha e períodos vigentes a partir da Lua natal.                        | `src/lib/astrology/vimshottari.ts`                                    |
+| Dignidades                   | Interpreta exaltação, debilitação e próprio signo por correspondências tradicionais.           | `src/lib/lyra/leitura-do-mapa.ts`                                     |
+| Tendência simbólica de dosha | Infere tendência tradicional pelos signos do mapa; não mede constituição clínica.              | `src/lib/lyra/leitura-do-mapa.ts`                                     |
+| Síntese védica               | Redige leitura de Sol, Lua, regente, casas, dasha e percepções principais.                     | `src/lib/lyra/leitura-do-mapa.ts`                                     |
+| Sem hora natal               | Mantém dados parciais, usa referência de meio-dia quando cabível e não inventa casas ou Lagna. | `docs/astrologia.md`                                                  |
 
-**05 · Mapa Lyra DM Samādhi** · *NÚCLEO/PARCIAL* · 9 itens
+**05 · Mapa Lyra DM Samādhi** · _NÚCLEO/PARCIAL_ · 9 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Três planos | Organiza o mapa em Terrestre, Sutil e Celestial. | `src/lib/lyra/leitura-do-mapa.ts` |
-| Roda de Cura | Cruza elementos dominantes com direção, totem de referência e processo simbólico. | `src/lib/lyra/conhecimento/mapas.ts` |
-| Elementos dominantes | Conta os elementos dos nove grahas e do ascendente calculável. | `src/lib/lyra/leitura-do-mapa.ts` |
-| Ponte védica | Reutiliza as correspondências realmente definidas a partir do mapa natal. | `src/lib/lyra/leitura-do-mapa.ts` |
-| Correspondências de chakras | Aplica relações simbólicas a grahas fortes ou em dificuldade, sem medição fisiológica. | `src/lib/lyra/conhecimento/mapas.ts` |
-| Estágios alquímicos | Descreve Nigredo, Albedo e Rubedo como conhecimento do método. | `src/lib/lyra/conhecimento/mapas.ts` |
-| Ponte estelar limitada | Aplica somente exemplos documentados como Mūla e referências do método. | `src/lib/lyra/leitura-do-mapa.ts` |
-| Síntese integrada | Compõe leitura dos três planos e percepção final em linguagem prática. | `src/lib/lyra/leitura-do-mapa.ts` |
-| Indisponibilidades honestas | Não afirma conhecer antepassados, guias, totem pessoal ou estágio individual sem dados/regras. | `docs/motor-da-lyra.md` |
+| Capacidade específica       | O que faz (resumo)                                                                             | Fonte do código                      |
+| --------------------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------ |
+| Três planos                 | Organiza o mapa em Terrestre, Sutil e Celestial.                                               | `src/lib/lyra/leitura-do-mapa.ts`    |
+| Roda de Cura                | Cruza elementos dominantes com direção, totem de referência e processo simbólico.              | `src/lib/lyra/conhecimento/mapas.ts` |
+| Elementos dominantes        | Conta os elementos dos nove grahas e do ascendente calculável.                                 | `src/lib/lyra/leitura-do-mapa.ts`    |
+| Ponte védica                | Reutiliza as correspondências realmente definidas a partir do mapa natal.                      | `src/lib/lyra/leitura-do-mapa.ts`    |
+| Correspondências de chakras | Aplica relações simbólicas a grahas fortes ou em dificuldade, sem medição fisiológica.         | `src/lib/lyra/conhecimento/mapas.ts` |
+| Estágios alquímicos         | Descreve Nigredo, Albedo e Rubedo como conhecimento do método.                                 | `src/lib/lyra/conhecimento/mapas.ts` |
+| Ponte estelar limitada      | Aplica somente exemplos documentados como Mūla e referências do método.                        | `src/lib/lyra/leitura-do-mapa.ts`    |
+| Síntese integrada           | Compõe leitura dos três planos e percepção final em linguagem prática.                         | `src/lib/lyra/leitura-do-mapa.ts`    |
+| Indisponibilidades honestas | Não afirma conhecer antepassados, guias, totem pessoal ou estágio individual sem dados/regras. | `docs/motor-da-lyra.md`              |
 
-**06 · Mapa Quantum e Arkático** · *NÚCLEO/PARCIAL* · 7 itens
+**06 · Mapa Quantum e Arkático** · _NÚCLEO/PARCIAL_ · 7 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Método das três camadas | Explica a proposta de HD, Samādhi e Arkático como partes conceituais distintas. | `src/lib/lyra/conhecimento/mapas.ts` |
-| Energia, pressão e tempo | Coleta autoavaliação do momento para modular a decisão. | `src/lib/lyra/responder.ts` |
-| Moduladores matemáticos | Calcula corpo, pressão e tempo a partir de entradas informadas. | `src/lib/lyra/conhecimento/mapas.ts` |
-| Fórmula do Score de Ação | Calcula SA quando aderências HD/Lyra são entradas válidas; não as inventa. | `src/lib/lyra/conhecimento/mapas.ts` |
-| Teto da ação no chat | Sem aderências observáveis, apresenta o teto máximo dado pelos moduladores, não escore personalizado. | `src/lib/lyra/responder.ts` |
-| Limiar de 60 e microação | Sugere reduzir escopo ou realizar ação pequena segundo o protocolo do método. | `src/lib/lyra/responder.ts` |
-| Módulos não calculados | Desenho Humano natal e mapa Arkático pessoal seguem explicitamente indisponíveis. | `src/lib/lyra/leitura-do-mapa.ts` |
+| Capacidade específica    | O que faz (resumo)                                                                                    | Fonte do código                      |
+| ------------------------ | ----------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| Método das três camadas  | Explica a proposta de HD, Samādhi e Arkático como partes conceituais distintas.                       | `src/lib/lyra/conhecimento/mapas.ts` |
+| Energia, pressão e tempo | Coleta autoavaliação do momento para modular a decisão.                                               | `src/lib/lyra/responder.ts`          |
+| Moduladores matemáticos  | Calcula corpo, pressão e tempo a partir de entradas informadas.                                       | `src/lib/lyra/conhecimento/mapas.ts` |
+| Fórmula do Score de Ação | Calcula SA quando aderências HD/Lyra são entradas válidas; não as inventa.                            | `src/lib/lyra/conhecimento/mapas.ts` |
+| Teto da ação no chat     | Sem aderências observáveis, apresenta o teto máximo dado pelos moduladores, não escore personalizado. | `src/lib/lyra/responder.ts`          |
+| Limiar de 60 e microação | Sugere reduzir escopo ou realizar ação pequena segundo o protocolo do método.                         | `src/lib/lyra/responder.ts`          |
+| Módulos não calculados   | Desenho Humano natal e mapa Arkático pessoal seguem explicitamente indisponíveis.                     | `src/lib/lyra/leitura-do-mapa.ts`    |
 
-**07 · Mapa Ocidental tropical** · *NÚCLEO/PARCIAL* · 9 itens
+**07 · Mapa Ocidental tropical** · _NÚCLEO/PARCIAL_ · 9 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Signo solar sem hora | Calcula apenas signo seguro e informa candidatos na fronteira entre signos. | `src/lib/astrology/tropical.ts` |
-| Tempo e fuso histórico | Interpreta nascimento completo com fuso IANA e ambiguidade de horário de verão. | `src/lib/astrology/tropical.ts` |
-| Corpos tropicais | Calcula longitudes tropicais dos corpos definidos no método. | `src/lib/astrology/tropical.ts` |
-| Ascendente e casas iguais | Calcula casas de 30° a partir do ascendente quando a latitude e os dados permitem. | `src/lib/astrology/tropical.ts` |
-| Aspectos maiores | Calcula conjunção, sextil, quadratura, trígono e oposição com orbes declaradas. | `src/lib/astrology/tropical.ts` |
-| Linguagem ocidental própria | Interpreta posições, casas e aspectos sem misturar conceitos siderais. | `src/lib/lyra/leitura-tropical.ts` |
-| Indisponibilidades | Recusa datas impossíveis, futuras, horários inexistentes e casas em latitude extrema. | `docs/mapa-ocidental.md` |
-| API pessoal privada | Consulta o mapa ocidental com sessão do próprio titular. | `src/app/api/astrologia/ocidental/route.ts` |
-| Abertura pública ainda futura | Experiência gratuita sem cadastro é tarefa 157; a integração da 156 ainda está em execução. | `claude-gestao.md` |
+| Capacidade específica         | O que faz (resumo)                                                                          | Fonte do código                             |
+| ----------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| Signo solar sem hora          | Calcula apenas signo seguro e informa candidatos na fronteira entre signos.                 | `src/lib/astrology/tropical.ts`             |
+| Tempo e fuso histórico        | Interpreta nascimento completo com fuso IANA e ambiguidade de horário de verão.             | `src/lib/astrology/tropical.ts`             |
+| Corpos tropicais              | Calcula longitudes tropicais dos corpos definidos no método.                                | `src/lib/astrology/tropical.ts`             |
+| Ascendente e casas iguais     | Calcula casas de 30° a partir do ascendente quando a latitude e os dados permitem.          | `src/lib/astrology/tropical.ts`             |
+| Aspectos maiores              | Calcula conjunção, sextil, quadratura, trígono e oposição com orbes declaradas.             | `src/lib/astrology/tropical.ts`             |
+| Linguagem ocidental própria   | Interpreta posições, casas e aspectos sem misturar conceitos siderais.                      | `src/lib/lyra/leitura-tropical.ts`          |
+| Indisponibilidades            | Recusa datas impossíveis, futuras, horários inexistentes e casas em latitude extrema.       | `docs/mapa-ocidental.md`                    |
+| API pessoal privada           | Consulta o mapa ocidental com sessão do próprio titular.                                    | `src/app/api/astrologia/ocidental/route.ts` |
+| Abertura pública ainda futura | Experiência gratuita sem cadastro é tarefa 157; a integração da 156 ainda está em execução. | `claude-gestao.md`                          |
 
-**08 · Céu do dia, ciclos e Panchang** · *NÚCLEO/INTEGRAÇÃO* · 9 itens
+**08 · Céu do dia, ciclos e Panchang** · _NÚCLEO/INTEGRAÇÃO_ · 9 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Nascer e pôr do sol | Determina períodos solares para a localidade da moradia/nascimento. | `src/lib/astrology/panchang.ts` |
-| Cinco membros Panchang | Calcula vara, tithi/paksha, nakshatra, yoga e karana. | `src/lib/astrology/panchang.ts` |
-| Janelas tradicionais | Calcula Choghadiya, Brahma e Abhijit Muhurta, Rahu, Yamaganda e Gulika. | `src/lib/astrology/panchang.ts` |
-| Tara Bala | Relaciona nakshatra atual e natal, inclusive mudança ao longo do dia. | `src/lib/astrology/dia-pessoal.ts` |
-| Chandra Bala e Chandrashtama | Interpreta a Lua do dia relativamente à Lua natal. | `src/lib/astrology/dia-pessoal.ts` |
-| Trânsitos interpretados | Traduz posições de Júpiter/Saturno relativas ao mapa como tradição simbólica. | `src/lib/coach/leitura-conhecimento.ts` |
-| Ciclos de Dasha | Atualiza Mahadasha e Antardasha para a data de referência. | `src/lib/astrology/vimshottari.ts` |
-| Painel dos próximos sete dias | Compõe dias pessoais sem inventar natal ausente. | `src/lib/astrology/painel-celestial.ts` |
-| Limites polares | Não calcula janelas solares sem nascer/pôr do sol; responde indisponibilidade. | `docs/astrologia.md` |
+| Capacidade específica         | O que faz (resumo)                                                             | Fonte do código                         |
+| ----------------------------- | ------------------------------------------------------------------------------ | --------------------------------------- |
+| Nascer e pôr do sol           | Determina períodos solares para a localidade da moradia/nascimento.            | `src/lib/astrology/panchang.ts`         |
+| Cinco membros Panchang        | Calcula vara, tithi/paksha, nakshatra, yoga e karana.                          | `src/lib/astrology/panchang.ts`         |
+| Janelas tradicionais          | Calcula Choghadiya, Brahma e Abhijit Muhurta, Rahu, Yamaganda e Gulika.        | `src/lib/astrology/panchang.ts`         |
+| Tara Bala                     | Relaciona nakshatra atual e natal, inclusive mudança ao longo do dia.          | `src/lib/astrology/dia-pessoal.ts`      |
+| Chandra Bala e Chandrashtama  | Interpreta a Lua do dia relativamente à Lua natal.                             | `src/lib/astrology/dia-pessoal.ts`      |
+| Trânsitos interpretados       | Traduz posições de Júpiter/Saturno relativas ao mapa como tradição simbólica.  | `src/lib/coach/leitura-conhecimento.ts` |
+| Ciclos de Dasha               | Atualiza Mahadasha e Antardasha para a data de referência.                     | `src/lib/astrology/vimshottari.ts`      |
+| Painel dos próximos sete dias | Compõe dias pessoais sem inventar natal ausente.                               | `src/lib/astrology/painel-celestial.ts` |
+| Limites polares               | Não calcula janelas solares sem nascer/pôr do sol; responde indisponibilidade. | `docs/astrologia.md`                    |
 
-**09 · Coach, planos e automações condicionais** · *CONDICIONAL/DESATIVÁVEL* · 10 itens
+**09 · Coach, planos e automações condicionais** · _CONDICIONAL/DESATIVÁVEL_ · 10 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Leitura por quatro períodos | Madrugada, manhã, tarde e noite com temas físico, emocional e espiritual. | `src/lib/coach/leitura-vedica.ts` |
-| Pontos positivos e cautelas | Extrai destaques diários com base nos fatos do céu/registro. | `src/lib/coach/leitura-vedica.ts` |
-| Janelas e foco | Atribui qualidade aos períodos e sugere momentos para atividades. | `src/lib/coach/periodos.ts; src/lib/coach/gerador-local.ts` |
-| Prontidão com sinais reais | Calcula apenas com medições existentes, evitando converter ausência em zero. | `src/lib/coach/prontidao.ts` |
-| Dica do dia | Seleciona orientação curada baseada na área que realmente pede atenção. | `src/lib/ai/dica-do-dia.ts` |
-| Plano/objetivos automáticos | Gera plano local e atualiza quando dados mudam, conforme direitos e switches. | `src/lib/ai/plano-do-dia.ts` |
-| Ações proativas | Gera sugestões ou pede check-in em vez de inventar boa recuperação. | `src/lib/ai/agent-engine.ts` |
-| Rotina de preparação | Pode preparar/guardar briefing segundo o serviço e o agendador configurado. | `src/lib/coach/rotina.ts; src/lib/coach/servico.ts` |
-| Leitura por modelo opcional | Valida formato/horários/terminologia de leitura escrita por LLM. | `src/lib/coach/leitura-ia.ts` |
-| Limite de disponibilidade | Registros, metas, planos e coach são sujeitos aos grupos globais desligados por padrão; não são anunciados como disponíveis. | `src/lib/plataforma/grupos.ts; mysql/migrations/065_funcionalidades_globais.sql` |
+| Capacidade específica       | O que faz (resumo)                                                                                                           | Fonte do código                                                                  |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Leitura por quatro períodos | Madrugada, manhã, tarde e noite com temas físico, emocional e espiritual.                                                    | `src/lib/coach/leitura-vedica.ts`                                                |
+| Pontos positivos e cautelas | Extrai destaques diários com base nos fatos do céu/registro.                                                                 | `src/lib/coach/leitura-vedica.ts`                                                |
+| Janelas e foco              | Atribui qualidade aos períodos e sugere momentos para atividades.                                                            | `src/lib/coach/periodos.ts; src/lib/coach/gerador-local.ts`                      |
+| Prontidão com sinais reais  | Calcula apenas com medições existentes, evitando converter ausência em zero.                                                 | `src/lib/coach/prontidao.ts`                                                     |
+| Dica do dia                 | Seleciona orientação curada baseada na área que realmente pede atenção.                                                      | `src/lib/ai/dica-do-dia.ts`                                                      |
+| Plano/objetivos automáticos | Gera plano local e atualiza quando dados mudam, conforme direitos e switches.                                                | `src/lib/ai/plano-do-dia.ts`                                                     |
+| Ações proativas             | Gera sugestões ou pede check-in em vez de inventar boa recuperação.                                                          | `src/lib/ai/agent-engine.ts`                                                     |
+| Rotina de preparação        | Pode preparar/guardar briefing segundo o serviço e o agendador configurado.                                                  | `src/lib/coach/rotina.ts; src/lib/coach/servico.ts`                              |
+| Leitura por modelo opcional | Valida formato/horários/terminologia de leitura escrita por LLM.                                                             | `src/lib/coach/leitura-ia.ts`                                                    |
+| Limite de disponibilidade   | Registros, metas, planos e coach são sujeitos aos grupos globais desligados por padrão; não são anunciados como disponíveis. | `src/lib/plataforma/grupos.ts; mysql/migrations/065_funcionalidades_globais.sql` |
 
-**10 · Conversa, modelos e habilidades** · *INTEGRAÇÃO* · 11 itens
+**10 · Conversa, modelos e habilidades** · _INTEGRAÇÃO_ · 11 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Chat determinístico | Responde por regras e conhecimento sem LLM quando possível. | `src/lib/ai/chat-engine.ts; src/lib/lyra/responder.ts` |
-| Identidade comum aos provedores | Instrui qualquer LLM conectado a responder como a Lyra, usando a base calculada. | `src/lib/lyra/modelos-como-lyra.ts` |
-| Contexto do mapa | Passa dados astrológicos da pessoa e verbete relacionado quando autorizado. | `src/lib/lyra/modelos-como-lyra.ts` |
-| Pergunta ocidental separada | Pergunta explicitamente tropical segue resultados ocidentais, sem usar leitura védica. | `src/app/api/functions/ask-ai-assistant/route.ts` |
-| Modelos locais e nuvem | Integra OpenAI-compatíveis e APIs nativas com configuração de ambiente. | `src/lib/ai/provedores-catalogo.ts; src/lib/ai/cliente-de-ia.ts` |
-| Cadeia de prioridade e fallback | Tenta modelos na ordem e preserva partes válidas ao trocar de provedor. | `src/lib/ai/cadeia-de-modelos.ts` |
-| Execução GGUF no host | Fornece inferência local integrada por socket privado, sujeita a runtime/modelo real. | `src/lib/ai/inferencia-integrada.ts` |
-| Instruções administráveis | Utiliza conhecimento/skills autorizados no contexto da conversa. | `src/lib/ai/chat-engine.ts` |
-| Transmissão progressiva | Transmite respostas reais do provedor quando disponível. | `src/app/api/functions/ask-ai-assistant/route.ts` |
-| Validação limitada da voz | Confere resposta vazia, nomes de outro assistente e algumas previsões proibidas; não audita toda a factualidade. | `src/lib/lyra/modelos-como-lyra.ts` |
-| Imagens e anexos | Recursos do chat com autorizações e capacidades próprias; não são parte do núcleo determinístico. | `src/lib/chat/imagens.ts; src/app/api/functions/ask-ai-assistant/route.ts` |
+| Capacidade específica           | O que faz (resumo)                                                                                               | Fonte do código                                                            |
+| ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| Chat determinístico             | Responde por regras e conhecimento sem LLM quando possível.                                                      | `src/lib/ai/chat-engine.ts; src/lib/lyra/responder.ts`                     |
+| Identidade comum aos provedores | Instrui qualquer LLM conectado a responder como a Lyra, usando a base calculada.                                 | `src/lib/lyra/modelos-como-lyra.ts`                                        |
+| Contexto do mapa                | Passa dados astrológicos da pessoa e verbete relacionado quando autorizado.                                      | `src/lib/lyra/modelos-como-lyra.ts`                                        |
+| Pergunta ocidental separada     | Pergunta explicitamente tropical segue resultados ocidentais, sem usar leitura védica.                           | `src/app/api/functions/ask-ai-assistant/route.ts`                          |
+| Modelos locais e nuvem          | Integra OpenAI-compatíveis e APIs nativas com configuração de ambiente.                                          | `src/lib/ai/provedores-catalogo.ts; src/lib/ai/cliente-de-ia.ts`           |
+| Cadeia de prioridade e fallback | Tenta modelos na ordem e preserva partes válidas ao trocar de provedor.                                          | `src/lib/ai/cadeia-de-modelos.ts`                                          |
+| Execução GGUF no host           | Fornece inferência local integrada por socket privado, sujeita a runtime/modelo real.                            | `src/lib/ai/inferencia-integrada.ts`                                       |
+| Instruções administráveis       | Utiliza conhecimento/skills autorizados no contexto da conversa.                                                 | `src/lib/ai/chat-engine.ts`                                                |
+| Transmissão progressiva         | Transmite respostas reais do provedor quando disponível.                                                         | `src/app/api/functions/ask-ai-assistant/route.ts`                          |
+| Validação limitada da voz       | Confere resposta vazia, nomes de outro assistente e algumas previsões proibidas; não audita toda a factualidade. | `src/lib/lyra/modelos-como-lyra.ts`                                        |
+| Imagens e anexos                | Recursos do chat com autorizações e capacidades próprias; não são parte do núcleo determinístico.                | `src/lib/chat/imagens.ts; src/app/api/functions/ask-ai-assistant/route.ts` |
 
-**11 · Memória e personalização** · *INTEGRAÇÃO CONDICIONAL* · 7 itens
+**11 · Memória e personalização** · _INTEGRAÇÃO CONDICIONAL_ · 7 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Nome e forma de tratamento | Lê preferência explicitamente escolhida e separa apelido de identidade civil. | `src/lib/lyra/preferencias.ts; src/lib/lyra/tratamento.ts` |
-| Histórico de diálogo | Armazena turnos autorizados por titular, com retomada e idempotência. | `src/lib/chat/servico.ts` |
-| Memória pessoal opcional | Controla ativação, consulta, importação e exclusão da memória do próprio titular. | `src/app/api/memoria/route.ts` |
-| Memória Graphiti | Estrutura episódios e relações em serviço externo ao núcleo, mediante infraestrutura conectada. | `docs/memoria-graphiti.md; services/memoria/app.py` |
-| Modo Privacidade | Limita envio a modelos externos e acesso à memória conforme escolha efetiva. | `src/app/api/functions/ask-ai-assistant/route.ts` |
-| Análise pontual aprofundada | Amplia a pergunta com ++- apenas nesta interação. | `src/lib/lyra/analise-aprofundada.ts` |
-| Treinamento por feedback | Administra avaliações e treinamento do serviço próprio, sem modificar automaticamente modelos de terceiros. | `docs/treinamento-por-feedback.md` |
+| Capacidade específica       | O que faz (resumo)                                                                                          | Fonte do código                                            |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| Nome e forma de tratamento  | Lê preferência explicitamente escolhida e separa apelido de identidade civil.                               | `src/lib/lyra/preferencias.ts; src/lib/lyra/tratamento.ts` |
+| Histórico de diálogo        | Armazena turnos autorizados por titular, com retomada e idempotência.                                       | `src/lib/chat/servico.ts`                                  |
+| Memória pessoal opcional    | Controla ativação, consulta, importação e exclusão da memória do próprio titular.                           | `src/app/api/memoria/route.ts`                             |
+| Memória Graphiti            | Estrutura episódios e relações em serviço externo ao núcleo, mediante infraestrutura conectada.             | `docs/memoria-graphiti.md; services/memoria/app.py`        |
+| Modo Privacidade            | Limita envio a modelos externos e acesso à memória conforme escolha efetiva.                                | `src/app/api/functions/ask-ai-assistant/route.ts`          |
+| Análise pontual aprofundada | Amplia a pergunta com ++- apenas nesta interação.                                                           | `src/lib/lyra/analise-aprofundada.ts`                      |
+| Treinamento por feedback    | Administra avaliações e treinamento do serviço próprio, sem modificar automaticamente modelos de terceiros. | `docs/treinamento-por-feedback.md`                         |
 
-**12 · Integridade, limites e funcionamento** · *REGRAS DE ACESSO* · 10 itens
+**12 · Integridade, limites e funcionamento** · _REGRAS DE ACESSO_ · 10 itens
 
-| Capacidade específica | O que faz (resumo) | Fonte do código |
-| --- | --- | --- |
-| Sessões e titularidade | APIs de mapa, painel e chat exigem sessão e não selecionam perfil de terceiros. | `src/app/api/astrologia/mapa/route.ts; src/app/api/astrologia/painel/route.ts` |
-| Direitos de plano | Permissões como vedic_insights, ai_chat_messages, chat_history são revalidadas no servidor. | `src/lib/plans/service.ts` |
-| Oito grupos funcionais | Interruptores persistidos podem bloquear coach, registros, dispositivos e outros recursos associados. | `src/lib/plataforma/grupos.ts; src/lib/plataforma/funcionalidades.ts` |
-| Tratamento do horário | Usa fusos históricos e registra limitações de hora desconhecida ou ambígua. | `src/lib/astrology/tempo.ts; src/lib/astrology/tropical.ts` |
-| Cache natal e tropical | Reutiliza bases versionadas com invalidação por mudanças do perfil. | `src/lib/astrology/persistencia-natal.ts; src/lib/astrology/tropical-do-perfil.ts` |
-| Cache do painel | Reutiliza projeções de sete dias por titular/versão/hash. | `src/lib/astrology/persistencia-painel.ts` |
-| Cache diário | Mantém Panchang limitado em memória por data, local e fuso. | `src/lib/astrology/panchang.ts` |
-| Faltas explícitas | Devolve informações indisponíveis em vez de posições e módulos inventados. | `src/lib/lyra/leitura-do-mapa.ts; src/lib/lyra/leitura-tropical.ts` |
-| Validação de LLM ainda parcial | Há conferência por padrões de identidade, mas não verificação geral de planetas, horários e fatos gerados. | `src/lib/lyra/modelos-como-lyra.ts` |
-| Atualização de tarefas | A tarefa 156 permanece aberta para conclusão do Ocidental; 157 para gratuito e 147 para Generative UI. | `claude-gestao.md` |
+| Capacidade específica          | O que faz (resumo)                                                                                         | Fonte do código                                                                    |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| Sessões e titularidade         | APIs de mapa, painel e chat exigem sessão e não selecionam perfil de terceiros.                            | `src/app/api/astrologia/mapa/route.ts; src/app/api/astrologia/painel/route.ts`     |
+| Direitos de plano              | Permissões como vedic_insights, ai_chat_messages, chat_history são revalidadas no servidor.                | `src/lib/plans/service.ts`                                                         |
+| Oito grupos funcionais         | Interruptores persistidos podem bloquear coach, registros, dispositivos e outros recursos associados.      | `src/lib/plataforma/grupos.ts; src/lib/plataforma/funcionalidades.ts`              |
+| Tratamento do horário          | Usa fusos históricos e registra limitações de hora desconhecida ou ambígua.                                | `src/lib/astrology/tempo.ts; src/lib/astrology/tropical.ts`                        |
+| Cache natal e tropical         | Reutiliza bases versionadas com invalidação por mudanças do perfil.                                        | `src/lib/astrology/persistencia-natal.ts; src/lib/astrology/tropical-do-perfil.ts` |
+| Cache do painel                | Reutiliza projeções de sete dias por titular/versão/hash.                                                  | `src/lib/astrology/persistencia-painel.ts`                                         |
+| Cache diário                   | Mantém Panchang limitado em memória por data, local e fuso.                                                | `src/lib/astrology/panchang.ts`                                                    |
+| Faltas explícitas              | Devolve informações indisponíveis em vez de posições e módulos inventados.                                 | `src/lib/lyra/leitura-do-mapa.ts; src/lib/lyra/leitura-tropical.ts`                |
+| Validação de LLM ainda parcial | Há conferência por padrões de identidade, mas não verificação geral de planetas, horários e fatos gerados. | `src/lib/lyra/modelos-como-lyra.ts`                                                |
+| Atualização de tarefas         | A tarefa 156 permanece aberta para conclusão do Ocidental; 157 para gratuito e 147 para Generative UI.     | `claude-gestao.md`                                                                 |
 
 ##### N.4 · Achados forenses e riscos identificados
 
@@ -919,6 +934,7 @@ Os defeitos encontrados nas etapas anteriores desta rodada foram corrigidos nas 
 **Contrato de dados de apresentação:** cada item terá identificador estável, tópico, ordem, título, descrição pt-BR, tipo (núcleo/integração/condicional/parcial/futuro), entradas necessárias, pré-requisito (conta/plano/interruptor/provedor), fonte no código e link GitHub válido, versão da auditoria e observação de incerteza. O conteúdo das tabelas acima é **fonte editorial documentada**, não API em execução. Distinguir o estado de código do estado de produção.
 
 **Etapas futuras, somente mediante nova autorização:**
+
 1. Revalidar `main` e a tarefa 142 na versão efetiva; ler regras/workflows, conhecer as decisões da 147/156 e confirmar se a fonte de navegação/filtros ainda é a mesma. Não sobrescrever alterações simultâneas.
 2. Inserir **Motor da Lyra** como segundo grupo do Filtro 1; manter Radar Premium primeiro e os outros grupos intactos. Reusar o Filtro 2 para busca; tópicos internos formam navegação, não um novo sétimo controle principal.
 3. Popular o catálogo **somente com novas funcionalidades de N.7**, com título, diferencial, evidência de ausência, implementação sugerida e fontes reais. N.3 serve somente para eliminar repetições. Nunca chamar funcionalidade já implementada ou grupo desativado de novidade.
@@ -936,7 +952,6 @@ Documentos de origem auditados: `docs/motor-da-lyra.md`, `docs/astrologia.md`, `
 **Publicação documental do Motor da Lyra:** auditoria e filtro registrados no commit `c4c2193d139d8ed856b5d8422a8f30d64109fc15` na branch `main`; somente `claude-gestao.md` foi alterado. Este registro do SHA é publicado em commit documental próprio, segundo a regra 6, sem modificar código, interfaces, banco ou serviços. **Aguardar instruções.**
 
 **Critério de aceite retificado em 13/11/2026:** manter 174 IDs principais únicos, dois painéis e seis filtros principais, Radar primeiro e Motor segundo; os 112 itens preexistentes permanecem exclusivamente como baseline interno, enquanto o filtro Motor apresenta apenas **9 novas propostas em 3 tópicos** da seção N.7, sem implementação nem falsa alegação de exclusividade mundial. **Estado: tarefa pausada; aguardar instruções.**
-
 
 ##### N.7 · CORREÇÃO DE ESCOPO: filtro Motor da Lyra somente com melhorias não implementadas
 
@@ -1050,7 +1065,6 @@ Documentos de origem auditados: `docs/motor-da-lyra.md`, `docs/astrologia.md`, `
 
 A redação histórica da seção N.7, que pedia mostrar apenas propostas no filtro Motor, fica **SUPERADA** por este contrato, pois o pedido “trazer cada coisa que ela faz” refere-se ao **inventário das 112 capacidades existentes**. A instrução posterior “Não pode trazer coisas que o motor da Lyra já tem” aplica-se **exclusivamente ao filtro de inovações**, que passa a ter cinco cálculos novos, sem repetir as capacidades do Motor. N.7 permanece no histórico do gestor para rastreabilidade, não integra o Top 5 novo nem o filtro de funcionalidades existentes. A seção N.2 revisada prevalece para UI futura.
 
-
 #### O · Inovações para o Motor Lyra: cinco cálculos inéditos no escopo auditado · 13-11-2026
 
 > [!IMPORTANT]
@@ -1114,14 +1128,14 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 ##### O.3 · Quadro de antiduplicação, requisitos de decisão e concorrência
 
-| Já disponível na Lyra | Não sugerir novamente | Proposta efetivamente NOVA |
-| --- | --- | --- |
-| Graus natais e carta tropical ou sideral D1 | Leitura natal comum, posição do dia | INOV-LYRA-01: instantes de aspectos exatos ao grau natal e múltiplas passagens |
-| Nove grahas, casas por signo inteiro e Mahadasha | Repetir mapa Védico como novidade | INOV-LYRA-02: divisões D9/D10 com regras matemáticas adicionais |
-| Cidade natal, coordenadas, fuso e nascer do sol | Mostrar cidade ou mapa geográfico simples | INOV-LYRA-03: linhas AS/DS/MC/IC globais e carta relocalizada |
-| Mapa natal, linha de 7 dias e dasha | Renomear dia ou aniversário como “retorno” | INOV-LYRA-04: busca do instante exato solar/lunar e carta própria do retorno |
-| Tithi, fase lunar, nascer/pôr, Panchang | Mostrar Lua Nova/cheia ou aviso genérico | INOV-LYRA-05: busca de eclipses com visibilidade local, tipo e circunstâncias |
-| Proveniência, voz, agentes, comparação de mapas e avaliação de modelos já planejados | Duplicar roadmap das seções M e N.7 | Todos excluídos deste novo Top 5 |
+| Já disponível na Lyra                                                                | Não sugerir novamente                      | Proposta efetivamente NOVA                                                     |
+| ------------------------------------------------------------------------------------ | ------------------------------------------ | ------------------------------------------------------------------------------ |
+| Graus natais e carta tropical ou sideral D1                                          | Leitura natal comum, posição do dia        | INOV-LYRA-01: instantes de aspectos exatos ao grau natal e múltiplas passagens |
+| Nove grahas, casas por signo inteiro e Mahadasha                                     | Repetir mapa Védico como novidade          | INOV-LYRA-02: divisões D9/D10 com regras matemáticas adicionais                |
+| Cidade natal, coordenadas, fuso e nascer do sol                                      | Mostrar cidade ou mapa geográfico simples  | INOV-LYRA-03: linhas AS/DS/MC/IC globais e carta relocalizada                  |
+| Mapa natal, linha de 7 dias e dasha                                                  | Renomear dia ou aniversário como “retorno” | INOV-LYRA-04: busca do instante exato solar/lunar e carta própria do retorno   |
+| Tithi, fase lunar, nascer/pôr, Panchang                                              | Mostrar Lua Nova/cheia ou aviso genérico   | INOV-LYRA-05: busca de eclipses com visibilidade local, tipo e circunstâncias  |
+| Proveniência, voz, agentes, comparação de mapas e avaliação de modelos já planejados | Duplicar roadmap das seções M e N.7        | Todos excluídos deste novo Top 5                                               |
 
 **Recomendação de prioridade técnica, sem violar o Tópico 1:** 01 após concluir o cálculo do mapa da 156; 02 como módulo matemático isolado na sideral; 03 como motor geográfico independente; 04 reutilizando a infraestrutura numérica da 01; 05 reutilizando biblioteca astronomy-engine já instalada. A ordem real de execução deve ser aprovada, e o registro não altera prioridades anteriores.
 
@@ -1261,7 +1275,6 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 - **O que de fato passou:** `tsc` das funções numéricas, `node tests/validar-numerica.cjs` (raízes e ângulos), `node tests/validar-divisionais.cjs` (casos D9/D10), e cálculo real do eclipse de 12/08/2026 pela biblioteca independente Swiss Ephemeris Python 2.10.03. Estes testes NÃO executam as dependências completas da aplicação.
 - **Para desbloquear:** (1) verificar a disponibilidade de runner, permissões, limites de minutos e eventuais políticas de Actions com acesso administrativo; (2) obter logs da execução ou rodar novo workflow e identificar causa raiz; (3) executar `pnpm install --frozen-lockfile`, `pnpm check:format`, `pnpm check:lint`, `pnpm check:types`, `pnpm test` e `pnpm build` no Node 24 com astronomy-engine 2.1.19; (4) verificar a suíte `inovacoes.test.ts`, segurança da API e cálculos nos cinco métodos; (5) testar navegação autenticada e UI em 320/390/768/1280/1440 px; (6) integração MySQL/CRUD somente onde o fluxo de titularidade persistida exigir, sem impedir testes matemáticos puros; (7) Ruff é não aplicável ao novo núcleo TS, mas verificar Python se houver futuras alterações nele; (8) corrigir erros reais e repetir gates até passar, sem desabilitar regras.
 - **Critério de saída:** CI success com logs de passos, cálculos confrontados com referência independente, QA de navegador e segurança, sem regressões; mover esta tarefa do Tópico 2 para Tópico 4 com resultados reais, elevar 175–179 a 🟢 somente depois de homologação, não por mera publicação.
-
 
 ## Tópico 3 · Tarefas a Iniciar
 
@@ -2491,8 +2504,6 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 9. Entregar logs sanitizados, matriz de paridade por comando, provas de isolamento dos runtimes e de preservação das portas ocupadas, quality gates aplicáveis e revisão final. Publicar a entrega lógica em commit/push próprios na main, sem branches/worktrees, e registrar o SHA imediatamente no gestor.
 
 **Aceite:** dois orquestradores reais e completos nos respectivos ambientes, `run.py` retirado após migração comprovada, nenhuma porta liberada à força, documentação coerente e validação real publicada. Esta nova tarefa eleva o total para 174 e as pendências para 34 (12 em validação, três em andamento, 19 a iniciar); a implementação não foi antecipadamente aprovada.
-
-
 
 ### 180 · Generative UI com A2UI 1.0 para respostas interativas · ⚪ A INICIAR
 
@@ -5430,7 +5441,6 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 **Fechamento técnico em 09-11-2026:** auditoria somente leitura entregue em `docs/auditoria/2026-11-09-programa-154.md`, inventário sanitizado em `docs/auditoria/2026-11-08-baseline-154.json` e script reproduzível `scripts/auditar-programa-154.mjs`. HEAD e remoto conferidos; 95 referências de planos, 23 de mapas, 47 de publicação visual e 25 de proteções inventariadas. Matriz 155–172, riscos, migração e rollback documentados. Banco local: apenas assinatura administrativa, Stripe test sem webhook/preços e OAuth ausente. Nenhum segredo ou dado pessoal exportado. Execução real do script aprovada; baseline técnico da 144 referenciado com data e sem alegar reexecução. Sem mudanças de produto, sem reativação dos oito grupos e sem homologação externa simulada. SHA da publicação será registrado imediatamente após o push.
 
-
 ### 175 · Motor de trânsitos exatos aos pontos natais · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
 - **Origem e data:** solicitação independente do usuário sobre TOP 5 Inovações para o Motor Lyra, em 13/11/2026, aproximadamente 11h20 (America/Sao_Paulo); não é execução da tarefa 142.
@@ -5480,4 +5490,3 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes tentados/resultados comprováveis:** Swiss Ephemeris 2.10.03 localizou eclipse de 12/08/2026, mas a CI não executou os testes JS: run 43441320684 falhou em 3 segundos sem logs úteis. Código publicado, homologação incompleta.
 - **Integração e dependências:** usar o motor determinístico sem LLM; sessão e plano vedic_insights no endpoint comum; não alterar o mapa natal existente; frontend /inovacoes e página condicional protegida por AppShell. Validação integrada e de acesso real ainda exigida na tarefa 190.
 - **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
-

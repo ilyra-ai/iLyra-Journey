@@ -66,9 +66,7 @@ export function calcularLinhasAstrocartograficas(instante: Date) {
       coordenadas.ra * 15 - sideralGreenwich
     );
     for (const angulo of ['MC', 'IC'] as const) {
-      const lon = longitudeGeografica(
-        meridiano + (angulo === 'IC' ? 180 : 0)
-      );
+      const lon = longitudeGeografica(meridiano + (angulo === 'IC' ? 180 : 0));
       linhas.push({
         planeta: corpo.nome,
         angulo,
@@ -94,9 +92,7 @@ export function calcularLinhasAstrocartograficas(instante: Date) {
           continue;
         }
         const h = (Math.acos(c) * 180) / Math.PI;
-        const lon = longitudeGeografica(
-          meridiano + (angulo === 'AS' ? -h : h)
-        );
+        const lon = longitudeGeografica(meridiano + (angulo === 'AS' ? -h : h));
         pontos.push({ latitude, longitude: lon });
       }
       segmentos.push(...dividirNoAntimeridiano(pontos));

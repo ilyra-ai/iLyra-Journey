@@ -18,13 +18,19 @@ export interface PosicaoDivisional {
  * Navamsa: móvel/próprio, fixo/nono, duplo/quinto.
  * Dashamsa: signo ímpar/próprio, par/nono (contagem inclusiva).
  */
-export function signoDivisional(longitudeNatal: number, divisao: DivisaoVedica) {
+export function signoDivisional(
+  longitudeNatal: number,
+  divisao: DivisaoVedica
+) {
   const resultado = indiceDivisional(longitudeNatal, divisao);
   return { ...resultado, nome: SIGNOS[resultado.indice] };
 }
 
 /** Deriva D9/D10 exclusivamente das posições natais siderais calculadas. */
-export function calcularMapaDivisional(mapa: MapaNatal, divisao: DivisaoVedica) {
+export function calcularMapaDivisional(
+  mapa: MapaNatal,
+  divisao: DivisaoVedica
+) {
   const ascendente = mapa.lagna
     ? signoDivisional(mapa.lagna.longitude, divisao)
     : null;

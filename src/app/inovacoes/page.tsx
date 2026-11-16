@@ -25,12 +25,7 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 type Tipo =
-  | 'transitos'
-  | 'd9'
-  | 'd10'
-  | 'astrocartografia'
-  | 'retornos'
-  | 'eclipses';
+  'transitos' | 'd9' | 'd10' | 'astrocartografia' | 'retornos' | 'eclipses';
 type Zodiaco = 'sideral' | 'tropical';
 type Ponto = { latitude: number; longitude: number };
 type Linha = {
@@ -163,8 +158,7 @@ function grau(valor: number) {
 function pontosNoMapa(pontos: Ponto[]) {
   return pontos
     .map(
-      (ponto) =>
-        (ponto.longitude + 180) * 2 + ',' + (90 - ponto.latitude) * 2
+      (ponto) => (ponto.longitude + 180) * 2 + ',' + (90 - ponto.latitude) * 2
     )
     .join(' ');
 }
@@ -208,7 +202,13 @@ function MapaAngular({ linhas }: { linhas: Linha[] }) {
         xmlns="http://www.w3.org/2000/svg"
       >
         <title>Astrocartografia sobre contornos Natural Earth</title>
-        <image href="/world-countries.svg" x="0" y="0" width="720" height="360" />
+        <image
+          href="/world-countries.svg"
+          x="0"
+          y="0"
+          width="720"
+          height="360"
+        />
         {Array.from({ length: 13 }, (_, i) => (
           <line
             key={'meridiano-' + i}
@@ -256,12 +256,15 @@ function MapaAngular({ linhas }: { linhas: Linha[] }) {
       </svg>
       <p className="text-xs leading-5 text-muted-foreground">
         Contornos mundiais Natural Earth (domínio público). AS e DS são
-        tracejados; MC e IC, contínuos. A geometria é geocêntrica e não
-        inclui paralaxe lunar, refração ou relevo.
+        tracejados; MC e IC, contínuos. A geometria é geocêntrica e não inclui
+        paralaxe lunar, refração ou relevo.
       </p>
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         {(['AS', 'DS', 'MC', 'IC'] as const).map((angulo) => (
-          <div key={angulo} className="rounded border border-border p-3 text-sm">
+          <div
+            key={angulo}
+            className="rounded border border-border p-3 text-sm"
+          >
             <strong>{angulo}</strong>
             {' · '}
             {filtradas.filter((linha) => linha.angulo === angulo).length}
@@ -422,8 +425,8 @@ function Conteudo({ tipo, dados }: { tipo: Tipo; dados: Resultado }) {
 function ExploradorDeInovacoes() {
   const [tipo, setTipo] = useState<Tipo>('transitos');
   const [zodiaco, setZodiaco] = useState<Zodiaco>('sideral');
-  const [inicio, setInicio] = useState(
-    () => new Date().toISOString().slice(0, 10)
+  const [inicio, setInicio] = useState(() =>
+    new Date().toISOString().slice(0, 10)
   );
   const [dias, setDias] = useState('14');
   const [corpo, setCorpo] = useState<'sol' | 'lua'>('sol');
@@ -506,9 +509,7 @@ function ExploradorDeInovacoes() {
         setDados(corpo.dados);
       } catch (falha) {
         if (!controle.signal.aborted)
-          setErro(
-            falha instanceof Error ? falha.message : 'Falha inesperada.'
-          );
+          setErro(falha instanceof Error ? falha.message : 'Falha inesperada.');
       } finally {
         if (!controle.signal.aborted) setCarregando(false);
       }
@@ -534,9 +535,9 @@ function ExploradorDeInovacoes() {
             Explore o seu céu com precisão
           </h1>
           <p className="max-w-3xl text-muted-foreground">
-            Cinco cálculos astronômicos e astrológicos do motor próprio da
-            Lyra, sem depender de modelos de IA conectados. Leituras
-            astrológicas são interpretações simbólicas.
+            Cinco cálculos astronômicos e astrológicos do motor próprio da Lyra,
+            sem depender de modelos de IA conectados. Leituras astrológicas são
+            interpretações simbólicas.
           </p>
         </header>
         <Tabs value={tipo} onValueChange={(valor) => trocarTipo(valor as Tipo)}>
@@ -557,7 +558,10 @@ function ExploradorDeInovacoes() {
             <CardDescription>{opcao.descricao}</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={consultar} className="flex flex-wrap items-end gap-3">
+            <form
+              onSubmit={consultar}
+              className="flex flex-wrap items-end gap-3"
+            >
               {tipo !== 'd9' && tipo !== 'd10' && (
                 <label className="grid gap-1 text-sm font-medium">
                   Início (UTC)
@@ -605,9 +609,7 @@ function ExploradorDeInovacoes() {
                   <select
                     className="h-11 rounded border border-input bg-card px-3"
                     value={corpo}
-                    onChange={(e) =>
-                      setCorpo(e.target.value as 'sol' | 'lua')
-                    }
+                    onChange={(e) => setCorpo(e.target.value as 'sol' | 'lua')}
                   >
                     <option value="sol">Solar</option>
                     <option value="lua">Lunar</option>
