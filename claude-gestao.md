@@ -59,7 +59,9 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 
 **Linha temporal persistida e publicada:** `67737c9c`, push confirmado de `817f1d78` para `67737c9c` na `main`.
 
-**156 · Leitura ocidental no painel · 15-11-2026:** implementação publicada em `23c7a501` e confirmada no histórico da `main`. A aba Ocidental consulta a API privada quando ativada e abre a leitura tropical em modal próprio. Foram aprovados cinco testes da API com MySQL real, lint e tipos. Permanecem em validação o acesso autenticado pelo navegador, a apresentação responsiva e a ampliação das datas de comparação externa das efemérides.
+**156 · Leitura ocidental no painel · 15-11-2026:** implementação publicada em `23c7a501` e confirmada no histórico da `main`. A aba Ocidental consulta a API privada quando ativada e abre a leitura tropical em modal próprio. Foram aprovados cinco testes da API com MySQL real, lint e tipos. Permanecem em validação o acesso autenticado pelo navegador e a apresentação responsiva.
+
+**156 · Comparação externa das efemérides · 15-11-2026:** o commit `63507453` foi confirmado em `origin/main`. Três novas conferências do Sol tropical usam respostas consultadas do JPL Horizons DE441 para 29 de fevereiro de 2000 e para os dois lados da transição de Peixes para Áries em 20 de março de 2024. A suíte tropical passou com 41 testes, incluindo a conferência histórica em horário de verão de São Paulo. [Documentação da API do JPL Horizons](https://ssd-api.jpl.nasa.gov/doc/horizons.html).
 
 **156 · Leitura ocidental no chat · 12-11-2026:** publicado em `ddc0d89e`, com push confirmado na `main`. Perguntas explícitas sobre astrologia ocidental usam o cálculo tropical do titular. Com apenas a data de nascimento, a resposta se limita à leitura solar. O contexto de interpretação exclui a leitura védica nesse fluxo. Quatro testes de integração do chat passaram com MySQL real, incluindo a leitura de Sagitário e a ausência de referências siderais. Formato dos arquivos alterados, lint e tipos aprovados.
 
