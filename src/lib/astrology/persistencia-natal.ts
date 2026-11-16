@@ -9,7 +9,7 @@ import { NOME_DO_GRAHA, REGENTE_DO_SIGNO, posicao } from './sideral';
 import { senhorDoNakshatra } from './vimshottari';
 
 // Incrementar ao alterar efemérides, ayanamsha, casas ou serialização da base.
-const VERSAO = 2;
+const VERSAO = 3;
 const METODO = 'sideral-lahiri';
 const longitude = z.number().finite().min(0).lt(360);
 const baseSchema = z
@@ -17,6 +17,9 @@ const baseSchema = z
     nascimentoUtc: z.iso.datetime(),
     horaConhecida: z.boolean(),
     precisaoDaHora: z.enum(['informada', 'estimada', 'desconhecida']),
+    diaDeNascimento: z
+      .object({ inicio: z.iso.datetime(), fim: z.iso.datetime() })
+      .nullable(),
     lagna: longitude.nullable(),
     planetas: z
       .array(
@@ -42,13 +45,20 @@ const baseSchema = z
   .refine((base) => base.horaConhecida === (base.lagna !== null))
   .refine(
     (base) => base.horaConhecida === (base.precisaoDaHora !== 'desconhecida')
-  );
+  )
+  .refine((base) => base.horaConhecida === (base.diaDeNascimento === null));
 
 function gravavel(mapa: MapaNatal): z.infer<typeof baseSchema> {
   return {
     nascimentoUtc: mapa.nascimentoUtc.toISOString(),
     horaConhecida: mapa.horaConhecida,
     precisaoDaHora: mapa.precisaoDaHora,
+    diaDeNascimento: mapa.diaDeNascimento
+      ? {
+          inicio: mapa.diaDeNascimento.inicio.toISOString(),
+          fim: mapa.diaDeNascimento.fim.toISOString(),
+        }
+      : null,
     lagna: mapa.lagna?.longitude ?? null,
     planetas: mapa.planetas.map(({ graha, longitude, retrogrado }) => ({
       graha,
@@ -76,6 +86,14 @@ function restaurar(base: z.infer<typeof baseSchema>, agora: Date): MapaNatal {
       nascimentoUtc: new Date(base.nascimentoUtc),
       horaConhecida: base.horaConhecida,
       precisaoDaHora: base.precisaoDaHora,
+      diaDeNascimento: base.diaDeNascimento
+        ? {
+            inicio: new Date(base.diaDeNascimento.inicio),
+            fim: new Date(base.diaDeNascimento.fim),
+          }
+        : null,
+      // Recalculadas para a data da leitura por `mapaNatalNaData`.
+      possibilidades: null,
       lagna:
         lagnaPos && regente
           ? { ...lagnaPos, regente, nomeDoRegente: NOME_DO_GRAHA[regente] }

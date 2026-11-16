@@ -330,6 +330,7 @@ export function responderComoLyra(
       texto: [
         `${nome}estas são as percepções principais do seu mapa védico:`,
         ...leitura.percepcoes.map((p) => `- ${p}`),
+        leitura.avisoDaHora ?? '',
         leitura.vedico.lagna,
         leitura.vedico.lua,
         leitura.vedico.dasha ?? '',

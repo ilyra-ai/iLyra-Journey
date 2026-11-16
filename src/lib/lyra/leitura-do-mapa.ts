@@ -2,6 +2,7 @@ import { NAKSHATRA_INFO, NATUREZA } from '@/lib/coach/conhecimento';
 import type { MapaNatal, PlanetaNoMapa } from '@/lib/astrology/mapa-natal';
 import {
   type Graha,
+  NAKSHATRAS,
   NOME_DO_GRAHA,
   REGENTE_DO_SIGNO,
   SIGNOS,
@@ -53,6 +54,11 @@ export interface LeituraDeGraha {
 }
 
 export interface LeituraDaLyra {
+  /**
+   * Aviso sobre a hora de nascimento: estimada pela pessoa ou desconhecida.
+   * `null` quando a hora foi informada.
+   */
+  avisoDaHora: string | null;
   tipos: Array<{ tipo: string; nome: string; definicao: string }>;
   vedico: {
     lagna: string;
@@ -119,13 +125,46 @@ function leituraDoGraha(planeta: PlanetaNoMapa): LeituraDeGraha {
   };
 }
 
+function ou(nomes: readonly string[]) {
+  return nomes.length <= 1
+    ? (nomes[0] ?? '')
+    : `${nomes.slice(0, -1).join(', ')} ou ${nomes.at(-1)}`;
+}
+
+/** Com a hora desconhecida, o que da Lua natal não dá para afirmar. */
+function incertezaDaLua(mapa: MapaNatal) {
+  return {
+    signo: (mapa.possibilidades?.signosDaLua.length ?? 1) > 1,
+    nakshatra: (mapa.possibilidades?.nakshatrasDaLua.length ?? 1) > 1,
+  };
+}
+
+function avisoDaHora(mapa: MapaNatal): string | null {
+  if (mapa.precisaoDaHora === 'estimada') {
+    return 'A hora de nascimento deste mapa foi estimada por você, pelo horário que escolheu como o mais parecido com você. O Ascendente, as casas e o período de vida são aproximados. Se você encontrar a hora na sua certidão de nascimento, informe-a no perfil.';
+  }
+  if (mapa.precisaoDaHora === 'desconhecida') {
+    return 'Sem a hora de nascimento, o Ascendente e as casas não são calculados, a posição da Lua é aproximada e o período de vida não pode ser determinado com datas. No perfil você pode informar a hora ou escolher o horário que mais se parece com você.';
+  }
+  return null;
+}
+
 function textoDoLagna(mapa: MapaNatal): string {
   if (!mapa.lagna) {
-    return 'Ascendente (Lagna) indisponível: sem a hora de nascimento ele não é calculado. Informe a hora no perfil para a leitura completa das casas.';
+    return 'Ascendente (Lagna) indisponível: sem a hora de nascimento ele não é calculado. Informe a hora no perfil, ou escolha o horário que mais se parece com você, para a leitura completa das casas.';
   }
   const signo = SIGNOS_INFO[mapa.lagna.signo];
   const regente = mapa.planetas.find((p) => p.graha === mapa.lagna?.regente);
   const casaDoRegente = regente?.casa ? CASAS_INFO[regente.casa - 1] : null;
+  if (mapa.precisaoDaHora === 'estimada') {
+    // O nakshatra do Ascendente muda em menos de uma hora: com a hora
+    // estimada só o signo é afirmado.
+    return [
+      `Ascendente (Lagna) em ${mapa.lagna.nomeDoSigno} (${mapa.lagna.rashi}), pela hora que você escolheu: você chega ao mundo com ${signo.qualidades}.`,
+      `O regente, ${mapa.lagna.nomeDoRegente}${regente?.casa ? `, está na casa ${regente.casa}` : ''}${casaDoRegente ? `: a sua energia vital se dirige aos temas dessa casa (${casaDoRegente.temas})` : ''}.`,
+      'É uma estimativa: com a hora da certidão de nascimento o Ascendente pode ser outro.',
+    ].join(' ');
+  }
   return [
     `Ascendente (Lagna) em ${mapa.lagna.nomeDoSigno} (${mapa.lagna.rashi}), no nakshatra ${mapa.lagna.nomeDoNakshatra}: você chega ao mundo com ${signo.qualidades}.`,
     `O regente, ${mapa.lagna.nomeDoRegente}${regente?.casa ? `, está na casa ${regente.casa}` : ''}${casaDoRegente ? `: a sua energia vital se dirige aos temas dessa casa (${casaDoRegente.temas})` : ''}.`,
@@ -134,8 +173,31 @@ function textoDoLagna(mapa: MapaNatal): string {
 
 function textoDaLua(mapa: MapaNatal): string {
   const lua = mapa.lua;
+  const incerta = incertezaDaLua(mapa);
+  if (mapa.possibilidades && (incerta.signo || incerta.nakshatra)) {
+    const signos = mapa.possibilidades.signosDaLua;
+    const nakshatras = mapa.possibilidades.nakshatrasDaLua.map(
+      (indice) => NAKSHATRAS[indice]
+    );
+    return [
+      incerta.signo
+        ? `Sem a hora de nascimento, a sua Lua pode estar em ${ou(signos.map((indice) => SIGNOS[indice]))}: no dia em que você nasceu ela mudou de signo.`
+        : `Lua em ${lua.nomeDoSigno}: a sua mente e as suas emoções pedem ${SIGNOS_INFO[lua.signo].qualidades}.`,
+      incerta.nakshatra
+        ? `O nakshatra da Lua fica entre ${ou(nakshatras)}; a hora de nascimento define qual.`
+        : `O nakshatra da Lua é ${nakshatras[0]}.`,
+      'Informe a hora no perfil, ou escolha o horário que mais se parece com você, para confirmar.',
+    ].join(' ');
+  }
   const extra = NAKSHATRAS_EXTRA[lua.nakshatra];
   const info = NAKSHATRA_INFO[lua.nakshatra];
+  if (mapa.precisaoDaHora === 'desconhecida') {
+    // Signo e nakshatra valem para o dia inteiro; o pada depende da hora.
+    return [
+      `Lua em ${lua.nomeDoSigno}, no nakshatra ${lua.nomeDoNakshatra}: a sua mente e as suas emoções pedem ${SIGNOS_INFO[lua.signo].qualidades}.`,
+      `${lua.nomeDoNakshatra} tem como símbolo ${extra.simbolo} e fala de ${extra.tema}. Divindade: ${info.divindade}. Temperamento ${NOME_DO_GANA[extra.gana]}; natureza ${minusculaInicial(NATUREZA[info.natureza].nome)}.`,
+    ].join(' ');
+  }
   return [
     `Lua em ${lua.nomeDoSigno}, no nakshatra ${lua.nomeDoNakshatra} (pada ${lua.pada}): a sua mente e as suas emoções pedem ${SIGNOS_INFO[lua.signo].qualidades}.`,
     `${lua.nomeDoNakshatra} tem como símbolo ${extra.simbolo} e fala de ${extra.tema}. Divindade: ${info.divindade}. Temperamento ${NOME_DO_GANA[extra.gana]}; natureza ${minusculaInicial(NATUREZA[info.natureza].nome)}.`,
@@ -149,7 +211,19 @@ function textoDoSol(mapa: MapaNatal): string {
 }
 
 function textoDoDasha(mapa: MapaNatal): string | null {
+  if (mapa.precisaoDaHora === 'desconhecida') {
+    const possiveis = mapa.possibilidades?.mahadashas ?? [];
+    if (possiveis.length === 0) return null;
+    if (possiveis.length === 1) {
+      const graha = possiveis[0];
+      return `Sem a hora de nascimento, o subperíodo e as datas não podem ser calculados. Em qualquer hora daquele dia, porém, o período maior (Mahadasha) que você vive hoje é o de ${NOME_DO_GRAHA[graha]}: ${TEMA_DO_DASHA[graha]}.`;
+    }
+    return `Sem a hora de nascimento, o seu período de vida (dasha) não pode ser determinado: conforme a hora em que você nasceu, hoje você estaria no período de ${ou(possiveis.map((graha) => `${NOME_DO_GRAHA[graha]} (${minusculaInicial(TEMA_DO_DASHA[graha])})`))}. Informe a hora no perfil, ou escolha o horário que mais se parece com você.`;
+  }
   if (!mapa.dasha) return null;
+  if (mapa.precisaoDaHora === 'estimada') {
+    return `Pela hora que você escolheu, você vive o período maior (Mahadasha) de ${mapa.dasha.mahadasha.nome}: ${TEMA_DO_DASHA[mapa.dasha.mahadasha.graha]}. Dentro dele, o subperíodo (Antardasha) de ${mapa.dasha.antardasha.nome} acrescenta uma ${minusculaInicial(TEMA_DO_DASHA[mapa.dasha.antardasha.graha])}. Como a hora é estimada, as datas de início e de fim desses períodos são aproximadas e não são mostradas.`;
+  }
   const { mahadasha, antardasha } = mapa.dasha;
   const formatar = (d: Date) =>
     d.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
@@ -185,7 +259,11 @@ function doshaDoMapa(mapa: MapaNatal): { predominante: Dosha; texto: string } {
   const nome = { vata: 'Vata', pitta: 'Pitta', kapha: 'Kapha' }[predominante];
   return {
     predominante,
-    texto: `Pelo mapa (signos do Lagna e da Lua e o regente do Lagna, como no Brihat Parashara Hora Shastra), a tendência de constituição puxa para ${nome}. Para equilibrar: ${CUIDADO_DO_DOSHA[predominante]}. É uma tendência astrológica; a sua constituição real se avalia com um profissional de Ayurveda.`,
+    texto: `${
+      mapa.lagna
+        ? 'Pelo mapa (signos do Lagna e da Lua e o regente do Lagna, como no Brihat Parashara Hora Shastra)'
+        : `Pelo signo da Lua (sem a hora de nascimento não há Lagna${incertezaDaLua(mapa).signo ? ', e a Lua usada é a do meio-dia daquele dia, que pode não ser a sua' : ''})`
+    }, a tendência de constituição puxa para ${nome}. Para equilibrar: ${CUIDADO_DO_DOSHA[predominante]}. É uma tendência astrológica; a sua constituição real se avalia com um profissional de Ayurveda.`,
   };
 }
 
@@ -208,7 +286,13 @@ function contagemDeElementos(mapa: MapaNatal) {
 /** Afinidade estelar só onde o método Samādhi a define de forma fixa. */
 function afinidadeEstelar(mapa: MapaNatal): string | null {
   const MULA = 18;
-  if (mapa.lua.nakshatra === MULA || mapa.lagna?.nakshatra === MULA) {
+  // A ponte com Mūla só vale quando o nakshatra é certo: Lua sem dúvida no
+  // dia e Ascendente de hora informada.
+  const luaEmMula =
+    mapa.lua.nakshatra === MULA && !incertezaDaLua(mapa).nakshatra;
+  const lagnaEmMula =
+    mapa.precisaoDaHora === 'informada' && mapa.lagna?.nakshatra === MULA;
+  if (luaEmMula || lagnaEmMula) {
     return 'Com a Lua ou o Ascendente em Mūla, o nakshatra do centro da galáxia, o método Samādhi fala de "missão de reconexão com a Fonte Galáctica" e do amparo de "consciências muito antigas do núcleo galáctico".';
   }
   const sol = mapa.planetas.find((p) => p.graha === 'sol') as PlanetaNoMapa;
@@ -294,12 +378,13 @@ export function lerMapaComoLyra(mapa: MapaNatal): LeituraDaLyra {
     'Afinidade estelar indisponível pelo cálculo: no método Samādhi, o Mapa Estelar é lido por percepção (a constelação ou civilização que "chama" a sua atenção), e a Lyra não a inventa.';
 
   const sol = mapa.planetas.find((p) => p.graha === 'sol') as PlanetaNoMapa;
+  const luaIncerta = incertezaDaLua(mapa);
   const mesmoSigno = mapa.lagna?.signo === mapa.lua.signo;
   const sintese = [
     `Você tem raízes de ${dominantes.map((e) => NOME_DO_ELEMENTO[e].split(' ')[0].toLowerCase()).join(' e ')} (${dominantes.map((e) => `${RODA_DE_CURA[e].direcao}, ${RODA_DE_CURA[e].totem}`).join('; ')}).`,
     mesmoSigno
       ? `Ascendente e Lua em ${mapa.lua.nomeDoSigno} reforçam o mesmo tom: ${SIGNOS_INFO[mapa.lua.signo].qualidades}, no jeito de agir e no de sentir.`
-      : `${mapa.lagna ? `Chega ao mundo com ${SIGNOS_INFO[mapa.lagna.signo].qualidades}` : `Brilha com ${SIGNOS_INFO[sol.signo].qualidades}`} e sente a vida com ${SIGNOS_INFO[mapa.lua.signo].qualidades} (Lua em ${mapa.lua.nomeDoSigno}).`,
+      : `${mapa.lagna ? `Chega ao mundo com ${SIGNOS_INFO[mapa.lagna.signo].qualidades}` : `Brilha com ${SIGNOS_INFO[sol.signo].qualidades}`}${luaIncerta.signo ? '' : ` e sente a vida com ${SIGNOS_INFO[mapa.lua.signo].qualidades} (Lua em ${mapa.lua.nomeDoSigno})`}.`,
     mapa.dasha
       ? `Agora você atravessa a ${TEMA_DO_DASHA[mapa.dasha.mahadasha.graha]}, regida por ${mapa.dasha.mahadasha.nome}.`
       : '',
@@ -311,8 +396,12 @@ export function lerMapaComoLyra(mapa: MapaNatal): LeituraDaLyra {
   const percepcoes = [
     mapa.lagna
       ? `Seu Ascendente em ${mapa.lagna.nomeDoSigno} mostra ${SIGNOS_INFO[mapa.lagna.signo].qualidades}.`
-      : `Sua Lua em ${mapa.lua.nomeDoSigno} é o seu centro: ${SIGNOS_INFO[mapa.lua.signo].qualidades}.`,
-    `Sua Lua em ${mapa.lua.nomeDoNakshatra} fala de ${NAKSHATRAS_EXTRA[mapa.lua.nakshatra].tema}.`,
+      : luaIncerta.signo
+        ? `Seu Sol em ${sol.nomeDoSigno} é a referência segura do seu mapa: ${SIGNOS_INFO[sol.signo].qualidades}.`
+        : `Sua Lua em ${mapa.lua.nomeDoSigno} é o seu centro: ${SIGNOS_INFO[mapa.lua.signo].qualidades}.`,
+    luaIncerta.nakshatra
+      ? `Sua Lua fica entre ${ou((mapa.possibilidades?.nakshatrasDaLua ?? []).map((indice) => NAKSHATRAS[indice]))}: a hora de nascimento define qual.`
+      : `Sua Lua em ${mapa.lua.nomeDoNakshatra} fala de ${NAKSHATRAS_EXTRA[mapa.lua.nakshatra].tema}.`,
     ...destaques.map(
       (p) =>
         `${p.nome} ${p.dignidade === 'exaltado' ? 'em exaltação' : p.dignidade === 'proprio' ? 'no próprio signo' : 'em debilitação'}: ${GRAHAS_INFO[p.graha].significa} ${p.dignidade === 'debilitado' ? 'são um campo de aprendizado consciente' : 'são um ponto forte seu'}.`
@@ -331,6 +420,7 @@ export function lerMapaComoLyra(mapa: MapaNatal): LeituraDaLyra {
   if (!estelar) indisponivelSamadhi.push('afinidade estelar');
 
   return {
+    avisoDaHora: avisoDaHora(mapa),
     tipos: Object.values(TIPOS_DE_MAPA).map((t) => ({
       tipo: t.tipo,
       nome: t.nome,

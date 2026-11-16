@@ -12,6 +12,8 @@ import { fusoValido } from './tempo';
 export interface BirthReference {
   birth_date?: string | Date | null;
   birth_time?: string | null;
+  /** Hora estimada pela pessoa; igual a `birth_time` enquanto valer. */
+  birth_time_estimate?: string | null;
   birth_location?: string | null;
   birth_latitude?: number | string | null;
   birth_longitude?: number | string | null;
@@ -22,7 +24,10 @@ export interface AstrologicalData {
   moonPhase: number;
   moonSign: string;
   sunSign: string;
-  /** Mahadasha / Antardasha vigentes (só com nascimento completo). */
+  /**
+   * Mahadasha / Antardasha vigentes: só com data, cidade e hora de
+   * nascimento. Com a hora estimada pela pessoa, sem a data de término.
+   */
   currentDasha?: string;
   nakshatra: string;
   tithi: string;
@@ -147,17 +152,20 @@ function buildCurrentDasha(date: Date, nascimento?: BirthReference) {
   ) {
     return undefined;
   }
+  const hora = nascimento?.birth_time
+    ? nascimento.birth_time.slice(0, 5)
+    : null;
+  const horaEstimada =
+    hora !== null && nascimento?.birth_time_estimate?.slice(0, 5) === hora;
   const dasha = calcularMapaNatal(
-    {
-      data,
-      hora: nascimento?.birth_time ? nascimento.birth_time.slice(0, 5) : null,
-      latitude,
-      longitude,
-      fuso,
-    },
+    { data, hora, horaEstimada, latitude, longitude, fuso },
     date
   ).dasha;
+  // Sem a hora de nascimento o período não é determinável.
   if (!dasha) return undefined;
+  if (horaEstimada) {
+    return `Mahadasha de ${dasha.mahadasha.nome}, Antardasha de ${dasha.antardasha.nome} (hora de nascimento estimada pela pessoa: período aproximado, sem data exata de término)`;
+  }
   const ate = new Intl.DateTimeFormat('pt-BR', {
     day: '2-digit',
     month: '2-digit',

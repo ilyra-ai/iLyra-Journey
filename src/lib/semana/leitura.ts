@@ -259,7 +259,9 @@ export function lerLeituraDaSemana(opcoes: {
     resumo: resumoDosPassados(passados, temMapa),
     passados,
     proxima: { resumo: resumoDaProxima(proximos, temMapa), dias: proximos },
-    fase: mapa?.dasha ? faseDaVida(dashaSimples(mapa.dasha)) : null,
+    fase: mapa?.dasha
+      ? faseDaVida(dashaSimples(mapa.dasha, mapa.precisaoDaHora === 'estimada'))
+      : null,
     transitos,
   };
 }

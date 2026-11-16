@@ -204,13 +204,15 @@ export async function POST(request: Request) {
         goals: unknown;
         birth_date: string | null;
         birth_time: string | null;
+        birth_time_estimate: string | null;
         birth_location: string | null;
         birth_latitude: string | null;
         birth_longitude: string | null;
         birth_timezone: string | null;
       }>(
-        `SELECT first_name, nickname, goals, birth_date, birth_time, birth_location,
-              birth_latitude, birth_longitude, birth_timezone
+        `SELECT first_name, nickname, goals, birth_date, birth_time,
+              birth_time_estimate, birth_location, birth_latitude,
+              birth_longitude, birth_timezone
          FROM profiles WHERE id = ? LIMIT 1`,
         [session.user.id]
       );

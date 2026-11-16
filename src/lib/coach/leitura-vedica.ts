@@ -301,7 +301,9 @@ export function montarEntradaDaLeitura(fatos: FatosDoDia): EntradaDaLeitura {
           SIGNO_INFO[hoje.signoDaLua.indice].elemento
         ),
       },
-      dasha: mapa.dasha ? dashaSimples(mapa.dasha) : null,
+      dasha: mapa.dasha
+        ? dashaSimples(mapa.dasha, mapa.precisaoDaHora === 'estimada')
+        : null,
       tara: {
         nome: dia.pessoal.tara.nome,
         qualidade: dia.pessoal.tara.qualidade,
@@ -559,15 +561,27 @@ export type DashaSimples = NonNullable<
   NonNullable<EntradaDaLeitura['mapa']>['dasha']
 >;
 
-/** Fase da vida (Vimshottari) com os temas e as datas de fim. */
-export function dashaSimples(dasha: DashaAtual): DashaSimples {
+/**
+ * Fase da vida (Vimshottari) com os temas e as datas de fim. Com a hora de
+ * nascimento estimada pela pessoa, as datas dependem de uma Lua aproximada:
+ * saem só como ano e marcadas como aproximadas.
+ */
+export function dashaSimples(
+  dasha: DashaAtual,
+  horaEstimada = false
+): DashaSimples {
+  const anoDoMahadasha = String(dasha.mahadasha.fim.getUTCFullYear());
   return {
     mahadasha: GRAHA_INFO[dasha.mahadasha.graha].nome,
     antardasha: GRAHA_INFO[dasha.antardasha.graha].nome,
     temaDoMahadasha: GRAHA_INFO[dasha.mahadasha.graha].tema,
     temaDoAntardasha: GRAHA_INFO[dasha.antardasha.graha].tema,
-    fimDoMahadasha: String(dasha.mahadasha.fim.getUTCFullYear()),
-    fimDoAntardasha: mesEAno(dasha.antardasha.fim),
+    fimDoMahadasha: horaEstimada
+      ? `por volta de ${anoDoMahadasha}`
+      : anoDoMahadasha,
+    fimDoAntardasha: horaEstimada
+      ? `por volta de ${dasha.antardasha.fim.getUTCFullYear()}`
+      : mesEAno(dasha.antardasha.fim),
   };
 }
 

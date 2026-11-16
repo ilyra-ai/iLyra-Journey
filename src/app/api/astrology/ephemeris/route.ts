@@ -38,8 +38,8 @@ export async function GET(request: Request) {
     if (sessao) await requireFeatureEnabled(sessao, 'vedic_insights');
     const [nascimento] = sessao
       ? await queryRows<BirthReference>(
-          `SELECT birth_date, birth_time, birth_location, birth_latitude,
-                  birth_longitude, birth_timezone
+          `SELECT birth_date, birth_time, birth_time_estimate, birth_location,
+                  birth_latitude, birth_longitude, birth_timezone
              FROM profiles WHERE id = ? LIMIT 1`,
           [sessao.user.id]
         )

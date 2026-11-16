@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 19                       |
+| 🟡 Implementadas com validação pendente | 20                       |
 | 🔵 Em andamento                         | 3                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5509,3 +5509,13 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes e resultados comprováveis:** 9 testes de integração novos contra o MySQL de teste isolado, com a migration 069 aplicada em banco vazio (anônimo recusado, campos expostos, gravação e uso pelo mapa natal real, troca e desfazer, hora digitada volta a informada, proteção da hora informada, corpo inválido, limite polar, isolamento entre contas). Suíte unitária: 1092 aprovados; integração completa: 635 aprovados em 72 arquivos; ESLint, `tsc --noEmit`, Prettier e `next build` aprovados.
 - **Limitação declarada:** gates em Node v26.13.0 por chamada direta dos binários (Node 24 ausente na estação).
 - **Aceite integral pendente:** repetir os gates em Node 24; leituras com aviso de estimativa (193) e tela de escolha (194).
+
+### 193 · Leituras honestas com hora de nascimento estimada ou desconhecida · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** achado nº 1 da análise forense do motor e solicitação do usuário de 16/11/2026 (tarefas 191 e 192).
+- **Causa raiz corrigida:** sem a hora de nascimento, o mapa védico assumia 12:00 e apresentava nakshatra, pada e dasha como certos. Em 400 datas de amostra, o nakshatra divergia em 50,0% dos nascimentos do começo e do fim do dia e o Mahadasha vigente em 47,6%.
+- **Implementação real:** com a hora desconhecida o motor não informa mais dasha e calcula `possibilidades` (signos e nakshatras da Lua no dia civil e Mahadashas possíveis hoje), refeitas a cada data de leitura. A leitura da Lyra declara a incerteza da Lua, lista os períodos possíveis sem datas, deixa de citar o regente do Lagna quando não há Lagna e não afirma a ponte com Mūla sem certeza. Com a hora estimada, a leitura avisa a estimativa, afirma só o signo do Ascendente, não mostra datas dos períodos, e a fase de vida do coach e da semana sai como ano aproximado. O contexto do céu não informa dasha sem hora e não informa data de término com hora estimada. Os modelos conectados recebem o limite do mapa nas instruções.
+- **Arquivos:** `src/lib/astrology/mapa-natal.ts`, `persistencia-natal.ts` (base natal versão 3), `serializacao.ts`, `engine.ts`, `src/lib/lyra/leitura-do-mapa.ts`, `modelos-como-lyra.ts`, `responder.ts`, `src/lib/coach/leitura-vedica.ts`, `gerador-local.ts`, `src/lib/semana/leitura.ts`, `src/lib/ai/plano-do-dia.ts`, `src/app/api/astrology/ephemeris/route.ts`, `src/app/api/functions/ask-ai-assistant/route.ts`, `src/lib/lyra/leitura-da-hora.test.ts`.
+- **Testes e resultados comprováveis:** 11 testes novos. Suíte unitária: 1103 aprovados; integração: 635 aprovados; ESLint, `tsc --noEmit`, Prettier e `next build` aprovados.
+- **Limitação declarada:** com a hora desconhecida, Tara Bala e Chandra Bala do dia continuam usando a Lua do meio-dia do nascimento; o cartão do perfil avisa e convida a escolher o horário. Gates em Node v26.13.0 (Node 24 ausente na estação).
+- **Aceite integral pendente:** repetir os gates em Node 24 e homologar a tela (194).

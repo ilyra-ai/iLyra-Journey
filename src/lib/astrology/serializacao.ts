@@ -1,7 +1,7 @@
 import type { DiaVedico } from './perfil-astrologico';
 import type { MapaNatal } from './mapa-natal';
 import type { Intervalo } from './panchang';
-import { grausEMinutos } from './sideral';
+import { grausEMinutos, NAKSHATRAS, NOME_DO_GRAHA, SIGNOS } from './sideral';
 import { horaLocal } from './tempo';
 
 /**
@@ -14,6 +14,18 @@ export function mapaParaJson(mapa: MapaNatal) {
     nascimentoUtc: mapa.nascimentoUtc.toISOString(),
     horaConhecida: mapa.horaConhecida,
     precisaoDaHora: mapa.precisaoDaHora,
+    // Com a hora desconhecida: o que é possível no dia de nascimento.
+    possibilidades: mapa.possibilidades
+      ? {
+          signosDaLua: mapa.possibilidades.signosDaLua.map((i) => SIGNOS[i]),
+          nakshatrasDaLua: mapa.possibilidades.nakshatrasDaLua.map(
+            (i) => NAKSHATRAS[i]
+          ),
+          mahadashas: mapa.possibilidades.mahadashas.map(
+            (graha) => NOME_DO_GRAHA[graha]
+          ),
+        }
+      : null,
     lagna: mapa.lagna
       ? {
           signo: mapa.lagna.nomeDoSigno,

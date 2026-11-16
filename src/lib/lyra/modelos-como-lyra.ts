@@ -53,6 +53,11 @@ function resumoDoMapa(
   const leitura = lerMapaComoLyra(mapa);
   return [
     'Mapa natal desta pessoa, lido pelo motor da Lyra (mapa védico tradicional):',
+    ...(leitura.avisoDaHora
+      ? [
+          `- Limite deste mapa, que você deve respeitar e dizer quando falar de Ascendente, casas, Lua ou períodos: ${leitura.avisoDaHora}`,
+        ]
+      : []),
     `- ${leitura.vedico.lagna}`,
     `- ${leitura.vedico.lua}`,
     `- ${leitura.vedico.sol}`,

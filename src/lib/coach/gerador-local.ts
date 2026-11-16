@@ -304,6 +304,9 @@ export function gerarDiaLocal({ contexto, agora }: EntradaDoGerador): {
   const astro = getAstrologicalContext(panchang.nascerDoSol, {
     birth_date: perfil.nascimento.data,
     birth_time: perfil.nascimento.hora,
+    birth_time_estimate: perfil.nascimento.horaEstimada
+      ? perfil.nascimento.hora
+      : null,
     birth_location: perfil.nascimento.local?.rotulo ?? null,
     birth_latitude: perfil.nascimento.local?.latitude ?? null,
     birth_longitude: perfil.nascimento.local?.longitude ?? null,
