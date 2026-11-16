@@ -6,6 +6,7 @@ import {
   idadeDoNascimento,
 } from '@/lib/perfil/conclusao-onboarding';
 import { cidadePorId } from '@/lib/geo/cidades';
+import { horaDaJanelaEscolhida } from '@/lib/perfil/hora-de-nascimento';
 import { requireServerSession } from '@/lib/mysql/server-auth';
 import { withTransaction } from '@/lib/mysql/pool';
 import { travarAdministracao } from '@/lib/auth/bloqueio';
@@ -23,6 +24,10 @@ export async function POST(request: Request) {
       : null;
     if (!nascimento || (b.residence_city_id && !moradia))
       throw new HttpError('Escolha uma cidade válida na lista.', 404);
+    // Recalculada no servidor: o navegador só diz qual horário foi escolhido.
+    const horaEstimada = b.birth_time_window
+      ? horaDaJanelaEscolhida(b.birth_date, nascimento.id, b.birth_time_window)
+      : null;
     await exigirDentroDoLimite(
       { escopo: 'concluir-onboarding', limite: 20, janelaSegundos: 3600 },
       session.user.id
@@ -69,7 +74,10 @@ export async function POST(request: Request) {
         fields.push('nickname=?');
         values.push(b.nickname?.trim() || null);
       }
-      if (b.birth_time !== undefined) {
+      if (horaEstimada !== null) {
+        fields.push('birth_time=?', 'birth_time_estimate=?');
+        values.push(horaEstimada, horaEstimada);
+      } else if (b.birth_time !== undefined) {
         fields.push('birth_time=?');
         values.push(b.birth_time);
       }

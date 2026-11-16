@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { format, parseISO } from 'date-fns';
 import Link from 'next/link';
@@ -50,6 +50,8 @@ import {
 import { DatePicker } from '@/components/ui/date-picker';
 import { TimeInput } from '@/components/ui/time-input';
 import { SeletorDeCidade } from '@/components/geo/SeletorDeCidade';
+import { EscolhaDaHoraNaConfiguracao } from '@/components/profile/EscolhaDaHora';
+import type { OpcaoDeHora } from '@/lib/perfil/hora-de-nascimento';
 import { OnboardingNavigationDots } from './OnboardingNavigationDots';
 
 const cidade = z.object({
@@ -146,6 +148,13 @@ export function OnboardingForm() {
     [falhaEnvio, setFalhaEnvio] = React.useState<string | null>(null),
     [rascunhoSalvo, setRascunhoSalvo] = React.useState(false);
   const falhaRascunho = React.useRef(false);
+  // Horário escolhido por quem não sabe a hora, com a data e a cidade para as
+  // quais ele foi calculado: só vale enquanto as duas não mudarem.
+  const [janela, setJanela] = React.useState<{
+    opcao: OpcaoDeHora;
+    data: string;
+    cidadeId: number;
+  } | null>(null);
   const valoresOriginais = React.useRef<{
     hora: string;
     moradia: number | null;
@@ -164,6 +173,10 @@ export function OnboardingForm() {
       residence_city: null,
       consent: false,
     },
+  });
+  const [cidadeDeNascimento, horaDigitada] = useWatch({
+    control: form.control,
+    name: ['birth_city', 'birth_time'],
   });
   const chave = titular ? `lyra:onboarding:v1:${titular}` : null;
   const persistir = React.useCallback(() => {
@@ -416,9 +429,24 @@ export function OnboardingForm() {
       toast.error('Confira o campo destacado para continuar.');
     }
   }
+  function janelaValida(
+    dataDeNascimento: Date | undefined,
+    cidadeId: number | undefined,
+    hora: string
+  ) {
+    return janela &&
+      !hora &&
+      dataDeNascimento &&
+      Number.isFinite(dataDeNascimento.getTime()) &&
+      janela.data === format(dataDeNascimento, 'yyyy-MM-dd') &&
+      janela.cidadeId === cidadeId
+      ? janela.opcao
+      : null;
+  }
   async function gravar(v: Valores) {
     if (!v.birth_city || !titular) return;
     const moradiaId = v.residence_city?.id ?? null;
+    const horario = janelaValida(v.birth_date, v.birth_city.id, v.birth_time);
     setEnviando(true);
     setFalhaEnvio(null);
     try {
@@ -429,9 +457,11 @@ export function OnboardingForm() {
           nickname: v.nickname || null,
           birth_date: format(v.birth_date, 'yyyy-MM-dd'),
           birth_city_id: v.birth_city.id,
-          ...(v.birth_time || v.birth_time !== valoresOriginais.current.hora
-            ? { birth_time: v.birth_time || null }
-            : {}),
+          ...(horario
+            ? { birth_time_window: horario.id }
+            : v.birth_time || v.birth_time !== valoresOriginais.current.hora
+              ? { birth_time: v.birth_time || null }
+              : {}),
           ...(v.residence_city || moradiaId !== valoresOriginais.current.moradia
             ? { residence_city_id: moradiaId }
             : {}),
@@ -496,6 +526,11 @@ export function OnboardingForm() {
   const atual = etapas[etapa],
     Icone = atual.icon,
     v = form.getValues();
+  const horarioEscolhido = janelaValida(
+    v.birth_date,
+    cidadeDeNascimento?.id,
+    horaDigitada ?? ''
+  );
   return (
     <Form {...form}>
       <form
@@ -750,10 +785,36 @@ export function OnboardingForm() {
                         <TimeInput {...field} placeholder="HH:MM" />
                       </FormControl>
                       <FormDescription>
-                        O horário ajuda a detalhar o mapa. Se não souber, você
-                        pode definir depois no perfil.
+                        O horário ajuda a detalhar o mapa. Se não souber,
+                        escolha abaixo o horário que mais se parece com você.
                       </FormDescription>
                       <FormMessage />
+                      <EscolhaDaHoraNaConfiguracao
+                        data={
+                          v.birth_date &&
+                          Number.isFinite(v.birth_date.getTime())
+                            ? format(v.birth_date, 'yyyy-MM-dd')
+                            : null
+                        }
+                        cidadeId={cidadeDeNascimento?.id ?? null}
+                        horaNoFormulario={field.value ?? ''}
+                        escolhida={janelaValida(
+                          v.birth_date,
+                          cidadeDeNascimento?.id,
+                          field.value ?? ''
+                        )}
+                        aoEscolher={(opcao) =>
+                          setJanela(
+                            opcao && v.birth_date && cidadeDeNascimento
+                              ? {
+                                  opcao,
+                                  data: format(v.birth_date, 'yyyy-MM-dd'),
+                                  cidadeId: cidadeDeNascimento.id,
+                                }
+                              : null
+                          )
+                        }
+                      />
                     </FormItem>
                   )}
                 />
@@ -807,6 +868,9 @@ export function OnboardingForm() {
                     <dd className="mt-1 font-medium">
                       {v.birth_date ? format(v.birth_date, 'dd/MM/yyyy') : ''}
                       {v.birth_time ? ` · ${v.birth_time}` : ''}
+                      {horarioEscolhido
+                        ? ` · ${horarioEscolhido.inicio} às ${horarioEscolhido.fim} (${horarioEscolhido.palavra}, estimado)`
+                        : ''}
                     </dd>
                   </div>
                   <div>

@@ -71,6 +71,7 @@ import { PrivacyDataCard } from './PrivacyDataCard';
 import { PurchaseHistoryCard } from './PurchaseHistoryCard';
 import { LocaisDoPerfil } from './LocaisDoPerfil';
 import { avisarMapaAtualizado } from '@/lib/astrology/evento-do-mapa';
+import { EscolhaDaHora } from '@/components/profile/EscolhaDaHora';
 import type { CidadeEscolhida } from '@/components/geo/SeletorDeCidade';
 import { Slider } from '@/components/ui/slider';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -700,6 +701,15 @@ export function ProfileForm() {
                           Define o ascendente (Lagna) e as casas do mapa védico.
                         </FormDescription>
                         <FormMessage />
+                        <EscolhaDaHora
+                          horaNoFormulario={field.value ?? ''}
+                          aoGravar={(hora) =>
+                            form.setValue('birth_time', hora ?? '', {
+                              shouldDirty: false,
+                              shouldValidate: true,
+                            })
+                          }
+                        />
                       </FormItem>
                     )}
                   />

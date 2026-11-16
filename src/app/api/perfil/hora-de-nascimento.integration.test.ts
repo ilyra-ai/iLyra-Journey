@@ -11,6 +11,8 @@ import {
   type UsuarioDeTeste,
 } from '../../../../tests/integration/fixtures';
 import { chamar } from '../../../../tests/integration/http';
+import { POST as concluirOnboarding } from '../onboarding/route';
+import { buscarCidades } from '@/lib/geo/cidades';
 import { DELETE, GET, POST } from './hora-de-nascimento/route';
 
 const SAO_PAULO = {
@@ -290,5 +292,153 @@ describe('Hora de nascimento estimada pelo titular', () => {
       birth_time_estimate: null,
     });
     expect((await horasDoPerfil(titular)).birth_time).not.toBeNull();
+  });
+});
+
+describe('Horário escolhido na configuração inicial', () => {
+  const cidade = () => buscarCidades('São Paulo')[0];
+  const previa = (usuario: UsuarioDeTeste | null, consulta: string) =>
+    chamar(GET, {
+      usuario,
+      path: `/api/perfil/hora-de-nascimento?${consulta}`,
+    });
+  const dados = () => ({
+    first_name: 'Pessoa',
+    last_name: 'Teste',
+    birth_date: '1990-12-01',
+    birth_city_id: cidade().id,
+    consent: true as const,
+  });
+
+  it('a prévia devolve horário e palavra sem gravar nada, só para quem tem sessão', async () => {
+    const pessoa = await criarUsuario();
+    expect(
+      (await previa(null, `data=1990-12-01&cidadeId=${cidade().id}`)).status
+    ).toBe(401);
+
+    const resposta = await previa(
+      pessoa,
+      `data=1990-12-01&cidadeId=${cidade().id}`
+    );
+    expect(resposta.status).toBe(200);
+    const { opcoes } = resposta.json as { opcoes: OpcoesDeHora['opcoes'] };
+    expect(opcoes.length).toBeGreaterThanOrEqual(12);
+    expect(Object.keys(resposta.json as object)).toEqual(['opcoes']);
+    for (const opcao of opcoes) {
+      expect(Object.keys(opcao).toSorted()).toEqual([
+        'escolhida',
+        'fim',
+        'id',
+        'inicio',
+        'palavra',
+      ]);
+    }
+    expect(await horasDoPerfil(pessoa)).toEqual({
+      birth_time: null,
+      birth_time_estimate: null,
+    });
+  });
+
+  it('a prévia recusa parâmetros inválidos, cidade inexistente e data impossível', async () => {
+    const pessoa = await criarUsuario();
+    expect((await previa(pessoa, 'data=1990-12-01')).status).toBe(400);
+    expect((await previa(pessoa, 'data=01/12/1990&cidadeId=1')).status).toBe(
+      400
+    );
+    expect(
+      (await previa(pessoa, `data=1990-02-30&cidadeId=${cidade().id}`)).status
+    ).toBe(400);
+    expect(
+      (await previa(pessoa, 'data=1990-12-01&cidadeId=999999999')).status
+    ).toBe(404);
+  });
+
+  it('conclui o onboarding com a janela escolhida e grava a hora como estimada', async () => {
+    const pessoa = await criarUsuario();
+    await executeStatement(
+      'UPDATE profiles SET onboarding_completed=FALSE WHERE id=?',
+      [pessoa.id]
+    );
+    const { opcoes } = (
+      await previa(pessoa, `data=1990-12-01&cidadeId=${cidade().id}`)
+    ).json as { opcoes: OpcoesDeHora['opcoes'] };
+    const escolhida = opcoes[4];
+
+    const resposta = await chamar(concluirOnboarding, {
+      usuario: pessoa,
+      method: 'POST',
+      body: { ...dados(), birth_time_window: escolhida.id },
+    });
+    expect(resposta.status).toBe(200);
+
+    const gravado = await horasDoPerfil(pessoa);
+    expect(gravado.birth_time).not.toBeNull();
+    expect(gravado.birth_time).toBe(gravado.birth_time_estimate);
+    const hora = gravado.birth_time!.slice(0, 5);
+    expect(escolhida.inicio <= hora && hora < escolhida.fim).toBe(true);
+
+    const situacao = (await chamar(GET, { usuario: pessoa }))
+      .json as OpcoesDeHora;
+    expect(situacao.situacao).toBe('estimada');
+    expect(situacao.opcoes.find((o) => o.escolhida)?.palavra).toBe(
+      escolhida.palavra
+    );
+    const mapa = await chamar(mapaNatal, { usuario: pessoa });
+    expect(mapa.json).toMatchObject({ mapa: { precisaoDaHora: 'estimada' } });
+  });
+
+  it('recusa janela de outro dia e hora digitada junto com janela, sem concluir', async () => {
+    const pessoa = await criarUsuario();
+    await executeStatement(
+      'UPDATE profiles SET onboarding_completed=FALSE WHERE id=?',
+      [pessoa.id]
+    );
+    const enviar = (extra: Record<string, unknown>) =>
+      chamar(concluirOnboarding, {
+        usuario: pessoa,
+        method: 'POST',
+        body: { ...dados(), ...extra },
+      });
+    expect(
+      (await enviar({ birth_time_window: '2001-01-01T12:00:00.000Z' })).status
+    ).toBe(409);
+    expect(
+      (
+        await enviar({
+          birth_time: '10:30',
+          birth_time_window: '1990-12-01T03:00:00.000Z',
+        })
+      ).status
+    ).toBe(400);
+    const [perfil] = await queryRows<{ onboarding_completed: number }>(
+      'SELECT onboarding_completed FROM profiles WHERE id=?',
+      [pessoa.id]
+    );
+    expect(perfil.onboarding_completed).toBe(0);
+    expect(await horasDoPerfil(pessoa)).toEqual({
+      birth_time: null,
+      birth_time_estimate: null,
+    });
+  });
+
+  it('a hora digitada no onboarding continua sendo informada', async () => {
+    const pessoa = await criarUsuario();
+    await executeStatement(
+      'UPDATE profiles SET onboarding_completed=FALSE WHERE id=?',
+      [pessoa.id]
+    );
+    const resposta = await chamar(concluirOnboarding, {
+      usuario: pessoa,
+      method: 'POST',
+      body: { ...dados(), birth_time: '10:30' },
+    });
+    expect(resposta.status).toBe(200);
+    expect(await horasDoPerfil(pessoa)).toMatchObject({
+      birth_time_estimate: null,
+    });
+    expect((await chamar(GET, { usuario: pessoa })).json).toMatchObject({
+      situacao: 'informada',
+      hora: '10:30',
+    });
   });
 });

@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 20                       |
+| 🟡 Implementadas com validação pendente | 21                       |
 | 🔵 Em andamento                         | 3                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5519,3 +5519,13 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes e resultados comprováveis:** 11 testes novos. Suíte unitária: 1103 aprovados; integração: 635 aprovados; ESLint, `tsc --noEmit`, Prettier e `next build` aprovados.
 - **Limitação declarada:** com a hora desconhecida, Tara Bala e Chandra Bala do dia continuam usando a Lua do meio-dia do nascimento; o cartão do perfil avisa e convida a escolher o horário. Gates em Node v26.13.0 (Node 24 ausente na estação).
 - **Aceite integral pendente:** repetir os gates em Node 24 e homologar a tela (194).
+
+### 194 · Escolha do horário de nascimento no onboarding e no perfil · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** solicitação do usuário em 16/11/2026: quem não sabe a hora escolhe o horário vendo apenas o intervalo e uma palavra, sem termos técnicos, no onboarding e no perfil.
+- **Implementação real:** componente `EscolhaDaHora` (perfil) e `EscolhaDaHoraNaConfiguracao` (onboarding), com a mesma grade acessível de opções (horário e uma palavra), opção "Nenhuma se parece comigo" e estados de carregamento, erro e indisponibilidade. No perfil a escolha é gravada na hora pela rota; no onboarding a data e a cidade ainda não estão salvas, então a rota devolve uma prévia (`?data=&cidadeId=`) e a conclusão recebe `birth_time_window`, com a hora recalculada no servidor e gravada como estimada. O cartão do mapa mostra o aviso da leitura, o Ascendente só por signo quando estimado e as possibilidades quando a hora é desconhecida.
+- **CRUD da hora estimada:** criar (POST da rota ou conclusão do onboarding), ler (GET), alterar (POST com outra janela) e apagar (DELETE), todos restritos ao próprio titular e cobertos por testes de integração.
+- **Arquivos:** `src/components/profile/EscolhaDaHora.tsx`, `ProfileForm.tsx`, `MapaVedicoCard.tsx`, `src/components/onboarding/onboarding-form.tsx`, `src/lib/perfil/hora-de-nascimento.ts`, `src/lib/perfil/conclusao-onboarding.ts`, `src/app/api/perfil/hora-de-nascimento/route.ts`, `src/app/api/onboarding/route.ts`, `src/app/api/perfil/hora-de-nascimento.integration.test.ts`.
+- **Testes e resultados comprováveis:** 5 testes de integração novos (prévia, recusas, conclusão com janela, janela inválida sem concluir, hora digitada). Unitários: 1103 aprovados; integração: 640 aprovados; ESLint sem avisos, `tsc --noEmit`, Prettier e `next build` aprovados. O diálogo do perfil foi exercitado no navegador em 16/11/2026 (13 opções, escolha de "Liberdade 07:16 às 09:29" gravou 08:22 como estimada e a leitura passou a avisar a estimativa).
+- **Não validado:** a etapa do onboarding e o cartão do mapa não foram abertos no navegador depois da alteração; responsivo e leitor de tela não foram conferidos. O horário escolhido no onboarding não entra no rascunho da aba: ao recarregar, a pessoa escolhe de novo. Gates em Node v26.13.0 (Node 24 ausente na estação).
+- **Banco local:** migration 069 aplicada após backup de `profiles` com restauração conferida; permanece a conta de teste `qa-hora-estimada@lyra.test`.

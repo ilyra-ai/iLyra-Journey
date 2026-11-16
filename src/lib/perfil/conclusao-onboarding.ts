@@ -26,6 +26,11 @@ export const conclusaoOnboardingSchema = z
       .regex(/^([01]\d|2[0-3]):[0-5]\d$/)
       .nullable()
       .optional(),
+    /**
+     * Para quem não sabe a hora: início (UTC) da janela escolhida entre as do
+     * dia de nascimento. O servidor calcula a hora e a grava como estimada.
+     */
+    birth_time_window: z.iso.datetime().optional(),
     birth_city_id: z.number().int().positive(),
     residence_city_id: z.number().int().positive().nullable().optional(),
     gender: z.enum(['male', 'female', 'other', 'prefer_not-to-say']).optional(),
@@ -34,4 +39,8 @@ export const conclusaoOnboardingSchema = z
       error: 'Confirme o consentimento para concluir.',
     }),
   })
-  .strict();
+  .strict()
+  .refine((v) => !(v.birth_time && v.birth_time_window), {
+    error: 'Informe a hora de nascimento ou escolha um horário, não os dois.',
+    path: ['birth_time_window'],
+  });

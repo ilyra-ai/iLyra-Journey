@@ -8,6 +8,7 @@ import {
   lerPerfilAstrologico,
   type PerfilAstrologico,
 } from '@/lib/astrology/perfil-astrologico';
+import { cidadePorId } from '@/lib/geo/cidades';
 import { HttpError } from '@/lib/http-error';
 import { SIGNOS_INFO } from '@/lib/lyra/conhecimento/jyotish';
 import { executeStatement, queryRows, withTransaction } from '@/lib/mysql/pool';
@@ -103,6 +104,65 @@ function montarOpcoes(perfil: PerfilAstrologico): OpcoesDeHora {
           janela.horaEstimada === perfil.nascimento.hora,
       })),
   };
+}
+
+/**
+ * Janelas para uma data e uma cidade ainda não salvas no perfil (configuração
+ * inicial). A cidade vem da base local pelo id; data inexistente, cidade
+ * desconhecida e latitude polar são recusadas com mensagem própria.
+ */
+function janelasDeNascimento(data: string, cidadeId: number): JanelaDeHora[] {
+  const cidade = cidadePorId(cidadeId);
+  if (!cidade)
+    throw new HttpError('Cidade não encontrada na base de cidades.', 404);
+  try {
+    return calcularJanelasDeHora({
+      data,
+      latitude: cidade.latitude,
+      longitude: cidade.longitude,
+      fuso: cidade.fuso,
+    });
+  } catch (erro) {
+    if (erro instanceof RangeError) throw new HttpError(erro.message, 422);
+    throw erro;
+  }
+}
+
+/** Horário e palavra de cada janela, sem nada gravado. */
+export function opcoesDeHoraParaNascimento(
+  data: string,
+  cidadeId: number
+): OpcaoDeHora[] {
+  return janelasDeNascimento(data, cidadeId)
+    .filter((janela) => janela.horaEstimada !== null)
+    .map((janela) => ({
+      id: janela.inicioUtc.toISOString(),
+      inicio: janela.inicio,
+      fim: janela.fim,
+      palavra: SIGNOS_INFO[janela.signo].essencia,
+      escolhida: false,
+    }));
+}
+
+/**
+ * Hora representativa da janela escolhida, recalculada no servidor para a
+ * data e a cidade informadas na configuração inicial.
+ */
+export function horaDaJanelaEscolhida(
+  data: string,
+  cidadeId: number,
+  janelaId: string
+): string {
+  const instante = new Date(janelaId).getTime();
+  const janela = janelasDeNascimento(data, cidadeId).find(
+    (item) => item.inicioUtc.getTime() === instante
+  );
+  if (!janela?.horaEstimada)
+    throw new HttpError(
+      'Esse horário não pertence ao dia e à cidade de nascimento informados. Escolha novamente.',
+      409
+    );
+  return janela.horaEstimada;
 }
 
 async function bloquearPerfil(userId: string, connection: PoolConnection) {

@@ -227,22 +227,30 @@ export function MapaVedicoCard() {
                 </dt>
                 <dd className="mt-1 font-display text-lg font-semibold text-foreground">
                   {data.mapa.lagna
-                    ? `${data.mapa.lagna.signo} ${data.mapa.lagna.grau}`
+                    ? data.mapa.precisaoDaHora === 'estimada'
+                      ? data.mapa.lagna.signo
+                      : `${data.mapa.lagna.signo} ${data.mapa.lagna.grau}`
                     : 'Sem hora de nascimento'}
                 </dd>
                 {data.mapa.lagna ? (
                   <dd className="text-xs text-muted-foreground">
-                    {data.mapa.lagna.rashi} · regente {data.mapa.lagna.regente}
+                    {data.mapa.precisaoDaHora === 'estimada'
+                      ? 'Estimado pelo horário que você escolheu'
+                      : `${data.mapa.lagna.rashi} · regente ${data.mapa.lagna.regente}`}
                   </dd>
                 ) : null}
               </div>
               <div className="rounded-lg border border-border bg-background p-3">
                 <dt className="text-xs text-muted-foreground">Lua natal</dt>
                 <dd className="mt-1 font-display text-lg font-semibold text-foreground">
-                  {data.mapa.lua.signo}
+                  {data.mapa.possibilidades
+                    ? data.mapa.possibilidades.signosDaLua.join(' ou ')
+                    : data.mapa.lua.signo}
                 </dd>
                 <dd className="text-xs text-muted-foreground">
-                  {data.mapa.lua.nakshatra}, pada {data.mapa.lua.pada}
+                  {data.mapa.possibilidades
+                    ? data.mapa.possibilidades.nakshatrasDaLua.join(' ou ')
+                    : `${data.mapa.lua.nakshatra}, pada ${data.mapa.lua.pada}`}
                 </dd>
               </div>
               <div className="rounded-lg border border-border bg-background p-3">
@@ -250,20 +258,29 @@ export function MapaVedicoCard() {
                 <dd className="mt-1 font-display text-lg font-semibold text-foreground">
                   {data.mapa.dasha
                     ? `${data.mapa.dasha.mahadasha.nome.split(' (')[0]} / ${data.mapa.dasha.antardasha.nome.split(' (')[0]}`
-                    : '—'}
+                    : data.mapa.possibilidades?.mahadashas.length
+                      ? data.mapa.possibilidades.mahadashas
+                          .map((nome) => nome.split(' (')[0])
+                          .join(' ou ')
+                      : '—'}
                 </dd>
                 {data.mapa.dasha ? (
                   <dd className="text-xs text-muted-foreground">
-                    Antardasha até {dataBr(data.mapa.dasha.antardasha.fim)}
+                    {data.mapa.precisaoDaHora === 'estimada'
+                      ? 'Datas aproximadas: a hora é estimada'
+                      : `Antardasha até ${dataBr(data.mapa.dasha.antardasha.fim)}`}
+                  </dd>
+                ) : data.mapa.possibilidades?.mahadashas.length ? (
+                  <dd className="text-xs text-muted-foreground">
+                    Depende da hora de nascimento
                   </dd>
                 ) : null}
               </div>
             </dl>
 
-            {!data.mapa.horaConhecida ? (
+            {data.leitura?.avisoDaHora ? (
               <p className="rounded-md border border-warning/30 bg-warning-light px-3 py-2 text-xs leading-5 text-warning">
-                Sem a hora de nascimento, o mapa usa 12:00: não há ascendente
-                nem casas, e a Lua e o dasha podem variar algumas horas.
+                {data.leitura.avisoDaHora}
               </p>
             ) : null}
 
