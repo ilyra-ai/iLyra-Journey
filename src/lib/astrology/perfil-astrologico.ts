@@ -20,6 +20,7 @@ import { dataLocal, fusoValido } from './tempo';
 interface LinhaDoPerfil {
   birth_date: string | Date | null;
   birth_time: string | null;
+  birth_time_estimate: string | null;
   birth_location: string | null;
   birth_latitude: string | number | null;
   birth_longitude: string | number | null;
@@ -41,6 +42,11 @@ export interface PerfilAstrologico {
   nascimento: {
     data: string | null;
     hora: string | null;
+    /**
+     * A hora foi estimada pela própria pessoa ao escolher uma janela do dia
+     * de nascimento (`birth_time_estimate` igual a `birth_time`).
+     */
+    horaEstimada: boolean;
     local: Local | null;
   };
   moradia: Local | null;
@@ -81,7 +87,7 @@ export async function lerPerfilAstrologico(
   connection?: PoolConnection
 ): Promise<PerfilAstrologico> {
   const [linha] = await queryRows<LinhaDoPerfil>(
-    `SELECT birth_date, birth_time, birth_location, birth_latitude,
+    `SELECT birth_date, birth_time, birth_time_estimate, birth_location, birth_latitude,
             birth_longitude, birth_timezone, residence_location,
             residence_latitude, residence_longitude, residence_timezone
        FROM profiles WHERE id = ? LIMIT 1`,
@@ -106,12 +112,14 @@ export async function lerPerfilAstrologico(
     : null;
   const data = dataIso(linha?.birth_date ?? null);
   const hora = linha?.birth_time ? linha.birth_time.slice(0, 5) : null;
+  const horaEstimada =
+    hora !== null && linha?.birth_time_estimate?.slice(0, 5) === hora;
   const faltando: PerfilAstrologico['faltando'] = [];
   if (!data) faltando.push('data');
   if (!hora) faltando.push('hora');
   if (!nascimentoLocal) faltando.push('local');
   return {
-    nascimento: { data, hora, local: nascimentoLocal },
+    nascimento: { data, hora, horaEstimada, local: nascimentoLocal },
     moradia,
     localDoDia: moradia ?? nascimentoLocal,
     faltando,
@@ -123,12 +131,13 @@ export function mapaDoPerfil(
   perfil: PerfilAstrologico,
   agora = new Date()
 ): MapaNatal | null {
-  const { data, hora, local: lugar } = perfil.nascimento;
+  const { data, hora, horaEstimada, local: lugar } = perfil.nascimento;
   if (!data || !lugar) return null;
   return calcularMapaNatal(
     {
       data,
       hora,
+      horaEstimada,
       latitude: lugar.latitude,
       longitude: lugar.longitude,
       fuso: lugar.fuso,

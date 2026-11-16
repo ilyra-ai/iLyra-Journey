@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 18                       |
+| 🟡 Implementadas com validação pendente | 19                       |
 | 🔵 Em andamento                         | 3                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5500,3 +5500,12 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Limitação declarada:** os gates rodaram em Node v26.13.0 por chamada direta dos binários, porque a estação não tem o Node `^24.18.1` exigido pelo projeto e o pnpm recusa a execução. A janela inteiramente contida na hora repetida do fim do horário de verão fica sem hora representável, pois o perfil guarda apenas a hora local.
 - **Correções prévias exigidas pelos gates:** `383c6505` (Prettier em sete arquivos já publicados) e `4bfdb573` (ordem de `/inovacoes` na navegação e quatro testes que falhavam).
 - **Aceite integral pendente:** repetir os gates em Node 24 e concluir as tarefas 192 a 194, que ligam as janelas ao perfil, às leituras e à tela de escolha.
+
+### 192 · Hora de nascimento estimada no perfil: persistência, precisão da hora e rota · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** continuação da solicitação do usuário de 16/11/2026 (tarefa 191).
+- **Motivo e implementação real:** migration `069` acrescenta `profiles.birth_time_estimate`; a hora do perfil é estimada enquanto essa coluna for igual a `birth_time`, de modo que digitar outra hora no perfil volta a tratá-la como informada sem depender de quem gravou. O mapa natal ganha `precisaoDaHora` (`informada`, `estimada`, `desconhecida`), gravada na base natal (versão 2) e devolvida pela serialização. A rota `/api/perfil/hora-de-nascimento` (GET, POST, DELETE) devolve ao navegador somente horário e uma palavra por janela; o servidor recalcula as janelas a partir do perfil, nunca substitui nem apaga uma hora informada e recusa janela de outro dia.
+- **Arquivos:** `mysql/migrations/069_hora_de_nascimento_estimada.sql`, `src/lib/perfil/hora-de-nascimento.ts`, `src/app/api/perfil/hora-de-nascimento/route.ts`, `src/app/api/perfil/hora-de-nascimento.integration.test.ts`, `src/lib/astrology/perfil-astrologico.ts`, `src/lib/astrology/mapa-natal.ts`, `src/lib/astrology/persistencia-natal.ts`, `src/lib/astrology/serializacao.ts`, `src/lib/astrology/hora-de-nascimento.test.ts` e quatro fixtures de teste com o novo campo do perfil.
+- **Testes e resultados comprováveis:** 9 testes de integração novos contra o MySQL de teste isolado, com a migration 069 aplicada em banco vazio (anônimo recusado, campos expostos, gravação e uso pelo mapa natal real, troca e desfazer, hora digitada volta a informada, proteção da hora informada, corpo inválido, limite polar, isolamento entre contas). Suíte unitária: 1092 aprovados; integração completa: 635 aprovados em 72 arquivos; ESLint, `tsc --noEmit`, Prettier e `next build` aprovados.
+- **Limitação declarada:** gates em Node v26.13.0 por chamada direta dos binários (Node 24 ausente na estação).
+- **Aceite integral pendente:** repetir os gates em Node 24; leituras com aviso de estimativa (193) e tela de escolha (194).

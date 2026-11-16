@@ -195,3 +195,39 @@ describe('Palavra de cada janela na base curada', () => {
     }
   });
 });
+
+describe('Precisão da hora no mapa natal', () => {
+  const nascimento = { data: '1990-12-01', ...saoPaulo };
+
+  it('distingue hora informada, estimada e desconhecida', () => {
+    const informada = calcularMapaNatal(
+      { ...nascimento, hora: '10:30' },
+      agora
+    );
+    const estimada = calcularMapaNatal(
+      { ...nascimento, hora: '10:30', horaEstimada: true },
+      agora
+    );
+    const desconhecida = calcularMapaNatal(
+      { ...nascimento, hora: null },
+      agora
+    );
+
+    expect(informada.precisaoDaHora).toBe('informada');
+    expect(estimada.precisaoDaHora).toBe('estimada');
+    expect(desconhecida.precisaoDaHora).toBe('desconhecida');
+    // A estimativa muda só a declaração de origem, nunca a astronomia.
+    expect(estimada.lagna).toEqual(informada.lagna);
+    expect(estimada.planetas).toEqual(informada.planetas);
+    expect(desconhecida.lagna).toBeNull();
+  });
+
+  it('sem hora, a marca de estimativa não cria uma hora conhecida', () => {
+    const mapa = calcularMapaNatal(
+      { ...nascimento, hora: null, horaEstimada: true },
+      agora
+    );
+    expect(mapa.horaConhecida).toBe(false);
+    expect(mapa.precisaoDaHora).toBe('desconhecida');
+  });
+});

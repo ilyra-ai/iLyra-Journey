@@ -13,6 +13,7 @@ export function mapaParaJson(mapa: MapaNatal) {
   return {
     nascimentoUtc: mapa.nascimentoUtc.toISOString(),
     horaConhecida: mapa.horaConhecida,
+    precisaoDaHora: mapa.precisaoDaHora,
     lagna: mapa.lagna
       ? {
           signo: mapa.lagna.nomeDoSigno,

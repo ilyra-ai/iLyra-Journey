@@ -31,6 +31,7 @@ function contexto(
       nascimento: {
         data: '1990-05-15',
         hora: '08:30',
+        horaEstimada: false,
         local: SAO_PAULO,
         ...nascimento,
       },

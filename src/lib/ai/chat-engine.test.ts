@@ -247,7 +247,12 @@ describe('o dia de hoje no chat', () => {
       userId: 'teste',
       data: '2026-10-14',
       perfil: {
-        nascimento: { data: '1990-05-15', hora: '08:30', local: SP },
+        nascimento: {
+          data: '1990-05-15',
+          hora: '08:30',
+          horaEstimada: false,
+          local: SP,
+        },
         moradia: SP,
         localDoDia: SP,
         faltando: [],

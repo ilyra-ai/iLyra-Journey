@@ -25,6 +25,8 @@ export interface DadosDeNascimento {
   data: string;
   /** HH:mm local; sem hora o Lagna e as casas não são calculados. */
   hora: string | null;
+  /** A hora foi estimada pela pessoa (janela do dia), não lida de um registro. */
+  horaEstimada?: boolean;
   latitude: number;
   longitude: number;
   /** Fuso IANA do local de nascimento. */
@@ -39,10 +41,18 @@ export interface PlanetaNoMapa extends Posicao {
   retrogrado: boolean;
 }
 
+/**
+ * De onde vem a hora do mapa: informada pela pessoa, estimada por ela ao
+ * escolher uma janela do dia de nascimento, ou desconhecida (o cálculo usa
+ * 12:00 local e não tem Lagna).
+ */
+export type PrecisaoDaHora = 'informada' | 'estimada' | 'desconhecida';
+
 export interface MapaNatal {
   nascimentoUtc: Date;
   /** Sem hora de nascimento, o mapa usa 12:00 local e não tem Lagna. */
   horaConhecida: boolean;
+  precisaoDaHora: PrecisaoDaHora;
   lagna: (Posicao & { regente: Graha; nomeDoRegente: string }) | null;
   planetas: PlanetaNoMapa[];
   lua: PlanetaNoMapa;
@@ -114,6 +124,11 @@ export function calcularMapaNatal(
   return {
     nascimentoUtc: instante,
     horaConhecida,
+    precisaoDaHora: !horaConhecida
+      ? 'desconhecida'
+      : nascimento.horaEstimada
+        ? 'estimada'
+        : 'informada',
     lagna:
       lagnaLongitude === null
         ? null
