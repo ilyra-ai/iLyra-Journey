@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { buscarCidades } from '@/lib/geo/cidades';
 import {
   calcularMapaTropical,
+  calcularMapaTropicalPorLocal,
   calcularSolPorData,
   validarDataTropical,
 } from './tropical';
@@ -13,6 +14,35 @@ const distancia = (a: number, b: number) =>
   Math.abs(((a - b + 540) % 360) - 180);
 
 describe('Mapa tropical independente', () => {
+  // JPL Horizons DE441, Sol (10), centro 500@399, quantidade 31, AIRLESS.
+  // https://ssd-api.jpl.nasa.gov/doc/horizons.html
+  it.each([
+    ['2000-02-29', '12:00', 340.2058271, 'Peixes'],
+    ['2024-03-20', '02:55', 359.9921201, 'Peixes'],
+    ['2024-03-20', '03:25', 0.0128177, 'Áries'],
+  ] as const)(
+    'confere Sol tropical no JPL em %s às %s UTC',
+    (data, hora, longitude, signo) => {
+      const mapa = calcularMapaTropicalPorLocal(
+        {
+          data,
+          hora,
+          local: {
+            nome: 'Greenwich',
+            latitude: 51.48,
+            longitude: 0,
+            fuso: 'Europe/London',
+          },
+        },
+        agora
+      );
+      const sol = mapa.planetas.find(({ planeta }) => planeta === 'sol')!;
+      expect(mapa.nascimento.instanteUtc).toBe(`${data}T${hora}:00.000Z`);
+      expect(distancia(sol.posicao.longitude, longitude)).toBeLessThan(0.02);
+      expect(sol.posicao.signo).toBe(signo);
+    }
+  );
+
   // JPL Horizons DE441, geocêntrico 500@399, quantidade 31, UTC 1990-12-01 12:30.
   // Consulta real em 09/11/2026: longitude aparente na eclíptica da data, sem refração.
   const referenciaJpl = {
