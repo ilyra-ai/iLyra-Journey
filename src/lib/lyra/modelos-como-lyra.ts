@@ -3,7 +3,7 @@ import type { MapaNatal } from '@/lib/astrology/mapa-natal';
 import { TIPOS_DE_MAPA } from './conhecimento/mapas';
 import { lerMapaComoLyra } from './leitura-do-mapa';
 import { instrucoesDeIdentidade } from './personalidade';
-import { buscarVerbete, normalizar, textoDoVerbete } from './responder';
+import { encontrarVerbete, normalizar, textoDoVerbete } from './responder';
 import { CONTEXTO_VOLTA_PARA_CASA } from './volta-para-casa';
 import { instrucoesDeAnalise, pedidoDeAnalise } from './analise-aprofundada';
 
@@ -83,7 +83,7 @@ export interface BaseDoChatDaLyra {
 
 /** Instruções de sistema do chat para qualquer modelo conectado. */
 export function instrucoesDoChatComoLyra(base: BaseDoChatDaLyra): string {
-  const verbete = buscarVerbete(pedidoDeAnalise(base.pergunta).pergunta);
+  const verbete = encontrarVerbete(pedidoDeAnalise(base.pergunta).pergunta);
   return [
     instrucoesDeIdentidade(),
     COMO_TRABALHAR,

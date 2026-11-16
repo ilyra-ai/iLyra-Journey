@@ -18,7 +18,11 @@ import {
   expressarComoLyra,
   IDENTIDADE_DA_LYRA,
 } from '@/lib/lyra/personalidade';
-import { type ContextoDaLyra, responderComoLyra } from '@/lib/lyra/responder';
+import {
+  type ContextoDaLyra,
+  responderComoLyra,
+  responderPelaBase,
+} from '@/lib/lyra/responder';
 import {
   detalharRespostaDoMotor,
   pedidoDeAnalise,
@@ -568,7 +572,15 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
     );
   }
 
-  // 10. Fallback Deterministico
+  // 10. Base curada por termos: antes da resposta genérica, procura o verbete
+  // que trata da pergunta em linguagem do dia a dia. Só chega aqui o que
+  // nenhuma resposta anterior atendeu.
+  if (responses.length === 0 && astro) {
+    const daBase = responderPelaBase(query);
+    if (daBase) return daBase.texto;
+  }
+
+  // 11. Fallback Deterministico
   if (responses.length === 0) {
     responses.push(
       `${name}, podemos explorar ${goals}. ${astro ? `O contexto astrológico disponível indica Lua em ${astro.moonSign}, ${astro.tithi}.` : 'Podemos conversar a partir das informações disponíveis.'}`

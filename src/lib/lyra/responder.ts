@@ -31,6 +31,9 @@ import { IDENTIDADE_DA_LYRA, VALORES_DA_LYRA } from './personalidade';
  * com os outros assuntos (sono, glicose, o dia...).
  */
 
+import { criarBuscaPorTermos } from './busca-por-termos';
+import { normalizar } from './texto';
+
 export interface ContextoDaLyra {
   nome?: string | null;
   mapa: MapaNatal | null;
@@ -63,16 +66,7 @@ export const BASE_DE_CONHECIMENTO: readonly Verbete[] = [
   ...VEDANGAS,
 ];
 
-/** Minúsculas, sem acentos e com espaços simples. */
-export function normalizar(texto: string) {
-  return texto
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/\p{M}/gu, '')
-    .replace(/[^\p{L}\p{N}\s]/gu, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
+export { normalizar };
 
 /** Termo como palavra inteira, também no plural ("upanishad(s)"). */
 function contem(texto: string, termo: string) {
@@ -95,6 +89,20 @@ export function buscarVerbete(pergunta: string): Verbete | null {
     }
   }
   return melhor?.verbete ?? null;
+}
+
+const buscaPorTermos = criarBuscaPorTermos(BASE_DE_CONHECIMENTO);
+
+/**
+ * Verbete ligado à pergunta: primeiro pela palavra-chave exata; sem ela, pela
+ * busca por termos (radicais e pesos), que entende perguntas em linguagem do
+ * dia a dia e recusa o que não tem verbete. Usada quando nenhuma resposta
+ * mais específica existe e para dar contexto aos modelos conectados.
+ */
+export function encontrarVerbete(pergunta: string): Verbete | null {
+  return (
+    buscarVerbete(pergunta) ?? buscaPorTermos.buscar(pergunta)?.verbete ?? null
+  );
 }
 
 /** Verbete em texto corrido (título, resumo, pontos, prática e fonte). */
@@ -357,8 +365,21 @@ export function responderComoLyra(
   }
 
   // 7. Base de conhecimento (Vedanta, Upavedas, Vedangas, mapas).
+  // Só a palavra-chave exata: este passo roda antes das respostas do chat
+  // sobre os dados da própria pessoa e não deve tomar o lugar delas.
   const verbete = buscarVerbete(pergunta);
   if (verbete) return { assunto: verbete.id, texto: textoDoVerbete(verbete) };
 
   return null;
+}
+
+/**
+ * Resposta da base curada para uma pergunta que nenhuma regra mais
+ * específica respondeu, ou `null` quando a base não tem o assunto.
+ */
+export function responderPelaBase(pergunta: string): RespostaDaLyra | null {
+  const verbete = encontrarVerbete(pergunta);
+  return verbete
+    ? { assunto: verbete.id, texto: textoDoVerbete(verbete) }
+    : null;
 }

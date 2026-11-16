@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 21                       |
+| 🟡 Implementadas com validação pendente | 22                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5537,3 +5537,12 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Medições reais (contêiner descartável da imagem de memória, CPU):** palavras-chave atuais acham o verbete certo em 30% das perguntas com verbete e recusam corretamente 95% das demais (acerto total 56%). `potion-multilingual-128M` (já no projeto): 1º lugar correto em 68%, acerto total máximo 70%. `intfloat/multilingual-e5-small` (revisão `614241f6`): 1º lugar correto em 83%, acerto total máximo 77%, 13 ms por pergunta.
 - **Limites da medição:** os cortes foram escolhidos no próprio conjunto, portanto os acertos totais dos modelos são otimistas; as perguntas foram escritas por quem conhece os verbetes. Nenhum modelo foi adotado e nenhum contêiner do projeto foi alterado.
 - **Pendente:** medir o EmbeddingGemma 2, escolher o modelo, definir a recusa de perguntas fora do assunto e ligar a busca ao elo `lyra` da cadeia; ampliar a base curada (hoje 30 verbetes).
+
+### 196 · Busca por termos na base curada do Motor da Lyra, sem modelo de IA · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** decisão do usuário em 16/11/2026: os modelos de significado ficariam pesados; melhorar o motor sem virar IA por enquanto e sem deixar de ler todos os mapas.
+- **Implementação real:** `criarBuscaPorTermos` (radicais de cinco letras, palavras vazias, nota BM25 com pesos por campo e nota mínima de recusa) em `src/lib/lyra/busca-por-termos.ts`; `encontrarVerbete` e `responderPelaBase` em `responder.ts`. No chat a busca entra somente antes da resposta genérica, depois de todas as respostas sobre os dados da pessoa; o passo da base dentro da leitura dos mapas continua só por palavra-chave exata. Os modelos conectados passam a receber o verbete encontrado pela busca como contexto. Nenhuma dependência nova, nenhum download, nenhuma mudança na cadeia de modelos.
+- **Resultado medido na régua de 100 perguntas:** verbete certo em 47 de 60 (antes 18), recusa correta em 37 de 40 (antes 38), acerto total 84% (antes 56%); nenhuma das 25 perguntas fora do assunto recebe verbete. Para comparação, medidos no mesmo conjunto: `potion-multilingual-128M` 70% e `multilingual-e5-small` 77%, ambos com corte escolhido no próprio conjunto.
+- **Arquivos:** `src/lib/lyra/busca-por-termos.ts`, `busca-por-termos.test.ts`, `texto.ts`, `responder.ts`, `modelos-como-lyra.ts`, `src/lib/ai/chat-engine.ts`, `docs/motor_lyra/drp_motor_lyra.md`.
+- **Testes e resultados comprováveis:** 12 testes novos (radicais, achados sem palavra-chave, recusa, nota mínima, determinismo, régua, chat e leitura dos mapas inalterada). Unitários: 1117 aprovados; integração: 640 aprovados; ESLint, `tsc --noEmit`, Prettier e `next build` aprovados.
+- **Limites declarados:** tamanho do radical, pesos e nota mínima foram escolhidos na própria régua, escrita por quem conhece os verbetes; o ganho real com perguntas de usuários pode ser menor. As 3 recusas erradas restantes vêm de palavras-chave antigas e curtas ("casa", "significa", "mantra"). Temas sem verbete (respiração, chakras, meditação para iniciantes) continuam sem resposta: dependem de ampliar a base curada. Gates em Node v26.13.0 (Node 24 ausente na estação).
