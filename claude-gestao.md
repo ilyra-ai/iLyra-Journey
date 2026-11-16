@@ -224,12 +224,12 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 17                       |
+| 🟡 Implementadas com validação pendente | 18                       |
 | 🔵 Em andamento                         | 3                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
 | Branch de trabalho                      | `main` (única permitida) |
-| Última atualização                      | 2026-11-13 · 11h20 BRT   |
+| Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
 > Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os 17 estados 🟡 preservam entregas publicadas com homologação incompleta sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
@@ -5490,3 +5490,13 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes tentados/resultados comprováveis:** Swiss Ephemeris 2.10.03 localizou eclipse de 12/08/2026, mas a CI não executou os testes JS: run 43441320684 falhou em 3 segundos sem logs úteis. Código publicado, homologação incompleta.
 - **Integração e dependências:** usar o motor determinístico sem LLM; sessão e plano vedic_insights no endpoint comum; não alterar o mapa natal existente; frontend /inovacoes e página condicional protegida por AppShell. Validação integrada e de acesso real ainda exigida na tarefa 190.
 - **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
+
+### 191 · Janelas de hora do dia de nascimento no Motor da Lyra · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** solicitação do usuário em 16/11/2026 (America/Sao_Paulo), após a análise forense do motor: a maioria das pessoas não sabe a hora em que nasceu, e o mapa védico assumia 12:00 em silêncio. O usuário pediu que a pessoa escolha o horário por uma característica principal, em uma palavra, sem termos técnicos.
+- **Motivo e implementação real:** `calcularJanelasDeHora` divide o dia civil de nascimento nos intervalos em que o Lagna sideral permanece no mesmo signo (varredura de 30 s e bissecção até 1 s), cobre dias de 23, 24 e 25 horas e devolve, por janela, uma hora local conferida que reproduz o mesmo Lagna. Latitude polar, data inexistente, fuso desconhecido e local inválido são recusados. A base curada ganhou `essencia`, uma palavra distinta por signo.
+- **Arquivos:** `src/lib/astrology/hora-de-nascimento.ts`, `src/lib/astrology/hora-de-nascimento.test.ts`, `src/lib/lyra/conhecimento/jyotish.ts`, `docs/motor_lyra/drp_motor_lyra.md`.
+- **Testes e resultados comprováveis:** 12 testes novos aprovados (cobertura contígua do dia, sequência dos signos, coincidência com o Lagna do mapa natal conferido contra o Swiss Ephemeris, fronteira com precisão de segundos, horário de verão, três latitudes, recusas). Suíte unitária completa: 1090 testes aprovados; ESLint, `tsc --noEmit`, Prettier e `next build` aprovados.
+- **Limitação declarada:** os gates rodaram em Node v26.13.0 por chamada direta dos binários, porque a estação não tem o Node `^24.18.1` exigido pelo projeto e o pnpm recusa a execução. A janela inteiramente contida na hora repetida do fim do horário de verão fica sem hora representável, pois o perfil guarda apenas a hora local.
+- **Correções prévias exigidas pelos gates:** `383c6505` (Prettier em sete arquivos já publicados) e `4bfdb573` (ordem de `/inovacoes` na navegação e quatro testes que falhavam).
+- **Aceite integral pendente:** repetir os gates em Node 24 e concluir as tarefas 192 a 194, que ligam as janelas ao perfil, às leituras e à tela de escolha.

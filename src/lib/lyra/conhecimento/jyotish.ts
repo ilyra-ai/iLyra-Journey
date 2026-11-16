@@ -167,6 +167,12 @@ export interface InfoDoSigno {
   dosha: Dosha | 'misto';
   /** Qualidades em linguagem simples. */
   qualidades: string;
+  /**
+   * A característica principal em uma única palavra, sem termo técnico: é o
+   * que a pessoa vê ao escolher a janela de hora quando não sabe a hora em
+   * que nasceu. As doze palavras são distintas.
+   */
+  essencia: string;
 }
 
 export const SIGNOS_INFO: readonly InfoDoSigno[] = [
@@ -175,72 +181,84 @@ export const SIGNOS_INFO: readonly InfoDoSigno[] = [
     modalidade: 'movel',
     dosha: 'pitta',
     qualidades: 'iniciativa, coragem, pioneirismo e franqueza',
+    essencia: 'Coragem',
   },
   {
     elemento: 'terra',
     modalidade: 'fixo',
     dosha: 'vata',
     qualidades: 'estabilidade, sensualidade, constância e senso de valor',
+    essencia: 'Constância',
   },
   {
     elemento: 'ar',
     modalidade: 'duplo',
     dosha: 'misto',
     qualidades: 'curiosidade, comunicação, versatilidade e troca',
+    essencia: 'Curiosidade',
   },
   {
     elemento: 'agua',
     modalidade: 'movel',
     dosha: 'kapha',
     qualidades: 'cuidado, memória afetiva, proteção e intuição',
+    essencia: 'Cuidado',
   },
   {
     elemento: 'fogo',
     modalidade: 'fixo',
     dosha: 'pitta',
     qualidades: 'brilho, generosidade, liderança e criatividade',
+    essencia: 'Liderança',
   },
   {
     elemento: 'terra',
     modalidade: 'duplo',
     dosha: 'vata',
     qualidades: 'discernimento, serviço, método e atenção ao detalhe',
+    essencia: 'Organização',
   },
   {
     elemento: 'ar',
     modalidade: 'movel',
     dosha: 'misto',
     qualidades: 'harmonia, diplomacia, estética e parceria',
+    essencia: 'Harmonia',
   },
   {
     elemento: 'agua',
     modalidade: 'fixo',
     dosha: 'kapha',
     qualidades: 'profundidade, intensidade, transformação e lealdade',
+    essencia: 'Intensidade',
   },
   {
     elemento: 'fogo',
     modalidade: 'duplo',
     dosha: 'pitta',
     qualidades: 'busca de sentido, fé, estudo e liberdade',
+    essencia: 'Liberdade',
   },
   {
     elemento: 'terra',
     modalidade: 'movel',
     dosha: 'vata',
     qualidades: 'responsabilidade, ambição, estrutura e persistência',
+    essencia: 'Responsabilidade',
   },
   {
     elemento: 'ar',
     modalidade: 'fixo',
     dosha: 'misto',
     qualidades: 'visão de futuro, coletividade, originalidade e ideal',
+    essencia: 'Originalidade',
   },
   {
     elemento: 'agua',
     modalidade: 'duplo',
     dosha: 'kapha',
     qualidades: 'compaixão, imaginação, entrega e espiritualidade',
+    essencia: 'Compaixão',
   },
 ];
 
