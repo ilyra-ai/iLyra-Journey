@@ -9,13 +9,14 @@ import { NOME_DO_GRAHA, REGENTE_DO_SIGNO, posicao } from './sideral';
 import { senhorDoNakshatra } from './vimshottari';
 
 // Incrementar ao alterar efemérides, ayanamsha, casas ou serialização da base.
-const VERSAO = 3;
+const VERSAO = 4;
 const METODO = 'sideral-lahiri';
 const longitude = z.number().finite().min(0).lt(360);
 const baseSchema = z
   .object({
     nascimentoUtc: z.iso.datetime(),
     horaConhecida: z.boolean(),
+    limiteDoLagna: z.literal('latitude-polar').nullable(),
     precisaoDaHora: z.enum(['informada', 'estimada', 'desconhecida']),
     diaDeNascimento: z
       .object({ inicio: z.iso.datetime(), fim: z.iso.datetime() })
@@ -42,7 +43,13 @@ const baseSchema = z
       .length(9)
       .refine((itens) => new Set(itens.map((item) => item.graha)).size === 9),
   })
-  .refine((base) => base.horaConhecida === (base.lagna !== null))
+  .refine(
+    (base) =>
+      base.lagna !== null ||
+      !base.horaConhecida ||
+      base.limiteDoLagna === 'latitude-polar'
+  )
+  .refine((base) => base.lagna === null || base.horaConhecida)
   .refine(
     (base) => base.horaConhecida === (base.precisaoDaHora !== 'desconhecida')
   )
@@ -52,6 +59,7 @@ function gravavel(mapa: MapaNatal): z.infer<typeof baseSchema> {
   return {
     nascimentoUtc: mapa.nascimentoUtc.toISOString(),
     horaConhecida: mapa.horaConhecida,
+    limiteDoLagna: mapa.limiteDoLagna,
     precisaoDaHora: mapa.precisaoDaHora,
     diaDeNascimento: mapa.diaDeNascimento
       ? {
@@ -85,6 +93,7 @@ function restaurar(base: z.infer<typeof baseSchema>, agora: Date): MapaNatal {
     {
       nascimentoUtc: new Date(base.nascimentoUtc),
       horaConhecida: base.horaConhecida,
+      limiteDoLagna: base.limiteDoLagna,
       precisaoDaHora: base.precisaoDaHora,
       diaDeNascimento: base.diaDeNascimento
         ? {

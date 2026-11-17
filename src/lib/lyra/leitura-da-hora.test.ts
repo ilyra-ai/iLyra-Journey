@@ -235,3 +235,23 @@ describe('Hora de nascimento estimada pela pessoa', () => {
     expect(resposta!.texto).toMatch(/estimada por você/);
   });
 });
+
+describe('Leitura de nascimento além do Círculo Polar', () => {
+  it('explica o limite do Ascendente sem pedir a hora', () => {
+    const mapa = calcularMapaNatal(
+      {
+        data: '1990-06-21',
+        hora: '12:00',
+        latitude: 69.6492,
+        longitude: 18.9553,
+        fuso: 'Europe/Oslo',
+      },
+      agora
+    );
+    const leitura = lerMapaComoLyra(mapa);
+    expect(leitura.vedico.lagna).toMatch(/além do Círculo Polar/);
+    expect(leitura.vedico.lagna).not.toMatch(/Informe a hora/);
+    expect(leitura.avisoDaHora).toBeNull();
+    expect(mapaParaJson(mapa).limiteDoLagna).toBe('latitude-polar');
+  });
+});

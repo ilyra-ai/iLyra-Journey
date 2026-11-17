@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 26                       |
+| 🟡 Implementadas com validação pendente | 27                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5582,3 +5582,11 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Causa raiz corrigida:** `calcularMapaNatal` aceitava datas e horas inexistentes ("1990-02-30" virava 2 de março, "25:99" o dia seguinte) e calculava o mapa de outro instante sem aviso. Agora `conferirNascimento` recusa data inexistente ou fora do formato, hora fora de HH:mm, fuso desconhecido e local fora do globo com `RangeError`.
 - **Arquivos:** `src/lib/astrology/mapa-natal.ts`, `projecao-natal.test.ts`.
 - **Testes:** 2 testes novos (9 entradas inválidas recusadas; ano bissexto, hora desconhecida e extremos do relógio aceitos). Unitários 1139, integração 646, lint, tipos, formato e build aprovados em Node v26.13.0.
+
+### 201 · Ascendente védico além do Círculo Polar · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** achado nº 4 da análise forense do motor; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
+- **Causa raiz corrigida:** o mapa ocidental já declarava o ascendente indisponível além do Círculo Polar, onde parte da eclíptica não nasce em certas horas e a fórmula deixa de valer, mas o védico calculava o Lagna assim mesmo. Agora o mapa védico devolve `limiteDoLagna: 'latitude-polar'`, sem Lagna nem casas, mantendo planetas, Lua e períodos. A constante `LATITUDE_POLAR` passou a morar em `sideral.ts`.
+- **Consumidores ajustados:** leitura da Lyra (explica o limite sem pedir a hora), serialização, base natal persistida (versão 4), D9/D10 e cartão do mapa ("Indisponível além do Círculo Polar").
+- **Arquivos:** `src/lib/astrology/sideral.ts`, `mapa-natal.ts`, `persistencia-natal.ts`, `serializacao.ts`, `hora-de-nascimento.ts`, `inovacoes/divisionais.ts`, `src/lib/lyra/leitura-do-mapa.ts`, `src/components/profile/MapaVedicoCard.tsx` e testes.
+- **Testes:** 4 testes novos (Tromsø 69,6° N sem Lagna e com planetas e dasha; 66,5° com Lagna; sem hora sem o limite; leitura e serialização). Unitários 1143, integração 646, lint, tipos, formato e build aprovados em Node v26.13.0. O cartão não foi conferido no navegador.

@@ -125,6 +125,17 @@ const CORPO: Partial<Record<Graha, Body>> = {
 
 const EXTENSAO_DO_NAKSHATRA = 360 / 27;
 
+/**
+ * Círculo Polar (≈ 66,56°). Além dele, parte da eclíptica nunca nasce nem se
+ * põe em certas horas e a fórmula do ascendente deixa de valer: o motor
+ * declara o ascendente e as casas indisponíveis, nos dois zodíacos.
+ */
+export const LATITUDE_POLAR = 66.56;
+
+export function latitudePolar(latitude: number) {
+  return Math.abs(latitude) >= LATITUDE_POLAR;
+}
+
 export function normalizarGraus(valor: number) {
   return ((valor % 360) + 360) % 360;
 }

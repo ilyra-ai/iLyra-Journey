@@ -230,7 +230,9 @@ export function MapaVedicoCard() {
                     ? data.mapa.precisaoDaHora === 'estimada'
                       ? data.mapa.lagna.signo
                       : `${data.mapa.lagna.signo} ${data.mapa.lagna.grau}`
-                    : 'Sem hora de nascimento'}
+                    : data.mapa.limiteDoLagna === 'latitude-polar'
+                      ? 'Indisponível além do Círculo Polar'
+                      : 'Sem hora de nascimento'}
                 </dd>
                 {data.mapa.lagna ? (
                   <dd className="text-xs text-muted-foreground">

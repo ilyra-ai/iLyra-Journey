@@ -150,6 +150,9 @@ function avisoDaHora(mapa: MapaNatal): string | null {
 }
 
 function textoDoLagna(mapa: MapaNatal): string {
+  if (!mapa.lagna && mapa.limiteDoLagna === 'latitude-polar') {
+    return 'Ascendente (Lagna) e casas indisponíveis: você nasceu além do Círculo Polar, onde parte do zodíaco não nasce no horizonte em certas horas e o cálculo do Ascendente deixa de valer. A Lua, os planetas e os períodos de vida continuam calculados.';
+  }
   if (!mapa.lagna) {
     return 'Ascendente (Lagna) indisponível: sem a hora de nascimento ele não é calculado. Informe a hora no perfil, ou escolha o horário que mais se parece com você, para a leitura completa das casas.';
   }

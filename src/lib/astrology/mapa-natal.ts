@@ -1,4 +1,5 @@
 import {
+  latitudePolar,
   ascendenteSideral,
   type Graha,
   longitudeSideral,
@@ -67,6 +68,11 @@ export interface MapaNatal {
   nascimentoUtc: Date;
   /** Sem hora de nascimento, o mapa usa 12:00 local e não tem Lagna. */
   horaConhecida: boolean;
+  /**
+   * Motivo de o Lagna não existir mesmo com a hora conhecida: nascimento
+   * além do Círculo Polar. `null` nos demais casos.
+   */
+  limiteDoLagna: 'latitude-polar' | null;
   precisaoDaHora: PrecisaoDaHora;
   /** Dia civil de nascimento (só com a hora desconhecida). */
   diaDeNascimento: Intervalo | null;
@@ -204,9 +210,11 @@ export function calcularMapaNatal(
     nascimento.fuso
   );
 
-  const lagnaLongitude = horaConhecida
-    ? ascendenteSideral(instante, nascimento.latitude, nascimento.longitude)
-    : null;
+  const polar = latitudePolar(nascimento.latitude);
+  const lagnaLongitude =
+    horaConhecida && !polar
+      ? ascendenteSideral(instante, nascimento.latitude, nascimento.longitude)
+      : null;
   const signoDoLagna =
     lagnaLongitude === null ? null : Math.floor(lagnaLongitude / 30);
 
@@ -231,6 +239,7 @@ export function calcularMapaNatal(
   return {
     nascimentoUtc: instante,
     horaConhecida,
+    limiteDoLagna: horaConhecida && polar ? 'latitude-polar' : null,
     precisaoDaHora: !horaConhecida
       ? 'desconhecida'
       : nascimento.horaEstimada

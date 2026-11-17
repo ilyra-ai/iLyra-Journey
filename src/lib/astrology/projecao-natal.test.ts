@@ -108,3 +108,38 @@ describe('Conferência dos dados de nascimento', () => {
     expect(() => calcularMapaNatal({ ...base, hora: '23:59' })).not.toThrow();
   });
 });
+
+describe('Ascendente védico além do Círculo Polar', () => {
+  const tromso = {
+    data: '1990-06-21',
+    hora: '12:00',
+    latitude: 69.6492,
+    longitude: 18.9553,
+    fuso: 'Europe/Oslo',
+  };
+  it('declara Lagna e casas indisponíveis e mantém planetas e períodos', () => {
+    const mapa = calcularMapaNatal(tromso, new Date('2026-11-17T12:00:00Z'));
+    expect(mapa.horaConhecida).toBe(true);
+    expect(mapa.limiteDoLagna).toBe('latitude-polar');
+    expect(mapa.lagna).toBeNull();
+    expect(mapa.planetas.every((p) => p.casa === null)).toBe(true);
+    expect(mapa.dasha).not.toBeNull();
+    expect(mapa.planetas).toHaveLength(9);
+  });
+  it('abaixo do Círculo Polar o Lagna continua calculado', () => {
+    const mapa = calcularMapaNatal(
+      { ...tromso, latitude: 66.5 },
+      new Date('2026-11-17T12:00:00Z')
+    );
+    expect(mapa.limiteDoLagna).toBeNull();
+    expect(mapa.lagna).not.toBeNull();
+  });
+  it('sem hora o limite não se aplica: falta a hora, não o lugar', () => {
+    const mapa = calcularMapaNatal(
+      { ...tromso, hora: null },
+      new Date('2026-11-17T12:00:00Z')
+    );
+    expect(mapa.limiteDoLagna).toBeNull();
+    expect(mapa.lagna).toBeNull();
+  });
+});

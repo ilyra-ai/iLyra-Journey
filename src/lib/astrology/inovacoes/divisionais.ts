@@ -56,9 +56,12 @@ export function calcularMapaDivisional(
       ? { nomeDoSigno: ascendente.nome, indiceDoSigno: ascendente.indice }
       : null,
     planetas,
-    limite: mapa.horaConhecida
-      ? 'O ascendente divisional é muito sensível à precisão da hora de nascimento.'
-      : 'Sem hora natal, não se calculam casas nem ascendente divisional; as posições planetárias são aproximadas.',
+    limite:
+      mapa.limiteDoLagna === 'latitude-polar'
+        ? 'Nascimento além do Círculo Polar: sem ascendente nem casas divisionais; as posições planetárias seguem calculadas.'
+        : mapa.horaConhecida
+          ? 'O ascendente divisional é muito sensível à precisão da hora de nascimento.'
+          : 'Sem hora natal, não se calculam casas nem ascendente divisional; as posições planetárias são aproximadas.',
     interpretacao:
       'D9 e D10 são técnicas interpretativas védicas, não previsões científicas.',
   };

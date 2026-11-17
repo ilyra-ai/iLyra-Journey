@@ -1,4 +1,4 @@
-import { ascendenteSideral } from './sideral';
+import { ascendenteSideral, LATITUDE_POLAR, latitudePolar } from './sideral';
 import { dataLocal, fusoValido, horaLocal, localParaUtc } from './tempo';
 
 /**
@@ -11,8 +11,8 @@ import { dataLocal, fusoValido, horaLocal, localParaUtc } from './tempo';
  * resulta numa hora estimada, sempre tratada como estimativa nas leituras.
  */
 
-/** Mesmo limite do mapa tropical: acima dele o Ascendente não é oferecido. */
-export const LATITUDE_POLAR = 66.56;
+/** Mesmo limite do mapa natal e do tropical (ver `sideral.ts`). */
+export { LATITUDE_POLAR };
 
 const MINUTO = 60_000;
 /** Passo da varredura: curto o bastante para signos de ascensão rápida. */
@@ -62,7 +62,7 @@ function conferirEntrada(local: LocalDaHora) {
     Math.abs(local.longitude) > 180
   )
     throw new RangeError('Local de nascimento inválido.');
-  if (Math.abs(local.latitude) >= LATITUDE_POLAR)
+  if (latitudePolar(local.latitude))
     throw new RangeError(
       'Em latitude polar o Ascendente não é calculado; as janelas de hora não estão disponíveis.'
     );
