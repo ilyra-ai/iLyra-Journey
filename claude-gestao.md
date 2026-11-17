@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 25                       |
+| 🟡 Implementadas com validação pendente | 26                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5575,3 +5575,10 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Arquivos:** `mysql/migrations/071_aprovacao_dos_verbetes_gerados.sql`, `src/lib/lyra/verbetes-gerados-servico.ts`, `verbetes-gerados.ts`, `responder.ts`, `conhecimento/tipos.ts`, `verbetes-gerados.test.ts`, `src/app/api/admin/lyra/verbetes/route.ts`, `verbetes.integration.test.ts`.
 - **Testes e resultados comprováveis:** testes unitários de pendente fora do motor e de aprovado consultado; 6 testes de integração contra o MySQL real (grava pendente, pendente fora do motor, banco recusa aprovação incompleta, permissões de anônimo e paciente, aprovação com 400/404/409 e registro do administrador, retirada).
 - **Pendente:** não existe tela de administração para revisar os verbetes; a revisão é feita pela rota. Gates em Node v26.13.0 (Node 24 ausente na estação).
+
+### 200 · Conferência dos dados de nascimento no mapa védico · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** achado nº 5 da análise forense do motor (16/11/2026); pedido do titular em 17/11/2026 para finalizar as pendências do motor.
+- **Causa raiz corrigida:** `calcularMapaNatal` aceitava datas e horas inexistentes ("1990-02-30" virava 2 de março, "25:99" o dia seguinte) e calculava o mapa de outro instante sem aviso. Agora `conferirNascimento` recusa data inexistente ou fora do formato, hora fora de HH:mm, fuso desconhecido e local fora do globo com `RangeError`.
+- **Arquivos:** `src/lib/astrology/mapa-natal.ts`, `projecao-natal.test.ts`.
+- **Testes:** 2 testes novos (9 entradas inválidas recusadas; ano bissexto, hora desconhecida e extremos do relógio aceitos). Unitários 1139, integração 646, lint, tipos, formato e build aprovados em Node v26.13.0.

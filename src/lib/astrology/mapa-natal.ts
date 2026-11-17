@@ -8,7 +8,7 @@ import {
   type Posicao,
   REGENTE_DO_SIGNO,
 } from './sideral';
-import { localParaUtc } from './tempo';
+import { fusoValido, localParaUtc } from './tempo';
 import type { Intervalo } from './panchang';
 import {
   calcularVimshottari,
@@ -162,10 +162,41 @@ function possibilidadesDoDia(
   };
 }
 
+/**
+ * Recusa datas e horas que não existem no calendário e locais fora do globo.
+ * Sem esta conferência, "1990-02-30" virava 2 de março e "25:99" o dia
+ * seguinte, e o mapa saía calculado para outro instante sem aviso.
+ */
+export function conferirNascimento(nascimento: DadosDeNascimento) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(nascimento.data))
+    throw new RangeError('Informe a data de nascimento no formato AAAA-MM-DD.');
+  const [ano, mes, dia] = nascimento.data.split('-').map(Number);
+  if (
+    new Date(Date.UTC(ano, mes - 1, dia)).toISOString().slice(0, 10) !==
+    nascimento.data
+  )
+    throw new RangeError('A data de nascimento não existe no calendário.');
+  if (
+    nascimento.hora !== null &&
+    !/^([01]\d|2[0-3]):[0-5]\d$/.test(nascimento.hora)
+  )
+    throw new RangeError('Hora de nascimento inválida; informe HH:mm.');
+  if (!fusoValido(nascimento.fuso))
+    throw new RangeError('Fuso horário do local de nascimento desconhecido.');
+  if (
+    !Number.isFinite(nascimento.latitude) ||
+    !Number.isFinite(nascimento.longitude) ||
+    Math.abs(nascimento.latitude) > 90 ||
+    Math.abs(nascimento.longitude) > 180
+  )
+    throw new RangeError('Local de nascimento inválido.');
+}
+
 export function calcularMapaNatal(
   nascimento: DadosDeNascimento,
   agora: Date = new Date()
 ): MapaNatal {
+  conferirNascimento(nascimento);
   const horaConhecida = Boolean(nascimento.hora);
   const instante = localParaUtc(
     nascimento.data,

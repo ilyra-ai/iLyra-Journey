@@ -75,3 +75,36 @@ describe('projeção natal sem repetir efemérides', () => {
     );
   });
 });
+
+describe('Conferência dos dados de nascimento', () => {
+  const base = {
+    data: '1990-12-01',
+    hora: '10:30',
+    latitude: -23.5475,
+    longitude: -46.6361,
+    fuso: 'America/Sao_Paulo',
+  };
+  it('recusa data, hora, fuso e local que não existem', () => {
+    for (const erro of [
+      { data: '1990-02-30' },
+      { data: '1990-13-01' },
+      { data: '01/12/1990' },
+      { hora: '25:99' },
+      { hora: '10h30' },
+      { fuso: 'Marte/Olympus' },
+      { latitude: 91 },
+      { longitude: -181 },
+      { latitude: Number.NaN },
+    ]) {
+      expect(() => calcularMapaNatal({ ...base, ...erro })).toThrow(RangeError);
+    }
+  });
+  it('aceita ano bissexto, hora desconhecida e os extremos do relógio', () => {
+    expect(() =>
+      calcularMapaNatal({ ...base, data: '2000-02-29' })
+    ).not.toThrow();
+    expect(() => calcularMapaNatal({ ...base, hora: null })).not.toThrow();
+    expect(() => calcularMapaNatal({ ...base, hora: '00:00' })).not.toThrow();
+    expect(() => calcularMapaNatal({ ...base, hora: '23:59' })).not.toThrow();
+  });
+});
