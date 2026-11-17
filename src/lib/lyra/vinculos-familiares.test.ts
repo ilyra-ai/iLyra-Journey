@@ -31,7 +31,7 @@ const PROIBIDO_SEM_CAIXA = /doen[çc]a|diagn[óo]stic|tumor|morte|morrer/i;
 describe('Vínculos familiares no mapa', () => {
   const leitura = lerVinculosFamiliares(comHora)!;
 
-  it('lê os sete vínculos a partir do Lagna, com a casa tradicional de cada um', () => {
+  it('lê os doze vínculos a partir do Lagna, com a casa tradicional de cada um', () => {
     expect(leitura.referencia).toBe('lagna');
     expect(leitura.vinculos.map((v) => v.id)).toEqual([
       'mae',
@@ -41,12 +41,40 @@ describe('Vínculos familiares no mapa', () => {
       'tios-maternos',
       'avos-paternos',
       'avos-maternos',
+      'filhos',
+      'conjuge',
+      'sogra',
+      'sogro',
+      'netos',
     ]);
     expect(leitura.indisponiveis).toEqual(['primos', 'tios paternos']);
-    const mae = leitura.vinculos[0];
-    expect(mae.origem).toMatch(/casa 4/);
-    expect(mae.origem).toMatch(/Lua/);
-    expect(leitura.vinculos[1].origem).toMatch(/casa 9.*Sol/);
+    const origem = Object.fromEntries(
+      leitura.vinculos.map((v) => [v.id, v.origem])
+    );
+    expect(origem.mae).toMatch(/casa 4.*Lua/);
+    expect(origem.pai).toMatch(/casa 9.*Sol/);
+    // Filhos e filhas pela casa 5 e Júpiter, sem separar por gênero.
+    expect(origem.filhos).toMatch(/casa 5 \(Putra Bhava\).*Júpiter/);
+    expect(origem.filhos).toMatch(/sem separar por gênero/);
+    expect(origem.conjuge).toMatch(/casa 7 \(Kalatra Bhava\).*Vênus/);
+    // Bhavat bhavam: 4º e 9º a partir do 7º; 5º a partir do 5º.
+    expect(origem.sogra).toMatch(/casa 10 \(o 4º a partir do 7º/);
+    expect(origem.sogro).toMatch(/casa 3 \(o 9º a partir do 7º/);
+    expect(origem.netos).toMatch(/casa 9 \(o 5º a partir do 5º/);
+  });
+
+  it('a casa usada por cada vínculo novo segue a contagem a partir do Lagna', () => {
+    // O regente citado precisa ser o da casa certa: confere pela casa 5.
+    const signoDaCasa5 = (comHora.lagna!.signo + 4) % 12;
+    const regente = REGENTE_DO_SIGNO[signoDaCasa5];
+    const nome = comHora.planetas
+      .find((p) => p.graha === regente)!
+      .nome.split(' (')[0];
+    const filhos = leitura.vinculos.find((v) => v.id === 'filhos')!;
+    const textos = [...filhos.atritos, ...filhos.apoios].join(' ');
+    if (textos.includes('regente da casa')) {
+      expect(textos).toContain(nome);
+    }
   });
 
   it('cita o regente real da casa do vínculo', () => {

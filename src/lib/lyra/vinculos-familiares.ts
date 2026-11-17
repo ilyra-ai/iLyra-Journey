@@ -13,11 +13,14 @@ import { dignidadeDoGraha, GRAHAS_INFO } from './conhecimento/jyotish';
  *
  * O Jyotish associa cada parente a uma casa e a um planeta significador
  * (karaka): a mãe à casa 4 e à Lua, o pai à casa 9 e ao Sol, os irmãos às
- * casas 3 e 11 e a Marte, os tios maternos à casa 6 e a Mercúrio. Avós saem
- * do princípio "casa a partir da casa" (bhavat bhavam): o 9º a partir do 9º
- * (casa 5) para a linha paterna e o 4º a partir do 4º (casa 7) para a
- * materna. Fonte: Brihat Parashara Hora Shastra (capítulos das casas e dos
- * karakas).
+ * casas 3 e 11 e a Marte, os tios maternos à casa 6 e a Mercúrio, os filhos
+ * à casa 5 e a Júpiter e o cônjuge à casa 7 e a Vênus. Avós, sogros e netos
+ * saem do princípio "casa a partir da casa" (bhavat bhavam): o 9º a partir
+ * do 9º (casa 5) para a linha paterna, o 4º a partir do 4º (casa 7) para a
+ * materna, o 4º e o 9º a partir do 7º (casas 10 e 3) para sogra e sogro e o
+ * 5º a partir do 5º (casa 9) para os netos. Filhos e filhas são lidos pela
+ * mesma casa: a tradição não separa por gênero. Fonte: Brihat Parashara Hora
+ * Shastra (capítulos das casas e dos karakas).
  *
  * A leitura só aponta temas para reflexão. Não descreve a pessoa real, não
  * prevê acontecimentos, não diagnostica e não afirma conflito: mostra onde a
@@ -32,7 +35,12 @@ export type IdDoVinculo =
   | 'irmaos-mais-velhos'
   | 'tios-maternos'
   | 'avos-paternos'
-  | 'avos-maternos';
+  | 'avos-maternos'
+  | 'filhos'
+  | 'conjuge'
+  | 'sogra'
+  | 'sogro'
+  | 'netos';
 
 interface DefinicaoDoVinculo {
   id: IdDoVinculo;
@@ -132,6 +140,70 @@ const VINCULOS: readonly DefinicaoDoVinculo[] = [
       'O que dessa história você gostaria de conhecer melhor?',
     ],
     origem: 'casa 7 (o 4º a partir do 4º, princípio bhavat bhavam)',
+  },
+  {
+    id: 'filhos',
+    nome: 'Filhos e filhas',
+    casa: 5,
+    karaka: 'jupiter',
+    tema: 'criação, afeto, orgulho, expectativas e o que você transmite a quem vem depois',
+    reflexoes: [
+      'O que você espera dos seus filhos, e o que eles esperam de você?',
+      'Como equilibrar proteção e liberdade nesta fase da vida deles?',
+    ],
+    origem:
+      'casa 5 (Putra Bhava) e Júpiter como significador dos filhos; a tradição lê filhos e filhas pela mesma casa, sem separar por gênero',
+  },
+  {
+    id: 'conjuge',
+    nome: 'Cônjuge ou companheiro(a)',
+    casa: 7,
+    karaka: 'venus',
+    tema: 'parceria, acordos, afeto do dia a dia e a forma como vocês decidem juntos',
+    reflexoes: [
+      'Em que vocês se apoiam bem, e onde os acordos pedem conversa?',
+      'O que cada um precisa para se sentir escutado na relação?',
+    ],
+    origem: 'casa 7 (Kalatra Bhava) e Vênus como significadora do cônjuge',
+  },
+  {
+    id: 'sogra',
+    nome: 'Sogra',
+    casa: 10,
+    karaka: 'lua',
+    tema: 'acolhimento na família do cônjuge, convivência e limites entre as duas casas',
+    reflexoes: [
+      'Como você se sente recebido na família do seu cônjuge?',
+      'Que limites tornam a convivência mais leve para todos?',
+    ],
+    origem:
+      'casa 10 (o 4º a partir do 7º, princípio bhavat bhavam) e a Lua como significadora da mãe',
+  },
+  {
+    id: 'sogro',
+    nome: 'Sogro',
+    casa: 3,
+    karaka: 'sol',
+    tema: 'respeito, referências e a autoridade na família do cônjuge',
+    reflexoes: [
+      'Como você lida com opiniões e expectativas da família do seu cônjuge?',
+      'Onde há espaço para respeito mútuo sem abrir mão do que é seu?',
+    ],
+    origem:
+      'casa 3 (o 9º a partir do 7º, princípio bhavat bhavam) e o Sol como significador do pai',
+  },
+  {
+    id: 'netos',
+    nome: 'Netos',
+    casa: 9,
+    karaka: 'jupiter',
+    tema: 'continuidade, legado, alegria e a convivência entre gerações',
+    reflexoes: [
+      'O que você gostaria de transmitir às próximas gerações?',
+      'Como estar presente sem ocupar o lugar dos pais deles?',
+    ],
+    origem:
+      'casa 9 (o 5º a partir do 5º, princípio bhavat bhavam) e Júpiter como significador dos filhos',
   },
 ];
 

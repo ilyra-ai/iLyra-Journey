@@ -9,7 +9,8 @@ import { mapaParaJson } from './serializacao';
 import { dataLocal } from './tempo';
 
 // Incrementar quando mudar a composição da leitura diária ou seu formato.
-const versaoDoPainel = 2;
+// 3: vínculos de filhos, cônjuge, sogra, sogro e netos (tarefa 214).
+const versaoDoPainel = 3;
 
 function hash(texto: string) {
   return createHash('sha256').update(texto).digest('hex');
