@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
+import { z } from 'zod';
+
 import {
   cadeiaTemModelo,
   type EloDaCadeia,
@@ -37,7 +39,53 @@ import { DIAS_ENTRE_REVISOES, lerCatalogo } from './servico';
 export const PASSOS_DA_ATUALIZACAO = 24;
 /** Uma atualização parada há mais tempo que isto é dada como interrompida. */
 export const MINUTOS_ATE_INTERROMPER = 60;
+/**
+ * A conclusão traz as recomendações completas, e modelos que raciocinam
+ * gastam parte da resposta pensando: 12 mil tokens de resposta mais cerca de
+ * 14 mil de pedido (registro de 40 mil caracteres, instrução e catálogo)
+ * cabem num contexto de 32 mil tokens.
+ */
+export const TOKENS_DA_ATUALIZACAO = 12_288;
+export const REGISTRO_DA_ATUALIZACAO = 40_000;
 const ROTULO = 'exames-medicos';
+
+/** Resultado do modelo em JSON Schema, sem a chave `$schema`. */
+const ESQUEMA_BASE: Record<string, unknown> = Object.fromEntries(
+  Object.entries(
+    z.toJSONSchema(resultadoDaAtualizacaoSchema, {
+      io: 'input',
+      unrepresentable: 'any',
+    })
+  ).filter(([chave]) => chave !== '$schema')
+);
+
+/**
+ * Resultado imposto ao modelo na conclusão (saída estruturada): toda
+ * `fonteUrl` só aceita as páginas que ele realmente leu nesta pesquisa. Sem
+ * página lida, nenhuma proposta é possível.
+ */
+export function esquemaDoResultado(
+  fontes: Array<{ url: string }>
+): Record<string, unknown> {
+  const lidas = [...new Set(fontes.map((f) => f.url))];
+  const trocar = (no: unknown): unknown => {
+    if (Array.isArray(no)) return no.map(trocar);
+    if (!no || typeof no !== 'object') return no;
+    return Object.fromEntries(
+      Object.entries(no).map(([chave, valor]) => [
+        chave,
+        chave === 'fonteUrl' ? { type: 'string', enum: lidas } : trocar(valor),
+      ])
+    );
+  };
+  const esquema = trocar(ESQUEMA_BASE) as {
+    properties: { propostas: Record<string, unknown> };
+  };
+  if (lidas.length === 0) {
+    esquema.properties.propostas = { type: 'array', maxItems: 0 };
+  }
+  return esquema;
+}
 
 /** Páginas oficiais por onde o modelo começa, além das fontes do catálogo. */
 export const PONTOS_DE_PARTIDA_OFICIAIS = [
@@ -244,6 +292,9 @@ export async function executarAtualizacao(
       acesso,
       pontosDePartida,
       maximoDePassos: PASSOS_DA_ATUALIZACAO,
+      maximoDeTokens: TOKENS_DA_ATUALIZACAO,
+      limiteDoRegistro: REGISTRO_DA_ATUALIZACAO,
+      esquemaDoResultado,
       validarResultado: (resultado) => {
         const lido = resultadoDaAtualizacaoSchema.safeParse(resultado);
         return lido.success

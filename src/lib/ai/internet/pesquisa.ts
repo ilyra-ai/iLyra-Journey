@@ -48,9 +48,115 @@ export const MAXIMO_DE_PASSOS = 14;
 /** Texto de uma página entregue ao modelo em cada leitura. */
 const TRECHO_POR_PAGINA = 7_000;
 /** Registro total da pesquisa reenviado ao modelo a cada passo. */
-const LIMITE_DO_REGISTRO = 60_000;
+export const LIMITE_DO_REGISTRO = 60_000;
+/** Resposta máxima do modelo em cada passo, raciocínio incluído. */
+export const TOKENS_POR_PASSO = 4096;
+/** Quanto de cada observação antiga sobra quando o registro é resumido. */
+const RESUMO_DA_OBSERVACAO = 1_200;
 /** Links de cada página repassados ao modelo. */
 const LINKS_POR_PAGINA = 40;
+
+/**
+ * Esquema JSON de cada passo, enviado como saída estruturada: servidores que
+ * a aplicam na geração (Ollama, llama.cpp, vLLM) não deixam o modelo sair do
+ * protocolo. No último passo só a conclusão é aceita, com o resultado no
+ * esquema da tarefa quando ele é informado.
+ */
+export function esquemaDoPasso(
+  ultimo: boolean,
+  comBusca: boolean,
+  esquemaDoResultado?: Record<string, unknown>
+): Record<string, unknown> {
+  const concluir = {
+    type: 'object',
+    properties: {
+      acao: { type: 'string', const: 'concluir' },
+      resultado: esquemaDoResultado ?? { type: 'object' },
+    },
+    required: ['acao', 'resultado'],
+    additionalProperties: false,
+  };
+  if (ultimo) return concluir;
+  return {
+    anyOf: [
+      ...(comBusca
+        ? [
+            {
+              type: 'object',
+              properties: {
+                acao: { type: 'string', const: 'buscar' },
+                consulta: { type: 'string', minLength: 2, maxLength: 300 },
+              },
+              required: ['acao', 'consulta'],
+              additionalProperties: false,
+            },
+          ]
+        : []),
+      {
+        type: 'object',
+        properties: {
+          acao: { type: 'string', const: 'ler' },
+          url: { type: 'string', minLength: 10, maxLength: 600 },
+        },
+        required: ['acao', 'url'],
+        additionalProperties: false,
+      },
+      concluir,
+    ],
+  };
+}
+
+/** Endereço comparável: sem fragmento, sem barra final e sem "www.". */
+export function enderecoDaPagina(url: string) {
+  try {
+    const u = new URL(url.trim());
+    u.hash = '';
+    return `${u.host.toLowerCase().replace(/^www\./, '')}${u.pathname.replace(/\/+$/, '')}${u.search}`;
+  } catch {
+    return url.trim();
+  }
+}
+
+/**
+ * Registro reenviado ao modelo. Quando passa do limite, as observações mais
+ * antigas são resumidas (e, se preciso, reduzidas ao pedido), em vez de
+ * sumirem: assim o modelo não esquece o que já leu e não repete leituras.
+ */
+export function montarRegistro(
+  observacoes: Observacao[],
+  lidas: Map<string, { passo: number; url: string }>,
+  limite: number
+) {
+  const indice = lidas.size
+    ? `Páginas já lidas (o conteúdo está abaixo; não leia de novo):\n${[
+        ...lidas.values(),
+      ]
+        .map((l) => `- passo ${l.passo}: ${l.url}`)
+        .join('\n')}`
+    : '';
+  const corpos = observacoes.map((o) => o.resposta);
+  const texto = () =>
+    [
+      indice,
+      ...observacoes.map((o, i) =>
+        corpos[i]
+          ? `[Passo ${o.passo}] ${o.pedido}\n${corpos[i]}`
+          : `[Passo ${o.passo}] ${o.pedido}`
+      ),
+    ]
+      .filter(Boolean)
+      .join('\n\n');
+  for (let i = 0; i < corpos.length - 1 && texto().length > limite; i += 1) {
+    if (corpos[i].length > RESUMO_DA_OBSERVACAO) {
+      corpos[i] =
+        `${corpos[i].slice(0, RESUMO_DA_OBSERVACAO)}\n(resumido para caber no registro)`;
+    }
+  }
+  for (let i = 0; i < corpos.length - 1 && texto().length > limite; i += 1) {
+    corpos[i] = '';
+  }
+  return texto();
+}
 
 function lerPasso(bruto: string): Passo | null {
   try {
@@ -103,6 +209,18 @@ export async function pesquisarNaInternet(opcoes: {
     fontes: ResultadoDaPesquisa['fontes']
   ) => string | null;
   maximoDePassos?: number;
+  /** Resposta máxima por passo; a conclusão precisa caber nela. */
+  maximoDeTokens?: number;
+  /** Tamanho máximo do registro reenviado ao modelo a cada passo. */
+  limiteDoRegistro?: number;
+  /**
+   * Esquema JSON do resultado, imposto na conclusão (saída estruturada). Como
+   * função, recebe as páginas já lidas: a tarefa pode limitar as fontes
+   * citáveis a elas.
+   */
+  esquemaDoResultado?:
+    | Record<string, unknown>
+    | ((fontes: ResultadoDaPesquisa['fontes']) => Record<string, unknown>);
   registrar?: (consulta: {
     tarefa: string;
     tipo: 'busca' | 'pagina';
@@ -122,20 +240,23 @@ export async function pesquisarNaInternet(opcoes: {
   const registrar = opcoes.registrar ?? (async () => undefined);
   const observacoes: Observacao[] = [];
   const fontes: ResultadoDaPesquisa['fontes'] = [];
+  const lidas = new Map<string, { passo: number; url: string }>();
+  // Endereços recusados (404, fora do alcance, rede interna): não se repetem.
+  const recusadas = new Map<string, { passo: number; motivo: string }>();
   const maximo = opcoes.maximoDePassos ?? MAXIMO_DE_PASSOS;
+  const comBusca = buscaDisponivel(opcoes.env);
   const protocolo = instrucoesDoProtocolo(
     opcoes.acesso,
-    buscaDisponivel(opcoes.env),
+    comBusca,
     opcoes.pontosDePartida ?? []
   );
 
   for (let passo = 1; passo <= maximo; passo += 1) {
-    let registro = observacoes
-      .map((o) => `[Passo ${o.passo}] ${o.pedido}\n${o.resposta}`)
-      .join('\n\n');
-    if (registro.length > LIMITE_DO_REGISTRO) {
-      registro = `(início do registro omitido)\n${registro.slice(-LIMITE_DO_REGISTRO)}`;
-    }
+    const registro = montarRegistro(
+      observacoes,
+      lidas,
+      opcoes.limiteDoRegistro ?? LIMITE_DO_REGISTRO
+    );
     const ultimo = passo === maximo;
     const gerado = await gerarNaCadeia(
       opcoes.cadeia,
@@ -151,7 +272,15 @@ export async function pesquisarNaInternet(opcoes: {
           .filter(Boolean)
           .join('\n\n'),
         json: true,
-        maximoDeTokens: 4096,
+        esquemaJson: esquemaDoPasso(
+          ultimo,
+          comBusca,
+          typeof opcoes.esquemaDoResultado === 'function'
+            ? opcoes.esquemaDoResultado(fontes)
+            : opcoes.esquemaDoResultado
+        ),
+        nomeDoEsquema: 'passo_da_pesquisa',
+        maximoDeTokens: opcoes.maximoDeTokens ?? TOKENS_POR_PASSO,
       },
       {
         rotulo: `internet:${opcoes.rotulo}`,
@@ -169,8 +298,16 @@ export async function pesquisarNaInternet(opcoes: {
       }
     );
     if (gerado.origem === 'lyra') {
+      // A tarefa é administrativa e não leva dado pessoal: o motivo de cada
+      // modelo ajuda o administrador a corrigir a configuração.
+      const motivos = gerado.tentativas
+        .map(
+          (t) =>
+            `${t.provedor} · ${t.modelo}: ${t.resultado}${t.motivo ? ` (${t.motivo.slice(0, 200)})` : ''}`
+        )
+        .join('; ');
       throw new Error(
-        'Nenhum modelo de IA respondeu à pesquisa no formato combinado.'
+        `Nenhum modelo de IA respondeu à pesquisa no formato combinado (passo ${passo}${motivos ? `; ${motivos}` : ''}).`
       );
     }
     const pedido = lerPasso(gerado.texto)!;
@@ -224,11 +361,34 @@ export async function pesquisarNaInternet(opcoes: {
       continue;
     }
 
+    const jaLida = lidas.get(enderecoDaPagina(pedido.url));
+    if (jaLida) {
+      observacoes.push({
+        passo,
+        pedido: `Leitura: ${pedido.url}`,
+        resposta: `Esta página já foi lida no passo ${jaLida.passo} e o conteúdo está no registro. Siga outro link ou conclua com o que já leu.`,
+      });
+      continue;
+    }
+    const jaRecusada = recusadas.get(enderecoDaPagina(pedido.url));
+    if (jaRecusada) {
+      observacoes.push({
+        passo,
+        pedido: `Leitura: ${pedido.url}`,
+        resposta: `Esta página já foi recusada no passo ${jaRecusada.passo} (${jaRecusada.motivo}). Não peça de novo: use um link que apareceu nas páginas lidas ou conclua.`,
+      });
+      continue;
+    }
+
     try {
       const pagina = await lerPagina(pedido.url, opcoes.acesso, {
         buscar: opcoes.buscar,
         resolver: opcoes.resolver,
       });
+      // O endereço pedido e o final (após redirecionamentos) contam como lidos.
+      for (const endereco of [pedido.url, pagina.url]) {
+        lidas.set(enderecoDaPagina(endereco), { passo, url: pagina.url });
+      }
       fontes.push({ url: pagina.url, titulo: pagina.titulo });
       await registrar({
         tarefa: opcoes.rotulo,
@@ -252,6 +412,7 @@ export async function pesquisarNaInternet(opcoes: {
       });
     } catch (erro) {
       const motivo = erro instanceof Error ? erro.message : 'falha na leitura';
+      recusadas.set(enderecoDaPagina(pedido.url), { passo, motivo });
       await registrar({
         tarefa: opcoes.rotulo,
         tipo: 'pagina',

@@ -294,3 +294,24 @@ describe('Conferência das propostas', () => {
     ).toBeLessThanOrEqual(40);
   });
 });
+
+describe('Esquema imposto na conclusão', () => {
+  it('fonteUrl só aceita as páginas lidas; sem página lida, nenhuma proposta', async () => {
+    const { esquemaDoResultado } = await import('./atualizacao-servico');
+    const esquema = JSON.stringify(
+      esquemaDoResultado([{ url: PAGINA }, { url: PAGINA }])
+    );
+    const fontes = [...esquema.matchAll(/"fonteUrl":(\{[^}]*\})/g)].map(
+      (m) => m[1]
+    );
+    // atualizar e novo (em dados) e retirar.
+    expect(fontes).toHaveLength(3);
+    for (const fonte of fontes) {
+      expect(JSON.parse(fonte)).toEqual({ type: 'string', enum: [PAGINA] });
+    }
+    const vazio = esquemaDoResultado([]) as {
+      properties: { propostas: unknown };
+    };
+    expect(vazio.properties.propostas).toEqual({ type: 'array', maxItems: 0 });
+  });
+});

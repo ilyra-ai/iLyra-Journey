@@ -428,10 +428,18 @@ export async function gerarTextoDetalhado(
               // O ID opaco não permite reconhecer Qwen pelo nome; templates
               // sem esse parâmetro apenas não o utilizam.
               ...(conexao.integrado ||
-              (pedido.esquemaJson &&
+              // Saída estruturada, com ou sem esquema: o JSON é a resposta
+              // visível e o raciocínio não pode consumir os tokens dela.
+              ((pedido.esquemaJson || pedido.json) &&
                 /(?:^|\/)qwen3[._-]/i.test(conexao.modelo) &&
                 urlEhLocal(conexao.baseUrl))
-                ? { chat_template_kwargs: { enable_thinking: false } }
+                ? {
+                    // llama.cpp e vLLM leem o template; Ollama e Jan ignoram
+                    // o template e só desligam o raciocínio pelo parâmetro
+                    // padrão da OpenAI (conferido em 17/11/2026).
+                    chat_template_kwargs: { enable_thinking: false },
+                    reasoning_effort: 'none',
+                  }
                 : {}),
               ...(pedido.maximoDeTokens
                 ? { max_tokens: pedido.maximoDeTokens }

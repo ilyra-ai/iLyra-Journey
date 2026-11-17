@@ -180,9 +180,17 @@ describe('saída estruturada por JSON Schema', () => {
           }
         );
       }
+      // JSON sem esquema (protocolo da pesquisa, verbetes) também é estruturado.
+      servidor.responder('{"acao":"concluir","resultado":{}}');
+      await gerarTexto(
+        { ...conexao(servidor.baseUrl), modelo: 'Qwen3_5-4B-IQ4_XS' },
+        { sistema: 's', usuario: 'u', json: true }
+      );
+      expect(servidor.requisicoes).toHaveLength(3);
       for (const requisicao of servidor.requisicoes) {
         expect(requisicao.corpo).toMatchObject({
           chat_template_kwargs: { enable_thinking: false },
+          reasoning_effort: 'none',
         });
       }
       servidor.responder('Resposta livre');
@@ -195,6 +203,9 @@ describe('saída estruturada por JSON Schema', () => {
       );
       expect(servidor.requisicoes.at(-1)?.corpo).not.toHaveProperty(
         'chat_template_kwargs'
+      );
+      expect(servidor.requisicoes.at(-1)?.corpo).not.toHaveProperty(
+        'reasoning_effort'
       );
     } finally {
       await servidor.fechar();
