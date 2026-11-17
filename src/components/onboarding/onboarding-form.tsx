@@ -113,6 +113,22 @@ const rascunhoSchema = z.object({
     residence_city: cidade.nullable(),
     gender: genero.nullable(),
     activity_level: z.number().int().min(1).max(5).nullable(),
+    // Horário escolhido por quem não sabe a hora; ausente em rascunhos
+    // anteriores a este campo.
+    horario_estimado: z
+      .object({
+        opcao: z.object({
+          id: z.iso.datetime(),
+          inicio: z.string().regex(/^\d{2}:\d{2}$/),
+          fim: z.string().regex(/^\d{2}:\d{2}$/),
+          palavra: z.string().min(1).max(40),
+          escolhida: z.boolean(),
+        }),
+        data: z.iso.date(),
+        cidadeId: z.number().int().positive(),
+      })
+      .nullable()
+      .optional(),
   }),
 });
 const etapas = [
@@ -150,11 +166,13 @@ export function OnboardingForm() {
   const falhaRascunho = React.useRef(false);
   // Horário escolhido por quem não sabe a hora, com a data e a cidade para as
   // quais ele foi calculado: só vale enquanto as duas não mudarem.
-  const [janela, setJanela] = React.useState<{
+  const [janela, definirJanela] = React.useState<{
     opcao: OpcaoDeHora;
     data: string;
     cidadeId: number;
   } | null>(null);
+  // Lida pelo rascunho, que é gravado fora do ciclo de renderização.
+  const janelaRef = React.useRef<typeof janela>(null);
   const valoresOriginais = React.useRef<{
     hora: string;
     moradia: number | null;
@@ -202,6 +220,7 @@ export function OnboardingForm() {
             residence_city: v.residence_city,
             gender: v.gender ?? null,
             activity_level: v.activity_level ?? null,
+            horario_estimado: janelaRef.current,
           },
         })
       );
@@ -214,6 +233,11 @@ export function OnboardingForm() {
       }
     }
   }, [chave, form, titular]);
+  function setJanela(valor: typeof janela) {
+    janelaRef.current = valor;
+    definirJanela(valor);
+    persistir();
+  }
   React.useEffect(
     () =>
       form.subscribe({
@@ -295,7 +319,9 @@ export function OnboardingForm() {
           if (raw) {
             const draft = rascunhoSchema.safeParse(JSON.parse(raw));
             if (draft.success && draft.data.expires > Date.now()) {
-              const d = draft.data.data;
+              const { horario_estimado, ...d } = draft.data.data;
+              janelaRef.current = horario_estimado ?? null;
+              definirJanela(horario_estimado ?? null);
               Object.assign(base, d, {
                 birth_date: d.birth_date ? parseISO(d.birth_date) : undefined,
                 gender: d.gender ?? undefined,

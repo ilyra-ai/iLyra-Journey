@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 31                       |
+| 🟡 Implementadas com validação pendente | 32                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5618,3 +5618,10 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Causa raiz corrigida:** com a hora desconhecida, Tara Bala e Chandra Bala do dia usavam a Lua natal do meio-dia, embora a Lua possa mudar de nakshatra e de signo no dia do nascimento. Agora o dia pessoal só é afirmado quando Tara e Chandra Bala dão o mesmo resultado para toda Lua possível daquele dia; caso contrário, `pessoal` fica nulo com `pessoalIndisponivel: 'hora-de-nascimento'`, e a leitura do coach explica a ausência e convida a informar ou escolher a hora, em vez de pedir data e cidade que já estão no perfil.
 - **Arquivos:** `src/lib/astrology/perfil-astrologico.ts`, `serializacao.ts`, `src/lib/coach/leitura-vedica.ts` e testes.
 - **Testes:** 4 testes novos (Lua mudando no dia sem dia pessoal; hora conhecida com dia pessoal; Lua parada no dia com dia pessoal sem a hora; texto do coach). Unitários, integração, lint, tipos, formato e build aprovados em Node v26.13.0.
+
+### 206 · Horário escolhido preservado no rascunho do onboarding · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** limite declarado na tarefa 194; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
+- **Correção:** o rascunho do onboarding na aba (`sessionStorage`) guardava todos os campos menos o horário escolhido por quem não sabe a hora; ao recarregar, a pessoa precisava escolher de novo. O rascunho passa a guardar o horário com a data e a cidade para as quais foi calculado (campo opcional, compatível com rascunhos anteriores) e o restaura; o horário só vale enquanto data e cidade não mudarem, e o servidor continua recalculando a hora no envio.
+- **Arquivos:** `src/components/onboarding/onboarding-form.tsx`.
+- **Testes:** o formulário não tem teste de componente no projeto (ambiente de teste `node`); validado por tipos, lint e build. Não conferido no navegador. Unitários, integração, lint, tipos, formato e build aprovados em Node v26.13.0.
