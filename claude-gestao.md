@@ -227,7 +227,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | 🟡 Implementadas com validação pendente | 40                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 35                       |
+| ⚪ A iniciar                            | 38                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
@@ -5721,3 +5721,18 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte da Matriz editável de entitlements (Administração → Planos).
 - **Escopo pedido:** no desktop, mostrar cada recurso em cartões no formato quadrado, 3 por linha, sem cartões muito grandes. Hoje cada recurso ocupa a largura inteira, com os quatro planos (Free, Meta, Care, Administrador) em dois por linha.
+
+### 221 · Selos das propostas de exames centralizados, com ícone e cor · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026, com o recorte do selo "Novo exame" na tabela de revisão da tela Exames Médicos (tema claro).
+- **Escopo pedido:** centralizar o conteúdo das colunas da tabela; trocar "Novo exame" por "Novo" (e equivalentes curtos para atualizar e retirar), com ícone ou imagem que deixe o tipo claro, e selos coloridos.
+
+### 222 · Símbolo da marca com fundo transparente · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026, com os recortes do avatar do chat no tema claro: o símbolo aparece num quadrado azul-noite.
+- **Escopo pedido:** usar o símbolo com fundo transparente ("já temos a imagem"). Continuação da tarefa 219.
+
+### 223 · Todos os h2 em tamanho de tópico e negrito · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026, com o recorte do título "Matriz real de capacidades" (Administração → Planos, tema claro).
+- **Escopo pedido:** deixar todos os `h2` do tamanho de tópico e em negrito. Continuação da tarefa 216.
