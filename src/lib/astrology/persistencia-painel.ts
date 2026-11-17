@@ -9,7 +9,7 @@ import { mapaParaJson } from './serializacao';
 import { dataLocal } from './tempo';
 
 // Incrementar quando mudar a composição da leitura diária ou seu formato.
-const versaoDoPainel = 1;
+const versaoDoPainel = 2;
 
 function hash(texto: string) {
   return createHash('sha256').update(texto).digest('hex');

@@ -28,6 +28,10 @@ import {
   TIPOS_DE_MAPA,
 } from './conhecimento/mapas';
 import { CUIDADO_DO_DOSHA } from './conhecimento/upavedas';
+import {
+  lerVinculosFamiliares,
+  type VinculosFamiliares,
+} from './vinculos-familiares';
 
 /**
  * Leitura do mapa natal pelo motor da Lyra, sem modelo de IA (tarefa 55).
@@ -81,6 +85,8 @@ export interface LeituraDaLyra {
   };
   /** De 3 a 5 percepções principais (regra do método Samādhi). */
   percepcoes: string[];
+  /** Vínculos familiares como leitura simbólica (tarefa 208). */
+  vinculos: VinculosFamiliares | null;
 }
 
 const ORDEM_DOS_ELEMENTOS: Elemento[] = ['fogo', 'terra', 'ar', 'agua'];
@@ -467,5 +473,6 @@ export function lerMapaComoLyra(mapa: MapaNatal): LeituraDaLyra {
       ],
     },
     percepcoes: percepcoes.slice(0, 5),
+    vinculos: lerVinculosFamiliares(mapa),
   };
 }
