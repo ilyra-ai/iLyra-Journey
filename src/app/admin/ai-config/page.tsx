@@ -5,6 +5,7 @@ import { AccessDenied } from '@/components/layout/AccessDenied';
 import { PageIntro } from '@/components/layout/PageIntro';
 import { useAuth } from '@/context/AuthContext';
 import { SplashScreen } from '@/components/SplashScreen';
+import { AcessoInternetDaIa } from '@/components/admin/AcessoInternetDaIa';
 import { AIConfigForm } from '@/components/admin/AIConfigForm';
 import { AIKnowledgeManager } from '@/components/admin/AIKnowledgeManager';
 import { useIsAdmin } from '@/hooks/use-is-admin';
@@ -35,6 +36,7 @@ export default function AIConfigPage() {
       />
       <AIConfigForm />
       <AIKnowledgeManager />
+      <AcessoInternetDaIa />
     </AppShell>
   );
 }
