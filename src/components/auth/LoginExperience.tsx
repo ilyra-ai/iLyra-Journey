@@ -4,7 +4,7 @@ import { CSSProperties, SubmitEvent, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ceuVedico from '@/assets/celestial/ceu-vedico-transparente.png';
-import logoLyra from '@/app/icon.png';
+import logoLyra from '@/assets/celestial/simbolo-transparente.png';
 import { CelestialBrand } from '@/components/public/CelestialBrand';
 import identidade from '@/components/public/CelestialIdentity.module.css';
 import { toast } from 'sonner';

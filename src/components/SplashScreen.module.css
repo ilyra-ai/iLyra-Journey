@@ -63,9 +63,9 @@
 }
 
 .symbol {
-  width: 76%;
+  /* Símbolo transparente e recortado: sem máscara para esfumaçar fundo. */
+  width: 62%;
   height: auto;
-  mask-image: radial-gradient(ellipse, #000 45%, transparent 74%);
 }
 
 .content h1 {

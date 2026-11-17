@@ -1,14 +1,13 @@
 import Image from 'next/image';
 
-import simboloDaLyra from '@/assets/celestial/simbolo.png';
+import simboloDaLyra from '@/assets/celestial/simbolo-transparente.png';
 import { cn } from '@/lib/utils';
 
 /*
   Marca da Lyra na identidade celestial aprovada: o "L" dourado abraçando o
-  coração, sobre o azul-noite do próprio símbolo (o mesmo da tela de
-  carregamento e do favicon). O símbolo já traz o fundo, então a marca é um
-  ladrilho arredondado igual nos temas claro e escuro, sem o fundo branco
-  que o logo anterior (teal e coral) precisava no tema escuro.
+  coração, com fundo transparente (src/assets/celestial/simbolo-transparente.png,
+  gerado de simbolo.png por scripts/gerar-simbolo-transparente.mjs), igual nos
+  temas claro e escuro.
 */
 
 interface MarcaLyraProps {
@@ -33,7 +32,7 @@ export function MarcaLyra({
   return (
     <span
       className={cn(
-        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[22%]',
+        'inline-flex shrink-0 items-center justify-center',
         className
       )}
       style={{ width: tamanho, height: tamanho }}
@@ -48,7 +47,7 @@ export function MarcaLyra({
         // ficava oculta). Carga imediata com alta prioridade, sem preload.
         loading={prioridade ? 'eager' : 'lazy'}
         fetchPriority={prioridade ? 'high' : undefined}
-        className="h-full w-full object-cover"
+        className="h-full w-full object-contain"
       />
     </span>
   );

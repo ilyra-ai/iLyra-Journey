@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import horizonte from '@/assets/celestial/horizonte.png';
-import simbolo from '@/assets/celestial/simbolo.png';
+import simbolo from '@/assets/celestial/simbolo-transparente.png';
 import { CelestialBrand } from '@/components/public/CelestialBrand';
 import { cn } from '@/lib/utils';
 import identidade from './public/CelestialIdentity.module.css';
