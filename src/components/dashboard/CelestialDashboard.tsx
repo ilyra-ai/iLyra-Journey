@@ -383,7 +383,14 @@ export function CelestialDashboard() {
                 </div>
               </Tabs>
             </section>
-            <CelestialChat />
+            {/* Vínculos em resumo, em cima do chat compacto (tarefa 213). */}
+            <div className={styles.ladoDoMapa}>
+              <VinculosFamiliares
+                dados={data.leitura?.vinculos ?? null}
+                className={styles.card}
+              />
+              <CelestialChat nome={profile?.first_name ?? null} />
+            </div>
           </div>
           <div className={styles.bottomGrid}>
             <section
@@ -485,10 +492,6 @@ export function CelestialDashboard() {
               )}
             </section>
           </div>
-          <VinculosFamiliares
-            dados={data.leitura?.vinculos ?? null}
-            className={cn(styles.card, 'mt-6')}
-          />
           <PrevencaoCard className={cn(styles.card, 'mt-6')} />
           <div className={styles.footer}>Lyra MetaCare</div>
         </>

@@ -45,6 +45,22 @@ const alteracaoSchema = z.discriminatedUnion('tipo', [
     .strict(),
 ]);
 
+type Sessao = Awaited<ReturnType<typeof requireServerSession>>;
+
+/**
+ * A prevenção aparece junto dos vínculos familiares, que vêm da leitura do
+ * mapa (`vedic_insights`), e no cartão do registro de saúde
+ * (`daily_checkin`): basta uma das duas. O histórico de saúde da família é
+ * do registro de saúde e exige `daily_checkin`.
+ */
+async function exigirAlgumAcesso(sessao: Sessao) {
+  try {
+    await requireFeatureEnabled(sessao, 'vedic_insights');
+  } catch {
+    await requireFeatureEnabled(sessao, 'daily_checkin');
+  }
+}
+
 /**
  * Prevenção do próprio titular (tarefa 209): exames indicados pela idade,
  * pelo corpo e pelo histórico da família, com a situação de cada um, e o
@@ -53,7 +69,7 @@ const alteracaoSchema = z.discriminatedUnion('tipo', [
 export async function GET() {
   try {
     const sessao = await requireServerSession();
-    await requireFeatureEnabled(sessao, 'daily_checkin');
+    await exigirAlgumAcesso(sessao);
     return NextResponse.json(await lerPlanoDoTitular(sessao.user.id), {
       headers: SEM_CACHE,
     });
@@ -66,8 +82,12 @@ export async function GET() {
 export async function PATCH(request: Request) {
   try {
     const sessao = await requireServerSession();
-    await requireFeatureEnabled(sessao, 'daily_checkin');
     const alteracao = await lerJson(request, alteracaoSchema);
+    if (alteracao.tipo === 'historico') {
+      await requireFeatureEnabled(sessao, 'daily_checkin');
+    } else {
+      await exigirAlgumAcesso(sessao);
+    }
     const usuario = sessao.user.id;
     if (alteracao.tipo === 'exame') {
       await registrarExame(

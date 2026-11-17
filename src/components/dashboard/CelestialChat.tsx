@@ -7,13 +7,13 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import {
   ChevronRight,
-  Maximize2,
+  MessageCircle,
   Minimize2,
   Paperclip,
   Send,
   Sparkles,
 } from 'lucide-react';
-import logo from '@/app/icon.png';
+import logo from '@/assets/celestial/simbolo-transparente.png';
 import { usePlanFeatureAccess } from '@/hooks/use-plan-feature-access';
 import { useConversaLyra } from '@/hooks/use-conversa-lyra';
 import { usePrivacyMode } from '@/hooks/use-privacy-mode';
@@ -41,8 +41,13 @@ const ChatCompleto = dynamic(
   }
 );
 
-/** Compositor compacto usando o mesmo transporte, privacidade e histórico do chat. */
-export function CelestialChat() {
+/**
+ * Conversa com a Lyra no painel. Fechada, ocupa só o título e um botão de
+ * ícone (pedido do titular em 17/11/2026, tarefa 213); aberta, traz as
+ * sugestões, as mensagens e o campo de texto, com o mesmo transporte,
+ * privacidade e histórico do chat.
+ */
+export function CelestialChat({ nome }: { nome?: string | null }) {
   const { enabled, loading, subscription } =
     usePlanFeatureAccess('ai_chat_messages');
   const salvar = isPlanFeatureEnabled(subscription, 'chat_history');
@@ -51,6 +56,9 @@ export function CelestialChat() {
   const [texto, setTexto] = useState('');
   const [anexosAberto, setAnexosAberto] = useState(false);
   const [ampliado, setAmpliado] = useState(false);
+  // Começo da conversa no cartão fechado; null mantém a saudação com o nome.
+  const [inicio, setInicio] = useState<string | null>(null);
+  const saudacao = nome?.trim() ? `Oi Lyra, sou ${nome.trim()}` : 'Oi Lyra';
   const campo = useRef<HTMLTextAreaElement>(null);
   const conversa = useConversaLyra(null, undefined, salvar);
   useLayoutEffect(() => {
@@ -82,19 +90,22 @@ export function CelestialChat() {
         {ampliado ? (
           <DialogTitle>Converse com a Lyra</DialogTitle>
         ) : (
-          <h2 id="titulo-lyra-painel">Converse com a Lyra</h2>
+          <h2 id="titulo-lyra-painel" className={styles.tituloCompacto}>
+            Converse com a Lyra
+          </h2>
         )}
         <button
           type="button"
           className={styles.expandChat}
           onClick={() => setAmpliado((atual) => !atual)}
-          aria-label={ampliado ? 'Reduzir conversa' : 'Ampliar conversa'}
+          aria-label={ampliado ? 'Reduzir conversa' : 'Abrir conversa'}
           aria-expanded={ampliado}
+          title={ampliado ? 'Reduzir conversa' : 'Abrir conversa'}
         >
           {ampliado ? (
             <Minimize2 aria-hidden="true" />
           ) : (
-            <Maximize2 aria-hidden="true" />
+            <MessageCircle aria-hidden="true" />
           )}
         </button>
       </div>
@@ -109,6 +120,42 @@ export function CelestialChat() {
         <Link href="/planos" className={styles.outlineButton}>
           Conhecer os planos <ChevronRight aria-hidden="true" />
         </Link>
+      ) : !ampliado ? (
+        // Cartão fechado: só a primeira mensagem. Enviar abre a conversa
+        // completa já com ela, e a pessoa continua dali.
+        <form
+          className={styles.composer}
+          onSubmit={(evento) => {
+            evento.preventDefault();
+            const mensagem = (inicio ?? saudacao).trim();
+            if (!mensagem || conversa.enviando) return;
+            setAmpliado(true);
+            void conversa
+              .enviar(mensagem, privacyMode ? '' : (chave ?? ''))
+              .then((sucesso) => {
+                if (sucesso) setInicio(null);
+              });
+          }}
+        >
+          <label className="sr-only" htmlFor="inicio-lyra-painel">
+            Primeira mensagem para a Lyra
+          </label>
+          <textarea
+            id="inicio-lyra-painel"
+            rows={1}
+            value={inicio ?? saudacao}
+            maxLength={2000}
+            onChange={(evento) => setInicio(evento.target.value)}
+            required
+          />
+          <button
+            type="submit"
+            aria-label="Enviar e abrir a conversa com a Lyra"
+            disabled={conversa.enviando || !(inicio ?? saudacao).trim()}
+          >
+            <Send aria-hidden="true" />
+          </button>
+        </form>
       ) : (
         <>
           <div className={styles.chatShortcuts}>

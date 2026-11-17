@@ -224,10 +224,10 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 40                       |
+| 🟡 Implementadas com validação pendente | 43                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 38                       |
+| ⚪ A iniciar                            | 36                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
@@ -5678,16 +5678,19 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Conferência posterior (17/11/2026):** pesquisa completa com modelo real comprovada na tarefa 211 (Ollama, `nexuz/qwen3.5-agent:4b`, 7 páginas oficiais lidas); painel "Acesso do modelo de IA à internet" conferido no navegador (modo "Só os sites liberados", 12 fontes, aviso da busca sem chave e tabela das consultas reais com horário local).
 - **Fronteiras não comprovadas:** busca pela API do Brave Search sem chave real no ambiente (formato coberto por teste, chamada externa não executada).
 
-### 213 · Painel: chat compacto e resumo dos vínculos familiares · ⚪ A INICIAR
+### 213 · Painel: chat compacto e resumo dos vínculos familiares · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
-- **Origem e data:** pedido do titular em 17/11/2026, com o recorte do cartão "Converse com a Lyra" do painel.
-- **Escopo pedido:** a seção "Vínculos familiares no seu mapa" não pode abrir inteira assim que o app abre. O cartão "Converse com a Lyra" do painel diminui, ficando só algo como "Converse com a Lyra" e um botão de ícone que abre o chat. Acima dele, um cartão com um resumo dos parentes que, ao ser clicado, abre a tela "Vínculos familiares no seu mapa" completa, com todas as informações.
-- **Observação:** o pedido anterior do mesmo dia, de mostrar só os parentescos que têm algo no mapa, foi desconsiderado pelo titular.
+- **Origem e data:** pedidos do titular em 17/11/2026: a tela dos vínculos não pode abrir inteira no painel; o cartão "Converse com a Lyra" diminui; em cima dele, um resumo dos parentes que abre a tela completa; depois, alinhar o chat com o cartão "Meu mapa védico", título menor, caixa de texto com "Oi Lyra, sou {nome}" e botão enviar que abre a conversa; respiro entre os botões e as bordas; botões menores, sempre alinhados. O titular também pediu, no mesmo dia, a Medicina Germânica junto com os vínculos (ver decisão abaixo).
+- **Estado em 17/11/2026:** `VinculosFamiliares.tsx` virou resumo compacto: os 12 parentes em botões pequenos numa grade de colunas iguais (3 no desktop, 2 no celular), com ponto colorido pelo tom (apoio, atenção, equilíbrio), e "Ver tudo", que abre a tela completa com o resumo de cada vínculo; cada parente abre o detalhe da leitura simbólica e a seção **Cuidar de você**: a pergunta "Este vínculo pesa para você hoje?" (salva em `prevencao_vinculos`) e os exames de prevenção indicados pela idade e pelo corpo, do catálogo oficial do motor, com o aviso oficial. O resumo fica em cima do chat, na coluna ao lado do mapa (`.ladoDoMapa`): o chat fica embaixo, rente ao fim do mapa; os vínculos ocupam o resto e só a lista rola. `CelestialChat` fechado mostra só o título menor (`.tituloCompacto`), o ícone e a caixa com "Oi Lyra, sou {primeiro nome}"; enviar abre a conversa completa já com a mensagem. A rota `/api/prevencao` aceita `vedic_insights` ou `daily_checkin` para o plano, os exames e o "pesa?"; o histórico de saúde da família continua exigindo `daily_checkin`, que o titular informou que ficará desligado.
+- **Causa raiz corrigida durante a conferência:** no desktop o painel é uma grade de uma tela só (`minmax(0, 1.65fr)` para a linha de cima); a coluna nova (421 px de conteúdo para 348 px) fazia o mapa e o chat invadirem a linha de baixo. A linha passou a `grid-template-rows: minmax(0, 1fr)` e a coluna respeita a altura com rolagem só na lista de parentes.
+- **Decisão sobre a Medicina Germânica:** não incluída. Associar conflitos familiares a doenças específicas, como a Medicina Germânica faz, pode levar alguém a se achar doente ou a trocar tratamento médico; o que entra junto dos vínculos é o cuidado acordado com o titular na tarefa 209 (a pergunta "pesa?" e os exames oficiais de prevenção), sem diagnóstico e sem relacionar doença a conflito.
+- **Evidências (navegador, admin local):** desktop 1440×900, tablet 768 e celular 375 sem sobreposição entre cartões e sem rolagem horizontal (medido por script na página); chat e mapa terminando na mesma altura (626 px); título do chat em 23,4 px; caixa com "Oi Lyra, sou Admin"; enviar abriu a conversa com a mensagem e a Lyra respondeu pelo Ollama; detalhe de "Filhos e filhas" no celular com "Cuidar de você" e três exames indicados; 25 px de respiro entre os botões e a borda inferior. Unitários 1210, integração 663, lint, tipos, formato e build aprovados.
+- **Fronteiras não comprovadas:** acesso à prevenção só com `vedic_insights` ligado e `daily_checkin` desligado não tem teste automatizado próprio (a regra está na rota); tema claro não conferido.
 
-### 214 · Mais vínculos familiares (filhos, filhas e outros) · ⚪ A INICIAR
+### 214 · Mais vínculos familiares (filhos, cônjuge, sogros e netos) · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
-- **Origem e data:** pedido do titular em 17/11/2026: acrescentar mais vínculos familiares, como filhos, filhas e outros.
-- **Base existente:** `src/lib/lyra/vinculos-familiares.ts` (`NOMES_DOS_VINCULOS`, leitura simbólica pelo mapa védico, tarefa 205) e o cartão `VinculosFamiliares.tsx`.
+- **Origem e data:** pedido do titular em 17/11/2026: acrescentar filhos, filhas e outros.
+- **Estado em 17/11/2026:** `vinculos-familiares.ts` passou de 7 para 12 vínculos, só com regras estabelecidas no Jyotish (Brihat Parashara Hora Shastra): **Filhos e filhas** (casa 5, Putra Bhava, Júpiter; a tradição não separa por gênero, e isso é dito na origem da leitura), **Cônjuge ou companheiro(a)** (casa 7, Kalatra Bhava, Vênus), **Sogra** (casa 10, o 4º a partir do 7º, Lua), **Sogro** (casa 3, o 9º a partir do 7º, Sol) e **Netos** (casa 9, o 5º a partir do 5º, Júpiter). Primos e tios paternos seguem indisponíveis por não terem regra fixa. Os novos entram automaticamente na pergunta "pesa?" da prevenção. A versão do cache do painel subiu para 3 (`persistencia-painel.ts`), porque o painel guardava a leitura antiga com 7 vínculos. Testes: 12 vínculos com casa e significador de cada um conferidos, regente da casa 5 conferido, linguagem sem diagnóstico. Conferido no navegador: 12 parentes no resumo e detalhe completo.
 
 ### 215 · Funcionalidades do painel administrativo em mini cards · ⚪ A INICIAR
 
@@ -5727,12 +5730,18 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte do selo "Novo exame" na tabela de revisão da tela Exames Médicos (tema claro).
 - **Escopo pedido:** centralizar o conteúdo das colunas da tabela; trocar "Novo exame" por "Novo" (e equivalentes curtos para atualizar e retirar), com ícone ou imagem que deixe o tipo claro, e selos coloridos.
 
-### 222 · Símbolo da marca com fundo transparente · ⚪ A INICIAR
+### 222 · Símbolo da marca com fundo transparente em todos os usos · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
-- **Origem e data:** pedido do titular em 17/11/2026, com os recortes do avatar do chat no tema claro: o símbolo aparece num quadrado azul-noite.
-- **Escopo pedido:** usar o símbolo com fundo transparente ("já temos a imagem"). Continuação da tarefa 219.
+- **Origem e data:** pedidos do titular em 17/11/2026: "precisa ter fundo transparente" e "todos os logos da Lyra têm que ter fundo transparente".
+- **Estado em 17/11/2026:** o projeto só tinha o símbolo com fundo azul-noite opaco (`simbolo.png`, `icon.png`). `scripts/gerar-simbolo-transparente.mjs` (Sharp, dependência declarada) gera `src/assets/celestial/simbolo-transparente.png` de forma determinística: cor de fundo amostrada nos cantos (rgb 27, 27, 44), opacidade pela distância de cor com borda suave, cor despremultiplicada para não deixar franja azul, bordas vazias recortadas e margem de 4% (963 × 963, alfa de 0 a 255; inspeção visual feita). Passa a ser usado no `MarcaLyra` (chat, balões, sidebar, busca, erros), no cartão do chat do painel, no login e na tela de carregamento (sem a máscara que esfumaçava o fundo antigo).
+- **Fronteiras não comprovadas:** favicon e ícones de instalação (PWA) continuam com fundo, como exigem esses formatos; tema claro e tela de carregamento não conferidos no navegador.
 
 ### 223 · Todos os h2 em tamanho de tópico e negrito · ⚪ A INICIAR
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte do título "Matriz real de capacidades" (Administração → Planos, tema claro).
 - **Escopo pedido:** deixar todos os `h2` do tamanho de tópico e em negrito. Continuação da tarefa 216.
+
+### 224 · Todos os planos com o acesso do Care; configurações só para o administrador · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026: "todos os planos devem ser do tipo Care e somente o administrador tem acesso full às configurações do app".
+- **A confirmar na implementação:** se a mudança é na matriz de recursos (Free e Meta liberando o mesmo que o Care) ou na assinatura de cada usuário; preservar o acesso total do administrador.

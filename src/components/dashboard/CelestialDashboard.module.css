@@ -97,6 +97,24 @@
   grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
   gap: 16px;
 }
+/* Coluna ao lado do mapa (tarefa 213): resumo dos vínculos em cima do chat
+   compacto. O chat fica com a altura dele; os vínculos ocupam o resto e
+   rolam só na lista de parentes quando a linha do painel é mais baixa. */
+.ladoDoMapa {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  min-height: 0;
+}
+.ladoDoMapa > :first-child {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+.ladoDoMapa > :last-child {
+  flex-shrink: 0;
+}
 .mapCard {
   position: relative;
   padding: 24px 26px;
@@ -315,8 +333,7 @@
   top: 12px;
   width: 40px;
   height: 40px;
-  object-fit: cover;
-  border-radius: 50%;
+  object-fit: contain;
   opacity: 1;
   pointer-events: none;
 }
@@ -754,7 +771,12 @@
   }
   .mainGrid {
     grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    /* A linha não cresce além da fatia da tela reservada a ela. */
+    grid-template-rows: minmax(0, 1fr);
     min-height: 0;
+    gap: 14px;
+  }
+  .ladoDoMapa {
     gap: 14px;
   }
   .mapCard {
@@ -977,4 +999,11 @@
   color-scheme: light;
   color: hsl(var(--foreground));
   background: #faf6eb;
+}
+
+/* Título do chat fechado no painel (tarefa 213): menor que o do chat
+   aberto, para o cartão compacto. Mais específico que .chatCard h2. */
+.chatCard h2.tituloCompacto {
+  font-size: clamp(1.3rem, 2.6vh, 1.6rem);
+  line-height: 1.15;
 }
