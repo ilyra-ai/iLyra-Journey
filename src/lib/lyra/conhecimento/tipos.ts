@@ -6,7 +6,7 @@
  */
 
 export type AreaDoConhecimento =
-  'vedanta' | 'upaveda' | 'vedanga' | 'jyotish' | 'mapa';
+  'vedanta' | 'upaveda' | 'vedanga' | 'jyotish' | 'mapa' | 'yoga' | 'tradicao';
 
 export interface Verbete {
   /** Identificador estável (kebab-case). */

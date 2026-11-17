@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 22                       |
+| 🟡 Implementadas com validação pendente | 23                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5546,3 +5546,14 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Arquivos:** `src/lib/lyra/busca-por-termos.ts`, `busca-por-termos.test.ts`, `texto.ts`, `responder.ts`, `modelos-como-lyra.ts`, `src/lib/ai/chat-engine.ts`, `docs/motor_lyra/drp_motor_lyra.md`.
 - **Testes e resultados comprováveis:** 12 testes novos (radicais, achados sem palavra-chave, recusa, nota mínima, determinismo, régua, chat e leitura dos mapas inalterada). Unitários: 1117 aprovados; integração: 640 aprovados; ESLint, `tsc --noEmit`, Prettier e `next build` aprovados.
 - **Limites declarados:** tamanho do radical, pesos e nota mínima foram escolhidos na própria régua, escrita por quem conhece os verbetes; o ganho real com perguntas de usuários pode ser menor. As 3 recusas erradas restantes vêm de palavras-chave antigas e curtas ("casa", "significa", "mantra"). Temas sem verbete (respiração, chakras, meditação para iniciantes) continuam sem resposta: dependem de ampliar a base curada. Gates em Node v26.13.0 (Node 24 ausente na estação).
+
+### 197 · Base curada ampliada e nota mínima relativa ao tamanho da base · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** solicitação do usuário em 16/11/2026 para ampliar a base de conhecimento do motor. Em seguida o usuário definiu que os verbetes devem passar a ser preenchidos automaticamente pelo motor e pelo modelo de IA conectado (tarefa 198); estes 16 verbetes ficam como base inicial curada.
+- **Implementação real:** 16 verbetes em `src/lib/lyra/conhecimento/yoga-e-tradicao.ts` (Ashtanga, Pranayama, Asana, Dhyana, chakras, Kundalini, Samsara, sonhos, mantra e japa, Ekadashi, divindades, Tantra, Puja, planetas retrógrados, compatibilidade de casal e gemas), com fonte tradicional em cada um, avisos de saúde onde cabem e a declaração do que a Lyra não calcula. Áreas novas `yoga` e `tradicao`. Pendente a conferência do titular, como os demais verbetes.
+- **Causa raiz corrigida:** a nota mínima da busca por termos era um número fixo, e a nota BM25 cresce com o tamanho da base; com 46 verbetes, 5 perguntas fora do assunto passaram a receber verbete. A nota mínima agora acompanha a raridade máxima da base e vale exatamente a de referência (4,5) com 30 verbetes.
+- **Correções durante a validação:** a busca por termos à frente da palavra-chave confundiu "vedanta" com "vedangas"; a palavra-chave exata voltou a ter prioridade. Nove palavras-chave copiadas das perguntas da régua foram retiradas para não viciar a medição.
+- **Régua v2 (111 perguntas):** 15 perguntas escritas antes dos verbetes novos passaram a ter alvo e ficam marcadas (`escrita-antes-do-verbete`); 1 pergunta com verbete e 10 de temas sem verbete foram acrescentadas. Resultado: 57 de 76 achados (só palavras-chave: 31), 33 de 35 recusas corretas, 14 das 15 perguntas escritas antes respondidas.
+- **Limite conhecido:** "qual a distância da terra à lua" recebe o verbete de planetas retrógrados; o teste nomeia esse único caso, e qualquer outro acerto falso fora do assunto o faz falhar.
+- **Testes e resultados comprováveis:** unitários 1119 aprovados; integração 640 aprovados; ESLint, `tsc --noEmit`, Prettier e `next build` aprovados em Node v26.13.0 (Node 24 ausente na estação). O Docker Desktop estava desligado e foi iniciado para a integração.
+- **Aviso externo não tratado:** o `next build` parou uma vez com `SecurityFatalError`, informando vulnerabilidade conhecida no Next.js 16.4.3 e sugerindo `next upgrade --agent=security`; a segunda execução concluiu. A atualização não foi feita e depende de decisão do titular.

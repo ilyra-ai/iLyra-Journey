@@ -16,13 +16,22 @@ const semResposta = itens.filter((item) => item.tipo !== 'com-verbete');
 describe('Conjunto de avaliação do entendimento', () => {
   it('é íntegro: perguntas únicas, tipos conhecidos e verbetes existentes', () => {
     const ids = new Set(BASE_DE_CONHECIMENTO.map((verbete) => verbete.id));
-    expect(itens).toHaveLength(100);
-    expect(new Set(itens.map((item) => item.pergunta)).size).toBe(100);
+    expect(itens).toHaveLength(111);
+    expect(new Set(itens.map((item) => item.pergunta)).size).toBe(111);
     for (const item of itens) {
       expect(['com-verbete', 'sem-verbete', 'fora-do-assunto']).toContain(
         item.tipo
       );
       expect(item.aceitos.length > 0).toBe(item.tipo === 'com-verbete');
+    }
+    // As perguntas escritas antes dos verbetes que as respondem ficam
+    // marcadas: medem a base nova sem o viés de quem escreveu o verbete.
+    const escritasAntes = itens.filter(
+      (item) => 'origem' in item && item.origem === 'escrita-antes-do-verbete'
+    );
+    expect(escritasAntes).toHaveLength(15);
+    for (const item of escritasAntes) {
+      expect(item.tipo).toBe('com-verbete');
       for (const id of item.aceitos) expect(ids.has(id)).toBe(true);
     }
     // Todo verbete da base é alvo de pelo menos uma pergunta.
@@ -37,8 +46,9 @@ describe('Conjunto de avaliação do entendimento', () => {
     const recusou = semResposta.filter(
       (item) => buscarVerbete(item.pergunta) === null
     ).length;
-    // Medido em 16/11/2026: 18 de 60 achados e 38 de 40 recusados.
-    expect(achou).toBeGreaterThanOrEqual(18);
-    expect(recusou).toBeGreaterThanOrEqual(38);
+    // Régua v2, medida em 16/11/2026: 31 de 76 achados e 34 de 35 recusados
+    // só com palavras-chave.
+    expect(achou).toBeGreaterThanOrEqual(31);
+    expect(recusou).toBeGreaterThanOrEqual(34);
   });
 });

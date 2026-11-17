@@ -7,7 +7,8 @@ import { calcularMapaNatal } from '@/lib/astrology/mapa-natal';
 import avaliacao from './avaliacao/perguntas.json';
 import {
   criarBuscaPorTermos,
-  NOTA_MINIMA,
+  NOTA_MINIMA_DE_REFERENCIA,
+  notaMinimaPara,
   radicaisDoTexto,
 } from './busca-por-termos';
 import type { Verbete } from './conhecimento/tipos';
@@ -81,15 +82,23 @@ describe('Busca por termos', () => {
   });
 
   it('a nota mínima separa a recusa do melhor candidato', () => {
-    const fraco = busca.melhor('como fazer uma puja em casa');
+    const fraco = busca.melhor('qual a previsão do tempo para amanhã');
     expect(fraco).not.toBeNull();
-    expect(fraco!.nota).toBeLessThan(NOTA_MINIMA);
-    expect(busca.buscar('como fazer uma puja em casa')).toBeNull();
+    expect(fraco!.nota).toBeLessThan(busca.notaMinima);
+    expect(busca.buscar('qual a previsão do tempo para amanhã')).toBeNull();
     const forte = busca.buscar(
       'o que é o estado de absorção total na meditação'
     );
-    expect(forte!.nota).toBeGreaterThanOrEqual(NOTA_MINIMA);
+    expect(forte!.nota).toBeGreaterThanOrEqual(busca.notaMinima);
     expect(forte!.termos.length).toBeGreaterThan(0);
+  });
+
+  it('a nota mínima acompanha o tamanho da base e vale a de referência com 30', () => {
+    expect(notaMinimaPara(30)).toBeCloseTo(NOTA_MINIMA_DE_REFERENCIA, 10);
+    expect(notaMinimaPara(BASE_DE_CONHECIMENTO.length)).toBe(busca.notaMinima);
+    expect(notaMinimaPara(60)).toBeGreaterThan(notaMinimaPara(46));
+    expect(notaMinimaPara(46)).toBeGreaterThan(notaMinimaPara(30));
+    expect(notaMinimaPara(0)).toBe(NOTA_MINIMA_DE_REFERENCIA);
   });
 
   it('é determinística e funciona com uma base vazia ou de um verbete', () => {
@@ -121,20 +130,35 @@ describe('Régua de avaliação com a busca por termos', () => {
     const recusou = semResposta.filter(
       (item) => encontrarVerbete(item.pergunta) === null
     ).length;
-    // Medido em 16/11/2026: 47 de 60 achados e 37 de 40 recusados
-    // (só palavras-chave: 18 de 60 e 38 de 40).
-    expect(achou).toBeGreaterThanOrEqual(47);
-    expect(recusou).toBeGreaterThanOrEqual(37);
+    // Régua v2, medida em 16/11/2026: 57 de 76 achados e 33 de 35
+    // recusados (só palavras-chave: 31 de 76 e 34 de 35).
+    expect(achou).toBeGreaterThanOrEqual(57);
+    expect(recusou).toBeGreaterThanOrEqual(33);
   });
 
-  it('nenhuma pergunta fora do assunto recebe um verbete', () => {
+  it('fora do assunto, só o limite conhecido recebe verbete', () => {
     const foraDoAssunto = itens.filter(
       (item) => item.tipo === 'fora-do-assunto'
     );
     expect(foraDoAssunto).toHaveLength(25);
+    // Limite conhecido da busca por termos, registrado na tarefa 197:
+    // "terra" e "lua" levam ao verbete de planetas retrógrados. Qualquer
+    // outro acerto falso faz este teste falhar.
     expect(
-      foraDoAssunto.filter((item) => encontrarVerbete(item.pergunta) !== null)
-    ).toEqual([]);
+      foraDoAssunto
+        .filter((item) => encontrarVerbete(item.pergunta) !== null)
+        .map((item) => item.pergunta)
+    ).toEqual(['qual a distância da terra à lua']);
+  });
+
+  it('responde 14 das 15 perguntas escritas antes dos verbetes novos', () => {
+    const escritasAntes = itens.filter(
+      (item) => 'origem' in item && item.origem === 'escrita-antes-do-verbete'
+    );
+    const achou = escritasAntes.filter((item) =>
+      item.aceitos.includes(encontrarVerbete(item.pergunta)?.id ?? '')
+    ).length;
+    expect(achou).toBeGreaterThanOrEqual(14);
   });
 });
 

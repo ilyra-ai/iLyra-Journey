@@ -1,5 +1,5 @@
 {
-  "versao": 1,
+  "versao": 2,
   "descricao": "Perguntas rotuladas para medir se o motor da Lyra encontra o verbete certo e recusa o que não sabe.",
   "itens": [
     {
@@ -304,78 +304,93 @@
     },
     {
       "pergunta": "como respirar para acalmar a ansiedade",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["pranayama"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "que posturas de yoga ajudam nas costas",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["asana"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "o que são os chakras e para que servem",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["chakras"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "o que significa mercúrio retrógrado",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["graha-vakri"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "como fazer um mapa de sinastria de casal",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["compatibilidade"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "quais cristais combinam comigo",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["navaratna"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "o que é reencarnação",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["samsara"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "como meditar se nunca meditei",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["dhyana"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "qual mantra devo recitar para prosperidade",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["mantra-japa"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "o que é kundalini",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["kundalini"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "como interpretar meus sonhos",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["svapna"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "o que é jejum ekadashi",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["ekadashi"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "quais são os deuses hindus principais",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["devatas"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "o que é tantra",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["tantra"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "como fazer uma puja em casa",
-      "tipo": "sem-verbete",
-      "aceitos": []
+      "tipo": "com-verbete",
+      "aceitos": ["puja"],
+      "origem": "escrita-antes-do-verbete"
     },
     {
       "pergunta": "qual o preço do bitcoin hoje",
@@ -500,6 +515,61 @@
     {
       "pergunta": "qual filme assistir hoje",
       "tipo": "fora-do-assunto",
+      "aceitos": []
+    },
+    {
+      "pergunta": "quais são as etapas do caminho do yoga, além das posturas",
+      "tipo": "com-verbete",
+      "aceitos": ["ashtanga-yoga"]
+    },
+    {
+      "pergunta": "o que é o feng shui",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como funciona o tarô",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que é numerologia",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que é astrologia chinesa",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como fazer regressão de memória",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que são os anjos da guarda",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "como ler a mão",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que é o calendário maia",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que é reiki",
+      "tipo": "sem-verbete",
+      "aceitos": []
+    },
+    {
+      "pergunta": "o que é constelação familiar",
+      "tipo": "sem-verbete",
       "aceitos": []
     }
   ]

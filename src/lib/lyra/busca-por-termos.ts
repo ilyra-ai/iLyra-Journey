@@ -35,8 +35,27 @@ const PESO = { palavrasChave: 3, titulo: 3, resumo: 2, corpo: 1 } as const;
 /** Parâmetros usuais do BM25, com normalização de tamanho moderada. */
 const K1 = 1.2;
 const B = 0.5;
-/** Nota mínima para aceitar um verbete; abaixo dela a busca recusa. */
-export const NOTA_MINIMA = 4.5;
+/**
+ * Nota mínima calibrada numa base de 30 verbetes. A nota BM25 cresce com o
+ * tamanho da base (a raridade máxima de um termo é log(1 + (N − 0,5) / 1,5)),
+ * então a nota mínima efetiva acompanha essa raridade: um número fixo
+ * passaria a aceitar perguntas fora do assunto à medida que a base cresce.
+ */
+export const NOTA_MINIMA_DE_REFERENCIA = 4.5;
+const VERBETES_DA_CALIBRACAO = 30;
+
+function raridadeMaxima(total: number) {
+  return Math.log(1 + (total - 0.5) / 1.5);
+}
+
+/** Nota mínima para uma base com `total` verbetes. */
+export function notaMinimaPara(total: number) {
+  if (total < 1) return NOTA_MINIMA_DE_REFERENCIA;
+  return (
+    (NOTA_MINIMA_DE_REFERENCIA * raridadeMaxima(total)) /
+    raridadeMaxima(VERBETES_DA_CALIBRACAO)
+  );
+}
 
 function radical(palavra: string) {
   const singular =
@@ -72,6 +91,8 @@ export interface BuscaPorTermos {
   buscar(pergunta: string): ResultadoDaBusca | null;
   /** Verbete de maior nota, mesmo abaixo da mínima (para medição). */
   melhor(pergunta: string): ResultadoDaBusca | null;
+  /** Nota mínima efetiva desta base. */
+  notaMinima: number;
 }
 
 export function criarBuscaPorTermos(
@@ -131,11 +152,13 @@ export function criarBuscaPorTermos(
     return vencedor;
   }
 
+  const notaMinima = notaMinimaPara(total);
   return {
     melhor,
+    notaMinima,
     buscar(pergunta) {
       const resultado = melhor(pergunta);
-      return resultado && resultado.nota >= NOTA_MINIMA ? resultado : null;
+      return resultado && resultado.nota >= notaMinima ? resultado : null;
     },
   };
 }

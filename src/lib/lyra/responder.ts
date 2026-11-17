@@ -31,6 +31,7 @@ import { IDENTIDADE_DA_LYRA, VALORES_DA_LYRA } from './personalidade';
  * com os outros assuntos (sono, glicose, o dia...).
  */
 
+import { YOGA_E_TRADICAO } from './conhecimento/yoga-e-tradicao';
 import { criarBuscaPorTermos } from './busca-por-termos';
 import { normalizar } from './texto';
 
@@ -64,6 +65,7 @@ export const BASE_DE_CONHECIMENTO: readonly Verbete[] = [
   ...VEDANTA,
   ...UPAVEDAS,
   ...VEDANGAS,
+  ...YOGA_E_TRADICAO,
 ];
 
 export { normalizar };
@@ -96,8 +98,10 @@ const buscaPorTermos = criarBuscaPorTermos(BASE_DE_CONHECIMENTO);
 /**
  * Verbete ligado à pergunta: primeiro pela palavra-chave exata; sem ela, pela
  * busca por termos (radicais e pesos), que entende perguntas em linguagem do
- * dia a dia e recusa o que não tem verbete. Usada quando nenhuma resposta
- * mais específica existe e para dar contexto aos modelos conectados.
+ * dia a dia e recusa o que não tem verbete. A palavra-chave vem primeiro
+ * porque os radicais confundem termos próximos ("vedanta" e "vedangas").
+ * Usada quando nenhuma resposta mais específica existe e para dar contexto
+ * aos modelos conectados.
  */
 export function encontrarVerbete(pergunta: string): Verbete | null {
   return (
