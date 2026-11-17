@@ -227,7 +227,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | 🟡 Implementadas com validação pendente | 35                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 29                       |
+| ⚪ A iniciar                            | 31                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
@@ -5650,3 +5650,20 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Arquivos:** `mysql/migrations/072_prevencao.sql`, `src/lib/prevencao/plano.ts`, `plano.test.ts`, `servico.ts`, `src/app/api/prevencao/route.ts`, `src/app/api/admin/prevencao/route.ts`, `src/app/api/prevencao.integration.test.ts`, `src/lib/lyra/vinculos-familiares.ts`.
 - **Testes:** 16 unitários (idade, faixas, corpo, intervalos e fim de mês, histórico, vínculos, honestidade) e 7 de integração (anônimo, plano pelo catálogo da migration, registro e desfazer, recusas, isolamento entre titulares, permissões e revisão mensal). Unitários 1176, integração 653, lint, tipos, formato e build aprovados em Node v26.13.0.
 - **Pendente:** interface no painel principal e tela de revisão da administração (tarefa 210).
+
+### 210 · Card de prevenção no painel principal · 🔵 EM ANDAMENTO
+
+- **Origem e data:** pedido do titular em 17/11/2026: card de prevenção com visual premium no painel principal, ligado à tarefa 209.
+- **Estado em 17/11/2026:** implementado e ainda não publicado. `src/components/dashboard/PrevencaoCard.tsx` (anel de progresso com exames em dia, os três exames mais urgentes com cor por situação, aviso do estresse dos vínculos e botão "Abrir para saber mais") e pop-up em abas: Seus exames (situação, o que o exame procura, orientação oficial com link da fonte, registro e remoção da data do último exame), Família (histórico de saúde por condição e parente), Vínculos e estresse (a pessoa responde se cada vínculo pesa) e Sinais de alerta (quando procurar atendimento logo, com SAMU 192 e CVV 188). Inserido em `CelestialDashboard.tsx` abaixo dos vínculos familiares. Tipos e lint aprovados; gates completos em execução no momento do registro. Falta: concluir gates, conferir no navegador, commit e push.
+
+### 211 · Atualização dos exames médicos pelo modelo de IA, com revisão da administração · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026.
+- **Escopo pedido:** (1) no menu do administrador, botão "Atualizar Exames Médicos": o modelo de IA lê uma instrução detalhada, primeiro consulta os exames que estão no motor da Lyra, depois investiga fontes oficiais na internet e propõe atualizações ou exames novos; não pode excluir exames do motor, só marcar para revisão os que indicar retirar. (2) Tabela só com os exames que o modelo marcou para revisão. (3) Dois botões com ícone, sem texto, para aprovar todos ou reprovar todos. (4) Aprovar ou reprovar cada um. (5) Exame aprovado ou reprovado não volta a ser trazido pelo modelo. (6) Abaixo, tabela com todos os exames do motor, 10 por página, com informações básicas; clicar na linha abre pop-up para editar todas as informações e salvar no motor.
+- **Base existente:** catálogo `prevencao_recomendacoes` e rota `/api/admin/prevencao` (tarefa 209). Depende da tarefa 212 para o acesso à internet.
+
+### 212 · Acesso do modelo de IA à internet, com alcance definido pelo administrador · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026: o modelo de IA (não o motor da Lyra) deve acessar a internet, e o administrador escolhe o alcance: apenas sites liberados por ele ou acesso total.
+- **Situação atual:** a cadeia de modelos do app (`src/lib/ai/cadeia-de-modelos.ts`) só envia texto e não tem ferramenta de busca nem de leitura de páginas.
+- **A definir na implementação:** ferramenta de leitura de páginas e de busca executada pelo servidor, configuração do alcance na administração (lista de domínios ou acesso total), limites de volume e tempo, proteção contra acesso à rede interna (SSRF) e registro das páginas consultadas, sem enviar dados pessoais nas buscas.
