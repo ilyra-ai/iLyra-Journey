@@ -7,7 +7,11 @@ import {
   Rotation_EQJ_EQD,
   SiderealTime,
 } from 'astronomy-engine';
-import { ascendenteSideral, ayanamshaLahiri } from '../sideral';
+import {
+  ascendenteSideral,
+  ascendenteTropical,
+  latitudePolar,
+} from '../sideral';
 import { limitarLocal, normalizarAngulo } from './numerica';
 import type { ZodiacoDeInovacoes } from './transitos';
 
@@ -119,23 +123,17 @@ export function compararAscendentesRelocados(
   limitarLocal(localOriginal.latitude, localOriginal.longitude);
   limitarLocal(localConsultado.latitude, localConsultado.longitude);
   if (
-    Math.abs(localOriginal.latitude) >= 66.56 ||
-    Math.abs(localConsultado.latitude) >= 66.56
+    latitudePolar(localOriginal.latitude) ||
+    latitudePolar(localConsultado.latitude)
   ) {
     throw new RangeError(
       'O cálculo de ascendente relocalizado não está disponível em latitude polar.'
     );
   }
-  const converter = (local: { latitude: number; longitude: number }) => {
-    const sideral = ascendenteSideral(
-      instante,
-      local.latitude,
-      local.longitude
-    );
-    return zodiaco === 'sideral'
-      ? sideral
-      : normalizarAngulo(sideral + ayanamshaLahiri(instante));
-  };
+  const converter = (local: { latitude: number; longitude: number }) =>
+    zodiaco === 'sideral'
+      ? ascendenteSideral(instante, local.latitude, local.longitude)
+      : ascendenteTropical(instante, local.latitude, local.longitude);
   return {
     nascimentoUtc: instante.toISOString(),
     zodiaco,

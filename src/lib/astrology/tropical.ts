@@ -1,13 +1,12 @@
-import {
-  Body,
-  Ecliptic,
-  GeoVector,
-  MakeTime,
-  SiderealTime,
-  e_tilt,
-} from 'astronomy-engine';
+import { Body, Ecliptic, GeoVector, MakeTime } from 'astronomy-engine';
 import { cidadePorId } from '@/lib/geo/cidades';
-import { SIGNOS, longitudeTropical, normalizarGraus } from './sideral';
+import {
+  SIGNOS,
+  ascendenteTropical,
+  latitudePolar,
+  longitudeTropical,
+  normalizarGraus,
+} from './sideral';
 import { fusoValido, ocorrenciasLocais } from './tempo';
 
 const HORA = 3_600_000;
@@ -139,25 +138,6 @@ function instanteLocal(
   );
 }
 
-function ascendenteTropical(
-  instante: Date,
-  latitude: number,
-  longitude: number
-) {
-  const tempo = MakeTime(instante);
-  const r = ((SiderealTime(tempo) * 15 + longitude) * Math.PI) / 180;
-  const e = (e_tilt(tempo).tobl * Math.PI) / 180;
-  const fi = (latitude * Math.PI) / 180;
-  return posicaoTropical(
-    (Math.atan2(
-      Math.cos(r),
-      -(Math.sin(r) * Math.cos(e) + Math.tan(fi) * Math.sin(e))
-    ) *
-      180) /
-      Math.PI
-  );
-}
-
 /** Casas iguais de 30° a partir do ascendente: sistema explícito, distinto das casas védicas por signo inteiro. */
 export function calcularMapaTropical(
   entrada: {
@@ -251,13 +231,12 @@ export function calcularBaseTropical(
       ),
     ])
   ) as BaseNatalTropical['planetas'];
-  const polar = Math.abs(cidade.latitude) >= 66.56;
+  const polar = latitudePolar(cidade.latitude);
   return {
     planetas,
     ascendente: polar
       ? null
-      : ascendenteTropical(instante, cidade.latitude, cidade.longitude)
-          .longitude,
+      : ascendenteTropical(instante, cidade.latitude, cidade.longitude),
   };
 }
 

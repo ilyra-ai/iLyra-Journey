@@ -10,7 +10,9 @@ import {
 /**
  * Base astronômica do zodíaco sideral (Jyotish): ayanamsha Lahiri, longitudes
  * sidéreas dos grahas, nodo lunar médio e ascendente (Lagna). Calculado com o
- * astronomy-engine (VSOP87/ELP, precisão de segundos de arco).
+ * astronomy-engine (VSOP87/ELP). Precisão comprovada nos testes: posições
+ * tropicais a menos de 0,02° do JPL Horizons e Lahiri a menos de 0,01° do
+ * Swiss Ephemeris (ver `tropical.test.ts` e `sideral.test.ts`).
  */
 
 export const SIGNOS = [
@@ -190,10 +192,12 @@ export function longitudeSideral(graha: Graha, instante: Date) {
 }
 
 /**
- * Ascendente (Lagna) sideral: ponto da eclíptica que nasce no horizonte leste
- * do local. RAMC = tempo sideral aparente de Greenwich + longitude.
+ * Ascendente tropical: ponto da eclíptica (de data) que nasce no horizonte
+ * leste do local. RAMC = tempo sideral aparente de Greenwich + longitude.
+ * Fórmula única do motor: o Lagna sideral, o ascendente ocidental, as
+ * revoluções e a astrocartografia partem dela.
  */
-export function ascendenteSideral(
+export function ascendenteTropical(
   instante: Date,
   latitude: number,
   longitude: number
@@ -203,7 +207,7 @@ export function ascendenteSideral(
   const obliquidade = (e_tilt(tempo).tobl * Math.PI) / 180;
   const r = (ramc * Math.PI) / 180;
   const fi = (latitude * Math.PI) / 180;
-  const tropical = normalizarGraus(
+  return normalizarGraus(
     (Math.atan2(
       Math.cos(r),
       -(
@@ -214,7 +218,18 @@ export function ascendenteSideral(
       180) /
       Math.PI
   );
-  return normalizarGraus(tropical - ayanamshaLahiri(instante));
+}
+
+/** Ascendente (Lagna) sideral Lahiri. */
+export function ascendenteSideral(
+  instante: Date,
+  latitude: number,
+  longitude: number
+) {
+  return normalizarGraus(
+    ascendenteTropical(instante, latitude, longitude) -
+      ayanamshaLahiri(instante)
+  );
 }
 
 export interface Posicao {

@@ -1,7 +1,8 @@
 import type { MapaNatal } from '../mapa-natal';
 import {
   ascendenteSideral,
-  ayanamshaLahiri,
+  ascendenteTropical,
+  latitudePolar,
   longitudeSideral,
   longitudeTropical,
 } from '../sideral';
@@ -39,7 +40,7 @@ export function calcularRetornos(
   limitarLocal(local.latitude, local.longitude);
   if (!local.nome.trim())
     throw new RangeError('Informe a localidade para a carta de retorno.');
-  if (Math.abs(local.latitude) >= 66.56)
+  if (latitudePolar(local.latitude))
     throw new RangeError('Casas de retorno indisponíveis em latitude polar.');
   if (!mapa.horaConhecida)
     throw new RangeError('A revolução requer hora natal conhecida.');
@@ -57,15 +58,10 @@ export function calcularRetornos(
     corpo === 'lua' ? 2 * HORA_MS : 12 * HORA_MS
   );
   const retornos = passagens.map((instante) => {
-    const lagnaSideral = ascendenteSideral(
-      instante,
-      local.latitude,
-      local.longitude
-    );
     const ascendente =
       zodiaco === 'sideral'
-        ? lagnaSideral
-        : normalizarAngulo(lagnaSideral + ayanamshaLahiri(instante));
+        ? ascendenteSideral(instante, local.latitude, local.longitude)
+        : ascendenteTropical(instante, local.latitude, local.longitude);
     const planetas = corpos.map((planeta) => {
       const longitude = longitudeDo(planeta, instante);
       const signo = Math.floor(longitude / 30);
