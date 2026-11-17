@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 32                       |
+| 🟡 Implementadas com validação pendente | 33                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5625,3 +5625,10 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Correção:** o rascunho do onboarding na aba (`sessionStorage`) guardava todos os campos menos o horário escolhido por quem não sabe a hora; ao recarregar, a pessoa precisava escolher de novo. O rascunho passa a guardar o horário com a data e a cidade para as quais foi calculado (campo opcional, compatível com rascunhos anteriores) e o restaura; o horário só vale enquanto data e cidade não mudarem, e o servidor continua recalculando a hora no envio.
 - **Arquivos:** `src/components/onboarding/onboarding-form.tsx`.
 - **Testes:** o formulário não tem teste de componente no projeto (ambiente de teste `node`); validado por tipos, lint e build. Não conferido no navegador. Unitários, integração, lint, tipos, formato e build aprovados em Node v26.13.0.
+
+### 207 · Tela de aprovação dos verbetes da Lyra · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** limite declarado na tarefa 199; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
+- **Implementação real:** página administrativa `/admin/lyra-verbetes` ("Verbetes da Lyra", no grupo Conteúdo e IA do menu), com abas de pendentes e aprovados. Cada verbete aparece por inteiro (área, título, resumo, pontos, prática, fonte citada, modelo e provedor que o escreveram, data e palavras-chave), com as ações Aprovar e Recusar ou Retirar da base; a remoção pede confirmação e explica que não pode ser desfeita. A página avisa que a conferência automática não verifica a veracidade do conteúdo. Usa a rota `/api/admin/lyra/verbetes` (tarefa 199) e o padrão de carga `useKeyedResource`.
+- **Arquivos:** `src/app/admin/lyra-verbetes/page.tsx`, `layout.tsx`, `src/components/admin/VerbetesGeradosContent.tsx`, `src/components/layout/navigation.ts`, `sidebar-structure.ts`.
+- **Testes:** a rota já tem 6 testes de integração; a página foi validada por tipos, lint e build, com a rota gerada no build. Não conferida no navegador. Unitários 1152, integração 646 aprovados em Node v26.13.0.

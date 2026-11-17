@@ -113,7 +113,11 @@ const SECOES: DefinicaoDeSecao[] = [
         id: 'conteudo-ia',
         titulo: 'Conteúdo e IA',
         icone: ClipboardList,
-        destinos: ['/admin/content', '/admin/ai-config'],
+        destinos: [
+          '/admin/content',
+          '/admin/lyra-verbetes',
+          '/admin/ai-config',
+        ],
       },
       {
         id: 'dados-relatorios',
