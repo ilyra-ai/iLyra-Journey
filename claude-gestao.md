@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 34                       |
+| 🟡 Implementadas com validação pendente | 35                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5641,3 +5641,12 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Limite:** a busca de casos parecidos na internet pelo modelo de IA não foi implementada; a cadeia de modelos do app não tem acesso à web. A tela não foi conferida no navegador.
 - **Arquivos:** `src/lib/lyra/vinculos-familiares.ts`, `vinculos-familiares.test.ts`, `leitura-do-mapa.ts`, `src/lib/astrology/persistencia-painel.ts`, `src/components/dashboard/VinculosFamiliares.tsx`, `CelestialDashboard.tsx`.
 - **Testes:** 8 testes novos (sete vínculos e casas, regente real citado, tom coerente, ausência de linguagem de diagnóstico ou previsão, determinismo, Chandra Lagna sem hora, ausência com a Lua incerta, presença na leitura da Lyra). Unitários 1160, integração 646, lint, tipos, formato e build aprovados em Node v26.13.0.
+
+### 209 · Prevenção no motor da Lyra: exames recomendados, histórico da família e vínculos que pesam · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** combinado com o titular em 17/11/2026 como alternativa aos itens 2 e 3 da tarefa 208: levar cada pessoa aos exames certos na hora certa, com o histórico da família e o estresse dos vínculos que pesam. O titular pediu que as recomendações fiquem no motor e sejam revisadas pela administração uma vez por mês.
+- **Pesquisa nas fontes oficiais (17/11/2026, navegador):** mamografia de 50 a 74 anos a cada 2 anos (INCA, atualizado em 30/09/2025); DNA-HPV de 25 a 64 anos a cada 5 anos, ou Papanicolau a cada 3 (INCA); sangue oculto nas fezes (FIT) de 50 a 75 anos a cada 2 anos (Diretrizes Brasileiras do Rastreamento do Câncer de Cólon e Reto, INCA); glicemia a partir de 35 anos, a cada 3 anos se normal (Diretriz SBD 2026, R6 e R11); PSA sem recomendação de rotina, decisão compartilhada (INCA, atualizado em 10/12/2025). Pressão arterial e perfil lipídico entraram como não conferidos (`conferido = FALSE`), porque as fontes da SBC não foram consultadas; a revisão da administração precisa confirmá-los. As ferramentas de busca da sessão estavam com erro de configuração; a leitura foi feita direto nas páginas oficiais.
+- **Implementação real:** migration 072 com `prevencao_recomendacoes` (catálogo com fonte, revisão e quem revisou), `prevencao_historico_familiar`, `prevencao_exames_realizados` e `prevencao_vinculos`. Motor puro `montarPlanoDePrevencao`: exames por idade e pelo corpo (mamas, colo do útero, próstata; sem gênero informado, diz para quem vale), situação em dia, pendente ou vencida pelo intervalo, conversa com o médico para PSA e para quem está antes da faixa com histórico na família, e bloco de estresse quando a pessoa diz que um vínculo pesa, ligado a pressão, glicemia e colesterol. O mapa astrológico não entra no cálculo. Rotas `GET/PATCH /api/prevencao` (titular, recurso `daily_checkin`) e `GET/PATCH /api/admin/prevencao` (catálogo, edição e confirmação da revisão mensal; vence 30 dias após a revisão mais antiga ou quando há recomendação não conferida).
+- **Arquivos:** `mysql/migrations/072_prevencao.sql`, `src/lib/prevencao/plano.ts`, `plano.test.ts`, `servico.ts`, `src/app/api/prevencao/route.ts`, `src/app/api/admin/prevencao/route.ts`, `src/app/api/prevencao.integration.test.ts`, `src/lib/lyra/vinculos-familiares.ts`.
+- **Testes:** 16 unitários (idade, faixas, corpo, intervalos e fim de mês, histórico, vínculos, honestidade) e 7 de integração (anônimo, plano pelo catálogo da migration, registro e desfazer, recusas, isolamento entre titulares, permissões e revisão mensal). Unitários 1176, integração 653, lint, tipos, formato e build aprovados em Node v26.13.0.
+- **Pendente:** interface no painel principal e tela de revisão da administração (tarefa 210).

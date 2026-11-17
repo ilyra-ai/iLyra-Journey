@@ -135,6 +135,13 @@ const VINCULOS: readonly DefinicaoDoVinculo[] = [
   },
 ];
 
+/** Identificadores e nomes dos vínculos, para outras partes do app. */
+export const NOMES_DOS_VINCULOS: Readonly<Record<IdDoVinculo, string>> =
+  Object.fromEntries(VINCULOS.map((v) => [v.id, v.nome])) as Record<
+    IdDoVinculo,
+    string
+  >;
+
 const CASAS_DIFICEIS = new Set([6, 8, 12]);
 const CASAS_DE_APOIO = new Set([1, 4, 5, 7, 9, 10]);
 
