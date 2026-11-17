@@ -31,7 +31,10 @@ export async function POST(request: Request) {
           'Você é um verificador de conexão. Responda em português do Brasil, em uma frase curta.',
         usuario:
           'Confirme que está funcionando dizendo, em até 12 palavras, qual nakshatra a Lua ocupa no mapa de quem nasce com a Lua a 5° de Touro.',
-        maximoDeTokens: 120,
+        // Mesmo teto da resposta comum do chat: modelos que raciocinam antes
+        // de responder (Qwen 3.5, DeepSeek R1) esgotavam 120 tokens pensando,
+        // e o teste acusava falha num modelo que funciona no chat.
+        maximoDeTokens: 1024,
       });
       return NextResponse.json({
         ok: true,

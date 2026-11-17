@@ -897,14 +897,16 @@ export function ProvedorDeIa() {
                           key={m}
                           className="flex flex-col gap-2 rounded-xl border border-border bg-card p-3 sm:flex-row sm:items-center"
                         >
-                          <span className="min-w-0 flex-1 break-all text-sm font-medium text-foreground">
+                          {/* O nome mantém largura mínima: uma mensagem de
+                              teste longa não o espreme a uma letra por linha. */}
+                          <span className="min-w-0 flex-1 break-all text-sm font-medium text-foreground sm:min-w-48">
                             {m}
                           </span>
                           {teste ? (
                             <span
                               role="status"
                               className={cn(
-                                'flex min-w-0 items-center gap-1.5 text-xs',
+                                'flex min-w-0 flex-1 items-center gap-1.5 text-xs',
                                 teste.ok ? 'text-success' : 'text-destructive'
                               )}
                             >

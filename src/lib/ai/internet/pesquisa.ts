@@ -231,6 +231,12 @@ export async function pesquisarNaInternet(opcoes: {
   resolver?: Resolvedor;
   buscarModelo?: typeof fetch;
   env?: AmbienteDaBusca;
+  /** Chamado no início de cada passo, para mostrar o andamento. */
+  aoPasso?: (andamento: {
+    passo: number;
+    maximo: number;
+    paginasLidas: number;
+  }) => Promise<void>;
 }): Promise<ResultadoDaPesquisa> {
   if (opcoes.acesso.modo === 'desligado') {
     throw new AcessoNegado(
@@ -252,6 +258,7 @@ export async function pesquisarNaInternet(opcoes: {
   );
 
   for (let passo = 1; passo <= maximo; passo += 1) {
+    await opcoes.aoPasso?.({ passo, maximo, paginasLidas: fontes.length });
     const registro = montarRegistro(
       observacoes,
       lidas,

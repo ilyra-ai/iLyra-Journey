@@ -315,3 +315,17 @@ describe('Esquema imposto na conclusão', () => {
     expect(vazio.properties.propostas).toEqual({ type: 'array', maxItems: 0 });
   });
 });
+
+describe('Mensagem da atualização', () => {
+  it('encurta sem partir palavra e marca o corte', async () => {
+    const { caber } = await import('./atualizacao-servico');
+    expect(caber('curta', 600)).toBe('curta');
+    const longa = `${'palavra '.repeat(80)}fim`;
+    const curta = caber(longa, 600);
+    expect(curta.length).toBeLessThanOrEqual(600);
+    expect(curta.endsWith('palavra…')).toBe(true);
+    expect(caber('a reforça início do rastreamento', 20)).toBe(
+      'a reforça início…'
+    );
+  });
+});

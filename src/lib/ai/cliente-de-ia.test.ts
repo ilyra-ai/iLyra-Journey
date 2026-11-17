@@ -166,7 +166,7 @@ describe('saída estruturada por JSON Schema', () => {
     }
   });
 
-  it('Qwen 3 local entrega saída estruturada sem esgotar os tokens em raciocínio', async () => {
+  it('Qwen 3 local responde sem esgotar os tokens em raciocínio', async () => {
     const servidor = await iniciarServidorOpenAiCompativel();
     try {
       for (const modelo of ['Qwen3_5-9B-IQ4_XS', 'Qwen/Qwen3.5-9B']) {
@@ -193,13 +193,22 @@ describe('saída estruturada por JSON Schema', () => {
           reasoning_effort: 'none',
         });
       }
+      // Texto livre (chat, teste de conexão) também: com 1.024 tokens o
+      // raciocínio esgotava a resposta antes de ela começar.
       servidor.responder('Resposta livre');
       await gerarTexto(
-        { ...conexao(servidor.baseUrl), modelo: 'Qwen3_5-9B-IQ4_XS' },
-        {
-          sistema: 's',
-          usuario: 'u',
-        }
+        { ...conexao(servidor.baseUrl), modelo: 'nexuz/qwen3.5-agent:4b' },
+        { sistema: 's', usuario: 'u', maximoDeTokens: 1024 }
+      );
+      expect(servidor.requisicoes.at(-1)?.corpo).toMatchObject({
+        chat_template_kwargs: { enable_thinking: false },
+        reasoning_effort: 'none',
+      });
+      // Outros modelos seguem sem esses parâmetros.
+      servidor.responder('Resposta livre');
+      await gerarTexto(
+        { ...conexao(servidor.baseUrl), modelo: 'llama3.1:8b' },
+        { sistema: 's', usuario: 'u', json: true }
       );
       expect(servidor.requisicoes.at(-1)?.corpo).not.toHaveProperty(
         'chat_template_kwargs'

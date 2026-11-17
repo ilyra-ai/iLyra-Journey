@@ -427,11 +427,13 @@ export async function gerarTextoDetalhado(
               // O motor integrado reserva os tokens para a resposta visível.
               // O ID opaco não permite reconhecer Qwen pelo nome; templates
               // sem esse parâmetro apenas não o utilizam.
+              // Qwen 3 local raciocina antes de responder e, com os tetos da
+              // Lyra (1.024 tokens no chat), esgotava a resposta pensando, em
+              // texto livre e em JSON (conferido com Qwen 3.5 4B no Ollama em
+              // 17/11/2026). Como no motor integrado, o raciocínio é
+              // desligado e os tokens ficam para a resposta visível.
               ...(conexao.integrado ||
-              // Saída estruturada, com ou sem esquema: o JSON é a resposta
-              // visível e o raciocínio não pode consumir os tokens dela.
-              ((pedido.esquemaJson || pedido.json) &&
-                /(?:^|\/)qwen3[._-]/i.test(conexao.modelo) &&
+              (/(?:^|\/)qwen3[._-]/i.test(conexao.modelo) &&
                 urlEhLocal(conexao.baseUrl))
                 ? {
                     // llama.cpp e vLLM leem o template; Ollama e Jan ignoram

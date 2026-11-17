@@ -55,6 +55,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -193,6 +194,37 @@ function mudancas(atual: Exame, proposta: NonNullable<Proposta['dados']>) {
       ? []
       : [{ campo, antes, depois }];
   });
+}
+
+/**
+ * Andamento real da pesquisa: o passo gravado pelo servidor sobre o máximo
+ * de passos. A pesquisa costuma concluir antes do máximo, então o texto diz
+ * "de até".
+ */
+function AndamentoDaPesquisa({
+  andamento,
+}: {
+  andamento: Atualizacao['andamento'];
+}) {
+  const iniciado = andamento.maximo > 0;
+  const porcentagem = iniciado
+    ? Math.min(100, Math.round((andamento.passo / andamento.maximo) * 100))
+    : 0;
+  return (
+    <div className="space-y-1">
+      <Progress
+        value={porcentagem}
+        tone="astral"
+        className="h-1.5"
+        aria-label="Andamento da pesquisa do modelo de IA"
+      />
+      <p className="text-xs text-muted-foreground">
+        {iniciado
+          ? `Passo ${andamento.passo} de até ${andamento.maximo} · ${andamento.paginasLidas} ${andamento.paginasLidas === 1 ? 'página lida' : 'páginas lidas'}`
+          : 'Preparando a pesquisa…'}
+      </p>
+    </div>
+  );
 }
 
 function BotaoDeIcone({
@@ -756,19 +788,23 @@ export function ExamesMedicosContent() {
               Faça a atualização uma vez por mês.
             </CardDescription>
           </div>
-          <Button
-            type="button"
-            onClick={() => void atualizarExames()}
-            disabled={ocupado || emAndamento}
-            className="shrink-0"
-          >
-            {emAndamento ? (
-              <LoaderCircle className="animate-spin" aria-hidden="true" />
-            ) : (
-              <RefreshCw aria-hidden="true" />
-            )}
-            {emAndamento ? 'Pesquisando…' : 'Atualizar Exames Médicos'}
-          </Button>
+          <div className="flex shrink-0 flex-col gap-2 sm:w-56">
+            <Button
+              type="button"
+              onClick={() => void atualizarExames()}
+              disabled={ocupado || emAndamento}
+            >
+              {emAndamento ? (
+                <LoaderCircle className="animate-spin" aria-hidden="true" />
+              ) : (
+                <RefreshCw aria-hidden="true" />
+              )}
+              {emAndamento ? 'Pesquisando…' : 'Atualizar Exames Médicos'}
+            </Button>
+            {emAndamento && ultima ? (
+              <AndamentoDaPesquisa andamento={ultima.andamento} />
+            ) : null}
+          </div>
         </CardHeader>
         <CardContent className="space-y-3" aria-live="polite">
           {ultima ? (

@@ -116,6 +116,8 @@ export interface Atualizacao {
   autor: string | null;
   fontes: Array<{ url: string; titulo: string }>;
   propostasNovas: number;
+  /** Andamento gravado pela pesquisa; zero quando não há registro. */
+  andamento: { passo: number; maximo: number; paginasLidas: number };
 }
 
 export interface Proposta {
@@ -138,6 +140,9 @@ interface LinhaDaAtualizacao {
   autor: string | null;
   fontes: unknown;
   propostas_novas: number;
+  passo: number;
+  passos_maximos: number;
+  paginas_lidas: number;
 }
 
 function daAtualizacao(linha: LinhaDaAtualizacao): Atualizacao {
@@ -150,6 +155,11 @@ function daAtualizacao(linha: LinhaDaAtualizacao): Atualizacao {
     autor: linha.autor,
     fontes: json<Atualizacao['fontes']>(linha.fontes) ?? [],
     propostasNovas: Number(linha.propostas_novas),
+    andamento: {
+      passo: Number(linha.passo),
+      maximo: Number(linha.passos_maximos),
+      paginasLidas: Number(linha.paginas_lidas),
+    },
   };
 }
 
@@ -221,6 +231,34 @@ async function lerDecisoes(): Promise<Decisao[]> {
   }));
 }
 
+/** Grava em que passo a pesquisa está, para a barra de andamento da tela. */
+async function registrarAndamento(
+  id: string,
+  andamento: { passo: number; maximo: number; paginasLidas: number }
+) {
+  await executeStatement(
+    `UPDATE prevencao_atualizacoes
+        SET passo = ?, passos_maximos = ?, paginas_lidas = ?
+      WHERE id = ? AND situacao = 'em-andamento'`,
+    [andamento.passo, andamento.maximo, andamento.paginasLidas, id]
+  );
+}
+
+/** Tamanho da coluna `prevencao_atualizacoes.mensagem`. */
+const LIMITE_DA_MENSAGEM = 600;
+
+/**
+ * Encurta um texto para caber no limite sem partir palavra: corta no último
+ * espaço e marca o corte com reticências.
+ */
+export function caber(texto: string, limite: number) {
+  if (texto.length <= limite) return texto;
+  const trecho = texto.slice(0, limite - 1);
+  const espaco = trecho.lastIndexOf(' ');
+  const inteiro = espaco > limite * 0.6 ? trecho.slice(0, espaco) : trecho;
+  return `${inteiro.replace(/[\s,;:.–-]+$/u, '')}…`;
+}
+
 async function concluir(
   id: string,
   campos: {
@@ -238,7 +276,7 @@ async function concluir(
       WHERE id = ? AND situacao = 'em-andamento'`,
     [
       campos.situacao,
-      campos.mensagem.slice(0, 600),
+      caber(campos.mensagem, LIMITE_DA_MENSAGEM),
       campos.autor ?? null,
       campos.fontes ? JSON.stringify(campos.fontes) : null,
       campos.propostasNovas ?? 0,
@@ -305,6 +343,7 @@ export async function executarAtualizacao(
               .join('; ')}`;
       },
       registrar: registrarConsulta,
+      aoPasso: (andamento) => registrarAndamento(id, andamento),
       buscar: dependencias.buscar,
       resolver: dependencias.resolver,
       buscarModelo: dependencias.buscarModelo,
@@ -374,7 +413,7 @@ export async function situacaoDaAtualizacao(agora = new Date()) {
   await encerrarInterrompidas();
   const [ultima] = await queryRows<LinhaDaAtualizacao>(
     `SELECT id, situacao, iniciada_em, concluida_em, mensagem, autor, fontes,
-            propostas_novas
+            propostas_novas, passo, passos_maximos, paginas_lidas
        FROM prevencao_atualizacoes ORDER BY iniciada_em DESC LIMIT 1`
   );
   const pendentes = await queryRows<{
