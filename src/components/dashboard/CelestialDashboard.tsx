@@ -35,6 +35,7 @@ import type { LeituraTropical } from '@/lib/lyra/leitura-tropical';
 import identidade from '@/components/public/CelestialIdentity.module.css';
 import { cn } from '@/lib/utils';
 import { CelestialChat } from './CelestialChat';
+import { PrevencaoCard } from './PrevencaoCard';
 import { VinculosFamiliares } from './VinculosFamiliares';
 import { arteDoSigno } from './signos';
 import { arteDoTema } from './temas-do-dia';
@@ -488,6 +489,7 @@ export function CelestialDashboard() {
             dados={data.leitura?.vinculos ?? null}
             className={cn(styles.card, 'mt-6')}
           />
+          <PrevencaoCard className={cn(styles.card, 'mt-6')} />
           <div className={styles.footer}>Lyra MetaCare</div>
         </>
       ) : null}

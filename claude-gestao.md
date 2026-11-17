@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 35                       |
+| 🟡 Implementadas com validação pendente | 36                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 31                       |
@@ -5651,10 +5651,10 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes:** 16 unitários (idade, faixas, corpo, intervalos e fim de mês, histórico, vínculos, honestidade) e 7 de integração (anônimo, plano pelo catálogo da migration, registro e desfazer, recusas, isolamento entre titulares, permissões e revisão mensal). Unitários 1176, integração 653, lint, tipos, formato e build aprovados em Node v26.13.0.
 - **Pendente:** interface no painel principal e tela de revisão da administração (tarefa 210).
 
-### 210 · Card de prevenção no painel principal · 🔵 EM ANDAMENTO
+### 210 · Card de prevenção no painel principal · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
 - **Origem e data:** pedido do titular em 17/11/2026: card de prevenção com visual premium no painel principal, ligado à tarefa 209.
-- **Estado em 17/11/2026:** implementado e ainda não publicado. `src/components/dashboard/PrevencaoCard.tsx` (anel de progresso com exames em dia, os três exames mais urgentes com cor por situação, aviso do estresse dos vínculos e botão "Abrir para saber mais") e pop-up em abas: Seus exames (situação, o que o exame procura, orientação oficial com link da fonte, registro e remoção da data do último exame), Família (histórico de saúde por condição e parente), Vínculos e estresse (a pessoa responde se cada vínculo pesa) e Sinais de alerta (quando procurar atendimento logo, com SAMU 192 e CVV 188). Inserido em `CelestialDashboard.tsx` abaixo dos vínculos familiares. Tipos e lint aprovados; gates completos em execução no momento do registro. Falta: concluir gates, conferir no navegador, commit e push.
+- **Estado em 17/11/2026:** implementado e ainda não publicado. `src/components/dashboard/PrevencaoCard.tsx` (anel de progresso com exames em dia, os três exames mais urgentes com cor por situação, aviso do estresse dos vínculos e botão "Abrir para saber mais") e pop-up em abas: Seus exames (situação, o que o exame procura, orientação oficial com link da fonte, registro e remoção da data do último exame), Família (histórico de saúde por condição e parente), Vínculos e estresse (a pessoa responde se cada vínculo pesa) e Sinais de alerta (quando procurar atendimento logo, com SAMU 192 e CVV 188). Inserido em `CelestialDashboard.tsx` abaixo dos vínculos familiares. Unitários 1176, integração 653, lint, tipos, formato e build aprovados em Node v26.13.0. Não conferido no navegador.
 
 ### 211 · Atualização dos exames médicos pelo modelo de IA, com revisão da administração · ⚪ A INICIAR
 
