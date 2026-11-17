@@ -224,10 +224,10 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 38                       |
+| 🟡 Implementadas com validação pendente | 39                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 29                       |
+| ⚪ A iniciar                            | 35                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
@@ -5675,4 +5675,42 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Estado em 17/11/2026:** implementado. Migration `073_internet_do_modelo.sql`: `ia_acesso_internet` (modo `desligado` | `lista` | `total`, domínios, quem alterou) com o modo `lista` como padrão e as fontes oficiais de saúde já liberadas (gov.br, que inclui INCA e Ministério da Saúde, SBD, SBC, Febrasgo, SBM, SBU, SBCP, SBEM, SBP, OMS e OPAS), e `ia_consultas_internet` (registro de cada busca e página, sem dado de usuário). Em `src/lib/ai/internet/`: `seguranca.ts` (só https na porta 443, sem credenciais no endereço, DNS resolvido e recusado se cair em rede privada, local, reservada ou multicast, IPv4 e IPv6), `dominios.ts` (normalização e alcance por domínio com subdomínios; sem banco, usado também no navegador), `acesso.ts` (leitura, gravação e registro no MySQL), `pagina.ts` (leitura com redirecionamento manual reconferido a cada salto, até 3 saltos, 2 MB, 15 s, só HTML/texto, texto limpo e até 60 links dentro do alcance para o modelo navegar), `busca.ts` e `pesquisa.ts` (laço em JSON buscar/ler/concluir com qualquer modelo da cadeia, até 14 passos, validação do resultado pela tarefa e pontos de partida oficiais). Rota `GET/PATCH /api/admin/ia/internet` só para administradores, e painel "Acesso do modelo de IA à internet" em Admin → Configuração de IA (alcance, sites liberados, situação da busca e últimas consultas).
 - **Causa raiz encontrada na prova real:** a primeira versão buscava pela página HTML do DuckDuckGo. Feito de verdade, o pedido do servidor recebeu `HTTP 202` com desafio anti-robô (`anomaly`, `cc=botnet`), e o código tratava isso como "nenhum resultado". Contornar desafio anti-robô não é aceitável. A busca passou para a API oficial do Brave Search (variável opcional `BRAVE_SEARCH_API_KEY`, documentada no `.env.example`). Sem a chave, a busca recusa com aviso explícito e o modelo navega pelos links das páginas oficiais. O teste também achou um defeito na extração de texto: o título da página aparecia duplicado no corpo (`<head>` não era removido).
 - **Evidências reais (17/11/2026):** leitura real da página de detecção precoce do INCA (15.941 caracteres, 60 links dentro do alcance, entre eles a busca interna do gov.br) e da página da SBD (37 links); `https://169.254.169.254/` recusado como rede interna; `www.google.com` recusado fora da lista; busca sem chave com aviso explícito. 18 testes unitários novos (rede interna, alcance, leitura, redirecionamentos, limites, links, API de busca e laço da pesquisa com modelo falso compatível com OpenAI) e 4 de integração na rota (401/403, padrão da migration, validação de domínios e modo, registro de consultas). Unitários 1194, integração 657, lint sem avisos, tipos, formato e build aprovados em Node v26.13.0 (o projeto exige ^24.18.1; binários executados diretamente).
-- **Fronteiras não comprovadas:** busca pela API do Brave Search sem chave real no ambiente (formato coberto por teste, chamada externa não executada); pesquisa completa com um modelo real (será usada na tarefa 211); painel da administração não conferido no navegador.
+- **Conferência posterior (17/11/2026):** pesquisa completa com modelo real comprovada na tarefa 211 (Ollama, `nexuz/qwen3.5-agent:4b`, 7 páginas oficiais lidas); painel "Acesso do modelo de IA à internet" conferido no navegador (modo "Só os sites liberados", 12 fontes, aviso da busca sem chave e tabela das consultas reais com horário local).
+- **Fronteiras não comprovadas:** busca pela API do Brave Search sem chave real no ambiente (formato coberto por teste, chamada externa não executada).
+
+### 213 · Painel: chat compacto e resumo dos vínculos familiares · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026, com o recorte do cartão "Converse com a Lyra" do painel.
+- **Escopo pedido:** a seção "Vínculos familiares no seu mapa" não pode abrir inteira assim que o app abre. O cartão "Converse com a Lyra" do painel diminui, ficando só algo como "Converse com a Lyra" e um botão de ícone que abre o chat. Acima dele, um cartão com um resumo dos parentes que, ao ser clicado, abre a tela "Vínculos familiares no seu mapa" completa, com todas as informações.
+- **Observação:** o pedido anterior do mesmo dia, de mostrar só os parentescos que têm algo no mapa, foi desconsiderado pelo titular.
+
+### 214 · Mais vínculos familiares (filhos, filhas e outros) · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026: acrescentar mais vínculos familiares, como filhos, filhas e outros.
+- **Base existente:** `src/lib/lyra/vinculos-familiares.ts` (`NOMES_DOS_VINCULOS`, leitura simbólica pelo mapa védico, tarefa 205) e o cartão `VinculosFamiliares.tsx`.
+
+### 215 · Funcionalidades do painel administrativo em mini cards · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026, com o recorte de "Controles funcionais" no painel administrativo.
+- **Escopo pedido:** a lista de grupos (Registro diário de saúde, Diário pessoal, Outros registros, Metas e hábitos, Rotinas e práticas etc.) ocupa muito espaço. Passar para mini cards bem menores, com um X indicando desativado, mantendo o ativar e desativar.
+
+### 216 · Título "Gerenciamento de Usuários" proporcional a um título · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026, com o recorte da página Administração → Usuários.
+- **Escopo pedido:** aumentar a fonte do título "Gerenciamento de Usuários", hoje do tamanho de um texto comum.
+
+### 217 · Remover o cartão "Ajuda para começar" · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026, com o recorte do cartão "Ajuda para começar / Rever apresentação" (componente `ApresentacaoDaConta`, mostrado pelo `AppShell` no topo das páginas).
+- **Escopo pedido:** remover o cartão.
+
+### 218 · Cores para os planos e perfis nos selos da lista de usuários · ⚪ A INICIAR
+
+- **Origem e data:** pedido do titular em 17/11/2026, com o recorte dos selos "Free" e "Administrador" na lista de usuários.
+- **Escopo pedido:** dar uma cor própria a cada plano e perfil.
+
+### 219 · Logo novo no avatar do chat e demais usos da marca · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** pedido do titular em 17/11/2026, com os recortes do avatar do chat (cabeçalho e abertura) ainda com o logo anterior.
+- **Estado em 17/11/2026:** publicado em `b6d7ea93`. O componente `MarcaLyra` usava o logo anterior (teal e coral, `src/assets/marca/lyra-logo.png`) e passou a usar o símbolo da identidade celestial (`src/assets/celestial/simbolo.png`, o mesmo da tela de carregamento e do favicon), num ladrilho arredondado igual nos dois temas. Vale para chat (cabeçalho, abertura, balões e "digitando"), sidebar, busca de páginas e páginas de erro. `docs/design-system.md` atualizado; o arquivo antigo continua só como fonte dos ícones de instalação. Conferido no cabeçalho do chat pelo navegador. Unitários 1209, integração 663, lint, tipos, formato e build aprovados.
+- **Fronteiras não comprovadas:** abertura do chat (marca de 3,5rem), balões, tema claro e páginas de erro não conferidos um a um no navegador; ícones de instalação (PWA) ainda com o logo anterior.
