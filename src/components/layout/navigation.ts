@@ -20,6 +20,7 @@ import {
   Radio,
   Settings2,
   SlidersHorizontal,
+  Stethoscope,
   ShieldCheck,
   Smartphone,
   Sparkles,
@@ -326,6 +327,16 @@ export const navigationItems: NavigationDefinition[] = [
     description:
       'Revisão dos verbetes escritos pelo modelo de IA antes de o motor usá-los.',
     icon: BookOpenCheck,
+    section: 'Administração',
+    sectionKey: 'admin',
+    adminOnly: true,
+  },
+  {
+    href: '/admin/exames-medicos',
+    label: 'Exames Médicos',
+    description:
+      'Exames recomendados do motor da Lyra, atualizados pelo modelo de IA com a sua revisão.',
+    icon: Stethoscope,
     section: 'Administração',
     sectionKey: 'admin',
     adminOnly: true,

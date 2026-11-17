@@ -1,7 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import type { AcessoInternet } from '@/lib/ai/internet/acesso';
-import { registrarConsulta } from '@/lib/ai/internet/acesso';
+import {
+  lerAcessoInternet,
+  registrarConsulta,
+  salvarAcessoInternet,
+} from '@/lib/ai/internet/acesso';
 import { queryRows } from '@/lib/mysql/pool';
 
 import { criarUsuario } from '../../../../../tests/integration/fixtures';
@@ -48,34 +52,41 @@ describe('Acesso do modelo de IA à internet', () => {
     const admin = await criarUsuario('admin');
     const alterar = (body: unknown) =>
       chamar(PATCH, { usuario: admin, method: 'PATCH', body });
+    // O acesso é uma configuração única do banco: devolvida ao fim do teste.
+    const original = await lerAcessoInternet();
+    try {
+      const lista = await alterar({
+        modo: 'lista',
+        dominios: ['https://WWW.INCA.gov.br/', 'inca.gov.br', 'who.int'],
+      });
+      expect(lista.status).toBe(200);
+      expect((lista.json as Situacao).acesso).toMatchObject({
+        modo: 'lista',
+        dominios: ['inca.gov.br', 'who.int'],
+      });
+      const [linha] = await queryRows<{ atualizado_por: string }>(
+        'SELECT atualizado_por FROM ia_acesso_internet WHERE id = 1'
+      );
+      expect(linha.atualizado_por).toBe(admin.id);
 
-    const lista = await alterar({
-      modo: 'lista',
-      dominios: ['https://WWW.INCA.gov.br/', 'inca.gov.br', 'who.int'],
-    });
-    expect(lista.status).toBe(200);
-    expect((lista.json as Situacao).acesso).toMatchObject({
-      modo: 'lista',
-      dominios: ['inca.gov.br', 'who.int'],
-    });
-    const [linha] = await queryRows<{ atualizado_por: string }>(
-      'SELECT atualizado_por FROM ia_acesso_internet WHERE id = 1'
-    );
-    expect(linha.atualizado_por).toBe(admin.id);
+      expect((await alterar({ modo: 'lista', dominios: [] })).status).toBe(400);
+      expect(
+        (await alterar({ modo: 'lista', dominios: ['localhost'] })).status
+      ).toBe(400);
+      expect((await alterar({ modo: 'aberto', dominios: [] })).status).toBe(
+        400
+      );
+      expect(
+        (await alterar({ modo: 'total', dominios: [], extra: true })).status
+      ).toBe(400);
 
-    expect((await alterar({ modo: 'lista', dominios: [] })).status).toBe(400);
-    expect(
-      (await alterar({ modo: 'lista', dominios: ['localhost'] })).status
-    ).toBe(400);
-    expect((await alterar({ modo: 'aberto', dominios: [] })).status).toBe(400);
-    expect(
-      (await alterar({ modo: 'total', dominios: [], extra: true })).status
-    ).toBe(400);
-
-    const total = await alterar({ modo: 'total', dominios: [] });
-    expect((total.json as Situacao).acesso.modo).toBe('total');
-    const desligado = await alterar({ modo: 'desligado', dominios: [] });
-    expect((desligado.json as Situacao).acesso.modo).toBe('desligado');
+      const total = await alterar({ modo: 'total', dominios: [] });
+      expect((total.json as Situacao).acesso.modo).toBe('total');
+      const desligado = await alterar({ modo: 'desligado', dominios: [] });
+      expect((desligado.json as Situacao).acesso.modo).toBe('desligado');
+    } finally {
+      await salvarAcessoInternet(original, admin.id);
+    }
   });
 
   it('mostra as últimas consultas registradas', async () => {

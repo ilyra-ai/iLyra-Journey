@@ -116,6 +116,7 @@ const SECOES: DefinicaoDeSecao[] = [
         destinos: [
           '/admin/content',
           '/admin/lyra-verbetes',
+          '/admin/exames-medicos',
           '/admin/ai-config',
         ],
       },

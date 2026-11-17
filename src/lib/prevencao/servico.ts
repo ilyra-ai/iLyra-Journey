@@ -244,6 +244,9 @@ export async function situacaoDaRevisao(agora = new Date()) {
 export interface AlteracaoDaRecomendacao {
   nome?: string;
   procura?: string;
+  publico?: Publico;
+  tipo?: 'rotina' | 'conversa';
+  historicoRelevante?: Condicao[];
   idadeMinima?: number;
   idadeMaxima?: number | null;
   intervaloMeses?: number | null;
@@ -265,6 +268,9 @@ export async function alterarRecomendacao(
   const colunas: Record<keyof AlteracaoDaRecomendacao, string> = {
     nome: 'nome',
     procura: 'procura',
+    publico: 'publico',
+    tipo: 'tipo',
+    historicoRelevante: 'historico_relevante',
     idadeMinima: 'idade_minima',
     idadeMaxima: 'idade_maxima',
     intervaloMeses: 'intervalo_meses',
@@ -276,6 +282,33 @@ export async function alterarRecomendacao(
   const campos = Object.entries(alteracao).filter(
     ([, valor]) => valor !== undefined
   ) as Array<[keyof AlteracaoDaRecomendacao, unknown]>;
+  // Com só uma das idades no pedido, a faixa é conferida contra a gravada.
+  if (
+    alteracao.idadeMinima !== undefined ||
+    alteracao.idadeMaxima !== undefined
+  ) {
+    const [atual] = await queryRows<{
+      idade_minima: number;
+      idade_maxima: number | null;
+    }>(
+      'SELECT idade_minima, idade_maxima FROM prevencao_recomendacoes WHERE id = ?',
+      [id]
+    );
+    if (!atual) throw new HttpError('Recomendação não encontrada.', 404);
+    const minima = alteracao.idadeMinima ?? Number(atual.idade_minima);
+    const maxima =
+      alteracao.idadeMaxima === undefined
+        ? atual.idade_maxima === null
+          ? null
+          : Number(atual.idade_maxima)
+        : alteracao.idadeMaxima;
+    if (maxima !== null && maxima < minima) {
+      throw new HttpError(
+        'A idade máxima deve ser maior ou igual à mínima.',
+        400
+      );
+    }
+  }
   const resultado = await executeStatement(
     `UPDATE prevencao_recomendacoes
         SET ${[
@@ -285,7 +318,13 @@ export async function alterarRecomendacao(
           'revisado_por = ?',
         ].join(', ')}
       WHERE id = ?`,
-    [...campos.map(([, valor]) => valor), administrador, id]
+    [
+      ...campos.map(([campo, valor]) =>
+        campo === 'historicoRelevante' ? JSON.stringify(valor) : valor
+      ),
+      administrador,
+      id,
+    ]
   );
   if (resultado.affectedRows === 0) {
     throw new HttpError('Recomendação não encontrada.', 404);

@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 import { lerJson, respostaDeErro } from '@/lib/http/api';
 import { requireAdminSession } from '@/lib/mysql/server-auth';
+import { CONDICOES } from '@/lib/prevencao/plano';
+import { PUBLICOS, TIPOS_DE_RECOMENDACAO } from '@/lib/prevencao/atualizacao';
 import {
   alterarRecomendacao,
   confirmarRevisao,
@@ -22,6 +24,13 @@ const pedidoSchema = z.discriminatedUnion('acao', [
       id: z.string().min(1).max(40),
       nome: z.string().trim().min(3).max(120).optional(),
       procura: z.string().trim().min(10).max(300).optional(),
+      publico: z.enum(PUBLICOS).optional(),
+      tipo: z.enum(TIPOS_DE_RECOMENDACAO).optional(),
+      historicoRelevante: z
+        .array(z.enum(CONDICOES))
+        .max(CONDICOES.length)
+        .transform((lista) => [...new Set(lista)])
+        .optional(),
       idadeMinima: idade.optional(),
       idadeMaxima: idade.nullable().optional(),
       intervaloMeses: z.number().int().min(1).max(240).nullable().optional(),
@@ -72,6 +81,9 @@ export async function PATCH(request: Request) {
         {
           nome: pedido.nome,
           procura: pedido.procura,
+          publico: pedido.publico,
+          tipo: pedido.tipo,
+          historicoRelevante: pedido.historicoRelevante,
           idadeMinima: pedido.idadeMinima,
           idadeMaxima: pedido.idadeMaxima,
           intervaloMeses: pedido.intervaloMeses,

@@ -97,8 +97,11 @@ export async function pesquisarNaInternet(opcoes: {
   acesso: AcessoInternet;
   /** Páginas oficiais indicadas para o início da navegação. */
   pontosDePartida?: string[];
-  /** Valida o resultado final; devolve o motivo da recusa ou `null`. */
-  validarResultado?: (resultado: unknown) => string | null;
+  /** Valida o resultado final (com as páginas já lidas); devolve o motivo da recusa ou `null`. */
+  validarResultado?: (
+    resultado: unknown,
+    fontes: ResultadoDaPesquisa['fontes']
+  ) => string | null;
   maximoDePassos?: number;
   registrar?: (consulta: {
     tarefa: string;
@@ -160,7 +163,7 @@ export async function pesquisarNaInternet(opcoes: {
           if (ultimo && lido.acao !== 'concluir')
             return 'no último passo é preciso concluir';
           if (lido.acao === 'concluir' && opcoes.validarResultado)
-            return opcoes.validarResultado(lido.resultado);
+            return opcoes.validarResultado(lido.resultado, fontes);
           return null;
         },
       }

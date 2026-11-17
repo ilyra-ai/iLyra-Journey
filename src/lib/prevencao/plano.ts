@@ -58,7 +58,22 @@ export const NOME_DA_CONDICAO: Record<Condicao, string> = {
   avc: 'AVC (derrame)',
 };
 
-export type Publico = 'mamas' | 'colo-do-utero' | 'prostata' | 'todos';
+export const PUBLICOS = [
+  'mamas',
+  'colo-do-utero',
+  'prostata',
+  'todos',
+] as const;
+export type Publico = (typeof PUBLICOS)[number];
+export const TIPOS_DE_RECOMENDACAO = ['rotina', 'conversa'] as const;
+
+/** Rótulos para a administração. */
+export const NOME_DO_PUBLICO: Record<Publico, string> = {
+  mamas: 'Quem tem mamas',
+  'colo-do-utero': 'Quem tem colo do útero',
+  prostata: 'Quem tem próstata',
+  todos: 'Todas as pessoas',
+};
 
 export interface Recomendacao {
   id: string;
