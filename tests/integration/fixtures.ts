@@ -70,3 +70,60 @@ export async function definirAgendamentosParaUsuarios(ativo: boolean) {
     [ativo]
   );
 }
+
+/**
+ * Fixa um direito da matriz de planos para o teste e devolve a função que
+ * restaura o valor anterior. Testes do mecanismo de cota e de recurso
+ * declaram o limite que testam, sem depender da matriz que a administração
+ * edita (desde a tarefa 224, Free e Meta partem do mesmo acesso do Care).
+ */
+export async function definirDireito(
+  plano: string,
+  recurso: string,
+  valores: {
+    enabled: boolean;
+    quota?: number | null;
+    reset?: string | null;
+  }
+): Promise<() => Promise<void>> {
+  const [anterior] = await queryRows<{
+    enabled: number;
+    quota_value: number | null;
+    reset_interval: string | null;
+  }>(
+    `SELECT pe.enabled, pe.quota_value, pe.reset_interval
+       FROM plan_entitlements pe
+       JOIN plan_features f ON f.id = pe.feature_id
+       JOIN subscription_plans p ON p.id = pe.plan_id
+      WHERE p.plan_key = ? AND f.feature_key = ?`,
+    [plano, recurso]
+  );
+  if (!anterior) {
+    throw new Error(`Direito ausente na matriz: ${plano}/${recurso}`);
+  }
+  const gravar = (
+    enabled: boolean,
+    quota: number | null,
+    reset: string | null
+  ) =>
+    executeStatement(
+      `UPDATE plan_entitlements pe
+         JOIN plan_features f ON f.id = pe.feature_id
+         JOIN subscription_plans p ON p.id = pe.plan_id
+          SET pe.enabled = ?, pe.quota_value = ?, pe.reset_interval = ?
+        WHERE p.plan_key = ? AND f.feature_key = ?`,
+      [enabled, quota, reset, plano, recurso]
+    );
+  await gravar(
+    valores.enabled,
+    valores.quota === undefined ? anterior.quota_value : valores.quota,
+    valores.reset === undefined ? anterior.reset_interval : valores.reset
+  );
+  return async () => {
+    await gravar(
+      Boolean(anterior.enabled),
+      anterior.quota_value,
+      anterior.reset_interval
+    );
+  };
+}

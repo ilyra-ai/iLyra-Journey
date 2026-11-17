@@ -1,6 +1,10 @@
 import { randomUUID } from 'node:crypto';
-import { describe, it, expect } from 'vitest';
-import { criarUsuario, contar } from '../../../tests/integration/fixtures';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import {
+  contar,
+  criarUsuario,
+  definirDireito,
+} from '../../../tests/integration/fixtures';
 import { chamar } from '../../../tests/integration/http';
 import { executeStatement, queryRows } from '@/lib/mysql/pool';
 import {
@@ -74,6 +78,20 @@ async function serie() {
   return { u, id };
 }
 describe('diário pessoal e comparações com registros MySQL reais', () => {
+  // Os testes de janela usam o histórico de 30 dias do Free; desde a tarefa
+  // 224 a matriz parte do acesso do Care, então o limite é declarado aqui.
+  let restaurarJanela: () => Promise<void>;
+  beforeAll(async () => {
+    restaurarJanela = await definirDireito('free', 'metrics_history_days', {
+      enabled: true,
+      quota: 30,
+      reset: 'rolling',
+    });
+  });
+  afterAll(async () => {
+    await restaurarJanela();
+  });
+
   it('exige sessão em leituras, marcações e comparação', async () => {
     for (const [handler, method] of [
       [central.GET, 'GET'],

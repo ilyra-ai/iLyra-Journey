@@ -5,7 +5,10 @@ import { describe, expect, it } from 'vitest';
 import { gravarRegistroDoDia } from '@/lib/metricas/gravacao';
 import { executeStatement, queryRows } from '@/lib/mysql/pool';
 
-import { criarUsuario } from '../../../tests/integration/fixtures';
+import {
+  criarUsuario,
+  definirDireito,
+} from '../../../tests/integration/fixtures';
 import { chamar } from '../../../tests/integration/http';
 import { iniciarServidorOpenAiCompativel } from '../../../tests/support/servidor-openai-compativel';
 
@@ -74,27 +77,31 @@ describe('assistente de IA', () => {
 
   it('consome a cota antes de processar e recusa quando esgotada', async () => {
     const pessoa = await criarUsuario('patient', 'CotaChat');
-    const cota = await queryRows<{ quota_value: number }>(
-      `SELECT pe.quota_value FROM plan_entitlements pe
-       JOIN plan_features f ON f.id = pe.feature_id
-       JOIN subscription_plans p ON p.id = pe.plan_id
-       WHERE p.plan_key = 'free' AND f.feature_key = 'ai_chat_messages'`
-    );
-    const limite = Number(cota[0]?.quota_value);
-    for (let i = 0; i < limite; i += 1) {
-      const ok = await chamar(assistente.POST, {
+    // O teste declara a cota que testa; a matriz real é decisão do admin.
+    const limite = 3;
+    const restaurar = await definirDireito('free', 'ai_chat_messages', {
+      enabled: true,
+      quota: limite,
+      reset: 'monthly',
+    });
+    try {
+      for (let i = 0; i < limite; i += 1) {
+        const ok = await chamar(assistente.POST, {
+          method: 'POST',
+          body: { query: 'resumo' },
+          usuario: pessoa,
+        });
+        expect(ok.status).toBe(200);
+      }
+      const excedeu = await chamar(assistente.POST, {
         method: 'POST',
         body: { query: 'resumo' },
         usuario: pessoa,
       });
-      expect(ok.status).toBe(200);
+      expect(excedeu.status).toBe(403);
+    } finally {
+      await restaurar();
     }
-    const excedeu = await chamar(assistente.POST, {
-      method: 'POST',
-      body: { query: 'resumo' },
-      usuario: pessoa,
-    });
-    expect(excedeu.status).toBe(403);
   });
 
   it('chat segue a ordem de uso só com modelos locais e troca quando um falha (tarefa 54)', async () => {

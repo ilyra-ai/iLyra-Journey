@@ -19,6 +19,7 @@ import {
   criarUsuario,
   type UsuarioDeTeste,
   definirAgendamentosParaUsuarios,
+  definirDireito,
 } from '../../../tests/integration/fixtures';
 
 // Pré-condição: agenda liberada para usuários (o padrão é desativado, tarefa
@@ -147,6 +148,27 @@ describe('planos · assinatura', () => {
 });
 
 describe('planos · recursos e cotas', () => {
+  // Cota e janela do Free declaradas aqui: desde a tarefa 224 a matriz
+  // parte do acesso do Care, sem limite de profissionais.
+  const restauracoes: Array<() => Promise<void>> = [];
+  beforeAll(async () => {
+    restauracoes.push(
+      await definirDireito('free', 'professionals_total', {
+        enabled: true,
+        quota: 2,
+        reset: 'concurrent',
+      }),
+      await definirDireito('free', 'metrics_history_days', {
+        enabled: true,
+        quota: 30,
+        reset: 'rolling',
+      })
+    );
+  });
+  afterAll(async () => {
+    for (const restaurar of restauracoes.reverse()) await restaurar();
+  });
+
   it('bloqueia recursos desligados no plano e libera administradores', async () => {
     const pessoa = await criarUsuario('patient', 'Recursos');
     const bluetooth = await direito('free', 'wearable_bluetooth_connection');

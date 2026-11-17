@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 43                       |
+| 🟡 Implementadas com validação pendente | 44                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 36                       |
@@ -5713,6 +5713,7 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte dos selos "Free" e "Administrador" na lista de usuários.
 - **Escopo pedido:** dar uma cor própria a cada plano e perfil.
+- **Ajuste em 17/11/2026:** o app terá só dois planos, Care e Administrador (tarefa 225); as cores valem para esses dois e para os perfis.
 
 ### 219 · Logo novo no avatar do chat e demais usos da marca · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
@@ -5724,6 +5725,7 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte da Matriz editável de entitlements (Administração → Planos).
 - **Escopo pedido:** no desktop, mostrar cada recurso em cartões no formato quadrado, 3 por linha, sem cartões muito grandes. Hoje cada recurso ocupa a largura inteira, com os quatro planos (Free, Meta, Care, Administrador) em dois por linha.
+- **Ajuste em 17/11/2026:** com só dois planos (tarefa 225), cada cartão de recurso mostra apenas Care e Administrador; fazer depois da 225.
 
 ### 221 · Selos das propostas de exames centralizados, com ícone e cor · ⚪ A INICIAR
 
@@ -5741,7 +5743,14 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte do título "Matriz real de capacidades" (Administração → Planos, tema claro).
 - **Escopo pedido:** deixar todos os `h2` do tamanho de tópico e em negrito. Continuação da tarefa 216.
 
-### 224 · Todos os planos com o acesso do Care; configurações só para o administrador · ⚪ A INICIAR
+### 224 · Todos os planos com o acesso do Care; configurações só para o administrador · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
-- **Origem e data:** pedido do titular em 17/11/2026: "todos os planos devem ser do tipo Care e somente o administrador tem acesso full às configurações do app".
-- **A confirmar na implementação:** se a mudança é na matriz de recursos (Free e Meta liberando o mesmo que o Care) ou na assinatura de cada usuário; preservar o acesso total do administrador.
+- **Origem e data:** pedido do titular em 17/11/2026: "todos os planos devem ser do tipo Care e somente o administrador tem acesso full às configurações do app"; na pergunta de escopo, o titular escolheu mudar a matriz de recursos.
+- **Estado em 17/11/2026:** migration `076_planos_com_acesso_care.sql` iguala Free e Meta ao Care em `plan_entitlements` (ativo, cota e período de cada um dos 26 recursos; cria linhas que faltem). Antes, as diferenças eram cotas (mensagens, gerações de plano, histórico de métricas, consultas e profissionais) e três recursos desligados no Free ou no Meta (monitoramento em tempo real, atualizações por voz e Bluetooth de wearable). Aplicada no banco local: zero diferenças entre Free, Meta e Care. A matriz continua editável em Administração → Planos. Acesso total às configurações já era só do administrador: as 45 rotas de `/api/admin` exigem `requireAdminSession` e as páginas de `/admin` usam `AccessDenied` (as duas sem guarda só redirecionam ao painel administrativo).
+- **Testes:** oito testes de integração de cota e de recurso liam os limites do Free na matriz (15 mensagens, 30 dias de histórico, 2 profissionais, sem wearable) e deixaram de ter o que testar. O mecanismo não mudou; cada teste passou a declarar o limite que testa com o novo `definirDireito` (`tests/integration/fixtures.ts`), que restaura o valor anterior no fim. Unitários 1210, integração 663, lint, tipos, formato e build aprovados.
+
+### 225 · Só dois planos: Care e Administrador · ⚪ A INICIAR
+
+- **Origem e data:** decisão do titular em 17/11/2026: "só vão ter dois planos".
+- **Escopo:** retirar Free e Meta de uso (sem apagar dados nem histórico de assinaturas), passar quem está neles para o Care, fazer o cadastro novo entrar no Care, ajustar a página pública de planos, os textos e a matriz na administração.
+- **Dois preços no Care (decisão do titular em 17/11/2026):** o Care terá dois preços para a pessoa escolher o que pode pagar e colaborar; os dois liberam todas as funções do Care, só o valor muda. Antes de mexer na cobrança (preços do Stripe), confirmar com o titular os dois valores, o período (mensal, anual ou ambos) e os nomes que aparecem na escolha.

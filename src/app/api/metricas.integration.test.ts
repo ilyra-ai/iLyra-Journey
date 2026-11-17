@@ -3,7 +3,10 @@ import { describe, expect, it } from 'vitest';
 import { executeStatement, queryRows } from '@/lib/mysql/pool';
 import { assignPlanToUserByAdmin } from '@/lib/plans/service';
 
-import { criarUsuario } from '../../../tests/integration/fixtures';
+import {
+  criarUsuario,
+  definirDireito,
+} from '../../../tests/integration/fixtures';
 import { chamar } from '../../../tests/integration/http';
 
 import * as avaliacoes from './data/user-assessments/route';
@@ -141,13 +144,22 @@ describe('sessão da pulseira (POST /api/metricas/sensor)', () => {
 
   it('plano sem wearable recebe 403 e nada é gravado', async () => {
     const pessoa = await criarUsuario('patient', 'Free');
-    const resposta = await chamar(sensor.POST, {
-      method: 'POST',
-      body: sessao,
-      usuario: pessoa,
-    });
-    expect(resposta.status).toBe(403);
-    expect(await linhaDoDia(pessoa.id)).toBeNull();
+    const restaurar = await definirDireito(
+      'free',
+      'wearable_bluetooth_connection',
+      { enabled: false }
+    );
+    try {
+      const resposta = await chamar(sensor.POST, {
+        method: 'POST',
+        body: sessao,
+        usuario: pessoa,
+      });
+      expect(resposta.status).toBe(403);
+      expect(await linhaDoDia(pessoa.id)).toBeNull();
+    } finally {
+      await restaurar();
+    }
   });
 
   it('soma as sessões do dia sem apagar o check-in', async () => {

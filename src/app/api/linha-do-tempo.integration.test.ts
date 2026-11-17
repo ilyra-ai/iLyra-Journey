@@ -1,6 +1,9 @@
 import { randomUUID } from 'node:crypto';
-import { describe, it, expect } from 'vitest';
-import { criarUsuario } from '../../../tests/integration/fixtures';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import {
+  criarUsuario,
+  definirDireito,
+} from '../../../tests/integration/fixtures';
 import { chamar } from '../../../tests/integration/http';
 import { executeStatement } from '@/lib/mysql/pool';
 import { lerLinhaDoTempo } from '@/lib/linha-do-tempo/servico';
@@ -132,6 +135,19 @@ async function popular(
 }
 
 describe('linha do tempo pessoal unificada com MySQL real', () => {
+  // Os testes de janela usam o histórico de 30 dias do Free; desde a tarefa
+  // 224 a matriz parte do acesso do Care, então o limite é declarado aqui.
+  let restaurarJanela: () => Promise<void>;
+  beforeAll(async () => {
+    restaurarJanela = await definirDireito('free', 'metrics_history_days', {
+      enabled: true,
+      quota: 30,
+      reset: 'rolling',
+    });
+  });
+  afterAll(async () => {
+    await restaurarJanela();
+  });
   it('exige sessão e valida a consulta', async () => {
     expect((await chamar(rota.GET, { usuario: null })).status).toBe(401);
     const u = await criarUsuario(),
