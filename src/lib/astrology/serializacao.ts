@@ -129,6 +129,7 @@ export function diaParaJson(dia: DiaVedico) {
         ...intervalo(c),
       })),
     },
+    pessoalIndisponivel: dia.pessoalIndisponivel,
     pessoal: dia.pessoal
       ? {
           tara: dia.pessoal.tara,

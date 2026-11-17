@@ -164,6 +164,20 @@ describe('leitura védica do dia (motor da Lyra)', () => {
       'Com a sua data e a cidade de nascimento no perfil'
     );
   });
+
+  it('sem a hora e com a Lua natal mudando no dia, explica a ausência da leitura pessoal', () => {
+    // Em 01/12/1990 a Lua trocou de signo e de nakshatra.
+    const { briefing, entradaDaLeitura } = dia('2026-10-14', {
+      data: '1990-12-01',
+      hora: null,
+    });
+    expect(entradaDaLeitura.mapa).toBeNull();
+    expect(entradaDaLeitura.mapaIndisponivel).toBe('hora-de-nascimento');
+    expect(briefing.leitura.resumoGeral).toMatch(/Sem a hora de nascimento/);
+    expect(briefing.leitura.resumoGeral).not.toContain(
+      'Com a sua data e a cidade de nascimento no perfil'
+    );
+  });
 });
 
 function respostaValida(

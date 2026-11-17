@@ -156,6 +156,12 @@ export interface DiaVedico {
     taraDepois: (TaraBala & { aPartirDe: Date }) | null;
     chandra: ChandraBala;
   } | null;
+  /**
+   * Motivo de não haver dia pessoal mesmo com mapa natal: sem a hora de
+   * nascimento, a Lua natal pode estar em mais de um nakshatra ou signo
+   * naquele dia, e Tara Bala ou Chandra Bala mudariam conforme a hora.
+   */
+  pessoalIndisponivel: 'hora-de-nascimento' | null;
 }
 
 /** Dia védico (Panchang e dia pessoal) na data local do lugar do dia. */
@@ -172,7 +178,30 @@ export function diaVedicoDoPerfil(
     longitude: lugar.longitude,
     fuso: lugar.fuso,
   });
-  if (!mapa) return { local: lugar, panchang, pessoal: null };
+  if (!mapa)
+    return { local: lugar, panchang, pessoal: null, pessoalIndisponivel: null };
+
+  // Sem a hora, só vale o que é igual para toda Lua possível naquele dia.
+  if (mapa.possibilidades) {
+    const taras = new Set(
+      mapa.possibilidades.nakshatrasDaLua.map(
+        (nakshatra) => taraBala(nakshatra, panchang.nakshatra.indice).nome
+      )
+    );
+    const casas = new Set(
+      mapa.possibilidades.signosDaLua.map(
+        (signo) => chandraBala(signo, panchang.signoDaLua.indice).casa
+      )
+    );
+    if (taras.size > 1 || casas.size > 1) {
+      return {
+        local: lugar,
+        panchang,
+        pessoal: null,
+        pessoalIndisponivel: 'hora-de-nascimento',
+      };
+    }
+  }
 
   const proximoNakshatra = (panchang.nakshatra.indice + 1) % 27;
   const mudaNoDia =
@@ -191,5 +220,6 @@ export function diaVedicoDoPerfil(
         : null,
       chandra: chandraBala(mapa.lua.signo, panchang.signoDaLua.indice),
     },
+    pessoalIndisponivel: null,
   };
 }

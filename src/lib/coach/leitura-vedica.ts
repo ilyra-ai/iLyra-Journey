@@ -130,6 +130,11 @@ export interface EntradaDaLeitura {
     ekadashi: boolean;
     trocaDeNakshatra: string | null;
   };
+  /**
+   * Sem a hora de nascimento, a Lua natal pode variar no dia e o dia pessoal
+   * não é afirmado (`mapa` fica nulo mesmo com data e cidade).
+   */
+  mapaIndisponivel?: 'hora-de-nascimento' | null;
   /** Sem data e cidade de nascimento no perfil, não há mapa natal. */
   mapa: {
     lagna: string | null;
@@ -368,6 +373,7 @@ export function montarEntradaDaLeitura(fatos: FatosDoDia): EntradaDaLeitura {
       trocaDeNakshatra: troca,
     },
     mapa: mapaDaEntrada,
+    mapaIndisponivel: fatos.dia.pessoalIndisponivel,
     periodos,
     melhorJanela: fatos.melhorJanela
       ? { nome: fatos.melhorJanela.nome, horario: faixa(fatos.melhorJanela) }
@@ -661,7 +667,9 @@ function resumoGeral(entrada: EntradaDaLeitura): string {
       `${entrada.diaDaSemana} é o dia ${deGraha(entrada.regenteDoDia.graha)}, ligado a ${entrada.regenteDoDia.tema}.`,
       `A Lua em ${entrada.ceu.signoDaLua}, de clima ${entrada.ceu.natureza.clima}, favorece ${entrada.ceu.natureza.favorece}.`,
       horarios,
-      'Com a sua data e a cidade de nascimento no perfil, a leitura passa a falar do seu mapa.',
+      entrada.mapaIndisponivel === 'hora-de-nascimento'
+        ? 'Sem a hora de nascimento, a sua Lua natal pode estar em mais de um ponto do céu naquele dia, e a leitura pessoal mudaria conforme a hora; por isso ela fica de fora. Informe a hora no perfil, ou escolha o horário que mais se parece com você.'
+        : 'Com a sua data e a cidade de nascimento no perfil, a leitura passa a falar do seu mapa.',
     ].join(' ');
   }
   const { mapa } = entrada;

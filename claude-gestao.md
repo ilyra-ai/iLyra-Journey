@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 30                       |
+| 🟡 Implementadas com validação pendente | 31                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5611,3 +5611,10 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Causa raiz corrigida:** o índice combina sinais registrados com uma componente simbólica da fase lunar, mas os textos afirmavam diagnóstico ("o sistema nervoso autônomo apresenta sinais de sobrecarga", "alinhamento quântico-biológico", "perfeita fase com os ciclos cósmicos") e prometiam ganho ("elevar significativamente sua coerência"), contrariando as regras do próprio motor. O cálculo foi mantido; descrições, recomendação e documentação passaram a dizer o que o índice é: um resumo dos registros frente às faixas de referência, com a camada lunar declarada simbólica e o aviso de que não é avaliação de saúde. Quando a componente mais baixa é a lunar, a recomendação não pede mudança no corpo; nas demais, orienta procurar um profissional se o sinal persistir.
 - **Arquivos:** `src/lib/quantum/coherence-engine.ts`, `src/lib/integrative-engines.test.ts`.
 - **Testes:** 1 teste novo que percorre níveis diferentes do índice e recusa afirmações de diagnóstico ou efeito cósmico. Unitários, integração, lint, tipos, formato e build aprovados em Node v26.13.0.
+
+### 205 · Dia pessoal sem a hora de nascimento · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** limite declarado na tarefa 193; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
+- **Causa raiz corrigida:** com a hora desconhecida, Tara Bala e Chandra Bala do dia usavam a Lua natal do meio-dia, embora a Lua possa mudar de nakshatra e de signo no dia do nascimento. Agora o dia pessoal só é afirmado quando Tara e Chandra Bala dão o mesmo resultado para toda Lua possível daquele dia; caso contrário, `pessoal` fica nulo com `pessoalIndisponivel: 'hora-de-nascimento'`, e a leitura do coach explica a ausência e convida a informar ou escolher a hora, em vez de pedir data e cidade que já estão no perfil.
+- **Arquivos:** `src/lib/astrology/perfil-astrologico.ts`, `serializacao.ts`, `src/lib/coach/leitura-vedica.ts` e testes.
+- **Testes:** 4 testes novos (Lua mudando no dia sem dia pessoal; hora conhecida com dia pessoal; Lua parada no dia com dia pessoal sem a hora; texto do coach). Unitários, integração, lint, tipos, formato e build aprovados em Node v26.13.0.

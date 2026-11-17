@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import { getAstrologicalContext } from '@/lib/astrology/engine';
 import { calcularMapaNatal, mapaNatalNaData } from '@/lib/astrology/mapa-natal';
-import { mapaParaJson } from '@/lib/astrology/serializacao';
+import { diaParaJson, mapaParaJson } from '@/lib/astrology/serializacao';
+import {
+  diaVedicoDoPerfil,
+  type PerfilAstrologico,
+} from '@/lib/astrology/perfil-astrologico';
 import { NAKSHATRAS, SIGNOS } from '@/lib/astrology/sideral';
 import { dashaSimples, faseDaVida } from '@/lib/coach/leitura-vedica';
 
@@ -279,5 +283,57 @@ describe('Leitura com hora no horário de verão', () => {
       )
     );
     expect(ambos.avisoDaHora).toMatch(/duas vezes[\s\S]*estimada por você/);
+  });
+});
+
+describe('Dia pessoal com hora de nascimento desconhecida', () => {
+  const lugar = {
+    rotulo: 'São Paulo',
+    latitude: -23.5475,
+    longitude: -46.6361,
+    fuso: 'America/Sao_Paulo',
+  };
+  const perfil = (hora: string | null): PerfilAstrologico => ({
+    nascimento: { data: '1990-12-01', hora, horaEstimada: false, local: lugar },
+    moradia: lugar,
+    localDoDia: lugar,
+    faltando: hora ? [] : ['hora'],
+  });
+
+  it('não afirma Tara e Chandra Bala quando a Lua natal muda no dia', () => {
+    // Em 01/12/1990 a Lua trocou de signo e de nakshatra.
+    const semHora = calcularMapaNatal({ ...nascimento, hora: null }, agora);
+    const dia = diaVedicoDoPerfil(perfil(null), semHora, '2026-11-17')!;
+    expect(dia.pessoal).toBeNull();
+    expect(dia.pessoalIndisponivel).toBe('hora-de-nascimento');
+    expect(diaParaJson(dia).pessoalIndisponivel).toBe('hora-de-nascimento');
+  });
+
+  it('com a hora conhecida o dia pessoal continua calculado', () => {
+    const comHora = calcularMapaNatal({ ...nascimento, hora: '10:30' }, agora);
+    const dia = diaVedicoDoPerfil(perfil('10:30'), comHora, '2026-11-17')!;
+    expect(dia.pessoal).not.toBeNull();
+    expect(dia.pessoalIndisponivel).toBeNull();
+  });
+
+  it('sem hora, mas com a Lua parada num nakshatra e num signo, o dia pessoal é afirmado', () => {
+    let achou = false;
+    for (let i = 0; i < 400 && !achou; i += 1) {
+      const data = new Date(Date.UTC(1990, 0, 1 + i))
+        .toISOString()
+        .slice(0, 10);
+      const mapa = calcularMapaNatal(
+        { ...nascimento, data, hora: null },
+        agora
+      );
+      const p = mapa.possibilidades!;
+      if (p.nakshatrasDaLua.length === 1 && p.signosDaLua.length === 1) {
+        const dia = diaVedicoDoPerfil(perfil(null), mapa, '2026-11-17')!;
+        expect(dia.pessoal).not.toBeNull();
+        expect(dia.pessoalIndisponivel).toBeNull();
+        achou = true;
+      }
+    }
+    expect(achou).toBe(true);
   });
 });
