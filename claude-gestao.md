@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 24                       |
+| 🟡 Implementadas com validação pendente | 25                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5567,3 +5567,11 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Teste real com modelos locais em 17/11/2026 (sem gravar):** gemma3:1b no Ollama recusou o pneu pela fonte, falhou o formato em dois temas e produziu um verbete aceito pela conferência, porém incorreto ("Os Cinco Vayos" atribuídos à Bhagavad Gita). O Jan (Qwen2.5-VL-3B-Instruct, `127.0.0.1:1337`) respondeu HTTP 401 à chave informada, também por `curl` direto; não testado.
 - **Risco declarado:** a conferência do motor não verifica a veracidade do conteúdo; com modelos pequenos, verbetes errados podem entrar na base compartilhada. Mitigações existentes: marcação de verbete não conferido e remoção pela administração. Pendente decisão do titular entre publicação imediata e revisão antes de publicar.
 - **Limites:** sem modelo conectado nada é escrito; tema do domínio sem nenhum termo em comum com a base (ex.: "o que diz o ramayana") não dispara a escrita; o pré-filtro ainda deixa passar alguns temas fora do domínio (ex.: pneu), recusados depois pela fonte. Gates em Node v26.13.0 (Node 24 ausente na estação).
+
+### 199 · Aprovação dos verbetes escritos automaticamente antes de entrarem na base · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** decisão do titular em 17/11/2026, após o teste real da tarefa 198 em que o gemma3:1b produziu um verbete aceito pela conferência porém incorreto: os verbetes gerados só entram na base consultada pelo motor depois de aprovados por um administrador.
+- **Implementação real:** migration `071` acrescenta `status` (`pendente` ou `aprovado`), `aprovado_em` e `aprovado_por` a `lyra_verbetes_gerados`, com restrição que impede aprovação sem data e sem administrador; verbetes já gravados ficam pendentes. Todo verbete nasce pendente; o motor carrega somente os aprovados e ignora pendentes mesmo se recebidos. Rota administrativa: `GET ?situacao=pendente|aprovado`, `PATCH { id, acao: 'aprovar' }` (409 se já aprovado) e `DELETE ?id=` para recusar ou retirar. O texto do verbete aprovado informa o modelo que o escreveu e a aprovação pela administração.
+- **Arquivos:** `mysql/migrations/071_aprovacao_dos_verbetes_gerados.sql`, `src/lib/lyra/verbetes-gerados-servico.ts`, `verbetes-gerados.ts`, `responder.ts`, `conhecimento/tipos.ts`, `verbetes-gerados.test.ts`, `src/app/api/admin/lyra/verbetes/route.ts`, `verbetes.integration.test.ts`.
+- **Testes e resultados comprováveis:** testes unitários de pendente fora do motor e de aprovado consultado; 6 testes de integração contra o MySQL real (grava pendente, pendente fora do motor, banco recusa aprovação incompleta, permissões de anônimo e paciente, aprovação com 400/404/409 e registro do administrador, retirada).
+- **Pendente:** não existe tela de administração para revisar os verbetes; a revisão é feita pela rota. Gates em Node v26.13.0 (Node 24 ausente na estação).

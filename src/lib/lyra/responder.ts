@@ -116,8 +116,9 @@ const IDS_CURADOS = new Set(BASE_DE_CONHECIMENTO.map((verbete) => verbete.id));
  * gerado nunca substitui um curado de mesmo identificador.
  */
 export function definirVerbetesGerados(lista: readonly Verbete[]) {
+  // Só verbetes aprovados por um administrador chegam ao motor (tarefa 199).
   gerados = lista.filter(
-    (verbete) => verbete.gerado && !IDS_CURADOS.has(verbete.id)
+    (verbete) => verbete.gerado?.aprovadoEm && !IDS_CURADOS.has(verbete.id)
   );
   buscaComGerados = gerados.length
     ? criarBuscaPorTermos([...BASE_DE_CONHECIMENTO, ...gerados])
@@ -170,7 +171,7 @@ export function textoDoVerbete(verbete: Verbete) {
     `Fonte: ${verbete.fonte}.`,
     ...(verbete.gerado
       ? [
-          `Verbete escrito automaticamente pela Lyra com ${verbete.gerado.modelo} (${verbete.gerado.provedor}); ainda sem conferência humana.`,
+          `Verbete escrito automaticamente pela Lyra com ${verbete.gerado.modelo} (${verbete.gerado.provedor}) e aprovado pela administração.`,
         ]
       : []),
   ].join('\n');

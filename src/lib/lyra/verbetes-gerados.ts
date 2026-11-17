@@ -288,6 +288,8 @@ export function verbeteDaBase(
       provedor: autor.provedor,
       modelo: autor.modelo,
       criadoEm: criadoEm.toISOString(),
+      // Todo verbete escrito automaticamente nasce pendente de aprovação.
+      aprovadoEm: null,
     },
   };
 }

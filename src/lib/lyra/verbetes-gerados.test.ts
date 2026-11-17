@@ -346,12 +346,23 @@ describe('Escrita do verbete pela ordem de modelos', () => {
 });
 
 describe('Motor com verbetes escritos automaticamente', () => {
-  const gerado: Verbete = verbeteDaBase(
+  const pendente: Verbete = verbeteDaBase(
     { ...PRANAS, palavrasChave: ['vayus', 'cinco pranas'] },
     { provedor: 'Ollama', modelo: 'modelo-local' },
     new Date('2026-11-16T12:00:00Z')
   );
+  const gerado: Verbete = {
+    ...pendente,
+    gerado: { ...pendente.gerado!, aprovadoEm: '2026-11-17T12:00:00.000Z' },
+  };
   afterEach(() => definirVerbetesGerados([]));
+
+  it('nasce pendente e, pendente, não chega ao motor', () => {
+    expect(pendente.gerado?.aprovadoEm).toBeNull();
+    definirVerbetesGerados([pendente]);
+    expect(baseAtual()).toHaveLength(BASE_DE_CONHECIMENTO.length);
+    expect(encontrarVerbete('o que são os cinco vayus')).toBeNull();
+  });
 
   it('encontra o gerado e o marca como escrito automaticamente', () => {
     expect(encontrarVerbete('o que são os cinco vayus')).toBeNull();
@@ -359,7 +370,7 @@ describe('Motor com verbetes escritos automaticamente', () => {
     expect(baseAtual()).toHaveLength(BASE_DE_CONHECIMENTO.length + 1);
     expect(encontrarVerbete('o que são os cinco vayus')?.id).toBe(gerado.id);
     expect(textoDoVerbete(gerado)).toMatch(
-      /escrito automaticamente pela Lyra com modelo-local \(Ollama\); ainda sem conferência humana/
+      /escrito automaticamente pela Lyra com modelo-local \(Ollama\) e aprovado pela administração/
     );
     expect(textoDoVerbete(BASE_DE_CONHECIMENTO[0])).not.toMatch(
       /automaticamente/
@@ -370,7 +381,8 @@ describe('Motor com verbetes escritos automaticamente', () => {
     const disputa: Verbete = { ...gerado, palavrasChave: ['vedanta'] };
     const mesmoId: Verbete = { ...gerado, id: 'vedanta' };
     const semMarca: Verbete = { ...gerado, id: 'sem-marca', gerado: undefined };
-    definirVerbetesGerados([disputa, mesmoId, semMarca]);
+    const naoAprovado: Verbete = { ...pendente, id: 'nao-aprovado' };
+    definirVerbetesGerados([disputa, mesmoId, semMarca, naoAprovado]);
     expect(baseAtual()).toHaveLength(BASE_DE_CONHECIMENTO.length + 1);
     expect(encontrarVerbete('o que é vedanta')?.id).toBe('vedanta');
     expect(encontrarVerbete('o que é vedanta')?.gerado).toBeUndefined();

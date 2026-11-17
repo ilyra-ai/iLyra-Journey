@@ -25,7 +25,14 @@ export interface Verbete {
   fonte: string;
   /**
    * Presente só nos verbetes escritos automaticamente pelo modelo de IA
-   * conectado (tarefa 198); os curados não têm este campo.
+   * conectado (tarefa 198); os curados não têm este campo. `aprovadoEm` é
+   * `null` enquanto o verbete aguarda a aprovação de um administrador
+   * (tarefa 199); o motor só consulta os aprovados.
    */
-  gerado?: { provedor: string; modelo: string; criadoEm: string };
+  gerado?: {
+    provedor: string;
+    modelo: string;
+    criadoEm: string;
+    aprovadoEm: string | null;
+  };
 }
