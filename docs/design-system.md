@@ -52,13 +52,16 @@ frio (matiz 346) justamente para não se confundir com o coral de destaque.
 
 ## Marca e ícones
 
-- Componente único [`MarcaLyra`](../src/components/marca/MarcaLyra.tsx): logo
-  oficial (`src/assets/marca/lyra-logo.png`, fundo convertido em
-  transparência) usado na sidebar, menu do celular, landing (cabeçalho e
-  rodapé), login, tela de carregamento e erro global. É decorativo (`alt=""`)
+- Componente único [`MarcaLyra`](../src/components/marca/MarcaLyra.tsx): o
+  símbolo da identidade celestial (`src/assets/celestial/simbolo.png`, "L"
+  dourado abraçando o coração sobre azul-noite, o mesmo da tela de
+  carregamento e do favicon) num ladrilho arredondado, igual nos temas claro
+  e escuro. Aparece no chat (cabeçalho, abertura, balões e "digitando"),
+  sidebar, busca de páginas e páginas de erro. É decorativo (`alt=""`)
   quando o nome "lyra" aparece ao lado.
-- O logo foi desenhado sobre branco; no tema escuro os brilhos sumiriam, então
-  a marca fica num ladrilho branco arredondado (mesmo recurso do favicon).
+- O logo anterior (teal e coral, `src/assets/marca/lyra-logo.png`) saiu dos
+  componentes em 17/11/2026 e continua só como fonte dos ícones de instalação
+  gerados abaixo, ainda não redesenhados.
 - Ícones gerados a partir do mesmo arquivo: `src/app/favicon.ico` (16, 32,
   48 e 64 px), `src/app/icon.png` (192 px), `src/app/apple-icon.png` (180 px,
   fundo branco) e, para o manifesto (`src/app/manifest.ts`),

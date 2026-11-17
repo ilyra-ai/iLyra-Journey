@@ -1,14 +1,14 @@
 import Image from 'next/image';
 
-import logoDaLyra from '@/assets/marca/lyra-logo.png';
+import simboloDaLyra from '@/assets/celestial/simbolo.png';
 import { cn } from '@/lib/utils';
 
 /*
-  Marca oficial da Lyra (tarefa 47): o "L" em teal abraçando o coração coral.
-  O arquivo é o logo oficial com o fundo branco convertido em transparência.
-  Como o desenho original foi feito sobre branco, seus brilhos somem sobre
-  fundo escuro; no tema escuro a marca fica num ladrilho claro arredondado,
-  o mesmo usado no favicon, para manter as cores reais do logo.
+  Marca da Lyra na identidade celestial aprovada: o "L" dourado abraçando o
+  coração, sobre o azul-noite do próprio símbolo (o mesmo da tela de
+  carregamento e do favicon). O símbolo já traz o fundo, então a marca é um
+  ladrilho arredondado igual nos temas claro e escuro, sem o fundo branco
+  que o logo anterior (teal e coral) precisava no tema escuro.
 */
 
 interface MarcaLyraProps {
@@ -33,15 +33,13 @@ export function MarcaLyra({
   return (
     <span
       className={cn(
-        'inline-flex shrink-0 items-center justify-center rounded-[22%] dark:bg-white',
+        'inline-flex shrink-0 items-center justify-center overflow-hidden rounded-[22%]',
         className
       )}
       style={{ width: tamanho, height: tamanho }}
     >
-      {/* O respiro do ladrilho escuro vem de `scale`, e não de `padding` em
-          %, que seria calculado sobre a largura do elemento pai. */}
       <Image
-        src={logoDaLyra}
+        src={simboloDaLyra}
         alt={rotulo ?? ''}
         sizes={tamanho}
         // `priority` está obsoleto no Next 16 e gerava dois avisos no modo
@@ -50,7 +48,7 @@ export function MarcaLyra({
         // ficava oculta). Carga imediata com alta prioridade, sem preload.
         loading={prioridade ? 'eager' : 'lazy'}
         fetchPriority={prioridade ? 'high' : undefined}
-        className="h-full w-full object-contain dark:scale-[0.86]"
+        className="h-full w-full object-cover"
       />
     </span>
   );
