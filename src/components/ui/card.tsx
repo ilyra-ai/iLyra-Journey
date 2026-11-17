@@ -47,6 +47,7 @@ const CardTitle = React.forwardRef<
 >(({ className, as: Elemento = 'h3', ...props }, ref) => (
   <Elemento
     ref={ref}
+    data-slot="card-title"
     className={cn(
       'font-display text-lg font-semibold leading-tight tracking-tight text-card-foreground',
       className

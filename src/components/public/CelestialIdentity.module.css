@@ -40,6 +40,14 @@
   letter-spacing: normal;
 }
 
+/* Título de cartão em h2 recebe a fonte manuscrita acima; no tamanho de
+   texto do CardTitle (18 px) ela parecia texto miúdo. Aqui ele ganha
+   proporção de título. Os h3 seguem na fonte do texto. */
+.theme h2[data-slot='card-title'] {
+  font-size: 1.625rem;
+  line-height: 1.25;
+}
+
 .theme strong,
 .theme b,
 .theme em,

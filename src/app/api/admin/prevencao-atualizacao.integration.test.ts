@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterAll, describe, expect, it } from 'vitest';
 
 import type { EloDaCadeia } from '@/lib/ai/cadeia-de-modelos';
 import {
@@ -134,6 +134,14 @@ function dados(nome: string, mudancas: Record<string, unknown> = {}) {
 }
 
 describe('Atualização dos exames médicos pelo modelo de IA', () => {
+  // Os exames criados aqui (e os aprovados pelo teste) saem do catálogo no
+  // fim: o banco de teste é compartilhado e outros arquivos leem o catálogo.
+  afterAll(async () => {
+    await executeStatement(
+      "DELETE FROM prevencao_recomendacoes WHERE id LIKE 't211-%'"
+    );
+  });
+
   it('só administradores consultam, pedem e decidem', async () => {
     expect((await chamar(GET, { usuario: null })).status).toBe(401);
     const pessoa = await criarUsuario();
