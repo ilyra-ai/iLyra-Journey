@@ -255,3 +255,29 @@ describe('Leitura de nascimento além do Círculo Polar', () => {
     expect(mapaParaJson(mapa).limiteDoLagna).toBe('latitude-polar');
   });
 });
+
+describe('Leitura com hora no horário de verão', () => {
+  it('avisa a hora repetida e a inexistente', () => {
+    const sp = {
+      latitude: -23.5475,
+      longitude: -46.6361,
+      fuso: 'America/Sao_Paulo',
+    };
+    const repetida = lerMapaComoLyra(
+      calcularMapaNatal({ ...sp, data: '1990-02-10', hora: '23:30' }, agora)
+    );
+    expect(repetida.avisoDaHora).toMatch(/aconteceu duas vezes/);
+    const inexistente = lerMapaComoLyra(
+      calcularMapaNatal({ ...sp, data: '1990-10-21', hora: '00:30' }, agora)
+    );
+    expect(inexistente.avisoDaHora).toMatch(/não existiu naquele dia/);
+    // Hora estimada e repetida: os dois avisos.
+    const ambos = lerMapaComoLyra(
+      calcularMapaNatal(
+        { ...sp, data: '1990-02-10', hora: '23:30', horaEstimada: true },
+        agora
+      )
+    );
+    expect(ambos.avisoDaHora).toMatch(/duas vezes[\s\S]*estimada por você/);
+  });
+});

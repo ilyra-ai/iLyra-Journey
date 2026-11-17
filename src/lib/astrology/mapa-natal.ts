@@ -9,7 +9,7 @@ import {
   type Posicao,
   REGENTE_DO_SIGNO,
 } from './sideral';
-import { fusoValido, localParaUtc } from './tempo';
+import { fusoValido, localParaUtc, ocorrenciasLocais } from './tempo';
 import type { Intervalo } from './panchang';
 import {
   calcularVimshottari,
@@ -73,6 +73,13 @@ export interface MapaNatal {
    * além do Círculo Polar. `null` nos demais casos.
    */
   limiteDoLagna: 'latitude-polar' | null;
+  /**
+   * A hora informada caiu numa mudança de horário de verão ou de fuso:
+   * `repetida` (ocorreu duas vezes; o mapa usa a primeira) ou `inexistente`
+   * (não existiu; o mapa usa o relógio adiantado). O perfil guarda só a hora
+   * local, então o motor declara a escolha em vez de escondê-la.
+   */
+  horarioAmbiguo: 'repetida' | 'inexistente' | null;
   precisaoDaHora: PrecisaoDaHora;
   /** Dia civil de nascimento (só com a hora desconhecida). */
   diaDeNascimento: Intervalo | null;
@@ -198,6 +205,19 @@ export function conferirNascimento(nascimento: DadosDeNascimento) {
     throw new RangeError('Local de nascimento inválido.');
 }
 
+function horarioAmbiguo(
+  data: string,
+  hora: string,
+  fuso: string
+): MapaNatal['horarioAmbiguo'] {
+  const ocorrencias = ocorrenciasLocais(data, hora, fuso).length;
+  return ocorrencias === 0
+    ? 'inexistente'
+    : ocorrencias > 1
+      ? 'repetida'
+      : null;
+}
+
 export function calcularMapaNatal(
   nascimento: DadosDeNascimento,
   agora: Date = new Date()
@@ -240,6 +260,9 @@ export function calcularMapaNatal(
     nascimentoUtc: instante,
     horaConhecida,
     limiteDoLagna: horaConhecida && polar ? 'latitude-polar' : null,
+    horarioAmbiguo: horaConhecida
+      ? horarioAmbiguo(nascimento.data, nascimento.hora!, nascimento.fuso)
+      : null,
     precisaoDaHora: !horaConhecida
       ? 'desconhecida'
       : nascimento.horaEstimada

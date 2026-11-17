@@ -14,6 +14,7 @@ export function mapaParaJson(mapa: MapaNatal) {
     nascimentoUtc: mapa.nascimentoUtc.toISOString(),
     horaConhecida: mapa.horaConhecida,
     limiteDoLagna: mapa.limiteDoLagna,
+    horarioAmbiguo: mapa.horarioAmbiguo,
     precisaoDaHora: mapa.precisaoDaHora,
     // Com a hora desconhecida: o que é possível no dia de nascimento.
     possibilidades: mapa.possibilidades

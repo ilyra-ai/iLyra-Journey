@@ -123,3 +123,37 @@ export function horaLocal(instante: Date, fuso: string) {
   const p = partesLocais(instante, fuso);
   return `${String(p.hora).padStart(2, '0')}:${String(p.minuto).padStart(2, '0')}`;
 }
+
+/**
+ * Instantes UTC em que o relógio local do fuso mostrou `data` e `hora`
+ * ("HH:mm"), em ordem. Um instante: hora comum. Dois: hora repetida no fim
+ * do horário de verão. Nenhum: hora que não existiu no início do horário de
+ * verão ou numa mudança de fuso. Usado pelo mapa védico e pelo ocidental.
+ */
+export function ocorrenciasLocais(
+  data: string,
+  hora: string,
+  fuso: string
+): number[] {
+  const base = localParaUtc(data, hora, fuso).getTime();
+  const [ano, mes, dia] = data.split('-').map(Number);
+  const [h, m] = hora.split(':').map(Number);
+  const candidatos: number[] = [];
+  for (
+    let deslocamento = -3 * 3_600_000;
+    deslocamento <= 3 * 3_600_000;
+    deslocamento += 15 * 60_000
+  ) {
+    const valor = base + deslocamento;
+    const p = partesLocais(new Date(valor), fuso);
+    if (
+      p.ano === ano &&
+      p.mes === mes &&
+      p.dia === dia &&
+      p.hora === h &&
+      p.minuto === m
+    )
+      candidatos.push(valor);
+  }
+  return candidatos;
+}

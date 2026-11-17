@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 27                       |
+| 🟡 Implementadas com validação pendente | 28                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5590,3 +5590,10 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Consumidores ajustados:** leitura da Lyra (explica o limite sem pedir a hora), serialização, base natal persistida (versão 4), D9/D10 e cartão do mapa ("Indisponível além do Círculo Polar").
 - **Arquivos:** `src/lib/astrology/sideral.ts`, `mapa-natal.ts`, `persistencia-natal.ts`, `serializacao.ts`, `hora-de-nascimento.ts`, `inovacoes/divisionais.ts`, `src/lib/lyra/leitura-do-mapa.ts`, `src/components/profile/MapaVedicoCard.tsx` e testes.
 - **Testes:** 4 testes novos (Tromsø 69,6° N sem Lagna e com planetas e dasha; 66,5° com Lagna; sem hora sem o limite; leitura e serialização). Unitários 1143, integração 646, lint, tipos, formato e build aprovados em Node v26.13.0. O cartão não foi conferido no navegador.
+
+### 202 · Hora de nascimento no horário de verão declarada no mapa védico · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** achado nº 3 da análise forense do motor; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
+- **Causa raiz corrigida:** para uma hora repetida no fim do horário de verão, o mapa védico escolhia a primeira ocorrência em silêncio, e para uma hora inexistente adiantava o relógio sem avisar; o ocidental recusava as duas. Como o perfil guarda só a hora local, o védico mantém a escolha, mas agora a declara em `horarioAmbiguo` (`repetida` ou `inexistente`), e a leitura da Lyra explica o efeito no Ascendente, nas casas e nas datas dos períodos. A detecção passou a ser única (`ocorrenciasLocais` em `tempo.ts`), usada pelo védico e pelo ocidental.
+- **Arquivos:** `src/lib/astrology/tempo.ts`, `tropical.ts`, `mapa-natal.ts`, `persistencia-natal.ts` (base natal versão 5), `serializacao.ts`, `src/lib/lyra/leitura-do-mapa.ts` e testes.
+- **Testes:** 4 testes novos (hora repetida e inexistente em São Paulo, 1990, com o instante usado; hora comum e desconhecida; avisos na leitura, inclusive com hora estimada). Unitários 1147, integração 646, lint, tipos, formato e build aprovados em Node v26.13.0.

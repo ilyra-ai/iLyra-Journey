@@ -139,7 +139,22 @@ function incertezaDaLua(mapa: MapaNatal) {
   };
 }
 
+const AVISO_DO_HORARIO = {
+  repetida:
+    'A hora de nascimento informada aconteceu duas vezes naquele dia, no fim do horário de verão. O mapa usa a primeira vez; se você nasceu na segunda, o Ascendente, as casas e as datas dos períodos mudam.',
+  inexistente:
+    'A hora de nascimento informada não existiu naquele dia: o relógio foi adiantado pelo início do horário de verão. O mapa usa a hora já adiantada; confira a hora na certidão de nascimento.',
+} as const;
+
 function avisoDaHora(mapa: MapaNatal): string | null {
+  const doHorario = mapa.horarioAmbiguo
+    ? AVISO_DO_HORARIO[mapa.horarioAmbiguo]
+    : null;
+  const daPrecisao = avisoDaPrecisao(mapa);
+  return [doHorario, daPrecisao].filter(Boolean).join(' ') || null;
+}
+
+function avisoDaPrecisao(mapa: MapaNatal): string | null {
   if (mapa.precisaoDaHora === 'estimada') {
     return 'A hora de nascimento deste mapa foi estimada por você, pelo horário que escolheu como o mais parecido com você. O Ascendente, as casas e o período de vida são aproximados. Se você encontrar a hora na sua certidão de nascimento, informe-a no perfil.';
   }

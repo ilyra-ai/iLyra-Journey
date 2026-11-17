@@ -143,3 +143,38 @@ describe('Ascendente védico além do Círculo Polar', () => {
     expect(mapa.lagna).toBeNull();
   });
 });
+
+describe('Hora de nascimento no horário de verão', () => {
+  const sp = {
+    latitude: -23.5475,
+    longitude: -46.6361,
+    fuso: 'America/Sao_Paulo',
+  };
+  const agora = new Date('2026-11-17T12:00:00Z');
+  it('declara a hora repetida e usa a primeira ocorrência', () => {
+    const mapa = calcularMapaNatal(
+      { ...sp, data: '1990-02-10', hora: '23:30' },
+      agora
+    );
+    expect(mapa.horarioAmbiguo).toBe('repetida');
+    expect(mapa.nascimentoUtc.toISOString()).toBe('1990-02-11T01:30:00.000Z');
+  });
+  it('declara a hora inexistente e usa o relógio adiantado', () => {
+    const mapa = calcularMapaNatal(
+      { ...sp, data: '1990-10-21', hora: '00:30' },
+      agora
+    );
+    expect(mapa.horarioAmbiguo).toBe('inexistente');
+    expect(mapa.nascimentoUtc.toISOString()).toBe('1990-10-21T03:30:00.000Z');
+  });
+  it('hora comum e hora desconhecida não têm ambiguidade', () => {
+    expect(
+      calcularMapaNatal({ ...sp, data: '1990-12-01', hora: '10:30' }, agora)
+        .horarioAmbiguo
+    ).toBeNull();
+    expect(
+      calcularMapaNatal({ ...sp, data: '1990-02-10', hora: null }, agora)
+        .horarioAmbiguo
+    ).toBeNull();
+  });
+});

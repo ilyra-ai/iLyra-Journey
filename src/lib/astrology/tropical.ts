@@ -8,7 +8,7 @@ import {
 } from 'astronomy-engine';
 import { cidadePorId } from '@/lib/geo/cidades';
 import { SIGNOS, longitudeTropical, normalizarGraus } from './sideral';
-import { fusoValido, localParaUtc, partesLocais } from './tempo';
+import { fusoValido, ocorrenciasLocais } from './tempo';
 
 const HORA = 3_600_000;
 const DIA = 24 * HORA;
@@ -123,26 +123,7 @@ function instanteLocal(
   if (!/^([01]\d|2[0-3]):[0-5]\d$/.test(hora))
     throw new RangeError('Hora inválida; informe HH:mm.');
   if (!fusoValido(fuso)) throw new RangeError('Fuso IANA indisponível.');
-  const base = localParaUtc(data, hora, fuso).getTime();
-  const candidatos: number[] = [];
-  const [ano, mes, dia] = data.split('-').map(Number);
-  const [h, m] = hora.split(':').map(Number);
-  for (
-    let deslocamento = -3 * HORA;
-    deslocamento <= 3 * HORA;
-    deslocamento += 15 * 60_000
-  ) {
-    const valor = base + deslocamento;
-    const p = partesLocais(new Date(valor), fuso);
-    if (
-      p.ano === ano &&
-      p.mes === mes &&
-      p.dia === dia &&
-      p.hora === h &&
-      p.minuto === m
-    )
-      candidatos.push(valor);
-  }
+  const candidatos = ocorrenciasLocais(data, hora, fuso);
   if (!candidatos.length)
     throw new RangeError(
       'Esse horário local não existiu devido à mudança de fuso ou horário de verão.'
