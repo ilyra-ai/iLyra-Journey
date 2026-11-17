@@ -24,7 +24,8 @@ const PALAVRAS_VAZIAS = new Set(
     'fazer faz faco devo deve posso pode quero saber sobre mais menos muito ja ' +
     'nao sim ao aos pelo pela entre ate tambem so cada todo toda tudo algo ' +
     'alguma algum alguns nunca sempre hoje ontem amanha ajuda ajudar explica ' +
-    'conta diz dizem melhor coisa'
+    'conta diz dizem melhor coisa pergunta perguntas perguntar resposta ' +
+    'responder outra outro outras outros'
   ).split(' ')
 );
 

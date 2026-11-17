@@ -78,11 +78,13 @@ function contem(texto: string, termo: string) {
   );
 }
 
-/** Verbete mais específico para a pergunta (termo mais longo encontrado). */
-export function buscarVerbete(pergunta: string): Verbete | null {
+function porPalavraChave(
+  verbetes: readonly Verbete[],
+  pergunta: string
+): Verbete | null {
   const texto = normalizar(pergunta);
   let melhor: { verbete: Verbete; peso: number } | null = null;
-  for (const verbete of BASE_DE_CONHECIMENTO) {
+  for (const verbete of verbetes) {
     for (const chave of verbete.palavrasChave) {
       if (contem(texto, chave)) {
         const peso = chave.length;
@@ -93,19 +95,68 @@ export function buscarVerbete(pergunta: string): Verbete | null {
   return melhor?.verbete ?? null;
 }
 
+/**
+ * Verbete curado mais específico para a pergunta (termo mais longo
+ * encontrado). Só a base curada: é o passo usado dentro da leitura dos mapas,
+ * que não muda com os verbetes escritos automaticamente.
+ */
+export function buscarVerbete(pergunta: string): Verbete | null {
+  return porPalavraChave(BASE_DE_CONHECIMENTO, pergunta);
+}
+
 const buscaPorTermos = criarBuscaPorTermos(BASE_DE_CONHECIMENTO);
 
+/** Verbetes escritos automaticamente e carregados da base (tarefa 198). */
+let gerados: readonly Verbete[] = [];
+let buscaComGerados = buscaPorTermos;
+const IDS_CURADOS = new Set(BASE_DE_CONHECIMENTO.map((verbete) => verbete.id));
+
 /**
- * Verbete ligado à pergunta: primeiro pela palavra-chave exata; sem ela, pela
- * busca por termos (radicais e pesos), que entende perguntas em linguagem do
- * dia a dia e recusa o que não tem verbete. A palavra-chave vem primeiro
- * porque os radicais confundem termos próximos ("vedanta" e "vedangas").
- * Usada quando nenhuma resposta mais específica existe e para dar contexto
- * aos modelos conectados.
+ * Substitui os verbetes escritos automaticamente que o motor consulta. Um
+ * gerado nunca substitui um curado de mesmo identificador.
+ */
+export function definirVerbetesGerados(lista: readonly Verbete[]) {
+  gerados = lista.filter(
+    (verbete) => verbete.gerado && !IDS_CURADOS.has(verbete.id)
+  );
+  buscaComGerados = gerados.length
+    ? criarBuscaPorTermos([...BASE_DE_CONHECIMENTO, ...gerados])
+    : buscaPorTermos;
+}
+
+/**
+ * A pergunta compartilha algum termo com o vocabulário da base, mesmo abaixo
+ * da nota mínima: indica um assunto do domínio ainda sem verbete.
+ */
+export function temAssuntoNaBase(pergunta: string) {
+  return buscaComGerados.melhor(pergunta) !== null;
+}
+
+/** Base que o motor consulta agora: curados e, depois, gerados. */
+export function baseAtual(): readonly Verbete[] {
+  return gerados.length
+    ? [...BASE_DE_CONHECIMENTO, ...gerados]
+    : BASE_DE_CONHECIMENTO;
+}
+
+/**
+ * Verbete ligado à pergunta. Ordem: palavra-chave exata da base curada; busca
+ * por termos na base curada; palavra-chave dos verbetes escritos
+ * automaticamente; busca por termos na base inteira. A palavra-chave vem
+ * primeiro porque os radicais confundem termos próximos ("vedanta" e
+ * "vedangas"), e o curado sempre prevalece sobre o gerado. Usada quando
+ * nenhuma resposta mais específica existe e para dar contexto aos modelos
+ * conectados.
  */
 export function encontrarVerbete(pergunta: string): Verbete | null {
   return (
-    buscarVerbete(pergunta) ?? buscaPorTermos.buscar(pergunta)?.verbete ?? null
+    buscarVerbete(pergunta) ??
+    buscaPorTermos.buscar(pergunta)?.verbete ??
+    (gerados.length
+      ? (porPalavraChave(gerados, pergunta) ??
+        buscaComGerados.buscar(pergunta)?.verbete ??
+        null)
+      : null)
   );
 }
 
@@ -117,6 +168,11 @@ export function textoDoVerbete(verbete: Verbete) {
     ...verbete.pontos.map((p) => `- ${p}`),
     `Na prática: ${verbete.pratica}`,
     `Fonte: ${verbete.fonte}.`,
+    ...(verbete.gerado
+      ? [
+          `Verbete escrito automaticamente pela Lyra com ${verbete.gerado.modelo} (${verbete.gerado.provedor}); ainda sem conferência humana.`,
+        ]
+      : []),
   ].join('\n');
 }
 

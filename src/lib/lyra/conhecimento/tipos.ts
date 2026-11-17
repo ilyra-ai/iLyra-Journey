@@ -23,4 +23,9 @@ export interface Verbete {
   palavrasChave: string[];
   /** Fonte tradicional ou documento de origem. */
   fonte: string;
+  /**
+   * Presente só nos verbetes escritos automaticamente pelo modelo de IA
+   * conectado (tarefa 198); os curados não têm este campo.
+   */
+  gerado?: { provedor: string; modelo: string; criadoEm: string };
 }

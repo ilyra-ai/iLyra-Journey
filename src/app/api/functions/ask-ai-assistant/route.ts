@@ -17,7 +17,7 @@ import {
   solicitouCriacaoDeImagem,
 } from '@/lib/chat/pedido-de-imagem';
 import { HttpError } from '@/lib/http-error';
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import {
@@ -26,12 +26,27 @@ import {
   type AiSkillDocument,
 } from '@/lib/ai/chat-engine';
 import {
+  cadeiaTemModelo,
   type EloDaCadeia,
   gerarNaCadeia,
   montarCadeia,
   somenteLocais,
 } from '@/lib/ai/cadeia-de-modelos';
 import { lerConfiguracaoDeIa } from '@/lib/ai/provedores-da-plataforma';
+import {
+  baseAtual,
+  encontrarVerbete,
+  temAssuntoNaBase,
+} from '@/lib/lyra/responder';
+import {
+  escreverVerbeteNaCadeia,
+  perguntaPedeVerbete,
+} from '@/lib/lyra/verbetes-gerados';
+import {
+  gravarVerbeteGerado,
+  sincronizarVerbetesGerados,
+} from '@/lib/lyra/verbetes-gerados-servico';
+import { exigirDentroDoLimite } from '@/lib/security/rate-limit';
 import { getAstrologicalContext } from '@/lib/astrology/engine';
 import {
   concluirTurno,
@@ -351,6 +366,14 @@ export async function POST(request: Request) {
           respostaOcidental = erro.message;
         }
       }
+      // Verbetes escritos automaticamente (tarefa 198): o motor consulta os
+      // gravados por qualquer conversa. Uma falha ao ler mantém os já
+      // carregados e fica registrada; a resposta segue.
+      try {
+        await sincronizarVerbetesGerados();
+      } catch (erro) {
+        registrarErroInterno('chat: verbetes gerados', erro);
+      }
       const fallbackResponse =
         tratamento.confirmacao ??
         respostaOcidental ??
@@ -465,6 +488,52 @@ export async function POST(request: Request) {
                 ? 'o modelo desrespeitou a forma de tratamento escolhida pelo titular'
                 : null),
           });
+
+      // Sem verbete para um tema geral do domínio, o modelo conectado escreve
+      // um, depois da resposta, com a mesma ordem de modelos e as mesmas
+      // restrições de privacidade desta conversa. O verbete serve às próximas
+      // perguntas de qualquer conta; a pergunta não é gravada.
+      const perguntaDoTema = pedidoDeAnalise(query).pergunta;
+      if (
+        comVedico &&
+        !perguntaOcidental &&
+        !memoriaPrivada &&
+        !tratamento.confirmacao &&
+        arquivos.length === 0 &&
+        cadeiaTemModelo(cadeia) &&
+        perguntaPedeVerbete(perguntaDoTema, {
+          encontrar: encontrarVerbete,
+          temAssunto: temAssuntoNaBase,
+        })
+      ) {
+        const proibidos = [
+          profile?.first_name,
+          profile?.nickname,
+          session.user.email,
+          session.user.email?.split('@')[0],
+        ].filter((valor): valor is string => Boolean(valor));
+        after(async () => {
+          try {
+            await exigirDentroDoLimite(
+              { escopo: 'escrever-verbete', limite: 10, janelaSegundos: 3600 },
+              session.user.id
+            );
+            const gerado = await escreverVerbeteNaCadeia({
+              cadeia,
+              pergunta: perguntaDoTema,
+              proibidos,
+              base: baseAtual(),
+            });
+            if (gerado.tipo === 'verbete') {
+              await gravarVerbeteGerado(gerado.verbete, gerado.autor);
+            }
+          } catch (erro) {
+            // O limite por hora é esperado e não é falha.
+            if (erro instanceof HttpError && erro.statusCode === 429) return;
+            registrarErroInterno('chat: escrever verbete', erro);
+          }
+        });
+      }
 
       const pedidoDeImagem = comImagens
         ? pedidoDeImagemParaConversa(query, mapaNatal)
