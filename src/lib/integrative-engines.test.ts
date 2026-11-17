@@ -244,3 +244,64 @@ describe('koshas', () => {
     expect(ausente).toBeGreaterThan(ruim);
   });
 });
+
+describe('textos do Índice de Coerência Quântica', () => {
+  const PROIBIDO =
+    /sistema nervoso (aut[ôo]nomo )?(apresenta|est[áa])|campo bio-energ|qu[âa]ntico-biol|perfeita fase|decis[õo]es importantes/i;
+
+  it('não afirma diagnóstico nem efeito cósmico em nenhum nível', () => {
+    const casos = [
+      {},
+      {
+        hrv_ms: 60,
+        resting_heart_rate: 55,
+        spo2_average: 98,
+        deep_sleep_minutes: 100,
+        rem_sleep_minutes: 100,
+        meditation_minutes: 25,
+        mood_score: 5,
+        sleep_regularity_index: 90,
+        respiratory_rate: 14,
+        stress_score: 20,
+        sleep_duration_minutes: 480,
+      },
+      {
+        hrv_ms: 10,
+        resting_heart_rate: 100,
+        spo2_average: 88,
+        deep_sleep_minutes: 5,
+        rem_sleep_minutes: 5,
+        meditation_minutes: 0,
+        mood_score: 1,
+        sleep_regularity_index: 10,
+        respiratory_rate: 26,
+        stress_score: 95,
+        sleep_duration_minutes: 120,
+      },
+    ];
+    const niveis = new Set<string>();
+    for (const caso of casos) {
+      const metricas = {
+        hrv_ms: null,
+        resting_heart_rate: null,
+        sleep_duration_minutes: null,
+        deep_sleep_minutes: null,
+        rem_sleep_minutes: null,
+        spo2_average: null,
+        respiratory_rate: null,
+        stress_score: null,
+        mood_score: null,
+        meditation_minutes: null,
+        sleep_regularity_index: null,
+        ...caso,
+      };
+      const resultado = calculateQuantumCoherence(metricas);
+      niveis.add(resultado.level);
+      expect(resultado.description).not.toMatch(PROIBIDO);
+      expect(resultado.description).toMatch(/não é uma avaliação de saúde/);
+      expect(resultado.recommendation).not.toMatch(PROIBIDO);
+      expect(resultado.recommendation).not.toMatch(/significativamente/);
+    }
+    expect(niveis.size).toBeGreaterThan(1);
+  });
+});

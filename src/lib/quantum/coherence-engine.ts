@@ -1,12 +1,17 @@
 /**
  * Motor de Coerência Quântica — Lyra MetaCare
  *
- * Calcula o Índice de Coerência Quântica (ICQ): a convergência matemática
- * entre o estado biológico vibracional do usuário e os ciclos cósmicos do momento.
+ * Calcula o Índice de Coerência Quântica (ICQ): uma nota de 0 a 100 que
+ * combina os sinais registrados pela pessoa (HRV, frequência cardíaca, SpO₂,
+ * sono, respiração, meditação, humor e regularidade) com uma camada
+ * simbólica da fase lunar. O nome vem do método Lyra; "quântico" aqui é
+ * metáfora, não física.
  *
- * Fundamentação: aplica-se o princípio de ressonância — quando os ritmos
- * biológicos (HRV, sono, respiração) estão em fase com os ciclos lunares
- * e nakshatras, a coerência é máxima.
+ * Limite declarado (tarefa 204): o índice resume os registros; não mede o
+ * sistema nervoso, não diagnostica e não comprova relação entre a Lua e o
+ * corpo. A componente "alinhamento cósmico" é simbólica: a fase lunar não
+ * mede sono, estresse ou capacidade física (regra do motor em
+ * `modelos-como-lyra.ts`).
  *
  * O ICQ varia de 0 a 100:
  * - 0-30: Dissonância (desalinhamento bio-cósmico)
@@ -98,8 +103,9 @@ function calculateBioResonance(metrics: CoherenceMetricSnapshot): number {
 }
 
 /**
- * Alinhamento Cósmico: mede a ressonância entre biomarcadores
- * e o ciclo lunar/nakshatra atual.
+ * Alinhamento Cósmico (simbólico): pontua se os registros do dia combinam
+ * com o tema tradicional da fase lunar (recolhimento na Lua Nova, expansão na
+ * Cheia). É uma leitura simbólica, sem efeito fisiológico comprovado.
  */
 function calculateCosmicAlignment(
   metrics: CoherenceMetricSnapshot,
@@ -226,26 +232,28 @@ function buildCoherenceInsight(
 
   const weakLabels: Record<string, string> = {
     bioResonance: 'ressonância biológica (HRV, FC, SpO₂)',
-    cosmicAlignment: 'alinhamento com os ciclos cósmicos',
+    cosmicAlignment: 'alinhamento simbólico com a fase lunar',
     consciousnessDepth:
       'profundidade de consciência (sono profundo, meditação)',
     rhythmicCoherence: 'coerência rítmica (regularidade circadiana)',
   };
 
+  const limite =
+    'O índice resume os sinais registrados e uma leitura simbólica da Lua; não é uma avaliação de saúde nem do sistema nervoso.';
   const descriptions: Record<string, string> = {
-    dissonância:
-      'Seu campo bio-energético está em desarmonia com os ritmos cósmicos do momento. O sistema nervoso autônomo apresenta sinais de sobrecarga ou irregularidade.',
-    transição:
-      'Você está em fase de transição entre estados. Há sinais de ajuste acontecendo nos seus ritmos biológicos em relação ao ciclo cósmico vigente.',
-    harmonia:
-      'Boa ressonância entre seus biomarcadores e o momento cósmico. Seu sistema nervoso está respondendo bem aos estímulos e há coerência nos seus ciclos vitais.',
-    'coerência plena':
-      'Estado excepcional de alinhamento quântico-biológico. Seus ritmos biológicos estão em perfeita fase com os ciclos cósmicos. Aproveite este momento para decisões importantes e práticas profundas.',
+    dissonância: `Seus registros de hoje ficaram longe das faixas de referência usadas pelo índice. ${limite}`,
+    transição: `Parte dos seus registros de hoje está dentro das faixas de referência usadas pelo índice, e parte não. ${limite}`,
+    harmonia: `A maior parte dos seus registros de hoje está dentro das faixas de referência usadas pelo índice. ${limite}`,
+    'coerência plena': `Quase todos os seus registros de hoje estão dentro das faixas de referência usadas pelo índice. ${limite}`,
   };
 
+  const recomendacao =
+    weakest === 'cosmicAlignment'
+      ? 'A componente mais baixa hoje é a leitura simbólica da fase lunar: ela não pede nenhuma mudança no corpo; se quiser, use o tema da fase como reflexão.'
+      : `A componente mais baixa hoje é a ${weakLabels[weakest]}. Se algum desses sinais se mantiver fora do habitual por vários dias, converse com um profissional de saúde.`;
   return {
     description: descriptions[level],
-    recommendation: `Seu ponto de maior oportunidade agora é fortalecer a ${weakLabels[weakest]}. Pequenos ajustes nesta área podem elevar significativamente sua coerência geral.`,
+    recommendation: recomendacao,
   };
 }
 

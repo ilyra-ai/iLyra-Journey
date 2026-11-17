@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 29                       |
+| 🟡 Implementadas com validação pendente | 30                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5604,3 +5604,10 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Correções:** o comentário de `sideral.ts` anunciava "precisão de segundos de arco", mas os testes comprovam menos de 0,02° do JPL Horizons nas posições tropicais e menos de 0,01° do Swiss Ephemeris no Lahiri; o texto passou a dizer isso. A fórmula do ascendente existia em duas cópias (`sideral.ts` e `tropical.ts`) e as revoluções e a astrocartografia reconstruíam o ascendente tropical somando o ayanamsha ao sideral; agora há uma só função, `ascendenteTropical`, de onde derivam o Lagna sideral, o ascendente ocidental, as revoluções e a astrocartografia. Os literais `66.56` soltos foram trocados por `latitudePolar`.
 - **Arquivos:** `src/lib/astrology/sideral.ts`, `tropical.ts`, `inovacoes/astrocartografia.ts`, `inovacoes/retornos.ts`.
 - **Testes:** sem mudança de comportamento; as comparações existentes com JPL Horizons e Swiss Ephemeris continuam aprovadas. Unitários, integração, lint, tipos, formato e build aprovados em Node v26.13.0.
+
+### 204 · Textos honestos no Índice de Coerência Quântica · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** achado nº 2 da análise forense do motor; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
+- **Causa raiz corrigida:** o índice combina sinais registrados com uma componente simbólica da fase lunar, mas os textos afirmavam diagnóstico ("o sistema nervoso autônomo apresenta sinais de sobrecarga", "alinhamento quântico-biológico", "perfeita fase com os ciclos cósmicos") e prometiam ganho ("elevar significativamente sua coerência"), contrariando as regras do próprio motor. O cálculo foi mantido; descrições, recomendação e documentação passaram a dizer o que o índice é: um resumo dos registros frente às faixas de referência, com a camada lunar declarada simbólica e o aviso de que não é avaliação de saúde. Quando a componente mais baixa é a lunar, a recomendação não pede mudança no corpo; nas demais, orienta procurar um profissional se o sinal persistir.
+- **Arquivos:** `src/lib/quantum/coherence-engine.ts`, `src/lib/integrative-engines.test.ts`.
+- **Testes:** 1 teste novo que percorre níveis diferentes do índice e recusa afirmações de diagnóstico ou efeito cósmico. Unitários, integração, lint, tipos, formato e build aprovados em Node v26.13.0.
