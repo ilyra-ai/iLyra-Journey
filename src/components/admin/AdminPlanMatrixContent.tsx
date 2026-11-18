@@ -120,6 +120,12 @@ function notifyMatrixLoadError(error: unknown) {
 
 export function AdminPlanMatrixContent() {
   const [plans, setPlans] = React.useState<PlanMatrixPlan[]>([]);
+  // Só os planos em uso aparecem: os ativos e o Administrador. Free e Meta,
+  // inativos desde a tarefa 225, ficam no banco sem aparecer aqui.
+  const planosEmUso = React.useMemo(
+    () => plans.filter((plan) => plan.isActive || plan.key === 'admin'),
+    [plans]
+  );
   const [loading, setLoading] = React.useState(true);
   const [savingPlanKey, setSavingPlanKey] = React.useState<PlanKey | null>(
     null
@@ -312,8 +318,8 @@ export function AdminPlanMatrixContent() {
         </CardHeader>
       </Card>
 
-      <div className="grid gap-6 xl:grid-cols-4">
-        {plans.map((plan) => (
+      <div className="grid gap-6 md:grid-cols-2">
+        {planosEmUso.map((plan) => (
           <Card key={plan.key} className="min-w-0 overflow-hidden">
             {/* Faixa chapada com a cor principal configurada para o plano (dado do banco). */}
             <div
@@ -591,12 +597,11 @@ export function AdminPlanMatrixContent() {
         <CardHeader>
           <CardTitle as="h2">Matriz editável de entitlements</CardTitle>
           <CardDescription>
-            Cada linha abaixo representa uma capacidade real do produto e cada
-            coluna reflete o comportamento liberado para `Free`, `Meta` e `Care`
-            e o plano interno Administrador.
+            Cada cartão abaixo é uma capacidade real do produto, com o que está
+            liberado no Care e no plano interno Administrador.
           </CardDescription>
           <div className="flex flex-wrap gap-2">
-            {plans
+            {planosEmUso
               .filter((plan) => plan.key !== 'admin')
               .map((plan) => (
                 <Button
@@ -611,11 +616,12 @@ export function AdminPlanMatrixContent() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
+          {/* Cartões compactos, 3 por linha no desktop (tarefa 220). */}
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {featureCatalog.map((feature) => (
               <section
                 key={feature.key}
-                className="space-y-3 rounded-xl border border-border p-3 sm:p-4"
+                className="flex min-w-0 flex-col gap-3 rounded-xl border border-border p-3"
               >
                 <div className="min-w-0">
                   <div className="space-y-2">
@@ -623,7 +629,10 @@ export function AdminPlanMatrixContent() {
                       <p className="font-medium">{feature.name}</p>
                       <Badge variant="secondary">{feature.category}</Badge>
                     </div>
-                    <p className="text-sm leading-6 text-muted-foreground">
+                    <p
+                      className="line-clamp-3 text-sm leading-5 text-muted-foreground"
+                      title={feature.description}
+                    >
                       {feature.description}
                     </p>
                     {DEPENDENCIAS[feature.key]?.length ? (
@@ -644,8 +653,8 @@ export function AdminPlanMatrixContent() {
                     </p>
                   </div>
                 </div>
-                <div className="grid min-w-0 gap-3 sm:grid-cols-2 2xl:grid-cols-4">
-                  {plans.map((plan) => {
+                <div className="mt-auto grid min-w-0 gap-2">
+                  {planosEmUso.map((plan) => {
                     const planFeature = plan.features.find(
                       (item) => item.key === feature.key
                     );
@@ -662,7 +671,7 @@ export function AdminPlanMatrixContent() {
                             plan.key === 'admin' ||
                             feature.key === 'profile_management'
                           }
-                          className="min-w-0 space-y-4 rounded-md border border-border bg-background p-3"
+                          className="min-w-0 space-y-3 rounded-md border border-border bg-background p-2.5"
                         >
                           <legend className="px-1">
                             <PlanBadge planKey={plan.key} />

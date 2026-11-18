@@ -224,10 +224,10 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 50                       |
+| 🟡 Implementadas com validação pendente | 51                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 30                       |
+| ⚪ A iniciar                            | 29                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
@@ -5727,11 +5727,13 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Estado em 17/11/2026:** publicado em `b6d7ea93`. O componente `MarcaLyra` usava o logo anterior (teal e coral, `src/assets/marca/lyra-logo.png`) e passou a usar o símbolo da identidade celestial (`src/assets/celestial/simbolo.png`, o mesmo da tela de carregamento e do favicon), num ladrilho arredondado igual nos dois temas. Vale para chat (cabeçalho, abertura, balões e "digitando"), sidebar, busca de páginas e páginas de erro. `docs/design-system.md` atualizado; o arquivo antigo continua só como fonte dos ícones de instalação. Conferido no cabeçalho do chat pelo navegador. Unitários 1209, integração 663, lint, tipos, formato e build aprovados.
 - **Fronteiras não comprovadas:** abertura do chat (marca de 3,5rem), balões, tema claro e páginas de erro não conferidos um a um no navegador; ícones de instalação (PWA) ainda com o logo anterior.
 
-### 220 · Matriz de planos em cartões quadrados, 3 por linha · ⚪ A INICIAR
+### 220 · Matriz de planos em cartões quadrados, 3 por linha · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte da Matriz editável de entitlements (Administração → Planos).
 - **Escopo pedido:** no desktop, mostrar cada recurso em cartões no formato quadrado, 3 por linha, sem cartões muito grandes. Hoje cada recurso ocupa a largura inteira, com os quatro planos (Free, Meta, Care, Administrador) em dois por linha.
 - **Ajuste em 17/11/2026:** com só dois planos (tarefa 225), cada cartão de recurso mostra apenas Care e Administrador; fazer depois da 225.
+- **Estado em 18/11/2026:** `AdminPlanMatrixContent.tsx`: os recursos viraram cartões compactos numa grade de 3 por linha no desktop (2 no tablet, 1 no celular), com a descrição limitada a 3 linhas (texto completo no `title`) e os blocos de cada plano empilhados no cartão. A matriz, os botões "Salvar" e os cartões de plano do topo mostram só os planos em uso (`planosEmUso`: os ativos e o Administrador), ou seja, Care e Administrador; Free e Meta, inativos desde a 225, ficam no banco sem aparecer aqui. Conferido no navegador a 1440 px: 26 recursos, 3 por linha (mesmo topo), cada cartão com cerca de 378 × 330 a 354 px, só Care e Administrador; a 375 px, nada passa da tela. Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
+- **Consequência registrada:** como Free e Meta não aparecem mais na tela de planos, reativá-los, se um dia for preciso, exige uma migration ou edição direta no banco.
 
 ### 221 · Selos das propostas de exames centralizados, com ícone e cor · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
