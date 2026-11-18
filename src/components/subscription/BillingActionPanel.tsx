@@ -6,9 +6,11 @@ import { toast } from 'sonner';
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAccountBilling } from '@/hooks/use-account-billing';
-import { PlanKey } from '@/types/subscription';
+import type { BillingCatalogPlan, PlanKey } from '@/types/subscription';
 
 const PLAN_ORDER: Record<PlanKey, number> = {
   free: 0,
@@ -28,6 +30,86 @@ function extractApiError(payload: unknown) {
   }
 
   return undefined;
+}
+
+function valorMensal(valor: number, moeda: string) {
+  return new Intl.NumberFormat('pt-BR', {
+    style: 'currency',
+    currency: moeda,
+  }).format(valor);
+}
+
+/**
+ * Valores de colaboração do plano (tarefa 226): a pessoa escolhe com quanto
+ * colabora, sem nome para cada valor; todos dão o mesmo acesso. Um único
+ * botão assina o valor escolhido, em cobrança mensal recorrente.
+ */
+function EscolhaDoValor({
+  plan,
+  ativarCobranca,
+  ocupado,
+  aoAssinar,
+}: {
+  plan: BillingCatalogPlan;
+  ativarCobranca: boolean;
+  ocupado: (opcao: string) => boolean;
+  aoAssinar: (opcao: string) => void;
+}) {
+  const disponiveis = plan.contributionOptions.filter((o) => o.available);
+  const [escolhido, setEscolhido] = React.useState(disponiveis[0]?.key ?? '');
+  const opcao = disponiveis.find((o) => o.key === escolhido) ?? disponiveis[0];
+  const id = React.useId();
+  if (!opcao) return null;
+  const valor = valorMensal(opcao.monthlyPrice, plan.currencyCode);
+  return (
+    <div className="space-y-3">
+      <RadioGroup
+        aria-labelledby={`${id}-titulo`}
+        value={opcao.key}
+        onValueChange={setEscolhido}
+        className="grid grid-cols-2 gap-2"
+      >
+        <p id={`${id}-titulo`} className="col-span-2 text-sm font-medium">
+          Com quanto você quer colaborar?
+        </p>
+        {plan.contributionOptions.map((o) => (
+          <Label
+            key={o.key}
+            htmlFor={`${id}-${o.key}`}
+            className="flex min-h-11 cursor-pointer items-center justify-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm font-semibold tabular-nums transition-colors has-[[data-state=checked]]:border-primary has-[[data-state=checked]]:bg-primary/10 has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50"
+          >
+            <RadioGroupItem
+              id={`${id}-${o.key}`}
+              value={o.key}
+              disabled={!o.available}
+            />
+            {valorMensal(o.monthlyPrice, plan.currencyCode)}
+            <span className="text-xs font-normal text-muted-foreground">
+              /mês
+            </span>
+          </Label>
+        ))}
+      </RadioGroup>
+      <Button
+        className="h-auto min-h-10 w-full whitespace-normal"
+        onClick={() => aoAssinar(opcao.key)}
+        disabled={ocupado(opcao.key)}
+      >
+        {ocupado(opcao.key) ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+        ) : (
+          <ArrowUpRight className="mr-2 h-4 w-4" aria-hidden="true" />
+        )}
+        {ativarCobranca
+          ? `Ativar colaboração de ${valor} por mês`
+          : `Assinar com ${valor} por mês`}
+      </Button>
+      <p className="text-xs leading-5 text-muted-foreground">
+        Cobrança mensal automática, renovada todo mês pela Stripe, sem precisar
+        comprar de novo. Você cancela quando quiser na gestão da cobrança.
+      </p>
+    </div>
+  );
 }
 
 export function BillingActionPanel({
@@ -208,81 +290,112 @@ export function BillingActionPanel({
                 ) : null}
               </div>
             ) : null}
-            <div className="grid gap-2 sm:grid-cols-2">
-              {billingInterval !== 'annual' &&
-              plan.availableIntervals.includes('monthly') ? (
-                <Button
-                  className="h-auto min-h-10 whitespace-normal"
-                  onClick={() =>
-                    handleRedirectAction('/api/billing/checkout', {
+            {plan.contributionOptions.length > 0 ? (
+              <EscolhaDoValor
+                plan={plan}
+                ativarCobranca={isCurrentPlanCheckout}
+                ocupado={(opcao) =>
+                  actionKey ===
+                  '/api/billing/checkout' +
+                    JSON.stringify({
                       planKey: plan.key,
                       billingInterval: 'monthly',
+                      contributionOption: opcao,
                     })
-                  }
-                  disabled={
-                    actionKey ===
-                    '/api/billing/checkout{"planKey":"' +
-                      plan.key +
-                      '","billingInterval":"monthly"}'
-                  }
-                >
-                  {actionKey ===
-                  '/api/billing/checkout{"planKey":"' +
-                    plan.key +
-                    '","billingInterval":"monthly"}' ? (
-                    <Loader2
-                      className="mr-2 h-4 w-4 animate-spin"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <ArrowUpRight className="mr-2 h-4 w-4" aria-hidden="true" />
-                  )}
-                  {isCurrentPlanCheckout
-                    ? `Ativar cobrança ${plan.name} mensal`
-                    : `Assinar ${plan.name} mensal`}
-                </Button>
-              ) : null}
-              {billingInterval !== 'monthly' &&
-              plan.availableIntervals.includes('annual') ? (
-                <Button
-                  variant="outline"
-                  className="h-auto min-h-10 whitespace-normal"
-                  onClick={() =>
-                    handleRedirectAction('/api/billing/checkout', {
-                      planKey: plan.key,
-                      billingInterval: 'annual',
-                    })
-                  }
-                  disabled={
-                    actionKey ===
-                    '/api/billing/checkout{"planKey":"' +
-                      plan.key +
-                      '","billingInterval":"annual"}'
-                  }
-                >
-                  {actionKey ===
-                  '/api/billing/checkout{"planKey":"' +
-                    plan.key +
-                    '","billingInterval":"annual"}' ? (
-                    <Loader2
-                      className="mr-2 h-4 w-4 animate-spin"
-                      aria-hidden="true"
-                    />
-                  ) : (
-                    <ArrowUpRight className="mr-2 h-4 w-4" aria-hidden="true" />
-                  )}
-                  {isCurrentPlanCheckout
-                    ? `Ativar cobrança ${plan.name} anual`
-                    : `Assinar ${plan.name} anual`}
-                </Button>
-              ) : null}
-            </div>
-            {billingInterval &&
-            !plan.availableIntervals.includes(billingInterval) ? (
-              <p role="status" className="text-sm text-muted-foreground">
-                Este plano não está disponível no ciclo selecionado.
-              </p>
-            ) : null}
+                }
+                aoAssinar={(opcao) =>
+                  void handleRedirectAction('/api/billing/checkout', {
+                    planKey: plan.key,
+                    billingInterval: 'monthly',
+                    contributionOption: opcao,
+                  })
+                }
+              />
+            ) : (
+              <>
+                <div className="grid gap-2 sm:grid-cols-2">
+                  {billingInterval !== 'annual' &&
+                  plan.availableIntervals.includes('monthly') ? (
+                    <Button
+                      className="h-auto min-h-10 whitespace-normal"
+                      onClick={() =>
+                        handleRedirectAction('/api/billing/checkout', {
+                          planKey: plan.key,
+                          billingInterval: 'monthly',
+                        })
+                      }
+                      disabled={
+                        actionKey ===
+                        '/api/billing/checkout{"planKey":"' +
+                          plan.key +
+                          '","billingInterval":"monthly"}'
+                      }
+                    >
+                      {actionKey ===
+                      '/api/billing/checkout{"planKey":"' +
+                        plan.key +
+                        '","billingInterval":"monthly"}' ? (
+                        <Loader2
+                          className="mr-2 h-4 w-4 animate-spin"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <ArrowUpRight
+                          className="mr-2 h-4 w-4"
+                          aria-hidden="true"
+                        />
+                      )}
+                      {isCurrentPlanCheckout
+                        ? `Ativar cobrança ${plan.name} mensal`
+                        : `Assinar ${plan.name} mensal`}
+                    </Button>
+                  ) : null}
+                  {billingInterval !== 'monthly' &&
+                  plan.availableIntervals.includes('annual') ? (
+                    <Button
+                      variant="outline"
+                      className="h-auto min-h-10 whitespace-normal"
+                      onClick={() =>
+                        handleRedirectAction('/api/billing/checkout', {
+                          planKey: plan.key,
+                          billingInterval: 'annual',
+                        })
+                      }
+                      disabled={
+                        actionKey ===
+                        '/api/billing/checkout{"planKey":"' +
+                          plan.key +
+                          '","billingInterval":"annual"}'
+                      }
+                    >
+                      {actionKey ===
+                      '/api/billing/checkout{"planKey":"' +
+                        plan.key +
+                        '","billingInterval":"annual"}' ? (
+                        <Loader2
+                          className="mr-2 h-4 w-4 animate-spin"
+                          aria-hidden="true"
+                        />
+                      ) : (
+                        <ArrowUpRight
+                          className="mr-2 h-4 w-4"
+                          aria-hidden="true"
+                        />
+                      )}
+                      {isCurrentPlanCheckout
+                        ? `Ativar cobrança ${plan.name} anual`
+                        : `Assinar ${plan.name} anual`}
+                    </Button>
+                  ) : null}
+                </div>
+                {billingInterval &&
+                !plan.availableIntervals.includes(billingInterval) ? (
+                  <p role="status" className="text-sm text-muted-foreground">
+                    Este plano não está disponível no ciclo selecionado.
+                  </p>
+                ) : null}
+              </>
+            )}
           </div>
         );
       })}

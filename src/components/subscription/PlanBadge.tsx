@@ -8,7 +8,8 @@ import { PlanKey } from '@/types/subscription';
 
 /**
  * Cores dos planos (tarefa 218). Desde a tarefa 225 só Care e Administrador
- * estão em uso; Free e Meta aparecem só no histórico, em tom neutro.
+ * estão em uso; Free e Meta aparecem só no histórico, em tom neutro. O Care
+ * se chama Lyra Journey desde a tarefa 226 (a chave interna continua `care`).
  */
 const planVisuals: Record<
   PlanKey,
@@ -25,7 +26,7 @@ const planVisuals: Record<
     icon: ShieldCheck,
   },
   care: {
-    label: 'Care',
+    label: 'Lyra Journey',
     className:
       'border-teal-500/50 bg-teal-400/15 text-teal-800 dark:text-teal-200',
     icon: Crown,

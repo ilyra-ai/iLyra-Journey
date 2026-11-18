@@ -116,4 +116,108 @@ describe('jornada comercial dos próprios planos', () => {
       await restaurarMeta();
     }
   });
+  it('o Lyra Journey aparece com os dois valores, sem nome e sem o id da Stripe', async () => {
+    const lista = await chamar(catalogo, { usuario: null });
+    const plano = (
+      lista.json as {
+        plans: Array<{
+          key: string;
+          name: string;
+          contributionOptions: unknown[];
+        }>;
+      }
+    ).plans.find((p) => p.key === 'care');
+    expect(plano?.name).toBe('Lyra Journey');
+    // Só a chave e o valor: nenhum price id sai para a tela pública.
+    expect(plano?.contributionOptions).toEqual([
+      { key: 'colaboracao_999', monthlyPrice: 9.99 },
+      { key: 'colaboracao_1999', monthlyPrice: 19.99 },
+    ]);
+  });
+  it('o checkout do Lyra Journey exige um dos valores e é só mensal', async () => {
+    const tentar = async (body: Record<string, unknown>) => {
+      const resposta = await chamar(checkout, {
+        method: 'POST',
+        body: { planKey: 'care', ...body },
+        usuario: pessoa,
+      });
+      return {
+        status: resposta.status,
+        erro: (resposta.json as { error?: string }).error ?? '',
+      };
+    };
+    // Sem valor, valor desconhecido ou ciclo anual: 400, antes de olhar a
+    // configuração da cobrança.
+    expect(await tentar({ billingInterval: 'monthly' })).toEqual({
+      status: 400,
+      erro: expect.stringMatching(/Escolha com qual valor/),
+    });
+    expect(
+      await tentar({
+        billingInterval: 'monthly',
+        contributionOption: 'colaboracao_5000',
+      })
+    ).toEqual({
+      status: 400,
+      erro: expect.stringMatching(/Escolha com qual valor/),
+    });
+    expect(
+      await tentar({
+        billingInterval: 'annual',
+        contributionOption: 'colaboracao_999',
+      })
+    ).toEqual({
+      status: 400,
+      erro: expect.stringMatching(/assinatura mensal recorrente/),
+    });
+    expect(
+      (
+        await tentar({
+          billingInterval: 'monthly',
+          contributionOption: 'Valor Livre',
+        })
+      ).status
+    ).toBe(400);
+    // Valor válido: segue para a cobrança, que não está configurada no
+    // ambiente de teste (503, sem expor configuração).
+    expect(
+      await tentar({
+        billingInterval: 'monthly',
+        contributionOption: 'colaboracao_1999',
+      })
+    ).toEqual({
+      status: 503,
+      erro: 'Os pagamentos online ainda não estão disponíveis neste ambiente.',
+    });
+  });
+  it('plano sem valores de colaboração recusa um valor no checkout', async () => {
+    // Meta (sem valores) e Free reativados só para exercitar a regra.
+    const restaurarMeta = await reativarPlanoNoTeste('meta');
+    const restaurarFree = await reativarPlanoNoTeste('free');
+    const outra = await criarUsuario();
+    try {
+      await assignPlanToUserByAdmin({
+        targetUserId: outra.id,
+        actorUserId: gestora.id,
+        planKey: 'free',
+      });
+      const resposta = await chamar(checkout, {
+        method: 'POST',
+        body: {
+          planKey: 'meta',
+          billingInterval: 'monthly',
+          contributionOption: 'colaboracao_999',
+        },
+        usuario: outra,
+      });
+      expect(resposta.status).toBe(400);
+      expect((resposta.json as { error: string }).error).toMatch(
+        /não tem valores de colaboração/
+      );
+    } finally {
+      await restaurarFree();
+      await restaurarMeta();
+      await executeStatement('DELETE FROM users WHERE id = ?', [outra.id]);
+    }
+  });
 });

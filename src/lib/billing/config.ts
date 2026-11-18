@@ -111,6 +111,29 @@ export function resolveStripePriceId(
     : null;
 }
 
+/**
+ * Ciclos que podem ser assinados agora. Com valores de colaboração (tarefa
+ * 226), a assinatura é só mensal e recorrente, com o preço de cada valor:
+ * assinável quando ao menos um valor tem preço na Stripe no ambiente em uso.
+ * Os preços STRIPE_PRICE_* do .env.local não valem para os valores.
+ */
+export function intervalosAssinaveis(
+  planKey: PlanKey,
+  precos: { mensal: string | null; anual: string | null } | null | undefined,
+  opcoes: Array<{ mensal: string | null }> | undefined,
+  aceitarPrecosDoEnv: boolean
+): Array<'monthly' | 'annual'> {
+  if (planKey === 'free' || planKey === 'admin') return [];
+  if (opcoes && opcoes.length > 0) {
+    return opcoes.some((opcao) => Boolean(opcao.mensal)) ? ['monthly'] : [];
+  }
+  return (['monthly', 'annual'] as const).filter((intervalo) =>
+    Boolean(
+      resolveStripePriceId(planKey, precos, intervalo, aceitarPrecosDoEnv)
+    )
+  );
+}
+
 export function getStripeProviderName() {
   return STRIPE_PROVIDER;
 }

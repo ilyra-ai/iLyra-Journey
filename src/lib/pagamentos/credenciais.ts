@@ -546,6 +546,10 @@ export async function removerCredenciais(
       'DELETE FROM stripe_plan_prices WHERE environment = ?',
       [ambiente]
     );
+    await executeStatement(
+      'DELETE FROM stripe_contribution_prices WHERE environment = ?',
+      [ambiente]
+    );
   }
   return montarPublico(provedor);
 }

@@ -54,6 +54,19 @@ export const credencialSchema = z.object({
         produto: idDaStripe,
         mensal: idDaStripe,
         anual: idDaStripe,
+        // Preço mensal recorrente de cada valor de colaboração (tarefa 226).
+        opcoes: z
+          .array(
+            z.object({
+              opcao: z
+                .string()
+                .trim()
+                .regex(/^[a-z0-9_]{1,32}$/, 'Valor de colaboração inválido.'),
+              mensal: idDaStripe,
+            })
+          )
+          .max(10)
+          .optional(),
       })
     )
     .max(COMMERCIAL_PLAN_KEYS.length)

@@ -40,6 +40,8 @@ function eventoDeAssinatura(options: {
   clienteId: string;
   /** Ambiente da Stripe do evento (padrão: teste). */
   livemode?: boolean;
+  /** Price id pago (padrão: o mensal do Meta cadastrado no beforeAll). */
+  precoId?: string;
 }) {
   const agora = Math.floor(Date.now() / 1000);
   const livemode = options.livemode ?? false;
@@ -69,7 +71,7 @@ function eventoDeAssinatura(options: {
               current_period_start: agora,
               current_period_end: agora + 30 * 24 * 3600,
               price: {
-                id: precoMetaMensal,
+                id: options.precoId ?? precoMetaMensal,
                 object: 'price',
                 recurring: { interval: 'month' },
               },
@@ -208,6 +210,41 @@ describe('webhook Stripe', () => {
       [primeira.eventId]
     );
     expect(evento[0]?.status).toBe('processed');
+  });
+
+  it('o preço de um valor de colaboração ativa o Lyra Journey', async () => {
+    const precoDoValor = `price_valor_${randomUUID().slice(0, 8)}`;
+    await executeStatement(
+      `INSERT INTO stripe_contribution_prices (option_id, environment, monthly_price_id)
+         SELECT * FROM (
+           SELECT o.id, 'test' AS ambiente, ? AS preco
+             FROM plan_contribution_options o
+             JOIN subscription_plans p ON p.id = o.plan_id
+            WHERE p.plan_key = 'care' AND o.option_key = 'colaboracao_1999'
+         ) AS novo
+       ON DUPLICATE KEY UPDATE monthly_price_id = novo.preco`,
+      [precoDoValor]
+    );
+    try {
+      const usuario = await criarUsuario('patient', 'Colaboradora');
+      const payload = eventoDeAssinatura({
+        tipo: 'customer.subscription.created',
+        usuario,
+        status: 'active',
+        assinaturaId: `sub_${randomUUID().slice(0, 12)}`,
+        clienteId: `cus_${randomUUID().slice(0, 12)}`,
+        precoId: precoDoValor,
+      });
+      await processStripeWebhook({ payload, signature: assinar(payload) });
+      expect(await planoAtivo(usuario)).toEqual([
+        { plan_key: 'care', source: 'stripe' },
+      ]);
+    } finally {
+      await executeStatement(
+        'DELETE FROM stripe_contribution_prices WHERE monthly_price_id = ?',
+        [precoDoValor]
+      );
+    }
   });
 
   it('cancelamento devolve o usuário ao plano gratuito', async () => {

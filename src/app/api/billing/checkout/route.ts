@@ -11,6 +11,13 @@ export const runtime = 'nodejs';
 const checkoutPayloadSchema = z.object({
   planKey: z.enum(COMMERCIAL_PLAN_KEYS),
   billingInterval: z.enum(['monthly', 'annual']),
+  // Valor de colaboração escolhido (tarefa 226); o servidor confere se é um
+  // valor ativo do plano.
+  contributionOption: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9_]{1,32}$/)
+    .nullish(),
 });
 
 export async function POST(request: NextRequest) {
@@ -21,6 +28,7 @@ export async function POST(request: NextRequest) {
       session,
       planKey: payload.planKey,
       billingInterval: payload.billingInterval,
+      contributionOption: payload.contributionOption ?? null,
       origin: request.nextUrl.origin,
     });
 

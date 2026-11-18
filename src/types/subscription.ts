@@ -105,8 +105,19 @@ export interface AccountSubscriptionSummary {
   features: PlanFeatureAccess[];
 }
 
+/**
+ * Valor de colaboração de um plano (tarefa 226): um valor mensal recorrente,
+ * sem nome próprio, com exatamente o mesmo acesso das outras opções.
+ */
+export interface ContributionOption {
+  key: string;
+  monthlyPrice: number;
+}
+
 export interface PlanMatrixPlan extends SubscriptionPlanSummary {
   features: PlanFeatureAccess[];
+  /** Valores de colaboração ativos; vazio quando o plano tem preço único. */
+  contributionOptions: ContributionOption[];
   /**
    * O plano pode ser assinado online agora: tem preço na Stripe no ambiente
    * em uso (teste ou produção, escolhido em Admin → Pagamentos).
@@ -189,6 +200,11 @@ export interface BillingCatalogPlan {
   current: boolean;
   purchaseEnabled: boolean;
   availableIntervals: Array<'monthly' | 'annual'>;
+  /**
+   * Valores de colaboração; `available` diz se o valor já tem preço na
+   * Stripe no ambiente em uso. Com valores, a assinatura é só mensal.
+   */
+  contributionOptions: Array<ContributionOption & { available: boolean }>;
 }
 
 export interface BillingEnvironmentStatus {

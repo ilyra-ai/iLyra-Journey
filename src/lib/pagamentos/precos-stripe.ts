@@ -20,6 +20,17 @@ export interface PrecosDoPlanoNaStripe {
   anual: string | null;
 }
 
+/**
+ * Valor de colaboração de um plano (tarefa 226) e o preço mensal recorrente
+ * dele na Stripe neste ambiente. Com valores, o plano não usa os preços
+ * mensal e anual próprios: cada valor tem o seu.
+ */
+export interface PrecoDaOpcaoNaStripe {
+  opcao: string;
+  valorMensal: number;
+  mensal: string | null;
+}
+
 /** Linha da tela: o plano do catálogo e os ids dele neste ambiente. */
 export interface PrecoDoPlanoNaStripe extends PrecosDoPlanoNaStripe {
   plano: PlanKey;
@@ -27,6 +38,7 @@ export interface PrecoDoPlanoNaStripe extends PrecosDoPlanoNaStripe {
   valorMensal: number;
   valorAnual: number;
   moeda: string;
+  opcoes: PrecoDaOpcaoNaStripe[];
 }
 
 interface LinhaDoPreco {
@@ -55,11 +67,56 @@ async function linhasDosPrecos(ambiente: AmbienteDaStripe) {
   );
 }
 
+interface LinhaDaOpcao {
+  option_id: string;
+  plan_id: string;
+  option_key: string;
+  monthly_price: number | string;
+  monthly_price_id: string | null;
+}
+
+async function linhasDasOpcoes(ambiente: AmbienteDaStripe) {
+  return queryRows<LinhaDaOpcao>(
+    `SELECT o.id AS option_id, o.plan_id, o.option_key, o.monthly_price,
+            c.monthly_price_id
+       FROM plan_contribution_options o
+       LEFT JOIN stripe_contribution_prices c
+         ON c.option_id = o.id AND c.environment = ?
+      WHERE o.is_active = TRUE
+      ORDER BY o.display_order ASC, o.monthly_price ASC`,
+    [ambiente]
+  );
+}
+
+/**
+ * Preço mensal da Stripe de cada valor de colaboração ativo, por id do plano
+ * (planos sem valores ficam de fora). `mensal` é nulo quando o valor ainda
+ * não tem preço neste ambiente.
+ */
+export async function precosDasOpcoesNaStripe(
+  ambiente: AmbienteDaStripe
+): Promise<Map<string, PrecoDaOpcaoNaStripe[]>> {
+  const porPlano = new Map<string, PrecoDaOpcaoNaStripe[]>();
+  for (const linha of await linhasDasOpcoes(ambiente)) {
+    const lista = porPlano.get(linha.plan_id) ?? [];
+    lista.push({
+      opcao: linha.option_key,
+      valorMensal: Number(linha.monthly_price),
+      mensal: linha.monthly_price_id,
+    });
+    porPlano.set(linha.plan_id, lista);
+  }
+  return porPlano;
+}
+
 /** Planos pagos com os ids da Stripe do ambiente (vazios quando faltam). */
 export async function listarPrecosDaStripe(
   ambiente: AmbienteDaStripe
 ): Promise<PrecoDoPlanoNaStripe[]> {
-  const linhas = await linhasDosPrecos(ambiente);
+  const [linhas, opcoes] = await Promise.all([
+    linhasDosPrecos(ambiente),
+    precosDasOpcoesNaStripe(ambiente),
+  ]);
   return linhas.map((linha) => ({
     plano: linha.plan_key,
     nome: linha.name,
@@ -69,6 +126,7 @@ export async function listarPrecosDaStripe(
     produto: linha.product_id,
     mensal: linha.monthly_price_id,
     anual: linha.annual_price_id,
+    opcoes: opcoes.get(linha.plan_id) ?? [],
   }));
 }
 
@@ -150,16 +208,22 @@ export async function salvarPrecosDaStripe(
     const produto = limpo(preco.produto);
     const mensal = limpo(preco.mensal);
     const anual = limpo(preco.anual);
+    await recusarPrecoDeOutraTabela(
+      [mensal, anual].filter((id): id is string => Boolean(id)),
+      'opcoes',
+      preco.plano
+    );
     try {
+      // Sem produto nem preços próprios, a linha do plano sai; os preços dos
+      // valores de colaboração (abaixo) são gravados do mesmo jeito.
       if (!produto && !mensal && !anual) {
         await executar(
           'DELETE FROM stripe_plan_prices WHERE plan_id = ? AND environment = ?',
           [planId, ambiente]
         );
-        continue;
-      }
-      await executar(
-        `INSERT INTO stripe_plan_prices (
+      } else
+        await executar(
+          `INSERT INTO stripe_plan_prices (
            plan_id, environment, product_id, monthly_price_id,
            annual_price_id, updated_by
          ) VALUES (?, ?, ?, ?, ?, ?) AS novo
@@ -168,12 +232,103 @@ export async function salvarPrecosDaStripe(
            monthly_price_id = novo.monthly_price_id,
            annual_price_id = novo.annual_price_id,
            updated_by = novo.updated_by`,
-        [planId, ambiente, produto, mensal, anual, usuarioId]
-      );
+          [planId, ambiente, produto, mensal, anual, usuarioId]
+        );
     } catch (erro) {
       if ((erro as { code?: string }).code === 'ER_DUP_ENTRY') {
         throw new HttpError(
           `Um dos preços do plano "${preco.plano}" já está cadastrado em outro plano ou ambiente; cada plano e ciclo usa um preço próprio.`,
+          409
+        );
+      }
+      throw erro;
+    }
+    if (preco.opcoes && preco.opcoes.length > 0) {
+      await salvarPrecosDasOpcoes(
+        ambiente,
+        planId,
+        preco.plano,
+        preco.opcoes,
+        usuarioId
+      );
+    }
+  }
+}
+
+/**
+ * O webhook descobre o plano pelo preço pago: um mesmo price id não pode
+ * estar ao mesmo tempo nos preços do plano e nos valores de colaboração.
+ */
+async function recusarPrecoDeOutraTabela(
+  ids: string[],
+  outra: 'planos' | 'opcoes',
+  plano: string
+) {
+  if (ids.length === 0) return;
+  const marcadores = ids.map(() => '?').join(', ');
+  const repetidos = await queryRows<{ id: string }>(
+    outra === 'opcoes'
+      ? `SELECT monthly_price_id AS id FROM stripe_contribution_prices
+          WHERE monthly_price_id IN (${marcadores}) LIMIT 1`
+      : `SELECT monthly_price_id AS id FROM stripe_plan_prices
+          WHERE monthly_price_id IN (${marcadores})
+         UNION
+         SELECT annual_price_id FROM stripe_plan_prices
+          WHERE annual_price_id IN (${marcadores})
+         LIMIT 1`,
+    outra === 'opcoes' ? ids : [...ids, ...ids]
+  );
+  if (repetidos.length > 0) {
+    throw new HttpError(
+      `O preço ${repetidos[0].id} do plano "${plano}" já está cadastrado ${outra === 'opcoes' ? 'em um valor de colaboração' : 'como preço de um plano'}; cada plano, ciclo e valor usa um preço próprio.`,
+      409
+    );
+  }
+}
+
+async function salvarPrecosDasOpcoes(
+  ambiente: AmbienteDaStripe,
+  planId: string,
+  plano: string,
+  opcoes: NonNullable<PrecosInformados['opcoes']>,
+  usuarioId: string
+) {
+  const existentes = await queryRows<{ id: string; option_key: string }>(
+    'SELECT id, option_key FROM plan_contribution_options WHERE plan_id = ? AND is_active = TRUE',
+    [planId]
+  );
+  const idDaOpcao = new Map(existentes.map((o) => [o.option_key, o.id]));
+  for (const opcao of opcoes) {
+    const optionId = idDaOpcao.get(opcao.opcao);
+    if (!optionId) {
+      throw new HttpError(
+        `O plano "${plano}" não tem o valor de colaboração "${opcao.opcao}".`,
+        400
+      );
+    }
+    const mensal = limpo(opcao.mensal);
+    if (!mensal) {
+      await executeStatement(
+        'DELETE FROM stripe_contribution_prices WHERE option_id = ? AND environment = ?',
+        [optionId, ambiente]
+      );
+      continue;
+    }
+    await recusarPrecoDeOutraTabela([mensal], 'planos', plano);
+    try {
+      await executeStatement(
+        `INSERT INTO stripe_contribution_prices (
+           option_id, environment, monthly_price_id, updated_by
+         ) VALUES (?, ?, ?, ?) AS novo
+         ON DUPLICATE KEY UPDATE
+           monthly_price_id = novo.monthly_price_id,
+           updated_by = novo.updated_by`,
+        [optionId, ambiente, mensal, usuarioId]
+      );
+    } catch (erro) {
+      if ((erro as { code?: string }).code === 'ER_DUP_ENTRY') {
+        throw new HttpError(
+          `O preço ${mensal} do plano "${plano}" já está cadastrado em outro valor ou ambiente; cada valor de colaboração usa um preço próprio.`,
           409
         );
       }
@@ -228,13 +383,39 @@ export async function conferirPrecosNaStripe(
   const problemas: string[] = [];
   let conferidos = 0;
   for (const plano of planos) {
-    for (const [ciclo, precoId, valor, intervalo] of [
-      ['mensal', plano.mensal, plano.valorMensal, 'month'],
-      ['anual', plano.anual, plano.valorAnual, 'year'],
-    ] as const) {
+    // Cada valor de colaboração é um preço mensal recorrente próprio.
+    const itens: Array<{
+      rotulo: string;
+      ciclo: 'mensal' | 'anual';
+      precoId: string | null;
+      valor: number;
+      intervalo: 'month' | 'year';
+    }> = [
+      {
+        rotulo: `${plano.nome} mensal`,
+        ciclo: 'mensal',
+        precoId: plano.mensal,
+        valor: plano.valorMensal,
+        intervalo: 'month',
+      },
+      {
+        rotulo: `${plano.nome} anual`,
+        ciclo: 'anual',
+        precoId: plano.anual,
+        valor: plano.valorAnual,
+        intervalo: 'year',
+      },
+      ...plano.opcoes.map((opcao) => ({
+        rotulo: `${plano.nome} ${formatoDoValor(opcao.valorMensal, plano.moeda)} por mês`,
+        ciclo: 'mensal' as const,
+        precoId: opcao.mensal,
+        valor: opcao.valorMensal,
+        intervalo: 'month' as const,
+      })),
+    ];
+    for (const { rotulo, ciclo, precoId, valor, intervalo } of itens) {
       if (!precoId) continue;
       conferidos += 1;
-      const rotulo = `${plano.nome} ${ciclo}`;
       const { status, corpo } = await chamarProvedor(
         `https://api.stripe.com/v1/prices/${encodeURIComponent(precoId)}`,
         { headers: { Authorization: `Bearer ${chaveSecreta}` } }

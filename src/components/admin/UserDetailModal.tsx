@@ -63,7 +63,7 @@ const planNameMap: Record<PlanKey, string> = {
   free: 'Free',
   admin: 'Administrador',
   meta: 'Meta',
-  care: 'Care',
+  care: 'Lyra Journey',
 };
 
 const planDescriptionMap: Record<PlanKey, string> = {

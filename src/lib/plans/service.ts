@@ -3,12 +3,15 @@ import type { PoolConnection, RowDataPacket } from 'mysql2/promise';
 
 import {
   getStripeEnvironmentStatus,
-  resolveStripePriceId,
+  intervalosAssinaveis,
 } from '@/lib/billing/config';
 import { HttpError } from '@/lib/http-error';
 import { queryRows, withTransaction } from '@/lib/mysql/pool';
 import { credenciaisDoStripe } from '@/lib/pagamentos/credenciais';
-import { mapaDePrecosDaStripe } from '@/lib/pagamentos/precos-stripe';
+import {
+  mapaDePrecosDaStripe,
+  precosDasOpcoesNaStripe,
+} from '@/lib/pagamentos/precos-stripe';
 import {
   AdminUserListItem,
   AdminUserListResponse,
@@ -712,21 +715,18 @@ export async function getPlanMatrix(): Promise<PlanMatrixResponse> {
     undefined,
     credenciais
   ).configured;
-  const precos = await mapaDePrecosDaStripe(credenciais.ambiente);
+  const [precos, opcoes] = await Promise.all([
+    mapaDePrecosDaStripe(credenciais.ambiente),
+    precosDasOpcoesNaStripe(credenciais.ambiente),
+  ]);
   const assinavel = (planId: string, planKey: PlanKey) =>
     cobrancaPronta &&
-    planKey !== 'free' &&
-    planKey !== 'admin' &&
-    (['monthly', 'annual'] as const).some((intervalo) =>
-      Boolean(
-        resolveStripePriceId(
-          planKey,
-          precos.get(planId),
-          intervalo,
-          credenciais.origem === 'ambiente'
-        )
-      )
-    );
+    intervalosAssinaveis(
+      planKey,
+      precos.get(planId),
+      opcoes.get(planId),
+      credenciais.origem === 'ambiente'
+    ).length > 0;
 
   const plansMap = new Map<PlanKey, PlanMatrixPlan>();
 
@@ -749,6 +749,11 @@ export async function getPlanMatrix(): Promise<PlanMatrixResponse> {
         isActive: row.is_active === 1,
         isPublic: row.is_public === 1,
         features: [],
+        // Só o valor: o price id da Stripe não sai do servidor.
+        contributionOptions: (opcoes.get(row.plan_id) ?? []).map((opcao) => ({
+          key: opcao.opcao,
+          monthlyPrice: opcao.valorMensal,
+        })),
         assinaturaOnline: assinavel(row.plan_id, row.plan_key),
       });
     }

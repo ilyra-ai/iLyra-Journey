@@ -10,6 +10,7 @@ import {
   getBillingBaseUrl,
   getStripeEnvironmentStatus,
   getStripeProviderName,
+  intervalosAssinaveis,
   resolveStripePriceId,
 } from '@/lib/billing/config';
 import { getStripeClient } from '@/lib/billing/stripe';
@@ -17,6 +18,8 @@ import { credenciaisDoStripe } from '@/lib/pagamentos/credenciais';
 import {
   type AmbienteDaStripe,
   mapaDePrecosDaStripe,
+  type PrecoDaOpcaoNaStripe,
+  precosDasOpcoesNaStripe,
   type PrecosDoPlanoNaStripe,
 } from '@/lib/pagamentos/precos-stripe';
 import { HttpError } from '@/lib/http-error';
@@ -196,12 +199,21 @@ async function getPlanByStripePriceId(
     `
       SELECT ${COLUNAS_DO_PLANO_COM_ALIAS}
       FROM subscription_plans p
-      INNER JOIN stripe_plan_prices s ON s.plan_id = p.id
-      WHERE s.environment = ?
-        AND (s.monthly_price_id = ? OR s.annual_price_id = ?)
+      WHERE p.id IN (
+        SELECT s.plan_id
+          FROM stripe_plan_prices s
+         WHERE s.environment = ?
+           AND (s.monthly_price_id = ? OR s.annual_price_id = ?)
+        UNION
+        -- Valores de colaboração (tarefa 226): o preço é de um valor do plano.
+        SELECT o.plan_id
+          FROM stripe_contribution_prices c
+          INNER JOIN plan_contribution_options o ON o.id = c.option_id
+         WHERE c.environment = ? AND c.monthly_price_id = ?
+      )
       LIMIT 1
     `,
-    [ambiente, priceId, priceId]
+    [ambiente, priceId, priceId, ambiente, priceId]
   );
 
   const row = rows[0];
@@ -569,24 +581,17 @@ function buildBillingCatalogPlans(options: {
   currentPlanKey: PlanKey | null;
   billingConfigured: boolean;
   precos: Map<string, PrecosDoPlanoNaStripe>;
+  opcoes: Map<string, PrecoDaOpcaoNaStripe[]>;
   aceitarPrecosDoEnv: boolean;
 }): BillingCatalogPlan[] {
   return options.plans.map((plan) => {
-    const availableIntervals: Array<'monthly' | 'annual'> = [];
-    const precos = options.precos.get(plan.id);
-
-    for (const intervalo of ['monthly', 'annual'] as const) {
-      if (
-        resolveStripePriceId(
-          plan.key,
-          precos,
-          intervalo,
-          options.aceitarPrecosDoEnv
-        )
-      ) {
-        availableIntervals.push(intervalo);
-      }
-    }
+    const opcoes = options.opcoes.get(plan.id) ?? [];
+    const availableIntervals = intervalosAssinaveis(
+      plan.key,
+      options.precos.get(plan.id),
+      opcoes,
+      options.aceitarPrecosDoEnv
+    );
 
     return {
       key: plan.key,
@@ -605,6 +610,12 @@ function buildBillingCatalogPlans(options: {
         plan.key !== 'free' &&
         availableIntervals.length > 0,
       availableIntervals,
+      // Só o valor e se já tem preço: o price id não sai do servidor.
+      contributionOptions: opcoes.map((opcao) => ({
+        key: opcao.opcao,
+        monthlyPrice: opcao.valorMensal,
+        available: Boolean(opcao.mensal),
+      })),
     };
   });
 }
@@ -614,14 +625,14 @@ export async function getAccountBillingContext(options: {
   origin?: string;
 }): Promise<AccountBillingContext> {
   const credenciais = await credenciaisDoStripe();
-  const [plans, activeSubscription, linkedCustomer, precos] = await Promise.all(
-    [
+  const [plans, activeSubscription, linkedCustomer, precos, opcoes] =
+    await Promise.all([
       getPublicPlanCatalog(),
       getActiveSubscriptionRow(options.session.user.id),
       getBillingCustomerByUserId(options.session.user.id, credenciais.ambiente),
       mapaDePrecosDaStripe(credenciais.ambiente),
-    ]
-  );
+      precosDasOpcoesNaStripe(credenciais.ambiente),
+    ]);
 
   const statusDoAmbiente = getStripeEnvironmentStatus(
     options.origin,
@@ -648,6 +659,7 @@ export async function getAccountBillingContext(options: {
           ?.key as PlanKey | null) ?? null,
       billingConfigured: environment.configured,
       precos,
+      opcoes,
       aceitarPrecosDoEnv: credenciais.origem === 'ambiente',
     }),
   };
@@ -676,6 +688,8 @@ export async function createStripeCheckoutUrl(options: {
   session: AppSession;
   planKey: PlanKey;
   billingInterval: 'monthly' | 'annual';
+  /** Valor de colaboração escolhido, obrigatório no plano que tem valores. */
+  contributionOption?: string | null;
   origin?: string;
 }) {
   if (options.session.user.role === 'admin')
@@ -717,23 +731,73 @@ export async function createStripeCheckoutUrl(options: {
       session: options.session,
       origin: options.origin,
     });
+  // A escolha do valor é conferida antes da configuração da cobrança: um
+  // pedido inválido responde 400 em qualquer ambiente.
+  const opcoes =
+    (await precosDasOpcoesNaStripe((await credenciaisDoStripe()).ambiente)).get(
+      plan.id
+    ) ?? [];
+  let opcaoEscolhida: PrecoDaOpcaoNaStripe | null = null;
+  if (opcoes.length > 0) {
+    // Plano com valores de colaboração: a pessoa escolhe o valor e a
+    // assinatura é mensal e recorrente; todos dão o mesmo acesso.
+    if (options.billingInterval !== 'monthly') {
+      throw new HttpError(
+        `O plano ${plan.name} é uma assinatura mensal recorrente.`,
+        400
+      );
+    }
+    opcaoEscolhida =
+      opcoes.find((opcao) => opcao.opcao === options.contributionOption) ??
+      null;
+    if (!opcaoEscolhida) {
+      throw new HttpError(
+        `Escolha com qual valor quer colaborar no plano ${plan.name}.`,
+        400
+      );
+    }
+  } else if (options.contributionOption) {
+    throw new HttpError(
+      `O plano ${plan.name} não tem valores de colaboração.`,
+      400
+    );
+  }
   const credenciais = await exigirCobrancaConfigurada(
     options.session,
     options.origin
   );
-  const priceId = resolveStripePriceId(
-    plan.key,
-    (await mapaDePrecosDaStripe(credenciais.ambiente)).get(plan.id),
-    options.billingInterval,
-    credenciais.origem === 'ambiente'
-  );
-
-  if (!priceId) {
-    throw new HttpError(
-      `O plano ${plan.name} ainda não tem preço da Stripe para o ciclo ${options.billingInterval === 'annual' ? 'anual' : 'mensal'} no ambiente de ${credenciais.ambiente === 'live' ? 'produção' : 'teste'} (Admin → Pagamentos).`,
-      400
+  const nomeDoAmbiente = credenciais.ambiente === 'live' ? 'produção' : 'teste';
+  let priceId: string | null;
+  if (opcaoEscolhida) {
+    priceId = opcaoEscolhida.mensal;
+    if (!priceId) {
+      throw new HttpError(
+        `Este valor do plano ${plan.name} ainda não tem preço da Stripe no ambiente de ${nomeDoAmbiente} (Admin → Pagamentos).`,
+        400
+      );
+    }
+  } else {
+    priceId = resolveStripePriceId(
+      plan.key,
+      (await mapaDePrecosDaStripe(credenciais.ambiente)).get(plan.id),
+      options.billingInterval,
+      credenciais.origem === 'ambiente'
     );
+    if (!priceId) {
+      throw new HttpError(
+        `O plano ${plan.name} ainda não tem preço da Stripe para o ciclo ${options.billingInterval === 'annual' ? 'anual' : 'mensal'} no ambiente de ${nomeDoAmbiente} (Admin → Pagamentos).`,
+        400
+      );
+    }
   }
+  const metadados = {
+    lyra_user_id: options.session.user.id,
+    lyra_plan_key: options.planKey,
+    lyra_billing_interval: options.billingInterval,
+    ...(opcaoEscolhida
+      ? { lyra_contribution_option: opcaoEscolhida.opcao }
+      : {}),
+  };
 
   const baseUrl = getBillingBaseUrl(options.origin);
   if (!baseUrl) {
@@ -761,17 +825,9 @@ export async function createStripeCheckoutUrl(options: {
         quantity: 1,
       },
     ],
-    metadata: {
-      lyra_user_id: options.session.user.id,
-      lyra_plan_key: options.planKey,
-      lyra_billing_interval: options.billingInterval,
-    },
+    metadata: metadados,
     subscription_data: {
-      metadata: {
-        lyra_user_id: options.session.user.id,
-        lyra_plan_key: options.planKey,
-        lyra_billing_interval: options.billingInterval,
-      },
+      metadata: metadados,
     },
   });
 
@@ -1053,6 +1109,7 @@ async function registrarFaturaPaga(invoice: Stripe.Invoice) {
   let planKey: string | null = null;
   let intervalo: string | null = null;
   if (priceId) {
+    const ambienteDaFatura = ambienteDoObjeto(invoice);
     const planos = await queryRows<{
       plan_key: string;
       annual_price_id: string | null;
@@ -1063,9 +1120,16 @@ async function registrarFaturaPaga(invoice: Stripe.Invoice) {
         INNER JOIN subscription_plans p ON p.id = s.plan_id
         WHERE s.environment = ?
           AND (s.monthly_price_id = ? OR s.annual_price_id = ?)
+        UNION ALL
+        -- Valores de colaboração (tarefa 226): sempre mensais.
+        SELECT p.plan_key, NULL
+        FROM stripe_contribution_prices c
+        INNER JOIN plan_contribution_options o ON o.id = c.option_id
+        INNER JOIN subscription_plans p ON p.id = o.plan_id
+        WHERE c.environment = ? AND c.monthly_price_id = ?
         LIMIT 1
       `,
-      [ambienteDoObjeto(invoice), priceId, priceId]
+      [ambienteDaFatura, priceId, priceId, ambienteDaFatura, priceId]
     );
     if (planos[0]) {
       planKey = planos[0].plan_key;

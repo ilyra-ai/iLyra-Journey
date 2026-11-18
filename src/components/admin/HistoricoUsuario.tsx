@@ -26,7 +26,7 @@ const motivos: Record<string, string> = {
   pending: 'Onboarding pendente',
   free: 'Free',
   meta: 'Meta',
-  care: 'Care',
+  care: 'Lyra Journey',
 };
 const dataHora = new Intl.DateTimeFormat('pt-BR', {
   dateStyle: 'short',

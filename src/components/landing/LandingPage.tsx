@@ -321,7 +321,14 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
                           {plano.description}
                         </p>
                         <p className={styles.price}>
-                          {moedaPtBr(plano.monthlyPrice, plano.currencyCode)}
+                          {/* Valores de colaboração (tarefa 226): os dois, com o mesmo acesso. */}
+                          {plano.contributionOptions.length > 0
+                            ? plano.contributionOptions
+                                .map((v) =>
+                                  moedaPtBr(v.monthlyPrice, plano.currencyCode)
+                                )
+                                .join(' ou ')
+                            : moedaPtBr(plano.monthlyPrice, plano.currencyCode)}
                           <span> /mês</span>
                         </p>
                         {plano.annualPrice > 0 && (

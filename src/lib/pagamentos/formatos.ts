@@ -132,6 +132,8 @@ export interface PrecosInformados {
   produto?: string | null;
   mensal?: string | null;
   anual?: string | null;
+  /** Preço mensal recorrente de cada valor de colaboração (tarefa 226). */
+  opcoes?: Array<{ opcao: string; mensal?: string | null }>;
 }
 
 /**
@@ -140,7 +142,9 @@ export interface PrecosInformados {
  */
 export function errosDosPrecosDaStripe(
   precos: PrecosInformados[],
-  nomeDoPlano: (plano: string) => string = (plano) => plano
+  nomeDoPlano: (plano: string) => string = (plano) => plano,
+  nomeDaOpcao: (plano: string, opcao: string) => string = (_plano, opcao) =>
+    opcao
 ): string[] {
   const erros: string[] = [];
   const vistos = new Map<string, string>();
@@ -153,6 +157,10 @@ export function errosDosPrecosDaStripe(
     for (const [ciclo, valor] of [
       ['mensal', preco.mensal],
       ['anual', preco.anual],
+      ...(preco.opcoes ?? []).map(
+        (opcao) =>
+          [nomeDaOpcao(preco.plano, opcao.opcao), opcao.mensal] as const
+      ),
     ] as const) {
       const limpo = valor?.trim();
       if (!limpo) continue;
@@ -163,7 +171,7 @@ export function errosDosPrecosDaStripe(
       const anterior = vistos.get(limpo);
       if (anterior) {
         erros.push(
-          `${nome} (${ciclo}): o mesmo preço já está em ${anterior}; cada plano e ciclo precisa do seu.`
+          `${nome} (${ciclo}): o mesmo preço já está em ${anterior}; cada plano, ciclo e valor precisa do seu.`
         );
       } else {
         vistos.set(limpo, `${nome} (${ciclo})`);

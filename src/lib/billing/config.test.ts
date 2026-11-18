@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   getBillingBaseUrl,
   getStripeEnvironmentStatus,
+  intervalosAssinaveis,
   resolveStripePriceId,
 } from '@/lib/billing/config';
 import { SubscriptionPlanSummary } from '@/types/subscription';
@@ -135,5 +136,45 @@ describe('billing config', () => {
     // Com as chaves do painel, um preço do .env.local pode ser de outro
     // ambiente da Stripe: não vale.
     expect(resolveStripePriceId(plan.key, null, 'monthly', false)).toBeNull();
+  });
+
+  it('com valores de colaboração, a assinatura é só mensal e usa o preço de cada valor', () => {
+    process.env.STRIPE_PRICE_CARE_MONTHLY = 'price_env_monthly';
+    process.env.STRIPE_PRICE_CARE_ANNUAL = 'price_env_annual';
+    const precos = { mensal: 'price_db_monthly', anual: 'price_db_annual' };
+
+    // Nenhum valor com preço: não é assinável, nem pelos preços do plano
+    // nem pelos do .env.local.
+    expect(
+      intervalosAssinaveis(
+        'care',
+        precos,
+        [{ mensal: null }, { mensal: null }],
+        true
+      )
+    ).toEqual([]);
+    // Um valor com preço basta, e o ciclo é só o mensal.
+    expect(
+      intervalosAssinaveis(
+        'care',
+        precos,
+        [{ mensal: null }, { mensal: 'price_valor_1999' }],
+        false
+      )
+    ).toEqual(['monthly']);
+    // Sem valores, valem os preços do plano.
+    expect(intervalosAssinaveis('care', precos, [], false)).toEqual([
+      'monthly',
+      'annual',
+    ]);
+    expect(intervalosAssinaveis('care', null, undefined, true)).toEqual([
+      'monthly',
+      'annual',
+    ]);
+    // Free e Administrador nunca são assinados.
+    expect(intervalosAssinaveis('free', precos, [], true)).toEqual([]);
+    expect(
+      intervalosAssinaveis('admin', precos, [{ mensal: 'price_x' }], true)
+    ).toEqual([]);
   });
 });

@@ -331,7 +331,7 @@ export function AdminPlanMatrixContent() {
             />
             <CardHeader className="space-y-5">
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <PlanBadge planKey={plan.key} />
+                <PlanBadge planKey={plan.key} label={plan.name} />
                 <Badge
                   variant="secondary"
                   className="max-w-full whitespace-normal text-left"
@@ -653,7 +653,7 @@ export function AdminPlanMatrixContent() {
                           className="min-w-0 space-y-3 rounded-md border border-border bg-background p-2.5"
                         >
                           <legend className="px-1">
-                            <PlanBadge planKey={plan.key} />
+                            <PlanBadge planKey={plan.key} label={plan.name} />
                           </legend>
                           <div className="flex items-center justify-between gap-3">
                             <div>

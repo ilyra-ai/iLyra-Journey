@@ -33,6 +33,12 @@ export function PlansContent() {
   const planos = catalogo.data?.plans.filter(
     (p) => p.key !== 'admin' && p.isActive && p.isPublic
   );
+  // Plano com valores de colaboração é só mensal (tarefa 226): o seletor de
+  // ciclo só aparece se algum plano tiver preço anual próprio.
+  const temCicloAnual = Boolean(
+    planos?.some((p) => p.contributionOptions.length === 0 && p.annualPrice > 0)
+  );
+  const cicloEmUso = temCicloAnual ? ciclo : 'monthly';
   return (
     <>
       <PageIntro
@@ -74,26 +80,28 @@ export function PlansContent() {
             <p className="text-sm">
               Seu plano atual: <strong>{assinatura.data.plan.name}</strong>
             </p>
-            <div
-              role="group"
-              aria-label="Ciclo de pagamento"
-              className="flex gap-2"
-            >
-              <Button
-                variant={ciclo === 'monthly' ? 'default' : 'outline'}
-                aria-pressed={ciclo === 'monthly'}
-                onClick={() => setCiclo('monthly')}
+            {temCicloAnual ? (
+              <div
+                role="group"
+                aria-label="Ciclo de pagamento"
+                className="flex gap-2"
               >
-                Mensal
-              </Button>
-              <Button
-                variant={ciclo === 'annual' ? 'default' : 'outline'}
-                aria-pressed={ciclo === 'annual'}
-                onClick={() => setCiclo('annual')}
-              >
-                Anual
-              </Button>
-            </div>
+                <Button
+                  variant={ciclo === 'monthly' ? 'default' : 'outline'}
+                  aria-pressed={ciclo === 'monthly'}
+                  onClick={() => setCiclo('monthly')}
+                >
+                  Mensal
+                </Button>
+                <Button
+                  variant={ciclo === 'annual' ? 'default' : 'outline'}
+                  aria-pressed={ciclo === 'annual'}
+                  onClick={() => setCiclo('annual')}
+                >
+                  Anual
+                </Button>
+              </div>
+            ) : null}
           </div>
           {planos.length === 0 ? (
             <p role="status">
@@ -103,12 +111,20 @@ export function PlansContent() {
           <div className="grid min-w-0 gap-4 md:grid-cols-2 xl:grid-cols-3">
             {planos.map((plano) => {
               const atual = plano.key === assinatura.data!.plan.key;
-              const preco = new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: plano.currencyCode,
-              }).format(
-                ciclo === 'annual' ? plano.annualPrice : plano.monthlyPrice
-              );
+              const formatar = (valor: number) =>
+                new Intl.NumberFormat('pt-BR', {
+                  style: 'currency',
+                  currency: plano.currencyCode,
+                }).format(valor);
+              const valores = plano.contributionOptions;
+              const comValores = valores.length > 0;
+              const preco = comValores
+                ? valores.map((v) => formatar(v.monthlyPrice)).join(' ou ')
+                : formatar(
+                    cicloEmUso === 'annual'
+                      ? plano.annualPrice
+                      : plano.monthlyPrice
+                  );
               return (
                 <Card key={plano.id} className="flex min-w-0 flex-col">
                   <CardHeader className="space-y-3">
@@ -121,21 +137,50 @@ export function PlansContent() {
                       ) : null}
                     </div>
                     <CardTitle>{plano.name}</CardTitle>
+                    {comValores ? (
+                      // Abertura do plano: os valores dão o mesmo acesso e a
+                      // pessoa escolhe com quanto colabora.
+                      <div className="rounded-lg border border-primary/30 bg-primary/5 p-3">
+                        {plano.highlightText ? (
+                          <p className="text-sm font-semibold text-primary">
+                            {plano.highlightText}
+                          </p>
+                        ) : null}
+                        <p className="mt-1 text-sm leading-6">
+                          {plano.description}
+                        </p>
+                      </div>
+                    ) : null}
                     <p className="text-sm text-muted-foreground">
                       {plano.tagline}
                     </p>
-                    <p className="text-3xl font-semibold tabular-nums">
+                    <p
+                      className={
+                        comValores
+                          ? 'text-2xl font-semibold tabular-nums'
+                          : 'text-3xl font-semibold tabular-nums'
+                      }
+                    >
                       {preco}
                       <span className="ml-1 text-sm font-normal text-muted-foreground">
-                        /{ciclo === 'annual' ? 'ano' : 'mês'}
+                        /{cicloEmUso === 'annual' ? 'ano' : 'mês'}
                       </span>
                     </p>
-                    <p className="text-sm leading-6">{plano.description}</p>
-                    {plano.highlightText ? (
-                      <p className="text-sm font-medium text-primary">
-                        {plano.highlightText}
+                    {comValores ? (
+                      <p className="text-xs text-muted-foreground">
+                        Assinatura mensal recorrente, cobrada automaticamente
+                        todo mês.
                       </p>
-                    ) : null}
+                    ) : (
+                      <>
+                        <p className="text-sm leading-6">{plano.description}</p>
+                        {plano.highlightText ? (
+                          <p className="text-sm font-medium text-primary">
+                            {plano.highlightText}
+                          </p>
+                        ) : null}
+                      </>
+                    )}
                   </CardHeader>
                   <CardContent className="flex flex-1 flex-col gap-5">
                     <ul
@@ -178,7 +223,7 @@ export function PlansContent() {
                       <BillingActionPanel
                         currentPlanKey={assinatura.data!.plan.key}
                         preferredPlanKey={plano.key}
-                        billingInterval={ciclo}
+                        billingInterval={cicloEmUso}
                         compact
                       />
                     )}

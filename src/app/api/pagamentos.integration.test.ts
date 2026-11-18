@@ -121,6 +121,7 @@ async function limparPagamentos() {
   await executeStatement('DELETE FROM payment_provider_settings');
   await executeStatement('DELETE FROM payment_provider_credentials');
   await executeStatement('DELETE FROM stripe_plan_prices');
+  await executeStatement('DELETE FROM stripe_contribution_prices');
 }
 
 beforeEach(limparPagamentos);
@@ -554,6 +555,157 @@ describe('Admin → Pagamentos (credenciais dos meios de pagamento)', () => {
     expect(
       credencialDa(limpo).ambientes.test.precos.find((p) => p.plano === 'care')
     ).toMatchObject({ produto: null, mensal: null, anual: null });
+  });
+
+  it('guarda o preço de cada valor de colaboração e confere na Stripe', async () => {
+    const admin = await criarUsuario('admin', 'Admin');
+    const salvo = await salvar(
+      'stripe',
+      'test',
+      {
+        chavePublica: null,
+        segredo: CHAVE_STRIPE,
+        segredoDoWebhook: WEBHOOK_STRIPE,
+        precos: [
+          {
+            plano: 'care',
+            produto: 'prod_painelJourney1',
+            opcoes: [
+              { opcao: 'colaboracao_999', mensal: 'price_painelValor0999' },
+              { opcao: 'colaboracao_1999', mensal: 'price_painelValor1999' },
+            ],
+          },
+        ],
+      },
+      admin
+    );
+    expect(salvo.status).toBe(200);
+    const journey = credencialDa(salvo).ambientes.test.precos.find(
+      (p) => p.plano === 'care'
+    );
+    expect(journey?.opcoes).toEqual([
+      {
+        opcao: 'colaboracao_999',
+        valorMensal: 9.99,
+        mensal: 'price_painelValor0999',
+      },
+      {
+        opcao: 'colaboracao_1999',
+        valorMensal: 19.99,
+        mensal: 'price_painelValor1999',
+      },
+    ]);
+    // Os ids de teste não aparecem em produção.
+    expect(
+      credencialDa(salvo)
+        .ambientes.live.precos.flatMap((p) => p.opcoes)
+        .every((o) => !o.mensal)
+    ).toBe(true);
+
+    // Cada valor é conferido como preço mensal recorrente no valor certo:
+    // o de R$ 19,99 cadastrado como anual e com outro valor é apontado.
+    const chamadas = stripeFalsa(
+      {
+        price_painelValor0999: {
+          active: true,
+          recurring: { interval: 'month' },
+          currency: 'brl',
+          unit_amount: 999,
+          product: 'prod_painelJourney1',
+        },
+        price_painelValor1999: {
+          active: true,
+          recurring: { interval: 'year' },
+          currency: 'brl',
+          unit_amount: 1990,
+          product: 'prod_painelJourney1',
+        },
+      },
+      false
+    );
+    const divergente = await testarConexao('stripe', 'test', admin);
+    const mensagem = (divergente.json as { resultado: { mensagem: string } })
+      .resultado.mensagem;
+    expect(mensagem).toMatch(
+      /Lyra Journey R\$\s19,99 por mês: o preço não é uma assinatura mensal/
+    );
+    expect(mensagem).toMatch(/catálogo diz R\$\s19,99/);
+    // O de R$ 9,99 está certo e não aparece entre os problemas.
+    expect(mensagem).not.toMatch(/R\$\s9,99 por mês/);
+    expect(chamadas.map((c) => c.url)).toEqual([
+      'https://api.stripe.com/v1/account',
+      'https://api.stripe.com/v1/prices/price_painelValor0999',
+      'https://api.stripe.com/v1/prices/price_painelValor1999',
+    ]);
+
+    // O mesmo price id não pode ser preço do plano e de um valor: o webhook
+    // não saberia o que foi pago.
+    const repetido = await salvar(
+      'stripe',
+      'test',
+      {
+        chavePublica: null,
+        precos: [{ plano: 'care', mensal: 'price_painelValor0999' }],
+      },
+      admin
+    );
+    expect(repetido.status).toBe(409);
+    expect((repetido.json as { error: string }).error).toMatch(
+      /valor de colaboração/
+    );
+    const valorInexistente = await salvar(
+      'stripe',
+      'test',
+      {
+        chavePublica: null,
+        precos: [
+          {
+            plano: 'care',
+            opcoes: [
+              { opcao: 'colaboracao_5000', mensal: 'price_painelNovo01' },
+            ],
+          },
+        ],
+      },
+      admin
+    );
+    expect(valorInexistente.status).toBe(400);
+
+    // Campo vazio apaga o preço daquele valor, e só dele.
+    const limpo = await salvar(
+      'stripe',
+      'test',
+      {
+        chavePublica: null,
+        precos: [
+          {
+            plano: 'care',
+            produto: 'prod_painelJourney1',
+            opcoes: [{ opcao: 'colaboracao_1999', mensal: '' }],
+          },
+        ],
+      },
+      admin
+    );
+    expect(
+      credencialDa(limpo)
+        .ambientes.test.precos.find((p) => p.plano === 'care')
+        ?.opcoes.map((o) => o.mensal)
+    ).toEqual(['price_painelValor0999', null]);
+
+    // Remover as chaves do ambiente (fora de uso) apaga também os preços dos
+    // valores.
+    await configurar('stripe', { ambienteEmUso: 'test', ativo: false }, admin);
+    const removida = await chamar(conjunto.DELETE, {
+      method: 'DELETE',
+      params: { provedor: 'stripe', ambiente: 'test' },
+      usuario: admin,
+    });
+    expect(removida.status).toBe(200);
+    const [restantes] = await queryRows<{ total: number }>(
+      "SELECT COUNT(*) AS total FROM stripe_contribution_prices WHERE environment = 'test'"
+    );
+    expect(Number(restantes.total)).toBe(0);
   });
 
   it('testar conexão do PayPal usa o sandbox no ambiente de teste', async () => {

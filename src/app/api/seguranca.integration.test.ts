@@ -230,7 +230,13 @@ describe('configuração interna da cobrança', () => {
         });
         const checkoutPaciente = await chamar(checkout.POST, {
           method: 'POST',
-          body: { planKey: 'care', billingInterval: 'monthly' },
+          // Desde a tarefa 226 o Lyra Journey exige um dos valores de
+          // colaboração; com um valor válido o pedido chega à cobrança.
+          body: {
+            planKey: 'care',
+            billingInterval: 'monthly',
+            contributionOption: 'colaboracao_999',
+          },
           usuario: paciente,
         });
         expect(checkoutPaciente.status).toBe(503);

@@ -102,9 +102,16 @@ interface PrecoNoRascunho {
   produto: string;
   mensal: string;
   anual: string;
+  /** Preço mensal de cada valor de colaboração, pela chave do valor. */
+  opcoes: Record<string, string>;
 }
 
-const PRECO_VAZIO: PrecoNoRascunho = { produto: '', mensal: '', anual: '' };
+const PRECO_VAZIO: PrecoNoRascunho = {
+  produto: '',
+  mensal: '',
+  anual: '',
+  opcoes: {},
+};
 
 interface Rascunho {
   chavePublica: string;
@@ -123,8 +130,20 @@ function precosSalvos(conjunto: ConjuntoPublico) {
         produto: preco.produto ?? '',
         mensal: preco.mensal ?? '',
         anual: preco.anual ?? '',
-      },
+        opcoes: Object.fromEntries(
+          preco.opcoes.map((opcao) => [opcao.opcao, opcao.mensal ?? ''])
+        ),
+      } satisfies PrecoNoRascunho,
     ])
+  );
+}
+
+function opcoesAlteradas(
+  antes: PrecoNoRascunho | undefined,
+  preco: PrecoNoRascunho
+) {
+  return Object.entries(preco.opcoes).filter(
+    ([opcao, mensal]) => (antes?.opcoes[opcao] ?? '') !== mensal.trim()
   );
 }
 
@@ -152,15 +171,22 @@ function precosAlterados(
         !antes ||
         antes.produto !== preco.produto.trim() ||
         antes.mensal !== preco.mensal.trim() ||
-        antes.anual !== preco.anual.trim()
+        antes.anual !== preco.anual.trim() ||
+        opcoesAlteradas(antes, preco).length > 0
       );
     })
-    .map(([plano, preco]) => ({
-      plano,
-      produto: preco.produto.trim() || null,
-      mensal: preco.mensal.trim() || null,
-      anual: preco.anual.trim() || null,
-    }));
+    .map(([plano, preco]) => {
+      const opcoes = opcoesAlteradas(salvos[plano], preco).map(
+        ([opcao, mensal]) => ({ opcao, mensal: mensal.trim() || null })
+      );
+      return {
+        plano,
+        produto: preco.produto.trim() || null,
+        mensal: preco.mensal.trim() || null,
+        anual: preco.anual.trim() || null,
+        ...(opcoes.length > 0 ? { opcoes } : {}),
+      };
+    });
 }
 
 const formatoData = new Intl.DateTimeFormat('pt-BR', {
@@ -433,6 +459,13 @@ function FormularioDoConjunto({
   const emUso = credencial.ativo && credencial.ambienteEmUso === ambiente;
   const nomeDoPlano = (plano: string) =>
     conjunto.precos.find((p) => p.plano === plano)?.nome ?? plano;
+  const nomeDaOpcao = (plano: string, opcao: string) => {
+    const linha = conjunto.precos.find((p) => p.plano === plano);
+    const valor = linha?.opcoes.find((o) => o.opcao === opcao)?.valorMensal;
+    return linha && valor !== undefined
+      ? `${moeda(valor, linha.moeda)} por mês`
+      : opcao;
+  };
   const alterar = (parcial: Partial<Rascunho>) => {
     setErrosDoFormulario([]);
     setRascunho((atual) => ({ ...atual, ...parcial }));
@@ -483,9 +516,16 @@ function FormularioDoConjunto({
       ...errosDosPrecosDaStripe(
         Object.entries(rascunho.precos).map(([plano, preco]) => ({
           plano,
-          ...preco,
+          produto: preco.produto,
+          mensal: preco.mensal,
+          anual: preco.anual,
+          opcoes: Object.entries(preco.opcoes).map(([opcao, mensal]) => ({
+            opcao,
+            mensal,
+          })),
         })),
-        nomeDoPlano
+        nomeDoPlano,
+        nomeDaOpcao
       ),
     ];
     if (erros.length > 0) {
@@ -723,9 +763,10 @@ function FormularioDoConjunto({
             </legend>
             <p className="-mt-1 text-xs leading-relaxed text-muted-foreground">
               No modo de {nomeDoModo} da Stripe, em Catálogo de produtos, crie
-              um produto por plano com um preço mensal e um anual recorrentes,
-              nos valores abaixo, e cole os ids aqui. O &quot;Testar
-              conexão&quot; confere valor, moeda e ciclo de cada preço.
+              um produto por plano com os preços recorrentes nos valores abaixo
+              (no plano com valores de colaboração, um preço mensal recorrente
+              para cada valor) e cole os ids aqui. O &quot;Testar conexão&quot;
+              confere valor, moeda e ciclo de cada preço.
             </p>
             {conjunto.precos.map((preco) => {
               const valor = rascunho.precos[preco.plano] ?? PRECO_VAZIO;
@@ -742,8 +783,13 @@ function FormularioDoConjunto({
                   >
                     <span className="font-semibold">{preco.nome}</span>
                     <span className="text-xs text-muted-foreground">
-                      {moeda(preco.valorMensal, preco.moeda)} por mês ·{' '}
-                      {moeda(preco.valorAnual, preco.moeda)} por ano
+                      {preco.opcoes.length > 0
+                        ? `Assinatura mensal recorrente: ${preco.opcoes
+                            .map((opcao) =>
+                              moeda(opcao.valorMensal, preco.moeda)
+                            )
+                            .join(' ou ')} por mês, com o mesmo acesso`
+                        : `${moeda(preco.valorMensal, preco.moeda)} por mês · ${moeda(preco.valorAnual, preco.moeda)} por ano`}
                     </span>
                   </p>
                   <div className="grid gap-3 md:grid-cols-3">
@@ -754,20 +800,43 @@ function FormularioDoConjunto({
                       valor={valor.produto}
                       aoMudar={(v) => alterarPreco(preco.plano, { produto: v })}
                     />
-                    <CampoDoPreco
-                      id={`${id}-preco-${preco.plano}-mensal`}
-                      rotulo="Preço mensal"
-                      placeholder="price_..."
-                      valor={valor.mensal}
-                      aoMudar={(v) => alterarPreco(preco.plano, { mensal: v })}
-                    />
-                    <CampoDoPreco
-                      id={`${id}-preco-${preco.plano}-anual`}
-                      rotulo="Preço anual"
-                      placeholder="price_..."
-                      valor={valor.anual}
-                      aoMudar={(v) => alterarPreco(preco.plano, { anual: v })}
-                    />
+                    {preco.opcoes.length > 0 ? (
+                      preco.opcoes.map((opcao) => (
+                        <CampoDoPreco
+                          key={opcao.opcao}
+                          id={`${id}-preco-${preco.plano}-${opcao.opcao}`}
+                          rotulo={`Preço de ${moeda(opcao.valorMensal, preco.moeda)} por mês`}
+                          placeholder="price_..."
+                          valor={valor.opcoes[opcao.opcao] ?? ''}
+                          aoMudar={(v) =>
+                            alterarPreco(preco.plano, {
+                              opcoes: { ...valor.opcoes, [opcao.opcao]: v },
+                            })
+                          }
+                        />
+                      ))
+                    ) : (
+                      <>
+                        <CampoDoPreco
+                          id={`${id}-preco-${preco.plano}-mensal`}
+                          rotulo="Preço mensal"
+                          placeholder="price_..."
+                          valor={valor.mensal}
+                          aoMudar={(v) =>
+                            alterarPreco(preco.plano, { mensal: v })
+                          }
+                        />
+                        <CampoDoPreco
+                          id={`${id}-preco-${preco.plano}-anual`}
+                          rotulo="Preço anual"
+                          placeholder="price_..."
+                          valor={valor.anual}
+                          aoMudar={(v) =>
+                            alterarPreco(preco.plano, { anual: v })
+                          }
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
               );
@@ -1001,7 +1070,7 @@ function CartaoDoProvedor({
             </CardTitle>
             <CardDescription>
               {credencial.checkoutIntegrado
-                ? 'Cobra as assinaturas dos planos Meta e Care (checkout, portal e webhooks).'
+                ? 'Cobra as assinaturas recorrentes do Lyra Journey (checkout, portal e webhooks).'
                 : 'As chaves ficam guardadas e verificadas com o provedor; o checkout por este meio ainda não existe no app.'}
             </CardDescription>
           </div>

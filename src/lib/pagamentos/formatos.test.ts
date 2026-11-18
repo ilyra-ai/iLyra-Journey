@@ -87,7 +87,40 @@ describe('formatos das credenciais de pagamento', () => {
     expect(erros).toEqual([
       'Meta: o produto da Stripe começa com prod_.',
       'Meta (mensal): o preço da Stripe começa com price_.',
-      'Care (anual): o mesmo preço já está em Care (mensal); cada plano e ciclo precisa do seu.',
+      'Care (anual): o mesmo preço já está em Care (mensal); cada plano, ciclo e valor precisa do seu.',
+    ]);
+  });
+
+  it('confere o preço de cada valor de colaboração e o repetido entre valores e ciclos', () => {
+    expect(
+      errosDosPrecosDaStripe([
+        {
+          plano: 'care',
+          opcoes: [
+            { opcao: 'colaboracao_999', mensal: 'price_Valor0999' },
+            { opcao: 'colaboracao_1999', mensal: '' },
+          ],
+        },
+      ])
+    ).toEqual([]);
+    const erros = errosDosPrecosDaStripe(
+      [
+        {
+          plano: 'care',
+          mensal: 'price_Repetido',
+          opcoes: [
+            { opcao: 'colaboracao_999', mensal: 'prod_Errado1' },
+            { opcao: 'colaboracao_1999', mensal: 'price_Repetido' },
+          ],
+        },
+      ],
+      () => 'Lyra Journey',
+      (_plano, opcao) =>
+        opcao === 'colaboracao_999' ? 'R$ 9,99 por mês' : 'R$ 19,99 por mês'
+    );
+    expect(erros).toEqual([
+      'Lyra Journey (R$ 9,99 por mês): o preço da Stripe começa com price_.',
+      'Lyra Journey (R$ 19,99 por mês): o mesmo preço já está em Lyra Journey (mensal); cada plano, ciclo e valor precisa do seu.',
     ]);
   });
 });
