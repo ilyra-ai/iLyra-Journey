@@ -26,6 +26,7 @@ import {
   BillingCatalogPlan,
   PlanKey,
   SubscriptionPlanSummary,
+  PLANO_DE_BASE,
 } from '@/types/subscription';
 import { AppSession } from '@/types/app-session';
 
@@ -371,7 +372,7 @@ async function getActiveSubscriptionRow(userId: string) {
 }
 
 function resolveInternalPlanForDowngrade(role: string): PlanKey {
-  return role === 'admin' ? 'care' : 'free';
+  return role === 'admin' ? 'care' : PLANO_DE_BASE;
 }
 
 function getPrimaryStripeSubscriptionItem(subscription: Stripe.Subscription) {

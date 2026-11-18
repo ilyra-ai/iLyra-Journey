@@ -105,7 +105,7 @@ describe('POST /api/auth/register e /api/auth/login', () => {
       [email]
     );
     expect(plano).toEqual([
-      { plan_key: 'free', status: 'active', source: 'auth_register' },
+      { plan_key: 'care', status: 'active', source: 'auth_register' },
     ]);
     // O aceite fica registrado com a versão vigente de cada documento.
     const consentimentos = await queryRows<{

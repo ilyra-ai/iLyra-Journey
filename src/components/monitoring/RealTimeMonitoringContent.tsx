@@ -22,7 +22,7 @@ import { useAuth } from '@/context/AuthContext';
 import { useKeyedResource } from '@/hooks/use-keyed-resource';
 import { limiteDeFrequencia } from '@/lib/health/limite-de-frequencia';
 import { Button } from '@/components/ui/button';
-import { PlanKey } from '@/types/subscription';
+import { PlanKey, PLANO_DE_BASE } from '@/types/subscription';
 import { Badge } from '@/components/ui/badge';
 import {
   Card,
@@ -71,7 +71,7 @@ function avisarFalhaDaIdade(falha: unknown) {
 
 export function RealTimeMonitoringContent({
   voiceUpdatesEnabled = true,
-  currentPlanKey = 'free',
+  currentPlanKey = PLANO_DE_BASE,
 }: {
   voiceUpdatesEnabled?: boolean;
   currentPlanKey?: PlanKey;

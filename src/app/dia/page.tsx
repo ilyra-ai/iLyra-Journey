@@ -6,6 +6,7 @@ import { SplashScreen } from '@/components/SplashScreen';
 import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
 import { useAuth } from '@/context/AuthContext';
 import { usePlanFeatureAccess } from '@/hooks/use-plan-feature-access';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 export default function MeuDiaPage() {
   const { session } = useAuth();
@@ -30,7 +31,7 @@ export default function MeuDiaPage() {
         <MeuDia />
       ) : (
         <PlanUpgradeNotice
-          currentPlanKey={subscription?.plan.key ?? 'free'}
+          currentPlanKey={subscription?.plan.key ?? PLANO_DE_BASE}
           title="Coach diário indisponível"
           description="O seu plano atual não inclui o feed de dicas de IA, que alimenta o coach diário."
           showAction

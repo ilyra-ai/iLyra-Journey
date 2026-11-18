@@ -147,7 +147,7 @@ describe('explicações persistentes em MySQL e contrato HTTP identificado', () 
     const direitos = await queryRows<{ id: string; enabled: number }>(
       `SELECT e.id,e.enabled FROM plan_entitlements e
        JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id
-       WHERE p.plan_key='free' AND f.feature_key IN ('health_intelligence','metrics_history_days')`
+       WHERE p.plan_key='care' AND f.feature_key IN ('health_intelligence','metrics_history_days')`
     );
     const antes = chamadas();
     try {
@@ -155,7 +155,7 @@ describe('explicações persistentes em MySQL e contrato HTTP identificado', () 
         await executeStatement(
           `UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id
            JOIN plan_features f ON f.id=e.feature_id SET e.enabled=FALSE
-           WHERE p.plan_key='free' AND f.feature_key=?`,
+           WHERE p.plan_key='care' AND f.feature_key=?`,
           [recurso]
         );
         expect(

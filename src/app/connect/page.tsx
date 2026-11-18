@@ -8,6 +8,7 @@ import { WearableConnection } from '@/components/data-connection/WearableConnect
 import { usePlanFeatureAccess } from '@/hooks/use-plan-feature-access';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 export default function DataConnectionPage() {
   const { session } = useAuth();
@@ -42,7 +43,7 @@ export default function DataConnectionPage() {
         />
       ) : (
         <PlanUpgradeNotice
-          currentPlanKey={subscription?.plan.key ?? 'free'}
+          currentPlanKey={subscription?.plan.key ?? PLANO_DE_BASE}
           title="Conexão Bluetooth indisponível"
           description="A conexão de relógios e cintas por Bluetooth não faz parte do seu plano atual. Conheça os planos que incluem este recurso."
           showAction

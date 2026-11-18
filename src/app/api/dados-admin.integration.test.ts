@@ -225,7 +225,7 @@ describe('rotas administrativas', () => {
         chamar(assinaturaAdmin.PATCH, {
           method: 'PATCH',
           params: { userId: ana.id },
-          body: { planKey: 'care' },
+          body: { planKey: 'admin' },
           usuario: ana,
         }),
       () =>
@@ -254,14 +254,14 @@ describe('rotas administrativas', () => {
       expect((await chamada()).status).toBe(403);
     }
 
-    // A tentativa não alterou o plano da paciente.
+    // A tentativa não alterou o plano da paciente (segue no plano de base).
     const plano = await queryRows<{ plan_key: string }>(
       `SELECT p.plan_key FROM user_subscriptions s
          JOIN subscription_plans p ON p.id = s.plan_id
         WHERE s.user_id = ?`,
       [ana.id]
     );
-    expect(plano[0]?.plan_key).not.toBe('care');
+    expect(plano[0]?.plan_key).toBe('care');
   });
 
   it('configuração e base de conhecimento da IA: só o admin lê e altera', async () => {

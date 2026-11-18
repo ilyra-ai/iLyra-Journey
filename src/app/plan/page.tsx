@@ -9,6 +9,7 @@ import { usePlanFeatureAccess } from '@/hooks/use-plan-feature-access';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
 import { HealthOrchestratorProvider } from '@/context/HealthOrchestratorContext';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 export default function AIPlanPage() {
   const { session } = useAuth();
@@ -42,7 +43,7 @@ export default function AIPlanPage() {
         </HealthOrchestratorProvider>
       ) : (
         <PlanUpgradeNotice
-          currentPlanKey={subscription?.plan.key ?? 'free'}
+          currentPlanKey={subscription?.plan.key ?? PLANO_DE_BASE}
           title="Plano de IA indisponível"
           description="O plano de IA não faz parte do seu plano atual. Conheça os planos que incluem este recurso."
         />

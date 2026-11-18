@@ -224,10 +224,10 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 44                       |
+| 🟡 Implementadas com validação pendente | 45                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 36                       |
+| ⚪ A iniciar                            | 35                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
@@ -5749,8 +5749,11 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Estado em 17/11/2026:** migration `076_planos_com_acesso_care.sql` iguala Free e Meta ao Care em `plan_entitlements` (ativo, cota e período de cada um dos 26 recursos; cria linhas que faltem). Antes, as diferenças eram cotas (mensagens, gerações de plano, histórico de métricas, consultas e profissionais) e três recursos desligados no Free ou no Meta (monitoramento em tempo real, atualizações por voz e Bluetooth de wearable). Aplicada no banco local: zero diferenças entre Free, Meta e Care. A matriz continua editável em Administração → Planos. Acesso total às configurações já era só do administrador: as 45 rotas de `/api/admin` exigem `requireAdminSession` e as páginas de `/admin` usam `AccessDenied` (as duas sem guarda só redirecionam ao painel administrativo).
 - **Testes:** oito testes de integração de cota e de recurso liam os limites do Free na matriz (15 mensagens, 30 dias de histórico, 2 profissionais, sem wearable) e deixaram de ter o que testar. O mecanismo não mudou; cada teste passou a declarar o limite que testa com o novo `definirDireito` (`tests/integration/fixtures.ts`), que restaura o valor anterior no fim. Unitários 1210, integração 663, lint, tipos, formato e build aprovados.
 
-### 225 · Só dois planos: Care e Administrador · ⚪ A INICIAR
+### 225 · Só dois planos: Care e Administrador · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
 - **Origem e data:** decisão do titular em 17/11/2026: "só vão ter dois planos".
 - **Escopo:** retirar Free e Meta de uso (sem apagar dados nem histórico de assinaturas), passar quem está neles para o Care, fazer o cadastro novo entrar no Care, ajustar a página pública de planos, os textos e a matriz na administração.
 - **Dois preços no Care (decisão do titular em 17/11/2026):** o Care terá dois preços para a pessoa escolher o que pode pagar e colaborar; os dois liberam todas as funções do Care, só o valor muda. Antes de mexer na cobrança (preços do Stripe), confirmar com o titular os dois valores, o período (mensal, anual ou ambos) e os nomes que aparecem na escolha.
+- **Estado em 17/11/2026 (pedido "desativar os planos Free e Meta"):** migration `077_desativar_free_e_meta.sql` deixa Free e Meta inativos e fora da página pública, sem apagar nada; move para o Care as assinaturas ativas no Free ou no Meta sem vínculo com o Stripe, com um evento `subscription_assigned` de auditoria para cada (as pagas pelo Stripe ficam como estão para não dessincronizar a cobrança; já têm o acesso do Care pela 076). No código, a constante `PLANO_DE_BASE = 'care'` (`src/types/subscription.ts`) substitui o Free como plano padrão: cadastro, criação de usuário pelo administrador, volta de quem encerra a assinatura paga, reparo automático da assinatura e o plano mostrado nas telas enquanto a assinatura carrega; `PLANOS_COMERCIAIS_ATIVOS = ['care']`. Aplicada no banco local: Free e Meta inativos e privados; a conta de teste passou do Free para o Care com o evento de auditoria; a API pública de planos devolve só o Care.
+- **Testes:** cerca de 100 testes de integração ligavam e desligavam recursos no Free para o usuário de teste, que agora nasce no Care; passaram a usar o plano de base. Os testes do catálogo público e da cobrança refletem a decisão: Free e Meta não aparecem na página pública; as regras de "não reduzir plano pelo checkout" e de "cobrança sem Stripe responde 503 sem expor as chaves" continuam testadas reativando o Free ou o Meta só durante o teste (`reativarPlanoNoTeste`). A matriz de cobertura passou a percorrer só os planos comerciais ativos, por isso a integração foi de 663 para 611 testes (52 casos de Free e Meta). Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
+- **Fronteiras não comprovadas:** os dois preços do Care ainda não foram configurados (aguardam os valores, o período e os nomes); cadastro de uma conta nova pela tela não foi feito no navegador; assinaturas pagas no Stripe em Free ou Meta (nenhuma no banco local) seguem para a etapa dos dois preços.

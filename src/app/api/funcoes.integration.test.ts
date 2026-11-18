@@ -79,7 +79,7 @@ describe('assistente de IA', () => {
     const pessoa = await criarUsuario('patient', 'CotaChat');
     // O teste declara a cota que testa; a matriz real é decisão do admin.
     const limite = 3;
-    const restaurar = await definirDireito('free', 'ai_chat_messages', {
+    const restaurar = await definirDireito('care', 'ai_chat_messages', {
       enabled: true,
       quota: limite,
       reset: 'monthly',

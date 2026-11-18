@@ -22,7 +22,7 @@ const agora = new Date('2026-10-28T12:00:00Z');
 async function preparar(tipo: 'registro' | 'reflexao' = 'registro') {
   const u = await criarUsuario();
   await executeStatement(
-    "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=TRUE WHERE p.plan_key='free' AND f.feature_key IN ('daily_checkin','evening_reflection')"
+    "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=TRUE WHERE p.plan_key='care' AND f.feature_key IN ('daily_checkin','evening_reflection')"
   );
   const c = await prepararContextoOffline(u.session, agora);
   const base = c.bases.filter((b) => b.tipo === tipo).at(-1)!;
@@ -202,7 +202,7 @@ describe('registros offline com recibos reais no MySQL', () => {
   it('revalida recurso desabilitado antes de gravar', async () => {
     const { u, c, op } = await preparar();
     await executeStatement(
-      "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=FALSE WHERE p.plan_key='free' AND f.feature_key='daily_checkin'"
+      "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=FALSE WHERE p.plan_key='care' AND f.feature_key='daily_checkin'"
     );
     await expect(
       sincronizarOperacao(u.session, c.permissao, op, agora)

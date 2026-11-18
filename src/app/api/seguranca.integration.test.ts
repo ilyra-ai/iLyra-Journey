@@ -10,7 +10,11 @@ import {
   registrarOcorrencia,
 } from '@/lib/security/rate-limit';
 
-import { criarUsuario } from '../../../tests/integration/fixtures';
+import { assignPlanToUserByAdmin } from '@/lib/plans/service';
+import {
+  criarUsuario,
+  reativarPlanoNoTeste,
+} from '../../../tests/integration/fixtures';
 import { chamar, entrarComo } from '../../../tests/integration/http';
 
 import * as cobranca from './account/billing/route';
@@ -214,13 +218,26 @@ describe('configuração interna da cobrança', () => {
         expect.arrayContaining(['STRIPE_SECRET_KEY', 'STRIPE_WEBHOOK_SECRET'])
       );
 
-      const checkoutPaciente = await chamar(checkout.POST, {
-        method: 'POST',
-        body: { planKey: 'meta', billingInterval: 'monthly' },
-        usuario: paciente,
-      });
-      expect(checkoutPaciente.status).toBe(503);
-      expect(checkoutPaciente.texto).not.toMatch(/STRIPE_/);
+      // A paciente pede um plano acima do atual: ela passa ao Free,
+      // reativado só no teste, e pede o Care (desde a tarefa 225 só o Care é
+      // comercial, e a paciente já nasce nele).
+      const restaurarFree = await reativarPlanoNoTeste('free');
+      try {
+        await assignPlanToUserByAdmin({
+          targetUserId: paciente.id,
+          actorUserId: admin.id,
+          planKey: 'free',
+        });
+        const checkoutPaciente = await chamar(checkout.POST, {
+          method: 'POST',
+          body: { planKey: 'care', billingInterval: 'monthly' },
+          usuario: paciente,
+        });
+        expect(checkoutPaciente.status).toBe(503);
+        expect(checkoutPaciente.texto).not.toMatch(/STRIPE_/);
+      } finally {
+        await restaurarFree();
+      }
     } finally {
       for (const [chave, valor] of Object.entries(segredos)) {
         if (valor !== undefined) {

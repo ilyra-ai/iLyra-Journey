@@ -3,6 +3,17 @@ export const PLAN_KEYS = [...COMMERCIAL_PLAN_KEYS, 'admin'] as const;
 
 export type PlanKey = (typeof PLAN_KEYS)[number];
 
+/**
+ * Plano de base: o que a pessoa tem sem pagar (cadastro, criação pelo
+ * administrador, fim de uma assinatura paga). Desde a tarefa 225 o app tem
+ * só dois planos, Care e Administrador; Free e Meta ficam inativos, mantidos
+ * no tipo para o histórico de assinaturas.
+ */
+export const PLANO_DE_BASE = 'care' satisfies PlanKey;
+
+/** Planos comerciais em uso (tarefa 225); Free e Meta ficam só no histórico. */
+export const PLANOS_COMERCIAIS_ATIVOS = [PLANO_DE_BASE] as const;
+
 export const PLAN_FEATURE_KEYS = [
   'dashboard_access',
   'ai_scores',

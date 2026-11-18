@@ -17,11 +17,12 @@ import { isPlanFeatureEnabled } from '@/lib/plans/access';
 import { processarFilaDaMemoria } from '@/lib/memoria/servico';
 import { criarNotificacao } from '@/lib/notificacoes/servico';
 import {
-  COMMERCIAL_PLAN_KEYS,
   PLAN_FEATURE_KEYS,
   type AccountSubscriptionSummary,
   type PlanFeatureKey,
   type PlanMatrixPlan,
+  PLANO_DE_BASE,
+  PLANOS_COMERCIAIS_ATIVOS,
 } from '@/types/subscription';
 import * as matrix from './admin/plans/[planKey]/route';
 import * as summary from './account/subscription/route';
@@ -184,7 +185,7 @@ afterAll(async () => {
     await executeStatement('DELETE FROM users WHERE id=?', [id]);
 });
 
-describe.each(COMMERCIAL_PLAN_KEYS)('matriz real · %s', (key) => {
+describe.each(PLANOS_COMERCIAIS_ATIVOS)('matriz real · %s', (key) => {
   let p: PlanMatrixPlan;
   let u: UsuarioDeTeste;
   beforeAll(async () => {
@@ -244,7 +245,7 @@ describe.each(COMMERCIAL_PLAN_KEYS)('matriz real · %s', (key) => {
 
 it('Administradores conservam acesso; nenhum plano compra papel administrativo e o plano interno é imutável', async () => {
   const u = await pessoa();
-  for (const key of COMMERCIAL_PLAN_KEYS) {
+  for (const key of PLANOS_COMERCIAIS_ATIVOS) {
     await assignPlanToUserByAdmin({
       targetUserId: u.id,
       actorUserId: admin.id,
@@ -288,9 +289,9 @@ it('Administradores conservam acesso; nenhum plano compra papel administrativo e
       })
     ).status
   ).toBe(403);
-  const free = original.find((p) => p.key === 'free')!;
+  const base = original.find((p) => p.key === PLANO_DE_BASE)!;
   try {
-    await alterar(free, 'guided_breathing', false);
+    await alterar(base, 'guided_breathing', false);
     expect((await chamar(breath.GET, { usuario: admin })).status).toBe(200);
     expect(
       (
@@ -299,12 +300,12 @@ it('Administradores conservam acesso; nenhum plano compra papel administrativo e
       ).administrativeAccess
     ).toBe(true);
   } finally {
-    await updatePlanMatrixByKey('free', free);
+    await updatePlanMatrixByKey(PLANO_DE_BASE, base);
   }
 });
 
 it('rejeita duplicidade e janelas inválidas atomicamente; plano inativo bloqueia uso sem cortar o perfil', async () => {
-  const p = original.find((p) => p.key === 'free')!;
+  const p = original.find((p) => p.key === PLANO_DE_BASE)!;
   const f = p.features.find((f) => f.key === 'ai_chat_messages')!;
   const u = await pessoa();
   try {
@@ -313,7 +314,7 @@ it('rejeita duplicidade e janelas inválidas atomicamente; plano inativo bloquei
         await chamar(matrix.PATCH, {
           method: 'PATCH',
           usuario: admin,
-          params: { planKey: 'free' },
+          params: { planKey: PLANO_DE_BASE },
           body: { ...p, name: 'Não deve gravar', features: [f, f] },
         })
       ).status
@@ -323,7 +324,7 @@ it('rejeita duplicidade e janelas inválidas atomicamente; plano inativo bloquei
         await chamar(matrix.PATCH, {
           method: 'PATCH',
           usuario: admin,
-          params: { planKey: 'free' },
+          params: { planKey: PLANO_DE_BASE },
           body: {
             ...p,
             name: 'Não deve gravar',
@@ -333,18 +334,18 @@ it('rejeita duplicidade e janelas inválidas atomicamente; plano inativo bloquei
       ).status
     ).toBe(400);
     expect(
-      (await getPlanMatrix()).plans.find((p) => p.key === 'free')?.name
+      (await getPlanMatrix()).plans.find((p) => p.key === PLANO_DE_BASE)?.name
     ).toBe(p.name);
-    await updatePlanMatrixByKey('free', { ...p, isActive: false });
+    await updatePlanMatrixByKey(PLANO_DE_BASE, { ...p, isActive: false });
     expect(await probes.guided_breathing(u)).toBe(403);
     expect(await probes.profile_management(u)).toBe(200);
   } finally {
-    await updatePlanMatrixByKey('free', p);
+    await updatePlanMatrixByKey('care', p);
   }
 });
 
 it('limites de profissionais e consultas são atômicos em insert, upsert e atualização concorrente', async () => {
-  const p = original.find((p) => p.key === 'free')!;
+  const p = original.find((p) => p.key === 'care')!;
   const u = await pessoa();
   const post = (table: string, values: object, upsert = false) =>
     chamar(data.POST, {
@@ -438,12 +439,12 @@ it('limites de profissionais e consultas são atômicos em insert, upsert e atua
       )[0].total
     ).toBe(1);
   } finally {
-    await updatePlanMatrixByKey('free', p);
+    await updatePlanMatrixByKey('care', p);
   }
 });
 
 it('a janela vale na API genérica, check-in, score e retrospectiva; zero impede consulta e gravação manual', async () => {
-  const p = original.find((p) => p.key === 'free')!;
+  const p = original.find((p) => p.key === 'care')!;
   const u = await pessoa();
   const past = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
   try {
@@ -495,12 +496,12 @@ it('a janela vale na API genérica, check-in, score e retrospectiva; zero impede
     ).toBe(403);
     expect((await table('profiles', u)).status).toBe(200);
   } finally {
-    await updatePlanMatrixByKey('free', p);
+    await updatePlanMatrixByKey('care', p);
   }
 });
 
 it('desligar escores interrompe cálculo automático; memória e notificações desligadas não coletam nem processam', async () => {
-  const p = original.find((p) => p.key === 'free')!;
+  const p = original.find((p) => p.key === 'care')!;
   const u = await pessoa();
   try {
     await alterar(p, 'ai_scores', false);
@@ -589,12 +590,12 @@ it('desligar escores interrompe cálculo automático; memória e notificações 
       ).status
     ).toBe(403);
   } finally {
-    await updatePlanMatrixByKey('free', p);
+    await updatePlanMatrixByKey('care', p);
   }
 });
 
 it('bloqueia também as vias alternativas de escrita, feedback, replay e leitura personalizada', async () => {
-  const p = original.find((p) => p.key === 'free')!;
+  const p = original.find((p) => p.key === 'care')!;
   const u = await pessoa();
   const id = randomUUID();
   const cases: Array<{
@@ -763,12 +764,12 @@ it('bloqueia também as vias alternativas de escrita, feedback, replay e leitura
       ])
     ).toEqual([]);
   } finally {
-    await updatePlanMatrixByKey('free', p);
+    await updatePlanMatrixByKey('care', p);
   }
 });
 
 it('assinaturas de calendário antigas revalidam a matriz e o bloqueio do dono sem cookie', async () => {
-  const p = original.find((p) => p.key === 'free')!;
+  const p = original.find((p) => p.key === 'care')!;
   const u = await pessoa();
   const city = cidadePorId(3448439)!;
   expect(city).toBeTruthy();
@@ -807,7 +808,7 @@ it('assinaturas de calendário antigas revalidam a matriz e o bloqueio do dono s
     );
     expect((await open()).status).toBe(404);
   } finally {
-    await updatePlanMatrixByKey('free', p);
+    await updatePlanMatrixByKey('care', p);
   }
 });
 
@@ -853,7 +854,7 @@ it('consultas recusam profissionais de outra conta; upserts concorrentes não tr
 });
 
 it('cota de consultas usa UTC mesmo quando o processo está em outro fuso', async () => {
-  const p = original.find((p) => p.key === 'free')!;
+  const p = original.find((p) => p.key === 'care')!;
   const u = await pessoa();
   const tzAnterior = process.env.TZ;
   try {
@@ -888,6 +889,6 @@ it('cota de consultas usa UTC mesmo quando o processo está em outro fuso', asyn
   } finally {
     if (tzAnterior === undefined) delete process.env.TZ;
     else process.env.TZ = tzAnterior;
-    await updatePlanMatrixByKey('free', p);
+    await updatePlanMatrixByKey('care', p);
   }
 });

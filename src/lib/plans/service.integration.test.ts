@@ -84,9 +84,9 @@ beforeAll(async () => {
 describe('planos · assinatura', () => {
   it('cria a assinatura gratuita uma única vez, mesmo com chamadas repetidas', async () => {
     const pessoa = await criarUsuario('patient', 'Nova');
-    const primeira = await ensureUserSubscription(pessoa.id, 'free');
-    const segunda = await ensureUserSubscription(pessoa.id, 'free');
-    expect(primeira.plan_key).toBe('free');
+    const primeira = await ensureUserSubscription(pessoa.id, 'care');
+    const segunda = await ensureUserSubscription(pessoa.id, 'care');
+    expect(primeira.plan_key).toBe('care');
     expect(segunda.subscription_id).toBe(primeira.subscription_id);
     expect(await assinaturasAtivas(pessoa)).toBe(1);
   });
@@ -94,7 +94,7 @@ describe('planos · assinatura', () => {
   it('chamadas simultâneas criam uma única assinatura ativa', async () => {
     const pessoa = await criarUsuario('patient', 'Simultânea');
     const resultados = await Promise.all(
-      Array.from({ length: 8 }, () => ensureUserSubscription(pessoa.id, 'free'))
+      Array.from({ length: 8 }, () => ensureUserSubscription(pessoa.id, 'care'))
     );
     expect(new Set(resultados.map((r) => r.subscription_id)).size).toBe(1);
     expect(await assinaturasAtivas(pessoa)).toBe(1);
@@ -103,9 +103,9 @@ describe('planos · assinatura', () => {
   it('resume a assinatura com os recursos da matriz', async () => {
     const pessoa = await criarUsuario('patient', 'Resumo');
     const resumo = await getAccountSubscriptionSummary(pessoa.id, 'patient');
-    expect(resumo.plan.key).toBe('free');
+    expect(resumo.plan.key).toBe('care');
     const chat = resumo.features.find((f) => f.key === 'ai_chat_messages');
-    const esperado = await direito('free', 'ai_chat_messages');
+    const esperado = await direito('care', 'ai_chat_messages');
     expect(chat?.quotaValue).toBe(esperado.quota);
     expect(chat?.usedValue).toBe(0);
     expect(chat?.remainingValue).toBe(esperado.quota);
@@ -113,7 +113,7 @@ describe('planos · assinatura', () => {
 
   it('a troca de plano pelo administrador substitui a assinatura ativa', async () => {
     const pessoa = await criarUsuario('patient', 'Upgrade');
-    await ensureUserSubscription(pessoa.id, 'free');
+    await ensureUserSubscription(pessoa.id, 'care');
     await assignPlanToUserByAdmin({
       targetUserId: pessoa.id,
       actorUserId: admin.id,
@@ -148,17 +148,17 @@ describe('planos · assinatura', () => {
 });
 
 describe('planos · recursos e cotas', () => {
-  // Cota e janela do Free declaradas aqui: desde a tarefa 224 a matriz
-  // parte do acesso do Care, sem limite de profissionais.
+  // Cota e janela do plano de base declaradas aqui: desde as tarefas 224 e
+  // 225 ele é o Care, sem limite de profissionais.
   const restauracoes: Array<() => Promise<void>> = [];
   beforeAll(async () => {
     restauracoes.push(
-      await definirDireito('free', 'professionals_total', {
+      await definirDireito('care', 'professionals_total', {
         enabled: true,
         quota: 2,
         reset: 'concurrent',
       }),
-      await definirDireito('free', 'metrics_history_days', {
+      await definirDireito('care', 'metrics_history_days', {
         enabled: true,
         quota: 30,
         reset: 'rolling',
@@ -171,7 +171,7 @@ describe('planos · recursos e cotas', () => {
 
   it('bloqueia recursos desligados no plano e libera administradores', async () => {
     const pessoa = await criarUsuario('patient', 'Recursos');
-    const bluetooth = await direito('free', 'wearable_bluetooth_connection');
+    const bluetooth = await direito('care', 'wearable_bluetooth_connection');
     expect(
       await statusDe(
         requireFeatureEnabled(pessoa.session, 'wearable_bluetooth_connection')
@@ -186,7 +186,7 @@ describe('planos · recursos e cotas', () => {
 
   it('consome a cota mensal até o limite e então recusa', async () => {
     const pessoa = await criarUsuario('patient', 'Cota');
-    const { quota } = await direito('free', 'ai_plan_generations');
+    const { quota } = await direito('care', 'ai_plan_generations');
     expect(quota).not.toBeNull();
     for (let usado = 0; usado < (quota as number); usado += 1) {
       await consumeUsageQuota({
@@ -212,7 +212,7 @@ describe('planos · recursos e cotas', () => {
 
   it('consumos simultâneos nunca ultrapassam a cota', async () => {
     const pessoa = await criarUsuario('patient', 'Concorrência');
-    const { quota } = await direito('free', 'ai_chat_messages');
+    const { quota } = await direito('care', 'ai_chat_messages');
     const tentativas = (quota as number) + 5;
     const resultados = await Promise.all(
       Array.from({ length: tentativas }, () =>
@@ -238,7 +238,7 @@ describe('planos · recursos e cotas', () => {
 
   it('respeita a cota de linhas ativas', async () => {
     const pessoa = await criarUsuario('patient', 'Profissionais');
-    const { quota } = await direito('free', 'professionals_total');
+    const { quota } = await direito('care', 'professionals_total');
     expect(
       await statusDe(
         assertActiveRowsQuota({
@@ -261,7 +261,7 @@ describe('planos · recursos e cotas', () => {
 
   it('o histórico de métricas segue o plano; administradores não têm limite', async () => {
     const pessoa = await criarUsuario('patient', 'Histórico');
-    const { quota } = await direito('free', 'metrics_history_days');
+    const { quota } = await direito('care', 'metrics_history_days');
     expect(await getMetricsHistoryLimit(pessoa.session)).toBe(quota);
     expect(await getMetricsHistoryLimit(admin.session)).toBeNull();
   });

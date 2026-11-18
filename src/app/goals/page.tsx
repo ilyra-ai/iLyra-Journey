@@ -7,6 +7,7 @@ import { SplashScreen } from '@/components/SplashScreen';
 import { GoalTrackingContent } from '@/components/goals/GoalTrackingContent';
 import { usePlanFeatureAccess } from '@/hooks/use-plan-feature-access';
 import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 export default function GoalTrackingPage() {
   const { session } = useAuth();
@@ -37,7 +38,7 @@ export default function GoalTrackingPage() {
         <GoalTrackingContent />
       ) : (
         <PlanUpgradeNotice
-          currentPlanKey={subscription?.plan.key ?? 'free'}
+          currentPlanKey={subscription?.plan.key ?? PLANO_DE_BASE}
           title="Acompanhamento de metas indisponível"
           description="O acompanhamento detalhado de metas não faz parte do seu plano atual. Conheça os planos que incluem este recurso."
           showAction

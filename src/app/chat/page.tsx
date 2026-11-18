@@ -10,6 +10,7 @@ import { usePlanFeatureAccess } from '@/hooks/use-plan-feature-access';
 import { isPlanFeatureEnabled } from '@/lib/plans/access';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 function ConversaSelecionada() {
   const { session } = useAuth();
@@ -63,7 +64,7 @@ export default function ChatPage() {
         </Suspense>
       ) : (
         <PlanUpgradeNotice
-          currentPlanKey={subscription?.plan.key ?? 'free'}
+          currentPlanKey={subscription?.plan.key ?? PLANO_DE_BASE}
           title="Assistente IA indisponível"
           description="As conversas com a Lyra não fazem parte do seu plano atual. Conheça os planos que incluem este recurso."
         />

@@ -63,6 +63,7 @@ import { SeuDiaCard } from '@/components/coach/SeuDiaCard';
 import { BotaoRegistroDoDia } from '@/components/metricas/RegistroDoDia';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 function CarregandoAssunto() {
   return (
@@ -516,7 +517,7 @@ export function Dashboard() {
   if (!subscription || !dashboardEnabled) {
     return (
       <PlanUpgradeNotice
-        currentPlanKey={subscription?.plan.key ?? 'free'}
+        currentPlanKey={subscription?.plan.key ?? PLANO_DE_BASE}
         title="Painel completo indisponível"
         description="O painel completo não faz parte do seu plano atual. Conheça os planos que incluem esta visão."
       />

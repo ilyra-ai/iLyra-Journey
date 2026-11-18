@@ -7,6 +7,7 @@ import { isPlanFeatureEnabled } from '@/lib/plans/access';
 import { gruposDoRecurso } from '@/lib/plataforma/grupos';
 import type { PlanFeatureKey } from '@/types/subscription';
 import { PlanUpgradeNotice } from './PlanUpgradeNotice';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 /** Filhos bloqueados não são montados: não consultam dados nem iniciam práticas. */
 export function PlanFeatureGate({
@@ -49,14 +50,14 @@ export function PlanFeatureGate({
   if (recurso?.globalmenteDesativado)
     return (
       <PlanUpgradeNotice
-        currentPlanKey={data?.plan.key ?? 'free'}
+        currentPlanKey={data?.plan.key ?? PLANO_DE_BASE}
         title="Recurso desativado pelo administrador"
         description={`O recurso “${nome}” está desativado pelo administrador do app para todos os usuários. Seus registros continuam guardados e voltam a aparecer se o recurso for reativado.`}
       />
     );
   return (
     <PlanUpgradeNotice
-      currentPlanKey={data?.plan.key ?? 'free'}
+      currentPlanKey={data?.plan.key ?? PLANO_DE_BASE}
       title="Recurso indisponível no seu plano"
       description={`Seu plano atual não inclui ${nome}. Você pode continuar acessando seu perfil e os recursos habilitados.`}
       showAction

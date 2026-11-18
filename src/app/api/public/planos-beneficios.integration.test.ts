@@ -8,11 +8,20 @@ import { executeStatement } from '@/lib/mysql/pool';
 import { beneficiosPublicos } from '@/lib/plans/beneficios-publicos';
 import type { PlanMatrixResponse } from '@/types/subscription';
 
-it('publica alterações reais dos três planos comerciais com limites, zero e desabilitação; protege Administrador', async () => {
+it('publica alterações reais dos planos comerciais ativos com limites, zero e desabilitação; protege Administrador', async () => {
   const admin = await criarUsuario('admin');
   const original = await getPlanMatrix();
   try {
-    for (const plan of original.plans.filter((p) => p.key !== 'admin')) {
+    // Desde a tarefa 225 só o Care é comercial: Free e Meta ficam inativos.
+    const publicos = (
+      (await chamar(GET, { usuario: null })).json as PlanMatrixResponse
+    ).plans.map((p) => p.key);
+    expect(publicos).not.toContain('free');
+    expect(publicos).not.toContain('meta');
+    expect(publicos).toContain('care');
+    for (const plan of original.plans.filter(
+      (p) => p.key !== 'admin' && p.isActive && p.isPublic
+    )) {
       const features = plan.features.map((f) => ({
         key: f.key,
         enabled: f.enabled,

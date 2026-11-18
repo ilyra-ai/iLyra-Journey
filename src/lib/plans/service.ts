@@ -21,6 +21,7 @@ import {
   PlanMatrixUpdateInput,
   SubscriptionPlanSummary,
   UserSubscriptionAssignment,
+  PLANO_DE_BASE,
 } from '@/types/subscription';
 import { AppSession } from '@/types/app-session';
 import { capacidadeDisponivel } from './dependencias';
@@ -583,7 +584,7 @@ async function fetchFeatureAccess(
     ? 'admin'
     : role === 'admin'
       ? 'care'
-      : 'free';
+      : PLANO_DE_BASE;
   const current =
     (await fetchCurrentSubscriptionRow(userId, connection)) ??
     (await ensureUserSubscription(
@@ -623,7 +624,7 @@ export async function getAccountSubscriptionSummary(
     ? 'admin'
     : role === 'admin'
       ? 'care'
-      : 'free';
+      : PLANO_DE_BASE;
   let current =
     (await fetchCurrentSubscriptionRow(userId)) ??
     (await ensureUserSubscription(userId, preferredPlan, 'auto_repair_plan'));

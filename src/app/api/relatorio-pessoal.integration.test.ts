@@ -61,7 +61,7 @@ async function preparar() {
 }
 async function recurso(chave: string, enabled: boolean) {
   await executeStatement(
-    "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=? WHERE p.plan_key='free' AND f.feature_key=?",
+    "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=? WHERE p.plan_key='care' AND f.feature_key=?",
     [enabled, chave]
   );
 }
@@ -309,11 +309,11 @@ describe('relatório pessoal e PDF com registros reais no MySQL', () => {
     const u = await preparar(),
       r = await montarRelatorio(u.session, selecao(), agora);
     const sql =
-      "SELECT e.quota_value FROM plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id WHERE p.plan_key='free' AND f.feature_key='metrics_history_days'";
+      "SELECT e.quota_value FROM plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id WHERE p.plan_key='care' AND f.feature_key='metrics_history_days'";
     const [antes] = await queryRows<{ quota_value: number | null }>(sql);
     const atualizar = (v: number | null) =>
       executeStatement(
-        "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.quota_value=? WHERE p.plan_key='free' AND f.feature_key='metrics_history_days'",
+        "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.quota_value=? WHERE p.plan_key='care' AND f.feature_key='metrics_history_days'",
         [v]
       );
     await atualizar(7);

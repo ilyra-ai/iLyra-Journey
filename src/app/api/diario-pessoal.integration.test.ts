@@ -473,7 +473,7 @@ describe('diário pessoal (tarefa 135)', () => {
     expect(JSON.stringify(linha)).not.toContain('caminhar no parque');
     const recurso = (ativo: boolean) =>
       executeStatement(
-        "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=? WHERE p.plan_key='free' AND f.feature_key='evening_reflection'",
+        "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=? WHERE p.plan_key='care' AND f.feature_key='evening_reflection'",
         [ativo]
       );
     await recurso(false);

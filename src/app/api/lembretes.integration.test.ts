@@ -45,7 +45,7 @@ async function preparar() {
 }
 async function recurso(habilitado: boolean, chave = 'personal_notifications') {
   await executeStatement(
-    `UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=? WHERE p.plan_key='free' AND f.feature_key=?`,
+    `UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=? WHERE p.plan_key='care' AND f.feature_key=?`,
     [habilitado, chave]
   );
 }

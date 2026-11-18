@@ -207,7 +207,7 @@ describe('histórico recuperável dos registros manuais (129)', () => {
     await gravar(u, { passos: 8 });
     const id = corpo(await listar(u)).versoes[0].id;
     const originais = await queryRows<{ id: string; enabled: number }>(
-      "SELECT e.id,e.enabled FROM plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id WHERE p.plan_key='free' AND f.feature_key='daily_checkin'"
+      "SELECT e.id,e.enabled FROM plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id WHERE p.plan_key='care' AND f.feature_key='daily_checkin'"
     );
     try {
       for (const e of originais)

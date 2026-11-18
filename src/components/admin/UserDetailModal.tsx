@@ -47,6 +47,7 @@ import {
   PLAN_KEYS,
   PlanKey,
   UserSubscriptionAssignment,
+  PLANO_DE_BASE,
 } from '@/types/subscription';
 
 interface UserDetailModalProps {
@@ -132,7 +133,7 @@ export function UserDetailModal({
   const loadingAssignment = open && loadedForUserId !== user.id;
   const [savingAssignment, setSavingAssignment] = React.useState(false);
   const [selectedPlanKey, setSelectedPlanKey] = React.useState<PlanKey>(
-    user.plan.key ?? 'free'
+    user.plan.key ?? PLANO_DE_BASE
   );
   const [selectedBillingInterval, setSelectedBillingInterval] =
     React.useState<BillingInterval>(

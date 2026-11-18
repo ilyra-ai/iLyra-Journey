@@ -27,7 +27,7 @@ it('cadastros público e administrativo concedem um único Free sem conceder pap
     usuario: admin,
   });
   expect(criada.status).toBe(201);
-  expect(criada.json).toMatchObject({ planKey: 'free' });
+  expect(criada.json).toMatchObject({ planKey: 'care' });
   const publica = await chamar(registrar, {
     method: 'POST',
     body: {
@@ -46,7 +46,7 @@ it('cadastros público e administrativo concedem um único Free sem conceder pap
       `SELECT s.plan_key, p.role FROM users u JOIN profiles p ON p.id = u.id JOIN user_subscriptions a ON a.user_id = u.id JOIN subscription_plans s ON s.id = a.plan_id WHERE u.email = ? AND a.status = 'active'`,
       [email]
     );
-    expect(linhas).toEqual([{ plan_key: 'free', role: 'patient' }]);
+    expect(linhas).toEqual([{ plan_key: 'care', role: 'patient' }]);
   }
   const repetida = await chamar(POST, {
     method: 'POST',

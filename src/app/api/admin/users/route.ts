@@ -11,6 +11,7 @@ import { z } from 'zod';
 import { respostaDeErro } from '@/lib/http/api';
 import { requireAdminSession } from '@/lib/mysql/server-auth';
 import { listAdminUsersWithSubscriptions } from '@/lib/plans/service';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 export const runtime = 'nodejs';
 
@@ -94,14 +95,14 @@ export async function POST(request: Request) {
         `INSERT INTO profiles (id, email, first_name, last_name, role, onboarding_completed) VALUES (?, ?, ?, ?, 'patient', FALSE)`,
         [id, body.email, body.firstName, body.lastName]
       );
-      await ensureUserSubscription(id, 'free', 'admin_create', db);
+      await ensureUserSubscription(id, PLANO_DE_BASE, 'admin_create', db);
       await registrarEventoDeUsuario(db, {
         userId: id,
         actorId: session.user.id,
         action: 'account_created',
       });
     });
-    return NextResponse.json({ id, planKey: 'free' }, { status: 201 });
+    return NextResponse.json({ id, planKey: PLANO_DE_BASE }, { status: 201 });
   } catch (erro) {
     return respostaDeErro(erro, 'Não foi possível cadastrar o usuário.');
   }

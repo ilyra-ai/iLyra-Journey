@@ -27,7 +27,7 @@ async function recursoNoFree(recurso: PlanFeatureKey, habilitado: boolean) {
        JOIN subscription_plans p ON p.id = e.plan_id
        JOIN plan_features f ON f.id = e.feature_id
         SET e.enabled = ?
-      WHERE p.plan_key = 'free' AND f.feature_key = ?`,
+      WHERE p.plan_key='care' AND f.feature_key = ?`,
     [habilitado, recurso]
   );
 }

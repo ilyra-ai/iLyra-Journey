@@ -107,18 +107,18 @@ describe('painéis e transmissão com persistência real', () => {
       enabled: number;
       quota_value: number | null;
     }>(
-      `SELECT pf.id, pf.enabled, pf.quota_value FROM plan_entitlements pf JOIN subscription_plans p ON p.id = pf.plan_id JOIN plan_features f ON f.id = pf.feature_id WHERE p.plan_key = 'free' AND f.feature_key IN ('ai_scores', 'metrics_history_days')`
+      `SELECT pf.id, pf.enabled, pf.quota_value FROM plan_entitlements pf JOIN subscription_plans p ON p.id = pf.plan_id JOIN plan_features f ON f.id = pf.feature_id WHERE p.plan_key='care' AND f.feature_key IN ('ai_scores', 'metrics_history_days')`
     );
     expect(linhas).toHaveLength(2);
     try {
       await executeStatement(
-        `UPDATE plan_entitlements pf JOIN subscription_plans p ON p.id = pf.plan_id JOIN plan_features f ON f.id = pf.feature_id SET pf.enabled = FALSE WHERE p.plan_key = 'free' AND f.feature_key = 'ai_scores'`
+        `UPDATE plan_entitlements pf JOIN subscription_plans p ON p.id = pf.plan_id JOIN plan_features f ON f.id = pf.feature_id SET pf.enabled = FALSE WHERE p.plan_key='care' AND f.feature_key = 'ai_scores'`
       );
       expect(
         (await filtrarPaineisDoChat(pessoa.id, partes))[0].dias[0].prontidao
       ).toBeNull();
       await executeStatement(
-        `UPDATE plan_entitlements pf JOIN subscription_plans p ON p.id = pf.plan_id JOIN plan_features f ON f.id = pf.feature_id SET pf.enabled = FALSE WHERE p.plan_key = 'free' AND f.feature_key = 'metrics_history_days'`
+        `UPDATE plan_entitlements pf JOIN subscription_plans p ON p.id = pf.plan_id JOIN plan_features f ON f.id = pf.feature_id SET pf.enabled = FALSE WHERE p.plan_key='care' AND f.feature_key = 'metrics_history_days'`
       );
       expect(await filtrarPaineisDoChat(pessoa.id, partes)).toMatchObject([
         { indisponivel: 'plano', dias: [] },

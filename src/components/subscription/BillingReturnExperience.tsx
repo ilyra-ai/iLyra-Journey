@@ -30,7 +30,7 @@ import {
 import { useAuth } from '@/context/AuthContext';
 import { useAccountBilling } from '@/hooks/use-account-billing';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
-import { PLAN_KEYS, PlanKey } from '@/types/subscription';
+import { PLAN_KEYS, PlanKey, PLANO_DE_BASE } from '@/types/subscription';
 
 function isPlanKey(value: string | null): value is PlanKey {
   return value !== null && PLAN_KEYS.includes(value as PlanKey);
@@ -117,7 +117,7 @@ export function BillingReturnExperience({
     return null;
   }
 
-  const currentPlanKey = subscription?.plan.key ?? 'free';
+  const currentPlanKey = subscription?.plan.key ?? PLANO_DE_BASE;
   const stripePending =
     mode === 'success' &&
     billing?.environment.configured &&

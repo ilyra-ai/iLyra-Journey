@@ -145,7 +145,7 @@ describe('sessão da pulseira (POST /api/metricas/sensor)', () => {
   it('plano sem wearable recebe 403 e nada é gravado', async () => {
     const pessoa = await criarUsuario('patient', 'Free');
     const restaurar = await definirDireito(
-      'free',
+      'care',
       'wearable_bluetooth_connection',
       { enabled: false }
     );
@@ -168,7 +168,7 @@ describe('sessão da pulseira (POST /api/metricas/sensor)', () => {
     await assignPlanToUserByAdmin({
       targetUserId: pessoa.id,
       actorUserId: admin.id,
-      planKey: 'meta',
+      planKey: 'care',
     });
 
     // Check-in com FC de repouso 64 e passos.
@@ -234,7 +234,7 @@ describe('sessão da pulseira (POST /api/metricas/sensor)', () => {
     await assignPlanToUserByAdmin({
       targetUserId: pessoa.id,
       actorUserId: admin.id,
-      planKey: 'meta',
+      planKey: 'care',
     });
     const avisos = () =>
       queryRows<{ title: string }>(

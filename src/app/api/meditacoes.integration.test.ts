@@ -32,7 +32,7 @@ async function meditacaoDoDia(userId: string, data = '2026-10-29') {
 }
 async function recurso(habilitado: boolean) {
   await executeStatement(
-    "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=? WHERE p.plan_key='free' AND f.feature_key='guided_breathing'",
+    "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=? WHERE p.plan_key='care' AND f.feature_key='guided_breathing'",
     [habilitado]
   );
 }

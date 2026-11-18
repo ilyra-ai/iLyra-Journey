@@ -21,7 +21,7 @@ import { useKeyedResource } from '@/hooks/use-keyed-resource';
 import { useRotaLiberada } from '@/hooks/use-rota-liberada';
 import { ouvirMetricasAtualizadas } from '@/lib/metricas/evento-de-atualizacao';
 import { cn } from '@/lib/utils';
-import { PlanKey } from '@/types/subscription';
+import { PlanKey, PLANO_DE_BASE } from '@/types/subscription';
 
 interface DicaDoDia {
   dica: {
@@ -63,7 +63,7 @@ function avisarFalha(falha: unknown) {
 export function AITipsCard({
   className,
   featureEnabled = true,
-  currentPlanKey = 'free',
+  currentPlanKey = PLANO_DE_BASE,
 }: AITipsCardProps) {
   const router = useRouter();
   const rotaLiberada = useRotaLiberada();

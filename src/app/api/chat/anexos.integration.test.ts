@@ -383,7 +383,7 @@ describe('anexos privados, MySQL e handlers reais', () => {
       [u.id]
     );
     await executeStatement(
-      "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=FALSE WHERE p.plan_key='free' AND f.feature_key='chat_history'"
+      "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=FALSE WHERE p.plan_key='care' AND f.feature_key='chat_history'"
     );
     try {
       expect(
@@ -391,7 +391,7 @@ describe('anexos privados, MySQL e handlers reais', () => {
       ).toBe(403);
     } finally {
       await executeStatement(
-        "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=TRUE WHERE p.plan_key='free' AND f.feature_key='chat_history'"
+        "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=TRUE WHERE p.plan_key='care' AND f.feature_key='chat_history'"
       );
     }
   });

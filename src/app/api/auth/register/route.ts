@@ -18,6 +18,7 @@ import {
   exigirDentroDoLimite,
   ipDoCliente,
 } from '@/lib/security/rate-limit';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 export const runtime = 'nodejs';
 
@@ -112,7 +113,12 @@ export async function POST(request: Request) {
       // falhar, nada é gravado (antes ela era criada depois do COMMIT e uma
       // falha nesse ponto deixava a conta sem plano até o primeiro acesso,
       // que a reparava como "auto_repair_plan").
-      await ensureUserSubscription(userId, 'free', 'auth_register', connection);
+      await ensureUserSubscription(
+        userId,
+        PLANO_DE_BASE,
+        'auth_register',
+        connection
+      );
       return papel;
     });
 

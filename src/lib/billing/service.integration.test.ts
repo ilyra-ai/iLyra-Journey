@@ -237,7 +237,7 @@ describe('webhook Stripe', () => {
 
     const ativos = await planoAtivo(usuario);
     expect(ativos).toHaveLength(1);
-    expect(ativos[0]?.plan_key).toBe('free');
+    expect(ativos[0]?.plan_key).toBe('care');
     expect(
       await contar(
         `SELECT COUNT(*) AS total FROM user_subscriptions

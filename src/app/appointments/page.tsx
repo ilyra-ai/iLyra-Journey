@@ -7,6 +7,7 @@ import { AppointmentsContent } from '@/components/appointments/AppointmentsConte
 import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { useRotaLiberada } from '@/hooks/use-rota-liberada';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 export default function AppointmentsPage() {
   const { session } = useAuth();
@@ -31,7 +32,7 @@ export default function AppointmentsPage() {
         <AppointmentsContent />
       ) : (
         <PlanUpgradeNotice
-          currentPlanKey={subscription?.plan.key ?? 'free'}
+          currentPlanKey={subscription?.plan.key ?? PLANO_DE_BASE}
           title="Agenda indisponível"
           description="A agenda de consultas e profissionais não faz parte do seu plano atual. Conheça os planos que incluem este recurso."
           showAction

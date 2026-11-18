@@ -7,6 +7,7 @@ import { assignPlanToUserByAdmin } from '@/lib/plans/service';
 import {
   criarUsuario,
   type UsuarioDeTeste,
+  reativarPlanoNoTeste,
 } from '../../../tests/integration/fixtures';
 import { chamar, entrarComo } from '../../../tests/integration/http';
 
@@ -89,24 +90,30 @@ describe('jornada comercial dos próprios planos', () => {
     }
   );
   it('recusa reduzir plano pelo checkout de upgrade, sem alterar a assinatura', async () => {
-    await assignPlanToUserByAdmin({
-      targetUserId: pessoa.id,
-      actorUserId: gestora.id,
-      planKey: 'care',
-    });
-    expect(
-      (
-        await chamar(checkout, {
-          method: 'POST',
-          body: { planKey: 'meta', billingInterval: 'monthly' },
-          usuario: pessoa,
-        })
-      ).status
-    ).toBe(400);
-    const [atual] = await queryRows<{ plan_key: string }>(
-      "SELECT p.plan_key FROM user_subscriptions s JOIN subscription_plans p ON p.id=s.plan_id WHERE s.user_id=? AND s.status='active'",
-      [pessoa.id]
-    );
-    expect(atual.plan_key).toBe('care');
+    // A regra continua no código; o Meta é reativado só para exercitá-la.
+    const restaurarMeta = await reativarPlanoNoTeste('meta');
+    try {
+      await assignPlanToUserByAdmin({
+        targetUserId: pessoa.id,
+        actorUserId: gestora.id,
+        planKey: 'care',
+      });
+      expect(
+        (
+          await chamar(checkout, {
+            method: 'POST',
+            body: { planKey: 'meta', billingInterval: 'monthly' },
+            usuario: pessoa,
+          })
+        ).status
+      ).toBe(400);
+      const [atual] = await queryRows<{ plan_key: string }>(
+        "SELECT p.plan_key FROM user_subscriptions s JOIN subscription_plans p ON p.id=s.plan_id WHERE s.user_id=? AND s.status='active'",
+        [pessoa.id]
+      );
+      expect(atual.plan_key).toBe('care');
+    } finally {
+      await restaurarMeta();
+    }
   });
 });

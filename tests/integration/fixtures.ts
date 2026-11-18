@@ -127,3 +127,28 @@ export async function definirDireito(
     );
   };
 }
+
+/**
+ * Reativa um plano desativado (Free ou Meta, tarefa 225) só durante o teste,
+ * para exercitar regras de cobrança que dependem de dois planos comerciais.
+ * Devolve a função que restaura o estado anterior.
+ */
+export async function reativarPlanoNoTeste(
+  plano: string
+): Promise<() => Promise<void>> {
+  const [anterior] = await queryRows<{ is_active: number; is_public: number }>(
+    'SELECT is_active, is_public FROM subscription_plans WHERE plan_key = ?',
+    [plano]
+  );
+  if (!anterior) throw new Error(`Plano ausente: ${plano}`);
+  await executeStatement(
+    'UPDATE subscription_plans SET is_active = TRUE, is_public = TRUE WHERE plan_key = ?',
+    [plano]
+  );
+  return async () => {
+    await executeStatement(
+      'UPDATE subscription_plans SET is_active = ?, is_public = ? WHERE plan_key = ?',
+      [Boolean(anterior.is_active), Boolean(anterior.is_public), plano]
+    );
+  };
+}

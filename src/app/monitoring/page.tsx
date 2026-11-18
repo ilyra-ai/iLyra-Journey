@@ -10,6 +10,7 @@ import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { isPlanFeatureEnabled } from '@/lib/plans/access';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 export default function MonitoringPage() {
   const { session } = useAuth();
@@ -57,12 +58,12 @@ export default function MonitoringPage() {
           ) : null}
           <RealTimeMonitoringContent
             voiceUpdatesEnabled={voiceUpdatesEnabled}
-            currentPlanKey={subscription?.plan.key ?? 'free'}
+            currentPlanKey={subscription?.plan.key ?? PLANO_DE_BASE}
           />
         </>
       ) : (
         <PlanUpgradeNotice
-          currentPlanKey={subscription?.plan.key ?? 'free'}
+          currentPlanKey={subscription?.plan.key ?? PLANO_DE_BASE}
           title="Monitoramento premium bloqueado"
           description="O monitoramento em tempo real não faz parte do seu plano atual. Conheça os planos que incluem este recurso."
           showAction

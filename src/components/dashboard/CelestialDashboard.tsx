@@ -40,6 +40,7 @@ import { VinculosFamiliares } from './VinculosFamiliares';
 import { arteDoSigno } from './signos';
 import { arteDoTema } from './temas-do-dia';
 import styles from './CelestialDashboard.module.css';
+import { PLANO_DE_BASE } from '@/types/subscription';
 
 const MapaCompleto = dynamic(
   () =>
@@ -196,7 +197,7 @@ export function CelestialDashboard() {
         </div>
       ) : !acesso.enabled ? (
         <PlanUpgradeNotice
-          currentPlanKey={acesso.subscription?.plan.key ?? 'free'}
+          currentPlanKey={acesso.subscription?.plan.key ?? PLANO_DE_BASE}
           title="Seus mapas pessoais"
           description="Conheça os planos que incluem as leituras dos seus mapas."
         />

@@ -60,7 +60,7 @@ function formulario(
 }
 async function recurso(habilitado: boolean) {
   await executeStatement(
-    "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=? WHERE p.plan_key='free' AND f.feature_key='daily_checkin'",
+    "UPDATE plan_entitlements e JOIN subscription_plans p ON p.id=e.plan_id JOIN plan_features f ON f.id=e.feature_id SET e.enabled=? WHERE p.plan_key='care' AND f.feature_key='daily_checkin'",
     [habilitado]
   );
 }
@@ -79,11 +79,11 @@ const enviar = (
   });
 
 describe('diário alimentar com MySQL real', () => {
-  // Os testes de janela usam o histórico de 30 dias do Free; desde a tarefa
-  // 224 a matriz parte do acesso do Care, então o limite é declarado aqui.
+  // Os testes de janela usam um histórico de 30 dias no plano de base; desde
+  // as tarefas 224 e 225 é o Care, sem esse limite, então ele é declarado aqui.
   let restaurarJanela: () => Promise<void>;
   beforeAll(async () => {
-    restaurarJanela = await definirDireito('free', 'metrics_history_days', {
+    restaurarJanela = await definirDireito('care', 'metrics_history_days', {
       enabled: true,
       quota: 30,
       reset: 'rolling',
