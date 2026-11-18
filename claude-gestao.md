@@ -224,10 +224,10 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 49                       |
+| 🟡 Implementadas com validação pendente | 50                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 31                       |
+| ⚪ A iniciar                            | 30                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
@@ -5692,10 +5692,11 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Origem e data:** pedido do titular em 17/11/2026: acrescentar filhos, filhas e outros.
 - **Estado em 17/11/2026:** `vinculos-familiares.ts` passou de 7 para 12 vínculos, só com regras estabelecidas no Jyotish (Brihat Parashara Hora Shastra): **Filhos e filhas** (casa 5, Putra Bhava, Júpiter; a tradição não separa por gênero, e isso é dito na origem da leitura), **Cônjuge ou companheiro(a)** (casa 7, Kalatra Bhava, Vênus), **Sogra** (casa 10, o 4º a partir do 7º, Lua), **Sogro** (casa 3, o 9º a partir do 7º, Sol) e **Netos** (casa 9, o 5º a partir do 5º, Júpiter). Primos e tios paternos seguem indisponíveis por não terem regra fixa. Os novos entram automaticamente na pergunta "pesa?" da prevenção. A versão do cache do painel subiu para 3 (`persistencia-painel.ts`), porque o painel guardava a leitura antiga com 7 vínculos. Testes: 12 vínculos com casa e significador de cada um conferidos, regente da casa 5 conferido, linguagem sem diagnóstico. Conferido no navegador: 12 parentes no resumo e detalhe completo.
 
-### 215 · Funcionalidades do painel administrativo em mini cards · ⚪ A INICIAR
+### 215 · Funcionalidades do painel administrativo em mini cards · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte de "Controles funcionais" no painel administrativo.
 - **Escopo pedido:** a lista de grupos (Registro diário de saúde, Diário pessoal, Outros registros, Metas e hábitos, Rotinas e práticas etc.) ocupa muito espaço. Passar para mini cards bem menores, com um X indicando desativado, mantendo o ativar e desativar.
+- **Estado em 18/11/2026:** `ControlesFuncionais.tsx`: os grupos viraram mini cards numa grade (1 a 4 colunas conforme a largura), cada um um botão `role="switch"` com ✓ verde quando ativado e ✕ vermelho quando desativado; um clique alterna, com a mesma confirmação do servidor e controle de versão de antes. O histórico de alterações de cada grupo saiu de dentro dos cartões para uma seção única recolhida, com o nome do grupo em cada evento. Conferido no navegador: 8 grupos em mini cards de 55 px, cartão inteiro com 475 px (antes, só a lista passava de 730 px); clique alternou "Registro diário" de desativado para ativado e de volta, confirmado pelo servidor (estado final igual ao inicial). Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
 
 ### 216 · Títulos de cartão proporcionais (Gerenciamento de Usuários, Matriz de entitlements) · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
@@ -5739,6 +5740,7 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Estado em 18/11/2026:** selos com rótulo curto, ícone e cor própria (`SELO_DA_PROPOSTA` em `ExamesMedicosContent.tsx`): "Novo" com ícone + em verde, "Atualizar" com setas em azul e "Retirar" com ícone − em vermelho, com cores ajustadas aos temas claro e escuro. Colunas Proposta, Fonte lida e Decisão centralizadas e todas as células alinhadas ao meio na vertical; Exame e Motivo, que são textos longos, ficam alinhados à esquerda para leitura. Conferido por estilo calculado nas 6 primeiras linhas da tabela real (centro/meio, decisões centralizadas). Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
 - **Fronteiras não comprovadas:** captura visual da tabela não saiu (o painel do navegador não terminou de desenhar); tema claro não conferido.
 - **Ocorrência nos gates (18/11/2026):** na rodada de gates desta tarefa, o teste de integração "mostra as não conferidas, altera uma e confirma a revisão de todas" (`src/app/api/prevencao.integration.test.ts`) falhou uma vez e o commit `9e3ed81e` saiu antes de a falha ser vista, porque o filtro da saída não interrompia o encadeamento (corrigido: o resultado dos gates passou a ser conferido antes do commit). A falha não se repetiu em quatro execuções (o arquivo sozinho, junto com o da tarefa 211 e duas vezes a suíte completa, 611 de 611); o detalhe da asserção se perdeu no filtro. Causa não identificada; investigar se voltar.
+- **Causa encontrada (18/11/2026):** com o log completo, a falha intermitente do teste da prevenção voltou e mostrou `expected 30.000000011574073 to be less than or equal to 30`: o teste comparava `venceEm` (relógio do MySQL no contêiner) com `Date.now()` (relógio do Node) e supunha que o banco nunca estivesse à frente; estava 1 ms. A regra do app usa só o relógio do banco e está correta; o teste ganhou tolerância de 5 s para a diferença entre os relógios.
 
 ### 222 · Símbolo da marca com fundo transparente em todos os usos · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
