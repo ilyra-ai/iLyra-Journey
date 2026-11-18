@@ -224,7 +224,7 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 51                       |
+| 🟡 Implementadas com validação pendente | 52                       |
 | 🔵 Em andamento                         | 5                        |
 | 🔴 Bloqueadas                           | 1                        |
 | ⚪ A iniciar                            | 29                       |
@@ -5776,3 +5776,11 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 - **Origem e data:** decisões do titular em 18/11/2026: o plano único passa a se chamar **Lyra Journey**, alinhado à missão; terá dois valores mensais, **R$ 9,99** e **R$ 19,99**, com exatamente o mesmo acesso, para a pessoa escolher com quanto colabora para manter e expandir a Lyra; as duas opções ficam **no mesmo cartão**, sem cartão novo e sem nome próprio (só o valor); o início do cartão deixa claro que ambas têm o mesmo acesso.
 - **Desenho:** o identificador interno continua `care` (assinaturas, matriz e testes não mudam); muda o nome exibido. O modelo de preços do Stripe guardava só um preço mensal e um anual por plano; entra o conceito de opção de colaboração (cada opção com valor mensal e preço próprio no Stripe), lido pelo checkout, pela identificação do plano nos webhooks e pela tela de Pagamentos.
+- **Recorrência (pedido do titular em 18/11/2026):** os dois valores são assinaturas mensais recorrentes: a Stripe cobra sozinha todo mês até a pessoa cancelar, sem precisar comprar de novo. O checkout já usa `mode: 'subscription'` e o "Testar conexão" de Pagamentos recusa preço que não seja recorrente mensal; os preços das duas opções seguem a mesma regra.
+
+### 227 · Administrador é perfil, não plano: fora das telas de planos · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Origem e data:** pedido do titular em 18/11/2026: o cartão Administrador não é plano e não deveria aparecer em Administração → Planos, na matriz de planos nem em Pagamentos; esses cartões e telas são de uso exclusivo de quem tem perfil administrador, que tem acesso total ao app; os demais cartões (planos inativos) ficam desativados.
+- **Estado em 18/11/2026:** o acesso total já vinha do perfil, não do plano (`recursoHabilitado`, `contaTemRecurso` e `limiteDeMetricasDaConta` em `src/lib/plans/service.ts` liberam tudo para `role = 'admin'`; as rotas de `/api/admin` exigem `requireAdminSession`). `AdminPlanMatrixContent.tsx` passou a mostrar só os planos comerciais ativos: sai o cartão Administrador da lista de planos e da matriz de recursos, junto com os ramos de código que só serviam a ele. `listarPrecosDaStripe` (Pagamentos) lista só os planos pagos ativos; o Meta, inativo, saiu do cartão de preços (os ids já salvos ficam no banco para uma eventual reativação). Os campos de preço e de limite já aceitavam 0 (formulário `min="0"` e API `min(0)`). Conferido no navegador: Planos com só o cartão Lyra Journey e sem "Acesso interno sem cobrança"; Pagamentos com só o Lyra Journey nos preços da Stripe.
+- **Testes:** o teste de integração de Pagamentos usava o Meta como plano de exemplo na listagem e na conferência de preços; passou a usar o Care e a verificar que o Meta inativo não é listado.
+- **Fronteiras não comprovadas:** o selo do plano na matriz ainda mostra "Care" (nome fixo do `PlanBadge`), a acertar na tarefa 226; tema claro não conferido.

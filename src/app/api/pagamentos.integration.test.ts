@@ -170,9 +170,9 @@ describe('Admin → Pagamentos (credenciais dos meios de pagamento)', () => {
       expect(provedor.ambientes.test.configurado).toBe(false);
       expect(provedor.ambientes.live.configurado).toBe(false);
     }
-    // Só a Stripe lista os planos pagos para receber os preços.
+    // Só a Stripe lista os planos pagos ativos para receber os preços: o Meta,
+    // inativo desde a tarefa 225, fica fora (tarefa 227).
     expect(provedores[0].ambientes.test.precos.map((p) => p.plano)).toEqual([
-      'meta',
       'care',
     ]);
     expect(provedores[1].ambientes.test.precos).toEqual([]);
@@ -452,7 +452,7 @@ describe('Admin → Pagamentos (credenciais dos meios de pagamento)', () => {
 
   it('guarda os preços dos planos por ambiente e confere cada um na Stripe', async () => {
     const admin = await criarUsuario('admin', 'Admin');
-    const meta = await valorDoPlano('meta');
+    const care = await valorDoPlano('care');
     const salvo = await salvar(
       'stripe',
       'test',
@@ -462,9 +462,9 @@ describe('Admin → Pagamentos (credenciais dos meios de pagamento)', () => {
         segredoDoWebhook: WEBHOOK_STRIPE,
         precos: [
           {
-            plano: 'meta',
-            produto: 'prod_painelMeta01',
-            mensal: 'price_painelMetaMensal',
+            plano: 'care',
+            produto: 'prod_painelCare01',
+            mensal: 'price_painelCareMensal',
           },
         ],
       },
@@ -472,9 +472,9 @@ describe('Admin → Pagamentos (credenciais dos meios de pagamento)', () => {
     );
     expect(salvo.status).toBe(200);
     const precosDeTeste = credencialDa(salvo).ambientes.test.precos;
-    expect(precosDeTeste.find((p) => p.plano === 'meta')).toMatchObject({
-      produto: 'prod_painelMeta01',
-      mensal: 'price_painelMetaMensal',
+    expect(precosDeTeste.find((p) => p.plano === 'care')).toMatchObject({
+      produto: 'prod_painelCare01',
+      mensal: 'price_painelCareMensal',
       anual: null,
     });
     // Os preços de teste não aparecem em produção.
@@ -485,12 +485,12 @@ describe('Admin → Pagamentos (credenciais dos meios de pagamento)', () => {
     // Valor diferente do catálogo: o teste aponta o problema.
     stripeFalsa(
       {
-        price_painelMetaMensal: {
+        price_painelCareMensal: {
           active: true,
           recurring: { interval: 'month' },
-          currency: meta.moeda,
-          unit_amount: meta.centavos + 100,
-          product: 'prod_painelMeta01',
+          currency: care.moeda,
+          unit_amount: care.centavos + 100,
+          product: 'prod_painelCare01',
         },
       },
       false
@@ -507,12 +507,12 @@ describe('Admin → Pagamentos (credenciais dos meios de pagamento)', () => {
     vi.restoreAllMocks();
     const chamadas = stripeFalsa(
       {
-        price_painelMetaMensal: {
+        price_painelCareMensal: {
           active: true,
           recurring: { interval: 'month' },
-          currency: meta.moeda,
-          unit_amount: meta.centavos,
-          product: 'prod_painelMeta01',
+          currency: care.moeda,
+          unit_amount: care.centavos,
+          product: 'prod_painelCare01',
         },
       },
       false
@@ -527,7 +527,7 @@ describe('Admin → Pagamentos (credenciais dos meios de pagamento)', () => {
     });
     expect(chamadas.map((c) => c.url)).toEqual([
       'https://api.stripe.com/v1/account',
-      'https://api.stripe.com/v1/prices/price_painelMetaMensal',
+      'https://api.stripe.com/v1/prices/price_painelCareMensal',
     ]);
 
     // Preço que só existe no outro ambiente da Stripe: apontado.
@@ -547,12 +547,12 @@ describe('Admin → Pagamentos (credenciais dos meios de pagamento)', () => {
       'test',
       {
         chavePublica: null,
-        precos: [{ plano: 'meta', produto: '', mensal: '', anual: '' }],
+        precos: [{ plano: 'care', produto: '', mensal: '', anual: '' }],
       },
       admin
     );
     expect(
-      credencialDa(limpo).ambientes.test.precos.find((p) => p.plano === 'meta')
+      credencialDa(limpo).ambientes.test.precos.find((p) => p.plano === 'care')
     ).toMatchObject({ produto: null, mensal: null, anual: null });
   });
 

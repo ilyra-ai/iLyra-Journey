@@ -120,10 +120,12 @@ function notifyMatrixLoadError(error: unknown) {
 
 export function AdminPlanMatrixContent() {
   const [plans, setPlans] = React.useState<PlanMatrixPlan[]>([]);
-  // Só os planos em uso aparecem: os ativos e o Administrador. Free e Meta,
+  // Só os planos comerciais ativos aparecem (tarefa 227). Administrador é um
+  // perfil, não um plano: o acesso total vem do papel `admin` no servidor
+  // (recursoHabilitado e contaTemRecurso), não da matriz. Free e Meta,
   // inativos desde a tarefa 225, ficam no banco sem aparecer aqui.
   const planosEmUso = React.useMemo(
-    () => plans.filter((plan) => plan.isActive || plan.key === 'admin'),
+    () => plans.filter((plan) => plan.isActive && plan.key !== 'admin'),
     [plans]
   );
   const [loading, setLoading] = React.useState(true);
@@ -342,9 +344,7 @@ export function AdminPlanMatrixContent() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0 space-y-2">
                     <p className="text-sm font-medium text-muted-foreground">
-                      {plan.key === 'admin'
-                        ? 'Plano interno — não comercial'
-                        : 'Preview comercial'}
+                      Preview comercial
                     </p>
                     {/* h3: cada plano fica sob "Matriz real de capacidades". */}
                     <h3 className="break-words font-display text-2xl font-semibold tracking-tight text-foreground">
@@ -354,60 +354,43 @@ export function AdminPlanMatrixContent() {
                       {plan.tagline}
                     </p>
                   </div>
-                  {plan.key !== 'admin' ? (
-                    <div className="flex shrink-0 items-center gap-1.5">
-                      <Palette
-                        className="h-4 w-4 text-muted-foreground"
-                        aria-hidden="true"
-                      />
-                      <span
-                        className="h-4 w-4 rounded-full border border-border"
-                        style={{ backgroundColor: plan.accentFrom }}
-                        title={`Cor inicial ${plan.accentFrom}`}
-                        aria-hidden="true"
-                      />
-                      <span
-                        className="h-4 w-4 rounded-full border border-border"
-                        style={{ backgroundColor: plan.accentTo }}
-                        title={`Cor final ${plan.accentTo}`}
-                        aria-hidden="true"
-                      />
-                    </div>
-                  ) : null}
-                </div>
-                {plan.key === 'admin' ? (
-                  <p className="mt-5 border-t border-border pt-4 text-sm font-medium">
-                    Acesso interno sem cobrança
-                  </p>
-                ) : (
-                  <div className="mt-5 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Mensal</p>
-                      <p className="font-display text-3xl font-semibold tracking-tight text-foreground">
-                        {moedaPtBr(plan.monthlyPrice, plan.currencyCode)}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm text-muted-foreground">Anual</p>
-                      <p className="font-display text-xl font-semibold tracking-tight text-foreground">
-                        {moedaPtBr(plan.annualPrice, plan.currencyCode)}
-                      </p>
-                    </div>
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    <Palette
+                      className="h-4 w-4 text-muted-foreground"
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="h-4 w-4 rounded-full border border-border"
+                      style={{ backgroundColor: plan.accentFrom }}
+                      title={`Cor inicial ${plan.accentFrom}`}
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="h-4 w-4 rounded-full border border-border"
+                      style={{ backgroundColor: plan.accentTo }}
+                      title={`Cor final ${plan.accentTo}`}
+                      aria-hidden="true"
+                    />
                   </div>
-                )}
+                </div>
+                <div className="mt-5 flex flex-wrap items-end justify-between gap-4 border-t border-border pt-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Mensal</p>
+                    <p className="font-display text-3xl font-semibold tracking-tight text-foreground">
+                      {moedaPtBr(plan.monthlyPrice, plan.currencyCode)}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm text-muted-foreground">Anual</p>
+                    <p className="font-display text-xl font-semibold tracking-tight text-foreground">
+                      {moedaPtBr(plan.annualPrice, plan.currencyCode)}
+                    </p>
+                  </div>
+                </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-5">
-              {plan.key === 'admin' ? (
-                <p className="text-sm text-muted-foreground">
-                  Acesso interno completo da conta designada. Este plano não é
-                  vendido nem permite desabilitar capacidades.
-                </p>
-              ) : null}
-              <fieldset
-                disabled={plan.key === 'admin'}
-                className="space-y-5 min-w-0"
-              >
+              <fieldset className="space-y-5 min-w-0">
                 <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <Label htmlFor={`name-${plan.key}`}>Nome</Label>
@@ -598,21 +581,20 @@ export function AdminPlanMatrixContent() {
           <CardTitle as="h2">Matriz editável de entitlements</CardTitle>
           <CardDescription>
             Cada cartão abaixo é uma capacidade real do produto, com o que está
-            liberado no Care e no plano interno Administrador.
+            liberado em cada plano ativo. Administradores têm acesso total pelo
+            perfil, sem depender desta matriz.
           </CardDescription>
           <div className="flex flex-wrap gap-2">
-            {planosEmUso
-              .filter((plan) => plan.key !== 'admin')
-              .map((plan) => (
-                <Button
-                  key={plan.key}
-                  variant="outline"
-                  disabled={savingPlanKey !== null}
-                  onClick={() => void savePlan(plan.key)}
-                >
-                  Salvar {plan.name}
-                </Button>
-              ))}
+            {planosEmUso.map((plan) => (
+              <Button
+                key={plan.key}
+                variant="outline"
+                disabled={savingPlanKey !== null}
+                onClick={() => void savePlan(plan.key)}
+              >
+                Salvar {plan.name}
+              </Button>
+            ))}
           </div>
         </CardHeader>
         <CardContent>
@@ -667,10 +649,7 @@ export function AdminPlanMatrixContent() {
                     return (
                       <div key={plan.key} className="min-w-0">
                         <fieldset
-                          disabled={
-                            plan.key === 'admin' ||
-                            feature.key === 'profile_management'
-                          }
+                          disabled={feature.key === 'profile_management'}
                           className="min-w-0 space-y-3 rounded-md border border-border bg-background p-2.5"
                         >
                           <legend className="px-1">

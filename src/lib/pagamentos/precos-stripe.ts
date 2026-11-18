@@ -49,7 +49,7 @@ async function linhasDosPrecos(ambiente: AmbienteDaStripe) {
        FROM subscription_plans p
        LEFT JOIN stripe_plan_prices s
          ON s.plan_id = p.id AND s.environment = ?
-      WHERE p.plan_key IN ('meta', 'care')
+      WHERE p.plan_key IN ('meta', 'care') AND p.is_active = TRUE
       ORDER BY p.display_order ASC`,
     [ambiente]
   );
