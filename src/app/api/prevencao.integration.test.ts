@@ -257,8 +257,12 @@ describe('Revisão mensal do catálogo pela administração', () => {
     expect(corpo.vencida).toBe(false);
     expect(corpo.naoConferidas).toEqual([]);
     const dias = (new Date(corpo.venceEm).getTime() - Date.now()) / 86_400_000;
+    // venceEm vem do relógio do MySQL e Date.now() do relógio do Node; o
+    // contêiner pode estar alguns milissegundos à frente (falhou com
+    // 30,0000000116 dias, 1 ms). A tolerância de 5 s cobre só essa diferença.
+    const TOLERANCIA_DO_RELOGIO = 5 / 86_400;
     expect(dias).toBeGreaterThan(29);
-    expect(dias).toBeLessThanOrEqual(30);
+    expect(dias).toBeLessThanOrEqual(30 + TOLERANCIA_DO_RELOGIO);
     const [linha] = await queryRows<{ revisado_por: string }>(
       "SELECT revisado_por FROM prevencao_recomendacoes WHERE id = 'mamografia'"
     );
