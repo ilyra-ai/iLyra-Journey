@@ -224,10 +224,10 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 47                       |
+| 🟡 Implementadas com validação pendente | 48                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 33                       |
+| ⚪ A iniciar                            | 32                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
@@ -5704,10 +5704,12 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Estado em 17/11/2026:** `CardTitle` passou a ter `data-slot="card-title"` e o tema dá 26 px (1,625 rem, entrelinha 1,25) só a `h2[data-slot='card-title']`, sem alterar outros `h2` do app. Conferido no navegador: "Gerenciamento de Usuários" com 26 px na fonte de título. Unitários, integração, lint, tipos, formato e build aprovados.
 - **Fronteiras não comprovadas:** a página de planos não foi conferida depois da mudança (a aba saiu da página durante a conferência); demais títulos `h2` de cartão não conferidos um a um.
 
-### 217 · Remover o cartão "Ajuda para começar" · ⚪ A INICIAR
+### 217 · Remover o cartão "Ajuda para começar" · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte do cartão "Ajuda para começar / Rever apresentação" (componente `ApresentacaoDaConta`, mostrado pelo `AppShell` no topo das páginas).
 - **Escopo pedido:** remover o cartão.
+- **Estado em 18/11/2026:** o cartão é a apresentação guiada do app (`ApresentacaoOpcional`, no topo de todas as páginas pelo `AppShell`); remover o componente apagaria o tour de primeiros passos. Ele passou a aparecer só para quem ainda não viu a apresentação (convite "Quer conhecer a Lyra?") ou parou no meio ("Retomar apresentação"); concluída ou dispensada, some de todas as páginas. O aviso "Carregando ajuda opcional…", que piscava no topo de cada página, também saiu. Conferido no navegador com a conta admin (estado "dispensada"): Administração → Usuários começa direto no conteúdo. Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
+- **Consequência registrada:** quem concluiu ou dispensou a apresentação deixa de ter o botão "Rever apresentação"; se o titular quiser, ele pode ir para o menu da conta.
 
 ### 218 · Cores para os planos e perfis nos selos da lista de usuários · ⚪ A INICIAR
 
@@ -5733,6 +5735,7 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Escopo pedido:** centralizar o conteúdo das colunas da tabela; trocar "Novo exame" por "Novo" (e equivalentes curtos para atualizar e retirar), com ícone ou imagem que deixe o tipo claro, e selos coloridos.
 - **Estado em 18/11/2026:** selos com rótulo curto, ícone e cor própria (`SELO_DA_PROPOSTA` em `ExamesMedicosContent.tsx`): "Novo" com ícone + em verde, "Atualizar" com setas em azul e "Retirar" com ícone − em vermelho, com cores ajustadas aos temas claro e escuro. Colunas Proposta, Fonte lida e Decisão centralizadas e todas as células alinhadas ao meio na vertical; Exame e Motivo, que são textos longos, ficam alinhados à esquerda para leitura. Conferido por estilo calculado nas 6 primeiras linhas da tabela real (centro/meio, decisões centralizadas). Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
 - **Fronteiras não comprovadas:** captura visual da tabela não saiu (o painel do navegador não terminou de desenhar); tema claro não conferido.
+- **Ocorrência nos gates (18/11/2026):** na rodada de gates desta tarefa, o teste de integração "mostra as não conferidas, altera uma e confirma a revisão de todas" (`src/app/api/prevencao.integration.test.ts`) falhou uma vez e o commit `9e3ed81e` saiu antes de a falha ser vista, porque o filtro da saída não interrompia o encadeamento (corrigido: o resultado dos gates passou a ser conferido antes do commit). A falha não se repetiu em quatro execuções (o arquivo sozinho, junto com o da tarefa 211 e duas vezes a suíte completa, 611 de 611); o detalhe da asserção se perdeu no filtro. Causa não identificada; investigar se voltar.
 
 ### 222 · Símbolo da marca com fundo transparente em todos os usos · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 

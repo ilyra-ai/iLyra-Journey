@@ -143,12 +143,15 @@ function ApresentacaoDaConta({ titular }: { titular: string }) {
     }
   }
   const indice = estado && passo ? estado.passos.indexOf(passo) : 0;
-  if (recurso.loading && !estado)
-    return (
-      <div className="text-sm text-muted-foreground" role="status">
-        Carregando ajuda opcional…
-      </div>
-    );
+  // O cartão só aparece para quem ainda não viu a apresentação ou parou no
+  // meio (tarefa 217): concluída ou dispensada, ele some de todas as páginas.
+  // Sem estado carregado não há o que mostrar, nem aviso de carregamento.
+  if (!estado) return null;
+  if (
+    !aberto &&
+    (estado.estado === 'concluida' || estado.estado === 'dispensada')
+  )
+    return null;
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-card px-4 py-3">
       <div className="min-w-0">
