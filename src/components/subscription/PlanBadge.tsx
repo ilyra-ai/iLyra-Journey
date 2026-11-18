@@ -6,6 +6,10 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { PlanKey } from '@/types/subscription';
 
+/**
+ * Cores dos planos (tarefa 218). Desde a tarefa 225 só Care e Administrador
+ * estão em uso; Free e Meta aparecem só no histórico, em tom neutro.
+ */
 const planVisuals: Record<
   PlanKey,
   {
@@ -16,8 +20,15 @@ const planVisuals: Record<
 > = {
   admin: {
     label: 'Administrador',
-    className: 'border-border bg-muted text-foreground',
+    className:
+      'border-amber-500/50 bg-amber-400/15 text-amber-800 dark:text-amber-200',
     icon: ShieldCheck,
+  },
+  care: {
+    label: 'Care',
+    className:
+      'border-teal-500/50 bg-teal-400/15 text-teal-800 dark:text-teal-200',
+    icon: Crown,
   },
   free: {
     label: 'Free',
@@ -26,13 +37,8 @@ const planVisuals: Record<
   },
   meta: {
     label: 'Meta',
-    className: 'border-transparent bg-sidebar-accent text-primary',
-    icon: ShieldCheck,
-  },
-  care: {
-    label: 'Care',
-    className: 'border-transparent bg-cosmic-light text-cosmic-strong',
-    icon: Crown,
+    className: 'border-border bg-muted text-muted-foreground',
+    icon: Sparkles,
   },
 };
 

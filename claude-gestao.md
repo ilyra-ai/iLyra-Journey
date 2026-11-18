@@ -224,10 +224,10 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 48                       |
+| 🟡 Implementadas com validação pendente | 49                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 32                       |
+| ⚪ A iniciar                            | 31                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
@@ -5711,11 +5711,14 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Estado em 18/11/2026:** o cartão é a apresentação guiada do app (`ApresentacaoOpcional`, no topo de todas as páginas pelo `AppShell`); remover o componente apagaria o tour de primeiros passos. Ele passou a aparecer só para quem ainda não viu a apresentação (convite "Quer conhecer a Lyra?") ou parou no meio ("Retomar apresentação"); concluída ou dispensada, some de todas as páginas. O aviso "Carregando ajuda opcional…", que piscava no topo de cada página, também saiu. Conferido no navegador com a conta admin (estado "dispensada"): Administração → Usuários começa direto no conteúdo. Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
 - **Consequência registrada:** quem concluiu ou dispensou a apresentação deixa de ter o botão "Rever apresentação"; se o titular quiser, ele pode ir para o menu da conta.
 
-### 218 · Cores para os planos e perfis nos selos da lista de usuários · ⚪ A INICIAR
+### 218 · Cores para os planos e perfis nos selos da lista de usuários · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte dos selos "Free" e "Administrador" na lista de usuários.
 - **Escopo pedido:** dar uma cor própria a cada plano e perfil.
 - **Ajuste em 17/11/2026:** o app terá só dois planos, Care e Administrador (tarefa 225); as cores valem para esses dois e para os perfis.
+- **Estado em 18/11/2026:** `PlanBadge` com cor própria por plano: Administrador em dourado (escudo), Care em verde-azulado (coroa), Free e Meta em cinza neutro, só para o histórico. Na lista de usuários, o perfil deixou de mostrar o texto cru em inglês (`patient`, `admin`) e passou a "Usuário" (verde-azulado) e "Administrador" (dourado). Conferido no navegador pelas cores calculadas nas duas linhas da lista real. Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
+- **Ocorrência nos gates:** na primeira rodada, o teste "registra zero, ausência, campos e valores anteriores; restaura sem duplicar o dia" (`src/app/api/metricas/versoes.integration.test.ts`) falhou uma vez, e nada foi publicado. Ele passou três vezes sozinho e na rodada seguinte da suíte completa (611 de 611). É a segunda falha intermitente em arquivos diferentes (a outra está na tarefa 221); o detalhe se perdeu porque o script de gates guardava só o resumo; ele passou a guardar o log completo de cada etapa para a próxima ocorrência.
+- **Fronteiras não comprovadas:** tema claro não conferido.
 
 ### 219 · Logo novo no avatar do chat e demais usos da marca · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 

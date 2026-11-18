@@ -107,6 +107,20 @@ function extractApiError(payload: unknown) {
   return undefined;
 }
 
+/** Perfis com rótulo em português e a cor do plano correspondente (218). */
+const PERFIS: Record<string, { rotulo: string; classe: string }> = {
+  admin: {
+    rotulo: 'Administrador',
+    classe:
+      'border-amber-500/50 bg-amber-400/15 text-amber-800 dark:text-amber-200',
+  },
+  patient: {
+    rotulo: 'Usuário',
+    classe:
+      'border-teal-500/50 bg-teal-400/15 text-teal-800 dark:text-teal-200',
+  },
+};
+
 export function UserManagementContent() {
   const { db, session } = useAuth();
   const [filterRevision, setFilterRevision] = React.useState(0);
@@ -462,8 +476,13 @@ export function UserManagementContent() {
                           ) : (
                             <Badge variant="secondary">Pendente</Badge>
                           )}
-                          <Badge variant="outline" className="capitalize">
-                            {user.role}
+                          <Badge
+                            variant="outline"
+                            className={
+                              (PERFIS[user.role] ?? PERFIS.patient).classe
+                            }
+                          >
+                            {(PERFIS[user.role] ?? PERFIS.patient).rotulo}
                           </Badge>
                         </div>
                       </TableCell>
