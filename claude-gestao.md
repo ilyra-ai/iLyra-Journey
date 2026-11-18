@@ -224,10 +224,10 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 45                       |
+| 🟡 Implementadas com validação pendente | 46                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 35                       |
+| ⚪ A iniciar                            | 34                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
@@ -5738,10 +5738,12 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Estado em 17/11/2026:** o projeto só tinha o símbolo com fundo azul-noite opaco (`simbolo.png`, `icon.png`). `scripts/gerar-simbolo-transparente.mjs` (Sharp, dependência declarada) gera `src/assets/celestial/simbolo-transparente.png` de forma determinística: cor de fundo amostrada nos cantos (rgb 27, 27, 44), opacidade pela distância de cor com borda suave, cor despremultiplicada para não deixar franja azul, bordas vazias recortadas e margem de 4% (963 × 963, alfa de 0 a 255; inspeção visual feita). Passa a ser usado no `MarcaLyra` (chat, balões, sidebar, busca, erros), no cartão do chat do painel, no login e na tela de carregamento (sem a máscara que esfumaçava o fundo antigo).
 - **Fronteiras não comprovadas:** favicon e ícones de instalação (PWA) continuam com fundo, como exigem esses formatos; tema claro e tela de carregamento não conferidos no navegador.
 
-### 223 · Todos os h2 em tamanho de tópico e negrito · ⚪ A INICIAR
+### 223 · Todos os h2 em tamanho de tópico e negrito · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte do título "Matriz real de capacidades" (Administração → Planos, tema claro).
 - **Escopo pedido:** deixar todos os `h2` do tamanho de tópico e em negrito. Continuação da tarefa 216.
+- **Estado em 18/11/2026:** a fonte dos títulos (Clicker Script) só tem o peso 400, e o negrito sintetizado borra o traço manuscrito; os `h2` do tema celestial passaram a ter um contorno da própria cor proporcional ao tamanho (`-webkit-text-stroke: 0.028em`, `paint-order: stroke fill`), que engrossa o traço de forma limpa. Tamanho: os títulos de cartão em `h2` já têm tamanho de tópico (26 px, tarefa 216); os títulos do painel e o título de abertura continuam maiores, preservando a hierarquia. Conferido por estilo calculado no navegador ("Matriz real de capacidades": 26 px, contorno 0,73 px) e na tela de login. Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
+- **Fronteiras não comprovadas:** inspeção visual por captura não feita (a janela do app estava minimizada); tema claro não conferido.
 
 ### 224 · Todos os planos com o acesso do Care; configurações só para o administrador · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 

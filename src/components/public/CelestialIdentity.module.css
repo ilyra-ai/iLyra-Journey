@@ -40,6 +40,14 @@
   letter-spacing: normal;
 }
 
+/* h2 em negrito (tarefa 223). A Clicker Script só tem o peso 400, e o
+   negrito sintetizado borra o traço manuscrito; um contorno da própria cor,
+   proporcional ao tamanho, engrossa o traço de forma limpa. */
+.theme h2 {
+  -webkit-text-stroke: 0.028em currentColor;
+  paint-order: stroke fill;
+}
+
 /* Título de cartão em h2 recebe a fonte manuscrita acima; no tamanho de
    texto do CardTitle (18 px) ela parecia texto miúdo. Aqui ele ganha
    proporção de título. Os h3 seguem na fonte do texto. */
