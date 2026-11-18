@@ -10,6 +10,8 @@ import {
   ChevronRight,
   ExternalLink,
   LoaderCircle,
+  Minus,
+  Plus,
   RefreshCw,
   Stethoscope,
   X,
@@ -70,6 +72,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/context/AuthContext';
 import { useKeyedResource } from '@/hooks/use-keyed-resource';
 import { buscarJson } from '@/lib/http/transporte';
+import { cn } from '@/lib/utils';
 import type {
   Atualizacao,
   Proposta,
@@ -131,10 +134,28 @@ const NOME_DO_CAMPO: Record<CampoEditavel, string> = {
   fonteUrl: 'Endereço da fonte',
 };
 
-const NOME_DA_PROPOSTA: Record<Proposta['tipo'], string> = {
-  atualizar: 'Atualizar',
-  novo: 'Novo exame',
-  retirar: 'Retirar',
+/** Selo de cada tipo de proposta (tarefa 221): rótulo curto, ícone e cor. */
+const SELO_DA_PROPOSTA: Record<
+  Proposta['tipo'],
+  { rotulo: string; icone: typeof Plus; classe: string }
+> = {
+  novo: {
+    rotulo: 'Novo',
+    icone: Plus,
+    classe:
+      'border-emerald-600/40 bg-emerald-500/15 text-emerald-800 dark:text-emerald-300',
+  },
+  atualizar: {
+    rotulo: 'Atualizar',
+    icone: RefreshCw,
+    classe: 'border-sky-600/40 bg-sky-500/15 text-sky-800 dark:text-sky-300',
+  },
+  retirar: {
+    rotulo: 'Retirar',
+    icone: Minus,
+    classe:
+      'border-rose-600/40 bg-rose-500/15 text-rose-800 dark:text-rose-300',
+  },
 };
 
 function dataBr(iso: string, comHora = false) {
@@ -278,12 +299,20 @@ function LinhaDaProposta({
       ? mudancas(atual, proposta.dados)
       : [];
   return (
-    <TableRow className="align-top">
-      <TableCell>
+    <TableRow className="align-middle">
+      <TableCell className="text-center">
         <Badge
-          variant={proposta.tipo === 'retirar' ? 'destructive' : 'secondary'}
+          variant="outline"
+          className={cn(
+            'gap-1 whitespace-nowrap',
+            SELO_DA_PROPOSTA[proposta.tipo].classe
+          )}
         >
-          {NOME_DA_PROPOSTA[proposta.tipo]}
+          {React.createElement(SELO_DA_PROPOSTA[proposta.tipo].icone, {
+            className: 'size-3.5',
+            'aria-hidden': true,
+          })}
+          {SELO_DA_PROPOSTA[proposta.tipo].rotulo}
         </Badge>
       </TableCell>
       <TableCell className="min-w-56 whitespace-normal">
@@ -312,7 +341,7 @@ function LinhaDaProposta({
       <TableCell className="min-w-64 whitespace-normal text-sm">
         {proposta.motivo}
       </TableCell>
-      <TableCell className="min-w-44 whitespace-normal text-xs">
+      <TableCell className="min-w-44 whitespace-normal text-center text-xs">
         <a
           href={proposta.fonteUrl}
           target="_blank"
@@ -325,7 +354,7 @@ function LinhaDaProposta({
         </a>
       </TableCell>
       <TableCell>
-        <div className="flex justify-end gap-2">
+        <div className="flex justify-center gap-2">
           <BotaoDeIcone
             rotulo={`Aprovar: ${nome}`}
             disabled={ocupado}
@@ -900,11 +929,11 @@ export function ExamesMedicosContent() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Proposta</TableHead>
+                  <TableHead className="text-center">Proposta</TableHead>
                   <TableHead>Exame</TableHead>
                   <TableHead>Motivo</TableHead>
-                  <TableHead>Fonte lida</TableHead>
-                  <TableHead className="text-right">Decisão</TableHead>
+                  <TableHead className="text-center">Fonte lida</TableHead>
+                  <TableHead className="text-center">Decisão</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

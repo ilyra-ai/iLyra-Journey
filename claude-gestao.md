@@ -224,10 +224,10 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 | Implementações publicadas               | **82,6%** (157 de 190)   |
 | Tarefas totais                          | 190                      |
 | 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 46                       |
+| 🟡 Implementadas com validação pendente | 47                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 34                       |
+| ⚪ A iniciar                            | 33                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-16 · 10h40 BRT   |
 
@@ -5727,10 +5727,12 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Escopo pedido:** no desktop, mostrar cada recurso em cartões no formato quadrado, 3 por linha, sem cartões muito grandes. Hoje cada recurso ocupa a largura inteira, com os quatro planos (Free, Meta, Care, Administrador) em dois por linha.
 - **Ajuste em 17/11/2026:** com só dois planos (tarefa 225), cada cartão de recurso mostra apenas Care e Administrador; fazer depois da 225.
 
-### 221 · Selos das propostas de exames centralizados, com ícone e cor · ⚪ A INICIAR
+### 221 · Selos das propostas de exames centralizados, com ícone e cor · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte do selo "Novo exame" na tabela de revisão da tela Exames Médicos (tema claro).
 - **Escopo pedido:** centralizar o conteúdo das colunas da tabela; trocar "Novo exame" por "Novo" (e equivalentes curtos para atualizar e retirar), com ícone ou imagem que deixe o tipo claro, e selos coloridos.
+- **Estado em 18/11/2026:** selos com rótulo curto, ícone e cor própria (`SELO_DA_PROPOSTA` em `ExamesMedicosContent.tsx`): "Novo" com ícone + em verde, "Atualizar" com setas em azul e "Retirar" com ícone − em vermelho, com cores ajustadas aos temas claro e escuro. Colunas Proposta, Fonte lida e Decisão centralizadas e todas as células alinhadas ao meio na vertical; Exame e Motivo, que são textos longos, ficam alinhados à esquerda para leitura. Conferido por estilo calculado nas 6 primeiras linhas da tabela real (centro/meio, decisões centralizadas). Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
+- **Fronteiras não comprovadas:** captura visual da tabela não saiu (o painel do navegador não terminou de desenhar); tema claro não conferido.
 
 ### 222 · Símbolo da marca com fundo transparente em todos os usos · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
