@@ -5789,3 +5789,15 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Estado em 18/11/2026:** o acesso total já vinha do perfil, não do plano (`recursoHabilitado`, `contaTemRecurso` e `limiteDeMetricasDaConta` em `src/lib/plans/service.ts` liberam tudo para `role = 'admin'`; as rotas de `/api/admin` exigem `requireAdminSession`). `AdminPlanMatrixContent.tsx` passou a mostrar só os planos comerciais ativos: sai o cartão Administrador da lista de planos e da matriz de recursos, junto com os ramos de código que só serviam a ele. `listarPrecosDaStripe` (Pagamentos) lista só os planos pagos ativos; o Meta, inativo, saiu do cartão de preços (os ids já salvos ficam no banco para uma eventual reativação). Os campos de preço e de limite já aceitavam 0 (formulário `min="0"` e API `min(0)`). Conferido no navegador: Planos com só o cartão Lyra Journey e sem "Acesso interno sem cobrança"; Pagamentos com só o Lyra Journey nos preços da Stripe.
 - **Testes:** o teste de integração de Pagamentos usava o Meta como plano de exemplo na listagem e na conferência de preços; passou a usar o Care e a verificar que o Meta inativo não é listado.
 - **Fronteiras não comprovadas:** tema claro não conferido. (O selo "Care" na matriz foi acertado na tarefa 226.)
+
+### 228 · Troca de tema (claro e escuro) na landing page · ⚪ A INICIAR
+
+- **Origem e data:** anotação do titular em 19/11/2026: "acrescentar a possibilidade de mudar o tema na landing page". Ordem do titular: executar depois de terminar todas as anotações visuais já pedidas.
+- **Situação encontrada:** a landing usa só o tema celestial escuro (`.theme` de `CelestialIdentity.module.css`, `color-scheme: dark`); o botão de alternância `ThemeToggleButton` existe e já é usado no cabeçalho autenticado e nos documentos legais, mas não aparece na landing, e a landing não tem tokens de tema claro.
+- **Escopo:** botão de tema acessível na landing (mesmo controle e mesma preferência das demais telas públicas), versão clara da landing coerente com a identidade preto e dourado do app (tokens próprios, sem apagar o escuro), imagens e degradês legíveis nos dois temas, desktop, tablet e celular, contraste WCAG conferido.
+
+### 229 · `pnpm check:types` falha num clone limpo (tipos das imagens) · ⚪ A INICIAR
+
+- **Origem e data:** encontrado em 19/11/2026 na validação das pendências: gates no Node 24.21.0 num clone limpo da `main` (`eb97e469`) passaram em instalação, lint, formato, 1217 unitários, 616 de integração e build, mas `pnpm check:types` falhou com 38 erros TS2307 nos imports de `.png`.
+- **Causa raiz:** os tipos das imagens vêm do `next-env.d.ts`, gerado pelo Next no `dev`/`build` e ignorado no Git; num clone limpo o `tsc` roda antes de qualquer geração. O Next 16.4.3 instalado tem o comando oficial `next typegen` para gerar essas definições sem build.
+- **Correção prevista:** `check:types` passa a gerar as definições oficiais (`next typegen`) antes do `tsc --noEmit`, sem declarar tipos à mão; repetir os gates num clone limpo no Node 24 e no Windows. Ordem do titular: depois das anotações visuais.
