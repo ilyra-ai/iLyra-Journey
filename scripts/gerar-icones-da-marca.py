@@ -24,6 +24,12 @@ preservando os demais ícones e a marca das telas internas::
 
     /tmp/marca/bin/python scripts/gerar-icones-da-marca.py --favicon-celestial
 
+O ícone do iOS (``apple-icon.png``) e os ícones do manifesto
+(``public/icones``) com o símbolo celestial vêm de
+``node scripts/gerar-icones-celestiais.mjs`` (tarefa 219). O modo padrão
+deste script, sem argumentos, volta ao logo oficial antigo em ladrilho
+branco e sobrescreve esses arquivos: só use se a marca antiga voltar.
+
 Só é preciso rodar de novo se o logo oficial mudar.
 """
 
