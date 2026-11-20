@@ -595,7 +595,9 @@ export function ChatAssistantContent({
           </div>
         ) : (
           <div
-            className="flex flex-col gap-6 px-1"
+            // Coluna de leitura centralizada (tarefa 230): a conversa não se
+            // espalha nem fica presa à esquerda em telas largas.
+            className="mx-auto flex w-full max-w-3xl flex-col gap-5 px-1"
             role="log"
             aria-live="polite"
             aria-relevant="additions"
@@ -685,133 +687,136 @@ export function ChatAssistantContent({
       </div>
 
       <div className="relative shrink-0 border-t border-border bg-background pb-1 pt-3">
-        {historico.depois !== null ? (
-          <div className="mb-3 flex flex-wrap items-center gap-2">
-            <p className="text-sm text-muted-foreground">
-              Você abriu um trecho antigo da conversa.
-            </p>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={historico.carregando}
+        {/* Mesma coluna centralizada das mensagens (tarefa 230). */}
+        <div className="mx-auto w-full max-w-3xl">
+          {historico.depois !== null ? (
+            <div className="mb-3 flex flex-wrap items-center gap-2">
+              <p className="text-sm text-muted-foreground">
+                Você abriu um trecho antigo da conversa.
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={historico.carregando}
+                onClick={() => {
+                  setIsNearBottom(false);
+                  void historico.carregarSeguintes();
+                }}
+              >
+                Carregar mensagens seguintes
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                disabled={historico.carregando}
+                onClick={() => {
+                  historico.irParaRecentes();
+                  setIsNearBottom(true);
+                }}
+              >
+                Ir às mais recentes
+              </Button>
+            </div>
+          ) : null}
+          {showScrollButton ? (
+            <button
               onClick={() => {
-                setIsNearBottom(false);
-                void historico.carregarSeguintes();
-              }}
-            >
-              Carregar mensagens seguintes
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              disabled={historico.carregando}
-              onClick={() => {
-                historico.irParaRecentes();
+                scrollToBottom();
                 setIsNearBottom(true);
               }}
+              type="button"
+              className="absolute -top-12 left-1/2 z-20 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-md transition-colors hover:bg-muted"
+              aria-label="Voltar para o final da conversa"
             >
-              Ir às mais recentes
-            </Button>
-          </div>
-        ) : null}
-        {showScrollButton ? (
-          <button
-            onClick={() => {
-              scrollToBottom();
-              setIsNearBottom(true);
-            }}
-            type="button"
-            className="absolute -top-12 left-1/2 z-20 flex h-9 w-9 -translate-x-1/2 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-md transition-colors hover:bg-muted"
-            aria-label="Voltar para o final da conversa"
-          >
-            <ArrowDown className="h-4 w-4" aria-hidden="true" />
-          </button>
-        ) : null}
-        <div className="mb-2 flex flex-wrap items-center gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            disabled={
-              isTyping || historico.carregando || historico.depois !== null
-            }
-            onClick={() => {
-              setIsNearBottom(true);
-              void historico.enviar(
-                'Mostre meu painel com os registros recentes.',
-                privacyMode ? '' : userApiKey,
-                undefined,
-                true
-              );
-            }}
-          >
-            Ver meus dados no chat
-          </Button>
-          {isTyping && (
+              <ArrowDown className="h-4 w-4" aria-hidden="true" />
+            </button>
+          ) : null}
+          <div className="mb-2 flex flex-wrap items-center gap-2">
             <Button
               type="button"
-              variant="ghost"
+              variant="outline"
               size="sm"
-              onClick={historico.interromper}
-            >
-              Interromper resposta
-            </Button>
-          )}
-        </div>
-        {salvarHistorico ? (
-          <div className="mb-2 flex flex-col gap-2">
-            <AnexosDaConversa
-              obterConversa={historico.obterConversa}
-              conversaAtual={historico.conversaAtual}
-              desabilitado={
-                isTyping ||
-                historico.carregando ||
-                privacyMode ||
-                historico.depois !== null
+              disabled={
+                isTyping || historico.carregando || historico.depois !== null
               }
-              selecionados={anexos}
-              aoSelecionar={setAnexos}
-              consentimento={consentimentoAnexos}
-              aoConsentir={setConsentimentoAnexos}
-            />
-            {anexos.length ? (
-              <>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => {
-                    setAnexos([]);
-                    setConsentimentoAnexos(false);
-                  }}
-                >
-                  Limpar seleção de anexos
-                </Button>
-                <p className="text-xs text-muted-foreground">
-                  {anexos.length} arquivo(s) selecionado(s).{' '}
-                  {consentimentoAnexos
-                    ? 'Leitura autorizada para esta pergunta.'
-                    : 'Abra Anexos e autorize a leitura antes de enviar.'}
-                </p>
-              </>
-            ) : null}
+              onClick={() => {
+                setIsNearBottom(true);
+                void historico.enviar(
+                  'Mostre meu painel com os registros recentes.',
+                  privacyMode ? '' : userApiKey,
+                  undefined,
+                  true
+                );
+              }}
+            >
+              Ver meus dados no chat
+            </Button>
+            {isTyping && (
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={historico.interromper}
+              >
+                Interromper resposta
+              </Button>
+            )}
           </div>
-        ) : null}
-        <ChatInput
-          onSendMessage={handleSendMessage}
-          disabled={
-            isTyping ||
-            historico.carregando ||
-            historico.depois !== null ||
-            (anexos.length > 0 && (!consentimentoAnexos || privacyMode)) ||
-            Boolean(historico.erro && semConversa)
-          }
-          maxLength={LIMITE_DA_PERGUNTA}
-          placeholder={chatConfig.inputPlaceholder}
-        />
-        <p className="mt-2 text-center text-micro leading-4 text-muted-foreground">
-          {chatConfig.emptyStateHint}
-        </p>
+          {salvarHistorico ? (
+            <div className="mb-2 flex flex-col gap-2">
+              <AnexosDaConversa
+                obterConversa={historico.obterConversa}
+                conversaAtual={historico.conversaAtual}
+                desabilitado={
+                  isTyping ||
+                  historico.carregando ||
+                  privacyMode ||
+                  historico.depois !== null
+                }
+                selecionados={anexos}
+                aoSelecionar={setAnexos}
+                consentimento={consentimentoAnexos}
+                aoConsentir={setConsentimentoAnexos}
+              />
+              {anexos.length ? (
+                <>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setAnexos([]);
+                      setConsentimentoAnexos(false);
+                    }}
+                  >
+                    Limpar seleção de anexos
+                  </Button>
+                  <p className="text-xs text-muted-foreground">
+                    {anexos.length} arquivo(s) selecionado(s).{' '}
+                    {consentimentoAnexos
+                      ? 'Leitura autorizada para esta pergunta.'
+                      : 'Abra Anexos e autorize a leitura antes de enviar.'}
+                  </p>
+                </>
+              ) : null}
+            </div>
+          ) : null}
+          <ChatInput
+            onSendMessage={handleSendMessage}
+            disabled={
+              isTyping ||
+              historico.carregando ||
+              historico.depois !== null ||
+              (anexos.length > 0 && (!consentimentoAnexos || privacyMode)) ||
+              Boolean(historico.erro && semConversa)
+            }
+            maxLength={LIMITE_DA_PERGUNTA}
+            placeholder={chatConfig.inputPlaceholder}
+          />
+          <p className="mt-2 text-center text-micro leading-4 text-muted-foreground">
+            {chatConfig.emptyStateHint}
+          </p>
+        </div>
       </div>
     </section>
   );
