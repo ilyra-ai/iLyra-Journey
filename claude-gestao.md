@@ -220,14 +220,14 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **69,5%** (162 de 233)   |
-| Implementações publicadas               | **82,8%** (193 de 233)   |
+| Conclusão integral                      | **71,2%** (166 de 233)   |
+| Implementações publicadas               | **84,5%** (197 de 233)   |
 | Tarefas totais                          | 233                      |
-| 🟢 Concluídas                           | 162                      |
+| 🟢 Concluídas                           | 166                      |
 | 🟡 Implementadas com validação pendente | 31                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 35                       |
+| ⚪ A iniciar                            | 31                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-20 · BRT         |
 
@@ -5868,25 +5868,33 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Causa raiz:** os tipos das imagens vêm do `next-env.d.ts`, gerado pelo Next no `dev`/`build` e ignorado no Git; num clone limpo o `tsc` roda antes de qualquer geração. O Next 16.4.3 instalado tem o comando oficial `next typegen` para gerar essas definições sem build.
 - **Correção prevista:** `check:types` passa a gerar as definições oficiais (`next typegen`) antes do `tsc --noEmit`, sem declarar tipos à mão; repetir os gates num clone limpo no Node 24 e no Windows. Ordem do titular: depois das anotações visuais.
 
-### 230 · Chat da Lyra: respostas proporcionais, modernas e fáceis de ler · ⚪ A INICIAR
+### 230 · Chat da Lyra: respostas proporcionais, modernas e fáceis de ler · 🟢 CONCLUÍDA
+
+- **Estado em 20/11/2026 (`53633bdd`):** causa medida no navegador: as respostas usavam a Imprima larga do tema celestial com entrelinha de 1,87 numa faixa estreita encostada à esquerda (5 parágrafos curtos em 654 px no desktop). Passaram a usar a Inter, fonte de leitura já carregada, em 15 px com entrelinha 1,6, parágrafos e títulos internos mais próximos, e a conversa e a caixa de mensagem numa coluna de leitura centralizada de até 768 px (a mesma resposta caiu para 568 px). Conferido em 1440 e 375 px e no tema claro (contraste acima de 11:1); unitários, integração, lint, tipos, formato e build aprovados.
 
 - **Origem e data:** anotação do titular em 19/11/2026: "o chat da Lyra está desproporcional, as letras do prompt de respostas da Lyra estão muito grandes, difícil de ler; precisa ser mais moderna, mais fácil para usuários leigos e que consigam ver todas as respostas de forma rápida e fácil".
 - **Situação encontrada:** as respostas são renderizadas por `RespostaMarkdown` dentro de `ChatBubble`; a tipografia das respostas está desproporcional ao restante do chat.
 - **Escopo:** tamanho, entrelinha, largura de leitura e hierarquia (títulos, listas, destaques) das respostas ajustados para leitura rápida por leigos, em desktop, tablet e celular, nos temas claro e escuro, com contraste WCAG; sem mudar o conteúdo nem o fluxo do chat.
 
-### 231 · Histórico das conversas dentro do chat, com título criado pelo modelo de IA · ⚪ A INICIAR
+### 231 · Histórico das conversas dentro do chat, com título criado pelo modelo de IA · 🟢 CONCLUÍDA
+
+- **Estado em 20/11/2026 (`d041da8a`):** componente `ConversasDoChat` no próprio chat (coluna de 256 px no desktop; gaveta "Conversas" no celular e no tablet). Título pela IA em `src/lib/chat/titulo.ts`: depois da resposta, a cadeia (Ollama `nexuz/qwen3.5-agent:4b` primeiro, motor da Lyra como reserva) recebe a primeira pergunta, a atual e o começo da resposta e devolve um nome curto, limpo e conferido (formato, até 60 caracteres e 8 palavras, sem nome, apelido ou e-mail da pessoa como palavra inteira); sem título válido fica o começo da pergunta; no modo privado não roda. Migration `079_titulo_das_conversas.sql` (coluna `title_source`: pergunta, modelo ou pessoa), aplicada no banco local. Conferido com o Ollama real: a conversa recebeu "Como ficar calmo agora". Na primeira tentativa o título foi recusado por um defeito da checagem de dado pessoal, que procurava o nome "Ana" dentro de "semana" e "aquariana"; corrigida para palavra inteira, com teste.
 
 - **Origem e data:** anotação do titular em 19/11/2026: "acrescentar o histórico das conversas no próprio chat, e o nome do chat no histórico é criado automaticamente pelo modelo de IA, que faça sentido no contexto da conversa".
 - **Situação encontrada:** o componente `HistoricoDeConversas` (lista com título e data, rota `GET /api/chat/conversas`) só aparece na barra lateral antiga (`SidebarNavigation`), que a navegação horizontal do app deixou de mostrar; dentro do chat não há histórico. O título é o começo da primeira mensagem (`pedido.query` cortado em 120 caracteres, `src/lib/chat/servico.ts`), não gerado pela IA.
 - **Escopo:** painel de histórico no próprio chat (lateral no desktop, gaveta ou lista no celular), título curto gerado pelo modelo de IA da cadeia (Ollama primeiro, motor da Lyra como reserva, que mantém o começo da mensagem) a partir do contexto da conversa, sem dados sensíveis desnecessários.
 
-### 232 · Excluir e renomear conversas do histórico · ⚪ A INICIAR
+### 232 · Excluir e renomear conversas do histórico · 🟢 CONCLUÍDA
+
+- **Estado em 20/11/2026 (`d041da8a`):** `PATCH` (nome de 1 a 120 caracteres, uma linha) e `DELETE` em `/api/chat/conversas/[id]`, só do titular (anônimo 401; outra conta e inexistente 404; corpo inválido 400). Excluir apaga mensagens, anexos, imagens, favoritos e avaliações pela cascata do banco. No histórico: menu de cada conversa com "Renomear" (edição no próprio item, Enter salva, Esc cancela) e "Excluir" (confirmação que avisa que não pode ser desfeito; excluir a conversa aberta abre uma nova). Conferido pela tela e no banco.
 
 - **Origem e data:** anotação do titular em 19/11/2026: "dar a opção para a pessoa excluir, renomear o histórico do chat".
 - **Situação encontrada:** não existe; `src/app/api/chat/conversas/[id]/route.ts` só tem `GET`.
 - **Escopo:** `PATCH` (renomear) e `DELETE` (excluir, com confirmação e efeito real nas mensagens, anexos e imagens da conversa) restritos ao titular, com testes de integração (anônimo, outra conta, inexistente, título inválido), e as ações no histórico do chat.
 
-### 233 · Criar novo chat · ⚪ A INICIAR (já existe; conferir no novo histórico)
+### 233 · Criar novo chat · 🟢 CONCLUÍDA
+
+- **Estado em 20/11/2026 (`d041da8a`):** "Nova conversa" no topo do histórico (além do botão que já existia no cabeçalho do chat); conferido no desktop e na gaveta do celular.
 
 - **Origem e data:** anotação do titular em 19/11/2026: "dar a opção para a pessoa criar novo chat".
 - **Situação encontrada:** já implementado: botão "Nova conversa" (ícone `SquarePen`) no topo do chat (`ChatAssistantContent.tsx`). Falta apenas mantê-lo visível e coerente junto ao novo histórico da tarefa 231.
