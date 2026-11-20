@@ -220,18 +220,18 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **73,7%** (140 de 190)   |
-| Implementações publicadas               | **82,6%** (157 de 190)   |
-| Tarefas totais                          | 190                      |
-| 🟢 Concluídas                           | 140                      |
-| 🟡 Implementadas com validação pendente | 53                       |
+| Conclusão integral                      | **69,5%** (162 de 233)   |
+| Implementações publicadas               | **82,8%** (193 de 233)   |
+| Tarefas totais                          | 233                      |
+| 🟢 Concluídas                           | 162                      |
+| 🟡 Implementadas com validação pendente | 31                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 29                       |
+| ⚪ A iniciar                            | 35                       |
 | Branch de trabalho                      | `main` (única permitida) |
-| Última atualização                      | 2026-11-16 · 10h40 BRT   |
+| Última atualização                      | 2026-11-20 · BRT         |
 
-> Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os 17 estados 🟡 preservam entregas publicadas com homologação incompleta sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
+> Recontagem em 20/11/2026: os números anteriores não fechavam com a soma dos estados; o total passou a ser a soma de 🟢, 🟡, 🔵, 🔴 e ⚪. Conclusão integral = tarefas 🟢 ÷ total. Implementações publicadas = (🟢 + 🟡) ÷ total. Os 17 estados 🟡 preservam entregas publicadas com homologação incompleta sem declarar as fronteiras comprovadas. Registros anteriores abaixo são históricos; os indicadores e a linha “Validação atual” definem a classificação vigente.
 
 **Escopo vigente em 2026-11-06:** landing 149 aprovada, com aprovação registrada e publicada em `857617a6`. O usuário autorizou redesenhar por completo o carregamento e, depois, o login/cadastro, seguindo a identidade celestial e mantendo enquadramento responsivo em desktop/mobile. Concluir e publicar cada frente individualmente na main antes da próxima. As tarefas 142 e 144 continuam **pausadas**; suas mudanças locais independentes ficam fora destes commits. As 145, 146 e o restante da 147 permanecem a iniciar.
 
@@ -5212,7 +5212,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 145 · Concentrar o card “Meu mapa védico” no dashboard inicial
 
-**Estado: 🟡 implementada · Homologação visual pelo usuário pendente. Retomada autorizada em 08-11-2026.**
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** painel com o cartão "Meu mapa védico" concentrado, sem sobreposição nem rolagem lateral em 375, 768, 960, 1152 e 1440 px (960 e 1152 equivalem a zoom de 150% e 125%), temas claro e escuro sem texto abaixo do contraste WCAG.
+
+**Estado: 🟢 concluída · validação visual feita em 19 e 20/11/2026, a pedido do titular (histórico abaixo preservado).**
 
 - Card real concentrado no dashboard inicial `/`, integrado ao perfil e aos motores existentes pela tarefa 153; mantidos acesso por plano, erro, carregamento e orientação para dados ausentes.
 - Retirada somente a exibição duplicada do Perfil e seu import. O atalho passa a “Meu mapa no Painel”, usando o Link do Next. Os campos de nascimento, componente de leitura completa e cálculos são preservados. Busca em `ProfileForm.tsx` confirmou ausência de `MapaVedicoCard` e do antigo destino `perfil-contexto`.
@@ -5223,7 +5225,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 146 · Navegação horizontal no topo para uso em desktop
 
-**Estado: 🟡 implementada · Homologação visual pelo usuário pendente. Reconciliação em 08-11-2026.**
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** navegação horizontal no topo (Painel, Lyra AI, Histórico, Relatórios, Planos) no desktop; no celular abre menu suspenso, não gaveta lateral.
+
+**Estado: 🟢 concluída · validação visual feita em 19 e 20/11/2026, a pedido do titular (histórico abaixo preservado).**
 
 - Escopo atendido pela navegação autenticada da 152, já publicada em `88abc53f` e refinada em `673a38bf`; não recriar uma segunda barra. `Header.tsx` usa navegação horizontal superior, configuração real e permissões; administração fica na engrenagem, junto ao perfil. Sidebar lateral permanece somente na prévia do construtor.
 - Histórico: a imagem inicial indicava somente a posição superior. A aprovação celestial posterior substituiu as antigas cores salmão/verde; prevalecem marca aprovada, amarelo suave e fundo escuro dourado mais recente. A auditoria geral 142 e redesign conjunto 147 não são retomados por esta reconciliação.
@@ -5286,7 +5290,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 150 · Redesenhar integralmente o carregamento real do app
 
-**Estado: 🟡 implementada · Validação visual final do usuário pendente.**
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** carregamento real com `role=status`, marca e símbolo transparentes e nenhum percentual inventado.
+
+**Estado: 🟢 concluída · validação visual feita em 19 e 20/11/2026, a pedido do titular (histórico abaixo preservado).**
 
 - **Publicação da reconferência da 150:** `8322ca38`, push `cc961f28..8322ca38 main -> main`, somente gestão desta tarefa. Registro subsequente conforme regra 6; homologação visual continua com o usuário.
 
@@ -5328,6 +5334,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 152 · Redesenhar a navegação autenticada conforme o mockup celestial
 
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** cabeçalho de 77 px sem busca, com o controle de tema e "Planos" (modal de 1064 px com o catálogo real); menu móvel suspenso; menu de administração em duas colunas sem vazios, títulos em dourado e sem `/admin/content`; menu do perfil com degradê preto e dourado, borda branca, selo do plano e sem o grupo Tema; tema persistente (`lyra-celestial-theme`).
+
 **Novo acabamento do perfil publicado em 08-11-2026:** `786a5bd5`, push `e7f55cdb..786a5bd5 main -> main`, somente CSS da navegação. Menu com degradê preto/dourado escurecido, textos claros e tokens de hover/foco/separadores ajustados; badge Administrador `#D9F5F2` com texto preto, demais badges preservados. Regra compartilhada nos três modos de dispositivo. Prettier e análise sintática PostCSS aprovados; nenhuma lógica ou permissão alterada. Build completo será reconferido após a próxima atividade visual autorizada, sem alegar nova validação no navegador. Este registro atende à regra 6; substitui o acabamento amarelo sólido histórico.
 
 **Publicação da reconferência:** `a7e3c336`, push `29d567d8..a7e3c336 main -> main`, somente este painel. Registro subsequente conforme a regra 6; aprovação visual do administrador ainda não declarada.
@@ -5340,7 +5348,7 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 **Validação técnica desta rodada:** tipos e lint completos aprovados; 1.017 testes unitários em 97 arquivos aprovados. Build de produção aprovado com 139 páginas geradas e recursos offline preparados. A validação no navegador foi expressamente assumida pelo usuário, inclusive administrador, desktop, tablet, celular e zoom; manter esse aceite pendente até retorno dele. Fundo do AppShell/cabeçalho publicado em `b99baabd`, push `a1884b49..b99baabd main -> main`; landing preservada.
 
-**Estado: 🟡 implementada · Validação visual final do administrador pendente.**
+**Estado: 🟢 concluída · validação visual feita em 19 e 20/11/2026, a pedido do titular (histórico abaixo preservado).**
 
 - Substituir a apresentação lateral no uso normal do desktop por navegação superior fiel ao mockup: marca correta, Painel, Lyra AI, Histórico, Relatórios, Minha assinatura, busca e perfil, conforme os destinos efetivamente permitidos. Preservar nomes personalizados do construtor, sessão, plano, atalhos, pesquisa real e saída.
 - Ajustes aprovados: engrenagem junto ao perfil abre Administração por categorias, com todos os destinos administrativos permitidos; retirar somente `/admin/content` da navegação, preservando página e funcionalidades. Fundo da barra, painel móvel e AppShell igual à landing, incluindo cor e gradiente. Não reativar grupos desativados.
@@ -5353,7 +5361,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 153 · Reconstruir o painel celestial com leituras pessoais reais
 
-**Estado: 🟡 implementada · Validação visual pelo usuário pendente. Verificação técnica final em 08-11-2026.**
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** abas dos mapas alinhadas ao título, sem contorno amarelo e com seleção de cantos de 8 px; "Explorar meu mapa" abre o diálogo real "Seus mapas pessoais"; Linha temporal alinhada ao cartão do mapa e "Seu signo" ao chat; botões do chat de 28 e 32 px com respiro de 17 a 20 px; data com o ano; imagens dos cartões transparentes; desktop, tablet, celular e zoom conferidos.
+
+**Estado: 🟢 concluída · validação visual feita em 19 e 20/11/2026, a pedido do titular (histórico abaixo preservado).**
 
 **Publicação da verificação técnica:** `1bf5fdad`, push `d0ef57ff..1bf5fdad main -> main`, somente gestão e evidências da 153. Implementação e ativos já estavam na main nos commits abaixo. Registro subsequente conforme regra 6; homologação visual permanece pendente.
 
@@ -5443,6 +5453,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 175 · Motor de trânsitos exatos aos pontos natais · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** cinco oráculos independentes passam (`eb97e469`): eclipses de 2026 e 2027 contra o catálogo da NASA, D9 e D10 contra as regras fechadas, linha MC e trânsitos do Sol e revolução solar contra fórmulas de Meeus; as 6 abas de Inovações calculam no navegador; gates no Node 24.21.0 num clone limpo aprovados em instalação, lint, formato, 1217 unitários, 616 integrações e build. Falta: `check:types` num clone limpo (tarefa 229) e o resultado do GitHub Actions (`gh` ausente e conector do GitHub falhando nesta estação).
+
 - **Origem e data:** solicitação independente do usuário sobre TOP 5 Inovações para o Motor Lyra, em 13/11/2026, aproximadamente 11h20 (America/Sao_Paulo); não é execução da tarefa 142.
 - **Motivo e implementação real:** Funções matemáticas puras de busca angular e eventos de trânsito a posições natais, zodíaco sideral ou tropical e passagens diretas/retrógradas em janelas limitadas.
 - **Commit(s) publicados e visíveis na main:** `bd049a31136c5374c709d743b56fd7d59a84d866`, `2d36b6cdc806598d512543d4ed45ecfac5311664`.
@@ -5452,6 +5464,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
 
 ### 176 · Mapas divisionais védicos D9 e D10 · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** ver a tarefa 175 (oráculos, abas de Inovações e gates no Node 24); falta `check:types` num clone limpo (229) e o GitHub Actions.
 
 - **Origem e data:** solicitação independente do usuário sobre TOP 5 Inovações para o Motor Lyra, em 13/11/2026, aproximadamente 11h20 (America/Sao_Paulo); não é execução da tarefa 142.
 - **Motivo e implementação real:** Transformação Parāśari das longitudes siderais natais em Navamsa e Dashamsa, casas derivadas apenas com Lagna conhecido, indicação de imprecisão sem hora.
@@ -5463,6 +5477,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 177 · Linhas de astrocartografia e ascendente relocalizado · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** ver a tarefa 175 (oráculos, abas de Inovações e gates no Node 24); falta `check:types` num clone limpo (229) e o GitHub Actions.
+
 - **Origem e data:** solicitação independente do usuário sobre TOP 5 Inovações para o Motor Lyra, em 13/11/2026, aproximadamente 11h20 (America/Sao_Paulo); não é execução da tarefa 142.
 - **Motivo e implementação real:** Linhas MC/IC/AS/DS geocêntricas de 7 planetas com segmentação no antimeridiano; comparação de ascendente com UTC natal constante e mapa de contornos geográficos naturais.
 - **Commit(s) publicados e visíveis na main:** `d749302ddb27c933032faee9c40181eb7811860e`, `d65b5c3e22b9d64d5b2b05f76deb79fabcd0de60`.
@@ -5472,6 +5488,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
 
 ### 178 · Cálculo de cartas de revolução solar e lunar · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** ver a tarefa 175 (oráculos, abas de Inovações e gates no Node 24); falta `check:types` num clone limpo (229) e o GitHub Actions.
 
 - **Origem e data:** solicitação independente do usuário sobre TOP 5 Inovações para o Motor Lyra, em 13/11/2026, aproximadamente 11h20 (America/Sao_Paulo); não é execução da tarefa 142.
 - **Motivo e implementação real:** Pesquisa do retorno circular exato à longitude natal, carta do instante por local explícito e casas siderais ou tropicais com rejeição de local polar.
@@ -5483,6 +5501,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 179 · Motor de eclipses geolocalizados e interface das cinco inovações · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** ver a tarefa 175 (oráculos, abas de Inovações e gates no Node 24); falta `check:types` num clone limpo (229) e o GitHub Actions.
+
 - **Origem e data:** solicitação independente do usuário sobre TOP 5 Inovações para o Motor Lyra, em 13/11/2026, aproximadamente 11h20 (America/Sao_Paulo); não é execução da tarefa 142.
 - **Motivo e implementação real:** Busca de eclipses solares globais e locais e eclipses lunares, com horizonte geométrico; REST autenticado, página com seis abas para cinco módulos, menu e entitlement vedic_insights. Calculadora independente de LLM.
 - **Commit(s) publicados e visíveis na main:** `be2021ce5aec72dfbdda5cf115afb5c5ab9f564c`, `0c04071a071b8600e19a39ea5f479ee175b02afe`, `8a25f0f4a1d61bc13283d57aa5d24d6e37ced8c2`, `f97ef6eabca5e388ecd124bd7c40f319b5c91422`, `656e2b6b4e306c929c99744cb4c2beb3aa1379cb`, `6f7d222f4a46b9fd9446129263601094dd592052`, `625cfa04c813eb49d3f1381f0b2a20a85101bdce`, `bac3dc94f93a0b524742c2457930b7c8222abb32`.
@@ -5492,6 +5512,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
 
 ### 191 · Janelas de hora do dia de nascimento no Motor da Lyra · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** gates no Node 24.21.0 num clone limpo aprovados em instalação, lint, formato, 1217 unitários, 616 integrações e build; falta só `check:types` num clone limpo (tarefa 229).
 
 - **Origem e data:** solicitação do usuário em 16/11/2026 (America/Sao_Paulo), após a análise forense do motor: a maioria das pessoas não sabe a hora em que nasceu, e o mapa védico assumia 12:00 em silêncio. O usuário pediu que a pessoa escolha o horário por uma característica principal, em uma palavra, sem termos técnicos.
 - **Motivo e implementação real:** `calcularJanelasDeHora` divide o dia civil de nascimento nos intervalos em que o Lagna sideral permanece no mesmo signo (varredura de 30 s e bissecção até 1 s), cobre dias de 23, 24 e 25 horas e devolve, por janela, uma hora local conferida que reproduz o mesmo Lagna. Latitude polar, data inexistente, fuso desconhecido e local inválido são recusados. A base curada ganhou `essencia`, uma palavra distinta por signo.
@@ -5503,6 +5525,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 192 · Hora de nascimento estimada no perfil: persistência, precisão da hora e rota · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** gates no Node 24 aprovados, menos `check:types` num clone limpo (229); tela conferida na tarefa 194.
+
 - **Origem e data:** continuação da solicitação do usuário de 16/11/2026 (tarefa 191).
 - **Motivo e implementação real:** migration `069` acrescenta `profiles.birth_time_estimate`; a hora do perfil é estimada enquanto essa coluna for igual a `birth_time`, de modo que digitar outra hora no perfil volta a tratá-la como informada sem depender de quem gravou. O mapa natal ganha `precisaoDaHora` (`informada`, `estimada`, `desconhecida`), gravada na base natal (versão 2) e devolvida pela serialização. A rota `/api/perfil/hora-de-nascimento` (GET, POST, DELETE) devolve ao navegador somente horário e uma palavra por janela; o servidor recalcula as janelas a partir do perfil, nunca substitui nem apaga uma hora informada e recusa janela de outro dia.
 - **Arquivos:** `mysql/migrations/069_hora_de_nascimento_estimada.sql`, `src/lib/perfil/hora-de-nascimento.ts`, `src/app/api/perfil/hora-de-nascimento/route.ts`, `src/app/api/perfil/hora-de-nascimento.integration.test.ts`, `src/lib/astrology/perfil-astrologico.ts`, `src/lib/astrology/mapa-natal.ts`, `src/lib/astrology/persistencia-natal.ts`, `src/lib/astrology/serializacao.ts`, `src/lib/astrology/hora-de-nascimento.test.ts` e quatro fixtures de teste com o novo campo do perfil.
@@ -5512,6 +5536,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 193 · Leituras honestas com hora de nascimento estimada ou desconhecida · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** gates no Node 24 aprovados, menos `check:types` num clone limpo (229); tela conferida na tarefa 194.
+
 - **Origem e data:** achado nº 1 da análise forense do motor e solicitação do usuário de 16/11/2026 (tarefas 191 e 192).
 - **Causa raiz corrigida:** sem a hora de nascimento, o mapa védico assumia 12:00 e apresentava nakshatra, pada e dasha como certos. Em 400 datas de amostra, o nakshatra divergia em 50,0% dos nascimentos do começo e do fim do dia e o Mahadasha vigente em 47,6%.
 - **Implementação real:** com a hora desconhecida o motor não informa mais dasha e calcula `possibilidades` (signos e nakshatras da Lua no dia civil e Mahadashas possíveis hoje), refeitas a cada data de leitura. A leitura da Lyra declara a incerteza da Lua, lista os períodos possíveis sem datas, deixa de citar o regente do Lagna quando não há Lagna e não afirma a ponte com Mūla sem certeza. Com a hora estimada, a leitura avisa a estimativa, afirma só o signo do Ascendente, não mostra datas dos períodos, e a fase de vida do coach e da semana sai como ano aproximado. O contexto do céu não informa dasha sem hora e não informa data de término com hora estimada. Os modelos conectados recebem o limite do mapa nas instruções.
@@ -5520,7 +5546,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Limitação declarada:** com a hora desconhecida, Tara Bala e Chandra Bala do dia continuam usando a Lua do meio-dia do nascimento; o cartão do perfil avisa e convida a escolher o horário. Gates em Node v26.13.0 (Node 24 ausente na estação).
 - **Aceite integral pendente:** repetir os gates em Node 24 e homologar a tela (194).
 
-### 194 · Escolha do horário de nascimento no onboarding e no perfil · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 194 · Escolha do horário de nascimento no onboarding e no perfil · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** onboarding real: "Não sei a hora em que nasci" com 13 opções (palavra e intervalo), rótulo acessível ligado a cada opção, confirmação, revisão "estimado", conclusão grava a hora estimada (11:27 na janela escolhida) e o cartão do mapa avisa a estimativa e oculta as datas dos períodos.
 
 - **Origem e data:** solicitação do usuário em 16/11/2026: quem não sabe a hora escolhe o horário vendo apenas o intervalo e uma palavra, sem termos técnicos, no onboarding e no perfil.
 - **Implementação real:** componente `EscolhaDaHora` (perfil) e `EscolhaDaHoraNaConfiguracao` (onboarding), com a mesma grade acessível de opções (horário e uma palavra), opção "Nenhuma se parece comigo" e estados de carregamento, erro e indisponibilidade. No perfil a escolha é gravada na hora pela rota; no onboarding a data e a cidade ainda não estão salvas, então a rota devolve uma prévia (`?data=&cidadeId=`) e a conclusão recebe `birth_time_window`, com a hora recalculada no servidor e gravada como estimada. O cartão do mapa mostra o aviso da leitura, o Ascendente só por signo quando estimado e as possibilidades quando a hora é desconhecida.
@@ -5619,21 +5647,27 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Arquivos:** `src/lib/astrology/perfil-astrologico.ts`, `serializacao.ts`, `src/lib/coach/leitura-vedica.ts` e testes.
 - **Testes:** 4 testes novos (Lua mudando no dia sem dia pessoal; hora conhecida com dia pessoal; Lua parada no dia com dia pessoal sem a hora; texto do coach). Unitários, integração, lint, tipos, formato e build aprovados em Node v26.13.0.
 
-### 206 · Horário escolhido preservado no rascunho do onboarding · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 206 · Horário escolhido preservado no rascunho do onboarding · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** horário escolhido gravado no rascunho da aba e restaurado com a cidade e a etapa depois de recarregar a página.
 
 - **Origem e data:** limite declarado na tarefa 194; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
 - **Correção:** o rascunho do onboarding na aba (`sessionStorage`) guardava todos os campos menos o horário escolhido por quem não sabe a hora; ao recarregar, a pessoa precisava escolher de novo. O rascunho passa a guardar o horário com a data e a cidade para as quais foi calculado (campo opcional, compatível com rascunhos anteriores) e o restaura; o horário só vale enquanto data e cidade não mudarem, e o servidor continua recalculando a hora no envio.
 - **Arquivos:** `src/components/onboarding/onboarding-form.tsx`.
 - **Testes:** o formulário não tem teste de componente no projeto (ambiente de teste `node`); validado por tipos, lint e build. Não conferido no navegador. Unitários, integração, lint, tipos, formato e build aprovados em Node v26.13.0.
 
-### 207 · Tela de aprovação dos verbetes da Lyra · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 207 · Tela de aprovação dos verbetes da Lyra · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** verbete pendente aprovado pela tela (grava data e administrador), e "Retirar da base" com confirmação apaga o verbete.
 
 - **Origem e data:** limite declarado na tarefa 199; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
 - **Implementação real:** página administrativa `/admin/lyra-verbetes` ("Verbetes da Lyra", no grupo Conteúdo e IA do menu), com abas de pendentes e aprovados. Cada verbete aparece por inteiro (área, título, resumo, pontos, prática, fonte citada, modelo e provedor que o escreveram, data e palavras-chave), com as ações Aprovar e Recusar ou Retirar da base; a remoção pede confirmação e explica que não pode ser desfeita. A página avisa que a conferência automática não verifica a veracidade do conteúdo. Usa a rota `/api/admin/lyra/verbetes` (tarefa 199) e o padrão de carga `useKeyedResource`.
 - **Arquivos:** `src/app/admin/lyra-verbetes/page.tsx`, `layout.tsx`, `src/components/admin/VerbetesGeradosContent.tsx`, `src/components/layout/navigation.ts`, `sidebar-structure.ts`.
 - **Testes:** a rota já tem 6 testes de integração; a página foi validada por tipos, lint e build, com a rota gerada no build. Não conferida no navegador. Unitários 1152, integração 646 aprovados em Node v26.13.0.
 
-### 208 · Vínculos familiares no painel principal, como leitura simbólica · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 208 · Vínculos familiares no painel principal, como leitura simbólica · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** vínculos no painel abrem o diálogo com leitura do mapa, "Cuidar de você" e exames indicados.
 
 - **Origem e data:** solicitação do titular em 17/11/2026 (item 1): cards de possíveis conflitos com pai, mãe, irmãos, tios, avós e outros, com resumo e "abrir para saber mais" em pop-up organizado. Combinado com o titular: leitura simbólica, sem diagnóstico nem previsão.
 - **Itens não implementados por decisão técnica e de segurança:** itens 2 e 3 do pedido (motor atuando segundo a Nova Medicina Germânica e card de doenças ligadas a conflitos). Não há relação comprovada entre conflito lido no mapa e doença específica; o card induziria medo em pessoas saudáveis e falsa tranquilidade em quem tem risco real, e o método é associado ao abandono de tratamento oncológico. Proposta alternativa em discussão com o titular: card de prevenção com exames por idade, sexo e histórico familiar, e o estresse dos vínculos como fator de risco documentado.
@@ -5651,7 +5685,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes:** 16 unitários (idade, faixas, corpo, intervalos e fim de mês, histórico, vínculos, honestidade) e 7 de integração (anônimo, plano pelo catálogo da migration, registro e desfazer, recusas, isolamento entre titulares, permissões e revisão mensal). Unitários 1176, integração 653, lint, tipos, formato e build aprovados em Node v26.13.0.
 - **Pendente:** interface no painel principal e tela de revisão da administração (tarefa 210).
 
-### 210 · Card de prevenção no painel principal · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 210 · Card de prevenção no painel principal · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** exames de prevenção listados no diálogo do vínculo; "Sim, pesa" grava a resposta e liga o aviso de estresse aos exames de pressão, glicemia e colesterol.
 
 - **Origem e data:** pedido do titular em 17/11/2026: card de prevenção com visual premium no painel principal, ligado à tarefa 209.
 - **Estado em 17/11/2026:** implementado e ainda não publicado. `src/components/dashboard/PrevencaoCard.tsx` (anel de progresso com exames em dia, os três exames mais urgentes com cor por situação, aviso do estresse dos vínculos e botão "Abrir para saber mais") e pop-up em abas: Seus exames (situação, o que o exame procura, orientação oficial com link da fonte, registro e remoção da data do último exame), Família (histórico de saúde por condição e parente), Vínculos e estresse (a pessoa responde se cada vínculo pesa) e Sinais de alerta (quando procurar atendimento logo, com SAMU 192 e CVV 188). Inserido em `CelestialDashboard.tsx` abaixo dos vínculos familiares. Unitários 1176, integração 653, lint, tipos, formato e build aprovados em Node v26.13.0. Não conferido no navegador.
@@ -5680,6 +5716,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 213 · Painel: chat compacto e resumo dos vínculos familiares · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** chat compacto ("Oi Lyra, sou Ana") e resumo dos vínculos conferidos nos dois temas; falta o teste automatizado do acesso à prevenção só com `vedic_insights`.
+
 - **Origem e data:** pedidos do titular em 17/11/2026: a tela dos vínculos não pode abrir inteira no painel; o cartão "Converse com a Lyra" diminui; em cima dele, um resumo dos parentes que abre a tela completa; depois, alinhar o chat com o cartão "Meu mapa védico", título menor, caixa de texto com "Oi Lyra, sou {nome}" e botão enviar que abre a conversa; respiro entre os botões e as bordas; botões menores, sempre alinhados. O titular também pediu, no mesmo dia, a Medicina Germânica junto com os vínculos (ver decisão abaixo).
 - **Estado em 17/11/2026:** `VinculosFamiliares.tsx` virou resumo compacto: os 12 parentes em botões pequenos numa grade de colunas iguais (3 no desktop, 2 no celular), com ponto colorido pelo tom (apoio, atenção, equilíbrio), e "Ver tudo", que abre a tela completa com o resumo de cada vínculo; cada parente abre o detalhe da leitura simbólica e a seção **Cuidar de você**: a pergunta "Este vínculo pesa para você hoje?" (salva em `prevencao_vinculos`) e os exames de prevenção indicados pela idade e pelo corpo, do catálogo oficial do motor, com o aviso oficial. O resumo fica em cima do chat, na coluna ao lado do mapa (`.ladoDoMapa`): o chat fica embaixo, rente ao fim do mapa; os vínculos ocupam o resto e só a lista rola. `CelestialChat` fechado mostra só o título menor (`.tituloCompacto`), o ícone e a caixa com "Oi Lyra, sou {primeiro nome}"; enviar abre a conversa completa já com a mensagem. A rota `/api/prevencao` aceita `vedic_insights` ou `daily_checkin` para o plano, os exames e o "pesa?"; o histórico de saúde da família continua exigindo `daily_checkin`, que o titular informou que ficará desligado.
 - **Causa raiz corrigida durante a conferência:** no desktop o painel é uma grade de uma tela só (`minmax(0, 1.65fr)` para a linha de cima); a coluna nova (421 px de conteúdo para 348 px) fazia o mapa e o chat invadirem a linha de baixo. A linha passou a `grid-template-rows: minmax(0, 1fr)` e a coluna respeita a altura com rolagem só na lista de parentes.
@@ -5687,32 +5725,42 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Evidências (navegador, admin local):** desktop 1440×900, tablet 768 e celular 375 sem sobreposição entre cartões e sem rolagem horizontal (medido por script na página); chat e mapa terminando na mesma altura (626 px); título do chat em 23,4 px; caixa com "Oi Lyra, sou Admin"; enviar abriu a conversa com a mensagem e a Lyra respondeu pelo Ollama; detalhe de "Filhos e filhas" no celular com "Cuidar de você" e três exames indicados; 25 px de respiro entre os botões e a borda inferior. Unitários 1210, integração 663, lint, tipos, formato e build aprovados.
 - **Fronteiras não comprovadas:** acesso à prevenção só com `vedic_insights` ligado e `daily_checkin` desligado não tem teste automatizado próprio (a regra está na rota); tema claro não conferido.
 
-### 214 · Mais vínculos familiares (filhos, cônjuge, sogros e netos) · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 214 · Mais vínculos familiares (filhos, cônjuge, sogros e netos) · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** os 12 vínculos aparecem no painel (filhos, cônjuge, sogra, sogro e netos incluídos).
 
 - **Origem e data:** pedido do titular em 17/11/2026: acrescentar filhos, filhas e outros.
 - **Estado em 17/11/2026:** `vinculos-familiares.ts` passou de 7 para 12 vínculos, só com regras estabelecidas no Jyotish (Brihat Parashara Hora Shastra): **Filhos e filhas** (casa 5, Putra Bhava, Júpiter; a tradição não separa por gênero, e isso é dito na origem da leitura), **Cônjuge ou companheiro(a)** (casa 7, Kalatra Bhava, Vênus), **Sogra** (casa 10, o 4º a partir do 7º, Lua), **Sogro** (casa 3, o 9º a partir do 7º, Sol) e **Netos** (casa 9, o 5º a partir do 5º, Júpiter). Primos e tios paternos seguem indisponíveis por não terem regra fixa. Os novos entram automaticamente na pergunta "pesa?" da prevenção. A versão do cache do painel subiu para 3 (`persistencia-painel.ts`), porque o painel guardava a leitura antiga com 7 vínculos. Testes: 12 vínculos com casa e significador de cada um conferidos, regente da casa 5 conferido, linguagem sem diagnóstico. Conferido no navegador: 12 parentes no resumo e detalhe completo.
 
-### 215 · Funcionalidades do painel administrativo em mini cards · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 215 · Funcionalidades do painel administrativo em mini cards · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** mini cards de funcionalidades no painel administrativo conferidos nos dois temas.
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte de "Controles funcionais" no painel administrativo.
 - **Escopo pedido:** a lista de grupos (Registro diário de saúde, Diário pessoal, Outros registros, Metas e hábitos, Rotinas e práticas etc.) ocupa muito espaço. Passar para mini cards bem menores, com um X indicando desativado, mantendo o ativar e desativar.
 - **Estado em 18/11/2026:** `ControlesFuncionais.tsx`: os grupos viraram mini cards numa grade (1 a 4 colunas conforme a largura), cada um um botão `role="switch"` com ✓ verde quando ativado e ✕ vermelho quando desativado; um clique alterna, com a mesma confirmação do servidor e controle de versão de antes. O histórico de alterações de cada grupo saiu de dentro dos cartões para uma seção única recolhida, com o nome do grupo em cada evento. Conferido no navegador: 8 grupos em mini cards de 55 px, cartão inteiro com 475 px (antes, só a lista passava de 730 px); clique alternou "Registro diário" de desativado para ativado e de volta, confirmado pelo servidor (estado final igual ao inicial). Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
 
-### 216 · Títulos de cartão proporcionais (Gerenciamento de Usuários, Matriz de entitlements) · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 216 · Títulos de cartão proporcionais (Gerenciamento de Usuários, Matriz de entitlements) · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** títulos de cartão `h2` com 26 px nas telas de usuários e de planos.
 
 - **Origem e data:** pedidos do titular em 17/11/2026, com os recortes dos títulos "Gerenciamento de Usuários" (Administração → Usuários) e "Matriz editável de entitlements" (Administração → Planos): aumentar a fonte para ficar proporcional a um título.
 - **Causa raiz:** o tema celestial (`CelestialIdentity.module.css`) aplica a fonte manuscrita a todo `h2`. Os títulos de cartão em `h2` herdavam essa fonte com o tamanho de texto do `CardTitle` (18 px) e pareciam texto miúdo; os títulos em `h3` seguem na fonte do texto, por isso só alguns pareciam pequenos.
 - **Estado em 17/11/2026:** `CardTitle` passou a ter `data-slot="card-title"` e o tema dá 26 px (1,625 rem, entrelinha 1,25) só a `h2[data-slot='card-title']`, sem alterar outros `h2` do app. Conferido no navegador: "Gerenciamento de Usuários" com 26 px na fonte de título. Unitários, integração, lint, tipos, formato e build aprovados.
 - **Fronteiras não comprovadas:** a página de planos não foi conferida depois da mudança (a aba saiu da página durante a conferência); demais títulos `h2` de cartão não conferidos um a um.
 
-### 217 · Remover o cartão "Ajuda para começar" · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 217 · Remover o cartão "Ajuda para começar" · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** cartão de ajuda só aparece para quem ainda não viu a apresentação (conta nova vê "Quer conhecer a Lyra?").
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte do cartão "Ajuda para começar / Rever apresentação" (componente `ApresentacaoDaConta`, mostrado pelo `AppShell` no topo das páginas).
 - **Escopo pedido:** remover o cartão.
 - **Estado em 18/11/2026:** o cartão é a apresentação guiada do app (`ApresentacaoOpcional`, no topo de todas as páginas pelo `AppShell`); remover o componente apagaria o tour de primeiros passos. Ele passou a aparecer só para quem ainda não viu a apresentação (convite "Quer conhecer a Lyra?") ou parou no meio ("Retomar apresentação"); concluída ou dispensada, some de todas as páginas. O aviso "Carregando ajuda opcional…", que piscava no topo de cada página, também saiu. Conferido no navegador com a conta admin (estado "dispensada"): Administração → Usuários começa direto no conteúdo. Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
 - **Consequência registrada:** quem concluiu ou dispensou a apresentação deixa de ter o botão "Rever apresentação"; se o titular quiser, ele pode ir para o menu da conta.
 
-### 218 · Cores para os planos e perfis nos selos da lista de usuários · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 218 · Cores para os planos e perfis nos selos da lista de usuários · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** selos de plano e perfil coloridos e legíveis no tema claro, contraste conferido.
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte dos selos "Free" e "Administrador" na lista de usuários.
 - **Escopo pedido:** dar uma cor própria a cada plano e perfil.
@@ -5721,13 +5769,17 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Ocorrência nos gates:** na primeira rodada, o teste "registra zero, ausência, campos e valores anteriores; restaura sem duplicar o dia" (`src/app/api/metricas/versoes.integration.test.ts`) falhou uma vez, e nada foi publicado. Ele passou três vezes sozinho e na rodada seguinte da suíte completa (611 de 611). É a segunda falha intermitente em arquivos diferentes (a outra está na tarefa 221); o detalhe se perdeu porque o script de gates guardava só o resumo; ele passou a guardar o log completo de cada etapa para a próxima ocorrência.
 - **Fronteiras não comprovadas:** tema claro não conferido.
 
-### 219 · Logo novo no avatar do chat e demais usos da marca · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 219 · Logo novo no avatar do chat e demais usos da marca · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** chat usa o símbolo transparente; ícones de instalação (apple-icon e PWA 192, 512 e maskable) trocados para o símbolo celestial em `b7d761a7`.
 
 - **Origem e data:** pedido do titular em 17/11/2026, com os recortes do avatar do chat (cabeçalho e abertura) ainda com o logo anterior.
 - **Estado em 17/11/2026:** publicado em `b6d7ea93`. O componente `MarcaLyra` usava o logo anterior (teal e coral, `src/assets/marca/lyra-logo.png`) e passou a usar o símbolo da identidade celestial (`src/assets/celestial/simbolo.png`, o mesmo da tela de carregamento e do favicon), num ladrilho arredondado igual nos dois temas. Vale para chat (cabeçalho, abertura, balões e "digitando"), sidebar, busca de páginas e páginas de erro. `docs/design-system.md` atualizado; o arquivo antigo continua só como fonte dos ícones de instalação. Conferido no cabeçalho do chat pelo navegador. Unitários 1209, integração 663, lint, tipos, formato e build aprovados.
 - **Fronteiras não comprovadas:** abertura do chat (marca de 3,5rem), balões, tema claro e páginas de erro não conferidos um a um no navegador; ícones de instalação (PWA) ainda com o logo anterior.
 
-### 220 · Matriz de planos em cartões quadrados, 3 por linha · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 220 · Matriz de planos em cartões quadrados, 3 por linha · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** matriz com 3 cartões de 365 px por linha no desktop.
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte da Matriz editável de entitlements (Administração → Planos).
 - **Escopo pedido:** no desktop, mostrar cada recurso em cartões no formato quadrado, 3 por linha, sem cartões muito grandes. Hoje cada recurso ocupa a largura inteira, com os quatro planos (Free, Meta, Care, Administrador) em dois por linha.
@@ -5735,7 +5787,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Estado em 18/11/2026:** `AdminPlanMatrixContent.tsx`: os recursos viraram cartões compactos numa grade de 3 por linha no desktop (2 no tablet, 1 no celular), com a descrição limitada a 3 linhas (texto completo no `title`) e os blocos de cada plano empilhados no cartão. A matriz, os botões "Salvar" e os cartões de plano do topo mostram só os planos em uso (`planosEmUso`: os ativos e o Administrador), ou seja, Care e Administrador; Free e Meta, inativos desde a 225, ficam no banco sem aparecer aqui. Conferido no navegador a 1440 px: 26 recursos, 3 por linha (mesmo topo), cada cartão com cerca de 378 × 330 a 354 px, só Care e Administrador; a 375 px, nada passa da tela. Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
 - **Consequência registrada:** como Free e Meta não aparecem mais na tela de planos, reativá-los, se um dia for preciso, exige uma migration ou edição direta no banco.
 
-### 221 · Selos das propostas de exames centralizados, com ícone e cor · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 221 · Selos das propostas de exames centralizados, com ícone e cor · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** selos Novo e Atualizar coloridos e colunas centralizadas no tema claro; o vermelho de "Não conferido" estava ilegível no claro (1,76:1) e foi corrigido em `5a9754cc`.
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte do selo "Novo exame" na tabela de revisão da tela Exames Médicos (tema claro).
 - **Escopo pedido:** centralizar o conteúdo das colunas da tabela; trocar "Novo exame" por "Novo" (e equivalentes curtos para atualizar e retirar), com ícone ou imagem que deixe o tipo claro, e selos coloridos.
@@ -5744,26 +5798,34 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Ocorrência nos gates (18/11/2026):** na rodada de gates desta tarefa, o teste de integração "mostra as não conferidas, altera uma e confirma a revisão de todas" (`src/app/api/prevencao.integration.test.ts`) falhou uma vez e o commit `9e3ed81e` saiu antes de a falha ser vista, porque o filtro da saída não interrompia o encadeamento (corrigido: o resultado dos gates passou a ser conferido antes do commit). A falha não se repetiu em quatro execuções (o arquivo sozinho, junto com o da tarefa 211 e duas vezes a suíte completa, 611 de 611); o detalhe da asserção se perdeu no filtro. Causa não identificada; investigar se voltar.
 - **Causa encontrada (18/11/2026):** com o log completo, a falha intermitente do teste da prevenção voltou e mostrou `expected 30.000000011574073 to be less than or equal to 30`: o teste comparava `venceEm` (relógio do MySQL no contêiner) com `Date.now()` (relógio do Node) e supunha que o banco nunca estivesse à frente; estava 1 ms. A regra do app usa só o relógio do banco e está correta; o teste ganhou tolerância de 5 s para a diferença entre os relógios.
 
-### 222 · Símbolo da marca com fundo transparente em todos os usos · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 222 · Símbolo da marca com fundo transparente em todos os usos · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** tela de carregamento e chat com o símbolo transparente; favicon e ícones de instalação seguem opacos por exigência dos formatos.
 
 - **Origem e data:** pedidos do titular em 17/11/2026: "precisa ter fundo transparente" e "todos os logos da Lyra têm que ter fundo transparente".
 - **Estado em 17/11/2026:** o projeto só tinha o símbolo com fundo azul-noite opaco (`simbolo.png`, `icon.png`). `scripts/gerar-simbolo-transparente.mjs` (Sharp, dependência declarada) gera `src/assets/celestial/simbolo-transparente.png` de forma determinística: cor de fundo amostrada nos cantos (rgb 27, 27, 44), opacidade pela distância de cor com borda suave, cor despremultiplicada para não deixar franja azul, bordas vazias recortadas e margem de 4% (963 × 963, alfa de 0 a 255; inspeção visual feita). Passa a ser usado no `MarcaLyra` (chat, balões, sidebar, busca, erros), no cartão do chat do painel, no login e na tela de carregamento (sem a máscara que esfumaçava o fundo antigo).
 - **Fronteiras não comprovadas:** favicon e ícones de instalação (PWA) continuam com fundo, como exigem esses formatos; tema claro e tela de carregamento não conferidos no navegador.
 
-### 223 · Todos os h2 em tamanho de tópico e negrito · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 223 · Todos os h2 em tamanho de tópico e negrito · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** `h2` com 26 px e contorno de 0,73 px conferidos no tema claro.
 
 - **Origem e data:** pedido do titular em 17/11/2026, com o recorte do título "Matriz real de capacidades" (Administração → Planos, tema claro).
 - **Escopo pedido:** deixar todos os `h2` do tamanho de tópico e em negrito. Continuação da tarefa 216.
 - **Estado em 18/11/2026:** a fonte dos títulos (Clicker Script) só tem o peso 400, e o negrito sintetizado borra o traço manuscrito; os `h2` do tema celestial passaram a ter um contorno da própria cor proporcional ao tamanho (`-webkit-text-stroke: 0.028em`, `paint-order: stroke fill`), que engrossa o traço de forma limpa. Tamanho: os títulos de cartão em `h2` já têm tamanho de tópico (26 px, tarefa 216); os títulos do painel e o título de abertura continuam maiores, preservando a hierarquia. Conferido por estilo calculado no navegador ("Matriz real de capacidades": 26 px, contorno 0,73 px) e na tela de login. Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
 - **Fronteiras não comprovadas:** inspeção visual por captura não feita (a janela do app estava minimizada); tema claro não conferido.
 
-### 224 · Todos os planos com o acesso do Care; configurações só para o administrador · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 224 · Todos os planos com o acesso do Care; configurações só para o administrador · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** matriz e acessos conferidos: o perfil admin tem acesso total pelo papel.
 
 - **Origem e data:** pedido do titular em 17/11/2026: "todos os planos devem ser do tipo Care e somente o administrador tem acesso full às configurações do app"; na pergunta de escopo, o titular escolheu mudar a matriz de recursos.
 - **Estado em 17/11/2026:** migration `076_planos_com_acesso_care.sql` iguala Free e Meta ao Care em `plan_entitlements` (ativo, cota e período de cada um dos 26 recursos; cria linhas que faltem). Antes, as diferenças eram cotas (mensagens, gerações de plano, histórico de métricas, consultas e profissionais) e três recursos desligados no Free ou no Meta (monitoramento em tempo real, atualizações por voz e Bluetooth de wearable). Aplicada no banco local: zero diferenças entre Free, Meta e Care. A matriz continua editável em Administração → Planos. Acesso total às configurações já era só do administrador: as 45 rotas de `/api/admin` exigem `requireAdminSession` e as páginas de `/admin` usam `AccessDenied` (as duas sem guarda só redirecionam ao painel administrativo).
 - **Testes:** oito testes de integração de cota e de recurso liam os limites do Free na matriz (15 mensagens, 30 dias de histórico, 2 profissionais, sem wearable) e deixaram de ter o que testar. O mecanismo não mudou; cada teste passou a declarar o limite que testa com o novo `definirDireito` (`tests/integration/fixtures.ts`), que restaura o valor anterior no fim. Unitários 1210, integração 663, lint, tipos, formato e build aprovados.
 
 ### 225 · Só dois planos: Care e Administrador · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** Free e Meta fora das telas e o plano base conferidos; falta o cadastro de uma conta nova pela tela.
 
 - **Origem e data:** decisão do titular em 17/11/2026: "só vão ter dois planos".
 - **Escopo:** retirar Free e Meta de uso (sem apagar dados nem histórico de assinaturas), passar quem está neles para o Care, fazer o cadastro novo entrar no Care, ajustar a página pública de planos, os textos e a matriz na administração.
@@ -5774,6 +5836,8 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 226 · Plano Lyra Journey com dois valores de colaboração · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
 
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** cartão único com os dois valores, Pagamentos com um preço por valor e landing conferidos; falta o checkout real (sem chave da Stripe nesta estação).
+
 - **Origem e data:** decisões do titular em 18/11/2026: o plano único passa a se chamar **Lyra Journey**, alinhado à missão; terá dois valores mensais, **R$ 9,99** e **R$ 19,99**, com exatamente o mesmo acesso, para a pessoa escolher com quanto colabora para manter e expandir a Lyra; as duas opções ficam **no mesmo cartão**, sem cartão novo e sem nome próprio (só o valor); o início do cartão deixa claro que ambas têm o mesmo acesso.
 - **Desenho:** o identificador interno continua `care` (assinaturas, matriz e testes não mudam); muda o nome exibido. O modelo de preços do Stripe guardava só um preço mensal e um anual por plano; entra o conceito de opção de colaboração (cada opção com valor mensal e preço próprio no Stripe), lido pelo checkout, pela identificação do plano nos webhooks e pela tela de Pagamentos.
 - **Recorrência (pedido do titular em 18/11/2026):** os dois valores são assinaturas mensais recorrentes: a Stripe cobra sozinha todo mês até a pessoa cancelar, sem precisar comprar de novo. O checkout já usa `mode: 'subscription'` e o "Testar conexão" de Pagamentos recusa preço que não seja recorrente mensal; os preços das duas opções seguem a mesma regra.
@@ -5783,7 +5847,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Conferido no navegador:** build de produção, conta local de teste (criada sem senha e apagada depois): cartão único com a abertura, os dois valores e sem seletor de ciclo, em desktop e em 375 px sem rolagem lateral; Admin → Pagamentos com "Preço de R$ 9,99 por mês" e "Preço de R$ 19,99 por mês".
 - **Fronteiras não comprovadas:** sem chave real da Stripe no ambiente, não houve checkout de verdade nem a tela da escolha do valor desenhada (ela só aparece com a cobrança configurada e o preço de um valor cadastrado); a troca de valor por quem já assina é feita no portal da Stripe e depende de o portal estar configurado para permitir troca de preço; tema claro e landing não conferidos no navegador.
 
-### 227 · Administrador é perfil, não plano: fora das telas de planos · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 227 · Administrador é perfil, não plano: fora das telas de planos · 🟢 CONCLUÍDA
+
+- **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** Planos e Pagamentos só com o Lyra Journey, nos dois temas.
 
 - **Origem e data:** pedido do titular em 18/11/2026: o cartão Administrador não é plano e não deveria aparecer em Administração → Planos, na matriz de planos nem em Pagamentos; esses cartões e telas são de uso exclusivo de quem tem perfil administrador, que tem acesso total ao app; os demais cartões (planos inativos) ficam desativados.
 - **Estado em 18/11/2026:** o acesso total já vinha do perfil, não do plano (`recursoHabilitado`, `contaTemRecurso` e `limiteDeMetricasDaConta` em `src/lib/plans/service.ts` liberam tudo para `role = 'admin'`; as rotas de `/api/admin` exigem `requireAdminSession`). `AdminPlanMatrixContent.tsx` passou a mostrar só os planos comerciais ativos: sai o cartão Administrador da lista de planos e da matriz de recursos, junto com os ramos de código que só serviam a ele. `listarPrecosDaStripe` (Pagamentos) lista só os planos pagos ativos; o Meta, inativo, saiu do cartão de preços (os ids já salvos ficam no banco para uma eventual reativação). Os campos de preço e de limite já aceitavam 0 (formulário `min="0"` e API `min(0)`). Conferido no navegador: Planos com só o cartão Lyra Journey e sem "Acesso interno sem cobrança"; Pagamentos com só o Lyra Journey nos preços da Stripe.
