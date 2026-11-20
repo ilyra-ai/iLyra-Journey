@@ -220,14 +220,14 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **71,7%** (167 de 233)   |
-| Implementações publicadas               | **85,0%** (198 de 233)   |
+| Conclusão integral                      | **74,2%** (173 de 233)   |
+| Implementações publicadas               | **85,4%** (199 de 233)   |
 | Tarefas totais                          | 233                      |
-| 🟢 Concluídas                           | 167                      |
-| 🟡 Implementadas com validação pendente | 31                       |
-| 🔵 Em andamento                         | 4                        |
+| 🟢 Concluídas                           | 173                      |
+| 🟡 Implementadas com validação pendente | 26                       |
+| 🔵 Em andamento                         | 5                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 30                       |
+| ⚪ A iniciar                            | 28                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-20 · BRT         |
 
@@ -2489,7 +2489,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 **Registro de 2026-10-22:** tarefas 99–103 acrescentadas como **a iniciar**; a publicação deste registro não declara as funcionalidades implementadas. As tarefas 80/81 foram posteriormente concluídas e estão registradas no Tópico 4.
 
-### 174 · Prioridade máxima: orquestradores independentes WSL2/Ubuntu e Windows 11 · ⚪ PENDENTE
+### 174 · Prioridade máxima: orquestradores independentes WSL2/Ubuntu e Windows 11 · 🔵 EM EXECUÇÃO
+
+- **Situação em 20/11/2026:** o título dizia ⚪, mas grande parte já está publicada (isolamento dos artefatos `7a5f77bc`, diagnóstico Windows `385dec23`, purge restrito `4976986c`, cache `bba13cd5`; registros no topo deste gestor). Falta a ampliação de backup e restauração: a frente local (`scripts/launcher_backup.py`, `run.sh`, `run_windows.py`, `.gitignore` e testes) ainda não publicada. Nela, o `run_windows.py` quebrava ao iniciar com `ModuleNotFoundError: launcher_artifacts`, porque o backup importava o módulo irmão só do jeito de script; corrigido para importar pelo pacote quando vem como `scripts.launcher_backup` (testes dos launchers no Windows: 92 de 93, o restante é exclusivo de Linux). Falta comprovar backup e restauração reais em ambiente isolado antes de publicar. O Node 24.21.0 do Windows foi instalado em 19/11/2026 em `%LOCALAPPDATA%\lyra-tools\node-v24.21.0-win-x64` (SHA-256 conferido), para usar com `LYRA_NODE_BIN` sem trocar o Node 26 do sistema.
 
 **Solicitação explícita de 10-11-2026. Responsável:** principal; apoio de diagnóstico do subagente A quando disponível. **Ordem:** próxima implementação prioritária, antes das demais frentes. Registro solicitado agora; nenhuma remoção ou migração executada nesta atividade documental. Os números 174–181 do anexo de evolução do chat permanecem sub-requisitos da 147, não tarefas globais concorrentes com este ID.
 
@@ -5511,7 +5513,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Integração e dependências:** usar o motor determinístico sem LLM; sessão e plano vedic_insights no endpoint comum; não alterar o mapa natal existente; frontend /inovacoes e página condicional protegida por AppShell. Validação integrada e de acesso real ainda exigida na tarefa 190.
 - **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
 
-### 191 · Janelas de hora do dia de nascimento no Motor da Lyra · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 191 · Janelas de hora do dia de nascimento no Motor da Lyra · 🟢 CONCLUÍDA
+
+- **Fechamento em 20/11/2026:** gates no Node 24.21.0 num clone limpo da `main` (`3552364e`, Ubuntu do WSL2, pnpm 11.28.4 pelo Corepack): instalação congelada, lint, formato, tipos, 1221 unitários, 621 integrações e build, todos aprovados; a tela de escolha foi validada na tarefa 194.
 
 - **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** gates no Node 24.21.0 num clone limpo aprovados em instalação, lint, formato, 1217 unitários, 616 integrações e build; falta só `check:types` num clone limpo (tarefa 229).
 
@@ -5523,7 +5527,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Correções prévias exigidas pelos gates:** `383c6505` (Prettier em sete arquivos já publicados) e `4bfdb573` (ordem de `/inovacoes` na navegação e quatro testes que falhavam).
 - **Aceite integral pendente:** repetir os gates em Node 24 e concluir as tarefas 192 a 194, que ligam as janelas ao perfil, às leituras e à tela de escolha.
 
-### 192 · Hora de nascimento estimada no perfil: persistência, precisão da hora e rota · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 192 · Hora de nascimento estimada no perfil: persistência, precisão da hora e rota · 🟢 CONCLUÍDA
+
+- **Fechamento em 20/11/2026:** gates no Node 24.21.0 num clone limpo da `main` (`3552364e`, Ubuntu do WSL2, pnpm 11.28.4 pelo Corepack): instalação congelada, lint, formato, tipos, 1221 unitários, 621 integrações e build, todos aprovados; a tela de escolha foi validada na tarefa 194.
 
 - **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** gates no Node 24 aprovados, menos `check:types` num clone limpo (229); tela conferida na tarefa 194.
 
@@ -5534,7 +5540,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Limitação declarada:** gates em Node v26.13.0 por chamada direta dos binários (Node 24 ausente na estação).
 - **Aceite integral pendente:** repetir os gates em Node 24; leituras com aviso de estimativa (193) e tela de escolha (194).
 
-### 193 · Leituras honestas com hora de nascimento estimada ou desconhecida · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 193 · Leituras honestas com hora de nascimento estimada ou desconhecida · 🟢 CONCLUÍDA
+
+- **Fechamento em 20/11/2026:** gates no Node 24.21.0 num clone limpo da `main` (`3552364e`, Ubuntu do WSL2, pnpm 11.28.4 pelo Corepack): instalação congelada, lint, formato, tipos, 1221 unitários, 621 integrações e build, todos aprovados; a tela de escolha foi validada na tarefa 194.
 
 - **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** gates no Node 24 aprovados, menos `check:types` num clone limpo (229); tela conferida na tarefa 194.
 
@@ -5714,7 +5722,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Conferência posterior (17/11/2026):** pesquisa completa com modelo real comprovada na tarefa 211 (Ollama, `nexuz/qwen3.5-agent:4b`, 7 páginas oficiais lidas); painel "Acesso do modelo de IA à internet" conferido no navegador (modo "Só os sites liberados", 12 fontes, aviso da busca sem chave e tabela das consultas reais com horário local).
 - **Fronteiras não comprovadas:** busca pela API do Brave Search sem chave real no ambiente (formato coberto por teste, chamada externa não executada).
 
-### 213 · Painel: chat compacto e resumo dos vínculos familiares · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 213 · Painel: chat compacto e resumo dos vínculos familiares · 🟢 CONCLUÍDA
+
+- **Fechamento em 20/11/2026:** teste de integração novo em `src/app/api/prevencao.integration.test.ts`: com só `vedic_insights` ligado e `daily_checkin` desligado, a prevenção abre (GET, vínculo e exame 200) e o histórico de saúde da família responde 403; com os dois desligados, 403. Tema claro conferido na validação de 19 e 20/11.
 
 - **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** chat compacto ("Oi Lyra, sou Ana") e resumo dos vínculos conferidos nos dois temas; falta o teste automatizado do acesso à prevenção só com `vedic_insights`.
 
@@ -5823,7 +5833,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Estado em 17/11/2026:** migration `076_planos_com_acesso_care.sql` iguala Free e Meta ao Care em `plan_entitlements` (ativo, cota e período de cada um dos 26 recursos; cria linhas que faltem). Antes, as diferenças eram cotas (mensagens, gerações de plano, histórico de métricas, consultas e profissionais) e três recursos desligados no Free ou no Meta (monitoramento em tempo real, atualizações por voz e Bluetooth de wearable). Aplicada no banco local: zero diferenças entre Free, Meta e Care. A matriz continua editável em Administração → Planos. Acesso total às configurações já era só do administrador: as 45 rotas de `/api/admin` exigem `requireAdminSession` e as páginas de `/admin` usam `AccessDenied` (as duas sem guarda só redirecionam ao painel administrativo).
 - **Testes:** oito testes de integração de cota e de recurso liam os limites do Free na matriz (15 mensagens, 30 dias de histórico, 2 profissionais, sem wearable) e deixaram de ter o que testar. O mecanismo não mudou; cada teste passou a declarar o limite que testa com o novo `definirDireito` (`tests/integration/fixtures.ts`), que restaura o valor anterior no fim. Unitários 1210, integração 663, lint, tipos, formato e build aprovados.
 
-### 225 · Só dois planos: Care e Administrador · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 225 · Só dois planos: Care e Administrador · 🟢 CONCLUÍDA
+
+- **Cadastro pela tela em 20/11/2026:** conta nova criada pela aba "Criar conta" do login (e-mail de teste, senha aleatória gerada no próprio navegador, apagada no fim): foi para o onboarding e nasceu no Lyra Journey (`care`), ativa, com origem `auth_register`. Os dois valores do plano foram configurados na tarefa 226; não há assinatura paga em Free ou Meta no banco local.
 
 - **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** Free e Meta fora das telas e o plano base conferidos; falta o cadastro de uma conta nova pela tela.
 
@@ -5864,7 +5876,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Situação encontrada:** a landing usa só o tema celestial escuro (`.theme` de `CelestialIdentity.module.css`, `color-scheme: dark`); o botão de alternância `ThemeToggleButton` existe e já é usado no cabeçalho autenticado e nos documentos legais, mas não aparece na landing, e a landing não tem tokens de tema claro.
 - **Escopo:** botão de tema acessível na landing (mesmo controle e mesma preferência das demais telas públicas), versão clara da landing coerente com a identidade preto e dourado do app (tokens próprios, sem apagar o escuro), imagens e degradês legíveis nos dois temas, desktop, tablet e celular, contraste WCAG conferido.
 
-### 229 · `pnpm check:types` falha num clone limpo (tipos das imagens) · ⚪ A INICIAR
+### 229 · `pnpm check:types` falha num clone limpo (tipos das imagens) · 🟢 CONCLUÍDA
+
+- **Estado em 20/11/2026 (`3552364e`):** `check:types` passou a ser `next typegen && tsc --noEmit`. Reproduzido sem o `next-env.d.ts`: 43 erros antes, 0 depois. Prova final: gates no Node 24.21.0 num clone limpo da `main` (`3552364e`, Ubuntu do WSL2, pnpm 11.28.4 pelo Corepack): instalação congelada, lint, formato, tipos, 1221 unitários, 621 integrações e build, todos aprovados.
 
 - **Origem e data:** encontrado em 19/11/2026 na validação das pendências: gates no Node 24.21.0 num clone limpo da `main` (`eb97e469`) passaram em instalação, lint, formato, 1217 unitários, 616 de integração e build, mas `pnpm check:types` falhou com 38 erros TS2307 nos imports de `.png`.
 - **Causa raiz:** os tipos das imagens vêm do `next-env.d.ts`, gerado pelo Next no `dev`/`build` e ignorado no Git; num clone limpo o `tsc` roda antes de qualquer geração. O Next 16.4.3 instalado tem o comando oficial `next typegen` para gerar essas definições sem build.
