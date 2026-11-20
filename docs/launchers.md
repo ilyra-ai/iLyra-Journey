@@ -147,6 +147,19 @@ node scripts/mysql-upgrade.mjs --backup                       # cópia a frio ve
 node scripts/mysql-upgrade.mjs --restaurar <volume_de_backup> # restaura (recria o volume pelo Compose se necessário)
 ```
 
+### Backup exportável e restauração pelos launchers (tarefa 174)
+
+```bash
+./run.sh backup [--full]                                  # WSL2: ZIP verificado na raiz
+./run.sh restore lyra-backup-<...>.zip --confirmar-restauracao
+py run_windows.py backup [--full]                         # Windows 11 (LYRA_NODE_BIN = Node 24 Windows)
+py run_windows.py restore lyra-backup-<...>.zip           # pede RESTAURAR no terminal
+```
+
+- `backup` grava `lyra-backup-banco-<data>.zip` (ou `-full-`, com fontes e configuração) **na raiz do projeto**, fora do Git (`.gitignore`), com manifesto, inventário SHA-256 do volume e validação antes de finalizar. O link `mysql.sock` que o MySQL recria a cada partida fica fora; qualquer outro link é recusado.
+- `restore` exige a aplicação parada, confere o inventário, faz antes um backup completo do estado atual, prepara o banco num volume próprio (`lyra_restore_<token>`), confere esse volume contra o backup e só então troca o volume do MySQL. Se a preparação falha, o volume próprio é removido e nada muda.
+- Verificado em 20/11/2026 no Windows 11 e no WSL2 (disco do Windows em `/mnt/d`): backup, alteração do banco, restauração e as 103 tabelas com contagens idênticas às do backup; app saudável depois (`/api/health` com 81 migrations).
+
 ## `run.sh` (Windows 11 com Git Bash)
 
 ### Ambiente suportado

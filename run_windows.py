@@ -6,6 +6,8 @@ py run_windows.py COMANDO
   app [--prod]      app, com MySQL existente saudável
   db                MySQL e migrations, preservando banco saudável existente
   migrate           migrations e bootstrap do administrador
+  backup [--full]    backup verificável do banco; --full inclui fontes/configuração
+  restore ARQUIVO   restaura backup identificado após confirmação RESTAURAR
   doctor | status   diagnóstico real, somente leitura
   logs [app|db|todos] [--seguir]
   stop [app|db|todos]   somente recursos com identidade comprovada
@@ -38,13 +40,17 @@ import time
 import urllib.error
 import urllib.request
 from collections.abc import Iterator, Sequence
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
 from scripts.launcher_artifacts import (
-    ComprovacaoOrigem, ErroArtefatos, GerenciadorArtefatos, sha256,
+    ComprovacaoOrigem,
+    ErroArtefatos,
+    GerenciadorArtefatos,
+    sha256,
 )
+from scripts.launcher_backup import ErroBackup, MotorBackup
 
 RAIZ = Path(__file__).resolve().parent
 ESTADO = RAIZ / ".lyra-run/windows"
@@ -59,7 +65,7 @@ COMANDOS_LEGADOS = {
     "stop-app": ("stop", "app"), "stop-all": ("stop",),
     "setup-env": ("fix",), "install-deps": ("fix",), "health": ("doctor",),
 }
-MUTACOES = {"up", "app", "db", "migrate", "fix", "repair", "purge", "stop"}
+MUTACOES = {"up", "app", "db", "migrate", "fix", "repair", "purge", "stop", "backup", "restore"}
 
 
 class Falha(RuntimeError):
@@ -139,7 +145,7 @@ def ambiente(extra: dict[str, str] | None = None) -> dict[str, str]:
 def sanitizar(texto: str, variaveis: dict[str, str]) -> str:
     """Oculta credenciais herdadas, configuradas e estruturas usuais de autenticação."""
     valores = {str(valor) for chave, valor in variaveis.items() if valor
-        and re.search(r"PASSWORD|SECRET|TOKEN|KEY|SENHA|SEGREDO|CREDENTIAL", chave, re.I)}
+        and re.search(r"PASSWORD|SECRET|TOKEN|KEY|SENHA|SEGREDO|CREDENTIAL", chave, re.IGNORECASE)}
     for valor in sorted(valores, key=len, reverse=True):
         texto = texto.replace(valor, "[segredo oculto]")
     texto = re.sub(r"(https?://)[^\s/@:]+:[^\s/@]+@", r"\1[segredo oculto]@", texto)
@@ -159,7 +165,7 @@ def registrar_comando(comando: Sequence[str], evento: str, variaveis: dict[str, 
         alvo = Path(comando[1])
         if alvo.parent == RAIZ / "scripts" and alvo.suffix == ".mjs":
             etapa += " · " + alvo.name
-    entrada = {"instante": datetime.now(timezone.utc).isoformat(), "etapa": etapa,
+    entrada = {"instante": datetime.now(UTC).isoformat(), "etapa": etapa,
         "evento": evento, "codigo": codigo,
         "stdout": "[saída de identidade omitida]" if sensivel else sanitizar(stdout, variaveis),
         "stderr": "[saída de identidade omitida]" if sensivel and stderr else sanitizar(stderr, variaveis)}
@@ -551,7 +557,7 @@ def iniciar_app(prod: bool) -> None:
         if not identidade or not identidade.get("command") or not identidade.get("executable"):
             raise Falha(f"App iniciou PID {processo.pid}, mas CIM indisponível; não será encerrado sem prova. Log {log}")
         gravar_json(APP_META, {**identidade, "root": str(RAIZ), "platform": "windows", "host": platform.node(),
-            "port": porta, "mode": modo, "log": str(log), "started": datetime.now(timezone.utc).isoformat()})
+            "port": porta, "mode": modo, "log": str(log), "started": datetime.now(UTC).isoformat()})
         limite = time.monotonic() + 240
         while time.monotonic() < limite:
             if processo.poll() is not None:
@@ -702,6 +708,21 @@ def despachar(args: argparse.Namespace, gerenciador: GerenciadorArtefatos | None
                 docker("stop", "--time", "60", item["Id"])
         return 0
     preflight()
+    if comando in ("backup", "restore"):
+        motor = MotorBackup(RAIZ, node(), gerenciador=gerenciador)
+        if comando == "backup":
+            arquivo = motor.backup("full" if args.full else "banco")
+            mensagem("OK", f"Backup verificado salvo em {arquivo}.")
+        else:
+            arquivo = Path(args.arquivo).expanduser().absolute()
+            if not arquivo.is_file():
+                raise Falha("Informe um arquivo de backup existente.")
+            if estado_app():
+                raise Falha("Pare a aplicação própria antes da restauração; nenhum processo foi encerrado.")
+            confirmar("A restauração substitui os dados selecionados no backup e preserva o estado anterior. Confirme somente após conferir o arquivo.", "RESTAURAR")
+            resultado = motor.restaurar(arquivo, confirmar=True)
+            mensagem("OK", "Restauração verificada: " + sanitizar(json.dumps(resultado, ensure_ascii=False), ambiente()))
+        return 0
     if comando in ("up", "app") and estado_app():
         verificar_artefatos(gerenciador)
         iniciar_app(args.prod)
@@ -766,6 +787,10 @@ def criar_parser() -> argparse.ArgumentParser:
         item.add_argument("--prod", action="store_true")
     for nome in ("db", "migrate", "doctor", "status", "fix", "help"):
         sub.add_parser(nome)
+    backup = sub.add_parser("backup")
+    backup.add_argument("--full", action="store_true", help="inclui fontes e configuração além do banco")
+    restore = sub.add_parser("restore")
+    restore.add_argument("arquivo", help="arquivo de backup verificável gerado pelo launcher")
     repair = sub.add_parser("repair")
     repair.add_argument("--sim", action="store_true")
     purge = sub.add_parser("purge")
@@ -779,21 +804,48 @@ def criar_parser() -> argparse.ArgumentParser:
 
 
 def menu() -> int:
-    opcoes = {"1": ("Subir desenvolvimento", ["up"]), "2": ("Subir produção", ["up", "--prod"]),
-        "3": ("Banco e migrations", ["db"]), "4": ("Somente app", ["app"]),
-        "5": ("Migrations", ["migrate"]), "6": ("Diagnóstico", ["doctor"]),
-        "7": ("Correções seguras", ["fix"]), "8": ("Estado", ["status"]),
-        "9": ("Logs", ["logs"]), "10": ("Parar recursos próprios", ["stop"]),
-        "11": ("Reparar artefatos próprios", ["repair"]), "12": ("Purge com backup", ["purge", "--confirmar-purge"])}
+    grupos = (
+        ("Ambiente", (("Subir desenvolvimento completo", ["up"]),
+                      ("Subir produção completa", ["up", "--prod"]),
+                      ("Parar aplicação e banco próprios", ["stop"]))),
+        ("Aplicação", (("Iniciar somente aplicação", ["app"]),
+                       ("Iniciar aplicação em produção", ["app", "--prod"]),
+                       ("Parar somente aplicação própria", ["stop", "app"]))),
+        ("Banco", (("Iniciar banco e aplicar migrations", ["db"]),
+                   ("Aplicar migrations", ["migrate"]),
+                   ("Criar backup verificável do banco", ["backup"]),
+                   ("Restaurar backup identificado (confirmação obrigatória)", ["restore"]),
+                   ("Parar somente banco próprio", ["stop", "db"]))),
+        ("Diagnóstico", (("Verificar ambiente e saúde", ["doctor"]),
+                         ("Consultar estado", ["status"]),
+                         ("Consultar logs", ["logs"]))),
+        ("Manutenção", (("Aplicar correções seguras", ["fix"]),
+                        ("Reparar artefatos preservando dados", ["repair"]),
+                        ("Criar backup completo de fontes, configuração e banco", ["backup", "--full"]),
+                        ("Apagar banco após backup e confirmação", ["purge", "--confirmar-purge"]))),
+    )
+    opcoes = {str(indice): argumentos for indice, (_, argumentos) in enumerate(
+        (item for _, itens in grupos for item in itens), start=1)}
     while True:
         print("\nLyra MetaCare · Windows 11 nativo")
-        for chave, (rotulo, _) in opcoes.items():
-            print(f"{chave:>2}. {rotulo}")
+        indice = 0
+        for titulo, itens in grupos:
+            print(f"\n{titulo}")
+            for rotulo, _ in itens:
+                indice += 1
+                print(f"{indice:>2}. {rotulo}")
         escolha = input(" 0. Sair\nOpção: ").strip()
         if escolha == "0":
             return 0
         if escolha in opcoes:
-            main(opcoes[escolha][1])
+            argumentos = list(opcoes[escolha])
+            if argumentos[0] == "restore":
+                arquivo = input("Caminho do arquivo de backup (vazio cancela): ").strip()
+                if not arquivo:
+                    mensagem("AVISO", "Restauração cancelada; nenhum dado alterado.")
+                    continue
+                argumentos.append(arquivo)
+            main(argumentos)
         else:
             mensagem("AVISO", "Escolha uma opção apresentada.")
 
@@ -818,7 +870,7 @@ def main(argumentos: Sequence[str]) -> int:
             with gerenciador.transacao(), exclusao_mutua():
                 return despachar(args, gerenciador)
         return despachar(args)
-    except (Falha, ErroArtefatos) as erro:
+    except (Falha, ErroArtefatos, ErroBackup) as erro:
         mensagem("ERRO", str(erro))
         return 1
     except (KeyboardInterrupt, EOFError):

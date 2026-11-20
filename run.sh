@@ -15,6 +15,9 @@
 #    ./run.sh app [--prod]            somente a aplicação (banco saudável)
 #    ./run.sh db                      MySQL (Docker Compose) + migrations
 #    ./run.sh migrate                 somente as migrations
+#    ./run.sh backup [--full]         ZIP do banco ou app+banco na raiz
+#    ./run.sh restore ARQUIVO --confirmar-restauracao
+#                                     restaura backup validado selecionado
 #    ./run.sh doctor                  diagnóstico completo, somente leitura
 #    ./run.sh fix                     correções seguras e idempotentes
 #    ./run.sh repair [--sim]          recria .next, node_modules e o container
@@ -1431,6 +1434,28 @@ cmd_help() {
   sed -n '3,/^# ====/p' "${BASH_SOURCE[0]}" | sed -e '$d' -e 's/^# \{0,1\}//'
 }
 
+cmd_backup() {
+  local tipo=banco
+  if (( $# > 1 )) || { (( $# == 1 )) && [[ "$1" != --full ]]; }; then
+    erro "Use ./run.sh backup [--full]."
+    return 2
+  fi
+  [[ "${1:-}" != --full ]] || tipo=full
+  etapa_preflight || return 1
+  executar "Backup $tipo na raiz do projeto" python3 "$RAIZ/scripts/launcher_backup.py" \
+    --raiz "$RAIZ" --node "$(type -P node)" --tipo "$tipo" backup
+}
+
+cmd_restore() {
+  if (( $# != 2 )) || [[ "$2" != --confirmar-restauracao ]]; then
+    erro "Use ./run.sh restore ARQUIVO --confirmar-restauracao. Selecione o ZIP desejado; a restauração substitui dados após preservar o estado atual."
+    return 2
+  fi
+  etapa_preflight || return 1
+  executar "Restauração do backup selecionado" python3 "$RAIZ/scripts/launcher_backup.py" \
+    --raiz "$RAIZ" --node "$(type -P node)" --arquivo "$1" restaurar --confirmar
+}
+
 # -----------------------------------------------------------------------------
 # Menu interativo
 # -----------------------------------------------------------------------------
@@ -1438,26 +1463,36 @@ readonly -a MENU_ROTULOS=(
   "Sair"
   "Subir tudo (desenvolvimento)"
   "Subir tudo (produção: build + start)"
-  "Somente banco + migrations"
   "Somente aplicação (desenvolvimento)"
-  "Aplicar migrations"
+  "Parar somente a aplicação"
+  "Somente banco + migrations"
+  "Aplicar migrations existentes"
+  "Backup do banco na raiz"
+  "Backup completo do app e banco na raiz"
+  "Restaurar banco ou backup completo selecionado"
   "Diagnóstico (doctor)"
-  "Correções seguras (fix)"
   "Estado (status)"
   "Logs (aplicação e banco)"
-  "Parar tudo"
+  "Correções seguras (fix)"
   "Reparo preservando dados (repair)"
+  "Parar tudo"
 )
-readonly -a MENU_COMANDOS=("" "up" "up --prod" "db" "app" "migrate" "doctor" "fix" "status" "logs" "stop" "repair")
+readonly -a MENU_COMANDOS=("" "up" "up --prod" "app" "stop app" "db" "migrate" "backup" "backup --full" "restore" "doctor" "status" "logs" "fix" "repair" "stop")
+readonly -a MENU_TOPICOS=("" "Aplicação" "Aplicação" "Aplicação" "Aplicação" "Banco de dados e backups" "Banco de dados e backups" "Banco de dados e backups" "Banco de dados e backups" "Banco de dados e backups" "Diagnóstico" "Diagnóstico" "Diagnóstico" "Manutenção" "Manutenção" "Manutenção")
 
 menu() {
   configurar_docker || return 1
-  local escolha i
+  local escolha i topico arquivo_backup
   while true; do
     estado_app
     estado_banco --sem-sql
     printf '\n%s╭─ Lyra MetaCare · run.sh (%s) ──────────────────╮%s\n' "$C_TITULO" "$([[ "$PLATAFORMA" == windows ]] && echo "Git Bash" || echo "$PLATAFORMA")" "$C_FIM"
+    topico=""
     for (( i = 1; i < ${#MENU_ROTULOS[@]}; i++ )); do
+      if [[ "${MENU_TOPICOS[$i]}" != "$topico" ]]; then
+        topico="${MENU_TOPICOS[$i]}"
+        printf '%s│%s\n%s│  %s%s\n' "$C_TITULO" "$C_FIM" "$C_TITULO" "$topico" "$C_FIM"
+      fi
       printf '%s│%s %s%2d%s  %s\n' "$C_TITULO" "$C_FIM" "$C_INFO" "$i" "$C_FIM" "${MENU_ROTULOS[$i]}"
     done
     printf '%s│%s %s%2d%s  %s\n' "$C_TITULO" "$C_FIM" "$C_INFO" 0 "$C_FIM" "${MENU_ROTULOS[0]}"
@@ -1476,6 +1511,11 @@ menu() {
     (( escolha == 0 )) && return 0
     local -a argumentos
     read -r -a argumentos <<<"${MENU_COMANDOS[$escolha]}"
+    if [[ "${argumentos[0]}" == restore ]]; then
+      read -r -p "Caminho do ZIP de backup: " arquivo_backup || return 0
+      confirmar "Restaurar o backup selecionado preservando antes o estado atual?" RESTAURAR "restore ARQUIVO --confirmar-restauracao" || continue
+      argumentos=(restore "$arquivo_backup" --confirmar-restauracao)
+    fi
     executar_comando "${argumentos[@]}"
     read -r -p "Enter para voltar ao menu " _ || { printf '\n'; return 0; }
   done
@@ -1488,7 +1528,7 @@ executar_comando() {
   local comando="${1:-}"
   [[ $# -gt 0 ]] && shift
   case "$comando" in
-    up|app|db|migrate|doctor|fix|repair|purge|status|logs|stop) ;;
+    up|app|db|migrate|backup|restore|doctor|fix|repair|purge|status|logs|stop) ;;
     help|-h|--help) cmd_help; return 0 ;;
     *) erro "Comando desconhecido: $comando"; info "Use ./run.sh help."; return 2 ;;
   esac
@@ -1524,6 +1564,8 @@ executar_comando() {
     app)     cmd_app "$@" ;;
     db)      cmd_db ;;
     migrate) cmd_migrate ;;
+    backup)  cmd_backup "$@" ;;
+    restore) cmd_restore "$@" ;;
     doctor)  cmd_doctor ;;
     fix)     cmd_fix ;;
     repair)  cmd_repair "$@" ;;

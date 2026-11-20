@@ -16,6 +16,11 @@ from unittest import mock
 RAIZ = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(RAIZ))
 
+# run.py é o launcher do Linux/WSL2 (usa `pwd` e outros módulos POSIX); no
+# Windows estes testes são pulados, e o run_windows.py tem os seus.
+if sys.platform != "linux":
+    raise unittest.SkipTest("run.py é exclusivo de Linux/WSL2.")
+
 import run
 
 

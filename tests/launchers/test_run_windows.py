@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import os
 import json
+import io
 import platform
 import socket
 import subprocess
@@ -57,6 +58,21 @@ class TestComandos(unittest.TestCase):
         self.assertTrue(parser.parse_args(["up", "--prod"]).prod)
         self.assertTrue(parser.parse_args(["repair", "--sim"]).sim)
         self.assertTrue(parser.parse_args(["purge", "--confirmar-purge"]).confirmar_purge)
+        self.assertFalse(parser.parse_args(["backup"]).full)
+        self.assertTrue(parser.parse_args(["backup", "--full"]).full)
+        self.assertEqual(parser.parse_args(["restore", "backup.zip"]).arquivo, "backup.zip")
+
+    def test_menu_agrupa_comandos_e_despacha_somente_a_escolha(self) -> None:
+        saida = io.StringIO()
+        with mock.patch("builtins.input", side_effect=["8", "0"]), \
+             mock.patch.object(run_windows, "main", return_value=0) as main, \
+             mock.patch("sys.stdout", saida):
+            self.assertEqual(run_windows.menu(), 0)
+        main.assert_called_once_with(["migrate"])
+        texto = saida.getvalue()
+        posicoes = [texto.index("\n" + grupo + "\n") for grupo in (
+            "Ambiente", "Aplicação", "Banco", "Diagnóstico", "Manutenção")]
+        self.assertEqual(posicoes, sorted(posicoes))
 
 
 class TestPortasReais(unittest.TestCase):
@@ -373,6 +389,69 @@ class TestDoctorComDubles(unittest.TestCase):
     def test_doctor_falha_com_http_indisponivel_ou_migrations_pendentes(self) -> None:
         self.assertEqual(self.diagnosticar(503), 1)
         self.assertEqual(self.diagnosticar(200, banco_falha=True), 1)
+
+
+class TestBackupWindowsComDubles(unittest.TestCase):
+    def test_backup_banco_e_full_reusam_lease_sem_instalar_ou_parar(self) -> None:
+        for argumentos, tipo in ((["backup"], "banco"), (["backup", "--full"], "full")):
+            with self.subTest(tipo=tipo), mock.patch.object(run_windows, "preflight"), \
+                 mock.patch.object(run_windows, "node", return_value="node.exe"), \
+                 mock.patch.object(run_windows, "MotorBackup") as motor, \
+                 mock.patch.object(run_windows, "preparar_ambiente") as preparar, \
+                 mock.patch.object(run_windows, "parar_app") as parar:
+                gerenciador = object()
+                motor.return_value.backup.return_value = Path("backup.zip")
+                self.assertEqual(run_windows.despachar(run_windows.criar_parser().parse_args(argumentos), gerenciador), 0)
+                motor.assert_called_once_with(RAIZ, "node.exe", gerenciador=gerenciador)
+                motor.return_value.backup.assert_called_once_with(tipo)
+                preparar.assert_not_called()
+                parar.assert_not_called()
+
+    def test_restore_recusa_app_ativo_sem_parada_automatica(self) -> None:
+        with tempfile.TemporaryDirectory() as pasta:
+            arquivo = Path(pasta) / "backup.zip"
+            arquivo.write_bytes(b"fixture-apenas-fluxo-do-launcher")
+            with mock.patch.object(run_windows, "preflight"), \
+                 mock.patch.object(run_windows, "node", return_value="node.exe"), \
+                 mock.patch.object(run_windows, "MotorBackup") as motor, \
+                 mock.patch.object(run_windows, "estado_app", return_value={"pid": 999}), \
+                 mock.patch.object(run_windows, "confirmar") as confirmar, \
+                 mock.patch.object(run_windows, "parar_app") as parar:
+                with self.assertRaisesRegex(run_windows.Falha, "Pare a aplicação"):
+                    run_windows.despachar(run_windows.criar_parser().parse_args(["restore", str(arquivo)]))
+                motor.return_value.restaurar.assert_not_called()
+                confirmar.assert_not_called()
+                parar.assert_not_called()
+
+    def test_restore_exige_confirmacao_antes_do_motor(self) -> None:
+        with tempfile.TemporaryDirectory() as pasta:
+            arquivo = Path(pasta) / "backup.zip"
+            arquivo.write_bytes(b"fixture-apenas-fluxo-do-launcher")
+            args = run_windows.criar_parser().parse_args(["restore", str(arquivo)])
+            with mock.patch.object(run_windows, "preflight"), \
+                 mock.patch.object(run_windows, "node", return_value="node.exe"), \
+                 mock.patch.object(run_windows, "MotorBackup") as motor, \
+                 mock.patch.object(run_windows, "estado_app", return_value={}), \
+                 mock.patch("sys.stdin.isatty", return_value=False):
+                with self.assertRaisesRegex(run_windows.Falha, "confirmação explícita"):
+                    run_windows.despachar(args)
+                motor.return_value.restaurar.assert_not_called()
+            with mock.patch.object(run_windows, "preflight"), \
+                 mock.patch.object(run_windows, "node", return_value="node.exe"), \
+                 mock.patch.object(run_windows, "MotorBackup") as motor, \
+                 mock.patch.object(run_windows, "estado_app", return_value={}), \
+                 mock.patch("sys.stdin.isatty", return_value=True), \
+                 mock.patch("builtins.input", return_value="RESTAURAR"):
+                motor.return_value.restaurar.return_value = {"restaurado": True}
+                self.assertEqual(run_windows.despachar(args), 0)
+                motor.return_value.restaurar.assert_called_once_with(arquivo.absolute(), confirmar=True)
+
+    def test_menu_restore_pede_arquivo_e_permite_cancelar_sem_despachar(self) -> None:
+        with mock.patch("builtins.input", side_effect=["10", "", "10", "pasta com espaço/backup.zip", "0"]), \
+             mock.patch.object(run_windows, "main", return_value=0) as main, \
+             mock.patch("sys.stdout", io.StringIO()):
+            self.assertEqual(run_windows.menu(), 0)
+        main.assert_called_once_with(["restore", "pasta com espaço/backup.zip"])
 
 
 class TestIntegracaoLease(unittest.TestCase):

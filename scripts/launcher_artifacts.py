@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import ctypes
+import errno
 import hashlib
 import json
 import os
@@ -19,9 +20,9 @@ import subprocess
 import sys
 import threading
 import uuid
+from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterator
 
 PLATAFORMAS = ("linux", "windows")
 ARTEFATOS = (
@@ -143,7 +144,7 @@ ConvertTo-Json -InputObject @($ocupados) -Compress
 def _consultar_processos(argumentos: list[str], ambiente: dict | None = None) -> list[int]:
     try:
         resultado = subprocess.run(
-            argumentos, env=ambiente, capture_output=True, timeout=30, shell=False,
+            argumentos, env=ambiente, capture_output=True, timeout=30, shell=False, check=False,
         )
         if resultado.returncode != 0:
             raise ErroArtefatos("Não foi possível provar ausência de processos; alternância recusada.")
@@ -228,7 +229,35 @@ def _renomear_sem_sobrescrever(origem: Path, destino: Path) -> None:
     renomear.restype = ctypes.c_int
     if renomear(-100, os.fsencode(origem), -100, os.fsencode(destino), 1) != 0:
         codigo = ctypes.get_errno()
-        raise OSError(codigo, os.strerror(codigo), str(destino))
+        if codigo not in SEM_SUPORTE_A_NAO_SOBRESCREVER:
+            raise OSError(codigo, os.strerror(codigo), str(destino))
+        _renomear_sem_renameat2(origem, destino)
+
+
+# Erros de quem não aceita RENAME_NOREPLACE: o disco do Windows montado no
+# WSL2 (/mnt/<letra>, DrvFS) responde EINVAL, conferido em 20/11/2026.
+SEM_SUPORTE_A_NAO_SOBRESCREVER = {errno.EINVAL, errno.ENOSYS, errno.EOPNOTSUPP}
+
+
+def _renomear_sem_renameat2(origem: Path, destino: Path) -> None:
+    """Mesma garantia sem RENAME_NOREPLACE.
+
+    Arquivo: o hard link falha sozinho se o destino existir (nada é
+    sobrescrito) e só então a origem sai. Pasta (link não serve para pastas):
+    o destino é conferido ausente e a pasta renomeada; no Linux, renomear
+    sobre uma pasta com conteúdo falha, e o chamador já detém o lease
+    exclusivo do gerenciador durante a alternância.
+    """
+    if origem.is_dir() and not origem.is_symlink():
+        if destino.exists() or destino.is_symlink():
+            raise ErroArtefatos(f"Destino já existe; nada foi sobrescrito: {destino.name}")
+        os.rename(origem, destino)
+        return
+    try:
+        os.link(origem, destino, follow_symlinks=False)
+    except FileExistsError as erro:
+        raise ErroArtefatos(f"Destino já existe; nada foi sobrescrito: {destino.name}") from erro
+    os.unlink(origem)
 
 
 class GerenciadorArtefatos:

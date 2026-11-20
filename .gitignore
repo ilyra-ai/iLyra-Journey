@@ -52,6 +52,10 @@ pnpm-debug.log*
 # Backups locais (banco, app e pacotes completos) gerados pelo tui-webnova.sh
 # e pelos launchers: contêm dados do banco e nunca vão para o Git.
 /backups/
+# Pacotes exportáveis na raiz (app e dados privados) e os arquivos e pastas
+# temporários do backup (.lyra-backup-<id>.partial e .lyra-backup-*/).
+/lyra-backup-*.zip
+/.lyra-backup-*
 
 # Arquivos de ambiente: todos contêm configuração local e segredos, exceto o
 # modelo documentado .env.example (sem valores secretos).

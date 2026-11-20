@@ -373,3 +373,41 @@ class TestFronteiraProcessos(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestRenomearSemRenameat2(unittest.TestCase):
+    """Caminho sem RENAME_NOREPLACE (disco do Windows no WSL2, DrvFS)."""
+
+    def setUp(self) -> None:
+        self.temporario = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temporario.cleanup)
+        self.raiz = Path(self.temporario.name)
+
+    def test_arquivo_vai_para_destino_ausente(self) -> None:
+        origem, destino = self.raiz / "a.zip", self.raiz / "b.zip"
+        origem.write_bytes(b"dados")
+        artefatos._renomear_sem_renameat2(origem, destino)
+        self.assertFalse(origem.exists())
+        self.assertEqual(destino.read_bytes(), b"dados")
+
+    def test_arquivo_nao_sobrescreve_destino_existente(self) -> None:
+        origem, destino = self.raiz / "a.zip", self.raiz / "b.zip"
+        origem.write_bytes(b"novo")
+        destino.write_bytes(b"antigo")
+        with self.assertRaises(artefatos.ErroArtefatos):
+            artefatos._renomear_sem_renameat2(origem, destino)
+        self.assertEqual(origem.read_bytes(), b"novo")
+        self.assertEqual(destino.read_bytes(), b"antigo")
+
+    def test_pasta_nao_sobrescreve_e_move_quando_livre(self) -> None:
+        origem, destino = self.raiz / "node_modules", self.raiz / "alvo"
+        origem.mkdir()
+        (origem / "pacote.txt").write_text("x")
+        destino.mkdir()
+        with self.assertRaises(artefatos.ErroArtefatos):
+            artefatos._renomear_sem_renameat2(origem, destino)
+        self.assertTrue((origem / "pacote.txt").exists())
+        destino.rmdir()
+        artefatos._renomear_sem_renameat2(origem, destino)
+        self.assertTrue((destino / "pacote.txt").exists())
+        self.assertFalse(origem.exists())
