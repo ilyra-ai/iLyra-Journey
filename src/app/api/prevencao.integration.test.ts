@@ -3,7 +3,11 @@ import { describe, expect, it } from 'vitest';
 import { executeStatement, queryRows } from '@/lib/mysql/pool';
 import type { PlanoComDados } from '@/lib/prevencao/servico';
 
-import { criarUsuario } from '../../../tests/integration/fixtures';
+import {
+  criarUsuario,
+  definirDireito,
+} from '../../../tests/integration/fixtures';
+import { PLANO_DE_BASE } from '@/types/subscription';
 import { chamar } from '../../../tests/integration/http';
 import { GET as catalogo, PATCH as revisar } from './admin/prevencao/route';
 import { GET, PATCH } from './prevencao/route';
@@ -156,6 +160,69 @@ describe('Prevenção do titular', () => {
         })
       ).status
     ).toBe(400);
+  });
+
+  it('com só o mapa liberado (registro de saúde desligado) a prevenção abre, mas o histórico da família não', async () => {
+    // Tarefa 213: a prevenção vive no diálogo dos vínculos do mapa
+    // (`vedic_insights`); o histórico de saúde da família é do registro de
+    // saúde (`daily_checkin`).
+    const restaurarRegistro = await definirDireito(
+      PLANO_DE_BASE,
+      'daily_checkin',
+      { enabled: false }
+    );
+    const restaurarMapa = await definirDireito(
+      PLANO_DE_BASE,
+      'vedic_insights',
+      {
+        enabled: true,
+      }
+    );
+    try {
+      const pessoa = await criarUsuario();
+      await mulherDe52(pessoa.id);
+      expect((await chamar(GET, { usuario: pessoa })).status).toBe(200);
+      const alterar = (body: unknown) =>
+        chamar(PATCH, { usuario: pessoa, method: 'PATCH', body });
+      expect(
+        (await alterar({ tipo: 'vinculo', vinculoId: 'mae', pesa: 'sim' }))
+          .status
+      ).toBe(200);
+      expect(
+        (
+          await alterar({
+            tipo: 'exame',
+            recomendacaoId: 'mamografia',
+            realizadoEm: '2025-03-01',
+          })
+        ).status
+      ).toBe(200);
+      expect(
+        (
+          await alterar({
+            tipo: 'historico',
+            parente: 'mae',
+            condicao: 'diabetes',
+            presente: true,
+          })
+        ).status
+      ).toBe(403);
+
+      // Sem nenhum dos dois, a prevenção fecha.
+      const restaurarMapaDesligado = await definirDireito(
+        PLANO_DE_BASE,
+        'vedic_insights',
+        { enabled: false }
+      );
+      try {
+        expect((await chamar(GET, { usuario: pessoa })).status).toBe(403);
+      } finally {
+        await restaurarMapaDesligado();
+      }
+    } finally {
+      await restaurarMapa();
+      await restaurarRegistro();
+    }
   });
 
   it('os dados de um titular não aparecem para outro', async () => {
