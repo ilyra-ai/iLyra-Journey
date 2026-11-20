@@ -220,14 +220,14 @@ Esta sequência substitui a prioridade anterior da 174 e a reserva anterior das 
 
 | Indicador                               | Valor                    |
 | --------------------------------------- | ------------------------ |
-| Conclusão integral                      | **71,2%** (166 de 233)   |
-| Implementações publicadas               | **84,5%** (197 de 233)   |
+| Conclusão integral                      | **71,7%** (167 de 233)   |
+| Implementações publicadas               | **85,0%** (198 de 233)   |
 | Tarefas totais                          | 233                      |
-| 🟢 Concluídas                           | 166                      |
+| 🟢 Concluídas                           | 167                      |
 | 🟡 Implementadas com validação pendente | 31                       |
 | 🔵 Em andamento                         | 4                        |
 | 🔴 Bloqueadas                           | 1                        |
-| ⚪ A iniciar                            | 31                       |
+| ⚪ A iniciar                            | 30                       |
 | Branch de trabalho                      | `main` (única permitida) |
 | Última atualização                      | 2026-11-20 · BRT         |
 
@@ -5856,7 +5856,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes:** o teste de integração de Pagamentos usava o Meta como plano de exemplo na listagem e na conferência de preços; passou a usar o Care e a verificar que o Meta inativo não é listado.
 - **Fronteiras não comprovadas:** tema claro não conferido. (O selo "Care" na matriz foi acertado na tarefa 226.)
 
-### 228 · Troca de tema (claro e escuro) na landing page · ⚪ A INICIAR
+### 228 · Troca de tema (claro e escuro) na landing page · 🟢 CONCLUÍDA
+
+- **Estado em 20/11/2026 (`74763ccd`):** botão de tema (o mesmo do app e dos documentos legais) no cabeçalho da landing, à esquerda das ações no celular. Tema claro com tokens creme e dourado escuro (texto 13:1, cinza 7:1, dourado 6:1), artes trocadas pelas versões transparentes já registradas em `src/assets/celestial/TRANSPARENCIA.md` (lótus por `temas/sensibilidade.png`), leve escurecimento das artes e da marca para o dourado ler sobre o creme, e faixa final com o horizonte noturno e texto claro. Tema escuro aprovado sem mudança (fundo `#1d1e2b` e as seis artes opacas). Conferido em 1440 e 375 px nos dois temas; lint, tipos, 1221 unitários e build aprovados.
 
 - **Origem e data:** anotação do titular em 19/11/2026: "acrescentar a possibilidade de mudar o tema na landing page". Ordem do titular: executar depois de terminar todas as anotações visuais já pedidas.
 - **Situação encontrada:** a landing usa só o tema celestial escuro (`.theme` de `CelestialIdentity.module.css`, `color-scheme: dark`); o botão de alternância `ThemeToggleButton` existe e já é usado no cabeçalho autenticado e nos documentos legais, mas não aparece na landing, e a landing não tem tokens de tema claro.
