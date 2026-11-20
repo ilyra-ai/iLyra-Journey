@@ -194,28 +194,33 @@ describe('saída estruturada por JSON Schema', () => {
         });
       }
       // Texto livre (chat, teste de conexão) também: com 1.024 tokens o
-      // raciocínio esgotava a resposta antes de ela começar.
-      servidor.responder('Resposta livre');
-      await gerarTexto(
-        { ...conexao(servidor.baseUrl), modelo: 'nexuz/qwen3.5-agent:4b' },
-        { sistema: 's', usuario: 'u', maximoDeTokens: 1024 }
-      );
-      expect(servidor.requisicoes.at(-1)?.corpo).toMatchObject({
-        chat_template_kwargs: { enable_thinking: false },
-        reasoning_effort: 'none',
-      });
-      // Outros modelos seguem sem esses parâmetros.
-      servidor.responder('Resposta livre');
-      await gerarTexto(
-        { ...conexao(servidor.baseUrl), modelo: 'llama3.1:8b' },
-        { sistema: 's', usuario: 'u', json: true }
-      );
-      expect(servidor.requisicoes.at(-1)?.corpo).not.toHaveProperty(
-        'chat_template_kwargs'
-      );
-      expect(servidor.requisicoes.at(-1)?.corpo).not.toHaveProperty(
-        'reasoning_effort'
-      );
+      // raciocínio esgotava a resposta antes de ela começar. A tag do Ollama
+      // logo após a família (qwen3:8b) e o nome sem tag contam igualmente.
+      for (const modelo of ['nexuz/qwen3.5-agent:4b', 'qwen3:8b', 'qwen3']) {
+        servidor.responder('Resposta livre');
+        await gerarTexto(
+          { ...conexao(servidor.baseUrl), modelo },
+          { sistema: 's', usuario: 'u', maximoDeTokens: 1024 }
+        );
+        expect(servidor.requisicoes.at(-1)?.corpo).toMatchObject({
+          chat_template_kwargs: { enable_thinking: false },
+          reasoning_effort: 'none',
+        });
+      }
+      // Outros modelos, inclusive de nome parecido, seguem sem esses parâmetros.
+      for (const modelo of ['llama3.1:8b', 'qwen2.5:7b', 'qwen30-x']) {
+        servidor.responder('Resposta livre');
+        await gerarTexto(
+          { ...conexao(servidor.baseUrl), modelo },
+          { sistema: 's', usuario: 'u', json: true }
+        );
+        expect(servidor.requisicoes.at(-1)?.corpo).not.toHaveProperty(
+          'chat_template_kwargs'
+        );
+        expect(servidor.requisicoes.at(-1)?.corpo).not.toHaveProperty(
+          'reasoning_effort'
+        );
+      }
     } finally {
       await servidor.fechar();
     }

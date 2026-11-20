@@ -1,8 +1,20 @@
 import { describe, expect, it } from 'vitest';
 
-import { limparTitulo, tituloProvisorio } from './titulo';
+import { limparTitulo, resumoDaResposta, tituloProvisorio } from './titulo';
 
 describe('título das conversas (tarefa 231)', () => {
+  it('o contexto da resposta é o primeiro parágrafo, sem lista em negrito', () => {
+    const resposta =
+      '🌙 Pequenos ajustes ajudam o **sono** na semana.\n\n' +
+      '1. **Horários regulares**: durma sempre no mesmo horário.\n' +
+      '3. **Rotina de preparação**: Crie uma rotina';
+    expect(resumoDaResposta(resposta)).toBe(
+      'Pequenos ajustes ajudam o sono na semana.'
+    );
+    expect(resumoDaResposta('\n\n  Só um parágrafo  ')).toBe('Só um parágrafo');
+    expect(resumoDaResposta('a'.repeat(900))).toHaveLength(400);
+  });
+
   it('o provisório é o começo da pergunta numa linha', () => {
     expect(tituloProvisorio('  O que é\n\nMuhurta?  ')).toBe(
       'O que é Muhurta?'
@@ -26,6 +38,11 @@ describe('título das conversas (tarefa 231)', () => {
     expect(limparTitulo('')).toBeNull();
     expect(limparTitulo('Primeira linha\nSegunda linha')).toBeNull();
     expect(limparTitulo('palavra '.repeat(9))).toBeNull();
+    expect(limparTitulo('a b c d e f g h i j k')).toBeNull();
+    // Preposições contam, mas um título de 9 palavras curtas cabe.
+    expect(
+      limparTitulo('Hábitos para dormir melhor durante a semana de trabalho')
+    ).toBe('Hábitos para dormir melhor durante a semana de trabalho');
     expect(limparTitulo('x'.repeat(61))).toBeNull();
     expect(limparTitulo('2026 - 11')).toBeNull();
   });

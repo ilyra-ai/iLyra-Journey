@@ -18,7 +18,10 @@ export function tituloProvisorio(pergunta: string) {
 }
 
 const LIMITE_DE_CARACTERES = 60;
-const LIMITE_DE_PALAVRAS = 8;
+// O limite que protege a lista é o de caracteres. Artigos e preposições
+// contam como palavras: "Hábitos para dormir melhor durante a semana de
+// trabalho" (9 palavras, 55 caracteres) é um bom título e era recusado.
+const LIMITE_DE_PALAVRAS = 10;
 
 const INSTRUCOES = [
   'Você dá nome a conversas do chat da Lyra, um app de autoconhecimento.',
@@ -73,9 +76,29 @@ export function limparTitulo(texto: string, proibidos: string[] = []) {
 }
 
 /**
+ * Contexto da resposta para o título: só o primeiro parágrafo, sem markdown
+ * nem emoji. Modelos pequenos se prendem ao fim do texto: com a resposta
+ * inteira cortada num item em negrito ("**Rotina de preparação**: Crie..."),
+ * o Qwen 3 8B devolvia o item em vez do assunto (conferido em 20/11/2026).
+ */
+export function resumoDaResposta(resposta: string) {
+  const primeiroParagrafo =
+    resposta
+      .split(/\r?\n\s*\r?\n/)
+      .map((trecho) => trecho.trim())
+      .find(Boolean) ?? '';
+  return primeiroParagrafo
+    .replace(/[*_`#>]/g, '')
+    .replace(/\p{Extended_Pictographic}/gu, '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, 400);
+}
+
+/**
  * Pede o título à cadeia de modelos. Recebe só a pergunta e o começo da
  * resposta (sem anexos); devolve `null` quando nenhum modelo responde um
- * título válido.
+ * título válido. A pergunta vem por último, marcada como o assunto do título.
  */
 export async function gerarTituloDaConversa(opcoes: {
   cadeia: EloDaCadeia[];
@@ -90,11 +113,11 @@ export async function gerarTituloDaConversa(opcoes: {
     {
       sistema: INSTRUCOES,
       usuario: [
-        'Pergunta ou perguntas da pessoa:',
-        opcoes.pergunta.slice(0, 600),
-        '',
         'Começo da resposta da Lyra:',
-        opcoes.resposta.slice(0, 600),
+        resumoDaResposta(opcoes.resposta),
+        '',
+        'Pergunta ou perguntas da pessoa (o assunto do título):',
+        opcoes.pergunta.slice(0, 600),
       ].join('\n'),
       maximoDeTokens: 64,
     },

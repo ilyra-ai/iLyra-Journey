@@ -431,9 +431,12 @@ export async function gerarTextoDetalhado(
               // Lyra (1.024 tokens no chat), esgotava a resposta pensando, em
               // texto livre e em JSON (conferido com Qwen 3.5 4B no Ollama em
               // 17/11/2026). Como no motor integrado, o raciocínio é
-              // desligado e os tokens ficam para a resposta visível.
+              // desligado e os tokens ficam para a resposta visível. O nome
+              // pode trazer a tag do Ollama logo após a família (qwen3:8b),
+              // que também raciocina: 572 caracteres de pensamento e o dobro
+              // do tempo numa frase simples (conferido em 20/11/2026).
               ...(conexao.integrado ||
-              (/(?:^|\/)qwen3[._-]/i.test(conexao.modelo) &&
+              (/(?:^|\/)qwen3(?:[._:-]|$)/i.test(conexao.modelo) &&
                 urlEhLocal(conexao.baseUrl))
                 ? {
                     // llama.cpp e vLLM leem o template; Ollama e Jan ignoram
