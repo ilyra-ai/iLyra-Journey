@@ -1,6 +1,17 @@
 'use client';
 
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
+import { History } from 'lucide-react';
+import { ConversasDoChat } from '@/components/chat/ConversasDoChat';
+import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { AppShell } from '@/components/layout/AppShell';
 import { useAuth } from '@/context/AuthContext';
@@ -20,23 +31,76 @@ function ConversaSelecionada() {
   const salvarHistorico = isPlanFeatureEnabled(subscription, 'chat_history');
   const id = salvarHistorico ? busca.get('conversa') : null;
   const mensagem = salvarHistorico ? busca.get('mensagem') : null;
+  const [gavetaAberta, setGavetaAberta] = useState(false);
   if (loading) return <p role="status">Carregando conversa…</p>;
-  return (
-    <ChatAssistantContent
-      key={`${session?.user.id ?? 'visitante'}:${id ?? 'nova'}:${mensagem ?? ''}:${salvarHistorico}`}
-      salvarHistorico={salvarHistorico}
-      conversaId={id}
-      mensagemId={mensagem}
-      aoAbrirConversa={(conversa) => {
-        if (conversa !== id || mensagem)
-          router.replace(
-            conversa
-              ? `/chat?conversa=${encodeURIComponent(conversa)}`
-              : '/chat',
-            { scroll: false }
-          );
-      }}
+  // Histórico dentro do próprio chat (tarefas 231 a 233): coluna no desktop
+  // e gaveta no celular e no tablet. Abrir ou começar uma conversa troca a
+  // URL, e a chave do chat recria a conversa certa.
+  const abrir = (conversa: string) => {
+    setGavetaAberta(false);
+    router.push(`/chat?conversa=${encodeURIComponent(conversa)}`, {
+      scroll: false,
+    });
+  };
+  const nova = () => {
+    setGavetaAberta(false);
+    router.push('/chat', { scroll: false });
+  };
+  const conversas = (
+    <ConversasDoChat
+      conversaAtual={id}
+      aoAbrir={abrir}
+      aoNovaConversa={nova}
+      className="h-full"
     />
+  );
+  return (
+    <div className="flex min-h-0 w-full min-w-0 flex-1 gap-5">
+      {salvarHistorico ? (
+        <aside className="hidden w-64 shrink-0 border-r border-border pr-4 lg:flex lg:flex-col">
+          {conversas}
+        </aside>
+      ) : null}
+      <ChatAssistantContent
+        key={`${session?.user.id ?? 'visitante'}:${id ?? 'nova'}:${mensagem ?? ''}:${salvarHistorico}`}
+        salvarHistorico={salvarHistorico}
+        conversaId={id}
+        mensagemId={mensagem}
+        acaoDasConversas={
+          salvarHistorico ? (
+            <Sheet open={gavetaAberta} onOpenChange={setGavetaAberta}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="sm" className="gap-1.5 lg:hidden">
+                  <History aria-hidden="true" />
+                  <span>Conversas</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="left"
+                className="flex w-80 max-w-[88vw] flex-col"
+              >
+                <SheetHeader>
+                  <SheetTitle>Conversas</SheetTitle>
+                  <SheetDescription>
+                    Abra, renomeie ou exclua suas conversas com a Lyra.
+                  </SheetDescription>
+                </SheetHeader>
+                <div className="min-h-0 flex-1 px-4 pb-4">{conversas}</div>
+              </SheetContent>
+            </Sheet>
+          ) : null
+        }
+        aoAbrirConversa={(conversa) => {
+          if (conversa !== id || mensagem)
+            router.replace(
+              conversa
+                ? `/chat?conversa=${encodeURIComponent(conversa)}`
+                : '/chat',
+              { scroll: false }
+            );
+        }}
+      />
+    </div>
   );
 }
 

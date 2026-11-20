@@ -228,11 +228,14 @@ export function ChatAssistantContent({
   aoAbrirConversa,
   salvarHistorico = true,
   mensagemId = null,
+  acaoDasConversas = null,
 }: {
   salvarHistorico?: boolean;
   conversaId?: string | null;
   mensagemId?: string | null;
   aoAbrirConversa?: (id: string | null) => void;
+  /** Botão do histórico de conversas no celular e no tablet (tarefa 231). */
+  acaoDasConversas?: React.ReactNode;
 } = {}) {
   const administrador = useIsAdmin();
   const treino = useTreinamentoDoChat(administrador);
@@ -425,6 +428,7 @@ export function ChatAssistantContent({
           </div>
         </div>
         <div className="flex min-w-0 flex-wrap items-center justify-end gap-1">
+          {acaoDasConversas}
           {salvarHistorico ? (
             <PesquisaDeConversas aoAlterarFavorito={historico.atualizar} />
           ) : null}

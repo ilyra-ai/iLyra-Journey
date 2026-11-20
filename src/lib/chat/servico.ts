@@ -3,6 +3,7 @@ import { listaDeTextos } from '@/lib/json-values';
 import { partesDoBanco, partesDoChatSchema, type ParteDoChat } from './partes';
 import { filtrarPaineisDoChat } from './painel';
 import { metadadosDaImagem } from './imagens';
+import { tituloProvisorio } from './titulo';
 import type { PedidoDeImagemDoTurno } from './tipos';
 import { randomUUID } from 'node:crypto';
 import type { ResultSetHeader, RowDataPacket } from 'mysql2/promise';
@@ -94,6 +95,79 @@ export async function listarConversas(
           ).toString('base64url')
         : null,
   };
+}
+
+/** Título digitado pela pessoa: uma linha, sem caracteres de controle. */
+export const esquemaDoTitulo = z
+  .string()
+  .transform((titulo) => titulo.replace(/\s+/g, ' ').trim())
+  .pipe(
+    z
+      .string()
+      .min(1, 'Dê um nome à conversa.')
+      .max(120, 'Use até 120 caracteres.')
+      .regex(/^[^\p{Cc}]+$/u, 'O nome não pode ter caracteres de controle.')
+  );
+
+/** Renomeia a conversa da própria pessoa (tarefa 232). */
+export async function renomearConversa(
+  userId: string,
+  id: string,
+  titulo: string
+): Promise<ResumoDaConversa> {
+  const resultado = await executeStatement(
+    "UPDATE chat_conversations SET title = ?, title_source = 'pessoa' WHERE id = ? AND user_id = ?",
+    [titulo, id, userId]
+  );
+  if (resultado.affectedRows === 0)
+    throw new HttpError('Conversa não encontrada.', 404);
+  const [linha] = await queryRows<ConversaNoBanco>(
+    'SELECT id, user_id, title, updated_at FROM chat_conversations WHERE id = ? AND user_id = ?',
+    [id, userId]
+  );
+  return resumo(linha);
+}
+
+/**
+ * Exclui a conversa da própria pessoa (tarefa 232). Turnos, anexos, imagens
+ * geradas, favoritos e avaliações saem junto, pelas chaves estrangeiras com
+ * ON DELETE CASCADE (migrations 030, 034, 048, 056 e 063).
+ */
+export async function apagarConversa(userId: string, id: string) {
+  const resultado = await executeStatement(
+    'DELETE FROM chat_conversations WHERE id = ? AND user_id = ?',
+    [id, userId]
+  );
+  if (resultado.affectedRows === 0)
+    throw new HttpError('Conversa não encontrada.', 404);
+}
+
+/**
+ * Título provisório da conversa (o começo da primeira pergunta) enquanto o
+ * modelo ainda não deu nome nem a pessoa renomeou; `null` depois disso.
+ */
+export async function tituloAindaProvisorio(userId: string, id: string) {
+  const [linha] = await queryRows<{ title: string; title_source: string }>(
+    'SELECT title, title_source FROM chat_conversations WHERE id = ? AND user_id = ?',
+    [id, userId]
+  );
+  return linha?.title_source === 'pergunta' ? linha.title : null;
+}
+
+/**
+ * Grava o título criado pelo modelo de IA (tarefa 231) só se o título ainda
+ * for o provisório: nunca sobrescreve um nome dado pela pessoa.
+ */
+export async function gravarTituloGerado(
+  userId: string,
+  id: string,
+  titulo: string
+) {
+  const resultado = await executeStatement(
+    "UPDATE chat_conversations SET title = ?, title_source = 'modelo' WHERE id = ? AND user_id = ? AND title_source = 'pergunta'",
+    [titulo, id, userId]
+  );
+  return resultado.affectedRows > 0;
 }
 
 export async function lerConversa(
@@ -227,11 +301,7 @@ export async function iniciarTurno(
         throw new HttpError('Conversa não encontrada.', 404);
       await conexao.execute(
         'INSERT INTO chat_conversations (id, user_id, title) VALUES (?, ?, ?)',
-        [
-          pedido.conversationId,
-          userId,
-          pedido.query.replace(/\s+/g, ' ').slice(0, 120),
-        ]
+        [pedido.conversationId, userId, tituloProvisorio(pedido.query)]
       );
     }
     const [existentes] = await conexao.query<TurnoNoBanco[]>(

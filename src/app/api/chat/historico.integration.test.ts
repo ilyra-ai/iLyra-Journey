@@ -76,8 +76,14 @@ describe('histórico real de conversas', () => {
           })
         ).status
       ).toBe(200);
-      expect(servidor.requisicoes).toHaveLength(2);
-      const segunda = JSON.stringify(servidor.requisicoes[1].corpo);
+      // Depois da primeira resposta a conversa também pede o título ao
+      // modelo (tarefa 231); aqui contam só os pedidos de resposta.
+      const respostas = servidor.requisicoes.filter(
+        (r) => !JSON.stringify(r.corpo).includes('Você dá nome a conversas')
+      );
+      expect(respostas).toHaveLength(2);
+      expect(servidor.requisicoes).toHaveLength(3);
+      const segunda = JSON.stringify(respostas[1].corpo);
       expect(segunda).toContain(primeira.query);
       expect(segunda).toContain('Vamos cuidar do seu sono com calma.');
       expect(segunda).toContain('Qual era nosso assunto?');

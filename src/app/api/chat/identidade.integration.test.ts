@@ -73,8 +73,14 @@ describe('identidade global do Motor Lyra com MySQL real', () => {
       expect((resposta.json as { response: string }).response).toBe(
         '💡 Vamos aprender sobre o seu mapa.'
       );
-      expect(servidor.requisicoes).toHaveLength(1);
-      const enviado = JSON.stringify(servidor.requisicoes[0].corpo);
+      // A conversa também pede o título ao modelo depois da resposta
+      // (tarefa 231); aqui contam só os pedidos de resposta.
+      const respostas = () =>
+        servidor.requisicoes.filter(
+          (r) => !JSON.stringify(r.corpo).includes('Você dá nome a conversas')
+        );
+      expect(respostas()).toHaveLength(1);
+      const enviado = JSON.stringify(respostas()[0].corpo);
       expect(enviado).toContain('Douglas Mosken');
       expect(enviado).toContain('Organização e destaque');
       expect(enviado).toContain('Não presuma que ela é Douglas');
@@ -97,9 +103,7 @@ describe('identidade global do Motor Lyra com MySQL real', () => {
       expect(
         (depoisDaEscolha.json as { response: string }).response
       ).not.toMatch(/\bxuxu(?:zinho)?\b/iu);
-      expect(JSON.stringify(servidor.requisicoes.at(-1)?.corpo)).toContain(
-        'Bia'
-      );
+      expect(JSON.stringify(respostas().at(-1)?.corpo)).toContain('Bia');
     } finally {
       await servidor.fechar();
       const restaurada = await chamar(PUT, {

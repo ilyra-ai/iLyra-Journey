@@ -50,12 +50,15 @@ import { exigirDentroDoLimite } from '@/lib/security/rate-limit';
 import { getAstrologicalContext } from '@/lib/astrology/engine';
 import {
   concluirTurno,
+  gravarTituloGerado,
   partesJaGravadas,
   iniciarTurno,
   registrarFalhaDoTurno,
   respostaJaGravada,
+  tituloAindaProvisorio,
   type TurnoEmExecucao,
 } from '@/lib/chat/servico';
+import { gerarTituloDaConversa, tituloProvisorio } from '@/lib/chat/titulo';
 import { lerPerfilAstrologico } from '@/lib/astrology/perfil-astrologico';
 import { carregarNatalDoTitular } from '@/lib/astrology/persistencia-natal';
 import { tropicalDoTitular } from '@/lib/astrology/tropical-do-perfil';
@@ -494,6 +497,13 @@ export async function POST(request: Request) {
       // restrições de privacidade desta conversa. O verbete serve às próximas
       // perguntas de qualquer conta; a pergunta não é gravada.
       const perguntaDoTema = pedidoDeAnalise(query).pergunta;
+      // Nome, apelido e e-mail não entram em verbete nem em título gerado.
+      const dadosPessoais = [
+        profile?.first_name,
+        profile?.nickname,
+        session.user.email,
+        session.user.email?.split('@')[0],
+      ].filter((valor): valor is string => Boolean(valor));
       if (
         comVedico &&
         !perguntaOcidental &&
@@ -506,12 +516,7 @@ export async function POST(request: Request) {
           temAssunto: temAssuntoNaBase,
         })
       ) {
-        const proibidos = [
-          profile?.first_name,
-          profile?.nickname,
-          session.user.email,
-          session.user.email?.split('@')[0],
-        ].filter((valor): valor is string => Boolean(valor));
+        const proibidos = dadosPessoais;
         after(async () => {
           try {
             await exigirDentroDoLimite(
@@ -567,6 +572,33 @@ export async function POST(request: Request) {
             turno.turnId,
             memoriaPrivada
           );
+        // Título da conversa pelo modelo de IA (tarefa 231), depois da
+        // resposta e só enquanto o título for o provisório. No modo privado
+        // a conversa não sai para um modelo além da própria resposta.
+        if (!memoriaPrivada && cadeiaTemModelo(cadeia)) {
+          const conversa = turno.conversationId;
+          const titular = session.user.id;
+          after(async () => {
+            try {
+              const provisorio = await tituloAindaProvisorio(titular, conversa);
+              if (provisorio === null) return;
+              // O provisório é o começo da primeira pergunta: com a pergunta
+              // atual, o modelo dá nome ao assunto da conversa toda.
+              const titulo = await gerarTituloDaConversa({
+                cadeia,
+                pergunta:
+                  provisorio === tituloProvisorio(perguntaDoTema)
+                    ? perguntaDoTema
+                    : `${provisorio}\n${perguntaDoTema}`,
+                resposta: response,
+                proibidos: dadosPessoais,
+              });
+              if (titulo) await gravarTituloGerado(titular, conversa, titulo);
+            } catch (erro) {
+              registrarErroInterno('chat: título da conversa', erro);
+            }
+          });
+        }
       }
       return NextResponse.json({
         response,
