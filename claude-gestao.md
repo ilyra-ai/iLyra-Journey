@@ -5801,3 +5801,26 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Origem e data:** encontrado em 19/11/2026 na validação das pendências: gates no Node 24.21.0 num clone limpo da `main` (`eb97e469`) passaram em instalação, lint, formato, 1217 unitários, 616 de integração e build, mas `pnpm check:types` falhou com 38 erros TS2307 nos imports de `.png`.
 - **Causa raiz:** os tipos das imagens vêm do `next-env.d.ts`, gerado pelo Next no `dev`/`build` e ignorado no Git; num clone limpo o `tsc` roda antes de qualquer geração. O Next 16.4.3 instalado tem o comando oficial `next typegen` para gerar essas definições sem build.
 - **Correção prevista:** `check:types` passa a gerar as definições oficiais (`next typegen`) antes do `tsc --noEmit`, sem declarar tipos à mão; repetir os gates num clone limpo no Node 24 e no Windows. Ordem do titular: depois das anotações visuais.
+
+### 230 · Chat da Lyra: respostas proporcionais, modernas e fáceis de ler · ⚪ A INICIAR
+
+- **Origem e data:** anotação do titular em 19/11/2026: "o chat da Lyra está desproporcional, as letras do prompt de respostas da Lyra estão muito grandes, difícil de ler; precisa ser mais moderna, mais fácil para usuários leigos e que consigam ver todas as respostas de forma rápida e fácil".
+- **Situação encontrada:** as respostas são renderizadas por `RespostaMarkdown` dentro de `ChatBubble`; a tipografia das respostas está desproporcional ao restante do chat.
+- **Escopo:** tamanho, entrelinha, largura de leitura e hierarquia (títulos, listas, destaques) das respostas ajustados para leitura rápida por leigos, em desktop, tablet e celular, nos temas claro e escuro, com contraste WCAG; sem mudar o conteúdo nem o fluxo do chat.
+
+### 231 · Histórico das conversas dentro do chat, com título criado pelo modelo de IA · ⚪ A INICIAR
+
+- **Origem e data:** anotação do titular em 19/11/2026: "acrescentar o histórico das conversas no próprio chat, e o nome do chat no histórico é criado automaticamente pelo modelo de IA, que faça sentido no contexto da conversa".
+- **Situação encontrada:** o componente `HistoricoDeConversas` (lista com título e data, rota `GET /api/chat/conversas`) só aparece na barra lateral antiga (`SidebarNavigation`), que a navegação horizontal do app deixou de mostrar; dentro do chat não há histórico. O título é o começo da primeira mensagem (`pedido.query` cortado em 120 caracteres, `src/lib/chat/servico.ts`), não gerado pela IA.
+- **Escopo:** painel de histórico no próprio chat (lateral no desktop, gaveta ou lista no celular), título curto gerado pelo modelo de IA da cadeia (Ollama primeiro, motor da Lyra como reserva, que mantém o começo da mensagem) a partir do contexto da conversa, sem dados sensíveis desnecessários.
+
+### 232 · Excluir e renomear conversas do histórico · ⚪ A INICIAR
+
+- **Origem e data:** anotação do titular em 19/11/2026: "dar a opção para a pessoa excluir, renomear o histórico do chat".
+- **Situação encontrada:** não existe; `src/app/api/chat/conversas/[id]/route.ts` só tem `GET`.
+- **Escopo:** `PATCH` (renomear) e `DELETE` (excluir, com confirmação e efeito real nas mensagens, anexos e imagens da conversa) restritos ao titular, com testes de integração (anônimo, outra conta, inexistente, título inválido), e as ações no histórico do chat.
+
+### 233 · Criar novo chat · ⚪ A INICIAR (já existe; conferir no novo histórico)
+
+- **Origem e data:** anotação do titular em 19/11/2026: "dar a opção para a pessoa criar novo chat".
+- **Situação encontrada:** já implementado: botão "Nova conversa" (ícone `SquarePen`) no topo do chat (`ChatAssistantContent.tsx`). Falta apenas mantê-lo visível e coerente junto ao novo histórico da tarefa 231.
