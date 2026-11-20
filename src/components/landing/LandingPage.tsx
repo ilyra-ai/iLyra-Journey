@@ -1,7 +1,7 @@
 'use client';
 
 import { type CSSProperties, type ReactNode, useEffect, useState } from 'react';
-import Image, { type StaticImageData } from 'next/image';
+import Image, { type ImageProps, type StaticImageData } from 'next/image';
 import Link from 'next/link';
 import localFont from 'next/font/local';
 import {
@@ -20,6 +20,12 @@ import caminhoLunar from '@/assets/celestial/caminho-lunar.png';
 import lotusSamadhi from '@/assets/celestial/lotus-samadhi.png';
 import horizonte from '@/assets/celestial/horizonte.png';
 import marca from '@/assets/celestial/marca.png';
+import marcaTransparente from '@/assets/celestial/marca-transparente.png';
+import ceuVedicoTransparente from '@/assets/celestial/ceu-vedico-transparente.png';
+import esferaQuantumTransparente from '@/assets/celestial/esfera-quantum-transparente.png';
+import luaTransparente from '@/assets/celestial/lua-transparente.png';
+import lotusTransparente from '@/assets/celestial/temas/sensibilidade.png';
+import { ThemeToggleButton } from '@/components/theme/ThemeControls';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { beneficiosPublicos } from '@/lib/plans/beneficios-publicos';
 import { EVENTO_PLANOS_ATUALIZADOS } from '@/lib/plans/atualizacao-publica';
@@ -94,6 +100,47 @@ const ilustracoesDosPlanos: Partial<
   meta: esferaQuantum,
   care: lotusSamadhi,
 };
+
+/**
+ * Tema claro da landing (tarefa 228): cada arte de céu noturno opaco tem a
+ * versão transparente já registrada em src/assets/celestial/TRANSPARENCIA.md
+ * (o lótus reutiliza temas/sensibilidade.png). As duas versões vão no HTML e
+ * o CSS mostra a do tema em uso, sem depender do JavaScript para trocar.
+ */
+const VERSAO_CLARA = new Map<StaticImageData, StaticImageData>([
+  [marca, marcaTransparente],
+  [ceuVedico, ceuVedicoTransparente],
+  [esferaQuantum, esferaQuantumTransparente],
+  [caminhoLunar, luaTransparente],
+  [lotusSamadhi, lotusTransparente],
+]);
+
+function ArteDoTema({
+  src,
+  alt,
+  className,
+  ...props
+}: Omit<ImageProps, 'src'> & { src: StaticImageData }) {
+  const clara = VERSAO_CLARA.get(src);
+  if (!clara)
+    return <Image src={src} alt={alt} className={className} {...props} />;
+  return (
+    <>
+      <Image
+        src={src}
+        alt={alt}
+        className={[className, styles.artePraEscuro].filter(Boolean).join(' ')}
+        {...props}
+      />
+      <Image
+        src={clara}
+        alt={alt}
+        className={[className, styles.artePraClaro].filter(Boolean).join(' ')}
+        {...props}
+      />
+    </>
+  );
+}
 
 export function LandingPage({ overrideConfig, previewMode = false }: Props) {
   const { config: publicada, error: erroConfiguracao } =
@@ -235,7 +282,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
               <div className={styles.mapGrid}>
                 {config.features.items.map((mapa) => (
                   <article className={styles.mapCard} key={mapa.id}>
-                    <Image
+                    <ArteDoTema
                       src={ilustracoesDosMapas[mapa.id] ?? ceuVedico}
                       alt=""
                       sizes="(max-width: 900px) 90vw, 30vw"
@@ -303,7 +350,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
                       className={styles.planCard}
                       data-destaque={Boolean(plano.highlightText)}
                     >
-                      <Image
+                      <ArteDoTema
                         src={ilustracoesDosPlanos[plano.key] ?? ceuVedico}
                         alt=""
                         sizes="(max-width: 900px) 90vw, 30vw"
@@ -499,7 +546,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
     >
       <header className={styles.header}>
         <Link href="#topo" className={styles.brand}>
-          <Image
+          <ArteDoTema
             src={marca}
             alt={config.footer.brandLine}
             sizes="280px"
@@ -530,6 +577,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
           {config.plans.visible && <Link href="#planos">Planos</Link>}
         </nav>
         <div className={styles.headerActions}>
+          <ThemeToggleButton className={styles.themeToggle} />
           <Link href={config.hero.primaryCtaHref} className={styles.login}>
             {config.header.fullLoginLabel}
           </Link>
@@ -570,7 +618,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
             </div>
           </div>
           <div className={styles.heroVisual}>
-            <Image
+            <ArteDoTema
               src={ceuVedico}
               alt=""
               sizes="(max-width: 700px) 100vw, 55vw"
@@ -595,7 +643,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
               href={destinosDosDestaques[item.id] ?? '#sobre'}
               className={styles.highlight}
             >
-              <Image
+              <ArteDoTema
                 src={ilustracoesDosDestaques[item.id] ?? ceuVedico}
                 alt=""
                 sizes="(max-width: 700px) 34vw, (max-width: 900px) 40vw, 15vw"
