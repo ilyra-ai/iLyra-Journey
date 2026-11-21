@@ -639,7 +639,9 @@ def diagnostico() -> int:
                 raise Falha("Verificador somente leitura do banco ausente.")
             resultado = executar([node(), str(script)], tempo=30,
                 extra={"LYRA_IGNORAR_VERIFICACAO_DO_BANCO": "0"})
-            mensagem("OK", sanitizar(resultado.stdout.strip(), ambiente()))
+            # O verificador já escreve o próprio rótulo ("[OK] MySQL em ...").
+            texto = sanitizar(resultado.stdout.strip(), ambiente())
+            mensagem("OK", texto.removeprefix("[OK] "))
         except Falha as erro:
             falhas += 1
             mensagem("ERRO", f"Banco e migrations: {erro}")
