@@ -57,6 +57,16 @@ export default function PoliticaDePrivacidadePage() {
       conteudo: (
         <ul>
           <li>
+            <strong>Experimente Grátis (sem conta):</strong> nome completo e
+            data de nascimento, usados só para calcular a leitura do mapa
+            ocidental naquele momento. Não são gravados em banco, cookie,
+            armazenamento do navegador, endereço da página ou registro de
+            atividade, e somem ao fechar a janela. Para limitar abusos, contamos
+            os pedidos numa janela de uma hora por um código irreversível (hash)
+            do endereço de rede, apagado depois que a janela vence; o nome e a
+            data nunca entram nessa contagem.
+          </li>
+          <li>
             <strong>Cadastro:</strong> nome, sobrenome, e-mail e senha. A senha
             é guardada só como hash (bcrypt) e nunca pode ser lida por ninguém.
           </li>
@@ -439,9 +449,12 @@ export default function PoliticaDePrivacidadePage() {
       titulo: 'Crianças e adolescentes',
       conteudo: (
         <p>
-          A Lyra MetaCare não se destina a crianças. Pessoas com menos de 18
-          anos só devem usar a plataforma com o consentimento e o acompanhamento
-          de um dos pais ou do responsável legal.
+          A Lyra MetaCare não se destina a crianças. O cadastro e o Experimente
+          Grátis exigem 13 anos completos, conferidos no servidor pela data
+          informada; essa conferência é uma declaração de idade, não uma
+          verificação de identidade. Pessoas com menos de 18 anos só devem usar
+          a plataforma com o consentimento e o acompanhamento de um dos pais ou
+          do responsável legal.
         </p>
       ),
     },
