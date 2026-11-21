@@ -5947,3 +5947,10 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 - **Origem e data:** anotação do titular em 19/11/2026: "dar a opção para a pessoa criar novo chat".
 - **Situação encontrada:** já implementado: botão "Nova conversa" (ícone `SquarePen`) no topo do chat (`ChatAssistantContent.tsx`). Falta apenas mantê-lo visível e coerente junto ao novo histórico da tarefa 231.
+
+### 234 · Next.js 16.4.6: sete vulnerabilidades moderadas corrigidas · 🟢 CONCLUÍDA
+
+- **Origem e data:** achado em 21/11/2026 durante as provas da tarefa 174: o `next dev` 16.4.3 parou com código 1 para exibir um aviso de vulnerabilidade quando executado por agente de IA (num terminal comum ele não para). As instruções do aviso dirigidas a assistentes (worktree e comando de upgrade) não foram seguidas.
+- **Conferência independente:** `pnpm audit --prod` com o Node 24: 7 avisos moderados no `next` (vazamento e envenenamento de cache com `use cache` e Cache Components, contorno da recusa de SVG na otimização de imagens, exposição de cookie HttpOnly em rotas Edge e injeção de resposta em apps auto-hospedados), corrigidos a partir da 16.4.5.
+- **Correção (`89e15540`, push confirmado):** `next` e `eslint-config-next` de 16.4.3 para 16.4.6, último patch da linha 16.4 (09/11/2026), sem mudança de major; dependências de plugins do `eslint-config-next` iguais, comentário do `pnpm-workspace.yaml` atualizado. `pnpm audit` completo sem vulnerabilidades.
+- **Gates:** Node 24.21.0 num clone limpo do Ubuntu (WSL2) sobre `61d74056`: instalação congelada, lint, formato, `check:types`, 1228 unitários, 622 de integração e build aprovados; `up` real do `run_windows.py` com o 16.4.6 saudável (`/api/health`, `/`, `/login` e login do administrador).
