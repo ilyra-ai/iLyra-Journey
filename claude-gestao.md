@@ -2973,7 +2973,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 15 · Revisão do run_windows.py e eliminação de redundância
 
-- **Status:** 🟡 implementada · validação pendente · **Commit:** `d92005f` · **Push:** `main -> main` (confirmado; `main...origin/main` sem divergência)
+- **Homologada e concluída em 21/11/2026.**
+
+- **Status:** 🟢 homologada e concluída · validação pendente · **Commit:** `d92005f` · **Push:** `main -> main` (confirmado; `main...origin/main` sem divergência)
 - **Validação atual (revisão de 2026-11-04):** Execução completa do wrapper run_windows.py no Windows 11, incluindo delegação de subida, logs, parada e reinício. O doctor nativo passou em 04/11/2026.
 - **Por que o arquivo existia:** criado (commit `71e04a0`) porque o `run.py` da época era só para WSL/Ubuntu; virou uma segunda implementação do launcher no Windows, paralela ao `run.sh`.
 - **Divergências encontradas na versão anterior (661 linhas):**
