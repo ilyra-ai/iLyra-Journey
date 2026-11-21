@@ -1408,7 +1408,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Estado: ⚪ a iniciar.** Conteúdo acrescentado pelo usuário e reorganizado integralmente no Tópico 3. Este registro não inicia a implementação do programa nem conclui as tarefas 152/153. As dependências e condições comerciais abaixo continuam válidas.
 
-### 157 · Jornada pública “Quem sou eu?” sem conta, sem plano e sem fricção · ⚪ PENDENTE
+### 157 · Jornada pública “Quem sou eu?” sem conta, sem plano e sem fricção · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 #### Refinamento explícito de 09-11-2026 · Experimente Grátis
 
