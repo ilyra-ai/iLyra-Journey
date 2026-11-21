@@ -5627,7 +5627,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes e resultados comprováveis:** testes unitários de pendente fora do motor e de aprovado consultado; 6 testes de integração contra o MySQL real (grava pendente, pendente fora do motor, banco recusa aprovação incompleta, permissões de anônimo e paciente, aprovação com 400/404/409 e registro do administrador, retirada).
 - **Pendente:** não existe tela de administração para revisar os verbetes; a revisão é feita pela rota. Gates em Node v26.13.0 (Node 24 ausente na estação).
 
-### 200 · Conferência dos dados de nascimento no mapa védico · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 200 · Conferência dos dados de nascimento no mapa védico · 🟢 CONCLUÍDA
+
+- **Fechamento em 21/11/2026:** gates no Node 24.21.0 num clone limpo do Ubuntu (WSL2) sobre `7863ef58`: instalação congelada, lint, formato, `check:types`, 1228 unitários, 622 de integração e build aprovados. Validada por autorização do titular.
 
 - **Origem e data:** achado nº 5 da análise forense do motor (16/11/2026); pedido do titular em 17/11/2026 para finalizar as pendências do motor.
 - **Causa raiz corrigida:** `calcularMapaNatal` aceitava datas e horas inexistentes ("1990-02-30" virava 2 de março, "25:99" o dia seguinte) e calculava o mapa de outro instante sem aviso. Agora `conferirNascimento` recusa data inexistente ou fora do formato, hora fora de HH:mm, fuso desconhecido e local fora do globo com `RangeError`.
