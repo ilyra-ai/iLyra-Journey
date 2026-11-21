@@ -5646,7 +5646,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Arquivos:** `src/lib/astrology/sideral.ts`, `mapa-natal.ts`, `persistencia-natal.ts`, `serializacao.ts`, `hora-de-nascimento.ts`, `inovacoes/divisionais.ts`, `src/lib/lyra/leitura-do-mapa.ts`, `src/components/profile/MapaVedicoCard.tsx` e testes.
 - **Testes:** 4 testes novos (Tromsø 69,6° N sem Lagna e com planetas e dasha; 66,5° com Lagna; sem hora sem o limite; leitura e serialização). Unitários 1143, integração 646, lint, tipos, formato e build aprovados em Node v26.13.0. O cartão não foi conferido no navegador.
 
-### 202 · Hora de nascimento no horário de verão declarada no mapa védico · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 202 · Hora de nascimento no horário de verão declarada no mapa védico · 🟢 CONCLUÍDA
+
+- **Fechamento em 21/11/2026:** gates no Node 24.21.0 num clone limpo do Ubuntu (WSL2) sobre `7863ef58`: instalação congelada, lint, formato, `check:types`, 1228 unitários, 622 de integração e build aprovados. Validada por autorização do titular.
 
 - **Origem e data:** achado nº 3 da análise forense do motor; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
 - **Causa raiz corrigida:** para uma hora repetida no fim do horário de verão, o mapa védico escolhia a primeira ocorrência em silêncio, e para uma hora inexistente adiantava o relógio sem avisar; o ocidental recusava as duas. Como o perfil guarda só a hora local, o védico mantém a escolha, mas agora a declara em `horarioAmbiguo` (`repetida` ou `inexistente`), e a leitura da Lyra explica o efeito no Ascendente, nas casas e nas datas dos períodos. A detecção passou a ser única (`ocorrenciasLocais` em `tempo.ts`), usada pelo védico e pelo ocidental.
