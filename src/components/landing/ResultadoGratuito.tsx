@@ -20,6 +20,15 @@ type Conversa =
   | { fase: 'respondida'; pergunta: string; resposta: RespostaAoVisitante }
   | { fase: 'erro'; mensagem: string };
 
+/**
+ * Depois do cadastro, volta à escolha do valor (tarefa 159). Só o
+ * identificador `planos` vai na URL; nada da leitura nem da pessoa.
+ */
+function comRetornoAosPlanos(destino: string) {
+  if (!destino.startsWith('/login')) return destino;
+  return `${destino}${destino.includes('?') ? '&' : '?'}destino=planos`;
+}
+
 function dataPorExtenso(data: string) {
   const [ano, mes, dia] = data.split('-');
   return `${dia}/${mes}/${ano}`;
@@ -215,7 +224,10 @@ export function ResultadoGratuito({
         Seus dados não foram gravados.
       </p>
       <div className="flex flex-wrap gap-3">
-        <Link href={destinoDaAssinatura} className={classeDoBotaoPrincipal}>
+        <Link
+          href={comRetornoAosPlanos(destinoDaAssinatura)}
+          className={classeDoBotaoPrincipal}
+        >
           <Sparkles aria-hidden="true" className="size-4" />
           Conhecer os quatro mapas
         </Link>

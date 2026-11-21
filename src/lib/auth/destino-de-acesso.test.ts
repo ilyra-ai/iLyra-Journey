@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { destinoObrigatorio } from '@/lib/auth/destino-de-acesso';
+import { destinoDeRetorno } from '@/lib/auth/retorno';
 import type { AppSession } from '@/types/app-session';
 
 function sessao(onboardingConcluido: boolean, role = 'patient'): AppSession {
@@ -71,5 +72,42 @@ describe('destinoObrigatorio', () => {
     }
     expect(destinoObrigatorio(pronta, '/login')).toBe('/');
     expect(destinoObrigatorio(pronta, '/onboarding')).toBe('/');
+  });
+});
+
+describe('retorno ao destino depois do login (tarefa 159)', () => {
+  it('só aceita identificadores da lista fechada, nunca caminhos livres', () => {
+    expect(destinoDeRetorno('planos')).toBe('/planos');
+    expect(destinoDeRetorno('mapas')).toBe('/');
+    for (const tentativa of [
+      'https://site-malicioso.example',
+      '//site-malicioso.example',
+      '/admin',
+      '/planos',
+      'constructor',
+      '__proto__',
+      '',
+      null,
+      undefined,
+    ])
+      expect(destinoDeRetorno(tentativa)).toBeNull();
+  });
+
+  it('conta concluída volta do login e do onboarding ao destino pedido', () => {
+    expect(destinoObrigatorio(sessao(true), '/login', '/planos')).toBe(
+      '/planos'
+    );
+    expect(destinoObrigatorio(sessao(true), '/onboarding', '/planos')).toBe(
+      '/planos'
+    );
+    // Sem destino pedido, o painel de sempre.
+    expect(destinoObrigatorio(sessao(true), '/login')).toBe('/');
+  });
+
+  it('o destino não pula o onboarding nem libera rota a visitante', () => {
+    expect(destinoObrigatorio(sessao(false), '/login', '/planos')).toBe(
+      '/onboarding'
+    );
+    expect(destinoObrigatorio(null, '/planos', '/planos')).toBe('/login');
   });
 });

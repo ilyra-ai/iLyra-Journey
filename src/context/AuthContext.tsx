@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 import { db } from '@/integrations/mysql/client';
 import { destinoObrigatorio } from '@/lib/auth/destino-de-acesso';
+import { esquecerRetorno, lerRetorno } from '@/lib/auth/retorno';
 import { interromperLeituraDoChat } from '@/lib/voz/controlador';
 import { bloquearCofresAbertos } from '@/lib/offline/cofre';
 import { paginaSaindo } from '@/lib/navegador/saida-da-pagina';
@@ -45,6 +46,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           evento === 'SIGNED_IN' || evento === 'SIGNED_OUT'
         );
         recebeuEvento = true;
+        // Quem sai não leva o destino pendente para a próxima pessoa.
+        if (evento === 'SIGNED_OUT') esquecerRetorno();
         setSession(novaSessao);
         setLoading(false);
       }
@@ -91,14 +94,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // só no cliente (links, `router.push` e o botão "voltar"): antes ela só
   // rodava quando a sessão mudava, e o "voltar" a partir do onboarding abria
   // o painel de uma conta que ainda não tinha concluído o cadastro.
-  const destino = loading ? null : destinoObrigatorio(session, pathname);
+  // O retorno pedido antes do login (tarefa 159) vale uma vez, nesta aba.
+  const destino = loading
+    ? null
+    : destinoObrigatorio(session, pathname, lerRetorno());
 
   useEffect(() => {
     if (destino) {
       // `replace` para que o "voltar" não retorne à rota bloqueada.
       router.replace(destino);
+      if (session?.user.onboarding_completed && destino === lerRetorno())
+        esquecerRetorno();
     }
-  }, [destino, router]);
+  }, [destino, router, session]);
 
   // Nada da rota bloqueada é montado (nem as consultas dela) enquanto o
   // redirecionamento acontece.

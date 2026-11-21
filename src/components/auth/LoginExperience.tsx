@@ -1,6 +1,6 @@
 'use client';
 
-import { CSSProperties, SubmitEvent, useState } from 'react';
+import { CSSProperties, SubmitEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ceuVedico from '@/assets/celestial/ceu-vedico-transparente.png';
@@ -28,6 +28,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
 import type { LoginPageConfig, ToneKey } from '@/lib/site-page-config/schema';
 import { getBuilderIcon } from '@/lib/site-page-config/ui';
+import { guardarRetorno } from '@/lib/auth/retorno';
 import {
   ROTA_POLITICA_DE_PRIVACIDADE,
   ROTA_TERMOS_DE_USO,
@@ -43,6 +44,8 @@ function corDoIconeDestaque(tone: ToneKey): string {
 
 type LoginExperienceProps = {
   modoInicial?: 'login' | 'cadastro';
+  /** Identificador de retorno já validado (tarefa 159). */
+  retorno?: string | null;
   // Configuração em edição no Site Experience Builder (pré-visualização).
   overrideConfig?: LoginPageConfig;
   previewMode?: boolean;
@@ -64,7 +67,11 @@ export function LoginExperience({
   overrideConfig,
   previewMode = false,
   modoInicial = 'login',
+  retorno = null,
 }: LoginExperienceProps) {
+  // Guarda só o identificador, nesta aba, para depois do cadastro e do
+  // onboarding (tarefa 159).
+  useEffect(() => guardarRetorno(retorno), [retorno]);
   // Depois do login ou do cadastro, o AuthProvider leva a sessão ao destino
   // certo (onboarding para conta nova, painel para as demais) numa única
   // navegação; antes esta tela ia ao painel e só então ao onboarding.

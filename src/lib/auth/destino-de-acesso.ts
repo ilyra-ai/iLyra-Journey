@@ -24,7 +24,9 @@ export const ROTAS_SEMPRE_LIBERADAS: ReadonlySet<string> = new Set([
  */
 export function destinoObrigatorio(
   session: AppSession | null,
-  pathname: string
+  pathname: string,
+  /** Destino já validado pela lista de `retorno.ts` (tarefa 159). */
+  retorno: string | null = null
 ): string | null {
   if (ROTAS_SEMPRE_LIBERADAS.has(pathname)) {
     return null;
@@ -39,7 +41,7 @@ export function destinoObrigatorio(
   }
 
   if (pathname === ROTA_LOGIN || pathname === ROTA_ONBOARDING) {
-    return ROTA_INICIAL;
+    return retorno ?? ROTA_INICIAL;
   }
 
   return null;
