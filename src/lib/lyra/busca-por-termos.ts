@@ -13,7 +13,14 @@ import { normalizar } from './texto';
  * (`avaliacao/perguntas.json`).
  */
 
-/** Palavras sem assunto próprio, ignoradas na pergunta e nos verbetes. */
+/**
+ * Palavras sem assunto próprio, ignoradas na pergunta e nos verbetes.
+ * "significa" e "significam" fazem a pergunta ("o que significa Rahu em
+ * Escorpião?"), como "o que é": com o radical "signi", casavam com
+ * "significado" no resumo do Nirukta e levavam a pergunta à etimologia
+ * (achado no teste real de 20/11/2026). "significado" continua com assunto:
+ * "o significado da palavra" é tema do Nirukta.
+ */
 const PALAVRAS_VAZIAS = new Set(
   (
     'a o as os um uma uns umas de do da dos das em no na nos nas por para pra ' +
@@ -25,7 +32,7 @@ const PALAVRAS_VAZIAS = new Set(
     'nao sim ao aos pelo pela entre ate tambem so cada todo toda tudo algo ' +
     'alguma algum alguns nunca sempre hoje ontem amanha ajuda ajudar explica ' +
     'conta diz dizem melhor coisa pergunta perguntas perguntar resposta ' +
-    'responder outra outro outras outros'
+    'responder outra outro outras outros significa significam'
   ).split(' ')
 );
 

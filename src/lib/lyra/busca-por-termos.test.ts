@@ -111,6 +111,19 @@ describe('Busca por termos', () => {
     );
   });
 
+  it('"o que significa" faz a pergunta e não leva à etimologia', () => {
+    for (const pergunta of [
+      'O que significa Rahu em Escorpião?',
+      'O que significa a Lua em Touro?',
+    ]) {
+      expect(encontrarVerbete(pergunta)?.id).not.toBe('nirukta');
+    }
+    // "significado da palavra" continua sendo tema do Nirukta.
+    expect(encontrarVerbete('Qual o significado da palavra yoga?')?.id).toBe(
+      'nirukta'
+    );
+  });
+
   it('a palavra-chave exata continua tendo prioridade', () => {
     const pergunta = 'o que é vedanta';
     expect(buscarVerbete(pergunta)?.id).toBe('vedanta');
