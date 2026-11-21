@@ -1442,7 +1442,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Critérios de aceite:** nova sessão anônima abre a experiência e conclui leitura sem autenticação, sem `user_subscriptions`, sem chamar endpoint privado; dados calculados coerentes; usuário logado não perde sessão; caminhos privados permanecem 401/403; zero vazamento entre visitantes; compatível 320–1920px, zoom 200%, teclado/leitor de tela. Registrar screenshots reais com dados não identificáveis.
 
-### 158 · Experiência gratuita útil com a voz do Motor Lyra · ⚪ PENDENTE
+### 158 · Experiência gratuita útil com a voz do Motor Lyra · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 **Prioridade:** alta. **Dependências:** 156, 157, 155, 163 para qualquer consumo de LLM externo. **Proposta estritamente discutida:** reflexão do dia, traços simbólicos e breve apresentação conversacional com Lyra, com limite gratuito racional.
 
