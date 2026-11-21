@@ -69,6 +69,7 @@ import { listaDeTextos } from '@/lib/json-values';
 import {
   conferirVozDaLyra,
   instrucoesDoChatComoLyra,
+  instrucoesDosAnexosComoLyra,
 } from '@/lib/lyra/modelos-como-lyra';
 import { expressarComoLyra } from '@/lib/lyra/personalidade';
 import { resolverTratamento } from '@/lib/lyra/preferencias';
@@ -476,8 +477,16 @@ export async function POST(request: Request) {
             : preferencias?.allow_cloud
               ? cadeiaDaPlataforma
               : somenteLocais(cadeiaDaPlataforma);
+      // A leitura dos anexos leva só a identidade, o tratamento e as regras
+      // da leitura: o mapa, o céu e a memória pessoal não ajudam a ler um
+      // documento e não precisam ir ao modelo junto com ele.
       const leitura = arquivos.length
-        ? await lerComModelo(cadeia, pedido, arquivos, request.signal)
+        ? await lerComModelo(
+            cadeia,
+            { ...pedido, sistema: instrucoesDosAnexosComoLyra(tratamento) },
+            arquivos,
+            request.signal
+          )
         : null;
       const resultado = leitura
         ? null

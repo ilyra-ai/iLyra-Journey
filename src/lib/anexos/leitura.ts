@@ -32,6 +32,25 @@ const formato = z
       .max(3),
   })
   .strict();
+/**
+ * Região de uma imagem citada como fonte: precisa descrever algo do
+ * documento (ao menos três letras seguidas) e não pode ser o código da
+ * imagem de verificação, que não é documento da pessoa. No teste real com o
+ * Qwen 2.5 VL 7B (20/11/2026), a saída presa ao esquema chegou com região
+ * "}]}", com o próprio código ("4E40ABB9") e só com o nome do arquivo, e
+ * passava como fonte.
+ */
+export function regiaoDeImagemValida(
+  regiao: string | null,
+  codigo: string,
+  nomeDoArquivo = ''
+) {
+  const texto = regiao?.trim() ?? '';
+  if (!/\p{L}{3}/u.test(texto)) return false;
+  if (nomeDoArquivo && texto.toLowerCase() === nomeDoArquivo.toLowerCase())
+    return false;
+  return !codigo || !texto.toUpperCase().includes(codigo.toUpperCase());
+}
 function conferir(texto: string, arquivos: Fonte[], codigo: string) {
   const r = formato.parse(extrairJson(texto));
   const recusa = conferirVozDaLyra(r.resposta);
@@ -57,7 +76,7 @@ function conferir(texto: string, arquivos: Fonte[], codigo: string) {
       )
         throw new Error('Linhas da fonte inválidas.');
     } else if (
-      !f.regiao?.trim() ||
+      !regiaoDeImagemValida(f.regiao, codigo, a.file_name) ||
       f.linhaInicial !== null ||
       f.linhaFinal !== null
     )
@@ -110,6 +129,17 @@ export function esquemaDaLeitura(arquivos: Fonte[]) {
     campos.linhaInicial = { anyOf: [linha, { type: 'null' }] };
     campos.linhaFinal = { anyOf: [linha, { type: 'null' }] };
   }
+  // Com imagem, o código tem a forma exata do gerado em `lerComModelo` (8
+  // hexadecimais). Só "string" deixava a gramática aceitar "": no teste real
+  // com o Qwen 2.5 VL 7B (20/11/2026), a leitura saía certa com o código
+  // vazio e era recusada. Código errado continua recusado na conferência.
+  if (imagens > 0)
+    esquema.properties.codigoVisual = {
+      type: 'string',
+      pattern: '^[0-9A-F]{8}$',
+      description:
+        'Os 8 caracteres escritos na última imagem, a de verificação.',
+    };
   const naoLidos = esquema.properties.naoLidos as Esquema & {
     items: Esquema;
   };

@@ -11,6 +11,7 @@ import {
   conferirVozDaLyra,
   instrucoesDaLeituraComoLyra,
   instrucoesDoChatComoLyra,
+  instrucoesDosAnexosComoLyra,
 } from './modelos-como-lyra';
 import { instrucoesDeIdentidade } from './personalidade';
 
@@ -78,6 +79,31 @@ describe('modelos de IA agem como a Lyra (tarefa 56)', () => {
     expect(INSTRUCOES_DO_SISTEMA).toContain(
       'A leitura que o motor da Lyra já calculou para hoje é a sua base'
     );
+  });
+
+  it('anexos: identidade, tratamento e regras da leitura, sem o contexto do chat (tarefa 127)', () => {
+    const texto = instrucoesDosAnexosComoLyra({
+      nome: 'Ana',
+      carinhoso: false,
+    });
+    expect(texto.startsWith(instrucoesDeIdentidade())).toBe(true);
+    expect(texto).toContain(
+      'Regras desta leitura (valem acima das regras gerais)'
+    );
+    expect(texto).toContain('compare cada valor com a referência impressa');
+    expect(texto).toContain('"nome":"Ana","carinhoso":false');
+    // Mapa, resposta do motor e verbete do chat não entram na leitura.
+    expect(texto).not.toContain('Mapa natal');
+    expect(texto).not.toContain('Resposta do motor da Lyra para esta pergunta');
+    expect(texto).not.toContain('Conhecimento da Lyra ligado à pergunta');
+    // Bem menor que as instruções do chat com mapa.
+    const chat = instrucoesDoChatComoLyra({
+      pergunta: 'O que diz este exame?',
+      respostaDoMotor: 'Base do motor.',
+      mapa,
+      faltando: [],
+    });
+    expect(texto.length).toBeLessThan(chat.length);
   });
 
   it.each([
