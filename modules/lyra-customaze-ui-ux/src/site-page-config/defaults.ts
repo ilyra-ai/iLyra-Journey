@@ -62,7 +62,7 @@ const defaultLandingPageConfig: LandingPageConfig = {
       {
         id: 'landing-preview-1',
         title: 'Seus mapas',
-        description: 'Védico, Lyra DM Samādhi e Quantum.',
+        description: 'Védico, Lyra DM Samādhi, Quantum e Ocidental.',
         icon: 'moonStar',
         tone: 'cosmic',
       },
@@ -85,7 +85,7 @@ const defaultLandingPageConfig: LandingPageConfig = {
   features: {
     visible: true,
     badgeText: 'Seus mapas',
-    title: 'Três caminhos para se conhecer melhor.',
+    title: 'Quatro caminhos para se conhecer melhor.',
     description: 'Conheça o olhar de cada mapa e escolha por onde começar.',
     items: [
       {
@@ -111,6 +111,14 @@ const defaultLandingPageConfig: LandingPageConfig = {
           'Uma perspectiva de reflexão e ação que relaciona as leituras da Lyra às escolhas que você deseja experimentar, respeitando seu contexto e seu ritmo.',
         icon: 'brain',
         tone: 'primary',
+      },
+      {
+        id: 'landing-feature-4',
+        title: 'Ocidental',
+        description:
+          'O mapa astrológico tradicional do Ocidente, no zodíaco tropical: Sol, Lua e planetas nos signos e, com hora e cidade, ascendente e casas. Gratuito no Experimente Grátis, só com o nome e a data de nascimento.',
+        icon: 'sun',
+        tone: 'accent',
       },
     ],
   },
@@ -174,7 +182,7 @@ const defaultLandingPageConfig: LandingPageConfig = {
         step: '02',
         title: 'Conheça seus mapas',
         description:
-          'Explore as perspectivas do Védico, Lyra DM Samādhi e Quantum.',
+          'Explore as perspectivas do Védico, Lyra DM Samādhi, Quantum e Ocidental.',
         icon: 'heartPulse',
       },
       {
@@ -270,7 +278,7 @@ const defaultLoginPageConfig: LoginPageConfig = {
         id: 'login-highlight-1',
         title: 'Três perspectivas, seu universo',
         description:
-          'Védico, Lyra DM Samādhi e Quantum para ampliar seu olhar.',
+          'Védico, Lyra DM Samādhi, Quantum e Ocidental para ampliar seu olhar.',
         icon: 'sun',
         tone: 'primary',
       },

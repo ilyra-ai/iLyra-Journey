@@ -366,6 +366,16 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1.5rem;
 }
+/* Quatro mapas (tarefa 157): 2 × 2 em telas médias, uma linha nas largas;
+   até 900px valem as regras de uma coluna mais abaixo. */
+.mapGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 1251px) {
+  .mapGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
 .mapCard,
 .planCard {
   position: relative;

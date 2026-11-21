@@ -18,6 +18,7 @@ import ceuVedico from '@/assets/celestial/ceu-vedico.png';
 import esferaQuantum from '@/assets/celestial/esfera-quantum.png';
 import caminhoLunar from '@/assets/celestial/caminho-lunar.png';
 import lotusSamadhi from '@/assets/celestial/lotus-samadhi.png';
+import signoDeAries from '@/assets/celestial/signos/aries.png';
 import horizonte from '@/assets/celestial/horizonte.png';
 import marca from '@/assets/celestial/marca.png';
 import marcaTransparente from '@/assets/celestial/marca-transparente.png';
@@ -25,6 +26,7 @@ import ceuVedicoTransparente from '@/assets/celestial/ceu-vedico-transparente.pn
 import esferaQuantumTransparente from '@/assets/celestial/esfera-quantum-transparente.png';
 import luaTransparente from '@/assets/celestial/lua-transparente.png';
 import lotusTransparente from '@/assets/celestial/temas/sensibilidade.png';
+import { ExperimenteGratis } from '@/components/landing/ExperimenteGratis';
 import { ThemeToggleButton } from '@/components/theme/ThemeControls';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { beneficiosPublicos } from '@/lib/plans/beneficios-publicos';
@@ -82,6 +84,8 @@ const ilustracoesDosMapas: Record<string, StaticImageData> = {
   'landing-feature-1': ceuVedico,
   'landing-feature-2': lotusSamadhi,
   'landing-feature-3': esferaQuantum,
+  // O zodíaco tropical começa em Áries, no equinócio de março.
+  'landing-feature-4': signoDeAries,
 };
 const ilustracoesDosDestaques: Record<string, StaticImageData> = {
   'landing-preview-1': ceuVedico,
@@ -147,6 +151,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
     usePublicSitePageConfig('landing');
   const config = overrideConfig ?? publicada;
   const [menuAberto, setMenuAberto] = useState(false);
+  const [experimentando, setExperimentando] = useState(false);
   const [catalogo, setCatalogo] = useState<Catalogo>({
     estado: 'carregando',
     planos: [],
@@ -605,8 +610,11 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
             </h1>
             <p className={styles.heroDescription}>{config.hero.description}</p>
             <div className={styles.heroActions}>
-              <Link
-                href={config.hero.primaryCtaHref}
+              {/* Experimente Grátis (tarefa 157): abre a leitura sem conta. */}
+              <button
+                type="button"
+                onClick={() => setExperimentando(true)}
+                aria-haspopup="dialog"
                 className={`${styles.primaryButton} ${styles.trialButton}`}
               >
                 <Sparkles aria-hidden="true" />
@@ -614,7 +622,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
                   ? 'Experimente Grátis'
                   : config.hero.primaryCtaLabel}
                 <ArrowRight aria-hidden="true" />
-              </Link>
+              </button>
             </div>
           </div>
           <div className={styles.heroVisual}>
@@ -671,6 +679,12 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
         </nav>
         <p>{config.footer.note}</p>
       </footer>
+      <ExperimenteGratis
+        aberto={experimentando}
+        aoFechar={() => setExperimentando(false)}
+        destinoDaAssinatura={config.hero.primaryCtaHref}
+        classeDoBotaoPrincipal={styles.primaryButton}
+      />
     </div>
   );
 }
