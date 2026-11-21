@@ -5611,7 +5611,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes e resultados comprováveis:** 12 testes novos (radicais, achados sem palavra-chave, recusa, nota mínima, determinismo, régua, chat e leitura dos mapas inalterada). Unitários: 1117 aprovados; integração: 640 aprovados; ESLint, `tsc --noEmit`, Prettier e `next build` aprovados.
 - **Limites declarados:** tamanho do radical, pesos e nota mínima foram escolhidos na própria régua, escrita por quem conhece os verbetes; o ganho real com perguntas de usuários pode ser menor. As 3 recusas erradas restantes vêm de palavras-chave antigas e curtas ("casa", "significa", "mantra"). Temas sem verbete (respiração, chakras, meditação para iniciantes) continuam sem resposta: dependem de ampliar a base curada. Gates em Node v26.13.0 (Node 24 ausente na estação).
 
-### 197 · Base curada ampliada e nota mínima relativa ao tamanho da base · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 197 · Base curada ampliada e nota mínima relativa ao tamanho da base · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 - **Origem e data:** solicitação do usuário em 16/11/2026 para ampliar a base de conhecimento do motor. Em seguida o usuário definiu que os verbetes devem passar a ser preenchidos automaticamente pelo motor e pelo modelo de IA conectado (tarefa 198); estes 16 verbetes ficam como base inicial curada.
 - **Implementação real:** 16 verbetes em `src/lib/lyra/conhecimento/yoga-e-tradicao.ts` (Ashtanga, Pranayama, Asana, Dhyana, chakras, Kundalini, Samsara, sonhos, mantra e japa, Ekadashi, divindades, Tantra, Puja, planetas retrógrados, compatibilidade de casal e gemas), com fonte tradicional em cada um, avisos de saúde onde cabem e a declaração do que a Lyra não calcula. Áreas novas `yoga` e `tradicao`. Pendente a conferência do titular, como os demais verbetes.
