@@ -5749,7 +5749,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Origem e data:** pedido do titular em 17/11/2026: card de prevenção com visual premium no painel principal, ligado à tarefa 209.
 - **Estado em 17/11/2026:** implementado e ainda não publicado. `src/components/dashboard/PrevencaoCard.tsx` (anel de progresso com exames em dia, os três exames mais urgentes com cor por situação, aviso do estresse dos vínculos e botão "Abrir para saber mais") e pop-up em abas: Seus exames (situação, o que o exame procura, orientação oficial com link da fonte, registro e remoção da data do último exame), Família (histórico de saúde por condição e parente), Vínculos e estresse (a pessoa responde se cada vínculo pesa) e Sinais de alerta (quando procurar atendimento logo, com SAMU 192 e CVV 188). Inserido em `CelestialDashboard.tsx` abaixo dos vínculos familiares. Unitários 1176, integração 653, lint, tipos, formato e build aprovados em Node v26.13.0. Não conferido no navegador.
 
-### 211 · Atualização dos exames médicos pelo modelo de IA, com revisão da administração · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 211 · Atualização dos exames médicos pelo modelo de IA, com revisão da administração · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 - **Origem e data:** pedido do titular em 17/11/2026.
 - **Execução real com `qwen3:8b` (20/11/2026):** botão pela rota (`POST /api/admin/prevencao/atualizacao`), situação "concluida" em 16 s, autor "Ollama · qwen3:8b", 2 páginas oficiais do INCA lidas, 2 propostas descartadas pela conferência (exame inexistente no catálogo) e nenhuma proposta nova; catálogo intacto. O modelo encerrou no passo 5 de 24, uma pesquisa rasa: a qualidade depende do modelo, e a revisão do administrador continua obrigatória. As 12 propostas pendentes anteriores seguem para a decisão do titular. Causa provável da pesquisa rasa: o contexto padrão de 4.096 tokens do Ollama no contêiner, contra 32.768 do modelo usado em 17/11; a atualização pede até 12.288 tokens por passo.
