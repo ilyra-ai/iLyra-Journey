@@ -5578,7 +5578,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Não validado:** a etapa do onboarding e o cartão do mapa não foram abertos no navegador depois da alteração; responsivo e leitor de tela não foram conferidos. O horário escolhido no onboarding não entra no rascunho da aba: ao recarregar, a pessoa escolhe de novo. Gates em Node v26.13.0 (Node 24 ausente na estação).
 - **Banco local:** migration 069 aplicada após backup de `profiles` com restauração conferida; permanece a conta de teste `qa-hora-estimada@lyra.test`.
 
-### 195 · Entendimento por significado no Motor da Lyra: régua de avaliação · 🔵 EM ANDAMENTO
+### 195 · Entendimento por significado no Motor da Lyra: régua de avaliação · 🔴 BLOQUEADA
+
+- **Situação em 21/11/2026:** suspensa por decisão do titular de 16/11/2026, registrada na tarefa 196 ("os modelos de significado ficariam pesados; melhorar o motor sem virar IA por enquanto"). A régua de avaliação entregue aqui continua em uso pela 196. Retomar (medir o EmbeddingGemma 2, escolher o modelo e ligar a busca ao elo `lyra`) depende de nova decisão do titular, porque traz download de modelo e dependência nova.
 
 - **Origem e data:** solicitação do usuário em 16/11/2026 para o motor da Lyra passar a ser uma inteligência artificial, sem mudar regras e workflows dos outros modelos.
 - **Entregue nesta etapa:** conjunto de avaliação com 100 perguntas rotuladas em `src/lib/lyra/avaliacao/perguntas.json` (60 com verbete esperado, 15 de temas da Lyra sem verbete, 25 fora do assunto) e teste de integridade e de linha de base em `perguntas.test.ts`.
