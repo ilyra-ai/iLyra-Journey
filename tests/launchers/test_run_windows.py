@@ -234,15 +234,41 @@ class TestArquivosIsolados(unittest.TestCase):
 
 
 class TestBancoComDubles(unittest.TestCase):
-    def test_callback_memoria_incompativel_preserva_servico_e_env(self) -> None:
-        memoria = {"Config": {"Env": ["LYRA_MEMORIA_APP_URL=http://host.docker.internal:3000"]}}
-        with mock.patch.object(run_windows, "containers", return_value=[memoria]), \
+    def test_callback_de_outra_porta_recria_so_a_memoria(self) -> None:
+        # Porta 3000 ocupada por terceiro: o app vai para a 3001 e a memória,
+        # que chamava a 3000, passa a chamar a 3001 (como no run.sh).
+        antiga = {"Config": {"Env": ["LYRA_MEMORIA_APP_URL=http://host.docker.internal:3000"]},
+            "State": {"Running": True, "Health": {"Status": "healthy"}}}
+        nova = {"Config": {"Env": ["LYRA_MEMORIA_APP_URL=http://host.docker.internal:3001"]},
+            "State": {"Running": True, "Health": {"Status": "healthy"}},
+            "NetworkSettings": {"Ports": {"8000/tcp": [{"HostPort": "8019"}]}}}
+        with mock.patch.object(run_windows, "containers", side_effect=[[antiga], [nova]]), \
              mock.patch.object(run_windows, "compose") as compose, \
-             mock.patch.object(run_windows, "atualizar_env") as atualizar:
-            with self.assertRaisesRegex(run_windows.Falha, "porta 3001"):
-                run_windows.memoria(3001)
-            compose.assert_not_called()
-            atualizar.assert_not_called()
+             mock.patch.object(run_windows, "atualizar_env") as atualizar, \
+             mock.patch.object(run_windows, "consultar_http", return_value=(200, "")):
+            run_windows.memoria(3001)
+        atualizar.assert_called_once_with({"LYRA_MEMORIA_APP_URL": "http://host.docker.internal:3001"})
+        compose.assert_called_once_with("up", "-d", "--wait", "memoria")
+
+    def test_memoria_parada_volta_pelo_compose(self) -> None:
+        config = {"Env": ["LYRA_MEMORIA_APP_URL=http://host.docker.internal:3000"]}
+        parada = {"Config": config, "State": {"Running": False}}
+        saudavel = {"Config": config, "State": {"Running": True, "Health": {"Status": "healthy"}},
+            "NetworkSettings": {"Ports": {"8000/tcp": [{"HostPort": "8019"}]}}}
+        with mock.patch.object(run_windows, "containers", side_effect=[[parada], [saudavel]]), \
+             mock.patch.object(run_windows, "compose") as compose, \
+             mock.patch.object(run_windows, "consultar_http", return_value=(200, "")):
+            run_windows.memoria(3000)
+        compose.assert_called_once_with("up", "-d", "--wait", "memoria")
+
+    def test_memoria_rodando_sem_saude_fica_preservada(self) -> None:
+        config = {"Env": ["LYRA_MEMORIA_APP_URL=http://host.docker.internal:3000"]}
+        doente = {"Config": config, "State": {"Running": True, "Health": {"Status": "unhealthy"}}}
+        with mock.patch.object(run_windows, "containers", return_value=[doente]), \
+             mock.patch.object(run_windows, "compose") as compose, \
+             self.assertRaisesRegex(run_windows.Falha, "preservada para diagnóstico"):
+            run_windows.memoria(3000)
+        compose.assert_not_called()
 
     def test_logs_propaga_exit_docker(self) -> None:
         args = run_windows.criar_parser().parse_args(["logs", "db"])
@@ -361,9 +387,9 @@ class TestAppQueEncerraAoIniciar(unittest.TestCase):
                  mock.patch.object(run_windows, "estado_app", return_value=None), \
                  mock.patch.object(run_windows, "memoria"), \
                  mock.patch.object(run_windows, "node", return_value=sys.executable), \
-                 mock.patch.dict(os.environ, {"LYRA_APP_PORT": str(porta)}):
-                with self.assertRaisesRegex(run_windows.Falha, "App encerrou código 1"):
-                    run_windows.iniciar_app(False)
+                 mock.patch.dict(os.environ, {"LYRA_APP_PORT": str(porta)}), \
+                 self.assertRaisesRegex(run_windows.Falha, "App encerrou código 1"):
+                run_windows.iniciar_app(False)
             self.assertFalse(estado.exists())
 
 

@@ -509,8 +509,22 @@ def memoria(porta_app: int) -> None:
     if servicos:
         atual = servicos[0]
         configuracao = dict(i.split("=", 1) for i in atual["Config"].get("Env", []) if "=" in i)
-        if configuracao.get("LYRA_MEMORIA_APP_URL") != f"http://host.docker.internal:{porta_app}":
-            raise Falha(f"Memória existente usa callback {configuracao.get('LYRA_MEMORIA_APP_URL', '(ausente)')}, mas o app usaria a porta {porta_app}. Serviço e histórico preservados. A troca serial exige provar que o app anterior parou e reconfigurar somente o serviço memoria, mantendo o mesmo FalkorDB.")
+        retorno = f"http://host.docker.internal:{porta_app}"
+        if configuracao.get("LYRA_MEMORIA_APP_URL") != retorno:
+            # Chamado só por `iniciar_app` sem app próprio registrado e sob o
+            # lease dos artefatos: nenhum app deste checkout usa o callback
+            # antigo. Como no run.sh, só o serviço memoria é recriado com a
+            # porta nova; FalkorDB e o volume memoria_data ficam como estão.
+            atualizar_env({"LYRA_MEMORIA_APP_URL": retorno})
+            compose("up", "-d", "--wait", "memoria")
+            mensagem("OK", f"Memória reconfigurada para a porta {porta_app}; FalkorDB e histórico preservados.")
+            atual = containers("memoria")[0]
+        elif not atual.get("State", {}).get("Running"):
+            # Parada por `stop` (deste launcher ou do run.sh): sobe de novo com
+            # o mesmo container e o mesmo FalkorDB, como faz o run.sh. Só a
+            # memória em execução e sem saúde fica preservada para diagnóstico.
+            compose("up", "-d", "--wait", "memoria")
+            atual = containers("memoria")[0]
         porta = porta_container(atual, "8000/tcp")
         if saude_container(atual) and porta and consultar_http(f"http://127.0.0.1:{porta}/saude")[0] == 200:
             mensagem("OK", "Memória saudável reutilizada.")
