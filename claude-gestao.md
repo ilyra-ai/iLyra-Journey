@@ -5624,7 +5624,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes e resultados comprováveis:** unitários 1119 aprovados; integração 640 aprovados; ESLint, `tsc --noEmit`, Prettier e `next build` aprovados em Node v26.13.0 (Node 24 ausente na estação). O Docker Desktop estava desligado e foi iniciado para a integração.
 - **Aviso externo não tratado:** o `next build` parou uma vez com `SecurityFatalError`, informando vulnerabilidade conhecida no Next.js 16.4.3 e sugerindo `next upgrade --agent=security`; a segunda execução concluiu. A atualização não foi feita e depende de decisão do titular.
 
-### 198 · Verbetes escritos automaticamente pelo motor com o modelo de IA conectado · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 198 · Verbetes escritos automaticamente pelo motor com o modelo de IA conectado · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 - **Origem e data:** solicitação do usuário em 16/11/2026: os verbetes da base devem ser preenchidos automaticamente pelo motor da Lyra e pelo modelo de IA conectado.
 - **Teste real com `qwen3:8b` (20/11/2026):** no app, "O que é o dasha de Ketu?" disparou a escrita depois da resposta (pedido de 7,2 s ao Ollama) e o verbete "Dasha de Ketu" foi gravado **pendente** de aprovação (tarefa 199), sem aparecer no motor. A conferência funcionou nos dois sentidos: numa tentativa direta, o mesmo tema foi recusado por colidir com a palavra-chave do verbete "jyotisha". O conteúdo tem erro ("Ketu é um planeta sublunar"; Ketu é um nodo lunar) e palavras-chave espúrias ("keto", "keta"): fica para o titular reprovar na revisão. **Limite observado:** verbetes amplos da base (jyotisha, karma, dhyana, ayurveda) cobrem perguntas específicas ("nakshatra Shatabhisha", "yoga Gajakesari", "Trataka", "Panchakarma"), então a escrita não é chamada para esses temas; "Rahu em Escorpião" casou com o verbete "nirukta", um encaixe ruim da busca do motor.
