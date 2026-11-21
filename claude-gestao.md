@@ -5673,7 +5673,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Arquivos:** `src/lib/quantum/coherence-engine.ts`, `src/lib/integrative-engines.test.ts`.
 - **Testes:** 1 teste novo que percorre níveis diferentes do índice e recusa afirmações de diagnóstico ou efeito cósmico. Unitários, integração, lint, tipos, formato e build aprovados em Node v26.13.0.
 
-### 205 · Dia pessoal sem a hora de nascimento · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 205 · Dia pessoal sem a hora de nascimento · 🟢 CONCLUÍDA
+
+- **Fechamento em 21/11/2026:** gates no Node 24.21.0 num clone limpo do Ubuntu (WSL2) sobre `7863ef58`: instalação congelada, lint, formato, `check:types`, 1228 unitários, 622 de integração e build aprovados. Validada por autorização do titular.
 
 - **Origem e data:** limite declarado na tarefa 193; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
 - **Causa raiz corrigida:** com a hora desconhecida, Tara Bala e Chandra Bala do dia usavam a Lua natal do meio-dia, embora a Lua possa mudar de nakshatra e de signo no dia do nascimento. Agora o dia pessoal só é afirmado quando Tara e Chandra Bala dão o mesmo resultado para toda Lua possível daquele dia; caso contrário, `pessoal` fica nulo com `pessoalIndisponivel: 'hora-de-nascimento'`, e a leitura do coach explica a ausência e convida a informar ou escolher a hora, em vez de pedir data e cidade que já estão no perfil.
