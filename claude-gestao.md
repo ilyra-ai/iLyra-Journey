@@ -3178,7 +3178,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 23 · Documentação final e validação integral
 
-- **Status:** 🟡 implementada · validação pendente · **Commit:** `a4ee832` · **Push:** `a5a18ad..a4ee832 main -> main` (confirmado)
+- **Homologada e concluída em 21/11/2026.**
+
+- **Status:** 🟢 homologada e concluída · validação pendente · **Commit:** `a4ee832` · **Push:** `a5a18ad..a4ee832 main -> main` (confirmado)
 - **Validação atual (revisão de 2026-11-04):** Fechamento integral condicionado às fronteiras de validação registradas neste painel; os gates aprovados não comprovam automaticamente plataformas, dispositivos e provedores externos.
 - **Documentação:**
   - `README.md`: contagem real de testes (241 unitários e 73 de integração), portões completos (`test:integration` e `build`), segurança atual, links para `docs/acessibilidade.md` e `docs/design-system.md`, e contribuição direto na `main`.
