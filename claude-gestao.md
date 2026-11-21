@@ -1198,7 +1198,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Resposta do usuário em 09-11-2026:** Experimente Grátis recebe somente nome completo e data de nascimento, usados exclusivamente na sessão e não salvos. Aplicar idade mínima de 13 anos completos no servidor; abaixo disso não entra na experiência do app. Isso é filtro de idade declarada, não verificação de identidade. Somente o mapa astrológico tradicional ocidental é liberado gratuitamente; Védico, Lyra DM Samādhi e Quantum Arkáico dependem da assinatura. A política específica de Conexões da Alma não foi definida por essa resposta e não deve ser inferida. Requisitos detalhados incorporados à 157 e à atualização da landing.
 
-### 156 · Motor científico de posições do Mapa Astrológico Tradicional Ocidental (tropical) · 🔵 EM EXECUÇÃO
+### 156 · Motor científico de posições do Mapa Astrológico Tradicional Ocidental (tropical) · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 **Prioridade:** crítica. **Dependências:** 154, 155 para exposição pública. **Escopo aprovado:** quarto mapa, sem tocar nem substituir o Védico, Samādhi ou Quantum.
 
