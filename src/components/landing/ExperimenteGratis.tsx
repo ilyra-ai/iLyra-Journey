@@ -1,7 +1,6 @@
 'use client';
 
 import { type FormEvent, useId, useState } from 'react';
-import Link from 'next/link';
 import { Loader2, Sparkles } from 'lucide-react';
 
 import {
@@ -11,6 +10,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import type { DescobertaDoVisitante } from '@/lib/descoberta/visitante';
+
+import { ResultadoGratuito } from './ResultadoGratuito';
 
 interface Props {
   aberto: boolean;
@@ -119,57 +120,16 @@ export function ExperimenteGratis({
         </DialogDescription>
 
         {estado.fase === 'resultado' ? (
-          <section aria-live="polite" className="grid gap-3">
-            <h3 className="text-lg font-semibold text-foreground">
-              Seu mapa ocidental · zodíaco tropical
-            </h3>
-            <p className="leading-relaxed">
-              {estado.descoberta.leitura.resumo}
-            </p>
-            {/* Os limites do motor: itens curtos (o que falta calcular) e
-                frases com ponto final (o alcance da leitura). */}
-            <p className="text-sm font-medium">
-              Só com a data, esta leitura não inclui:
-            </p>
-            <ul className="-mt-1 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-              {estado.descoberta.leitura.limites
-                .filter((limite) => !limite.endsWith('.'))
-                .map((limite) => (
-                  <li key={limite}>{limite}</li>
-                ))}
-            </ul>
-            {estado.descoberta.leitura.limites
-              .filter((limite) => limite.endsWith('.'))
-              .map((limite) => (
-                <p key={limite} className="text-sm text-muted-foreground">
-                  {limite}
-                </p>
-              ))}
-            <p className="text-sm text-muted-foreground">
-              Interpretação simbólica para reflexão, sem diagnóstico nem
-              previsão. Seus dados não foram gravados.
-            </p>
-            <div className="flex flex-wrap gap-3 pt-2">
-              <Link
-                href={destinoDaAssinatura}
-                className={classeDoBotaoPrincipal}
-              >
-                <Sparkles aria-hidden="true" className="size-4" />
-                Conhecer os quatro mapas
-              </Link>
-              <button
-                type="button"
-                className="inline-flex min-h-11 items-center rounded-md border border-border px-4"
-                onClick={() => {
-                  setNome('');
-                  setData('');
-                  setEstado({ fase: 'formulario', erro: null });
-                }}
-              >
-                Fazer outra leitura
-              </button>
-            </div>
-          </section>
+          <ResultadoGratuito
+            descoberta={estado.descoberta}
+            destinoDaAssinatura={destinoDaAssinatura}
+            classeDoBotaoPrincipal={classeDoBotaoPrincipal}
+            aoRefazer={() => {
+              setNome('');
+              setData('');
+              setEstado({ fase: 'formulario', erro: null });
+            }}
+          />
         ) : (
           <form className="grid gap-4" onSubmit={enviar} noValidate>
             <div className="grid gap-1.5">

@@ -5,6 +5,12 @@ import { chamar } from '../../../../tests/integration/http';
 import { zerarLimite } from '@/lib/security/rate-limit';
 
 import { LIMITE_DESCOBERTA_POR_IP, POST } from './descoberta/route';
+import {
+  LIMITE_PERGUNTA_POR_IP,
+  POST as POST_PERGUNTA,
+} from './descoberta/pergunta/route';
+
+const IPS_DA_PERGUNTA: string[] = [];
 
 const IPS: string[] = [];
 function pedido(
@@ -124,5 +130,47 @@ describe('Experimente Grátis sem conta (tarefas 155 e 157)', () => {
     expect(excedido.headers.get('retry-after')).toMatch(/^\d+$/);
     // Outro IP continua livre.
     expect((await pedido('203.0.113.15', visitante)).status).toBe(200);
+  });
+});
+
+describe('Microconversa do Experimente Grátis (tarefa 158)', () => {
+  function perguntar(ip: string, body: unknown) {
+    IPS_DA_PERGUNTA.push(ip);
+    return chamar(POST_PERGUNTA, {
+      usuario: null,
+      method: 'POST',
+      path: '/api/public/descoberta/pergunta',
+      body,
+      headers: { 'x-forwarded-for': ip },
+    });
+  }
+
+  afterEach(async () => {
+    for (const ip of IPS_DA_PERGUNTA.splice(0))
+      await zerarLimite(LIMITE_PERGUNTA_POR_IP, ip);
+  });
+
+  it('responde pela base curada, sem conta, sem cookie e sem cache', async () => {
+    const r = await perguntar('203.0.113.20', { pergunta: 'o que é vedanta' });
+    expect(r.status).toBe(200);
+    expect(r.headers.get('cache-control')).toBe('no-store, private');
+    expect(r.headers.get('set-cookie')).toBeNull();
+    expect((r.json as { texto: string }).texto).toContain('Vedanta');
+  });
+
+  it('recusa pergunta vazia ou longa e limita por IP', async () => {
+    expect((await perguntar('203.0.113.21', { pergunta: 'x' })).status).toBe(
+      400
+    );
+    expect(
+      (await perguntar('203.0.113.21', { pergunta: 'a'.repeat(301) })).status
+    ).toBe(400);
+    for (let i = 0; i < LIMITE_PERGUNTA_POR_IP.limite; i++)
+      expect(
+        (await perguntar('203.0.113.22', { pergunta: 'o que é yoga' })).status
+      ).toBe(200);
+    expect(
+      (await perguntar('203.0.113.22', { pergunta: 'o que é yoga' })).status
+    ).toBe(429);
   });
 });

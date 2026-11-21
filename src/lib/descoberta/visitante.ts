@@ -8,6 +8,8 @@ import {
 } from '@/lib/lyra/leitura-tropical';
 import { idadeDoNascimento } from '@/lib/perfil/conclusao-onboarding';
 
+import { leituraGratuita, type LeituraGratuita } from './leitura-gratuita';
+
 /**
  * Experiência gratuita sem conta (tarefas 155 e 157). Decisão do titular em
  * 09/11/2026 e 21/11/2026: o visitante informa só o nome completo e a data de
@@ -61,6 +63,8 @@ export interface DescobertaDoVisitante {
     precisao: string;
   };
   leitura: LeituraTropical;
+  /** Natureza, forças, atenção, pergunta e reflexão do dia (tarefa 158). */
+  gratuita: LeituraGratuita;
 }
 
 /**
@@ -97,5 +101,6 @@ export function descobrirVisitante(
       precisao: mapa.precisao,
     },
     leitura: lerMapaTropical(mapa),
+    gratuita: leituraGratuita(mapa.sol.signo, agora),
   };
 }
