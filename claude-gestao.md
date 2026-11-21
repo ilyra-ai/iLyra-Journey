@@ -1494,7 +1494,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Aceite:** fluxo anônimo → modal → login → checkout → recurso funciona em caminho feliz e falhas; conta antiga não sofre sobrescrita; redirecionamento externo malicioso negado; ausência de perda do valor informado quando o usuário consentiu; teste real em duas abas e dispositivo móvel.
 
-### 160 · Migração comercial Free/Meta/Care para UMA ASSINATURA sem perda histórica · ⚪ PENDENTE
+### 160 · Migração comercial Free/Meta/Care para UMA ASSINATURA sem perda histórica · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 **Prioridade:** crítica. **Dependência:** 154. **Decisão aprovada:** uma assinatura comercial única, todos os recursos disponíveis e mesmos limites de tokens; administração exclusiva de `admin`; acesso anônimo não é um plano Free.
 
