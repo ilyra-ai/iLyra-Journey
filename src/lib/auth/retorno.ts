@@ -48,3 +48,51 @@ export function esquecerRetorno() {
     // Nada a limpar quando o armazenamento está bloqueado.
   }
 }
+
+/**
+ * Valor de contribuição escolhido no convite da assinatura (tarefa 161),
+ * só para vir pré-selecionado em /planos. É só o identificador da opção
+ * ("colaboracao_999"); o servidor confere a opção de novo no checkout.
+ */
+const CHAVE_DA_CONTRIBUICAO = 'lyra:contribuicao';
+const CONTRIBUICAO = /^colaboracao_\d{1,6}$/;
+
+export function guardarContribuicao(chave: string) {
+  if (!CONTRIBUICAO.test(chave)) return;
+  try {
+    sessionStorage.setItem(CHAVE_DA_CONTRIBUICAO, chave);
+  } catch {
+    // Sem armazenamento, /planos começa pelo primeiro valor.
+  }
+}
+
+/** No logout: o valor escolhido não passa para a próxima pessoa da aba. */
+export function esquecerContribuicao() {
+  try {
+    sessionStorage.removeItem(CHAVE_DA_CONTRIBUICAO);
+  } catch {
+    // Nada a limpar quando o armazenamento está bloqueado.
+  }
+}
+
+/**
+ * Valor que /planos marca primeiro: o escolhido no convite, se ainda for uma
+ * opção disponível; senão o primeiro disponível.
+ */
+export function contribuicaoInicial(
+  disponiveis: readonly { key: string }[],
+  escolhida: string | null
+) {
+  return disponiveis.some((o) => o.key === escolhida)
+    ? (escolhida as string)
+    : (disponiveis[0]?.key ?? '');
+}
+
+export function lerContribuicao(): string | null {
+  try {
+    const chave = sessionStorage.getItem(CHAVE_DA_CONTRIBUICAO);
+    return chave && CONTRIBUICAO.test(chave) ? chave : null;
+  } catch {
+    return null;
+  }
+}

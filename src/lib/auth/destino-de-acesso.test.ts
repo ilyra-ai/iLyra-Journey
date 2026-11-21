@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { destinoObrigatorio } from '@/lib/auth/destino-de-acesso';
-import { destinoDeRetorno } from '@/lib/auth/retorno';
+import { contribuicaoInicial, destinoDeRetorno } from '@/lib/auth/retorno';
 import type { AppSession } from '@/types/app-session';
 
 function sessao(onboardingConcluido: boolean, role = 'patient'): AppSession {
@@ -109,5 +109,23 @@ describe('retorno ao destino depois do login (tarefa 159)', () => {
       '/onboarding'
     );
     expect(destinoObrigatorio(null, '/planos', '/planos')).toBe('/login');
+  });
+});
+
+describe('valor escolhido no convite da assinatura (tarefa 161)', () => {
+  const opcoes = [{ key: 'colaboracao_999' }, { key: 'colaboracao_1999' }];
+
+  it('marca o valor escolhido quando ele ainda é uma opção disponível', () => {
+    expect(contribuicaoInicial(opcoes, 'colaboracao_1999')).toBe(
+      'colaboracao_1999'
+    );
+  });
+
+  it('volta ao primeiro valor quando a escolha não existe ou foi retirada', () => {
+    expect(contribuicaoInicial(opcoes, null)).toBe('colaboracao_999');
+    expect(contribuicaoInicial(opcoes, 'colaboracao_5000')).toBe(
+      'colaboracao_999'
+    );
+    expect(contribuicaoInicial([], 'colaboracao_999')).toBe('');
   });
 });

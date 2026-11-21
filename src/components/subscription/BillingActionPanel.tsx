@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAccountBilling } from '@/hooks/use-account-billing';
+import { contribuicaoInicial, lerContribuicao } from '@/lib/auth/retorno';
 import type { BillingCatalogPlan, PlanKey } from '@/types/subscription';
 
 const PLAN_ORDER: Record<PlanKey, number> = {
@@ -56,7 +57,10 @@ function EscolhaDoValor({
   aoAssinar: (opcao: string) => void;
 }) {
   const disponiveis = plan.contributionOptions.filter((o) => o.available);
-  const [escolhido, setEscolhido] = React.useState(disponiveis[0]?.key ?? '');
+  // O valor escolhido no convite da landing vem pré-selecionado (tarefa 161).
+  const [escolhido, setEscolhido] = React.useState(() =>
+    contribuicaoInicial(disponiveis, lerContribuicao())
+  );
   const opcao = disponiveis.find((o) => o.key === escolhido) ?? disponiveis[0];
   const id = React.useId();
   if (!opcao) return null;

@@ -6,7 +6,11 @@ import { toast } from 'sonner';
 
 import { db } from '@/integrations/mysql/client';
 import { destinoObrigatorio } from '@/lib/auth/destino-de-acesso';
-import { esquecerRetorno, lerRetorno } from '@/lib/auth/retorno';
+import {
+  esquecerContribuicao,
+  esquecerRetorno,
+  lerRetorno,
+} from '@/lib/auth/retorno';
 import { interromperLeituraDoChat } from '@/lib/voz/controlador';
 import { bloquearCofresAbertos } from '@/lib/offline/cofre';
 import { paginaSaindo } from '@/lib/navegador/saida-da-pagina';
@@ -47,7 +51,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         );
         recebeuEvento = true;
         // Quem sai não leva o destino pendente para a próxima pessoa.
-        if (evento === 'SIGNED_OUT') esquecerRetorno();
+        if (evento === 'SIGNED_OUT') {
+          esquecerRetorno();
+          esquecerContribuicao();
+        }
         setSession(novaSessao);
         setLoading(false);
       }

@@ -26,6 +26,7 @@ import ceuVedicoTransparente from '@/assets/celestial/ceu-vedico-transparente.pn
 import esferaQuantumTransparente from '@/assets/celestial/esfera-quantum-transparente.png';
 import luaTransparente from '@/assets/celestial/lua-transparente.png';
 import lotusTransparente from '@/assets/celestial/temas/sensibilidade.png';
+import { ConviteDaAssinatura } from '@/components/landing/ConviteDaAssinatura';
 import { ExperimenteGratis } from '@/components/landing/ExperimenteGratis';
 import { ThemeToggleButton } from '@/components/theme/ThemeControls';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
@@ -78,6 +79,9 @@ type Catalogo = {
   planos: PlanMatrixPlan[];
   erro?: string;
 };
+
+/** Cartão do mapa gratuito (ocidental, tarefa 157). */
+const MAPA_GRATUITO = 'landing-feature-4';
 
 // As imagens são ilustrações editoriais, nunca resultados calculados de um mapa.
 const ilustracoesDosMapas: Record<string, StaticImageData> = {
@@ -152,6 +156,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
   const config = overrideConfig ?? publicada;
   const [menuAberto, setMenuAberto] = useState(false);
   const [experimentando, setExperimentando] = useState(false);
+  const [convite, setConvite] = useState<string | null>(null);
   const [catalogo, setCatalogo] = useState<Catalogo>({
     estado: 'carregando',
     planos: [],
@@ -296,6 +301,23 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
                     <div className={styles.mapCopy}>
                       <h3>{mapa.title}</h3>
                       <p>{mapa.description}</p>
+                      {/* O ocidental é gratuito (tarefa 157); os demais
+                          abrem o convite da assinatura (tarefa 161). */}
+                      <button
+                        type="button"
+                        aria-haspopup="dialog"
+                        className={styles.textLink}
+                        onClick={() =>
+                          mapa.id === MAPA_GRATUITO
+                            ? setExperimentando(true)
+                            : setConvite(mapa.title)
+                        }
+                      >
+                        {mapa.id === MAPA_GRATUITO
+                          ? 'Experimentar grátis'
+                          : 'Quero este mapa'}
+                        <ArrowRight aria-hidden="true" />
+                      </button>
                     </div>
                   </article>
                 ))}
@@ -683,6 +705,15 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
         aberto={experimentando}
         aoFechar={() => setExperimentando(false)}
         destinoDaAssinatura={config.hero.primaryCtaHref}
+        classeDoBotaoPrincipal={styles.primaryButton}
+      />
+      <ConviteDaAssinatura
+        recurso={convite}
+        aoFechar={() => setConvite(null)}
+        plano={
+          catalogo.planos.find((p) => p.contributionOptions.length > 0) ?? null
+        }
+        destinoDoCadastro={config.hero.primaryCtaHref}
         classeDoBotaoPrincipal={styles.primaryButton}
       />
     </div>
