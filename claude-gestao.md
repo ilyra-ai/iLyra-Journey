@@ -5637,7 +5637,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Risco declarado:** a conferência do motor não verifica a veracidade do conteúdo; com modelos pequenos, verbetes errados podem entrar na base compartilhada. Mitigações existentes: marcação de verbete não conferido e remoção pela administração. Pendente decisão do titular entre publicação imediata e revisão antes de publicar.
 - **Limites:** sem modelo conectado nada é escrito; tema do domínio sem nenhum termo em comum com a base (ex.: "o que diz o ramayana") não dispara a escrita; o pré-filtro ainda deixa passar alguns temas fora do domínio (ex.: pneu), recusados depois pela fonte. Gates em Node v26.13.0 (Node 24 ausente na estação).
 
-### 199 · Aprovação dos verbetes escritos automaticamente antes de entrarem na base · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 199 · Aprovação dos verbetes escritos automaticamente antes de entrarem na base · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 - **Origem e data:** decisão do titular em 17/11/2026, após o teste real da tarefa 198 em que o gemma3:1b produziu um verbete aceito pela conferência porém incorreto: os verbetes gerados só entram na base consultada pelo motor depois de aprovados por um administrador.
 - **Implementação real:** migration `071` acrescenta `status` (`pendente` ou `aprovado`), `aprovado_em` e `aprovado_por` a `lyra_verbetes_gerados`, com restrição que impede aprovação sem data e sem administrador; verbetes já gravados ficam pendentes. Todo verbete nasce pendente; o motor carrega somente os aprovados e ignora pendentes mesmo se recebidos. Rota administrativa: `GET ?situacao=pendente|aprovado`, `PATCH { id, acao: 'aprovar' }` (409 se já aprovado) e `DELETE ?id=` para recusar ou retirar. O texto do verbete aprovado informa o modelo que o escreveu e a aprovação pela administração.
