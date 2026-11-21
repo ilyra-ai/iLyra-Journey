@@ -1268,7 +1268,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 ### BLOQUEADAS
 
-### 190 · Homologação integral pendente do TOP 5 Motor Lyra e GitHub Actions · 🔴 BLOQUEADA APÓS TENTATIVA REAL
+### 190 · Homologação integral pendente do TOP 5 Motor Lyra e GitHub Actions · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 - **Origem:** exigência expressa de tentar validações antes de criar qualquer tarefa pendente. Registrada em 13/11/2026, 11h20 (America/Sao_Paulo) somente após tentativas documentadas no sandbox e Actions.
 - **O que foi tentado:** `git ls-remote https://github.com/ilyra-ai/Lyra-MetaCare HEAD` falhou com `Could not resolve host: github.com`; `corepack pnpm --version` falhou por indisponibilidade de `https://registry.npmjs.org/pnpm/latest`; v22.16.0 disponível localmente não atende Node ^24.18.1 do repositório. O GitHub Actions executou em `bac3dc94`, run `43441320684`, job `131939361610`: status completed/failure 13/11/2026T14:17:30Z, nenhum passo retornado e logs indisponíveis (`BlobNotFound`). Não atribuir a causa a billing/minutos sem prova.
