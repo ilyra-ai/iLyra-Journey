@@ -1469,7 +1469,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Aceite:** visita real recebe leitura coerente e pode conhecer a voz da Lyra sem conta e sem dados fabricados; nenhuma rota de chat privado foi aberta; limites configurados funcionam no servidor; fallback local é real; logs não expõem data/resposta; tempos/erros são verificados com testes.
 
-### 159 · Captura progressiva, preservação consentida e retorno ao destino pós-login · ⚪ PENDENTE
+### 159 · Captura progressiva, preservação consentida e retorno ao destino pós-login · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 **Prioridade:** alta. **Dependências:** 155, 157, 158; integração posterior com 164/165 e 162.
 
