@@ -1171,7 +1171,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Situação desta ampliação O: APENAS DOCUMENTAÇÃO; CINCO PROPOSTAS NOVAS NO ESCOPO AUDITADO, ZERO IMPLEMENTADAS; filtro 1 reordenado documentalmente, seis filtros principais preservados. Aguardar instruções.**
 
-### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · 🔵 EM EXECUÇÃO
+### 155 · Privacidade de nascimento, proteção por idade e ECA Digital da descoberta pública · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 **Prioridade:** crítica e anterior à abertura pública. **Dependência:** 154. **Âmbito exato:** medidas imprescindíveis à experiência aberta e ao fluxo afetivo, não auditoria jurídica genérica da empresa.
 
