@@ -606,7 +606,8 @@ async function restaurar(volumeBackup) {
 }
 
 // Backup a frio avulso (usado antes de operações destrutivas, como o
-// `python3 run.py purge`). O serviço volta a subir se estava saudável.
+// `./run.sh purge` e o `py run_windows.py purge`). O serviço volta a subir se
+// estava saudável.
 async function backupAvulso() {
   const config = await lerConfiguracaoCompose();
   if (!(await volumeExiste(config.nomeVolume))) {

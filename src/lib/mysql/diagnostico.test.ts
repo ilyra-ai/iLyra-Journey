@@ -45,7 +45,8 @@ describe('dicaParaOTerminal', () => {
     vi.stubEnv('MYSQL_DATABASE', 'lyra_metacare');
     const dica = dicaParaOTerminal('sem-conexao');
     expect(dica).toContain('127.0.0.1:3307/lyra_metacare');
-    expect(dica).toContain('python3 run.py db');
+    expect(dica).toContain('./run.sh db');
+    expect(dica).toContain('py run_windows.py db');
     vi.unstubAllEnvs();
   });
 });

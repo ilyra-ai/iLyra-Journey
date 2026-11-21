@@ -72,13 +72,13 @@ export function dicaParaOTerminal(falha: FalhaDoBanco): string {
   const destino = destinoDoBanco();
   switch (falha) {
     case 'sem-conexao':
-      return `MySQL inacessível em ${destino}. Suba o banco com "python3 run.py db" (WSL2/Linux), "./run.sh db" (Git Bash) ou "pnpm db:start", e confira MYSQL_HOST e MYSQL_PORT no .env.local.`;
+      return `MySQL inacessível em ${destino}. Suba o banco com "./run.sh db" (WSL2/Linux), "py run_windows.py db" (Windows) ou "pnpm db:start", e confira MYSQL_HOST e MYSQL_PORT no .env.local.`;
     case 'acesso-negado':
       return `O MySQL recusou o usuário em ${destino}. Confira MYSQL_USER e MYSQL_PASSWORD no .env.local (devem ser os mesmos usados quando o volume do banco foi criado).`;
     case 'banco-inexistente':
-      return `O banco ${destino} não existe. Rode "python3 run.py db" ou "pnpm db:start" para criá-lo e aplicar as migrations.`;
+      return `O banco ${destino} não existe. Rode "./run.sh db", "py run_windows.py db" ou "pnpm db:start" para criá-lo e aplicar as migrations.`;
     case 'sem-migrations':
-      return `Faltam tabelas ou colunas em ${destino}: há migrations pendentes. Rode "python3 run.py migrate" ou "pnpm db:migrate".`;
+      return `Faltam tabelas ou colunas em ${destino}: há migrations pendentes. Rode "./run.sh migrate", "py run_windows.py migrate" ou "pnpm db:migrate".`;
   }
 }
 

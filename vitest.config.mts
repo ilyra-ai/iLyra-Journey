@@ -5,8 +5,8 @@ import { defineConfig } from 'vitest/config';
 // - integration: testes contra um MySQL real (`pnpm test:integration`). O
 //   setup global cria um banco isolado `<MYSQL_DATABASE>_test`, aplica as
 //   migrations reais e o remove ao final; o banco de desenvolvimento não é
-//   tocado. Requer o MySQL do projeto em execução (`./run.sh db`,
-//   `python3 run.py db` ou `pnpm db:start`).
+//   tocado. Requer o MySQL do projeto em execução (`./run.sh db` no WSL2,
+//   `py run_windows.py db` no Windows ou `pnpm db:start`).
 const INTEGRATION_GLOB = '**/*.integration.test.{ts,mjs}';
 
 export default defineConfig({

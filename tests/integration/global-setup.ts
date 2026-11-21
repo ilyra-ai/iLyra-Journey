@@ -120,7 +120,7 @@ export default async function setup(project: TestProject) {
     throw new Error(
       `MySQL do projeto inacessível em ${config.host}:${config.port} ` +
         `(${error instanceof Error ? error.message : String(error)}). ` +
-        'Suba o banco com `./run.sh db`, `python3 run.py db` ou `pnpm db:start`.',
+        'Suba o banco com `./run.sh db` (WSL2), `py run_windows.py db` (Windows) ou `pnpm db:start`.',
       { cause: error }
     );
   }

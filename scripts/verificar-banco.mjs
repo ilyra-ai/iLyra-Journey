@@ -26,7 +26,7 @@ import { MIGRATION_TABLE, sortMigrationFiles } from './lib/migrations.mjs';
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const COMO_SUBIR =
-  'Suba o banco com "python3 run.py db" (WSL2/Linux), "./run.sh db" (Git Bash) ou "pnpm db:start".';
+  'Suba o banco com "./run.sh db" (WSL2/Linux), "py run_windows.py db" (Windows) ou "pnpm db:start".';
 
 function falhar(mensagem) {
   console.error(`[ERRO] ${mensagem}`);
@@ -114,7 +114,7 @@ async function main() {
     const pendentes = arquivos.filter((arquivo) => !aplicadas.has(arquivo));
     if (pendentes.length > 0) {
       falhar(
-        `${pendentes.length} migration(s) pendente(s) em ${destino} (primeira: ${pendentes[0]}). Rode "python3 run.py migrate" ou "pnpm db:migrate".`
+        `${pendentes.length} migration(s) pendente(s) em ${destino} (primeira: ${pendentes[0]}). Rode "./run.sh migrate", "py run_windows.py migrate" ou "pnpm db:migrate".`
       );
       return;
     }

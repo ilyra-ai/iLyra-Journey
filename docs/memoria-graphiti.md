@@ -32,7 +32,7 @@ em entidades, relações, episódios de origem e períodos de validade.
 instalação local é `http://host.docker.internal:3000`. Os launchers ajustam a
 porta do retorno ao escolher outra porta para o aplicativo.
 
-Os launchers `run.py up/app` e `run.sh up/app` sobem e verificam a memória.
+Os launchers `./run.sh up/app` e `py run_windows.py up/app` sobem e verificam a memória.
 Para executá-la isoladamente:
 
 ```sh

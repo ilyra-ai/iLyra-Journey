@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 /**
  * Verificação de saúde ponta a ponta da aplicação em execução, usada pelo
- * run.sh (e, por delegação, pelo run_windows.py); o run.py tem implementação
- * equivalente em Python:
+ * run.sh (WSL2) e pelo run_windows.py (Windows 11):
  *   1. GET /api/health → 200 com todas as migrations do repositório aplicadas;
  *   2. GET / e GET /login → 200 (páginas renderizadas);
  *   3. POST /api/auth/login com o administrador inicial do .env.local → 200.

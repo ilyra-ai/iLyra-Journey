@@ -63,7 +63,7 @@ py run_windows.py logs app    # logs da aplicação
 py run_windows.py stop app    # para somente a aplicação da própria instância
 ```
 
-O estado passa a ser separado em `.lyra-run/linux/` e `.lyra-run/windows/`. PID, identidade do processo, porta e logs pertencem à plataforma e à instância que os criou. A existência de `.lyra-run/app.json` ou `.lyra-run-windows/` legados não autoriza apagar o estado nem encerrar um processo sem conferir sua identidade. `run.py` é retirado somente após a migração comprovada; não é o ponto de entrada da arquitetura nova.
+O estado passa a ser separado em `.lyra-run/linux/` e `.lyra-run/windows/`. PID, identidade do processo, porta e logs pertencem à plataforma e à instância que os criou. A existência de `.lyra-run/app.json` ou `.lyra-run-windows/` legados não autoriza apagar o estado nem encerrar um processo sem conferir sua identidade. O `run.py` foi retirado na tarefa 174, depois das provas reais dos dois launchers ([launchers.md](./launchers.md)).
 
 As portas preferidas são **http://localhost:3000** para o app e **127.0.0.1:3307** para MySQL; o endereço real deve ser lido na saída do launcher. **Nunca matar processos nem parar containers para liberar portas.** Identificar ocupação, escolher e reservar outra porta e tratar disputa concorrente, atualizando URLs, conexão e healthchecks coerentemente. A parada só alcança processos comprovadamente pertencentes à instância. Preservar serviços existentes, volumes, segredos e variáveis locais; o diagnóstico deve explicar incompatibilidades sem apagar configuração.
 
