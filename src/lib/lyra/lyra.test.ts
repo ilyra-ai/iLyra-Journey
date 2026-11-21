@@ -72,12 +72,17 @@ describe('base de conhecimento da Lyra', () => {
     }
   });
 
-  it('os três tipos de mapa são separados e dizem o que é calculável', () => {
+  it('os quatro tipos de mapa são separados e dizem o que é calculável', () => {
     expect(Object.keys(TIPOS_DE_MAPA)).toEqual([
       'vedico',
       'samadhi',
       'quantum',
+      'ocidental',
     ]);
+    expect(TIPOS_DE_MAPA.ocidental.calculavel.join(' ')).toMatch(
+      /casas iguais/
+    );
+    expect(TIPOS_DE_MAPA.ocidental.diferenca).toMatch(/tropical/);
     expect(TIPOS_DE_MAPA.vedico.simbolico).toEqual([]);
     expect(TIPOS_DE_MAPA.samadhi.simbolico.length).toBeGreaterThan(0);
     expect(TIPOS_DE_MAPA.quantum.simbolico.join(' ')).toMatch(/Desenho Humano/);

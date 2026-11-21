@@ -327,7 +327,7 @@ export function responderComoLyra(
 
   // 3. Diferença entre os tipos de mapa.
   if (
-    /\b(tipos de mapa|diferenca entre|quais mapas|tres mapas|qual a diferenca)\b/.test(
+    /\b(tipos de mapa|diferenca entre|quais mapas|tres mapas|quatro mapas|qual a diferenca)\b/.test(
       texto
     ) &&
     /\bmapas?\b/.test(texto)

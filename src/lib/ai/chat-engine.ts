@@ -199,7 +199,7 @@ function gerarRespostaDoMotor(query: string, context: ChatContext): string {
     return `${name}, encontrei estes registros dos seus relatos anteriores:\n\n${context.memorias.map((relato) => `• ${relato}`).join('\n')}\n\nSe algo mudou, você pode corrigir a lembrança nos controles de memória.`;
   }
 
-  // Motor da Lyra (tarefa 55): mapa natal, os três tipos de mapa, Vedanta,
+  // Motor da Lyra (tarefa 55): mapa natal, os quatro tipos de mapa, Vedanta,
   // Upavedas e Vedangas, respondidos pela base curada, sem modelo de IA.
   const daLyra = context.astrology
     ? responderComoLyra(query, {

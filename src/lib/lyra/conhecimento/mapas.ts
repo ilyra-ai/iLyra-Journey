@@ -4,10 +4,11 @@ import type { Elemento } from './jyotish';
 import type { Verbete } from './tipos';
 
 /**
- * Os três tipos de mapa que a Lyra lê, separados de forma explícita (tarefa
- * 55, pedido do usuário). Fontes: os documentos do usuário "Mapa Lyra DM
- * Samādhi" (66 páginas), "LIVRO MAPA LYRA DM SAMADHI" (37 páginas) e
- * "Mapa Quantum (Lyra e Arkático)" (6 páginas, versão 1.0 de 24/09/2025).
+ * Os quatro tipos de mapa que a Lyra lê, separados de forma explícita (tarefas
+ * 55 e 156, pedidos do usuário). Fontes: os documentos do usuário "Mapa Lyra
+ * DM Samādhi" (66 páginas), "LIVRO MAPA LYRA DM SAMADHI" (37 páginas) e
+ * "Mapa Quantum (Lyra e Arkático)" (6 páginas, versão 1.0 de 24/09/2025); o
+ * mapa ocidental tropical vem do motor próprio em `astrology/tropical.ts`.
  *
  * Regra de verdade herdada dos próprios documentos: o que é calculável é
  * calculado; o que é simbólico é dito como simbólico; o que falta é dito como
@@ -15,7 +16,7 @@ import type { Verbete } from './tipos';
  * como indisponível; não inferir", Mapa Quantum §2.3).
  */
 
-export type TipoDeMapa = 'vedico' | 'samadhi' | 'quantum';
+export type TipoDeMapa = 'vedico' | 'samadhi' | 'quantum' | 'ocidental';
 
 export interface DefinicaoDoMapa {
   tipo: TipoDeMapa;
@@ -102,6 +103,29 @@ export const TIPOS_DE_MAPA: Record<TipoDeMapa, DefinicaoDoMapa> = {
     diferenca:
       'É a evolução do Samādhi para a prática: em vez de uma leitura ampla, entrega uma ação de 5 a 15 minutos com Score de Ação, critério de parada e registro.',
     fonte: 'Documento do usuário "Mapa Quantum (Lyra e Arkático)", v1.0',
+  },
+  ocidental: {
+    tipo: 'ocidental',
+    nome: 'Mapa astrológico tradicional ocidental (tropical)',
+    definicao:
+      'O mapa natal da astrologia ocidental: o céu do momento do nascimento no zodíaco tropical, que começa no equinócio de março, com o Sol, a Lua e os planetas de Mercúrio a Plutão nos doze signos.',
+    finalidade:
+      'Oferecer a leitura simbólica tradicional do Ocidente, com temas de reflexão sobre temperamento e caminhos, sem diagnosticar nem prever destino.',
+    entradas:
+      'data de nascimento; hora e cidade, quando a pessoa quiser, para o mapa completo',
+    calculavel: [
+      'com só a data: o signo solar, ou os signos possíveis quando o Sol troca de signo naquele dia',
+      'com data, hora e cidade: as longitudes tropicais do Sol, da Lua e de Mercúrio a Plutão e o signo de cada um',
+      'o ascendente e as doze casas iguais de 30° a partir dele, fora das latitudes polares',
+      'os aspectos principais entre os corpos (conjunção, sextil, quadratura, trígono e oposição, com orbe declarado)',
+    ],
+    simbolico: [
+      'o sentido de cada signo, planeta e casa, lido como tema de reflexão e não como medida psicológica',
+    ],
+    diferenca:
+      'Usa o zodíaco tropical, cerca de 24° à frente do sideral do mapa védico, e casas iguais a partir do ascendente em vez de casas por signo inteiro; os dois mapas não se misturam.',
+    fonte:
+      'Astronomia de posição (astronomy-engine, conferida contra o JPL Horizons) e a tradição astrológica ocidental',
   },
 };
 
@@ -246,23 +270,25 @@ export const VERBETES_DOS_MAPAS: readonly Verbete[] = [
   {
     id: 'tipos-de-mapa',
     area: 'mapa',
-    titulo: 'Os três mapas da Lyra',
+    titulo: 'Os quatro mapas da Lyra',
     resumo:
-      'A Lyra lê três mapas diferentes: o mapa védico tradicional (Jyotish), o Mapa Lyra DM Samādhi e o Mapa Quantum, cada um com o seu método e o seu limite.',
+      'A Lyra lê quatro mapas diferentes: o mapa védico tradicional (Jyotish), o Mapa Lyra DM Samādhi, o Mapa Quantum e o mapa ocidental tropical, cada um com o seu método e o seu limite.',
     pontos: [
       `${TIPOS_DE_MAPA.vedico.nome}: ${TIPOS_DE_MAPA.vedico.definicao}`,
       `${TIPOS_DE_MAPA.samadhi.nome}: ${TIPOS_DE_MAPA.samadhi.diferenca}`,
       `${TIPOS_DE_MAPA.quantum.nome}: ${TIPOS_DE_MAPA.quantum.diferenca}`,
+      `${TIPOS_DE_MAPA.ocidental.nome}: ${TIPOS_DE_MAPA.ocidental.diferenca}`,
       'O que é calculado é dito como calculado; o que é simbólico, como simbólico; e o que falta, como indisponível.',
     ],
     pratica:
-      'Use o mapa védico para entender tendências, o Samādhi para integrar o sentido e o Quantum para escolher a próxima ação.',
+      'Use o mapa védico para entender tendências, o Samādhi para integrar o sentido, o Quantum para escolher a próxima ação e o ocidental para a leitura tradicional do Ocidente.',
     palavrasChave: [
       'tipos de mapa',
       'diferenca entre os mapas',
       'diferenca entre mapa',
       'quais mapas',
       'tres mapas',
+      'quatro mapas',
     ],
     fonte: 'Documentos do usuário e Brihat Parashara Hora Shastra',
   },
