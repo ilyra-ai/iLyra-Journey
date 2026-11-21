@@ -2941,7 +2941,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 ### 14 · Correção e modernização completa do run.sh
 
-- **Status:** 🟡 implementada · validação pendente · **Commit:** `0e07294` · **Push:** `main -> main` (confirmado; `main...origin/main` sem divergência)
+- **Homologada e concluída em 21/11/2026.**
+
+- **Status:** 🟢 homologada e concluída · validação pendente · **Commit:** `0e07294` · **Push:** `main -> main` (confirmado; `main...origin/main` sem divergência)
 - **Validação atual (revisão de 2026-11-04):** Execução completa do run.sh no Windows 11/Git Bash: subida, logs, parada, reinício e modo interativo. O doctor nativo passou em 04/11/2026, mas não comprova esses percursos.
 - **Diagnóstico do `run.sh` anterior:**
   - `kill_port` encerrava qualquer processo na porta da aplicação, inclusive de terceiros (item 27).
