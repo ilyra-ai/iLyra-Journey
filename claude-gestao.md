@@ -5900,7 +5900,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Testes:** cerca de 100 testes de integração ligavam e desligavam recursos no Free para o usuário de teste, que agora nasce no Care; passaram a usar o plano de base. Os testes do catálogo público e da cobrança refletem a decisão: Free e Meta não aparecem na página pública; as regras de "não reduzir plano pelo checkout" e de "cobrança sem Stripe responde 503 sem expor as chaves" continuam testadas reativando o Free ou o Meta só durante o teste (`reativarPlanoNoTeste`). A matriz de cobertura passou a percorrer só os planos comerciais ativos, por isso a integração foi de 663 para 611 testes (52 casos de Free e Meta). Unitários 1210, integração 611, lint, tipos, formato e build aprovados.
 - **Fronteiras não comprovadas:** os dois preços do Care ainda não foram configurados (aguardam os valores, o período e os nomes); cadastro de uma conta nova pela tela não foi feito no navegador; assinaturas pagas no Stripe em Free ou Meta (nenhuma no banco local) seguem para a etapa dos dois preços.
 
-### 226 · Plano Lyra Journey com dois valores de colaboração · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 226 · Plano Lyra Journey com dois valores de colaboração · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 - **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** cartão único com os dois valores, Pagamentos com um preço por valor e landing conferidos; falta o checkout real (sem chave da Stripe nesta estação).
 
