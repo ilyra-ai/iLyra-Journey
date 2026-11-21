@@ -5469,7 +5469,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Integração e dependências:** usar o motor determinístico sem LLM; sessão e plano vedic_insights no endpoint comum; não alterar o mapa natal existente; frontend /inovacoes e página condicional protegida por AppShell. Validação integrada e de acesso real ainda exigida na tarefa 190.
 - **Aceite integral pendente:** verificar cálculos contra oráculos independentes (incluindo casos de cúspide, período e fuso), testes Vitest no Node v24, lint/formatação/tipos/build sem warnings relevantes, integração do serviço autenticado, móvel/tablet/desktop e GitHub Actions **success**. Nenhum item é marcado como 🟢 antes de essas evidências existirem.
 
-### 176 · Mapas divisionais védicos D9 e D10 · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 176 · Mapas divisionais védicos D9 e D10 · 🟢 CONCLUÍDA
+
+- **Fechamento em 21/11/2026:** gates no Node 24.21.0 num clone limpo do Ubuntu (WSL2) sobre `7863ef58`: instalação congelada, lint, formato, `check:types`, 1228 unitários, 622 de integração e build aprovados; ver a tarefa 175 para o workflow e a 190 para a execução hospedada no GitHub.
 
 - **Validação em 19 e 20/11/2026 (build de produção, contas locais de teste sem senha, apagadas no fim):** ver a tarefa 175 (oráculos, abas de Inovações e gates no Node 24); falta `check:types` num clone limpo (229) e o GitHub Actions.
 
