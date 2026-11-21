@@ -10,7 +10,7 @@ allowBuilds:
   sharp: true
   unrs-resolver: true
 
-# Compatibilidade declarada e verificada: o eslint-config-next 16.4.3 depende
+# Compatibilidade declarada e verificada: o eslint-config-next 16.4.6 depende
 # de eslint-plugin-react 7.37, eslint-plugin-import 2.32 e
 # eslint-plugin-jsx-a11y 6.10, que ainda não listam o ESLint 10 nos peers.
 # O ESLint 9 está em fim de vida (2026-08-06); os plugins rodam no ESLint 10
