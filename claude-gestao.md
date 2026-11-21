@@ -5636,7 +5636,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Arquivos:** `src/lib/astrology/mapa-natal.ts`, `projecao-natal.test.ts`.
 - **Testes:** 2 testes novos (9 entradas inválidas recusadas; ano bissexto, hora desconhecida e extremos do relógio aceitos). Unitários 1139, integração 646, lint, tipos, formato e build aprovados em Node v26.13.0.
 
-### 201 · Ascendente védico além do Círculo Polar · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 201 · Ascendente védico além do Círculo Polar · 🟢 CONCLUÍDA
+
+- **Fechamento em 21/11/2026:** gates no Node 24.21.0 num clone limpo do Ubuntu (WSL2) sobre `7863ef58`: instalação congelada, lint, formato, `check:types`, 1228 unitários, 622 de integração e build aprovados. Validada por autorização do titular; o cartão "Indisponível além do Círculo Polar" segue coberto pelos testes de leitura e serialização.
 
 - **Origem e data:** achado nº 4 da análise forense do motor; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
 - **Causa raiz corrigida:** o mapa ocidental já declarava o ascendente indisponível além do Círculo Polar, onde parte da eclíptica não nasce em certas horas e a fórmula deixa de valer, mas o védico calculava o Lagna assim mesmo. Agora o mapa védico devolve `limiteDoLagna: 'latitude-polar'`, sem Lagna nem casas, mantendo planetas, Lua e períodos. A constante `LATITUDE_POLAR` passou a morar em `sideral.ts`.
