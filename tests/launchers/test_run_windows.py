@@ -326,6 +326,47 @@ class TestShutdownRealIsolado(unittest.TestCase):
             filho.wait(timeout=10)
 
 
+class TestStopDoBanco(unittest.TestCase):
+    def test_stop_db_para_memoria_e_falkordb_antes_do_mysql(self) -> None:
+        # Dublês: containers próprios por serviço e o Docker que registra.
+        proprios = {"memoria": [{"Id": "m1"}], "falkordb": [{"Id": "f1"}], "mysql": [{"Id": "db1"}]}
+        paradas: list[tuple[str, ...]] = []
+        with mock.patch.object(run_windows, "containers", side_effect=lambda s: proprios.get(s, [])), \
+             mock.patch.object(run_windows, "docker", side_effect=lambda *a: paradas.append(a)), \
+             mock.patch.object(run_windows, "parar_app") as parar_app:
+            args = run_windows.criar_parser().parse_args(["stop", "db"])
+            self.assertEqual(run_windows.despachar(args), 0)
+        parar_app.assert_not_called()
+        self.assertEqual([p[-1] for p in paradas], ["m1", "f1", "db1"])
+        self.assertTrue(all(p[:3] == ("stop", "--time", "60") for p in paradas))
+
+
+@unittest.skipUnless(sys.platform == "win32", "Identidade do processo por CIM exige Windows")
+class TestAppQueEncerraAoIniciar(unittest.TestCase):
+    def test_registro_do_app_encerrado_e_removido(self) -> None:
+        # O "Next" desta fixture é um script Python que encerra com código 1
+        # depois de 3 s, como o next dev que parou para exibir um aviso.
+        with tempfile.TemporaryDirectory() as pasta:
+            raiz = Path(pasta)
+            cli = raiz / "node_modules/next/dist/bin/next"
+            cli.parent.mkdir(parents=True)
+            cli.write_text("import sys, time\ntime.sleep(3)\nsys.exit(1)\n", encoding="utf-8")
+            estado = raiz / "app.json"
+            with socket.socket() as sonda:
+                sonda.bind(("127.0.0.1", 0))
+                porta = sonda.getsockname()[1]
+            with mock.patch.object(run_windows, "RAIZ", raiz), \
+                 mock.patch.object(run_windows, "APP_META", estado), \
+                 mock.patch.object(run_windows, "LOGS", raiz / "logs"), \
+                 mock.patch.object(run_windows, "estado_app", return_value=None), \
+                 mock.patch.object(run_windows, "memoria"), \
+                 mock.patch.object(run_windows, "node", return_value=sys.executable), \
+                 mock.patch.dict(os.environ, {"LYRA_APP_PORT": str(porta)}):
+                with self.assertRaisesRegex(run_windows.Falha, "App encerrou código 1"):
+                    run_windows.iniciar_app(False)
+            self.assertFalse(estado.exists())
+
+
 class TestLogsOperacionais(unittest.TestCase):
     def test_comando_real_registra_saida_erro_exit_e_oculta_segredos(self) -> None:
         with tempfile.TemporaryDirectory() as pasta, \

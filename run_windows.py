@@ -561,6 +561,10 @@ def iniciar_app(prod: bool) -> None:
         limite = time.monotonic() + 240
         while time.monotonic() < limite:
             if processo.poll() is not None:
+                # O próprio filho terminou (código conhecido): o registro dele
+                # não descreve mais processo nenhum e, se ficasse, o próximo
+                # `up` recusaria a troca de artefatos por estado inexistente.
+                APP_META.unlink(missing_ok=True)
                 raise Falha(f"App encerrou código {processo.returncode}; consulte {log}. Nenhum dono de porta foi encerrado.")
             if consultar_http(f"http://127.0.0.1:{porta}/api/health")[0] == 200:
                 print(script_node("verificar-app.mjs", str(porta)))
@@ -706,8 +710,12 @@ def despachar(args: argparse.Namespace, gerenciador: GerenciadorArtefatos | None
         if args.alvo in ("app", "todos"):
             parar_app()
         if args.alvo in ("db", "todos"):
-            for item in containers("mysql"):
-                docker("stop", "--time", "60", item["Id"])
+            # Como no run.sh: a memória e o FalkorDB param antes do MySQL, com
+            # os volumes preservados. Só containers deste checkout.
+            for servico in ("memoria", "falkordb", "mysql"):
+                for item in containers(servico):
+                    docker("stop", "--time", "60", item["Id"])
+            mensagem("OK", "Memória, FalkorDB e MySQL próprios parados; volumes preservados.")
         return 0
     preflight()
     if comando in ("backup", "restore"):
