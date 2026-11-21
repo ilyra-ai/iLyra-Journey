@@ -445,10 +445,12 @@ export function lerMapaComoLyra(mapa: MapaNatal): LeituraDaLyra {
 
   return {
     avisoDaHora: avisoDaHora(mapa),
-    tipos: Object.values(TIPOS_DE_MAPA).map((t) => ({
-      tipo: t.tipo,
-      nome: t.nome,
-      definicao: t.definicao,
+    // Só os mapas desta leitura, que partem do mesmo mapa natal sideral; o
+    // ocidental tropical tem leitura própria (`leitura-tropical.ts`).
+    tipos: (['vedico', 'samadhi', 'quantum'] as const).map((tipo) => ({
+      tipo,
+      nome: TIPOS_DE_MAPA[tipo].nome,
+      definicao: TIPOS_DE_MAPA[tipo].definicao,
     })),
     vedico: {
       lagna: textoDoLagna(mapa),
