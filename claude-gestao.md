@@ -5655,7 +5655,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Arquivos:** `src/lib/astrology/tempo.ts`, `tropical.ts`, `mapa-natal.ts`, `persistencia-natal.ts` (base natal versão 5), `serializacao.ts`, `src/lib/lyra/leitura-do-mapa.ts` e testes.
 - **Testes:** 4 testes novos (hora repetida e inexistente em São Paulo, 1990, com o instante usado; hora comum e desconhecida; avisos na leitura, inclusive com hora estimada). Unitários 1147, integração 646, lint, tipos, formato e build aprovados em Node v26.13.0.
 
-### 203 · Precisão declarada e fórmula única do ascendente · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 203 · Precisão declarada e fórmula única do ascendente · 🟢 CONCLUÍDA
+
+- **Fechamento em 21/11/2026:** gates no Node 24.21.0 num clone limpo do Ubuntu (WSL2) sobre `7863ef58`: instalação congelada, lint, formato, `check:types`, 1228 unitários, 622 de integração e build aprovados. Validada por autorização do titular.
 
 - **Origem e data:** achado nº 7 da análise forense do motor; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
 - **Correções:** o comentário de `sideral.ts` anunciava "precisão de segundos de arco", mas os testes comprovam menos de 0,02° do JPL Horizons nas posições tropicais e menos de 0,01° do Swiss Ephemeris no Lahiri; o texto passou a dizer isso. A fórmula do ascendente existia em duas cópias (`sideral.ts` e `tropical.ts`) e as revoluções e a astrocartografia reconstruíam o ascendente tropical somando o ayanamsha ao sideral; agora há uma só função, `ascendenteTropical`, de onde derivam o Lagna sideral, o ascendente ocidental, as revoluções e a astrocartografia. Os literais `66.56` soltos foram trocados por `latitudePolar`.
