@@ -5664,7 +5664,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Arquivos:** `src/lib/astrology/sideral.ts`, `tropical.ts`, `inovacoes/astrocartografia.ts`, `inovacoes/retornos.ts`.
 - **Testes:** sem mudança de comportamento; as comparações existentes com JPL Horizons e Swiss Ephemeris continuam aprovadas. Unitários, integração, lint, tipos, formato e build aprovados em Node v26.13.0.
 
-### 204 · Textos honestos no Índice de Coerência Quântica · 🟡 IMPLEMENTADA, VALIDAÇÃO PENDENTE
+### 204 · Textos honestos no Índice de Coerência Quântica · 🟢 CONCLUÍDA
+
+- **Fechamento em 21/11/2026:** gates no Node 24.21.0 num clone limpo do Ubuntu (WSL2) sobre `7863ef58`: instalação congelada, lint, formato, `check:types`, 1228 unitários, 622 de integração e build aprovados. Validada por autorização do titular.
 
 - **Origem e data:** achado nº 2 da análise forense do motor; pedido do titular em 17/11/2026 para finalizar as pendências do motor.
 - **Causa raiz corrigida:** o índice combina sinais registrados com uma componente simbólica da fase lunar, mas os textos afirmavam diagnóstico ("o sistema nervoso autônomo apresenta sinais de sobrecarga", "alinhamento quântico-biológico", "perfeita fase com os ciclos cósmicos") e prometiam ganho ("elevar significativamente sua coerência"), contrariando as regras do próprio motor. O cálculo foi mantido; descrições, recomendação e documentação passaram a dizer o que o índice é: um resumo dos registros frente às faixas de referência, com a camada lunar declarada simbólica e o aviso de que não é avaliação de saúde. Quando a componente mais baixa é a lunar, a recomendação não pede mudança no corpo; nas demais, orienta procurar um profissional se o sinal persistir.
