@@ -1580,7 +1580,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Aceite:** modal fiel à referência e integrado ao design, seleção funcional, preços verificáveis, sem paywall para assinantes e admins, sem diferença de direitos entre contribuições; bloqueio premium no backend e UX apropriada para contas sem plano.
 
-### 162 · Integração real de cobrança recorrente Stripe, contribuição escolhida e legado · ⚪ PENDENTE
+### 162 · Integração real de cobrança recorrente Stripe, contribuição escolhida e legado · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 **Prioridade:** crítica. **Dependências:** 160, 161, 163. **Não ativar live sem autorização financeira.** O projeto possui infraestrutura Stripe existente, mas não possui automaticamente a nova estrutura de dois preços equivalentes.
 
