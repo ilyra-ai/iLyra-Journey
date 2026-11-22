@@ -1764,7 +1764,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Aceite da avaliação:** parecer verificável de **disponível/inviável/bloqueado** com evidência oficial, custos e riscos; somente rotular integração como concluída se cobrança recorrente real for homologada, cancelamento e webhooks testados. Nenhuma alteração de cobrança live sem autorização.
 
-### 170 · Funil de descoberta, testes de disposição a pagar e melhoria de retenção · ⚪ PENDENTE
+### 170 · Funil de descoberta, testes de disposição a pagar e melhoria de retenção · 🟡 IMPLEMENTADA
+
+- **Implementada em 22/11/2026 (commit `2c1bd178`).** Itens 1–4, 10 (só indicadores no painel) e 11. Funil anônimo em `funil_contagens_diarias` (migração 082): dia, etapa, detalhe e total, sem nome, data, e-mail, IP, agente ou identificador. Lista fechada de etapas em `src/lib/funil/etapas.ts`; o navegador só informa as dele por `POST /api/public/funil` (sem cookie nem sessão, 512 bytes, 200/h por IP, robôs de fora); login concluído, cadastro, leitura entregue e pagamento iniciado são contados no servidor; medir nunca bloqueia a etapa. Painel em Administração → Funil da descoberta (7/30/90 dias): etapas, taxas só com denominador ("sem dados" sem base) e fatos lidos das tabelas reais (contas criadas, pagamentos confirmados pelo webhook da Stripe, faturas pagas, cancelamentos, assinaturas ativas por contribuição, retorno D7/D30 por conversa e custo de IA do mês). Documentação em `docs/funil-da-descoberta.md`. Testes: 6 unitários e 6 de integração; no navegador, contagem real de visita, clique em mapa e convite, painel no desktop e no celular. **Não implementado por depender de decisão comercial explícita:** experimento A/B de preço ou mensagem (item 6), coortes por renda (item 8) e o estudo comparativo das pesquisas externas (item 9). Fica 🟡 até a homologação.
 
 **Prioridade:** alta para validar produto/preço; não autoriza coleta invasiva nem modificar valores comerciais sem aprovação. **Dependências:** 155, 157–163; complementar a 164/165 e 168 quando estiverem disponíveis.
 
