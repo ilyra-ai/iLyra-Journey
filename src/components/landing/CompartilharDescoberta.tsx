@@ -11,6 +11,7 @@ import {
   nomeDoArquivo,
   textoDoCompartilhamento,
 } from '@/lib/descoberta/cartao';
+import { marcarEtapa } from '@/lib/funil/cliente';
 import type { Signo } from '@/lib/lyra/conhecimento/signos-ocidentais';
 
 interface Props {
@@ -122,6 +123,8 @@ export function CompartilharDescoberta({ signo }: Props) {
           ? { files: [imagem.arquivo], text: `${texto} ${link()}` }
           : { title: 'Lyra MetaCare', text: texto, url: link() }
       );
+      // Contagem anônima (tarefa 170): só a ação, nunca o signo.
+      marcarEtapa('cartao_compartilhado', 'compartilhar');
       setAviso({
         texto: 'Pronto, enviado para o compartilhamento.',
         erro: false,
@@ -146,6 +149,7 @@ export function CompartilharDescoberta({ signo }: Props) {
     ancora.click();
     ancora.remove();
     URL.revokeObjectURL(url);
+    marcarEtapa('cartao_compartilhado', 'baixar');
     setAviso({ texto: 'Cartão baixado.', erro: false });
   }
 

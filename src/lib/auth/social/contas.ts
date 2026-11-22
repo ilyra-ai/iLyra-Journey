@@ -60,12 +60,13 @@ export async function entrarComIdentidade(
     nome?: { primeiro: string | null; sobrenome: string | null };
     userAgent: string | null;
   }
-): Promise<ContaDoLogin> {
+): Promise<ContaDoLogin & { nova: boolean }> {
   const [vinculo] = await queryRows<{ user_id: string } & RowDataPacket>(
     'SELECT user_id FROM contas_sociais WHERE provedor = ? AND sujeito = ? LIMIT 1',
     [identidade.provedor, identidade.sujeito]
   );
   let id = vinculo?.user_id ?? null;
+  let nova = false;
 
   if (!id) {
     if (!identidade.email || !identidade.emailVerificado)
@@ -88,6 +89,7 @@ export async function entrarComIdentidade(
           'termos'
         );
       id = await criarConta(identidade.email, opcoes);
+      nova = true;
     }
     // INSERT IGNORE: duas abas no mesmo instante não duplicam o vínculo.
     await executeStatement(
@@ -110,7 +112,7 @@ export async function entrarComIdentidade(
       WHERE provedor = ? AND sujeito = ?`,
     [identidade.provedor, identidade.sujeito]
   );
-  return conta;
+  return { ...conta, nova };
 }
 
 async function criarConta(

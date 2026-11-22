@@ -8,6 +8,7 @@ import {
   novoEstado,
   urlDeAutorizacao,
 } from '@/lib/auth/social/oauth';
+import { contarEtapaSemBloquear } from '@/lib/funil/registro';
 import {
   enderecoDeRetorno,
   origemDoApp,
@@ -38,6 +39,7 @@ export async function GET(
     retorno: destinoDeRetorno(destino) ? destino : null,
     aceite: consulta.get('aceite') === '1',
   });
+  await contarEtapaSemBloquear('login_iniciado', provedor);
   const resposta = NextResponse.redirect(
     urlDeAutorizacao(credenciais, estado, enderecoDeRetorno(provedor, origem)),
     303

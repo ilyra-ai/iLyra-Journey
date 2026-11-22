@@ -34,6 +34,7 @@ import luaTransparente from '@/assets/celestial/lua-transparente.png';
 import lotusTransparente from '@/assets/celestial/temas/sensibilidade.png';
 import { ConviteDaAssinatura } from '@/components/landing/ConviteDaAssinatura';
 import { ExperimenteGratis } from '@/components/landing/ExperimenteGratis';
+import { marcarEtapa } from '@/lib/funil/cliente';
 import { ThemeToggleButton } from '@/components/theme/ThemeControls';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
 import { beneficiosPublicos } from '@/lib/plans/beneficios-publicos';
@@ -185,6 +186,28 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
   const [linkAtendido, setLinkAtendido] = useState(false);
   const abrirPeloLink = pedidoPeloLink && !linkAtendido && !previewMode;
 
+  // Funil anônimo (tarefa 170): uma visita por sessão da aba; a prévia do
+  // editor não conta.
+  useEffect(() => {
+    if (previewMode) return;
+    marcarEtapa('visita_landing', '', { umaVezPorSessao: true });
+    if (lerPedidoPeloLink())
+      marcarEtapa('iniciou_descoberta', 'link', { umaVezPorSessao: true });
+  }, [previewMode]);
+
+  function experimentar(origem: 'inicio' | 'mapa') {
+    if (!previewMode) marcarEtapa('iniciou_descoberta', origem);
+    setExperimentando(true);
+  }
+
+  function abrirConvite(mapa: { id: string; title: string }) {
+    if (!previewMode && mapa.id !== MAPA_GRATUITO) {
+      marcarEtapa('conteudo_premium_clicado', mapa.id);
+      marcarEtapa('modal_visto');
+    }
+    setConvite(mapa.title);
+  }
+
   useEffect(() => {
     const controller = new AbortController();
     async function carregar() {
@@ -331,8 +354,8 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
                         className={styles.textLink}
                         onClick={() =>
                           mapa.id === MAPA_GRATUITO
-                            ? setExperimentando(true)
-                            : setConvite(mapa.title)
+                            ? experimentar('mapa')
+                            : abrirConvite(mapa)
                         }
                       >
                         {mapa.id === MAPA_GRATUITO
@@ -657,7 +680,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
               {/* Experimente Grátis (tarefa 157): abre a leitura sem conta. */}
               <button
                 type="button"
-                onClick={() => setExperimentando(true)}
+                onClick={() => experimentar('inicio')}
                 aria-haspopup="dialog"
                 className={`${styles.primaryButton} ${styles.trialButton}`}
               >
@@ -744,6 +767,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
       <ConviteDaAssinatura
         recurso={convite}
         aoFechar={() => setConvite(null)}
+        medir={!previewMode}
         plano={
           catalogo.planos.find((p) => p.contributionOptions.length > 0) ?? null
         }

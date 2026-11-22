@@ -24,6 +24,7 @@ import {
   voltarComSessao,
 } from '@/lib/auth/social/rotas';
 import { registrarErroInterno } from '@/lib/observability/log-seguro';
+import { contarEtapaSemBloquear } from '@/lib/funil/registro';
 import {
   LIMITE_LOGIN_POR_IP,
   exigirDentroDoLimite,
@@ -88,6 +89,10 @@ async function concluir(
       sessionVersion: conta.session_version,
     });
     await setSessionCookie(token);
+    await contarEtapaSemBloquear(
+      conta.nova ? 'cadastro_concluido' : 'login_concluido',
+      provedor
+    );
     return voltarComSessao(origem, estado.retorno);
   } catch (erro) {
     if (erro instanceof ErroDoLoginSocial)

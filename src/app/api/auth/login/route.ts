@@ -14,6 +14,7 @@ import {
 import { lerJson, respostaDeErro } from '@/lib/http/api';
 import { queryRows } from '@/lib/mysql/pool';
 import { registrarErroInterno } from '@/lib/observability/log-seguro';
+import { contarEtapaSemBloquear } from '@/lib/funil/registro';
 import {
   LIMITE_LOGIN_POR_CONTA,
   LIMITE_LOGIN_POR_IP,
@@ -127,6 +128,7 @@ export async function POST(request: Request) {
       sessionOptions
     );
     await setSessionCookie(token, sessionOptions);
+    await contarEtapaSemBloquear('login_concluido', 'email');
 
     // Plano do dia pronto ao entrar (tarefa 51), sem atrasar o login: roda
     // depois da resposta. Antes do onboarding ainda não há perfil para ele.

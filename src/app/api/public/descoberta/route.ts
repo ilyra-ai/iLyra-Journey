@@ -4,6 +4,7 @@ import {
   descobrirVisitante,
   esquemaDoVisitante,
 } from '@/lib/descoberta/visitante';
+import { contarEtapaSemBloquear } from '@/lib/funil/registro';
 import { lerJson, respostaDeErro } from '@/lib/http/api';
 import { HttpError } from '@/lib/http-error';
 import {
@@ -40,9 +41,14 @@ export async function POST(request: Request) {
       throw new HttpError('Pedido grande demais.', 413);
     await exigirDentroDoLimite(LIMITE_DESCOBERTA_POR_IP, ipDoCliente(request));
     const visitante = await lerJson(request, esquemaDoVisitante);
-    return NextResponse.json(descobrirVisitante(visitante), {
-      headers: SEM_CACHE,
-    });
+    // Funil anônimo (tarefa 170): só a contagem, nunca a data nem o nome.
+    await contarEtapaSemBloquear('nascimento_validado');
+    const descoberta = descobrirVisitante(visitante);
+    await contarEtapaSemBloquear(
+      'leitura_entregue',
+      descoberta.gratuita.signo ? 'signo' : 'incerto'
+    );
+    return NextResponse.json(descoberta, { headers: SEM_CACHE });
   } catch (error) {
     const resposta = respostaDeErro(
       error,

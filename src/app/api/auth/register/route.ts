@@ -18,6 +18,7 @@ import {
   exigirDentroDoLimite,
   ipDoCliente,
 } from '@/lib/security/rate-limit';
+import { contarEtapaSemBloquear } from '@/lib/funil/registro';
 import { PLANO_DE_BASE } from '@/types/subscription';
 
 export const runtime = 'nodejs';
@@ -135,6 +136,7 @@ export async function POST(request: Request) {
       role,
     });
     await setSessionCookie(token);
+    await contarEtapaSemBloquear('cadastro_concluido', 'email');
 
     const session = buildAppSession(
       { sub: userId, email: payload.email, role },

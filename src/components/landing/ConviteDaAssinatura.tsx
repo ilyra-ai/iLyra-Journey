@@ -10,6 +10,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { guardarContribuicao } from '@/lib/auth/retorno';
+import { marcarEtapa } from '@/lib/funil/cliente';
 import { moedaPtBr } from '@/lib/formato/numero';
 import type { PlanMatrixPlan } from '@/types/subscription';
 
@@ -22,6 +23,8 @@ interface Props {
   /** Cadastro configurado no construtor (ex.: /login?modo=cadastro). */
   destinoDoCadastro: string;
   classeDoBotaoPrincipal: string;
+  /** Conta as etapas no funil anônimo (tarefa 170); falso na prévia do editor. */
+  medir?: boolean;
 }
 
 function comRetornoAosPlanos(destino: string) {
@@ -43,11 +46,13 @@ export function ConviteDaAssinatura({
   plano,
   destinoDoCadastro,
   classeDoBotaoPrincipal,
+  medir = false,
 }: Props) {
   const router = useRouter();
   const destino = comRetornoAosPlanos(destinoDoCadastro);
 
   function escolher(chave: string) {
+    if (medir) marcarEtapa('contribuicao_escolhida', chave);
     guardarContribuicao(chave);
     router.push(destino);
   }
@@ -56,7 +61,9 @@ export function ConviteDaAssinatura({
     <Dialog
       open={recurso !== null}
       onOpenChange={(abrir) => {
-        if (!abrir) aoFechar();
+        if (abrir) return;
+        if (medir) marcarEtapa('modal_fechado');
+        aoFechar();
       }}
     >
       <DialogContent className="max-w-[560px]">

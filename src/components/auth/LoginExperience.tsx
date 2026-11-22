@@ -51,6 +51,7 @@ import {
   ROTA_POLITICA_DE_PRIVACIDADE,
   ROTA_TERMOS_DE_USO,
 } from '@/lib/lgpd/documentos';
+import { marcarEtapa } from '@/lib/funil/cliente';
 import './LoginExperience.css';
 
 type SubmitMode = 'login' | 'register' | null;
@@ -138,6 +139,8 @@ export function LoginExperience({
     event.preventDefault();
     if (previewMode || submitMode) return;
 
+    // Funil anônimo (tarefa 170): o servidor conta o login concluído.
+    marcarEtapa('login_iniciado', 'email');
     setSubmitMode('login');
 
     const { error } = await db.auth.signInWithPassword({
@@ -161,6 +164,7 @@ export function LoginExperience({
   async function handleRegister(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
     if (previewMode || submitMode) return;
+    marcarEtapa('login_iniciado', 'email');
     const apelido = apelidoSchema.safeParse(registerNickname);
     if (!apelido.success) {
       setNicknameError(apelido.error.issues[0]?.message ?? 'Revise o apelido.');

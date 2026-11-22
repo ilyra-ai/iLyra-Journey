@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { createStripeCheckoutUrl } from '@/lib/billing/service';
 import { lerJson, respostaDeErro } from '@/lib/http/api';
 import { requireServerSession } from '@/lib/mysql/server-auth';
+import { contarEtapaSemBloquear } from '@/lib/funil/registro';
 import { COMMERCIAL_PLAN_KEYS } from '@/types/subscription';
 
 export const runtime = 'nodejs';
@@ -31,6 +32,12 @@ export async function POST(request: NextRequest) {
       contributionOption: payload.contributionOption ?? null,
       origin: request.nextUrl.origin,
     });
+    // Só a chave comercial da contribuição, nunca a pessoa (tarefa 170).
+    const opcao = payload.contributionOption ?? '';
+    await contarEtapaSemBloquear(
+      'checkout_iniciado',
+      /^colaboracao_d{1,6}$/.test(opcao) ? opcao : 'plano'
+    );
 
     return NextResponse.json({ url });
   } catch (error) {
