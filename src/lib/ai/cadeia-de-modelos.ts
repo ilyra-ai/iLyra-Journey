@@ -10,6 +10,7 @@ import {
   nomeDoProvedor,
   provedorEhLocal,
 } from './provedores-da-plataforma';
+import { registrarUso, USO_DESCONHECIDO, type UsoDeTokens } from './uso';
 
 /**
  * Cadeia de modelos de IA (tarefa 54): a ordem de uso escolhida pelo
@@ -184,8 +185,27 @@ export async function gerarNaCadeia(
     ocultarMotivosNoLog?: boolean;
     aoTexto?: (texto: string) => void;
     cancelamento?: AbortSignal;
+    /** Conta que motivou a chamada, para o uso de tokens (tarefa 163). */
+    titular?: string | null;
   } = {}
 ): Promise<ResultadoDaCadeia> {
+  // Cada tentativa é registrada (só números e identificação técnica).
+  const anotar = (
+    autor: AutorDoModelo,
+    resultado: TentativaNaCadeia['resultado'],
+    uso: UsoDeTokens,
+    milissegundos: number
+  ) =>
+    registrarUso({
+      titular: opcoes.titular ?? null,
+      rotulo: opcoes.rotulo ?? 'sem-rotulo',
+      provedor: autor.provedor,
+      modelo: autor.modelo,
+      local: autor.local,
+      resultado,
+      uso,
+      milissegundos,
+    });
   const tentativas: TentativaNaCadeia[] = [];
   let parcial = '';
   let autoresDaParcial: AutorDoModelo[] = [];
@@ -217,6 +237,7 @@ export async function gerarNaCadeia(
         : gerado.texto;
       const milissegundos = Date.now() - inicio;
       if (gerado.cortado) {
+        anotar(elo.autor, 'cortado', gerado.uso, milissegundos);
         tentativas.push({
           provedor: elo.autor.provedor,
           modelo: elo.autor.modelo,
@@ -230,6 +251,7 @@ export async function gerarNaCadeia(
       }
       const recusa = opcoes.validar?.(texto) ?? null;
       if (recusa) {
+        anotar(elo.autor, 'recusado', gerado.uso, milissegundos);
         tentativas.push({
           provedor: elo.autor.provedor,
           modelo: elo.autor.modelo,
@@ -243,6 +265,7 @@ export async function gerarNaCadeia(
         opcoes.aoTexto?.('');
         continue;
       }
+      anotar(elo.autor, 'ok', gerado.uso, milissegundos);
       tentativas.push({
         provedor: elo.autor.provedor,
         modelo: elo.autor.modelo,
@@ -265,6 +288,7 @@ export async function gerarNaCadeia(
     } catch (erro) {
       opcoes.cancelamento?.throwIfAborted();
       opcoes.aoTexto?.(parcial);
+      anotar(elo.autor, 'falhou', USO_DESCONHECIDO, Date.now() - inicio);
       tentativas.push({
         provedor: elo.autor.provedor,
         modelo: elo.autor.modelo,

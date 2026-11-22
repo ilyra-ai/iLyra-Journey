@@ -345,6 +345,8 @@ export async function escreverLeituraNaCadeia(opcoes: {
   base: LeituraVedica;
   ontem: LeituraVedica | null;
   buscar?: typeof fetch;
+  /** Conta da leitura, para o uso de tokens (tarefa 163). */
+  titular?: string | null;
 }): Promise<ResultadoDaLeituraDaIa & { tentativas: TentativaNaCadeia[] }> {
   const resultado = await gerarNaCadeia(
     opcoes.cadeia,
@@ -359,6 +361,7 @@ export async function escreverLeituraNaCadeia(opcoes: {
     {
       buscar: opcoes.buscar,
       rotulo: 'leitura-do-dia',
+      titular: opcoes.titular ?? null,
       validar: (bruto) => {
         const conferida = conferirLeituraDaIa(
           bruto,

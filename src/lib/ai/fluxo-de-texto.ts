@@ -40,6 +40,14 @@ const eventoSchema = z.object({
       stop_reason: z.string().nullable().optional(),
     })
     .optional(),
+  // Uso de tokens (tarefa 163): OpenAI e Ollama no último pedaço (com
+  // stream_options.include_usage), Gemini em cada evento e Anthropic na
+  // abertura (entrada) e no fim (saída) da mensagem.
+  usage: z.record(z.string(), z.unknown()).nullable().optional(),
+  usageMetadata: z.record(z.string(), z.unknown()).optional(),
+  message: z
+    .object({ usage: z.record(z.string(), z.unknown()).optional() })
+    .optional(),
 });
 
 /** Retém até a abertura de uma etiqueta partida, sem expor raciocínio. */
@@ -66,12 +74,19 @@ export async function lerFluxoDoProvedor(
   let texto = '',
     motivo = '',
     terminou = false;
+  let usage: Record<string, unknown> | undefined;
+  let usageMetadata: Record<string, unknown> | undefined;
   for await (const dados of eventosSse(corpo, sinal)) {
     if (dados === '[DONE]') break;
     const evento = eventoSchema.parse(JSON.parse(dados));
     if (evento.error !== undefined || evento.type === 'error')
       throw new Error('O provedor interrompeu a resposta.');
     let trecho = '';
+    if (evento.usageMetadata) usageMetadata = evento.usageMetadata;
+    if (tipo === 'anthropic') {
+      if (evento.message?.usage) usage = { ...usage, ...evento.message.usage };
+      if (evento.usage) usage = { ...usage, ...evento.usage };
+    } else if (evento.usage) usage = evento.usage;
     if (tipo === 'openai_compativel') {
       trecho = evento.choices?.[0]?.delta?.content ?? '';
       if (evento.choices?.[0]?.finish_reason) {
@@ -106,12 +121,18 @@ export async function lerFluxoDoProvedor(
   if (tipo === 'openai_compativel')
     return {
       choices: [{ message: { content: texto }, finish_reason: motivo }],
+      usage,
     };
   if (tipo === 'gemini')
     return {
       candidates: [
         { content: { parts: [{ text: texto }] }, finishReason: motivo },
       ],
+      usageMetadata,
     };
-  return { content: [{ type: 'text', text: texto }], stop_reason: motivo };
+  return {
+    content: [{ type: 'text', text: texto }],
+    stop_reason: motivo,
+    usage,
+  };
 }

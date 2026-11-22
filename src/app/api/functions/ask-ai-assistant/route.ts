@@ -485,13 +485,16 @@ export async function POST(request: Request) {
             cadeia,
             { ...pedido, sistema: instrucoesDosAnexosComoLyra(tratamento) },
             arquivos,
-            request.signal
+            request.signal,
+            undefined,
+            session.user.id
           )
         : null;
       const resultado = leitura
         ? null
         : await gerarNaCadeia(cadeia, pedido, {
             rotulo: userApiKey ? 'chat-byok' : 'chat',
+            titular: session.user.id,
             aoTexto,
             cancelamento: request.signal,
             validar: (texto) =>
@@ -537,6 +540,7 @@ export async function POST(request: Request) {
               pergunta: perguntaDoTema,
               proibidos,
               base: baseAtual(),
+              titular: session.user.id,
             });
             if (gerado.tipo === 'verbete') {
               await gravarVerbeteGerado(gerado.verbete, gerado.autor);
@@ -601,6 +605,7 @@ export async function POST(request: Request) {
                     : `${provisorio}\n${perguntaDoTema}`,
                 resposta: response,
                 proibidos: dadosPessoais,
+                titular: session.user.id,
               });
               if (titulo) await gravarTituloGerado(titular, conversa, titulo);
             } catch (erro) {

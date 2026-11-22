@@ -1,4 +1,5 @@
 import { lerFluxoDoProvedor } from './fluxo-de-texto';
+import { USO_DESCONHECIDO, usoDoCorpo, type UsoDeTokens } from './uso';
 import { type TipoDeProvedor, urlEhLocal } from './provedores-catalogo';
 import { buscarComAcessoLocal } from './transporte-local-wsl';
 import {
@@ -375,6 +376,8 @@ export interface TextoGerado {
    * pode ser continuado por outro modelo (ver cadeia-de-modelos.ts).
    */
   cortado: boolean;
+  /** Tokens informados pelo provedor (tarefa 163); nulos se ele não informar. */
+  uso: UsoDeTokens;
 }
 
 /** Texto gerado pelo modelo configurado. */
@@ -401,6 +404,7 @@ export async function gerarTextoDetalhado(
   }
   let texto = '';
   let cortado = false;
+  let uso: UsoDeTokens = USO_DESCONHECIDO;
   if (conexao.tipo === 'openai_compativel') {
     const formatos = formatosDeSaida(pedido);
     let corpo: {
@@ -423,6 +427,10 @@ export async function gerarTextoDetalhado(
               model: conexao.modelo,
               temperature: conexao.temperatura,
               stream: Boolean(pedido.aoTexto),
+              // No streaming, o uso de tokens só vem se for pedido (tarefa 163).
+              ...(pedido.aoTexto
+                ? { stream_options: { include_usage: true } }
+                : {}),
               messages: mensagensOpenAi(conexao, pedido),
               // O motor integrado reserva os tokens para a resposta visível.
               // O ID opaco não permite reconhecer Qwen pelo nome; templates
@@ -465,6 +473,7 @@ export async function gerarTextoDetalhado(
     const conteudo = corpo.choices?.[0]?.message?.content;
     texto = typeof conteudo === 'string' ? conteudo : '';
     cortado = corpo.choices?.[0]?.finish_reason === 'length';
+    uso = usoDoCorpo('openai_compativel', corpo);
   } else if (conexao.tipo === 'gemini') {
     const comEsquema = pedido.esquemaJson ? [true, false] : [false];
     let corpo: {
@@ -526,6 +535,7 @@ export async function gerarTextoDetalhado(
       .map((parte) => (typeof parte.text === 'string' ? parte.text : ''))
       .join('');
     cortado = corpo.candidates?.[0]?.finishReason === 'MAX_TOKENS';
+    uso = usoDoCorpo('gemini', corpo);
   } else {
     const corpo = (await requisitar(
       conexao,
@@ -578,6 +588,7 @@ export async function gerarTextoDetalhado(
       )
       .join('');
     cortado = corpo.stop_reason === 'max_tokens';
+    uso = usoDoCorpo('anthropic', corpo);
   }
   // Raciocínio aberto e não fechado (cortado no meio) sai inteiro.
   const semPensamento = texto
@@ -593,7 +604,7 @@ export async function gerarTextoDetalhado(
         : 'O modelo respondeu sem texto.'
     );
   }
-  return { texto: limpo, cortado };
+  return { texto: limpo, cortado, uso };
 }
 
 /**

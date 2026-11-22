@@ -8,6 +8,7 @@ import { SplashScreen } from '@/components/SplashScreen';
 import { AcessoInternetDaIa } from '@/components/admin/AcessoInternetDaIa';
 import { AIConfigForm } from '@/components/admin/AIConfigForm';
 import { AIKnowledgeManager } from '@/components/admin/AIKnowledgeManager';
+import { UsoDaIa } from '@/components/admin/UsoDaIa';
 import { useIsAdmin } from '@/hooks/use-is-admin';
 
 export default function AIConfigPage() {
@@ -37,6 +38,7 @@ export default function AIConfigPage() {
       <AIConfigForm />
       <AIKnowledgeManager />
       <AcessoInternetDaIa />
+      <UsoDaIa />
     </AppShell>
   );
 }

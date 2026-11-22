@@ -160,7 +160,9 @@ export async function lerComModelo(
   pedido: PedidoDeTexto,
   arquivos: Fonte[],
   sinal: AbortSignal,
-  buscar?: typeof fetch
+  buscar?: typeof fetch,
+  /** Conta que pediu a leitura, para o uso de tokens (tarefa 163). */
+  titular: string | null = null
 ) {
   if (cadeia[0]?.tipo !== 'modelo')
     throw new HttpError(
@@ -223,6 +225,7 @@ export async function lerComModelo(
       buscar,
       cancelamento: sinal,
       rotulo: 'anexos',
+      titular,
       ocultarMotivosNoLog: true,
       validar: (texto) => {
         try {

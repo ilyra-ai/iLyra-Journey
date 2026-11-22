@@ -51,6 +51,8 @@ it('recebe texto por HTTP antes do encerramento real do provedor compatível', a
     expect(resultado).toEqual({
       texto: 'Olá, vamos cuidar de você.',
       cortado: false,
+      // Este servidor não informa o uso de tokens (tarefa 163).
+      uso: { entrada: null, saida: null, raciocinio: null },
     });
   } finally {
     encerrar?.();

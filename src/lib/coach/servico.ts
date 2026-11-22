@@ -206,6 +206,7 @@ async function prepararBriefingDoDia(
       entrada: entradaDaLeitura,
       base: briefing.leitura,
       ontem: await leituraDeOntem(userId, contexto.data),
+      titular: userId,
     });
     if (resultadoDaIa.ok) {
       briefing = { ...briefing, origem: 'ia', leitura: resultadoDaIa.leitura };

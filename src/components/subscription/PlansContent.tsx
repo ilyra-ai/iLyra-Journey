@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Check, RefreshCw } from 'lucide-react';
 import { PageIntro } from '@/components/layout/PageIntro';
 import { BillingActionPanel } from '@/components/subscription/BillingActionPanel';
+import { SeuUsoDeIa } from './SeuUsoDeIa';
 import { PlanBadge } from '@/components/subscription/PlanBadge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -238,6 +239,7 @@ export function PlansContent() {
           </p>
         </div>
       )}
+      <SeuUsoDeIa />
     </>
   );
 }

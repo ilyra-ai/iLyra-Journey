@@ -150,6 +150,8 @@ export async function iniciarServidorOpenAiCompativel(
               finish_reason: 'stop',
             },
           ],
+          // Como os servidores reais (tarefa 163): contagem fixa e conhecida.
+          usage: { prompt_tokens: 12, completion_tokens: 7, total_tokens: 19 },
         });
         return;
       }

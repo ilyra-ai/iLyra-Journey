@@ -281,6 +281,8 @@ const TABELAS_DO_TITULAR = [
   ['reminder_preferences', 'user_id'],
   ['reminder_occurrences', 'user_id'],
   ['feature_usage_counters', 'user_id'],
+  // Uso de tokens das chamadas aos modelos de IA (tarefa 163).
+  ['ia_uso', 'user_id'],
   ['subscription_audit_events', 'user_id'],
 ] as const;
 

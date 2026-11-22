@@ -12,6 +12,10 @@ export async function register() {
     iniciarRotinaDoCoach();
     const { iniciarRotinaDaMemoria } = await import('./lib/memoria/rotina');
     iniciarRotinaDaMemoria();
+    // Uso de tokens de cada chamada aos modelos de IA (tarefa 163).
+    const { definirRegistroDoUso } = await import('./lib/ai/uso');
+    const { gravarUsoNoBanco } = await import('./lib/ai/uso-servico');
+    definirRegistroDoUso(gravarUsoNoBanco);
   }
 
   if (process.env.NEXT_RUNTIME === 'edge') {

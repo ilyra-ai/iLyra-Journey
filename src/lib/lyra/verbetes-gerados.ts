@@ -328,6 +328,8 @@ export async function escreverVerbeteNaCadeia(opcoes: {
   proibidos: readonly string[];
   base: readonly Verbete[];
   buscar?: typeof fetch;
+  /** Conta cuja pergunta motivou o verbete, para o uso de tokens (163). */
+  titular?: string | null;
 }): Promise<ResultadoDaGeracao> {
   const conferir = (bruto: string) =>
     conferirVerbeteGerado(bruto, {
@@ -347,6 +349,7 @@ export async function escreverVerbeteNaCadeia(opcoes: {
     {
       buscar: opcoes.buscar,
       rotulo: 'verbete',
+      titular: opcoes.titular ?? null,
       // A resposta recusada pode repetir trechos da pergunta.
       ocultarMotivosNoLog: true,
       validar: (bruto) => {

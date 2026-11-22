@@ -106,6 +106,8 @@ export async function gerarTituloDaConversa(opcoes: {
   resposta: string;
   proibidos: string[];
   buscar?: typeof fetch;
+  /** Conta da conversa, para o uso de tokens (tarefa 163). */
+  titular?: string | null;
 }): Promise<string | null> {
   if (!cadeiaTemModelo(opcoes.cadeia)) return null;
   const resultado = await gerarNaCadeia(
@@ -124,6 +126,7 @@ export async function gerarTituloDaConversa(opcoes: {
     {
       buscar: opcoes.buscar,
       rotulo: 'título da conversa',
+      titular: opcoes.titular ?? null,
       // A resposta recusada pode repetir trechos da conversa.
       ocultarMotivosNoLog: true,
       validar: (texto) =>
