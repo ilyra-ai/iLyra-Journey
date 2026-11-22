@@ -1,6 +1,12 @@
 'use client';
 
-import { type CSSProperties, type ReactNode, useEffect, useState } from 'react';
+import {
+  type CSSProperties,
+  type ReactNode,
+  useEffect,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 import Image, { type ImageProps, type StaticImageData } from 'next/image';
 import Link from 'next/link';
 import localFont from 'next/font/local';
@@ -150,6 +156,11 @@ function ArteDoTema({
   );
 }
 
+const semAssinatura = () => () => undefined;
+/** A URL só muda por `replaceState` ao fechar o modal, logo abaixo. */
+const lerPedidoPeloLink = () =>
+  new URLSearchParams(window.location.search).get('experimente') === '1';
+
 export function LandingPage({ overrideConfig, previewMode = false }: Props) {
   const { config: publicada, error: erroConfiguracao } =
     usePublicSitePageConfig('landing');
@@ -162,6 +173,17 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
     planos: [],
   });
   const [tentativa, setTentativa] = useState(0);
+
+  // Link do cartão compartilhado (tarefa 168): `/?experimente=1` abre o
+  // Experimente Grátis. Ao fechar, o parâmetro sai da barra de endereço.
+  const pedidoPeloLink = useSyncExternalStore(
+    semAssinatura,
+    lerPedidoPeloLink,
+    () => false
+  );
+  // Fechar precisa mudar estado: a URL sozinha não renderiza de novo.
+  const [linkAtendido, setLinkAtendido] = useState(false);
+  const abrirPeloLink = pedidoPeloLink && !linkAtendido && !previewMode;
 
   useEffect(() => {
     const controller = new AbortController();
@@ -702,8 +724,20 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
         <p>{config.footer.note}</p>
       </footer>
       <ExperimenteGratis
-        aberto={experimentando}
-        aoFechar={() => setExperimentando(false)}
+        aberto={experimentando || abrirPeloLink}
+        aoFechar={() => {
+          if (pedidoPeloLink) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('experimente');
+            window.history.replaceState(
+              window.history.state,
+              '',
+              url.pathname + url.search + url.hash
+            );
+          }
+          setLinkAtendido(true);
+          setExperimentando(false);
+        }}
         destinoDaAssinatura={config.hero.primaryCtaHref}
         classeDoBotaoPrincipal={styles.primaryButton}
       />

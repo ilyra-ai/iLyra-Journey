@@ -80,6 +80,14 @@ const nextConfig: NextConfig = {
       './src/assets/fonts/source-sans-3/SourceSans3-Regular.ttf',
       './src/assets/fonts/source-sans-3/SourceSans3-Semibold.ttf',
     ],
+    // Cartão compartilhável da descoberta (tarefa 168): fontes e artes lidas
+    // do disco pela rota da imagem.
+    '/api/public/cartao/[identificador]': [
+      './src/assets/fonts/source-sans-3/SourceSans3-Regular.ttf',
+      './src/assets/fonts/source-sans-3/SourceSans3-Semibold.ttf',
+      './src/assets/fonts/clicker-script/ClickerScript-Regular.ttf',
+      './src/assets/celestial/signos/*.png',
+    ],
   },
   env: { LYRA_LANDING_COM_ARTE: landingComArte ? '1' : '0' },
   ...(semLogsEmArquivo ? { experimental: { mcpServer: false } } : {}),

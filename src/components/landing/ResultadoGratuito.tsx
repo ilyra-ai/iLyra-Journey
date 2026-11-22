@@ -4,6 +4,7 @@ import { type FormEvent, useId, useState } from 'react';
 import Link from 'next/link';
 import { Loader2, MessageCircle, Sparkles } from 'lucide-react';
 
+import { CompartilharDescoberta } from '@/components/landing/CompartilharDescoberta';
 import type { RespostaAoVisitante } from '@/lib/descoberta/microconversa';
 import type { DescobertaDoVisitante } from '@/lib/descoberta/visitante';
 
@@ -218,6 +219,8 @@ export function ResultadoGratuito({
           </p>
         ) : null}
       </form>
+
+      <CompartilharDescoberta signo={gratuita.signo} />
 
       <p className="text-sm text-muted-foreground">
         Interpretação simbólica para reflexão, sem diagnóstico nem previsão.
