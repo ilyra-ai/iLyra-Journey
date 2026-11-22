@@ -1520,7 +1520,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Aceite:** novo catálogo com uma oferta; visitantes sem Free; duas contribuições produzem **o mesmo conjunto de recursos**; papel admin permanece impenetrável a contratantes; dados/assinaturas históricas preservados; migração testada em banco vazio e cópia isolada de esquema existente; 403/401 reais; rollback documentado; banco/Stripe reconciliáveis.
 
-### 161 · Modal premium “Uma Lyra para todos” e preço consciente em duas contribuições · ⚪ PENDENTE
+### 161 · Modal premium “Uma Lyra para todos” e preço consciente em duas contribuições · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 **Prioridade:** crítica. **Dependências:** 157, 160 e validação de preço/custos da 163; integração a checkout na 162. **Referência atualizada pelo usuário em 08/11/2026:** usar a composição da imagem `codex-clipboard-5a57dd0c-2abf-44a7-82eb-f96cea5ae522.png`: apresentação da assinatura consciente, duas opções lado a lado no desktop e empilhadas quando necessário, estado selecionado evidente e faixa explicando benefícios idênticos. Adaptar ao visual preto e dourado vigente do app, com fontes locais e tokens `--celestial-*`; a imagem é referência de organização, não autorização para substituir a identidade pela paleta azul.
 
