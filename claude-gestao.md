@@ -1632,7 +1632,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Aceite:** quota equivalente entre contribuições comprovada em teste; uso por modelo rastreável; previsão de margem possível sem inventar dados; bloqueio transacional correto; falhas de fornecedor comunicadas; sem tokens ou dados de chat sensíveis em log; proteção contra gasto anônimo descontrolado.
 
-### 164 · Login e cadastro real com Google, vínculo de conta e retorno à descoberta · ⚪ PENDENTE
+### 164 · Login e cadastro real com Google, vínculo de conta e retorno à descoberta · 🟡 IMPLEMENTADA
+
+- **Implementada em 22/11/2026 (commit `09309e49`).** OAuth 2.0/OIDC com PKCE, `state` e `nonce` assinados em cookie httpOnly de 10 min, `id_token` conferido no servidor (assinatura JWKS, `iss`, `aud`, `exp`, `nonce`); identidade por `(provedor, sub)` na tabela `contas_sociais`; conta nova só com o aceite dos termos, sem papel elevado e sem assinatura paga; e-mail verificado pelo Google vincula a conta existente; contas bloqueadas recusadas; retorno ao destino da tarefa 159. Testes: 9 unitários e 9 de integração; no navegador, botão aparece só ligado, cadastro exige o aceite, início leva ao Google com PKCE e erros voltam à tela de login com mensagem. Fica 🟡 até o titular registrar o app no provedor, colocar as credenciais em Administração → Login social e homologar no aparelho; sem isso não há login real a validar.
 
 **Prioridade:** alta. **Dependências:** 154, 155, 159; coordenação com 160 e 162. **Pedido do responsável:** reduzir drasticamente abandono por ausência de Google e Apple, sem eliminar e-mail/senha.
 
@@ -1656,7 +1658,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Aceite:** autenticação Google real no ambiente de teste, mesma identidade local em retornos repetidos, nenhum papel elevado, proteção contra fraude de `sub`/aud, vínculo seguro de conta existente, histórico da descoberta preservado com consentimento, APIs privadas seguras e login por e-mail preservado.
 
-### 165 · Login e cadastro real com Apple, identidade estável e e-mail privado · ⚪ PENDENTE
+### 165 · Login e cadastro real com Apple, identidade estável e e-mail privado · 🟡 IMPLEMENTADA
+
+- **Implementada em 22/11/2026 (commit `09309e49`).** Mesma infraestrutura da 164, com `response_mode=form_post` (retorno por POST, cookie de estado SameSite=None; Secure e exceção de CSRF só para `appleid.apple.com` nesse caminho), segredo do cliente ES256 gerado a cada troca a partir da chave .p8, Team ID e Key ID; nome lido do campo `user` só no primeiro consentimento; e-mail relay (Hide My Email) aceito como qualquer e-mail verificado. A Apple só aceita retorno https: a homologação precisa do domínio público. Fica 🟡 até o titular registrar o app no provedor, colocar as credenciais em Administração → Login social e homologar no aparelho; sem isso não há login real a validar.
 
 **Prioridade:** alta. **Dependências:** 154, 155, 159; idealmente compartilhar serviço de identidades externas da 164. **Pedido do responsável:** usuário deve poder escolher Apple como alternativa simples à criação manual de senha.
 
@@ -5997,7 +6001,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Correção (`89e15540`, push confirmado):** `next` e `eslint-config-next` de 16.4.3 para 16.4.6, último patch da linha 16.4 (09/11/2026), sem mudança de major; dependências de plugins do `eslint-config-next` iguais, comentário do `pnpm-workspace.yaml` atualizado. `pnpm audit` completo sem vulnerabilidades.
 - **Gates:** Node 24.21.0 num clone limpo do Ubuntu (WSL2) sobre `61d74056`: instalação congelada, lint, formato, `check:types`, 1228 unitários, 622 de integração e build aprovados; `up` real do `run_windows.py` com o 16.4.6 saudável (`/api/health`, `/`, `/login` e login do administrador).
 
-### 235 · Login com Google e Apple configurável pelo administrador, com ligar e desligar · 🔵 EM EXECUÇÃO
+### 235 · Login com Google e Apple configurável pelo administrador, com ligar e desligar · 🟡 IMPLEMENTADA
+
+- **Implementada em 22/11/2026 (commit `09309e49`).** Página Administração → Login social (submenu Pessoas e planos), migração 081, segredos cifrados com AES-256-GCM e nunca devolvidos, endereço de retorno para copiar, interruptor por provedor e botão "Apagar o segredo e desligar". Conferido no navegador: com credenciais de teste o botão "Continuar com Google" aparece; desligado, some. E-mail e senha continuam sempre disponíveis. Fica 🟡 até o titular registrar o app no provedor, colocar as credenciais em Administração → Login social e homologar no aparelho; sem isso não há login real a validar.
 
 - **Origem e data:** pedido do titular em 22/11/2026, ao decidir as tarefas 164 e 165 ("Implementar e deixar pronto"): acrescentar no menu de configurações do administrador a possibilidade de inserir as informações necessárias para o login com Google e com Apple funcionar, e um botão de ligar e desligar por provedor; desligado, o botão some da página de login; ligado, volta a aparecer na tela de login do app.
 - **Escopo:** página "Login social" na administração (submenu Pessoas e planos) com, para o Google, Client ID e Client secret, e, para a Apple, Services ID, Team ID, Key ID e a chave privada .p8; os endereços de retorno para copiar no Google Cloud e no Apple Developer; segredos cifrados no banco (AES-256-GCM, como as credenciais da Stripe) e nunca devolvidos à tela; interruptor por provedor. A tela de login mostra só os provedores ligados e com as credenciais completas.
