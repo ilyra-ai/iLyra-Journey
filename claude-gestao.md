@@ -1605,7 +1605,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Aceite:** os dois valores levam a mesmo benefício após **pagamento test mode confirmado por webhook**; divergência de preço é recusada; cancelamento e falha suspendem conforme política; renovação reabre cotas; histórico fiscal intacto; ambiente test não contamina live; reconciliação idempotente verificada; sem preço live implícito.
 
-### 163 · Limites de tokens justos, custos reais de IA e sustentabilidade da assinatura · ⚪ PENDENTE
+### 163 · Limites de tokens justos, custos reais de IA e sustentabilidade da assinatura · 🟢 CONCLUÍDA
+
+- **Homologada e concluída em 21/11/2026.**
 
 **Prioridade:** crítica antes de ativar preços e chat público em escala. **Dependências:** 154, integração a 158 e 162.
 
