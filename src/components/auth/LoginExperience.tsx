@@ -29,6 +29,24 @@ import { cn } from '@/lib/utils';
 import type { LoginPageConfig, ToneKey } from '@/lib/site-page-config/schema';
 import { getBuilderIcon } from '@/lib/site-page-config/ui';
 import { guardarRetorno } from '@/lib/auth/retorno';
+import type { ErroDoLoginSocialCodigo } from '@/lib/auth/social/rotas';
+import { BotoesDeLoginSocial } from './BotoesDeLoginSocial';
+
+/** Explicações dos erros do login com Google ou Apple (tarefa 235). */
+const MENSAGENS_DO_LOGIN_SOCIAL: Record<ErroDoLoginSocialCodigo, string> = {
+  indisponivel:
+    'Esse login não está disponível agora. Entre com e-mail e senha.',
+  expirou: 'O login demorou demais ou foi aberto em outra aba. Tente de novo.',
+  recusado:
+    'Não foi possível confirmar o login com o provedor. Tente de novo ou entre com e-mail e senha.',
+  termos:
+    'Para criar a conta, abra Criar conta, aceite os termos e escolha o Google ou a Apple de novo.',
+  'sem-email': 'O provedor não confirmou um e-mail. Entre com e-mail e senha.',
+  bloqueada:
+    'Sua conta está bloqueada. Entre em contato com a administração para recuperar o acesso.',
+  cancelado:
+    'O login foi cancelado. Escolha outra forma de entrar ou tente de novo.',
+};
 import {
   ROTA_POLITICA_DE_PRIVACIDADE,
   ROTA_TERMOS_DE_USO,
@@ -46,6 +64,8 @@ type LoginExperienceProps = {
   modoInicial?: 'login' | 'cadastro';
   /** Identificador de retorno já validado (tarefa 159). */
   retorno?: string | null;
+  /** Código de erro do login social, já validado pela página (tarefa 235). */
+  erroSocial?: ErroDoLoginSocialCodigo | null;
   // Configuração em edição no Site Experience Builder (pré-visualização).
   overrideConfig?: LoginPageConfig;
   previewMode?: boolean;
@@ -68,6 +88,7 @@ export function LoginExperience({
   previewMode = false,
   modoInicial = 'login',
   retorno = null,
+  erroSocial = null,
 }: LoginExperienceProps) {
   // Guarda só o identificador, nesta aba, para depois do cadastro e do
   // onboarding (tarefa 159).
@@ -246,6 +267,15 @@ export function LoginExperience({
           >
             {auth.title} <span>{auth.description}</span>
           </p>
+
+          {erroSocial ? (
+            <p
+              role="alert"
+              className="mt-4 rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm"
+            >
+              {MENSAGENS_DO_LOGIN_SOCIAL[erroSocial]}
+            </p>
+          ) : null}
 
           <Tabs
             value={isRegistering ? 'register' : 'login'}
@@ -565,6 +595,12 @@ export function LoginExperience({
               </form>
             </TabsContent>
           </Tabs>
+          <BotoesDeLoginSocial
+            cadastro={isRegistering}
+            aceiteDosTermos={aceiteDosTermos}
+            retorno={retorno}
+            previewMode={previewMode}
+          />
         </div>
       </section>
 

@@ -107,7 +107,7 @@ const SECOES: DefinicaoDeSecao[] = [
         id: 'pessoas-planos',
         titulo: 'Pessoas e planos',
         icone: UsersRound,
-        destinos: ['/admin/users', '/admin/plans'],
+        destinos: ['/admin/users', '/admin/plans', '/admin/login-social'],
       },
       {
         id: 'conteudo-ia',

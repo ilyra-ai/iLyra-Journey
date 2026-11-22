@@ -47,6 +47,15 @@ export function requisicaoDeMesmaOrigem(dados: DadosDaRequisicao): boolean {
   if (ROTAS_EXTERNAS.has(dados.caminho)) {
     return true;
   }
+  // Sign in with Apple devolve o login por POST vindo do domínio da Apple
+  // (tarefa 165). Só esse caminho e só essa origem; o estado assinado no
+  // cookie e o id_token conferido protegem o resto.
+  if (
+    dados.caminho === '/api/auth/social/apple/retorno' &&
+    origemDe(dados.origin) === 'https://appleid.apple.com'
+  ) {
+    return true;
+  }
 
   if (dados.secFetchSite) {
     // `none`: navegação iniciada pelo próprio usuário (barra de endereço).
