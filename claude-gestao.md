@@ -1723,7 +1723,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Aceite:** login e registro de passkey homologados com autenticador suportado em dispositivo real; revogação efetiva; fallback claro; nenhuma conta/role duplicado; segurança adequada a phishing e replay. **Se não houver ambiente HTTPS/dispositivo, marcar homologação pendente em vez de aprovar por mocks.**
 
-### 168 · Cartões de autodescoberta compartilháveis, opcionais e privados por padrão · ⚪ PENDENTE
+### 168 · Cartões de autodescoberta compartilháveis, opcionais e privados por padrão · 🟡 IMPLEMENTADA
+
+- **Implementada em 22/11/2026 (commit `130c3ce5`).** Depois da leitura gratuita: "Compartilhar minha descoberta" e "Baixar meu cartão", com prévia e escolha entre feed (4:5, 1080×1350) e Stories (9:16, 1080×1920). PNG gerado em `/api/public/cartao/[identificador]` com a arte própria dos signos e fontes do projeto; 26 variações guardadas na memória do processo, cache público e sem depender do banco. Datas de troca de signo geram "Meu céu ocidental", sem nomear signo. Cartão, texto e link sem nome, data, local ou conversa; o link é `/?experimente=1`, que abre o Experimente Grátis e sai da URL ao fechar. Web Share com o arquivo quando suportado, senão o link; cancelar o diálogo nativo mostra "Compartilhamento cancelado"; sem Web Share, copia o link. Testes: 6 unitários e 3 de integração; no navegador, prévia nos dois formatos, download, cancelamento, envio e o link. A contagem agregada de cliques entra com a tarefa 170. Fica 🟡 até a homologação no aparelho (WhatsApp/Instagram reais em Safari e Chrome).
 
 **Prioridade:** média/alta após primeira experiência gratuita. **Dependências:** 155, 156, 157, 158. **Oportunidade identificada no radar:** permitir divulgação orgânica com resultado escolhido voluntariamente, sem explorar informações pessoais.
 
