@@ -20,21 +20,21 @@ Um pagamento só aparece depois de confirmado pelo webhook da Stripe. As etapas 
 
 A lista fechada fica em `src/lib/funil/etapas.ts`. Uma etapa ou detalhe fora dela é recusado com 400.
 
-| Etapa                      | Quem conta | Detalhe                                | Onde                                                    |
-| -------------------------- | ---------- | -------------------------------------- | ------------------------------------------------------- |
-| `visita_landing`           | navegador  | —                                      | landing, uma vez por aba                                |
-| `iniciou_descoberta`       | navegador  | `inicio`, `mapa`, `link`               | botão, cartão do mapa ocidental, link `/?experimente=1` |
-| `nascimento_validado`      | servidor   | —                                      | `/api/public/descoberta`, dados aceitos                 |
-| `leitura_entregue`         | servidor   | `signo`, `incerto`                     | `/api/public/descoberta`, leitura devolvida             |
-| `cartao_compartilhado`     | navegador  | `compartilhar`, `baixar`               | cartão da tarefa 168, só depois de concluído            |
-| `conteudo_premium_clicado` | navegador  | mapa pago da landing                   | cartões que abrem o convite                             |
-| `modal_visto`              | navegador  | —                                      | convite da assinatura aberto                            |
-| `modal_fechado`            | navegador  | —                                      | convite fechado sem escolher                            |
-| `contribuicao_escolhida`   | navegador  | chave da opção (`colaboracao_999`…)    | convite                                                 |
-| `login_iniciado`           | ambos      | `email` (navegador); `google`, `apple` | formulários; início do login social                     |
-| `login_concluido`          | servidor   | `email`, `google`, `apple`             | depois da sessão criada                                 |
-| `cadastro_concluido`       | servidor   | `email`, `google`, `apple`             | conta criada                                            |
-| `checkout_iniciado`        | servidor   | chave da opção ou `plano`              | `/api/billing/checkout`, URL da Stripe criada           |
+| Etapa                      | Quem conta | Detalhe                                         | Onde                                                    |
+| -------------------------- | ---------- | ----------------------------------------------- | ------------------------------------------------------- |
+| `visita_landing`           | navegador  | —                                               | landing, uma vez por aba                                |
+| `iniciou_descoberta`       | navegador  | `inicio`, `mapa`, `link`                        | botão, cartão do mapa ocidental, link `/?experimente=1` |
+| `nascimento_validado`      | servidor   | —                                               | `/api/public/descoberta`, dados aceitos                 |
+| `leitura_entregue`         | servidor   | `signo`, `incerto`                              | `/api/public/descoberta`, leitura devolvida             |
+| `cartao_compartilhado`     | navegador  | `compartilhar`, `baixar`                        | cartão da tarefa 168, só depois de concluído            |
+| `conteudo_premium_clicado` | navegador  | mapa pago da landing                            | cartões que abrem o convite                             |
+| `modal_visto`              | navegador  | —                                               | convite da assinatura aberto                            |
+| `modal_fechado`            | navegador  | —                                               | convite fechado sem escolher                            |
+| `contribuicao_escolhida`   | navegador  | chave da opção (`colaboracao_999`…)             | convite                                                 |
+| `login_iniciado`           | ambos      | `email`, `chave` (navegador); `google`, `apple` | formulários e chave de acesso; início do login social   |
+| `login_concluido`          | servidor   | `email`, `google`, `apple`, `chave`             | depois da sessão criada                                 |
+| `cadastro_concluido`       | servidor   | `email`, `google`, `apple`                      | conta criada                                            |
+| `checkout_iniciado`        | servidor   | chave da opção ou `plano`                       | `/api/billing/checkout`, URL da Stripe criada           |
 
 ## Regras
 

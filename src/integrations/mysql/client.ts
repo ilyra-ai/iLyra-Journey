@@ -433,6 +433,23 @@ export const db = {
         },
       };
     },
+    // Chave de acesso (tarefa 167): a resposta assinada pelo aparelho vai
+    // para o servidor, que confere e cria a sessão como no login por senha.
+    async signInWithPasskey(resposta: unknown) {
+      const r = await requestJson('/api/auth/chave/login', {
+        method: 'POST',
+        body: JSON.stringify({ resposta }),
+      });
+      const session = r.ok ? sessaoDoCorpo(r.corpo) : null;
+      if (session) {
+        emitAuthChange('SIGNED_IN', session);
+        return { data: { session }, error: null };
+      }
+      return {
+        data: { session: null },
+        error: { message: r.ok ? 'Falha no login.' : r.falha.message },
+      };
+    },
     async signUp(payload: {
       email: string;
       password: string;

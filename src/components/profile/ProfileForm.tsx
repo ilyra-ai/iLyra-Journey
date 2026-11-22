@@ -67,6 +67,7 @@ import { db as databaseClient } from '@/integrations/mysql/client';
 import { AccountSubscriptionCard } from '@/components/subscription/AccountSubscriptionCard';
 import { MenstrualCycleSettings } from './MenstrualCycleSettings';
 import { AccountEmailCard } from './AccountEmailCard';
+import { ChavesDeAcessoCard } from './ChavesDeAcessoCard';
 import { PrivacyDataCard } from './PrivacyDataCard';
 import { PurchaseHistoryCard } from './PurchaseHistoryCard';
 import { LocaisDoPerfil } from './LocaisDoPerfil';
@@ -871,6 +872,13 @@ export function ProfileForm() {
           className="min-w-0 scroll-mt-24"
         >
           <AccountEmailCard />
+        </section>
+        <section
+          id="perfil-chaves"
+          aria-label="Chaves de acesso"
+          className="min-w-0 scroll-mt-24"
+        >
+          <ChavesDeAcessoCard />
         </section>
         <PrivacyDataCard />
         <PurchaseHistoryCard />

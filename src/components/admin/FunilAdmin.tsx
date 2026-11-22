@@ -23,6 +23,7 @@ const NOMES_DOS_DETALHES: Record<string, string> = {
   email: 'E-mail',
   google: 'Google',
   apple: 'Apple',
+  chave: 'Chave de acesso',
   inicio: 'Botão da página inicial',
   mapa: 'Cartão do mapa ocidental',
   link: 'Link de cartão compartilhado',

@@ -53,6 +53,8 @@
     "@radix-ui/react-toggle": "^1.1.18",
     "@radix-ui/react-toggle-group": "^1.1.19",
     "@sentry/nextjs": "^11.4.0",
+    "@simplewebauthn/browser": "14.0.0",
+    "@simplewebauthn/server": "14.1.0",
     "ai": "7.0.148",
     "astronomy-engine": "^2.1.19",
     "bcryptjs": "^3.0.3",

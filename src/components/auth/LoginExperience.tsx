@@ -30,6 +30,7 @@ import type { LoginPageConfig, ToneKey } from '@/lib/site-page-config/schema';
 import { getBuilderIcon } from '@/lib/site-page-config/ui';
 import { guardarRetorno } from '@/lib/auth/retorno';
 import type { ErroDoLoginSocialCodigo } from '@/lib/auth/social/rotas';
+import { BotaoDaChaveDeAcesso } from './BotaoDaChaveDeAcesso';
 import { BotoesDeLoginSocial } from './BotoesDeLoginSocial';
 
 /** Explicações dos erros do login com Google ou Apple (tarefa 235). */
@@ -599,6 +600,10 @@ export function LoginExperience({
               </form>
             </TabsContent>
           </Tabs>
+          {/* Chave de acesso (tarefa 167): só para quem já tem conta. */}
+          {isRegistering ? null : (
+            <BotaoDaChaveDeAcesso previewMode={previewMode} />
+          )}
           <BotoesDeLoginSocial
             cadastro={isRegistering}
             aceiteDosTermos={aceiteDosTermos}

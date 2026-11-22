@@ -13,7 +13,7 @@ import { z } from 'zod';
  * etapas: o painel lê esses números das tabelas de cobrança e de uso.
  */
 
-const METODOS_DE_LOGIN = ['email', 'google', 'apple'] as const;
+const METODOS_DE_LOGIN = ['email', 'google', 'apple', 'chave'] as const;
 export type MetodoDeLogin = (typeof METODOS_DE_LOGIN)[number];
 
 /** Chave comercial de uma opção de contribuição (tarefa 160). */
@@ -88,8 +88,8 @@ export const ETAPAS_DO_FUNIL = {
   login_iniciado: {
     rotulo: 'Logins iniciados',
     cliente: true,
-    // O navegador só informa o e-mail; Google e Apple o servidor conta ao
-    // redirecionar para o provedor.
+    // O navegador informa e-mail e chave de acesso; Google e Apple o
+    // servidor conta ao redirecionar para o provedor.
     detalheValido: entre(METODOS_DE_LOGIN),
   },
   login_concluido: {
@@ -131,8 +131,11 @@ export const esquemaDaEtapaDoCliente = z
     ({ etapa, detalhe }) =>
       etapaValida(etapa, detalhe) &&
       (ETAPAS_DO_FUNIL as Record<string, DefinicaoDaEtapa>)[etapa].cliente &&
-      // E-mail é o único login que o navegador informa.
-      (etapa !== 'login_iniciado' || detalhe === 'email'),
+      // O navegador informa o início do login por e-mail e por chave de
+      // acesso; Google e Apple o servidor conta ao redirecionar.
+      (etapa !== 'login_iniciado' ||
+        detalhe === 'email' ||
+        detalhe === 'chave'),
     { message: 'Etapa desconhecida.' }
   );
 

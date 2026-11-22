@@ -366,6 +366,18 @@ export async function exportarDadosDoTitular(userId: string) {
     clientes_de_cobranca: clientesDeCobranca,
     financeiro: await exportarFinanceiroDoTitular(userId),
     agenda_no_calendario: agendaNoCalendario,
+    // Login com Google e Apple (tarefa 235): o vínculo e o e-mail informado
+    // pelo provedor. O identificador (sub) é dado da pessoa naquele provedor.
+    contas_sociais: await queryRows<RowDataPacket>(
+      'SELECT provedor, sujeito, email, criado_em, ultimo_acesso_em FROM contas_sociais WHERE user_id = ? ORDER BY criado_em',
+      [userId]
+    ),
+    // Chaves de acesso (tarefa 167): só metadados. A chave pública e o
+    // identificador da credencial são material técnico de autenticação.
+    chaves_de_acesso: await queryRows<RowDataPacket>(
+      'SELECT nome, tipo_de_dispositivo, com_backup, criada_em, ultimo_uso_em, revogada_em FROM chaves_de_acesso WHERE user_id = ? ORDER BY criada_em',
+      [userId]
+    ),
     anexos_do_chat: (
       await queryRows<RowDataPacket>(
         'SELECT id,conversation_id,file_name,mime_type,byte_size,sha256,file_data,text_content,created_at FROM chat_attachments WHERE user_id=? ORDER BY created_at,id',
