@@ -15,6 +15,7 @@ import { interromperLeituraDoChat } from '@/lib/voz/controlador';
 import { bloquearCofresAbertos } from '@/lib/offline/cofre';
 import { paginaSaindo } from '@/lib/navegador/saida-da-pagina';
 import { AppSession } from '@/types/app-session';
+import { esquecerLeituraPendente } from '@/lib/descoberta/levar-ao-cadastro';
 import { SplashScreen } from '@/components/SplashScreen';
 
 type AuthContextType = {
@@ -54,6 +55,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (evento === 'SIGNED_OUT') {
           esquecerRetorno();
           esquecerContribuicao();
+          esquecerLeituraPendente();
         }
         setSession(novaSessao);
         setLoading(false);

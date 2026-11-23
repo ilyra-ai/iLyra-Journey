@@ -64,7 +64,10 @@ export default function PoliticaDePrivacidadePage() {
             atividade, e somem ao fechar a janela. Para limitar abusos, contamos
             os pedidos numa janela de uma hora por um código irreversível (hash)
             do endereço de rede, apagado depois que a janela vence; o nome e a
-            data nunca entram nessa contagem.
+            data nunca entram nessa contagem. Se você marcar a opção de levar a
+            leitura para o cadastro, o nome e a data seguem só na memória da
+            janela aberta até você criar a conta (para preencher o cadastro e o
+            onboarding) e somem ao fechar ou recarregar a página.
           </li>
           <li>
             <strong>Cadastro:</strong> nome, sobrenome, e-mail e senha. A senha

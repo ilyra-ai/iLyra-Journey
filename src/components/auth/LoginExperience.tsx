@@ -53,6 +53,10 @@ import {
   ROTA_TERMOS_DE_USO,
 } from '@/lib/lgpd/documentos';
 import { marcarEtapa } from '@/lib/funil/cliente';
+import {
+  separarNome,
+  verParaOCadastro,
+} from '@/lib/descoberta/levar-ao-cadastro';
 import './LoginExperience.css';
 
 type SubmitMode = 'login' | 'register' | null;
@@ -105,8 +109,14 @@ export function LoginExperience({
 
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-  const [registerFirstName, setRegisterFirstName] = useState('');
-  const [registerLastName, setRegisterLastName] = useState('');
+  // Leitura gratuita levada com consentimento (tarefa 188): o nome vem só
+  // da memória desta janela, sem armazenamento.
+  const [registerFirstName, setRegisterFirstName] = useState(
+    () => separarNome(verParaOCadastro()?.nome ?? '').primeiro
+  );
+  const [registerLastName, setRegisterLastName] = useState(
+    () => separarNome(verParaOCadastro()?.nome ?? '').sobrenome
+  );
   const [registerNickname, setRegisterNickname] = useState('');
   const [nicknameError, setNicknameError] = useState<string | null>(null);
   const [registerEmail, setRegisterEmail] = useState('');

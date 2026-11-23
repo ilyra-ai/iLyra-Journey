@@ -2,14 +2,21 @@
 
 import { type FormEvent, useId, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Loader2, MessageCircle, Sparkles } from 'lucide-react';
 
 import { CompartilharDescoberta } from '@/components/landing/CompartilharDescoberta';
+import {
+  type DadosDaLeitura,
+  guardarParaOCadastro,
+} from '@/lib/descoberta/levar-ao-cadastro';
 import type { RespostaAoVisitante } from '@/lib/descoberta/microconversa';
 import type { DescobertaDoVisitante } from '@/lib/descoberta/visitante';
 
 interface Props {
   descoberta: DescobertaDoVisitante;
+  /** Nome e data digitados, só na memória da janela (tarefa 188). */
+  visitante: DadosDaLeitura;
   destinoDaAssinatura: string;
   classeDoBotaoPrincipal: string;
   aoRefazer: () => void;
@@ -43,6 +50,7 @@ function dataPorExtenso(data: string) {
  */
 export function ResultadoGratuito({
   descoberta,
+  visitante,
   destinoDaAssinatura,
   classeDoBotaoPrincipal,
   aoRefazer,
@@ -51,6 +59,23 @@ export function ResultadoGratuito({
   const { gratuita, leitura } = descoberta;
   const [pergunta, setPergunta] = useState('');
   const [conversa, setConversa] = useState<Conversa>({ fase: 'vazia' });
+  const [levar, setLevar] = useState(false);
+  const router = useRouter();
+
+  /**
+   * Guardar a leitura na conta (tarefa 188): só com o consentimento marcado.
+   * O nome e a data seguem na memória desta janela até o cadastro e o
+   * onboarding; nada vai para armazenamento do navegador nem para a URL.
+   */
+  function guardarNaConta() {
+    if (!levar) return;
+    guardarParaOCadastro(visitante);
+    router.push(
+      destinoDaAssinatura.startsWith('/login')
+        ? destinoDaAssinatura
+        : '/login?modo=cadastro'
+    );
+  }
 
   async function perguntar(evento: FormEvent<HTMLFormElement>) {
     evento.preventDefault();
@@ -221,6 +246,31 @@ export function ResultadoGratuito({
       </form>
 
       <CompartilharDescoberta signo={gratuita.signo} />
+
+      <div className="grid gap-2 rounded-lg border border-border p-3">
+        <p className="font-medium">Quer guardar esta leitura e aprofundar?</p>
+        <label className="flex items-start gap-2 text-sm">
+          <input
+            type="checkbox"
+            checked={levar}
+            onChange={(e) => setLevar(e.target.checked)}
+            className="mt-1 size-4 accent-primary"
+          />
+          <span>
+            Levar meu nome e minha data de nascimento para o cadastro. Eles
+            ficam só nesta janela até eu criar a conta e somem se eu fechar ou
+            recarregar a página.
+          </span>
+        </label>
+        <button
+          type="button"
+          disabled={!levar}
+          onClick={guardarNaConta}
+          className="inline-flex min-h-11 w-fit items-center rounded-md border border-border px-4 disabled:opacity-60"
+        >
+          Criar conta e guardar a leitura
+        </button>
+      </div>
 
       <p className="text-sm text-muted-foreground">
         Interpretação simbólica para reflexão, sem diagnóstico nem previsão.

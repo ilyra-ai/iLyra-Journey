@@ -52,6 +52,7 @@ import { TimeInput } from '@/components/ui/time-input';
 import { SeletorDeCidade } from '@/components/geo/SeletorDeCidade';
 import { EscolhaDaHoraNaConfiguracao } from '@/components/profile/EscolhaDaHora';
 import type { OpcaoDeHora } from '@/lib/perfil/hora-de-nascimento';
+import { retirarParaOCadastro } from '@/lib/descoberta/levar-ao-cadastro';
 import { OnboardingNavigationDots } from './OnboardingNavigationDots';
 
 const cidade = z.object({
@@ -162,7 +163,8 @@ export function OnboardingForm() {
   const [enviando, setEnviando] = React.useState(false),
     [concluido, setConcluido] = React.useState(false),
     [falhaEnvio, setFalhaEnvio] = React.useState<string | null>(null),
-    [rascunhoSalvo, setRascunhoSalvo] = React.useState(false);
+    [rascunhoSalvo, setRascunhoSalvo] = React.useState(false),
+    [dataDaLeitura, setDataDaLeitura] = React.useState(false);
   const falhaRascunho = React.useRef(false);
   // Horário escolhido por quem não sabe a hora, com a data e a cidade para as
   // quais ele foi calculado: só vale enquanto as duas não mudarem.
@@ -337,6 +339,16 @@ export function OnboardingForm() {
             sessionStorage.removeItem(chave!);
           } catch {
             /* O formulário continua sem armazenamento local. */
+          }
+        }
+        // Leitura gratuita levada com consentimento (tarefa 188): a data vem
+        // só da memória desta janela e é usada uma vez, se o perfil não tem.
+        if (!base.birth_date) {
+          const leitura = retirarParaOCadastro();
+          const data = leitura ? parseISO(leitura.dataDeNascimento) : null;
+          if (data && Number.isFinite(data.getTime())) {
+            base.birth_date = data;
+            setDataDaLeitura(true);
           }
         }
         if (
@@ -577,7 +589,9 @@ export function OnboardingForm() {
           <p className="text-xs text-muted-foreground" aria-live="polite">
             {rascunhoSalvo
               ? 'Rascunho recuperado nesta aba'
-              : 'Você pode revisar antes de concluir'}
+              : dataDaLeitura
+                ? 'Trouxemos a data da sua leitura gratuita; confira'
+                : 'Você pode revisar antes de concluir'}
           </p>
         </div>
         <Card className="overflow-hidden">

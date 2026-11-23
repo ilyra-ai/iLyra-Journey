@@ -122,6 +122,7 @@ export function ExperimenteGratis({
         {estado.fase === 'resultado' ? (
           <ResultadoGratuito
             descoberta={estado.descoberta}
+            visitante={{ nome, dataDeNascimento: data }}
             destinoDaAssinatura={destinoDaAssinatura}
             classeDoBotaoPrincipal={classeDoBotaoPrincipal}
             aoRefazer={() => {
