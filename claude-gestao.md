@@ -2605,7 +2605,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Referência primária ou antecedente para investigação:** https://openfeature.dev/docs/reference/concepts/evaluation-api/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
 - **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
 
-### 185 · Cockpit de jornada, conversão, retenção e custo · ⚪ A INICIAR
+### 185 · Cockpit de jornada, conversão, retenção e custo · 🟡 IMPLEMENTADA
+
+- **Implementada em 23/11/2026 (commit `a700c4cd`), ampliando a 170.** Seletor Produção/Teste: eventos do webhook separados pelo `livemode` gravado e assinaturas pelo ambiente do cliente de cobrança, então fatura de teste não entra em produção. Faturamento do período: receita das faturas pagas (`amount_paid`) e reembolsos (`charge.refunded`, `amount_refunded`) por moeda; evento com erro de processamento fica de fora e cada evento conta uma vez. Coorte mínima de 10: taxas e retorno D7/D30 abaixo disso aparecem como "amostra pequena". Painel versionado (versão 2). Testes: 7 unitários e 7 de integração (receita e reembolso por ambiente, evento com erro ignorado, ambiente inválido); no navegador, Produção e Teste com amostras pequenas. **Fronteira externa:** os reembolsos só aparecem se o endpoint do webhook na Stripe enviar `charge.refunded`. Fica 🟡 até a homologação com faturamento real.
 
 - **Origem do pedido:** Top 3 Administradores · item 3; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
 - **Finalidade premium e escopo funcional:** Medições consentidas do início da autodescoberta, aprofundamento, checkout e retenção, com denominadores e custos reais.
