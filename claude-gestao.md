@@ -1707,7 +1707,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Aceite:** recurso premium calculável e útil; consentimento/privacidade; nenhum diagnóstico sentimental ou falso determinismo; modal correto para não assinante; mapa real quando dados suficientes; exclusão e acesso por titular testados em MySQL/HTTP/navegador.
 
-### 167 · Autenticação opcional por passkeys/WebAuthn · ⚪ PENDENTE
+### 167 · Autenticação opcional por passkeys/WebAuthn · 🟡 IMPLEMENTADA
+
+- **Implementada em 23/11/2026 (commits `2db889c3` e `1c67cec2`).** SimpleWebAuthn 14 (servidor 14.1.0, navegador 14.0.0). Migração 083: `chaves_de_acesso` (só chave pública e metadados; unicidade pelo SHA-256 da credencial) e `desafios_de_chave` (uso único, 5 min, preso à conta no registro). Registro só com sessão; login com credencial descoberta e verificação do usuário exigida; recusa origem errada, contador que volta, chave revogada e conta bloqueada; papel e versão de sessão lidos do banco. Perfil: criar, renomear e revogar (até 10); login: "Entrar com uma chave de acesso" quando há WebAuthn. Exportação LGPD passa a incluir as chaves (metadados) e os vínculos de Google/Apple (lacuna da 235). Testes: 8 de integração com autenticador de software (P-256 real, CBOR, asserções assinadas). Documentação em `docs/chaves-de-acesso.md`. Fica 🟡 até a homologação em aparelho real (Windows Hello, Touch ID/Face ID, Android) e em HTTPS.
 
 **Prioridade:** média; **oportunidade identificada no radar**, não obrigação anterior à versão inicial. **Dependências:** 164 e 165 preferencialmente, 155, serviço de identidades da 154. **Escopo estrito:** reduzir fricção de retorno; não criar sistema paralelo de contas.
 
