@@ -2635,7 +2635,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Referência primária ou antecedente para investigação:** https://github.com/cosinekitty/astronomy/blob/master/source/js/README.md. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
 - **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
 
-### 187 · Pergunte ao ponto do mapa com contexto verificável · ⚪ A INICIAR
+### 187 · Pergunte ao ponto do mapa com contexto verificável · 🟡 IMPLEMENTADA
+
+- **Implementada em 23/11/2026 (commit `a9d99146`).** No Astrolábio (186), cada planeta mostra a leitura determinística do Motor da Lyra para a posição (sem modelo de IA) e "Perguntar à Lyra sobre este ponto": abre o chat com a pergunta pronta para revisar, sem envio automático. O link leva só o identificador do planeta e a pergunta (nada de data, hora ou local de nascimento); o chat ignora planeta desconhecido e pergunta vazia ou acima de 300 caracteres. No chat, "Voltar ao ponto no mapa" abre o Painel em `/?ponto=<planeta>` com o mapa e o planeta escolhidos; ao fechar, o parâmetro sai da URL. Cálculo e plano conferidos no servidor pela rota do mapa. Testes: 3 unitários; no navegador, o ciclo mapa → chat → volta ao ponto. Fica 🟡 até a homologação.
 
 - **Origem do pedido:** Top 3 Usuários · item 2; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
 - **Finalidade premium e escopo funcional:** A partir de qualquer posição calculada, perguntar à Lyra e obter resposta conectada àquela posição e sua origem.
