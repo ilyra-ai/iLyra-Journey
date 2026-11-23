@@ -2581,7 +2581,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Referência primária ou antecedente para investigação:** https://design.google/library/expressive-material-design-google-research. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
 - **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
 
-### 183 · Centro de qualidade verificável da IA e dos mapas · ⚪ A INICIAR
+### 183 · Centro de qualidade verificável da IA e dos mapas · 🟡 IMPLEMENTADA
+
+- **Implementada em 23/11/2026 (commit `f0cb623f`).** Administração → Centro de qualidade. Cálculos: 37 verificações do Motor contra referências independentes (Swiss Ephemeris 2.10.03 para sideral, Lagna, ayanamsha e Vimshottari; JPL Horizons DE441 para o tropical), com esperado, obtido, desvio, tolerância e fonte, executadas na hora (cerca de 30 ms). O mesmo conjunto roda nos testes unitários, então regressão do Motor não passa nos gates; conjunto versionado (versão 1) e reprodutível. IA: por modelo, chamadas, falhas, cortes, recusas, latência p50/p95 das concluídas e custo do mês, do `ia_uso` (sem pedido nem resposta); nada troca o modelo em produção. **Não implementado, com aviso na tela:** taxa de resposta sem proveniência (as respostas ainda não registram a fonte). Referências de D9/D10, eclipses e astrocartografia ficam para quando houver valores externos consultados; não foram inventadas. Testes: 4 unitários e 2 de integração; no navegador, 37 de 37 aprovadas. Fica 🟡 até a homologação.
 
 - **Origem do pedido:** Top 3 Administradores · item 1; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
 - **Finalidade premium e escopo funcional:** Painel de QA com evidências de cálculos, fidelidade das respostas, regressões por versão e custo de provedor.
