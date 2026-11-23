@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 
-import { esquemaDoPeriodo, painelDoFunil } from '@/lib/funil/painel';
+import {
+  esquemaDoAmbiente,
+  esquemaDoPeriodo,
+  painelDoFunil,
+} from '@/lib/funil/painel';
 import { respostaDeErro } from '@/lib/http/api';
 import { HttpError } from '@/lib/http-error';
 import { requireAdminSession } from '@/lib/mysql/server-auth';
@@ -11,11 +15,14 @@ export const runtime = 'nodejs';
 export async function GET(request: Request) {
   try {
     await requireAdminSession();
-    const periodo = esquemaDoPeriodo.safeParse(
-      new URL(request.url).searchParams.get('dias') ?? '30'
-    );
+    const consulta = new URL(request.url).searchParams;
+    const periodo = esquemaDoPeriodo.safeParse(consulta.get('dias') ?? '30');
     if (!periodo.success) throw new HttpError('Período inválido.', 400);
-    return NextResponse.json(await painelDoFunil(periodo.data), {
+    const ambiente = esquemaDoAmbiente.safeParse(
+      consulta.get('ambiente') ?? 'live'
+    );
+    if (!ambiente.success) throw new HttpError('Ambiente inválido.', 400);
+    return NextResponse.json(await painelDoFunil(periodo.data, ambiente.data), {
       headers: { 'Cache-Control': 'no-store, private' },
     });
   } catch (error) {

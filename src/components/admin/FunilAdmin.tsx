@@ -51,6 +51,8 @@ function nomeDoDetalhe(detalhe: string) {
 const inteiro = (n: number) => n.toLocaleString('pt-BR');
 const porcentagem = (n: number) =>
   n.toLocaleString('pt-BR', { style: 'percent', maximumFractionDigits: 1 });
+const dinheiro = (v: { moeda: string; total: number }) =>
+  v.total.toLocaleString('pt-BR', { style: 'currency', currency: v.moeda });
 const dataCurta = (dia: string) => dia.split('-').reverse().join('/');
 
 function LinhaDaTaxa({ taxa }: { taxa: Taxa }) {
@@ -58,9 +60,11 @@ function LinhaDaTaxa({ taxa }: { taxa: Taxa }) {
     <li className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border py-2 last:border-0">
       <span>{taxa.rotulo}</span>
       <span className="font-medium tabular-nums">
-        {taxa.valor === null
-          ? 'sem dados'
-          : `${porcentagem(taxa.valor)} (${inteiro(taxa.numerador)} de ${inteiro(taxa.denominador)})`}
+        {taxa.amostraPequena
+          ? `amostra pequena (${inteiro(taxa.numerador)} de ${inteiro(taxa.denominador)})`
+          : taxa.valor === null
+            ? 'sem dados'
+            : `${porcentagem(taxa.valor)} (${inteiro(taxa.numerador)} de ${inteiro(taxa.denominador)})`}
       </span>
     </li>
   );
@@ -75,16 +79,20 @@ function Fato({ rotulo, valor }: { rotulo: string; valor: string }) {
   );
 }
 
-function retorno({
-  coorte,
-  retornaram,
-}: {
-  coorte: number;
-  retornaram: number;
-}) {
-  return coorte === 0
-    ? 'sem contas na idade'
-    : `${porcentagem(retornaram / coorte)} (${inteiro(retornaram)} de ${inteiro(coorte)})`;
+function retorno(
+  {
+    coorte,
+    retornaram,
+  }: {
+    coorte: number;
+    retornaram: number;
+  },
+  minima: number
+) {
+  if (coorte === 0) return 'sem contas na idade';
+  if (coorte < minima)
+    return `amostra pequena (${inteiro(coorte)} ${coorte === 1 ? 'conta' : 'contas'}; mínimo de ${minima})`;
+  return `${porcentagem(retornaram / coorte)} (${inteiro(retornaram)} de ${inteiro(coorte)})`;
 }
 
 /**
@@ -94,21 +102,25 @@ function retorno({
 export function FunilAdmin() {
   const { session } = useAuth();
   const [dias, setDias] = useState<(typeof PERIODOS)[number]>(30);
+  const [ambiente, setAmbiente] = useState<'live' | 'test'>('live');
 
   const pedir = useCallback(async () => {
-    const resposta = await buscarJson(`/api/admin/funil?dias=${dias}`, {
-      cache: 'no-store',
-    });
+    const resposta = await buscarJson(
+      `/api/admin/funil?dias=${dias}&ambiente=${ambiente}`,
+      {
+        cache: 'no-store',
+      }
+    );
     if (!resposta.ok) throw new Error(resposta.falha.message);
     return resposta.corpo as PainelDoFunil;
-  }, [dias]);
+  }, [dias, ambiente]);
   const avisar = useCallback((erro: unknown) => {
     toast.error('Não foi possível ler o funil.', {
       description: erro instanceof Error ? erro.message : undefined,
     });
   }, []);
   const { data: painel, loading } = useKeyedResource<PainelDoFunil | null>(
-    session ? `funil:${session.user.id}:${dias}` : null,
+    session ? `funil:${session.user.id}:${dias}:${ambiente}` : null,
     pedir,
     avisar,
     null
@@ -137,6 +149,22 @@ export function FunilAdmin() {
               {p} dias
             </ToggleGroupItem>
           ))}
+        </ToggleGroup>
+        <ToggleGroup
+          type="single"
+          value={ambiente}
+          onValueChange={(valor) => {
+            if (valor === 'live' || valor === 'test') setAmbiente(valor);
+          }}
+          aria-label="Ambiente da Stripe"
+          variant="outline"
+        >
+          <ToggleGroupItem value="live" className="min-h-11 px-4">
+            Produção
+          </ToggleGroupItem>
+          <ToggleGroupItem value="test" className="min-h-11 px-4">
+            Teste
+          </ToggleGroupItem>
         </ToggleGroup>
         {painel ? (
           <p className="text-sm text-muted-foreground">
@@ -215,8 +243,9 @@ export function FunilAdmin() {
             <CardHeader>
               <CardTitle>Cobrança e contas</CardTitle>
               <CardDescription>
-                Lido das tabelas de contas e de cobrança. Pagamento só conta
-                depois de confirmado pelo webhook da Stripe.
+                Lido das tabelas de contas e de cobrança, no ambiente escolhido
+                da Stripe. Pagamento, receita e reembolso só contam depois de
+                confirmados pelo webhook; cada evento entra uma vez só.
               </CardDescription>
             </CardHeader>
             <CardContent className="grid gap-3">
@@ -240,6 +269,28 @@ export function FunilAdmin() {
                 <Fato
                   rotulo="Assinaturas ativas agora"
                   valor={inteiro(painel.fatos.assinaturasAtivas)}
+                />
+                {painel.faturamento.receita.length ? (
+                  painel.faturamento.receita.map((v) => (
+                    <Fato
+                      key={`receita-${v.moeda}`}
+                      rotulo={`Receita das faturas pagas (${v.moeda})`}
+                      valor={dinheiro(v)}
+                    />
+                  ))
+                ) : (
+                  <Fato
+                    rotulo="Receita das faturas pagas"
+                    valor="sem faturas"
+                  />
+                )}
+                <Fato
+                  rotulo="Reembolsos no período"
+                  valor={
+                    painel.faturamento.reembolsado.length
+                      ? `${inteiro(painel.faturamento.reembolsos)} · ${painel.faturamento.reembolsado.map(dinheiro).join(' + ')}`
+                      : inteiro(painel.faturamento.reembolsos)
+                  }
                 />
               </div>
               <div>
@@ -279,11 +330,11 @@ export function FunilAdmin() {
               <CardContent className="grid gap-2 text-sm">
                 <p>
                   <span className="font-medium">D7:</span>{' '}
-                  {retorno(painel.retencao.d7)}
+                  {retorno(painel.retencao.d7, painel.coorteMinima)}
                 </p>
                 <p>
                   <span className="font-medium">D30:</span>{' '}
-                  {retorno(painel.retencao.d30)}
+                  {retorno(painel.retencao.d30, painel.coorteMinima)}
                 </p>
               </CardContent>
             </Card>

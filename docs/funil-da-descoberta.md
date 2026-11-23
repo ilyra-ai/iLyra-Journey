@@ -16,6 +16,23 @@ Tarefa 170. Painel em **Administração → Dados e relatórios → Funil da des
 
 Um pagamento só aparece depois de confirmado pelo webhook da Stripe. As etapas anônimas não seguem a mesma pessoa de uma etapa à outra, então as taxas do painel são tendência, não conversão individual.
 
+## Ambiente, faturamento e coorte mínima (tarefa 185)
+
+- **Ambiente:** o painel mostra **Produção** ou **Teste** da Stripe.
+  - Os eventos do webhook são separados pelo `livemode` gravado no próprio evento.
+  - As assinaturas são separadas pelo ambiente do cliente de cobrança (`billing_customers.environment`).
+  - Faturas de teste nunca entram nos números de produção.
+- **Faturamento:**
+  - a receita soma `amount_paid` dos eventos `invoice.paid` processados;
+  - os reembolsos somam `amount_refunded` dos eventos `charge.refunded`;
+  - tudo por moeda, convertido de centavos;
+  - cada evento entra uma vez só, pela chave única do provedor;
+  - evento com erro no processamento não conta.
+  - para os reembolsos aparecerem, o endpoint do webhook na Stripe precisa enviar `charge.refunded`. O webhook grava todo evento recebido, inclusive os que ele não trata.
+- **Coorte mínima:** com menos de 10 no denominador, taxas e retorno não mostram porcentagem e aparecem como "amostra pequena". Com poucas pessoas a porcentagem engana e pode apontar alguém.
+- **Versão:** a resposta do painel traz `versao` (hoje 2). Ela muda quando o significado de algum número muda.
+- **Conta excluída:** sai de contas criadas e do retorno, porque as linhas somem. Os eventos de cobrança continuam, sem dado pessoal no painel.
+
 ## Etapas
 
 A lista fechada fica em `src/lib/funil/etapas.ts`. Uma etapa ou detalhe fora dela é recusado com 400.

@@ -76,8 +76,22 @@ describe('etapas do funil anônimo (tarefa 170)', () => {
   });
 
   it('sem denominador, a taxa é "sem dados", nunca 0% nem infinito', () => {
-    expect(taxa('x', 0, 0).valor).toBeNull();
+    expect(taxa('x', 0, 0)).toMatchObject({
+      valor: null,
+      amostraPequena: false,
+    });
     expect(taxa('x', 3, 0).valor).toBeNull();
-    expect(taxa('x', 1, 4).valor).toBe(0.25);
+  });
+
+  it('abaixo da coorte mínima (10), a porcentagem não aparece (tarefa 185)', () => {
+    expect(taxa('x', 1, 4)).toMatchObject({
+      valor: null,
+      amostraPequena: true,
+    });
+    expect(taxa('x', 1, 9).amostraPequena).toBe(true);
+    expect(taxa('x', 5, 20)).toMatchObject({
+      valor: 0.25,
+      amostraPequena: false,
+    });
   });
 });

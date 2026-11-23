@@ -111,15 +111,15 @@ describe('painel do funil na administração (tarefa 170)', () => {
         })
       ).json as PainelDoFunil;
     const antes = await ler();
-    await contarEtapa('modal_visto');
-    await contarEtapa('modal_visto');
+    // Acima da coorte mínima (10), para a taxa aparecer.
+    for (let i = 0; i < 12; i += 1) await contarEtapa('modal_visto');
     await contarEtapa('contribuicao_escolhida', 'colaboracao_1999');
     // Fora do período de 7 dias: não entra.
     await contarEtapa('modal_visto', '', new Date(Date.now() - 20 * 864e5));
     const depois = await ler();
     const total = (p: PainelDoFunil, etapa: string) =>
       p.etapas.find((e) => e.etapa === etapa)?.total ?? 0;
-    expect(total(depois, 'modal_visto') - total(antes, 'modal_visto')).toBe(2);
+    expect(total(depois, 'modal_visto') - total(antes, 'modal_visto')).toBe(12);
     expect(
       depois.etapas
         .find((e) => e.etapa === 'contribuicao_escolhida')
@@ -128,6 +128,82 @@ describe('painel do funil na administração (tarefa 170)', () => {
     const convite = depois.taxas.find((t) => t.rotulo.includes('convite'));
     expect(convite?.denominador).toBe(total(depois, 'modal_visto'));
     expect(convite?.valor).not.toBeNull();
+  });
+
+  it('receita e reembolso vêm dos webhooks, separados por ambiente (tarefa 185)', async () => {
+    const admin = await criarUsuario('admin');
+    const ler = async (ambiente: string) =>
+      (
+        await chamar(PAINEL, {
+          usuario: admin,
+          path: `/api/admin/funil?dias=7&ambiente=${ambiente}`,
+        })
+      ).json as PainelDoFunil;
+    const reais = (p: PainelDoFunil, campo: 'receita' | 'reembolsado') =>
+      p.faturamento[campo].find((v) => v.moeda === 'BRL')?.total ?? 0;
+    const antesLive = await ler('live');
+    const antesTeste = await ler('test');
+    const evento = async (
+      tipo: string,
+      livemode: boolean,
+      objeto: Record<string, unknown>,
+      status = 'processed'
+    ) =>
+      executeStatement(
+        `INSERT INTO billing_webhook_events
+           (id, provider, external_event_id, event_type, status, payload)
+         VALUES (UUID(), 'stripe', ?, ?, ?, ?)`,
+        [
+          `evt_funil_${crypto.randomUUID()}`,
+          tipo,
+          status,
+          JSON.stringify({ livemode, type: tipo, data: { object: objeto } }),
+        ]
+      );
+    await evento('invoice.paid', true, { amount_paid: 1999, currency: 'brl' });
+    await evento('invoice.paid', false, { amount_paid: 999, currency: 'brl' });
+    // Com erro no processamento: não entra na receita.
+    await evento(
+      'invoice.paid',
+      true,
+      { amount_paid: 5000, currency: 'brl' },
+      'error'
+    );
+    await evento('charge.refunded', true, {
+      amount_refunded: 1999,
+      currency: 'brl',
+    });
+    const live = await ler('live');
+    const teste = await ler('test');
+    expect(reais(live, 'receita') - reais(antesLive, 'receita')).toBeCloseTo(
+      19.99
+    );
+    expect(reais(teste, 'receita') - reais(antesTeste, 'receita')).toBeCloseTo(
+      9.99
+    );
+    expect(live.faturamento.reembolsos - antesLive.faturamento.reembolsos).toBe(
+      1
+    );
+    expect(
+      reais(live, 'reembolsado') - reais(antesLive, 'reembolsado')
+    ).toBeCloseTo(19.99);
+    expect(teste.faturamento.reembolsos).toBe(
+      antesTeste.faturamento.reembolsos
+    );
+    expect(live.fatos.faturasPagas - antesLive.fatos.faturasPagas).toBe(1);
+    expect(live).toMatchObject({
+      versao: 2,
+      ambiente: 'live',
+      coorteMinima: 10,
+    });
+    expect(
+      (
+        await chamar(PAINEL, {
+          usuario: admin,
+          path: '/api/admin/funil?dias=7&ambiente=producao',
+        })
+      ).status
+    ).toBe(400);
   });
 
   it('contas criadas e retorno D7 vêm das tabelas reais', async () => {
