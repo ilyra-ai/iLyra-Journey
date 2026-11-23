@@ -389,8 +389,9 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  min-width: 40px;
-  min-height: 42px;
+  /* Alvo de toque de 44 px (tarefa 182). */
+  min-width: 44px;
+  min-height: 44px;
   color: hsl(var(--primary));
   border-radius: 8px;
 }

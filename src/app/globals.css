@@ -597,6 +597,30 @@
   }
 }
 
+/*
+ * Alvos de toque de 44 px em telas de toque (tarefa 182). No desktop o
+ * tamanho visual aprovado continua o mesmo; com o dedo, nenhum botão, aba ou
+ * campo fica menor que 44 px. :where() tem especificidade zero, então um
+ * min-height escolhido de propósito num componente continua valendo.
+ */
+@media (pointer: coarse) {
+  :where(
+    button,
+    [role='button'],
+    [role='tab'],
+    select,
+    input:not([type='checkbox']):not([type='radio']):not([type='range']):not(
+        [type='hidden']
+      )
+  ) {
+    min-height: 44px;
+  }
+
+  :where(button, [role='button'], [role='tab']) {
+    min-width: 44px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
