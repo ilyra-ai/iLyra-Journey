@@ -2570,7 +2570,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Referência primária ou antecedente para investigação:** https://developer.mozilla.org/en-US/docs/Web/API/View_Transition_API. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
 - **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
 
-### 182 · Material editorial expressivo e microinterações premium · ⚪ A INICIAR
+### 182 · Material editorial expressivo e microinterações premium · 🟡 IMPLEMENTADA (parcial)
+
+- **Implementado em 23/11/2026 (commit `e2d8c660`): a parte verificável, sem trocar a identidade aprovada.** Auditoria real a 320 e 375 px de Painel, chat, Teatro, perfil, planos e céu avançado: nenhum transbordo horizontal; alvos acima dos 24 px do WCAG 2.2 AA, mas vários abaixo de 44 px. Em telas de toque (`pointer: coarse`), botões, abas, selects e campos passam a ter no mínimo 44 px (regra `:where()` de especificidade zero); no desktop o visual não muda. O envio do chat do Painel saiu de 40×42 para 44×44. Movimento reduzido e foco visível já estavam no CSS global e foram conferidos; as transições novas (181) respeitam o movimento reduzido. **Pendente, por depender de você:** refino editorial (tipografia, hierarquia, microinterações) muda a identidade aprovada e precisa da sua autorização e direção visual; comparação de clareza com participantes reais (item 3) precisa de pessoas e consentimento. Nada foi inventado como ganho.
 
 - **Origem do pedido:** Top 3 UI/UX PREMIUM · item 3; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
 - **Finalidade premium e escopo funcional:** Design celestial premium expressivo mas funcional, com hierarquia editorial, controles legíveis e microinterações que comuniquem resultado.
