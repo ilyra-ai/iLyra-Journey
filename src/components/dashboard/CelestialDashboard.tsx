@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
@@ -112,6 +112,13 @@ function ResumosDoDia({ dia }: { dia: Dia }) {
   );
 }
 
+const semAssinatura = () => () => undefined;
+/** Só identificadores de planeta; qualquer outro valor é ignorado. */
+const lerPontoDoLink = () => {
+  const valor = new URLSearchParams(window.location.search).get('ponto');
+  return valor && /^[a-z]{3,8}$/.test(valor) ? valor : null;
+};
+
 export function CelestialDashboard() {
   const { session } = useAuth();
   const { profile } = useProfile();
@@ -122,6 +129,16 @@ export function CelestialDashboard() {
     'mapa' | 'ocidental' | 'dia' | 'signo' | null
   >(null);
   const [diaSelecionado, setDiaSelecionado] = useState<string | null>(null);
+  // Volta de uma pergunta sobre um ponto do mapa (tarefa 187): `/?ponto=sol`
+  // abre o mapa completo com o planeta escolhido. Ao fechar, sai da URL.
+  const pontoPeloLink = useSyncExternalStore(
+    semAssinatura,
+    lerPontoDoLink,
+    () => null
+  );
+  const [pontoAtendido, setPontoAtendido] = useState(false);
+  const ponto = pontoAtendido ? null : pontoPeloLink;
+  const modalAberto = modal ?? (ponto ? 'mapa' : null);
   const ler = useCallback(async (): Promise<PainelCelestial | null> => {
     const resposta = await buscarJson('/api/astrologia/painel', {
       cache: 'no-store',
@@ -498,27 +515,38 @@ export function CelestialDashboard() {
         </>
       ) : null}
       <Dialog
-        open={modal !== null}
+        open={modalAberto !== null}
         onOpenChange={(aberto) => {
-          if (!aberto) setModal(null);
+          if (aberto) return;
+          if (ponto) {
+            const url = new URL(window.location.href);
+            url.searchParams.delete('ponto');
+            window.history.replaceState(
+              window.history.state,
+              '',
+              url.pathname + url.search + url.hash
+            );
+            setPontoAtendido(true);
+          }
+          setModal(null);
         }}
       >
         <DialogContent className={cn(identidade.theme, styles.dialog)}>
           <DialogTitle>
-            {modal === 'ocidental'
+            {modalAberto === 'ocidental'
               ? 'Mapa astrológico tradicional ocidental'
-              : modal === 'mapa'
+              : modalAberto === 'mapa'
                 ? 'Seus mapas pessoais'
-                : modal === 'signo'
+                : modalAberto === 'signo'
                   ? `${sol?.signo ?? 'Signo'} · ${nome}`
                   : `Linha temporal · ${dia ? formatarData(dia.data) : ''}`}
           </DialogTitle>
           <DialogDescription>
-            {modal === 'dia'
+            {modalAberto === 'dia'
               ? 'Três perspectivas do seu mapa e o contexto calculado para a data selecionada.'
               : 'Leituras pessoais calculadas com seus dados. Imagens ilustrativas; interpretações simbólicas para reflexão.'}
           </DialogDescription>
-          {modal === 'ocidental' ? (
+          {modalAberto === 'ocidental' ? (
             ocidental.data ? (
               <section>
                 <h3>Zodíaco tropical</h3>
@@ -545,9 +573,9 @@ export function CelestialDashboard() {
                   : 'A leitura ocidental não está disponível no momento.'}
               </p>
             )
-          ) : modal === 'mapa' ? (
-            <MapaCompleto />
-          ) : modal === 'signo' ? (
+          ) : modalAberto === 'mapa' ? (
+            <MapaCompleto pontoInicial={ponto} />
+          ) : modalAberto === 'signo' ? (
             <section>
               {imagemSigno ? (
                 <Image

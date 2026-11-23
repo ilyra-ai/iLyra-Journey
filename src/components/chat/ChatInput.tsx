@@ -65,6 +65,8 @@ interface ChatInputProps {
   disabled?: boolean;
   maxLength?: number;
   placeholder?: string;
+  /** Texto já escrito ao abrir (ex.: pergunta vinda do mapa, tarefa 187). */
+  textoInicial?: string;
 }
 
 // ===== Defaults =====
@@ -77,8 +79,10 @@ function ChatInput({
   disabled = false,
   maxLength = DEFAULT_MAX_LENGTH,
   placeholder = 'Digite ou fale sua mensagem...',
+  textoInicial = '',
 }: ChatInputProps) {
-  const [text, setText] = useState('');
+  // Só preenche: a pessoa revisa e envia quando quiser.
+  const [text, setText] = useState(textoInicial.slice(0, maxLength));
   const [isListening, setIsListening] = useState(false);
 
   const recognitionRef = useRef<SpeechRecognition | null>(null);

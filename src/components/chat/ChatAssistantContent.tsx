@@ -1,4 +1,5 @@
 'use client';
+import Link from 'next/link';
 import { interromperLeituraDoChat } from '@/lib/voz/controlador';
 import { AnexosDaConversa } from './AnexosDaConversa';
 import { PlanFeatureGate } from '@/components/subscription/PlanFeatureGate';
@@ -229,7 +230,13 @@ export function ChatAssistantContent({
   salvarHistorico = true,
   mensagemId = null,
   acaoDasConversas = null,
+  rascunho = null,
+  pontoDoMapa = null,
 }: {
+  /** Pergunta pronta para revisar antes de enviar (tarefa 187). */
+  rascunho?: string | null;
+  /** Ponto do mapa de onde veio a pergunta, para voltar a ele. */
+  pontoDoMapa?: { graha: string; nome: string } | null;
   salvarHistorico?: boolean;
   conversaId?: string | null;
   mensagemId?: string | null;
@@ -805,8 +812,20 @@ export function ChatAssistantContent({
               ) : null}
             </div>
           ) : null}
+          {pontoDoMapa ? (
+            <p className="mb-2 text-xs text-muted-foreground">
+              Pergunta sobre {pontoDoMapa.nome} no seu mapa.{' '}
+              <Link
+                href={`/?ponto=${pontoDoMapa.graha}`}
+                className="underline underline-offset-2"
+              >
+                Voltar ao ponto no mapa
+              </Link>
+            </p>
+          ) : null}
           <ChatInput
             onSendMessage={handleSendMessage}
+            textoInicial={rascunho ?? ''}
             disabled={
               isTyping ||
               historico.carregando ||

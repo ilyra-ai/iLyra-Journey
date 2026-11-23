@@ -171,7 +171,12 @@ function avisarFalha(falha: unknown) {
  * posição dos nove grahas, calculados no servidor a partir da data, hora e
  * cidade de nascimento.
  */
-export function MapaVedicoCard() {
+export function MapaVedicoCard({
+  pontoInicial = null,
+}: {
+  /** Planeta já escolhido no Astrolábio (volta do chat, tarefa 187). */
+  pontoInicial?: string | null;
+} = {}) {
   const [versao, setVersao] = React.useState(0);
   React.useEffect(() => ouvirMapaAtualizado(() => setVersao((v) => v + 1)), []);
   const ler = React.useCallback(async () => {
@@ -287,7 +292,11 @@ export function MapaVedicoCard() {
               </p>
             ) : null}
 
-            <Astrolabio mapa={data.mapa} />
+            <Astrolabio
+              mapa={data.mapa}
+              leituras={data.leitura?.vedico.planetas ?? []}
+              pontoInicial={pontoInicial}
+            />
 
             <Table
               scrollLabel="Posição dos grahas no mapa natal (rolável)"

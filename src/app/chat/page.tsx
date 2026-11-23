@@ -21,6 +21,7 @@ import { usePlanFeatureAccess } from '@/hooks/use-plan-feature-access';
 import { isPlanFeatureEnabled } from '@/lib/plans/access';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { PlanUpgradeNotice } from '@/components/subscription/PlanUpgradeNotice';
+import { perguntaDaBusca, pontoDaBusca } from '@/lib/astrology/ponto-do-mapa';
 import { PLANO_DE_BASE } from '@/types/subscription';
 
 function ConversaSelecionada() {
@@ -31,6 +32,10 @@ function ConversaSelecionada() {
   const salvarHistorico = isPlanFeatureEnabled(subscription, 'chat_history');
   const id = salvarHistorico ? busca.get('conversa') : null;
   const mensagem = salvarHistorico ? busca.get('mensagem') : null;
+  // Pergunta vinda de um ponto do mapa (tarefa 187): só o texto da pergunta
+  // e o identificador do planeta, nunca dados de nascimento.
+  const ponto = pontoDaBusca(busca.get('ponto'));
+  const rascunho = ponto ? perguntaDaBusca(busca.get('pergunta')) : null;
   const [gavetaAberta, setGavetaAberta] = useState(false);
   if (loading) return <p role="status">Carregando conversa…</p>;
   // Histórico dentro do próprio chat (tarefas 231 a 233): coluna no desktop
@@ -66,6 +71,8 @@ function ConversaSelecionada() {
         salvarHistorico={salvarHistorico}
         conversaId={id}
         mensagemId={mensagem}
+        rascunho={rascunho}
+        pontoDoMapa={ponto}
         acaoDasConversas={
           salvarHistorico ? (
             <Sheet open={gavetaAberta} onOpenChange={setGavetaAberta}>

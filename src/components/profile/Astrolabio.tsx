@@ -1,6 +1,7 @@
 'use client';
 
 import { useId, useState } from 'react';
+import Link from 'next/link';
 
 import {
   anguloDaLongitude,
@@ -10,7 +11,10 @@ import {
   raiosSemSobreposicao,
   SIGLA_DO_GRAHA,
 } from '@/lib/astrology/astrolabio';
+import { linkDaPerguntaDoPonto } from '@/lib/astrology/ponto-do-mapa';
 import type { MapaNatalJson } from '@/lib/astrology/serializacao';
+import type { Graha } from '@/lib/astrology/sideral';
+import type { LeituraDeGraha } from '@/lib/lyra/leitura-do-mapa';
 import { SIGNOS } from '@/lib/astrology/sideral';
 import { cn } from '@/lib/utils';
 
@@ -38,9 +42,22 @@ function descricao(p: Planeta) {
  * signo, grau, nakshatra, casa e o método, com as limitações da hora de
  * nascimento. Nada aqui é estimado pela interface.
  */
-export function Astrolabio({ mapa }: { mapa: MapaNatalJson }) {
+export function Astrolabio({
+  mapa,
+  leituras = [],
+  pontoInicial = null,
+}: {
+  mapa: MapaNatalJson;
+  /** Leitura determinística do Motor para cada planeta (tarefa 187). */
+  leituras?: LeituraDeGraha[];
+  /** Planeta já escolhido ao abrir (volta do chat, `/?ponto=sol`). */
+  pontoInicial?: string | null;
+}) {
   const id = useId();
-  const [selecionado, setSelecionado] = useState<string | null>(null);
+  const [selecionado, setSelecionado] = useState<string | null>(
+    mapa.planetas.some((p) => p.graha === pontoInicial) ? pontoInicial : null
+  );
+  const leitura = leituras.find((l) => l.graha === selecionado) ?? null;
   const ascendente = mapa.lagna?.longitude ?? 0;
   const indiceDoLagna = mapa.lagna?.indiceDoSigno ?? null;
   const raios = raiosSemSobreposicao(mapa.planetas.map((p) => p.longitude));
@@ -242,6 +259,30 @@ export function Astrolabio({ mapa }: { mapa: MapaNatalJson }) {
                       ? ' Nodos lunares médios, sempre retrógrados.'
                       : ''}
                   </dd>
+                </div>
+                {leitura ? (
+                  <div>
+                    <dt className="text-xs text-muted-foreground">
+                      Leitura da Lyra
+                    </dt>
+                    <dd className="leading-relaxed">{leitura.texto}</dd>
+                  </div>
+                ) : null}
+                <div className="pt-1">
+                  <Link
+                    href={linkDaPerguntaDoPonto({
+                      graha: planeta.graha as Graha,
+                      signo: planeta.signo,
+                      casa: planeta.casa,
+                    })}
+                    className="inline-flex min-h-11 items-center rounded-md border border-border px-3 text-sm"
+                  >
+                    Perguntar à Lyra sobre este ponto
+                  </Link>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Abre o chat com a pergunta escrita para você revisar. Vai só
+                    o planeta e a posição, nunca a sua data de nascimento.
+                  </p>
                 </div>
                 {planeta.graha === 'lua' && semHora && mapa.possibilidades ? (
                   <div>
