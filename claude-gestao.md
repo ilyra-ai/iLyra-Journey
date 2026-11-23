@@ -2596,7 +2596,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Referência primária ou antecedente para investigação:** https://opentelemetry.io/docs/specs/semconv/registry/attributes/gen-ai/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
 - **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
 
-### 184 · Estúdio de publicação segura, aprovação e rollback · ⚪ A INICIAR
+### 184 · Estúdio de publicação segura, aprovação e rollback · 🟡 IMPLEMENTADA
+
+- **Implementada em 23/11/2026 (commit `044f17a3`).** Antes, publicar uma página do construtor sobrescrevia a anterior, sem volta. Migração 084: `site_page_config_versoes`, semeada com o publicado atual; toda publicação (construtor ou estúdio) grava a versão na mesma transação e publicar o mesmo conteúdo não cria versão. Administração → Estúdio de publicação: diferença semântica rascunho × publicado (por caminho; itens com href/id pela identidade), publicação com justificativa obrigatória (quem, quando, por quê), histórico e "Ver o que mudaria" antes de reverter. Reverter publica de novo a versão escolhida e vira versão (reversível); versão incompatível com o esquema atual é recusada (409). Prévia continua no construtor existente. Aprovação por uma pessoa administradora com registro; aprovação por duas pessoas não foi pedida. Testes: 4 unitários e 2 de integração; no navegador, versão 1 da página Aplicativo. Fica 🟡 até a homologação.
 
 - **Origem do pedido:** Top 3 Administradores · item 2; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
 - **Finalidade premium e escopo funcional:** Fluxo administrativo real para inspecionar, aprovar, publicar e reverter experiências versionadas sem perder dados.
