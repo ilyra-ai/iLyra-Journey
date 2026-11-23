@@ -6,6 +6,8 @@ import {
 import { lerComModelo } from '@/lib/anexos/leitura';
 import { createUIMessageStream, createUIMessageStreamResponse } from 'ai';
 import { montarPainelDoChat } from '@/lib/chat/painel';
+import { GRAHAS_DO_CHAT } from '@/lib/chat/partes';
+import { montarPontoDoChat } from '@/lib/chat/ponto-do-mapa';
 import { corteDoHistorico } from '@/lib/plans/historico';
 import {
   gerarImagemDoTurno,
@@ -111,6 +113,9 @@ const perguntaSchema = z
     regenerate: z.boolean().optional(),
     privacyMode: z.boolean().default(false),
     painel: z.boolean().default(false),
+    // Pergunta vinda de um ponto do mapa (tarefas 180 e 187): só o
+    // identificador do planeta; o cálculo é refeito aqui no servidor.
+    ponto: z.enum(GRAHAS_DO_CHAT).optional(),
     anexos: idsAnexosSchema.default([]),
     consentimentoAnexos: z.boolean().default(false),
   })
@@ -137,6 +142,7 @@ export async function POST(request: Request) {
       regenerate,
       privacyMode,
       painel,
+      ponto,
       anexos,
       consentimentoAnexos,
     } = await lerJson(request, perguntaSchema);
@@ -567,7 +573,10 @@ export async function POST(request: Request) {
               query
             ));
       request.signal.throwIfAborted();
-      const partes = painel ? await montarPainelDoChat(session.user.id) : [];
+      const partes = [
+        ...(painel ? await montarPainelDoChat(session.user.id) : []),
+        ...(ponto ? await montarPontoDoChat(session.user.id, ponto) : []),
+      ];
       let imagem = null;
       if (turno) {
         await concluirTurno(

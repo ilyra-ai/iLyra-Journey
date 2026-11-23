@@ -7,7 +7,14 @@ import { concluirTurno, iniciarTurno, lerConversa } from '@/lib/chat/servico';
 import { filtrarPaineisDoChat, montarPainelDoChat } from '@/lib/chat/painel';
 import { eventosSse } from '@/lib/chat/eventos-sse';
 import { exportarDadosDoTitular, excluirConta } from '@/lib/lgpd/conta';
+import type { ParteDoChat } from '@/lib/chat/partes';
 import * as assistente from '../functions/ask-ai-assistant/route';
+
+/** O catálogo tem mais de um tipo de parte (tarefa 180): aqui só painéis. */
+function painel(parte: ParteDoChat) {
+  if (parte.tipo !== 'painel') throw new Error('Esperava um painel.');
+  return parte;
+}
 
 describe('painéis e transmissão com persistência real', () => {
   it('isola registros, preserva ausências e reabre painéis e texto antigo', async () => {
@@ -22,8 +29,8 @@ describe('painéis e transmissão com persistência real', () => {
       [randomUUID(), outro.id, 99999]
     );
     const partes = await montarPainelDoChat(dono.id);
-    expect(partes[0].dias).toHaveLength(1);
-    expect(partes[0].dias[0]).toMatchObject({
+    expect(painel(partes[0]).dias).toHaveLength(1);
+    expect(painel(partes[0]).dias[0]).toMatchObject({
       passos: 7200,
       sono: null,
       vfc: 42.5,
@@ -101,7 +108,7 @@ describe('painéis e transmissão com persistência real', () => {
       [randomUUID(), pessoa.id, 32, 71]
     );
     const partes = await montarPainelDoChat(pessoa.id);
-    expect(partes[0].dias[0].prontidao).toBe(71);
+    expect(painel(partes[0]).dias[0].prontidao).toBe(71);
     const linhas = await queryRows<{
       id: string;
       enabled: number;
@@ -115,7 +122,8 @@ describe('painéis e transmissão com persistência real', () => {
         `UPDATE plan_entitlements pf JOIN subscription_plans p ON p.id = pf.plan_id JOIN plan_features f ON f.id = pf.feature_id SET pf.enabled = FALSE WHERE p.plan_key='care' AND f.feature_key = 'ai_scores'`
       );
       expect(
-        (await filtrarPaineisDoChat(pessoa.id, partes))[0].dias[0].prontidao
+        painel((await filtrarPaineisDoChat(pessoa.id, partes))[0]).dias[0]
+          .prontidao
       ).toBeNull();
       await executeStatement(
         `UPDATE plan_entitlements pf JOIN subscription_plans p ON p.id = pf.plan_id JOIN plan_features f ON f.id = pf.feature_id SET pf.enabled = FALSE WHERE p.plan_key='care' AND f.feature_key = 'metrics_history_days'`

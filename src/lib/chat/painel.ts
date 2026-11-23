@@ -43,17 +43,31 @@ export async function montarPainelDoChat(
   ];
 }
 
-/** A leitura de um painel antigo também respeita o plano vigente. */
+/**
+ * A leitura de partes antigas também respeita o plano vigente: o painel
+ * segue o histórico de métricas e o ponto do mapa (tarefa 180) some se a
+ * conta perdeu o recurso de mapas.
+ */
 export async function filtrarPaineisDoChat(
   usuario: string,
   partes: ParteDoChat[]
 ): Promise<ParteDoChat[]> {
   if (!partes.length) return partes;
-  if (!(await recursoAtivoNaPlataforma('metrics_history_days'))) return [];
-  const limite = await limiteDeMetricasDaConta(usuario),
-    corte = corteDoHistorico(limite);
-  const comEscores = await contaTemRecurso(usuario, 'ai_scores');
-  return partes.map((parte) => {
+  const temPainel = partes.some((p) => p.tipo === 'painel');
+  const temPonto = partes.some((p) => p.tipo === 'ponto-do-mapa');
+  const metricasAtivas =
+    temPainel && (await recursoAtivoNaPlataforma('metrics_history_days'));
+  const limite = metricasAtivas ? await limiteDeMetricasDaConta(usuario) : 0;
+  const corte = corteDoHistorico(limite);
+  const comEscores = metricasAtivas
+    ? await contaTemRecurso(usuario, 'ai_scores')
+    : false;
+  const comMapa = temPonto
+    ? await contaTemRecurso(usuario, 'vedic_insights')
+    : false;
+  return partes.flatMap((parte): ParteDoChat[] => {
+    if (parte.tipo === 'ponto-do-mapa') return comMapa ? [parte] : [];
+    if (!metricasAtivas) return [];
     const dias =
       limite === 0
         ? []
@@ -63,10 +77,12 @@ export async function filtrarPaineisDoChat(
               ...dia,
               prontidao: comEscores ? dia.prontidao : null,
             }));
-    return {
-      ...parte,
-      dias,
-      indisponivel: limite === 0 ? 'plano' : dias.length ? null : 'sem-dados',
-    };
+    return [
+      {
+        ...parte,
+        dias,
+        indisponivel: limite === 0 ? 'plano' : dias.length ? null : 'sem-dados',
+      },
+    ];
   });
 }

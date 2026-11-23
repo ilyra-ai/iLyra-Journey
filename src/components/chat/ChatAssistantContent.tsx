@@ -53,6 +53,11 @@ import {
   useTreinamentoDoChat,
 } from './TreinamentoDoChat';
 
+const PontoDoMapaNaConversa = dynamic(() =>
+  import('./PontoDoMapaNaConversa').then(
+    (modulo) => modulo.PontoDoMapaNaConversa
+  )
+);
 const PainelDaConversa = dynamic(
   () => import('./PainelDaConversa').then((modulo) => modulo.PainelDaConversa),
   { loading: () => <p role="status">Abrindo seus registros…</p> }
@@ -365,15 +370,21 @@ export function ChatAssistantContent({
     return () => container.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const pontoEnviado = useRef(false);
   const handleSendMessage = async (text: string) => {
     setIsNearBottom(true);
+    // Só a primeira pergunta vinda do mapa leva o ponto (tarefa 180).
+    const ponto =
+      pontoDoMapa && !pontoEnviado.current ? pontoDoMapa.graha : undefined;
+    if (ponto) pontoEnviado.current = true;
     const concluido = await historico.enviar(
       text,
       privacyMode ? '' : userApiKey,
       undefined,
       false,
       anexos,
-      consentimentoAnexos
+      consentimentoAnexos,
+      ponto
     );
     setConsentimentoAnexos(false);
     if (concluido) setAnexos([]);
@@ -677,9 +688,18 @@ export function ChatAssistantContent({
                     Resposta incompleta. Tente novamente para concluir.
                   </p>
                 )}
-                {msg.partes?.map((parte, indice) => (
-                  <PainelDaConversa key={indice} painel={parte} />
-                ))}
+                {msg.partes?.map((parte, indice) =>
+                  parte.tipo === 'painel' ? (
+                    <PainelDaConversa key={indice} painel={parte} />
+                  ) : (
+                    <PontoDoMapaNaConversa
+                      key={indice}
+                      ponto={parte}
+                      aoPerguntar={(texto) => void handleSendMessage(texto)}
+                      desabilitado={isTyping || historico.carregando}
+                    />
+                  )
+                )}
                 {msg.imagem ? (
                   <PlanFeatureGate features={['chat_images']} ocultar>
                     {' '}

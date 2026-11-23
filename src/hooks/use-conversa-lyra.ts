@@ -85,13 +85,19 @@ export function useConversaLyra(
     ocupado.current = false;
   };
 
+  // Refazer uma resposta com ponto do mapa pede o ponto de novo.
+  const pontoDaResposta = (turno?: TurnoDaConversa) =>
+    turno?.partes?.find((parte) => parte.tipo === 'ponto-do-mapa')?.graha;
+
   const enviar = async (
     texto: string,
     chave: string,
     refazer?: TurnoDaConversa,
     painel = false,
     anexos: string[] = [],
-    consentimentoAnexos = false
+    consentimentoAnexos = false,
+    /** Planeta de origem da pergunta (tarefas 180 e 187). */
+    ponto?: string
   ) => {
     if (
       ocupado.current ||
@@ -160,7 +166,12 @@ export function useConversaLyra(
             : {}),
           regenerate: refazer?.estado === 'concluido',
           privacyMode,
-          painel: painel || Boolean(refazer?.partes?.length),
+          painel:
+            painel ||
+            Boolean(refazer?.partes?.some((parte) => parte.tipo === 'painel')),
+          ...((ponto ?? pontoDaResposta(refazer))
+            ? { ponto: ponto ?? pontoDaResposta(refazer) }
+            : {}),
         },
         controle.signal,
         (resposta) => {
