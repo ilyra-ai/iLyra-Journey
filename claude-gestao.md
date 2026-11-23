@@ -1792,7 +1792,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Critérios de aceite:** painéis com dados reais e estados vazios honestos; eventos correspondem a etapas executadas; assinatura confirmada somente com provedor; dados pessoais ausentes dos payloads; exclusão/consentimento testados; A/B se aprovado não muda benefícios nem produz cobranças indevidas; zero números de marketing inventados.
 
-### 171 · QA integral do programa, segurança, regressão e compatibilidade mobile/desktop · ⚪ PENDENTE
+### 171 · QA integral do programa, segurança, regressão e compatibilidade mobile/desktop · 🟡 EXECUTADA (com itens inconclusivos)
+
+- **Executada em 23/11/2026 (commit `2f3b952f`).** Relatório em `docs/auditoria/2026-11-23-qa-integral-171.md`. `pnpm check:rotas` (novo): 253 combinações de rota e método sem cookie, 231 recusam com 401/403, 22 públicas por desenho com motivo registrado, 0 falhas. Corrigido: `/api/data/[table]` validava o corpo antes da sessão (agora 401 antes de ler o pedido) e `/inovacoes` tinha dois `h1`. Larguras 320 a 1920 px em 10 telas sem transbordo; alvos de toque de 44 px (182); verificação de acessibilidade em 11 telas sem achados além do corrigido; cálculo 37/37 (183); gates verdes (1302 unitários, 669 de integração, build). **Inconclusivo:** Stripe real (credenciais de teste do titular), Google/Apple (app registrado), chaves de acesso em aparelho real, iOS/Android e leitores de tela reais, axe-core (carregamento por CDN bloqueado nesta sessão), Pix (169 aguarda decisão).
 
 **Prioridade:** crítica para fechamento, não substitui QA incremental. **Dependências:** implementações não bloqueadas de 155–170. **Finalidade:** provar os recursos discutidos e todos os pontos de integração, não declarar funcionamento por existência de arquivo.
 
