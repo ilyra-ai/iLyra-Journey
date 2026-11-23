@@ -18,6 +18,7 @@
     "check:lint": "eslint .",
     "check:format": "prettier --check .",
     "check:types": "next typegen && tsc --noEmit",
+    "check:rotas": "node scripts/verificar-rotas-sem-sessao.mjs",
     "env:init": "node scripts/env-init.mjs",
     "db:start": "pnpm run env:init && docker compose --env-file .env.local up -d --wait mysql && pnpm run db:migrate",
     "db:migrate": "node scripts/mysql-migrate.mjs",

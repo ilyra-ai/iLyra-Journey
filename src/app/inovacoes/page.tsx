@@ -531,9 +531,10 @@ function ExploradorDeInovacoes() {
             <Orbit className="size-5" aria-hidden="true" />
             Motor da Lyra · Descobertas avançadas
           </div>
-          <h1 className="font-display text-3xl font-semibold tracking-tight">
+          {/* O <h1> da página é o do cabeçalho (padrão do PageIntro). */}
+          <h2 className="font-display text-3xl font-semibold tracking-tight">
             Explore o seu céu com precisão
-          </h1>
+          </h2>
           <p className="max-w-3xl text-muted-foreground">
             Cinco cálculos astronômicos e astrológicos do motor próprio da Lyra,
             sem depender de modelos de IA conectados. Leituras astrológicas são

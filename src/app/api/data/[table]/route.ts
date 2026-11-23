@@ -9,6 +9,7 @@ import {
   runUpdateQuery,
   runUpsertQuery,
 } from '@/lib/mysql/data-api';
+import { HttpError } from '@/lib/http-error';
 import { getServerSession } from '@/lib/mysql/server-auth';
 
 export const runtime = 'nodejs';
@@ -59,6 +60,21 @@ const atualizarSchema = z.object({
 });
 const excluirSchema = z.object({ filters: filtrosSchema });
 
+/**
+ * Sessão antes de qualquer validação do pedido (tarefa 171): sem conta, a
+ * resposta é 401 e não revela a estrutura esperada do corpo. A camada de
+ * dados confere a sessão de novo, por tabela.
+ */
+async function exigirSessao(operacao: 'leitura' | 'escrita') {
+  const session = await getServerSession();
+  if (!session)
+    throw new HttpError(
+      `Sessão autenticada obrigatória para ${operacao}.`,
+      401
+    );
+  return session;
+}
+
 function numeroOuNulo(valor: string | null) {
   return valor === null || valor === '' ? null : Number(valor);
 }
@@ -69,7 +85,7 @@ export async function GET(
 ) {
   try {
     const { table } = await params;
-    const session = await getServerSession();
+    const session = await exigirSessao('leitura');
     const searchParams = request.nextUrl.searchParams;
 
     const result = await runSelectQuery({
@@ -109,7 +125,7 @@ export async function POST(
 ) {
   try {
     const { table } = await params;
-    const session = await getServerSession();
+    const session = await exigirSessao('escrita');
     const body = await lerJson(request, inserirSchema);
 
     let result;
@@ -145,7 +161,7 @@ export async function PATCH(
 ) {
   try {
     const { table } = await params;
-    const session = await getServerSession();
+    const session = await exigirSessao('escrita');
     const body = await lerJson(request, atualizarSchema);
 
     const result = await runUpdateQuery({
@@ -167,7 +183,7 @@ export async function DELETE(
 ) {
   try {
     const { table } = await params;
-    const session = await getServerSession();
+    const session = await exigirSessao('escrita');
     const body = await lerJson(request, excluirSchema);
 
     const result = await runDeleteQuery({
