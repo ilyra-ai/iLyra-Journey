@@ -2553,7 +2553,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Referência primária ou antecedente para investigação:** https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
 - **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
 
-### 181 · Navegação espacial contextual entre mapas e Lyra · ⚪ A INICIAR
+### 181 · Navegação espacial contextual entre mapas e Lyra · 🟡 IMPLEMENTADA
+
+- **Implementada em 23/11/2026 (commit `db063928`), junto das 186 e 187.** O planeta escolhido no Astrolábio vai para `?ponto=` com `replaceState`: recarregar mantém o contexto, o Voltar continua normal e só o identificador do planeta vai na URL. A troca de planeta usa View Transitions quando há suporte e sem pedido de menos movimento. Ao abrir por `/?ponto=` (ou na volta do chat), o foco vai para o planeta. Fechar o mapa limpa o parâmetro lido da URL na hora; corrigido no caminho um caso em que o modal reabria. Conferido no navegador: escolha grava `?ponto=lua`, fechar limpa, recarregar com `?ponto=lua` reabre com o foco na Lua. Aspectos entre planetas não existem no Motor védico atual e não foram inventados. Fica 🟡 até a homologação em iOS/Android e com zoom de 200%.
 
 - **Origem do pedido:** Top 3 UI/UX PREMIUM · item 2; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
 - **Finalidade premium e escopo funcional:** Transições contínuas entre o planeta selecionado, seu aspecto, a leitura e a pergunta à Lyra, sem perda de contexto.
