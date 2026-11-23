@@ -1872,7 +1872,9 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Critério de aceite do item 171:** todos os cenários aplicáveis com **evidência real**, diferenças justificadas e falhas bloqueantes corrigidas. Não reclassificar erro como aprovada por mudar teste; UI sem funcionalidade real não é sucesso. Relatório obrigatório com severidade, responsável, SHA, reprodutibilidade, correção e reteste.
 
-### 172 · Publicação controlada, migrações reversíveis e estabilização do novo modelo · ⚪ PENDENTE
+### 172 · Publicação controlada, migrações reversíveis e estabilização do novo modelo · 🔴 BLOQUEADA (aguarda o titular)
+
+- **Feito em 23/11/2026 (commit `cf934045`), na parte que não depende do titular.** `scripts/verificar-backup-restauracao.sh`: dump consistente, restauração num banco descartável e comparação de linhas e `CHECKSUM TABLE` (111 tabelas idênticas; descartável apagado). Migrações idempotentes (nova execução: 0 aplicadas, 86 já aplicadas) e repetidas num banco vazio a cada gate. `docs/lancamento-programa-2026-11.md`: notas de mudança, exposição de cada recurso com padrão seguro (checkout fechado sem preços na Stripe, Google/Apple desligados, grupos da 144 desligados), reversão de cada migração 078–084 (todas aditivas, nenhuma toca pagamentos), plano de incidentes e `pnpm check:rotas`. Catálogo público conferido: só a Lyra Journey, com as duas contribuições de mesmo acesso. **Bloqueado no titular:** preço final e cadastro dos preços na Stripe, domínio e HTTPS de produção (Google, Apple e chaves de acesso), Stripe de produção com webhook, publicação no servidor de produção com monitoramento e QA pós-lançamento no ambiente real.
 
 **Prioridade:** crítica. **Dependências:** 171 e tarefas relevantes concluídas/homologadas; não promover opções externas condicionais ainda não viáveis como se tivessem sido entregues.
 
