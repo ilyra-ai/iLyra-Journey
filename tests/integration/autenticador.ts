@@ -44,7 +44,7 @@ function cbor(valor: Cbor): Buffer {
   }
   if (valor instanceof Uint8Array)
     return Buffer.concat([cabecalho(2, valor.length), Buffer.from(valor)]);
-  const partes = [cabecalho(5, valor.size)];
+  const partes: Buffer[] = [cabecalho(5, valor.size)];
   for (const [chave, item] of valor) partes.push(cbor(chave), cbor(item));
   return Buffer.concat(partes);
 }
