@@ -382,6 +382,16 @@ export const navigationItems: NavigationDefinition[] = [
     adminOnly: true,
   },
   {
+    href: '/admin/qualidade',
+    label: 'Centro de qualidade',
+    description:
+      'Cálculos do Motor conferidos contra referências independentes e qualidade dos modelos de IA.',
+    icon: ShieldCheck,
+    section: 'Administração',
+    sectionKey: 'admin',
+    adminOnly: true,
+  },
+  {
     href: '/admin/funil',
     label: 'Funil da descoberta',
     description:

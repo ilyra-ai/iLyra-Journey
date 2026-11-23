@@ -124,7 +124,12 @@ const SECOES: DefinicaoDeSecao[] = [
         id: 'dados-relatorios',
         titulo: 'Dados e relatórios',
         icone: BarChart3,
-        destinos: ['/admin/data-health', '/admin/reports', '/admin/funil'],
+        destinos: [
+          '/admin/data-health',
+          '/admin/reports',
+          '/admin/funil',
+          '/admin/qualidade',
+        ],
       },
     ],
   },
