@@ -45,7 +45,7 @@ const SECOES: DefinicaoDeSecao[] = [
     titulo: 'Dia a dia',
     chave: 'principal',
     rotuloAnterior: 'Principal',
-    destinos: ['/chat', '/', '/inovacoes', '/dia'],
+    destinos: ['/chat', '/', '/inovacoes', '/futuros', '/dia'],
     submenus: [],
   },
   {

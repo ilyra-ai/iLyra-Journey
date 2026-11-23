@@ -28,6 +28,7 @@ import {
   Sparkles,
   Sunrise,
   Target,
+  Theater,
   UserRound,
   UsersRound,
   Utensils,
@@ -80,6 +81,15 @@ export const navigationItems: NavigationDefinition[] = [
     description:
       'Trânsitos exatos, D9/D10, astrocartografia, retornos e eclipses calculados pela Lyra.',
     icon: Orbit,
+    section: 'Principal',
+    sectionKey: 'principal',
+  },
+  {
+    href: '/futuros',
+    label: 'Teatro dos Futuros',
+    description:
+      'Três histórias hipotéticas a partir de caminhos que você escreve. Não é previsão.',
+    icon: Theater,
     section: 'Principal',
     sectionKey: 'principal',
   },

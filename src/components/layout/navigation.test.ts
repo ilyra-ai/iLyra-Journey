@@ -14,15 +14,15 @@ const INICIO_DA_NAVEGACAO = [
   '/plan',
 ];
 
-// Com uma configuração salva, "Meu céu avançado" (rota posterior ao registro)
-// entra logo depois do Painel, sua antecessora na navegação.
+// Com uma configuração salva, "Meu céu avançado" e o "Teatro dos Futuros"
+// (rotas posteriores ao registro) entram logo depois das antecessoras.
 const INICIO_COM_CEU_AVANCADO = [
   '/chat',
   '/',
   '/inovacoes',
+  '/futuros',
   '/dia',
   '/semana',
-  '/respiracao',
 ];
 
 function semAsPaginas(hrefs: string[]): AppPageConfig {
