@@ -115,6 +115,7 @@ const SECOES: DefinicaoDeSecao[] = [
         icone: ClipboardList,
         destinos: [
           '/admin/content',
+          '/admin/publicacao',
           '/admin/lyra-verbetes',
           '/admin/exames-medicos',
           '/admin/ai-config',

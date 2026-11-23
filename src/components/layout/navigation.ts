@@ -382,6 +382,16 @@ export const navigationItems: NavigationDefinition[] = [
     adminOnly: true,
   },
   {
+    href: '/admin/publicacao',
+    label: 'Estúdio de publicação',
+    description:
+      'Diferença do rascunho, publicação com justificativa, versões e reversão das páginas.',
+    icon: History,
+    section: 'Administração',
+    sectionKey: 'admin',
+    adminOnly: true,
+  },
+  {
     href: '/admin/qualidade',
     label: 'Centro de qualidade',
     description:

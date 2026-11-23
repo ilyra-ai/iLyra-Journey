@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 
-import { queryRows, executeStatement } from '@/lib/mysql/pool';
+import { queryRows, executeStatement, withTransaction } from '@/lib/mysql/pool';
+import { registrarVersao } from '@/lib/site-page-config/versoes';
 import {
   getDefaultPageConfig,
   parsePageConfig,
@@ -142,7 +143,10 @@ export async function publishSitePageDraft<TKey extends SitePageKey>(options: {
   pageKey: TKey;
   actorUserId: string;
   config?: unknown;
-}): Promise<StoredPageConfig<TKey>> {
+  /** Justificativa da publicação, guardada na versão (tarefa 184). */
+  nota?: string | null;
+  origem?: 'publicacao' | 'reversao';
+}): Promise<StoredPageConfig<TKey> & { versaoPublicada: number | null }> {
   const row = await getSitePageConfigRow(options.pageKey);
   const fallbackDraft = getDefaultPageConfig(options.pageKey);
   const draftConfig =
@@ -152,46 +156,61 @@ export async function publishSitePageDraft<TKey extends SitePageKey>(options: {
         ? parsePageConfig(options.pageKey, parseStoredJson(row.draft_config))
         : fallbackDraft;
 
-  if (row) {
-    await executeStatement(
-      `
-        UPDATE site_page_configs
-        SET
-          draft_config = ?,
-          published_config = ?,
-          updated_by_user_id = ?
-        WHERE page_key = ?
-      `,
-      [
-        serializePageConfig(draftConfig),
-        serializePageConfig(draftConfig),
-        options.actorUserId,
-        options.pageKey,
-      ]
-    );
-  } else {
-    await executeStatement(
-      `
-        INSERT INTO site_page_configs (
-          id,
-          page_key,
-          draft_config,
-          published_config,
-          updated_by_user_id
-        )
-        VALUES (?, ?, ?, ?, ?)
-      `,
-      [
-        randomUUID(),
-        options.pageKey,
-        serializePageConfig(draftConfig),
-        serializePageConfig(draftConfig),
-        options.actorUserId,
-      ]
-    );
-  }
+  // Publicar e registrar a versão juntos: sem versão, sem publicação.
+  const versaoPublicada = await withTransaction(async (conexao) => {
+    if (row) {
+      await executeStatement(
+        `
+          UPDATE site_page_configs
+          SET
+            draft_config = ?,
+            published_config = ?,
+            updated_by_user_id = ?
+          WHERE page_key = ?
+        `,
+        [
+          serializePageConfig(draftConfig),
+          serializePageConfig(draftConfig),
+          options.actorUserId,
+          options.pageKey,
+        ],
+        conexao
+      );
+    } else {
+      await executeStatement(
+        `
+          INSERT INTO site_page_configs (
+            id,
+            page_key,
+            draft_config,
+            published_config,
+            updated_by_user_id
+          )
+          VALUES (?, ?, ?, ?, ?)
+        `,
+        [
+          randomUUID(),
+          options.pageKey,
+          serializePageConfig(draftConfig),
+          serializePageConfig(draftConfig),
+          options.actorUserId,
+        ],
+        conexao
+      );
+    }
+    return registrarVersao(conexao, {
+      pageKey: options.pageKey,
+      config: JSON.parse(serializePageConfig(draftConfig)),
+      origem: options.origem ?? 'publicacao',
+      nota: options.nota?.trim() || null,
+      autor: options.actorUserId,
+    });
+  });
 
-  return getAdminSitePageConfig(options.pageKey);
+  return {
+    ...(await getAdminSitePageConfig(options.pageKey)),
+    versaoPublicada,
+  };
 }
 
 export async function restoreSitePageDraftFromPublished<
