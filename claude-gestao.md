@@ -2620,7 +2620,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Referência primária ou antecedente para investigação:** https://www.nngroup.com/articles/state-of-ux-2026/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
 - **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
 
-### 186 · Astrolábio Vivo: mapa explorável e contextual · ⚪ A INICIAR
+### 186 · Astrolábio Vivo: mapa explorável e contextual · 🟡 IMPLEMENTADA
+
+- **Implementada em 23/11/2026 (commit `30322745`).** No mapa completo do Painel ("Explorar meu mapa"), a roda dos 12 signos com os planetas nas longitudes reais do Motor (Lahiri), Lagna às 9 horas e casas por signo inteiro; sem hora de nascimento, sem Lagna nem casas e com aviso. Escolher um planeta (clique na roda; lista de botões pelo teclado e leitor de tela) abre signo, grau, nakshatra e pada, casa, método e limitações (casa com hora estimada; Lua sem hora com os signos possíveis). A serialização do mapa passou a trazer a longitude sideral e o índice do signo. Geometria em funções puras com testes (4), planetas próximos em degraus. Corrigido no caminho: o modal do mapa transbordava na horizontal no celular por causa da tabela (`min-w-0` no cartão). A pergunta à Lyra a partir do ponto entra com a tarefa 187. Fica 🟡 até a homologação visual.
 
 - **Origem do pedido:** Top 3 Usuários · item 1; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
 - **Finalidade premium e escopo funcional:** Exploração acessível do próprio céu em que cada planeta, casa, aspecto e período abre o cálculo e explicação contextual.
