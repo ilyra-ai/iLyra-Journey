@@ -2644,7 +2644,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Referência primária ou antecedente para investigação:** https://developers.googleblog.com/a2ui-10-build-delightful-fast-reliable-agentic-experiences/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
 - **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
 
-### 188 · Trilha de Autodescoberta Progressiva gratuita e premium · ⚪ A INICIAR
+### 188 · Trilha de Autodescoberta Progressiva gratuita e premium · 🟡 IMPLEMENTADA
+
+- **Implementada em 23/11/2026 (commit `aa09790b`).** A trilha já vinha das tarefas 155 a 161 (13+, leitura calculada, incerteza de cúspide, retorno ao destino, convite com as duas contribuições). Faltava "aprofundar e guardar só depois de consentimento e login": no resultado gratuito, a opção "Levar meu nome e minha data de nascimento para o cadastro" (desligada por padrão) leva a pessoa ao cadastro com nome e sobrenome preenchidos e ao onboarding com a data, com o aviso "Trouxemos a data da sua leitura gratuita; confira". Os dados ficam só na memória da janela (sem localStorage, sessionStorage, cookie ou URL), vencem em 30 min, somem ao recarregar, fechar ou sair, e o onboarding usa a data uma vez, só se o perfil não tem. Política de privacidade 2026-11-23. Testes: 4 unitários; no navegador, fluxo completo até o onboarding com a data preenchida e nada no armazenamento do navegador. **Observação:** o commit chegou à `main` antes dos gates dele, por engano no push do gestor; os gates rodaram em seguida sobre a `main` e passaram (1277 unitários, 659 de integração e build).
 
 - **Origem do pedido:** Top 3 Usuários · item 3; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
 - **Finalidade premium e escopo funcional:** Uma descoberta inicial realmente calculada, com escolhas progressivas e acesso premium solicitado apenas quando necessário.
