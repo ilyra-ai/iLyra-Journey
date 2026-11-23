@@ -2540,7 +2540,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 
 **Aceite:** dois orquestradores reais e completos nos respectivos ambientes, `run.py` retirado após migração comprovada, nenhuma porta liberada à força, documentação coerente e validação real publicada. Esta nova tarefa eleva o total para 174 e as pendências para 34 (12 em validação, três em andamento, 19 a iniciar); a implementação não foi antecipadamente aprovada.
 
-### 180 · Generative UI com A2UI 1.0 para respostas interativas · ⚪ A INICIAR
+### 180 · Generative UI com A2UI 1.0 para respostas interativas · 🟡 IMPLEMENTADA
+
+- **Implementada em 23/11/2026 (commit `83148791`), estendendo o catálogo fechado de partes da tarefa 147.** A A2UI 1.0 foi avaliada e não adotada: o renderer próprio já cobre o contrato versionado e nunca executa nada vindo do modelo, e trazer outra arquitetura duplicaria a da 147. Nova parte `ponto-do-mapa` versão 1 (Zod estrito, união discriminada com o painel; tipo desconhecido, HTML, campos extras ou versão futura recusados). Quando a pergunta vem de um ponto do mapa (187), o chat envia só o identificador do planeta e o servidor monta a parte do mapa calculado do titular, com o plano conferido; sem recurso, mapa ou planeta, a resposta segue só em texto. Gravada com a resposta, volta ao reabrir, é pedida de novo ao refazer e some ao reabrir se o plano perdeu os mapas. No chat: posição, nakshatra, casa, leitura do Motor, "Ver no mapa" e continuações que só enviam texto. Testes: 3 unitários e 3 de integração; no navegador, pergunta do mapa com resposta da IA local, cartão na resposta e de volta após recarregar. Comparações e períodos interativos ficam para novas partes do mesmo catálogo. Fica 🟡 até a homologação.
 
 - **Origem do pedido:** Top 3 UI/UX PREMIUM · item 1; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
 - **Finalidade premium e escopo funcional:** Respostas do chat são transformadas em componentes nativos React apenas quando ajudam a explorar mapas, resultados, período e comparações.
