@@ -1,6 +1,7 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { flushSync } from 'react-dom';
 import Link from 'next/link';
 
 import {
@@ -46,18 +47,54 @@ export function Astrolabio({
   mapa,
   leituras = [],
   pontoInicial = null,
+  sincronizarUrl = false,
 }: {
   mapa: MapaNatalJson;
   /** Leitura determinística do Motor para cada planeta (tarefa 187). */
   leituras?: LeituraDeGraha[];
   /** Planeta já escolhido ao abrir (volta do chat, `/?ponto=sol`). */
   pontoInicial?: string | null;
+  /** Guarda o planeta escolhido em `?ponto=` (tarefa 181), no Painel. */
+  sincronizarUrl?: boolean;
 }) {
   const id = useId();
   const [selecionado, setSelecionado] = useState<string | null>(
     mapa.planetas.some((p) => p.graha === pontoInicial) ? pontoInicial : null
   );
   const leitura = leituras.find((l) => l.graha === selecionado) ?? null;
+  const botoes = useRef(new Map<string, HTMLButtonElement>());
+
+  // Volta do chat (tarefas 181 e 187): o foco vai para o planeta de origem.
+  useEffect(() => {
+    if (pontoInicial) botoes.current.get(pontoInicial)?.focus();
+  }, [pontoInicial]);
+
+  /**
+   * Troca de planeta com transição contínua quando o navegador oferece View
+   * Transitions e a pessoa não pediu menos movimento; sem isso, troca direto.
+   * A URL guarda só o identificador do planeta, sem entrada nova no
+   * histórico: recarregar mantém o ponto e o Voltar continua normal.
+   */
+  function escolher(graha: string) {
+    const aplicar = () => setSelecionado(graha);
+    if (sincronizarUrl) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('ponto', graha);
+      window.history.replaceState(
+        window.history.state,
+        '',
+        url.pathname + url.search + url.hash
+      );
+    }
+    const reduzir = window.matchMedia?.(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    if (typeof document.startViewTransition === 'function' && !reduzir) {
+      document.startViewTransition(() => flushSync(aplicar));
+      return;
+    }
+    aplicar();
+  }
   const ascendente = mapa.lagna?.longitude ?? 0;
   const indiceDoLagna = mapa.lagna?.indiceDoSigno ?? null;
   const raios = raiosSemSobreposicao(mapa.planetas.map((p) => p.longitude));
@@ -165,7 +202,7 @@ export function Astrolabio({
               <g
                 key={p.graha}
                 className="cursor-pointer"
-                onClick={() => setSelecionado(p.graha)}
+                onClick={() => escolher(p.graha)}
               >
                 <line
                   x1={marca.x}
@@ -209,9 +246,13 @@ export function Astrolabio({
               <li key={p.graha}>
                 <button
                   type="button"
+                  ref={(el) => {
+                    if (el) botoes.current.set(p.graha, el);
+                    else botoes.current.delete(p.graha);
+                  }}
                   aria-pressed={p.graha === selecionado}
                   aria-label={descricao(p)}
-                  onClick={() => setSelecionado(p.graha)}
+                  onClick={() => escolher(p.graha)}
                   className="min-h-11 rounded-md border border-border px-3 text-sm aria-pressed:border-primary aria-pressed:bg-primary/10"
                 >
                   {p.nome.split(' (')[0]}
@@ -223,6 +264,7 @@ export function Astrolabio({
           <div
             aria-live="polite"
             className="rounded-lg border border-border p-3 text-sm"
+            style={{ viewTransitionName: 'ponto-do-mapa' }}
           >
             {planeta ? (
               <dl className="grid gap-2">

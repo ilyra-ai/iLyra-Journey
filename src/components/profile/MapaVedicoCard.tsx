@@ -173,7 +173,10 @@ function avisarFalha(falha: unknown) {
  */
 export function MapaVedicoCard({
   pontoInicial = null,
+  sincronizarUrl = false,
 }: {
+  /** No Painel, o planeta escolhido vai para `?ponto=` (tarefa 181). */
+  sincronizarUrl?: boolean;
   /** Planeta já escolhido no Astrolábio (volta do chat, tarefa 187). */
   pontoInicial?: string | null;
 } = {}) {
@@ -296,6 +299,7 @@ export function MapaVedicoCard({
               mapa={data.mapa}
               leituras={data.leitura?.vedico.planetas ?? []}
               pontoInicial={pontoInicial}
+              sincronizarUrl={sincronizarUrl}
             />
 
             <Table

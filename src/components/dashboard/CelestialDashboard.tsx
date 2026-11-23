@@ -518,8 +518,10 @@ export function CelestialDashboard() {
         open={modalAberto !== null}
         onOpenChange={(aberto) => {
           if (aberto) return;
-          if (ponto) {
-            const url = new URL(window.location.href);
+          // Lido da URL agora: a escolha de planeta no Astrolábio grava
+          // `?ponto=` sem passar por este componente (tarefa 181).
+          const url = new URL(window.location.href);
+          if (url.searchParams.has('ponto')) {
             url.searchParams.delete('ponto');
             window.history.replaceState(
               window.history.state,
@@ -574,7 +576,7 @@ export function CelestialDashboard() {
               </p>
             )
           ) : modalAberto === 'mapa' ? (
-            <MapaCompleto pontoInicial={ponto} />
+            <MapaCompleto pontoInicial={ponto} sincronizarUrl />
           ) : modalAberto === 'signo' ? (
             <section>
               {imagemSigno ? (
