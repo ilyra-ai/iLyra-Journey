@@ -24,6 +24,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useKeyedResource } from '@/hooks/use-keyed-resource';
 import type { MapaNatalJson } from '@/lib/astrology/serializacao';
 import { ouvirMapaAtualizado } from '@/lib/astrology/evento-do-mapa';
+import { Astrolabio } from './Astrolabio';
 import type { LeituraDaLyra } from '@/lib/lyra/leitura-do-mapa';
 
 /**
@@ -188,7 +189,7 @@ export function MapaVedicoCard() {
   );
 
   return (
-    <Card>
+    <Card className="min-w-0">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Orbit className="h-5 w-5 text-cosmic" aria-hidden="true" />
@@ -285,6 +286,8 @@ export function MapaVedicoCard() {
                 {data.leitura.avisoDaHora}
               </p>
             ) : null}
+
+            <Astrolabio mapa={data.mapa} />
 
             <Table
               scrollLabel="Posição dos grahas no mapa natal (rolável)"

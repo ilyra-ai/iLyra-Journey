@@ -31,6 +31,10 @@ export function mapaParaJson(mapa: MapaNatal) {
     lagna: mapa.lagna
       ? {
           signo: mapa.lagna.nomeDoSigno,
+          // Para desenhar o mapa (Astrolábio, tarefa 186): índice do signo
+          // (0 = Áries) e longitude sideral absoluta, com duas casas.
+          indiceDoSigno: mapa.lagna.signo,
+          longitude: Math.round(mapa.lagna.longitude * 100) / 100,
           rashi: mapa.lagna.rashi,
           grau: grausEMinutos(mapa.lagna.grauNoSigno),
           nakshatra: mapa.lagna.nomeDoNakshatra,
@@ -42,6 +46,8 @@ export function mapaParaJson(mapa: MapaNatal) {
       graha: p.graha,
       nome: p.nome,
       signo: p.nomeDoSigno,
+      indiceDoSigno: p.signo,
+      longitude: Math.round(p.longitude * 100) / 100,
       rashi: p.rashi,
       grau: grausEMinutos(p.grauNoSigno),
       nakshatra: p.nomeDoNakshatra,
