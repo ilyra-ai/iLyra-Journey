@@ -2667,7 +2667,9 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Referência primária ou antecedente para investigação:** https://www.nngroup.com/articles/state-of-ux-2026/. A referência fundamenta técnica ou antecedente, não prova originalidade mundial.
 - **Estado real:** ⚪ não implementada, sem commit ou QA deste item; iniciar apenas mediante autorização.
 
-### 189 · Teatro dos Futuros Revisáveis: três cenários sem fatalismo · ⚪ A INICIAR
+### 189 · Teatro dos Futuros Revisáveis: três cenários sem fatalismo · 🟡 IMPLEMENTADA
+
+- **Implementada em 23/11/2026 (commit `b19eb793`).** Página "Teatro dos Futuros" (`/futuros`, plano com `vedic_insights`, na seção Dia a dia). A pessoa escreve a dúvida, o horizonte (3 meses, 1 ou 3 anos) e três caminhos; a Lyra devolve três histórias hipotéticas com o rótulo **NÃO É PREVISÃO**, separando fatos calculados do mapa (Mahadasha e subperíodo vigentes; virada de subperíodo só se cair no horizonte), símbolos da tradição (`TEMA_DO_DASHA`) e a ficção, que só reorganiza o que a pessoa escreveu. Regras determinísticas, sem modelo de IA; sem hora de nascimento, informa que o período não é determinável. Sessão efêmera: nada gravado; versões e trilha de hipóteses só na tela. Temas de risco à vida (orienta CVV 188 e SAMU 192) e decisões de saúde não viram cenário. Diário, Metas e os grupos desativados não foram tocados. Testes: 6 unitários e 2 de integração; no navegador, três histórias, nova versão com premissa alterada e a trilha. Fica 🟡 até a homologação.
 
 - **Origem do pedido:** Inovação autoral · Teatro dos Futuros Revisáveis; registrado em 13/11/2026, 11h20, America/Sao_Paulo. **Somente planejamento:** o usuário não autorizou codificar esta proposta nesta rodada.
 - **Finalidade premium e escopo funcional:** Pessoa explora três histórias hipotéticas condicionadas a escolhas próprias, altera premissas e compara como as narrativas mudam.
