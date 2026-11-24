@@ -169,8 +169,8 @@ describe('painel do funil na administração (tarefa 170)', () => {
       { amount_paid: 5000, currency: 'brl' },
       'error'
     );
-    await evento('charge.refunded', true, {
-      amount_refunded: 1999,
+    await evento('refund.created', true, {
+      amount: 1999,
       currency: 'brl',
     });
     const live = await ler('live');

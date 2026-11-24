@@ -826,8 +826,13 @@ export async function createStripeCheckoutUrl(options: {
       },
     ],
     metadata: metadados,
+    // Checkout em português para o público brasileiro.
+    locale: 'pt-BR',
     subscription_data: {
       metadata: metadados,
+      // Modo de cobrança recomendado pela Stripe para assinaturas novas:
+      // proração e datas de cobrança mais previsíveis.
+      billing_mode: { type: 'flexible' },
     },
   });
 

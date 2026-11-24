@@ -24,11 +24,11 @@ Um pagamento só aparece depois de confirmado pelo webhook da Stripe. As etapas 
   - Faturas de teste nunca entram nos números de produção.
 - **Faturamento:**
   - a receita soma `amount_paid` dos eventos `invoice.paid` processados;
-  - os reembolsos somam `amount_refunded` dos eventos `charge.refunded`;
+  - os reembolsos somam `amount` dos eventos `refund.created`, que o webhook do app assina;
   - tudo por moeda, convertido de centavos;
   - cada evento entra uma vez só, pela chave única do provedor;
   - evento com erro no processamento não conta.
-  - para os reembolsos aparecerem, o endpoint do webhook na Stripe precisa enviar `charge.refunded`. O webhook grava todo evento recebido, inclusive os que ele não trata.
+  - para os reembolsos aparecerem, o endpoint do webhook na Stripe precisa enviar `refund.created` (já está na lista de eventos da aba Pagamentos). O webhook grava todo evento recebido, inclusive os que ele não trata.
 - **Coorte mínima:** com menos de 10 no denominador, taxas e retorno não mostram porcentagem e aparecem como "amostra pequena". Com poucas pessoas a porcentagem engana e pode apontar alguém.
 - **Versão:** a resposta do painel traz `versao` (hoje 2). Ela muda quando o significado de algum número muda.
 - **Conta excluída:** sai de contas criadas e do retorno, porque as linhas somem. Os eventos de cobrança continuam, sem dado pessoal no painel.

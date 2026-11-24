@@ -275,8 +275,9 @@ async function retornoDasContas(agora: Date, dias: 7 | 30) {
 
 /**
  * Receita e reembolsos do período (tarefa 185), somados dos eventos da
- * Stripe já processados: faturas pagas (`amount_paid`) e cobranças
- * reembolsadas (`amount_refunded`), em centavos da moeda de cada evento.
+ * Stripe já processados: faturas pagas (`amount_paid`) e
+ * reembolsos criados (`refund.created`, campo `amount`), em centavos da
+ * moeda de cada evento: os eventos de reembolso que o webhook do app assina.
  * O evento fica uma vez só (chave única do provedor), então não há soma
  * duplicada por reenvio do webhook.
  */
@@ -304,7 +305,7 @@ async function faturamentoDoPeriodo(
     );
   const [pagas, reembolsadas] = await Promise.all([
     somar('invoice.paid', 'amount_paid'),
-    somar('charge.refunded', 'amount_refunded'),
+    somar('refund.created', 'amount'),
   ]);
   const valores = (linhas: typeof pagas): Valor[] =>
     linhas

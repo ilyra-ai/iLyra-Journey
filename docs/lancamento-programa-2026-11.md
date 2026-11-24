@@ -75,6 +75,6 @@ O responsável é o titular do projeto ou quem ele designar. Para cada gatilho, 
 
 1. **Preço final:** os valores implementados são R$ 9,99 e R$ 19,99 (tarefas 160 e 226). Para cobrar, é preciso cadastrar os preços de teste e de produção na Stripe e confirmar a decisão comercial.
 2. **Domínio e HTTPS de produção:** `APP_BASE_URL` com https, retorno do Google e da Apple cadastrado, e chaves de acesso no domínio final (o RP ID é o domínio).
-3. **Stripe de produção:** chaves live e webhook de produção com os eventos `checkout.session.completed`, `customer.subscription.*`, `invoice.paid` e `charge.refunded`.
+3. **Stripe de produção:** chaves live e webhook de produção com os eventos `checkout.session.completed`, `customer.subscription.*`, `invoice.*` e `refund.*`, conforme a lista da aba Pagamentos do admin.
 4. **Publicação no servidor de produção e monitoramento na janela de lançamento:** o funil, o centro de qualidade e o faturamento já são os painéis para isso.
 5. **QA pós-lançamento no ambiente real**, com contas de validação, sem cobrança live sem autorização.
