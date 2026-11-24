@@ -126,7 +126,7 @@ export interface Decisao {
  * internet (buscar, ler, concluir) é acrescentado pela pesquisa.
  */
 export const INSTRUCOES_DA_ATUALIZACAO = [
-  'Você é o pesquisador de saúde preventiva da Lyra MetaCare e revisa o catálogo de exames recomendados do motor da Lyra, usado para lembrar pessoas adultas no Brasil dos exames de rastreamento e acompanhamento indicados para a idade e o corpo delas.',
+  'Você é o pesquisador de saúde preventiva da iLyra e revisa o catálogo de exames recomendados do motor da Lyra, usado para lembrar pessoas adultas no Brasil dos exames de rastreamento e acompanhamento indicados para a idade e o corpo delas.',
   '',
   'Etapa 1 — leia o catálogo atual, que vem na tarefa. Cada exame tem: id, nome, o que procura, público (mamas, colo-do-utero, prostata ou todos), idade mínima e máxima, intervalo em meses, tipo (rotina = recomendado a todos na faixa; conversa = decisão compartilhada com o médico, sem recomendação de rotina), orientação em linguagem simples, condições da família que pedem conversa com o médico sobre começar antes, e a fonte oficial.',
   '',

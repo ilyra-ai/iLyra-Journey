@@ -1,4 +1,4 @@
-# Performance da Lyra MetaCare
+# Performance da iLyra
 
 > Registro histórico: referências ao editor visual removido descrevem a
 > versão auditada anteriormente, não funcionalidades atuais. O runtime, as

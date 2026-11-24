@@ -4,15 +4,15 @@ import { COR_DA_BARRA_DO_NAVEGADOR } from '@/components/theme/tema';
 
 /*
   Manifesto do aplicativo web (tarefa 47): nome, cores e ícones oficiais da
-  Lyra, usados quando a pessoa adiciona o app à tela inicial. Os ícones em
+  iLyra, usados quando a pessoa adiciona o app à tela inicial. Os ícones em
   `public/icones/` são gerados a partir do logo oficial, com fundo branco; o
   `maskable` deixa a marca dentro da área segura de 80% exigida pelos
   sistemas que recortam o ícone em círculo ou gota.
 */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Lyra MetaCare',
-    short_name: 'Lyra',
+    name: 'iLyra',
+    short_name: 'iLyra',
     description:
       'Bem-estar, longevidade e autoconhecimento com biometria, IA e astrologia védica.',
     lang: 'pt-BR',

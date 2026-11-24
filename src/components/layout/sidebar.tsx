@@ -90,7 +90,7 @@ function SidebarPrevia({
             <MarcaLyra tamanho={scalePx(36, iconScale)} prioridade />
             <span className="min-w-0">
               <span
-                className="block font-display font-semibold lowercase leading-tight text-foreground"
+                className="block font-display font-semibold leading-tight text-foreground"
                 style={{ fontSize: scaleRem(1.125, navLabelScale) }}
               >
                 {appConfig.sidebar.brandTitle}

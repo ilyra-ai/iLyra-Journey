@@ -116,35 +116,35 @@ function origemPublica() {
 export const metadata: Metadata = {
   metadataBase: origemPublica(),
   title: {
-    default: 'Lyra MetaCare',
-    template: '%s | Lyra MetaCare',
+    default: 'iLyra',
+    template: '%s | iLyra',
   },
   description:
     'Explore seus mapas pessoais, encontre novas perspectivas e converse com a Lyra. Autoconhecimento com leituras védicas, inteligência artificial e privacidade.',
   keywords: [
-    'Lyra MetaCare',
+    'iLyra',
     'autoconhecimento',
     'inteligência artificial',
     'astrologia védica',
     'mapas pessoais',
     'Lyra AI',
   ],
-  applicationName: 'Lyra MetaCare',
+  applicationName: 'iLyra',
   authors: [{ name: 'iLyra AI' }],
   creator: 'iLyra AI',
   publisher: 'iLyra AI',
   category: 'lifestyle',
   openGraph: {
-    title: 'Lyra MetaCare',
+    title: 'iLyra',
     description:
       'Um novo olhar para o seu dia. Explore seus mapas e converse com a Lyra.',
-    siteName: 'Lyra MetaCare',
+    siteName: 'iLyra',
     locale: 'pt_BR',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Lyra MetaCare',
+    title: 'iLyra',
     description:
       'Mapas pessoais, novas perspectivas e conversas com a Lyra AI, com privacidade e no seu ritmo.',
   },

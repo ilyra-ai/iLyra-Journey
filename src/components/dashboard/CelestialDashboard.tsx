@@ -511,7 +511,7 @@ export function CelestialDashboard() {
             </section>
           </div>
           <PrevencaoCard className={cn(styles.card, 'mt-6')} />
-          <div className={styles.footer}>Lyra MetaCare</div>
+          <div className={styles.footer}>iLyra</div>
         </>
       ) : null}
       <Dialog

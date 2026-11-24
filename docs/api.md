@@ -1,4 +1,4 @@
-# API da Lyra MetaCare (Route Handlers)
+# API da iLyra (Route Handlers)
 
 Todas as rotas ficam em `src/app/api/**/route.ts` e rodam no runtime Node.js. A sessão é um cookie `httpOnly` (`lyra_metacare_session`, JWT HS256 assinado com `AUTH_SECRET`).
 

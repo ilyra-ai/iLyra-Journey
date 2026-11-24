@@ -1,4 +1,4 @@
-# Lyra-MetaCare | MySQL 9.7.2 LTS
+# iLyra | MySQL 9.7.2 LTS
 #
 # Fonte única de configuração: .env.local, gerado por `pnpm env:init`.
 # Sempre executar com:
@@ -18,7 +18,7 @@ services:
     container_name: lyra-metacare-mysql
     restart: unless-stopped
 
-    # Configuração compatível com a aplicação Lyra-MetaCare.
+    # Configuração compatível com a aplicação iLyra.
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci

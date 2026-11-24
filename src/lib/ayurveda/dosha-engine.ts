@@ -1,5 +1,5 @@
 /**
- * Motor Ayurvédico Dinâmico de Doshas — Lyra MetaCare
+ * Motor Ayurvédico Dinâmico de Doshas — iLyra
  *
  * Calcula o dosha dominante (Vata, Pitta, Kapha) a partir de
  * biomarcadores fisiológicos reais do dia, não de questionários estáticos.

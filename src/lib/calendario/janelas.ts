@@ -28,7 +28,7 @@ export function eventosDoDia(
   }
 ): JanelaDoCalendario[] {
   const lembrete = opcoes.lembretes ? MINUTOS_DE_LEMBRETE : null;
-  const origem = `Calculado pela Lyra MetaCare com o céu de ${opcoes.lugar}.`;
+  const origem = `Calculado pela iLyra com o céu de ${opcoes.lugar}.`;
   const uid = (tipo: TipoDeJanela) =>
     `${tipo}-${panchang.data}-${opcoes.chaveDoUid}@lyra-metacare`;
 

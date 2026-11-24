@@ -31,7 +31,7 @@ Este modulo concentra a base reutilizavel do construtor visual administrativo da
 ## Instalacao portavel
 
 1. Copie a pasta `modules/lyra-customaze-ui-ux` para a raiz do projeto-alvo.
-2. Copie o script `Old/implement_elementor_lyra.py` deste repositório para a raiz do projeto-alvo (ele não é usado pelo próprio Lyra MetaCare, onde o módulo já está instalado).
+2. Copie o script `Old/implement_elementor_lyra.py` deste repositório para a raiz do projeto-alvo (ele não é usado pela própria iLyra, onde o módulo já está instalado).
 3. Execute `python implement_elementor_lyra.py`.
 4. O instalador vai:
    - validar se o projeto-alvo é compatível;

@@ -1,5 +1,5 @@
 /**
- * Motor de Índice Pránico (Energia Vital) — Lyra MetaCare
+ * Motor de Índice Pránico (Energia Vital) — iLyra
  *
  * Calcula o Prana Index: uma métrica que quantifica a energia vital
  * disponível no organismo, baseada na tradição védica do Prana

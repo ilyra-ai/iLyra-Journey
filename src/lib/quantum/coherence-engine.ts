@@ -1,5 +1,5 @@
 /**
- * Motor de Coerência Quântica — Lyra MetaCare
+ * Motor de Coerência Quântica — iLyra
  *
  * Calcula o Índice de Coerência Quântica (ICQ): uma nota de 0 a 100 que
  * combina os sinais registrados pela pessoa (HRV, frequência cardíaca, SpO₂,

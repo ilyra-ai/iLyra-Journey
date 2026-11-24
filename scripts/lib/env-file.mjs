@@ -139,7 +139,7 @@ export function completarEnv(
   if (novas.length > 0) {
     if (conteudoAtual === null) {
       linhas.push(
-        '# Configuração local da Lyra MetaCare (gerada por `pnpm env:init`).',
+        '# Configuração local da iLyra (gerada por `pnpm env:init`).',
         '# Contém segredos: não versione nem compartilhe este arquivo.',
         '# Documentação de cada variável: .env.example'
       );

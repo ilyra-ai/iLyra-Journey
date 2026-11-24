@@ -6,7 +6,7 @@
 
 **Mapas pessoais · Conversas com a Lyra · Novas perspectivas**
 
-[Seu espaço Lyra](#seu-espaço-lyra) · [Experiência visual](#experiência-visual-aprovada) · [Privacidade](#sua-privacidade) · [Documentação](#documentação-do-projeto)
+[Seu espaço iLyra](#seu-espaço-ilyra) · [Experiência visual](#experiência-visual-aprovada) · [Privacidade](#sua-privacidade) · [Documentação](#documentação-do-projeto)
 
 </div>
 
@@ -18,13 +18,13 @@
 
 </div>
 
-A Lyra MetaCare reúne leituras pessoais, inteligência artificial e histórico em uma experiência de autoconhecimento. O novo design aprovado combina atmosfera celestial, ilustrações de planetas e signos, títulos editoriais e detalhes em amarelo suave.
+A iLyra (antes chamada Lyra MetaCare) reúne leituras pessoais, inteligência artificial e histórico em uma experiência de autoconhecimento. O novo design aprovado combina atmosfera celestial, ilustrações de planetas e signos, títulos editoriais e detalhes em amarelo suave.
 
 **Sobre a imagem:** esta é a referência visual aprovada para o redesign da tarefa 147, detalhada no [painel de tarefas](./claude-gestao.md). A landing pública (149), o carregamento real (150) e o login/cadastro (151) receberam a identidade celestial; as demais telas aguardam suas etapas autorizadas. Nome, datas e leituras apresentados no mockup são ilustrativos.
 
 ---
 
-## Seu espaço Lyra
+## Seu espaço iLyra
 
 ### ✦ Seus mapas, novas perspectivas
 
@@ -89,7 +89,9 @@ Os oito grupos de registros e rotinas cuja desativação foi solicitada, assim c
 
 <div align="center">
 
-**Lyra MetaCare**
+**iLyra**
+
+Decifrando o Cosmos, Iluminando Destinos.
 
 Um novo olhar para o seu dia.
 

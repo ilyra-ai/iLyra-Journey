@@ -12,10 +12,10 @@ import {
 } from '@/lib/lgpd/documentos';
 
 export const metadata: Metadata = {
-  // O modelo do layout raiz acrescenta "| Lyra MetaCare".
+  // O modelo do layout raiz acrescenta "| iLyra".
   title: 'Política de privacidade',
   description:
-    'Como a Lyra MetaCare trata dados pessoais e dados de saúde, com base na LGPD.',
+    'Como a iLyra trata dados pessoais e dados de saúde, com base na LGPD.',
 };
 
 // O canal do encarregado vem do ambiente (LGPD_CONTATO_EMAIL), lido a cada
@@ -32,11 +32,11 @@ export default function PoliticaDePrivacidadePage() {
       conteudo: (
         <>
           <p>
-            A Lyra MetaCare é uma plataforma de bem-estar, longevidade e
-            autoconhecimento. Ela combina dados fisiológicos, hábitos e contexto
-            pessoal com motores de cálculo próprios, inteligência artificial e
-            uma camada de sabedoria integrativa (astrologia moderna e tradição
-            védica).{' '}
+            A iLyra (antes chamada Lyra MetaCare) é uma plataforma de bem-estar,
+            longevidade e autoconhecimento. Ela combina dados fisiológicos,
+            hábitos e contexto pessoal com motores de cálculo próprios,
+            inteligência artificial e uma camada de sabedoria integrativa
+            (astrologia moderna e tradição védica).{' '}
             <strong>
               A Lyra não é um serviço médico e nenhuma informação da plataforma
               substitui avaliação profissional de saúde.
@@ -452,12 +452,12 @@ export default function PoliticaDePrivacidadePage() {
       titulo: 'Crianças e adolescentes',
       conteudo: (
         <p>
-          A Lyra MetaCare não se destina a crianças. O cadastro e o Experimente
-          Grátis exigem 13 anos completos, conferidos no servidor pela data
-          informada; essa conferência é uma declaração de idade, não uma
-          verificação de identidade. Pessoas com menos de 18 anos só devem usar
-          a plataforma com o consentimento e o acompanhamento de um dos pais ou
-          do responsável legal.
+          A iLyra não se destina a crianças. O cadastro e o Experimente Grátis
+          exigem 13 anos completos, conferidos no servidor pela data informada;
+          essa conferência é uma declaração de idade, não uma verificação de
+          identidade. Pessoas com menos de 18 anos só devem usar a plataforma
+          com o consentimento e o acompanhamento de um dos pais ou do
+          responsável legal.
         </p>
       ),
     },

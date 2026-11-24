@@ -8,7 +8,7 @@ type DataCollection = NonNullable<
 >;
 
 /**
- * Política de coleta de dados do Sentry para o Lyra MetaCare.
+ * Política de coleta de dados do Sentry da iLyra.
  *
  * A plataforma manipula dados de saúde e de perfil (sinais vitais, ciclo,
  * avaliações, conversas com a IA). O padrão do Sentry 11 coleta usuário,

@@ -53,7 +53,7 @@ export function MobileSidebar({
         className={cn(identidade.theme, styles.mobileMenu)}
       >
         <DropdownMenuLabel className="text-primary">
-          Seu espaço Lyra
+          Seu espaço iLyra
         </DropdownMenuLabel>
         {Object.entries(grupos).map(([titulo, itens]) => (
           <DropdownMenuGroup key={titulo}>

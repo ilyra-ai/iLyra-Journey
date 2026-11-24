@@ -8,7 +8,7 @@ import { pageMetaByPath } from '@/components/layout/navigation';
  * As páginas do app são componentes de cliente e não podem exportar
  * `metadata`; cada segmento ganha um `layout.tsx` de servidor que chama esta
  * função. O nome vem da mesma navegação que monta o menu lateral, então a aba
- * e o menu dizem a mesma coisa. O modelo "%s | Lyra MetaCare" do layout raiz
+ * e o menu dizem a mesma coisa. O modelo "%s | iLyra" do layout raiz
  * completa o título.
  */
 export function metadadosDaRota(rota: string): Metadata {
@@ -25,7 +25,7 @@ export const METADADOS_FORA_DO_MENU = {
   login: {
     title: 'Entrar',
     description:
-      'Entre ou crie a sua conta na Lyra MetaCare para ver os seus sinais do dia.',
+      'Entre ou crie a sua conta na iLyra para ver os seus sinais do dia.',
   },
   onboarding: {
     title: 'Primeiros passos',
@@ -34,7 +34,7 @@ export const METADADOS_FORA_DO_MENU = {
   },
   pagamentoConfirmado: {
     title: 'Assinatura confirmada',
-    description: 'Retorno do pagamento da assinatura da Lyra MetaCare.',
+    description: 'Retorno do pagamento da assinatura da iLyra.',
   },
   pagamentoCancelado: {
     title: 'Assinatura não concluída',

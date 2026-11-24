@@ -41,8 +41,8 @@ export async function gerarPdfPessoal(r: RelatorioPessoal): Promise<Buffer> {
     lang: 'pt-BR',
     displayTitle: true,
     info: {
-      Title: 'Relatório pessoal - Lyra MetaCare',
-      Author: 'Lyra MetaCare',
+      Title: 'Relatório pessoal - iLyra',
+      Author: 'iLyra',
       Subject: 'Registros selecionados pelo titular',
     },
   });
@@ -61,7 +61,7 @@ export async function gerarPdfPessoal(r: RelatorioPessoal): Promise<Buffer> {
       .fillColor('#087d82')
       .font('forte')
       .fontSize(10)
-      .text('Lyra MetaCare | Relatório pessoal', 48, 32, { lineBreak: false });
+      .text('iLyra | Relatório pessoal', 48, 32, { lineBreak: false });
     doc.endMarkedContent();
     doc.x = 48;
     doc.y = 78;

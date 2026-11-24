@@ -8,7 +8,7 @@ sessões de foco e pausa (tarefa 126), sem substituí-las.
 
 ## Conteúdo e direitos de uso
 
-O catálogo tem oito práticas com roteiros **próprios do Lyra MetaCare**,
+O catálogo tem oito práticas com roteiros **próprios da iLyra**,
 escritos para o app (`src/lib/meditacoes/catalogo.ts`), com versão por
 prática. Não há arquivo de áudio de terceiros: a narração é produzida no
 dispositivo pela voz local em português, com o mesmo controlador da leitura em

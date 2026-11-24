@@ -11,22 +11,22 @@ import {
 } from '@/lib/lgpd/documentos';
 
 export const metadata: Metadata = {
-  // O modelo do layout raiz acrescenta "| Lyra MetaCare".
+  // O modelo do layout raiz acrescenta "| iLyra".
   title: 'Termos de uso',
-  description: 'Regras de uso da plataforma Lyra MetaCare.',
+  description: 'Regras de uso da plataforma iLyra.',
 };
 
 const secoes: SecaoDoDocumento[] = [
   {
     id: 'servico',
-    titulo: 'O que é a Lyra MetaCare',
+    titulo: 'O que é a iLyra',
     conteudo: (
       <p>
-        A Lyra MetaCare é uma plataforma de bem-estar, longevidade e
-        autoconhecimento que transforma dados de dispositivos, hábitos e
-        contexto pessoal em orientações. Ela reúne motores de cálculo próprios,
-        inteligência artificial e uma camada integrativa de astrologia moderna e
-        tradição védica.
+        A iLyra (antes chamada Lyra MetaCare) é uma plataforma de bem-estar,
+        longevidade e autoconhecimento que transforma dados de dispositivos,
+        hábitos e contexto pessoal em orientações. Ela reúne motores de cálculo
+        próprios, inteligência artificial e uma camada integrativa de astrologia
+        moderna e tradição védica.
       </p>
     ),
   },
@@ -136,7 +136,7 @@ export default function TermosDeUsoPage() {
   return (
     <DocumentoLegal
       titulo="Termos de uso"
-      resumo="As regras para usar a Lyra MetaCare: o que a plataforma faz, o que ela não faz (ela não substitui avaliação profissional de saúde) e como funcionam a sua conta e os planos."
+      resumo="As regras para usar a iLyra: o que a plataforma faz, o que ela não faz (ela não substitui avaliação profissional de saúde) e como funcionam a sua conta e os planos."
       versao={VERSAO_TERMOS_DE_USO}
       secoes={secoes}
     />

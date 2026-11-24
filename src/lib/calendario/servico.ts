@@ -136,7 +136,7 @@ export function calendarioDaAgenda(
 ) {
   return gerarCalendario({
     nome: NOME_DO_CALENDARIO,
-    descricao: `Hora do silêncio, horário mais forte do dia, pausa para começos e pôr do sol de ${agenda.lugar}, calculados pela Lyra MetaCare.`,
+    descricao: `Hora do silêncio, horário mais forte do dia, pausa para começos e pôr do sol de ${agenda.lugar}, calculados pela iLyra.`,
     atualizarACadaHoras: 12,
     eventos: agenda.eventos,
     geradoEm,

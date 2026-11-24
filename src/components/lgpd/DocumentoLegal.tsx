@@ -75,7 +75,7 @@ export function DocumentoLegal({
 
         <header className="mt-10 border-b border-border pb-8">
           <p className="text-sm font-medium text-primary">
-            Lyra MetaCare · versão de {dia}/{mes}/{ano}
+            iLyra · versão de {dia}/{mes}/{ano}
           </p>
           <h1 className="mt-3 text-balance font-display text-3xl font-semibold tracking-[-0.02em] sm:text-4xl">
             {titulo}

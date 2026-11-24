@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lyra MetaCare · launcher nativo Windows 11, Python 3.9+.
+"""iLyra · launcher nativo Windows 11, Python 3.9+.
 
 py run_windows.py COMANDO
   up [--prod]       ambiente, dependências, MySQL, migrations, memória e app
@@ -851,7 +851,7 @@ def menu() -> int:
     opcoes = {str(indice): argumentos for indice, (_, argumentos) in enumerate(
         (item for _, itens in grupos for item in itens), start=1)}
     while True:
-        print("\nLyra MetaCare · Windows 11 nativo")
+        print("\niLyra · Windows 11 nativo")
         indice = 0
         for titulo, itens in grupos:
             print(f"\n{titulo}")

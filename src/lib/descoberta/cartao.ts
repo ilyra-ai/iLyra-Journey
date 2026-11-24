@@ -120,8 +120,8 @@ export function conteudoDoCartao(signo: Signo | null): ConteudoDoCartao {
 /** Texto que acompanha o link no compartilhamento nativo. */
 export function textoDoCompartilhamento(signo: Signo | null) {
   const inicio = signo
-    ? `Descobri o meu Sol em ${signo} ${SIGNOS_OCIDENTAIS[signo].simbolo} na Lyra.`
-    : 'Descobri um pouco do meu céu ocidental na Lyra.';
+    ? `Descobri o meu Sol em ${signo} ${SIGNOS_OCIDENTAIS[signo].simbolo} na iLyra.`
+    : 'Descobri um pouco do meu céu ocidental na iLyra.';
   return `${inicio} ${CHAMADA_DO_COMPARTILHAMENTO}`;
 }
 

@@ -75,7 +75,7 @@ describe('iCalendar (RFC 5545)', () => {
     for (const linha of [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
-      'PRODID:-//iLyra AI//Lyra MetaCare//PT-BR',
+      'PRODID:-//iLyra AI//iLyra//PT-BR',
       'REFRESH-INTERVAL;VALUE=DURATION:PT12H',
       'X-PUBLISHED-TTL:PT12H',
       'DTSTAMP:20261015T100000Z',

@@ -1,4 +1,4 @@
-# Segurança da Lyra MetaCare
+# Segurança da iLyra
 
 Modelo de segurança da aplicação, revisado na tarefa 19 da instrução mestra (2026-10-06). Cada item indica onde a regra vive no código e o teste que a comprova.
 

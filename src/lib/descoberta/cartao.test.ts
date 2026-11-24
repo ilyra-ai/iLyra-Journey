@@ -55,7 +55,7 @@ describe('cartão compartilhável da descoberta (tarefa 168)', () => {
 
   it('texto e link do compartilhamento não levam data, nome nem parâmetro pessoal', () => {
     expect(textoDoCompartilhamento('Peixes')).toBe(
-      'Descobri o meu Sol em Peixes ♓ na Lyra. Que tal conhecer a sua história sob outro olhar?'
+      'Descobri o meu Sol em Peixes ♓ na iLyra. Que tal conhecer a sua história sob outro olhar?'
     );
     expect(textoDoCompartilhamento(null)).not.toMatch(/Sol em/);
     expect(CAMINHO_DA_JORNADA).toBe('/?experimente=1');

@@ -1,4 +1,4 @@
-# Lyra MetaCare · Guia operacional
+# iLyra · Guia operacional
 
 Referência de instalação, configuração, arquitetura e manutenção para quem opera
 o projeto. Execute os comandos na raiz do repositório. Este conteúdo foi preservado

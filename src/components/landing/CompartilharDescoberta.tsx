@@ -121,7 +121,7 @@ export function CompartilharDescoberta({ signo }: Props) {
       await navigator.share(
         comImagem && imagem.fase === 'pronta'
           ? { files: [imagem.arquivo], text: `${texto} ${link()}` }
-          : { title: 'Lyra MetaCare', text: texto, url: link() }
+          : { title: 'iLyra', text: texto, url: link() }
       );
       // Contagem anônima (tarefa 170): só a ação, nunca o signo.
       marcarEtapa('cartao_compartilhado', 'compartilhar');

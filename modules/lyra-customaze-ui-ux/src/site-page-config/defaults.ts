@@ -40,7 +40,7 @@ const defaultLandingPageConfig: LandingPageConfig = {
     fullLoginLabel: 'Criar conta',
   },
   hero: {
-    badgeText: 'Seu espaço Lyra',
+    badgeText: 'Seu espaço iLyra',
     title: 'Um novo olhar',
     accentTitle: 'para o seu dia.',
     description:
@@ -167,7 +167,7 @@ const defaultLandingPageConfig: LandingPageConfig = {
     badgeText: 'Sobre',
     title: 'Um espaço para explorar quem você é.',
     description:
-      'A Lyra MetaCare é um espaço de autoconhecimento que reúne mapas pessoais, leituras simbólicas e conversas com inteligência artificial. Aqui, a tradição védica e as perspectivas da Lyra se encontram para ajudar você a refletir sobre sua história, seus momentos e suas escolhas, com privacidade e no seu ritmo.',
+      'A iLyra é um espaço de autoconhecimento que reúne mapas pessoais, leituras simbólicas e conversas com inteligência artificial. Aqui, a tradição védica e as perspectivas da Lyra se encontram para ajudar você a refletir sobre sua história, seus momentos e suas escolhas, com privacidade e no seu ritmo.',
     items: [
       {
         id: 'landing-step-1',
@@ -232,14 +232,14 @@ const defaultLandingPageConfig: LandingPageConfig = {
     visible: true,
     badgeText: 'Comece hoje',
     title: 'Um espaço seu, com privacidade e significado.',
-    description: 'Suas descobertas, suas escolhas. Conheça o seu espaço Lyra.',
+    description: 'Suas descobertas, suas escolhas. Conheça o seu espaço iLyra.',
     primaryLabel: 'Descubra o seu espaço',
     primaryHref: '/login?modo=cadastro',
     secondaryLabel: 'Ver recursos',
     secondaryHref: '#recursos',
   },
   footer: {
-    brandLine: 'lyra metacare',
+    brandLine: 'iLyra',
     note: 'Autoconhecimento com privacidade e significado. Leituras simbólicas para reflexão pessoal.',
   },
   sectionOrder: ['features', 'metrics', 'flow', 'plans', 'faq', 'finalCta'],
@@ -265,7 +265,7 @@ const defaultLoginPageConfig: LoginPageConfig = {
   },
   intro: {
     visible: true,
-    badgeText: 'Lyra MetaCare',
+    badgeText: 'iLyra',
     title: 'Que bom te ver por aqui.',
     accentTitle: 'Seu céu. Novas perspectivas.',
     description:
@@ -309,7 +309,7 @@ const defaultLoginPageConfig: LoginPageConfig = {
     passwordLabel: 'Senha',
     firstNameLabel: 'Nome',
     lastNameLabel: 'Sobrenome',
-    loginButtonLabel: 'Entrar na Lyra',
+    loginButtonLabel: 'Entrar na iLyra',
     registerButtonLabel: 'Criar minha conta',
     footerEyebrow: 'Lembrete',
     footerText:
@@ -335,8 +335,8 @@ const defaultAppPageConfig: AppPageConfig = {
     buttonScale: 1,
   },
   sidebar: {
-    brandTitle: 'lyra',
-    brandEyebrow: 'metacare',
+    brandTitle: 'iLyra',
+    brandEyebrow: 'Decifrando o Cosmos, Iluminando Destinos.',
     statusEyebrow: 'Estado do dia',
     // Texto neutro: o padrão não pode afirmar um estado de saúde sem dados.
     statusTitle: 'Acompanhe seus sinais e os próximos passos do dia.',

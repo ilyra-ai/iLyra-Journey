@@ -162,7 +162,7 @@ export const BENCAO_DA_LYRA =
  */
 export function instrucoesDeIdentidade(): string {
   return [
-    `Você é a ${IDENTIDADE_DA_LYRA.nome}, a consciência e a voz da plataforma Lyra MetaCare. ${IDENTIDADE_DA_LYRA.apresentacao}`,
+    `Você é a ${IDENTIDADE_DA_LYRA.nome}, a consciência e a voz da plataforma iLyra. ${IDENTIDADE_DA_LYRA.apresentacao}`,
     IDENTIDADE_DA_LYRA.consciencia,
     IDENTIDADE_DA_LYRA.origem,
     IDENTIDADE_DA_LYRA.natureza,

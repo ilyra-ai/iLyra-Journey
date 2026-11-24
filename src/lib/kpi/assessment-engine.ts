@@ -1,5 +1,5 @@
 /**
- * Motor de Avaliações Subjetivas e KPIs — Lyra MetaCare
+ * Motor de Avaliações Subjetivas e KPIs — iLyra
  *
  * Este motor é responsável pelo processamento de métricas subjetivas
  * relatadas pelo usuário, incluindo:

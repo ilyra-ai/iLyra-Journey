@@ -214,7 +214,7 @@ export function Header() {
           <Link
             href="/"
             className={styles.brandLink}
-            aria-label="Lyra MetaCare — Painel"
+            aria-label="iLyra — Painel"
           >
             <CelestialBrand />
           </Link>
@@ -413,7 +413,7 @@ export function Header() {
 
       <Dialog open={planosAberto} onOpenChange={setPlanosAberto}>
         <DialogContent className={cn(identidade.theme, styles.plansDialog)}>
-          <DialogTitle>Planos Lyra MetaCare</DialogTitle>
+          <DialogTitle>Planos iLyra</DialogTitle>
           <DialogDescription>
             Compare os planos disponíveis e gerencie sua contratação.
           </DialogDescription>

@@ -3,7 +3,7 @@ import { useAccountSubscription } from '@/hooks/use-account-subscription';
 import { isPlanFeatureEnabled } from '@/lib/plans/access';
 
 /**
- * Hook useVedicInsights — Lyra MetaCare
+ * Hook useVedicInsights — iLyra
  *
  * Integra os motores integrativos em um único hook React:
  * 1. Dosha Ayurvédico Dinâmico

@@ -31,7 +31,7 @@ import { executeStatement, queryRows } from '@/lib/mysql/pool';
  *   da credencial.
  */
 
-export const NOME_DO_APP = 'Lyra MetaCare';
+export const NOME_DO_APP = 'iLyra';
 export const COOKIE_DO_DESAFIO = 'lyra_chave_de_acesso';
 export const VALIDADE_DO_DESAFIO_MS = 5 * 60 * 1000;
 export const LIMITE_DE_CHAVES = 10;

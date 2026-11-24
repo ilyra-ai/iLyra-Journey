@@ -1,6 +1,6 @@
 /**
- * Biblioteca de práticas guiadas (tarefa 132). Roteiros próprios do Lyra
- * MetaCare, escritos para o app em pt-BR; a narração é feita no dispositivo,
+ * Biblioteca de práticas guiadas (tarefa 132). Roteiros próprios da iLyra,
+ * escritos para o app em pt-BR; a narração é feita no dispositivo,
  * pela voz local em português, sem arquivo de áudio de terceiros nem envio de
  * texto a serviço externo. Cada passo começa em um instante fixo da prática:
  * a duração total não depende da velocidade da voz.

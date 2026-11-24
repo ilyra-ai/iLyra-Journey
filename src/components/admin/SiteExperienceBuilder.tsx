@@ -4224,7 +4224,7 @@ export function SiteExperienceBuilder() {
               <CardDescription className="max-w-3xl text-sm leading-6">
                 Somente administradores podem editar, salvar rascunho, publicar,
                 restaurar e reorganizar a experiência pública e a camada visual
-                do app da Lyra.
+                do app iLyra.
               </CardDescription>
             </div>
           </div>

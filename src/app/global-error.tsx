@@ -30,7 +30,7 @@ export default function GlobalError({
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
         {/* Esta tela substitui o layout raiz e não herda o título da aba; o
             React 19 move o <title> para o <head>. */}
-        <title>Erro inesperado | Lyra MetaCare</title>
+        <title>Erro inesperado | iLyra</title>
         <main
           id="conteudo-principal"
           className="flex min-h-screen items-center justify-center px-4 py-10"
@@ -38,9 +38,7 @@ export default function GlobalError({
           <div className="flex w-full max-w-xl flex-col items-center gap-5 rounded-xl border border-border bg-card p-6 text-center sm:p-10">
             <div className="flex flex-col items-center gap-2">
               <MarcaLyra tamanho="56px" />
-              <p className="text-sm font-medium text-muted-foreground">
-                Lyra MetaCare
-              </p>
+              <p className="text-sm font-medium text-muted-foreground">iLyra</p>
             </div>
             <h1 className="font-display text-3xl font-semibold tracking-tight">
               Algo saiu do ritmo por aqui.

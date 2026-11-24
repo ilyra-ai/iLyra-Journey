@@ -1,4 +1,4 @@
-# LGPD na Lyra MetaCare
+# LGPD na iLyra
 
 Como a plataforma atende à Lei Geral de Proteção de Dados (Lei 13.709/2018) no código. Os textos para o público estão em `/privacidade` e `/termos`.
 

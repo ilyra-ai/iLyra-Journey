@@ -248,14 +248,14 @@ export function LoginExperience({
         )}
       >
         <CelestialBrand />
-        {auth.brandText !== 'lyra' && auth.brandText !== 'Lyra MetaCare' ? (
+        {!['lyra', 'iLyra', 'Lyra MetaCare'].includes(auth.brandText) ? (
           <span className="text-sm text-muted-foreground">
             {auth.brandText}
           </span>
         ) : null}
       </div>
 
-      <h1 className="sr-only">Acesso à Lyra MetaCare</h1>
+      <h1 className="sr-only">Acesso à iLyra</h1>
 
       {/* Formulário: logo após o título no celular; coluna direita no desktop */}
       <section

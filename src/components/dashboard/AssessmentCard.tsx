@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * AssessmentCard — Lyra MetaCare
+ * AssessmentCard — iLyra
  *
  * Componente visual interativo para coletar dados reais do usuário (WHO-5, NPS, Mood).
  * Envia as respostas do usuário de forma assíncrona para serem calculadas e salvas no banco.

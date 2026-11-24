@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ════════════════════════════════════════════════════════════════════════════
-#  TUI-WEBNOVA · Orquestrador do Lyra MetaCare (WSL2 Ubuntu)
+#  TUI-WEBNOVA · Orquestrador do iLyra (WSL2 Ubuntu)
 #
 #  Adaptado do template WebNova (https://github.com/ilyra-ai/tui-webnova):
 #  launcher Bash + servidor Python (somente biblioteca padrão) + painel web.
@@ -28,7 +28,7 @@
 set -Eeuo pipefail
 IFS=$'\n\t'
 
-APP_NOME="${WEBNOVA_APP_NOME:-Lyra MetaCare}"
+APP_NOME="${WEBNOVA_APP_NOME:-iLyra}"
 APP_VERSAO="${WEBNOVA_APP_VERSAO:-2.0.0}"
 WEBNOVA_HOST="${WEBNOVA_HOST:-127.0.0.1}"
 WEBNOVA_PORT="${WEBNOVA_PORT:-8808}"
@@ -91,7 +91,7 @@ import webbrowser
 from pathlib import Path
 from typing import Callable, Dict, List, Optional
 
-APP_NOME = os.environ.get("APP_NOME", "Lyra MetaCare")
+APP_NOME = os.environ.get("APP_NOME", "iLyra")
 APP_VERSAO = os.environ.get("APP_VERSAO", "2.0.0")
 HOST = os.environ.get("WEBNOVA_HOST", "127.0.0.1")
 PORT_DEFAULT = int(os.environ.get("WEBNOVA_PORT", "8808"))
@@ -618,7 +618,7 @@ concluido "Tudo pronto. A aplicação vai abrir na aba “🚀 Aplicação” do
 
 S_EXECUTAR_APP = r'''
 carregar_node
-printf '%s%s◆ Lyra MetaCare · %s · http://localhost:%s%s\n\n' "$B" "$TL" "$MODO_APP" "$PORT" "$R"
+printf '%s%s◆ iLyra · %s · http://localhost:%s%s\n\n' "$B" "$TL" "$MODO_APP" "$PORT" "$R"
 exec corepack pnpm exec next "$SUBCOMANDO" -p "$PORT"
 '''
 
@@ -664,7 +664,7 @@ trap 'rm -rf "$pasta"' EXIT
 fazer_dump "$pasta/banco.sql.gz" || morrer "O backup do banco falhou."
 fazer_tar_app "$pasta/app.tar.gz" || morrer "O backup do app falhou."
 {
-  echo "Backup completo Lyra MetaCare"
+  echo "Backup completo iLyra"
   echo "Data: $(date -Iseconds)"
   echo "Commit: $(git rev-parse HEAD 2>/dev/null) ($(git branch --show-current 2>/dev/null))"
   echo "Node: $(node --version 2>/dev/null) · pnpm: $PNPM_FIXO"
@@ -1389,7 +1389,7 @@ HTML = r'''<!doctype html>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="color-scheme" content="dark light" />
-<title>TUI-WEBNOVA · Lyra MetaCare</title>
+<title>TUI-WEBNOVA · iLyra</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%8C%3C/text%3E%3C/svg%3E" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -1489,7 +1489,7 @@ pre.alt{position:absolute;inset:0;margin:0;padding:12px;overflow:auto;font:12.5p
 <body>
 <div class="app">
   <aside class="lateral vidro" aria-label="Ações do orquestrador">
-    <div class="marca"><div class="logo" aria-hidden="true">🌌</div><div><h1>TUI-WEBNOVA</h1><p>Orquestrador · Lyra MetaCare</p></div></div>
+    <div class="marca"><div class="logo" aria-hidden="true">🌌</div><div><h1>TUI-WEBNOVA</h1><p>Orquestrador · iLyra</p></div></div>
     <label class="busca" for="filtro">🔎 <input id="filtro" placeholder="Buscar ação" autocomplete="off" /><span class="kbd">Ctrl K</span></label>
     <nav class="menu" id="menu" aria-label="Lista de ações"></nav>
     <div class="rodape"><button class="btn" id="btTema" type="button">🌓 Tema</button><button class="btn" id="btShell" type="button">⌨️ Terminal</button></div>
@@ -1497,7 +1497,7 @@ pre.alt{position:absolute;inset:0;margin:0;padding:12px;overflow:auto;font:12.5p
 
   <main class="centro vidro" id="centro">
     <div class="topo">
-      <div><div class="sobre">🧭 Painel de operação</div><h2 id="saudacao">Lyra MetaCare</h2><p class="sub" id="linhaSistema">Carregando o ambiente…</p></div>
+      <div><div class="sobre">🧭 Painel de operação</div><h2 id="saudacao">iLyra</h2><p class="sub" id="linhaSistema">Carregando o ambiente…</p></div>
       <div class="botoes">
         <button class="btn" type="button" data-acao="verificar">🔎 Check-up</button>
         <button class="btn prim" type="button" data-acao="iniciar_dev">🧪 Iniciar Dev</button>
@@ -2082,7 +2082,7 @@ def interno_env() -> int:
     adicionadas = [linha.split("=", 1)[0] for linha in novas]
     if novas:
         if atual_texto is None:
-            linhas += ["# Configuração local da Lyra MetaCare (gerada pelo TUI-WEBNOVA).",
+            linhas += ["# Configuração local da iLyra (gerada pelo TUI-WEBNOVA).",
                        "# Contém segredos: não versione nem compartilhe este arquivo.",
                        "# Documentação de cada variável: .env.example"]
         else:

@@ -135,7 +135,7 @@ async function desenhar(
           color: OURO,
         }}
       >
-        LYRA METACARE
+        iLyra
       </div>
       <div
         style={{

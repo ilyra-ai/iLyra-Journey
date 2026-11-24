@@ -1,7 +1,7 @@
 'use client';
 
 /**
- * VedicDashboard — Lyra MetaCare
+ * VedicDashboard — iLyra
  *
  * Painel dos motores integrativos:
  * - Dosha Ayurvédico Dinâmico

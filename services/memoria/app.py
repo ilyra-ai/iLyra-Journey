@@ -236,7 +236,7 @@ async def guardar_episodio(usuario: UUID, episodio: Episodio):
                             labels=[],
                             created_at=datetime.now(UTC),
                             source=EpisodeType.text,
-                            source_description="Relato da própria pessoa no Lyra MetaCare; não é diagnóstico nem constatação independente.",
+                            source_description="Relato da própria pessoa na iLyra; não é diagnóstico nem constatação independente.",
                             content=f"Relato da pessoa usuária sobre si: {episodio.texto}",
                             valid_at=episodio.referencia,
                         )
@@ -253,7 +253,7 @@ async def guardar_episodio(usuario: UUID, episodio: Episodio):
                         name=str(episodio.id),
                         uuid=str(episodio.id),
                         episode_body=f"Relato da pessoa usuária sobre si: {episodio.texto}",
-                        source_description="Relato da própria pessoa no Lyra MetaCare; não é diagnóstico nem constatação independente.",
+                        source_description="Relato da própria pessoa na iLyra; não é diagnóstico nem constatação independente.",
                         source=EpisodeType.text,
                         reference_time=episodio.referencia,
                         group_id=nome_do_grafo(usuario),

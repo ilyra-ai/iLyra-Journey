@@ -563,7 +563,7 @@ export function getPageMeta(pathname: string, appConfig?: AppPageConfig) {
 
   return (
     pageMetaByPath[pathname] ?? {
-      title: 'Lyra MetaCare',
+      title: 'iLyra',
       description:
         'Experiência premium de bem-estar com dados, IA e sabedoria ancestral.',
       icon: Settings2,

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  Lyra MetaCare · launcher Linux / WSL2 Ubuntu (bash 4+)
+#  iLyra · launcher Linux / WSL2 Ubuntu (bash 4+)
 # -----------------------------------------------------------------------------
 #  Ambiente suportado:
 #    - WSL2 Ubuntu é o ambiente oficial, com Node e Corepack Linux.
@@ -1102,7 +1102,7 @@ remover_artefato() {
 cmd_up() {
   local modo=dev
   [[ "${1:-}" == "--prod" ]] && modo=prod
-  titulo "Lyra MetaCare · up ($([[ "$modo" == prod ]] && echo produção || echo desenvolvimento))"
+  titulo "iLyra · up ($([[ "$modo" == prod ]] && echo produção || echo desenvolvimento))"
   etapa_preflight || return 1
   etapa_env || return 1
   etapa_dependencias || return 1
@@ -1125,7 +1125,7 @@ cmd_up() {
 cmd_app() {
   local modo=dev
   [[ "${1:-}" == "--prod" ]] && modo=prod
-  titulo "Lyra MetaCare · app"
+  titulo "iLyra · app"
   etapa_preflight || return 1
   etapa_env || return 1
   estado_banco --sem-sql
@@ -1143,7 +1143,7 @@ cmd_app() {
 }
 
 cmd_db() {
-  titulo "Lyra MetaCare · db"
+  titulo "iLyra · db"
   limpar_verif; verificar_docker
   if (( $(contar_erros) > 0 )); then mostrar_verificacoes; return 1; fi
   etapa_env || return 1
@@ -1153,7 +1153,7 @@ cmd_db() {
 }
 
 cmd_migrate() {
-  titulo "Lyra MetaCare · migrate"
+  titulo "iLyra · migrate"
   etapa_env || return 1
   estado_banco --sem-sql
   if [[ "$DB_SAUDE" != "healthy" ]]; then
@@ -1165,7 +1165,7 @@ cmd_migrate() {
 }
 
 cmd_doctor() {
-  titulo "Lyra MetaCare · doctor (somente leitura)"
+  titulo "iLyra · doctor (somente leitura)"
   limpar_verif
   verificar_plataforma
   verif "Bash" ok "$BASH_VERSION"
@@ -1253,7 +1253,7 @@ cmd_doctor() {
 }
 
 cmd_fix() {
-  titulo "Lyra MetaCare · fix (correções seguras)"
+  titulo "iLyra · fix (correções seguras)"
   etapa_preflight || return 1
   etapa_env || return 1
   etapa_dependencias || return 1
@@ -1263,7 +1263,7 @@ cmd_fix() {
 }
 
 cmd_repair() {
-  titulo "Lyra MetaCare · repair (preserva os dados)"
+  titulo "iLyra · repair (preserva os dados)"
   info "Será feito: parar a aplicação, remover .next e node_modules (recriáveis), reinstalar as dependências, recriar o container do MySQL (o volume com os dados é mantido) e reaplicar as migrations."
   if [[ "${1:-}" != "--sim" ]]; then
     confirmar "Confirma o reparo?" sim "--sim" || return 1
@@ -1282,7 +1282,7 @@ cmd_repair() {
 }
 
 cmd_purge() {
-  titulo "Lyra MetaCare · purge (APAGA o banco local)"
+  titulo "iLyra · purge (APAGA o banco local)"
   if [[ "${1:-}" != "--confirmar-purge" ]]; then
     erro "O purge apaga TODOS os dados do MySQL local deste projeto. Repita com --confirmar-purge."
     return 2
@@ -1355,7 +1355,7 @@ cmd_purge() {
 }
 
 cmd_status() {
-  titulo "Lyra MetaCare · status"
+  titulo "iLyra · status"
   estado_app
   estado_banco
   linha_status() { printf '%s%s%s\n' "$(coluna "$1" 13)" "$(coluna "$2" 19)" "$3"; }
@@ -1423,7 +1423,7 @@ cmd_logs() {
 cmd_stop() {
   local alvo="${1:-todos}"
   case "$alvo" in app|db|todos) ;; *) erro "Use: ./run.sh stop [app|db]"; return 2 ;; esac
-  titulo "Lyra MetaCare · stop"
+  titulo "iLyra · stop"
   local codigo=0
   if [[ "$alvo" == app || "$alvo" == todos ]]; then parar_app || codigo=1; fi
   if [[ "$alvo" == db || "$alvo" == todos ]]; then parar_banco || codigo=1; fi
@@ -1486,7 +1486,7 @@ menu() {
   while true; do
     estado_app
     estado_banco --sem-sql
-    printf '\n%s╭─ Lyra MetaCare · run.sh (%s) ──────────────────╮%s\n' "$C_TITULO" "$([[ "$PLATAFORMA" == windows ]] && echo "Git Bash" || echo "$PLATAFORMA")" "$C_FIM"
+    printf '\n%s╭─ iLyra · run.sh (%s) ──────────────────╮%s\n' "$C_TITULO" "$([[ "$PLATAFORMA" == windows ]] && echo "Git Bash" || echo "$PLATAFORMA")" "$C_FIM"
     topico=""
     for (( i = 1; i < ${#MENU_ROTULOS[@]}; i++ )); do
       if [[ "${MENU_TOPICOS[$i]}" != "$topico" ]]; then

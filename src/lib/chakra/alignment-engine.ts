@@ -1,5 +1,5 @@
 /**
- * Motor de Alinhamento de Chakras — Lyra MetaCare
+ * Motor de Alinhamento de Chakras — iLyra
  *
  * Mapeia os 7 chakras principais a biomarcadores fisiológicos mensuráveis,
  * gerando um score de alinhamento para cada centro energético.

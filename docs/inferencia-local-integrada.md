@@ -19,7 +19,7 @@ Servidor: https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.
 
 ## Instalação pela interface
 
-1. Execute o Lyra-MetaCare no mesmo Ubuntu/WSL2 onde estão os arquivos GGUF.
+1. Execute a iLyra no mesmo Ubuntu/WSL2 onde estão os arquivos GGUF.
 2. Abra Administração → Modelos de IA e marque Lyra · modelo integrado.
 3. O painel informa se o runtime está instalado e permite clicar em Instalar runtime CUDA no WSL2. A ação executa scripts/instalar-inferencia-local.sh como o usuário atual, sem sudo ou driver NVIDIA no Ubuntu.
 4. A compilação utiliza a release oficial `v0.9.0`, revisão `cd959bae99ff4bed22bef2604f45241c09bbb8c8`, de ggml-org/llama.cpp, GGML_CUDA=ON, CMAKE_CUDA_ARCHITECTURES=120, Release e quatro tarefas de compilação simultâneas. O destino é `~/.cache/lyra-metacare/llama.cpp/build/bin/llama-server`. Requisitos disponíveis no WSL: git, cmake, compilador C++, nvcc CUDA 12.8+ e nvidia-smi funcional. O instalador encontra o CUDA em `/usr/local/cuda/bin` e evita a busca lenta nos diretórios Windows herdados no PATH.

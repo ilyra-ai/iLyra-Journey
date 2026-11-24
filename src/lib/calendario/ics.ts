@@ -83,7 +83,7 @@ export function gerarCalendario(calendario: Calendario) {
   const linhas: string[] = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//iLyra AI//Lyra MetaCare//PT-BR',
+    'PRODID:-//iLyra AI//iLyra//PT-BR',
     'CALSCALE:GREGORIAN',
     'METHOD:PUBLISH',
     propriedade('NAME', escaparTexto(calendario.nome)),

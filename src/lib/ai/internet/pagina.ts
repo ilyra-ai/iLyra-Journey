@@ -16,7 +16,7 @@ export const LIMITE_DE_BYTES = 2_000_000;
 export const LIMITE_DE_CARACTERES = 24_000;
 const TEMPO_MAXIMO_MS = 15_000;
 const MAXIMO_DE_REDIRECIONAMENTOS = 3;
-const AGENTE = 'LyraMetaCare/1.0 (pesquisa de fontes oficiais de saude)';
+const AGENTE = 'iLyra/1.0 (pesquisa de fontes oficiais de saude)';
 
 export interface PaginaLida {
   url: string;

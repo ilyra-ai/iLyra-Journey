@@ -1,4 +1,4 @@
-# Launchers da Lyra MetaCare
+# Launchers da iLyra
 
 ## Arquitetura definida pela tarefa 174 · 10-11-2026
 

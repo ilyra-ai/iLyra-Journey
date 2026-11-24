@@ -284,7 +284,7 @@ function Reprodutor({
       </CardContent>
       <CardFooter>
         <p className="text-xs text-muted-foreground">
-          Roteiro próprio do Lyra MetaCare (versão {pratica.versao}). Prática de
+          Roteiro próprio da iLyra (versão {pratica.versao}). Prática de
           bem-estar e relaxamento; não substitui cuidado profissional de saúde.
         </p>
       </CardFooter>
