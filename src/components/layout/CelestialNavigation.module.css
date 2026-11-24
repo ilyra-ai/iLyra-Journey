@@ -228,12 +228,14 @@
   .primary {
     display: none;
   }
+  /* O logo iLyra é estreito: a marca ocupa só a própria largura e os botões
+     cabem na mesma linha até em 320 px. */
   .brandLink {
     min-width: 0;
-    flex-basis: 180px;
-    flex-shrink: 1;
+    flex: 0 1 auto;
   }
   .brandLink > div {
+    width: auto;
     height: 46px;
   }
   .actions {
