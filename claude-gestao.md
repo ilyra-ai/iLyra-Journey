@@ -2060,7 +2060,7 @@ Para cada tarefa, registrar **antes, durante e após**:
 | Tarefa 152          | Navegação publicada; QA visual autenticado pendente                | Não marcar como aprovado pela nova iniciativa        |
 | Tarefa 153          | Dashboard celestial em andamento na tarefa 153                     | Não duplicar nem concluir por este programa          |
 
-### 173 · Rebranding integral da plataforma Lyra MetaCare para iLyra · 🟡 IMPLEMENTADA (aguarda homologação do titular)
+### 173 · Rebranding integral da plataforma Lyra MetaCare para iLyra · 🟢 CONCLUÍDA (homologada pelo titular em 24/11/2026)
 
 **Feito em 24/11/2026, na parte de textos e configuração (commit `7a687b82`):**
 
