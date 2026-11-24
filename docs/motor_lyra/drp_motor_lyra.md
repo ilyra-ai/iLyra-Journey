@@ -1,6 +1,6 @@
 # Plano de Recuperação de Desastres do Motor da Lyra
 
-**Escopo:** execução local em Windows 11 e WSL2 Ubuntu. **Edição inicial:** 16 de novembro de 2026. **Repositório de referência:** [ilyra-ai/Lyra-MetaCare](https://github.com/ilyra-ai/Lyra-MetaCare). A cópia de trabalho no Windows fica em `D:\02-PROJETOS\Lyra-MetaCare`. Todos os caminhos abaixo são relativos à raiz Git, salvo indicação expressa.
+**Escopo:** execução local em Windows 11 e WSL2 Ubuntu. **Edição inicial:** 16 de novembro de 2026. **Repositório de referência:** [ilyra-ai/iLyra-Journey](https://github.com/ilyra-ai/iLyra-Journey) (até 24/11/2026, `ilyra-ai/Lyra-MetaCare`, que o GitHub redireciona). A cópia de trabalho no Windows fica em `D:\02-PROJETOS\Lyra-MetaCare`. Todos os caminhos abaixo são relativos à raiz Git, salvo indicação expressa.
 
 ## 1. Objetivo e fronteira de recuperação
 

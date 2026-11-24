@@ -77,7 +77,9 @@ Tudo deve funcionar DE FORMA REAL.
 
 Clone obrigatoriamente:
 
-https://github.com/ilyra-ai/Lyra-MetaCare
+https://github.com/ilyra-ai/iLyra-Journey
+
+(Nome atual desde 24/11/2026; antes, ilyra-ai/Lyra-MetaCare, que o GitHub redireciona.)
 
 Utilize a branch:
 
@@ -1926,4 +1928,4 @@ Faça push.
 
 Continue para a próxima tarefa.
 
-O objetivo final é transformar o repositório ilyra-ai/Lyra-MetaCare em uma plataforma tecnicamente consistente, atualizada para o ecossistema estável de outubro de 2026, segura, reproduzível e executável de ponta a ponta, sem simulações, sem placeholders, sem hardcodes indevidos, sem código cortado e sem erros escondidos.
+O objetivo final é transformar o repositório ilyra-ai/iLyra-Journey em uma plataforma tecnicamente consistente, atualizada para o ecossistema estável de outubro de 2026, segura, reproduzível e executável de ponta a ponta, sem simulações, sem placeholders, sem hardcodes indevidos, sem código cortado e sem erros escondidos.
