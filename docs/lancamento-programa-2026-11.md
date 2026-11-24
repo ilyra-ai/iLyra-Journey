@@ -59,6 +59,16 @@ Os interruptores não substituem permissões: toda rota confere sessão e plano 
 | 079      | Coluna `chat_conversations.title_source`                                            | `ALTER TABLE chat_conversations DROP COLUMN title_source;`                                                                                                                                                                                                                                                                                                           |
 | 078      | `plan_contribution_options`, `stripe_contribution_prices` e o texto do plano `care` | Não reverter com assinaturas ativas nesses preços: a contribuição de cada assinatura vem do preço da Stripe. Sem assinaturas: `DROP TABLE stripe_contribution_prices; DROP TABLE plan_contribution_options;`                                                                                                                                                         |
 
+## Testar o checkout no computador local
+
+A Stripe não consegue chamar `localhost`, por isso o Stripe CLI recebe os eventos e repassa para o app.
+
+1. Instale o CLI: `winget install Stripe.StripeCli`.
+2. Faça `stripe login` ou passe a chave de teste pela variável `STRIPE_API_KEY`, nunca pela linha de comando.
+3. Rode `stripe listen --print-secret`. Cole o `whsec_` que ele mostrar em Visão Geral Admin → aba Pagamentos → "Segredo de assinatura do webhook" e salve.
+4. Deixe rodando: `stripe listen --events <lista da aba Pagamentos> --forward-to localhost:3000/api/webhooks/stripe`. A versão 1.55 exige a lista de eventos.
+5. Assine em /planos com o cartão de teste `4242 4242 4242 4242`. A assinatura só fica ativa quando `checkout.session.completed` chega com resposta 200.
+
 ## Plano de incidentes
 
 O responsável é o titular do projeto ou quem ele designar. Para cada gatilho, verificar e agir assim:
@@ -73,7 +83,9 @@ O responsável é o titular do projeto ou quem ele designar. Para cada gatilho, 
 
 ## Depende do titular (não marcado como concluído)
 
-1. **Preço final:** os valores implementados são R$ 9,99 e R$ 19,99 (tarefas 160 e 226). Para cobrar, é preciso cadastrar os preços de teste e de produção na Stripe e confirmar a decisão comercial.
+1. **Preço final:** os valores implementados são R$ 9,99 e R$ 19,99 (tarefas 160 e 226).
+   - **Em teste, já cadastrados e cobrados (24/11/2026):** produto Lyra Journey com os dois preços mensais em BRL. Um checkout real em modo teste ativou a assinatura pelo webhook, com 5 eventos e todos respondidos com 200.
+   - **Falta para produção:** criar os mesmos preços em modo live e confirmar a decisão comercial.
 2. **Domínio e HTTPS de produção:** `APP_BASE_URL` com https, retorno do Google e da Apple cadastrado, e chaves de acesso no domínio final (o RP ID é o domínio).
 3. **Stripe de produção:** chaves live e webhook de produção com os eventos `checkout.session.completed`, `customer.subscription.*`, `invoice.*` e `refund.*`, conforme a lista da aba Pagamentos do admin.
 4. **Publicação no servidor de produção e monitoramento na janela de lançamento:** o funil, o centro de qualidade e o faturamento já são os painéis para isso.
