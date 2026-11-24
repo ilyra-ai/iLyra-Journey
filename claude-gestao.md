@@ -2060,7 +2060,33 @@ Para cada tarefa, registrar **antes, durante e após**:
 | Tarefa 152          | Navegação publicada; QA visual autenticado pendente                | Não marcar como aprovado pela nova iniciativa        |
 | Tarefa 153          | Dashboard celestial em andamento na tarefa 153                     | Não duplicar nem concluir por este programa          |
 
-### 173 · Rebranding integral da plataforma Lyra MetaCare para iLyra · ⚪ PENDENTE
+### 173 · Rebranding integral da plataforma Lyra MetaCare para iLyra · 🔵 EM ANDAMENTO (textos feitos; aguarda o logo novo do titular)
+
+**Feito em 24/11/2026, na parte de textos e configuração (commit `7a687b82`):**
+
+- **Marca exibida:** passou de "Lyra MetaCare" para **iLyra** em:
+  - metadados, Open Graph e manifesto PWA (nome e nome curto);
+  - títulos das páginas, termos e privacidade (com "antes chamada Lyra MetaCare" para rastreabilidade);
+  - login, cabeçalho (rótulo do link e diálogo "Planos iLyra") e rodapé do painel;
+  - documento legal, meditações, relatório em PDF, calendário (texto e `PRODID`);
+  - cartão compartilhável (imagem e texto "na iLyra"), nome do app na chave de acesso e User-Agent da pesquisa;
+  - textos padrão do construtor;
+  - launchers (`run.sh`, `run_windows.py`, `tui-webnova.sh`), `compose.yaml` (comentários), README, AGENTS, `.env.example` e títulos dos documentos vivos.
+- **Grafia oficial:** a barra lateral deixou de forçar minúsculas, para não exibir "ilyra".
+- **Lyra preservada:** a companheira continua Lyra. No prompt, só "a voz da plataforma iLyra" mudou. Motor, mapas e o "Mapa Lyra DM Samādhi" não foram tocados; os textos em que a Lyra fala dela mesma ficaram como estavam.
+- **Banco (migração 085):**
+  - troca no publicado e no rascunho só os campos que ainda têm exatamente o texto padrão antigo; o personalizado é preservado;
+  - quando o publicado muda, grava uma versão nova no Estúdio de publicação (`app` v2, origem `migracao`). A v1 antiga continua disponível para reverter;
+  - aplicada no banco local; a segunda execução não muda nada.
+- **Preservados por compatibilidade:** cookie `lyra_metacare_session`, banco `lyra_metacare`, nome do pacote, sal da cifra (mudar tornaria ilegíveis os segredos salvos), formatos `lyra-metacare/...` das exportações e `uid` dos eventos de calendário (mudar duplicaria eventos nos calendários das pessoas). Os registros históricos mantêm o nome da época.
+- **Repositório:** renomeado pelo titular para `ilyra-ai/iLyra-Journey` em 24/11/2026; `origin` atualizado.
+- **Nome da assinatura:** continua **Lyra Journey**, decisão mais recente do titular (tarefas 160/226 e nome do repositório), no lugar de "Assinatura Consciente iLyra" desta especificação.
+
+**Pendente:**
+
+- **Logo, favicon, ícones de instalação, fundo e imagens do README:** o titular está criando o logo novo. O logo atual traz "lyra metacare" desenhado na imagem, por isso o `alt` do logo muda junto com a imagem.
+- **QA visual completo nas larguras da 173.12.**
+- **Pesquisa no INPI (173.10)**, sem afirmar registro.
 
 **Publicação documental confirmada:** `561c41ae`, push `3fad0bce..561c41ae main -> main`, em 07-11-2026. Anexo integral registrado, 173 tarefas únicas, sem iniciar o rebranding; demais alterações locais fora do commit. Quebras de linha do anexo normalizadas em parágrafos para não manter espaços finais.
 
