@@ -257,7 +257,8 @@ export function BillingActionPanel({
       {portalEligible ? (
         <Button
           variant="outline"
-          className="w-full"
+          // Quebra linha com texto ampliado a 200% (WCAG 1.4.4), sem vazar.
+          className="h-auto min-h-10 w-full whitespace-normal"
           onClick={() => handleRedirectAction('/api/billing/portal')}
           disabled={actionKey === '/api/billing/portal{}'}
         >

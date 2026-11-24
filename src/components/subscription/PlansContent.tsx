@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAccountResource } from '@/hooks/use-account-resource';
 import { useAccountSubscription } from '@/hooks/use-account-subscription';
+import { cn } from '@/lib/utils';
 import type { PlanMatrixResponse } from '@/types/subscription';
 
 function catalogoValido(payload: unknown): payload is PlanMatrixResponse {
@@ -155,15 +156,16 @@ export function PlansContent() {
                     <p className="text-sm text-muted-foreground">
                       {plano.tagline}
                     </p>
+                    {/* flex-wrap: com texto a 200%, o "/mês" desce de linha
+                        em vez de passar da borda. */}
                     <p
-                      className={
-                        comValores
-                          ? 'text-2xl font-semibold tabular-nums'
-                          : 'text-3xl font-semibold tabular-nums'
-                      }
+                      className={cn(
+                        'flex flex-wrap items-baseline gap-x-1 font-semibold tabular-nums',
+                        comValores ? 'text-2xl' : 'text-3xl'
+                      )}
                     >
-                      {preco}
-                      <span className="ml-1 text-sm font-normal text-muted-foreground">
+                      <span>{preco}</span>
+                      <span className="text-sm font-normal text-muted-foreground">
                         /{cicloEmUso === 'annual' ? 'ano' : 'mês'}
                       </span>
                     </p>

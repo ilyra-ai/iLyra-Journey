@@ -109,7 +109,7 @@ function Teatro() {
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid grid-cols-[minmax(0,1fr)] gap-6">
       <Card>
         <CardHeader>
           <CardTitle>Suas premissas</CardTitle>
@@ -120,7 +120,12 @@ function Teatro() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="grid gap-4" onSubmit={montar}>
+          <form
+            // minmax(0, 1fr) e min-w-0: sem eles, o texto ampliado a 200%
+            // alarga a coluna e o fieldset (largura mínima = conteúdo).
+            className="grid grid-cols-[minmax(0,1fr)] gap-4"
+            onSubmit={montar}
+          >
             <div className="grid gap-1.5">
               <Label htmlFor={`${id}-duvida`}>Sua dúvida</Label>
               <Input
@@ -133,7 +138,7 @@ function Teatro() {
                 }
               />
             </div>
-            <fieldset className="grid gap-2">
+            <fieldset className="grid min-w-0 gap-2">
               <legend className="text-sm font-medium">Horizonte</legend>
               <div className="flex flex-wrap gap-2">
                 {(Object.keys(HORIZONTES) as Horizonte[]).map((h) => (
@@ -155,11 +160,11 @@ function Teatro() {
                 ))}
               </div>
             </fieldset>
-            <div className="grid gap-3 lg:grid-cols-3">
+            <div className="grid grid-cols-[minmax(0,1fr)] gap-3 lg:grid-cols-3">
               {premissas.caminhos.map((c, i) => (
                 <fieldset
                   key={i}
-                  className="grid gap-2 rounded-lg border border-border p-3"
+                  className="grid min-w-0 gap-2 rounded-lg border border-border p-3"
                 >
                   <legend className="px-1 text-sm font-medium">
                     Caminho {i + 1}
@@ -189,7 +194,11 @@ function Teatro() {
               </p>
             ) : null}
             <div>
-              <Button type="submit" disabled={enviando}>
+              <Button
+                type="submit"
+                disabled={enviando}
+                className="h-auto min-h-10 max-w-full whitespace-normal"
+              >
                 {enviando ? (
                   <Loader2 aria-hidden="true" className="size-4 animate-spin" />
                 ) : null}

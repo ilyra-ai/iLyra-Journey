@@ -767,6 +767,8 @@ export function ChatAssistantContent({
               type="button"
               variant="outline"
               size="sm"
+              // Quebra linha com texto ampliado a 200% (WCAG 1.4.4), sem vazar.
+              className="h-auto min-h-9 max-w-full whitespace-normal"
               disabled={
                 isTyping || historico.carregando || historico.depois !== null
               }
