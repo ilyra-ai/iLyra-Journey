@@ -2060,7 +2060,7 @@ Para cada tarefa, registrar **antes, durante e após**:
 | Tarefa 152          | Navegação publicada; QA visual autenticado pendente                | Não marcar como aprovado pela nova iniciativa        |
 | Tarefa 153          | Dashboard celestial em andamento na tarefa 153                     | Não duplicar nem concluir por este programa          |
 
-### 173 · Rebranding integral da plataforma Lyra MetaCare para iLyra · 🔵 EM ANDAMENTO (textos feitos; aguarda o logo novo do titular)
+### 173 · Rebranding integral da plataforma Lyra MetaCare para iLyra · 🔵 EM ANDAMENTO (textos, logo e tema claro feitos; faltam ampliação de 200% e INPI)
 
 **Feito em 24/11/2026, na parte de textos e configuração (commit `7a687b82`):**
 
@@ -2082,10 +2082,35 @@ Para cada tarefa, registrar **antes, durante e após**:
 - **Repositório:** renomeado pelo titular para `ilyra-ai/iLyra-Journey` em 24/11/2026; `origin` atualizado.
 - **Nome da assinatura:** continua **Lyra Journey**, decisão mais recente do titular (tarefas 160/226 e nome do repositório), no lugar de "Assinatura Consciente iLyra" desta especificação.
 
+**Logo iLyra em 24/11/2026 (commit `bd5e8662`, gates verdes: 1302 unitários, 669 integrações e build).** O titular pediu que eu criasse o logo e aprovou a proposta "Vega".
+
+- **Logo:** "iLyra" em Clicker Script, com o pingo do "i" trocado pela estrela **Vega**, a mais brilhante da constelação de Lyra. O slogan "Decifrando o Cosmos, Iluminando Destinos." vem opcional, em Imprima.
+- **Símbolo:** anel com a constelação de Lyra e Vega em destaque. Abaixo de 48 px, mostra só o anel e Vega. Também é o rosto da Lyra no chat.
+- **Implementação:**
+  - SVG embutido nos componentes `LogoILyra`, `SimboloILyra` e `MarcaLyra`, que seguem o tema: texto em `currentColor` e dourado em `--primary`;
+  - fundo transparente em tudo: favicon (16 a 64 px), `icon`, `apple-icon` e os ícones do manifesto.
+- **Gerador:** `scripts/gerar-marca-ilyra.mjs` cria tudo a partir das fontes do projeto (SIL OFL), com `fontkit`, `sharp` e `prettier`, todos já dependências.
+- **README:** logo em `<picture>`, com versão para o tema claro e para o escuro.
+- **Limpeza:** foram removidos as imagens e os três geradores do logo antigo, que ficaram sem uso (busca com `git grep`).
+- **Conferido no navegador:** cabeçalho nos temas claro e escuro, landing, login e painel em 375 px e no desktop, sem rolagem horizontal nem erro no console.
+- **Grafia:** títulos em caixa-alta mantêm "iLyra" com o i minúsculo.
+- **Limitação:** o iOS põe fundo preto atrás de ícones transparentes, e alguns launchers Android põem branco. Foi escolhido um dourado que lê nos dois.
+
+**Tema claro como padrão em 24/11/2026 (commit `fe4f9cf1`), a pedido do titular:**
+
+- A área logada abria escura por padrão (`ThemeProvider`); agora todas as rotas abrem claras. A escolha de cada pessoa continua salva.
+- Login e tela de carregamento, que só tinham a versão escura, ganharam a versão clara com os tokens do cabeçalho claro.
+- Conferido sem preferência salva: login e painel abrem claros, sem erro no console.
+
+**QA de larguras (173.12) em 24/11/2026:**
+
+- **Área logada:** painel, planos e chat em 320, 390, 768, 1024, 1366 e 1920 px. Nenhum estouro horizontal; o logo mede 92 px no celular e 113 px no tablet e no desktop.
+- **Área pública:** landing, login e termos em 320, 768 e 1920 px, sem estouro.
+- **Achado e corrigido (commit `d66d652e`):** em 320 px, os botões do cabeçalho caíam para uma segunda linha, porque a reserva de 180 px era a medida do logo antigo. Agora o cabeçalho fica numa linha só.
+
 **Pendente:**
 
-- **Logo, favicon, ícones de instalação, fundo e imagens do README:** o titular está criando o logo novo. O logo atual traz "lyra metacare" desenhado na imagem, por isso o `alt` do logo muda junto com a imagem.
-- **QA visual completo nas larguras da 173.12.**
+- **Ampliação de texto a 200% e leitor de tela real**, ainda não testados.
 - **Pesquisa no INPI (173.10)**, sem afirmar registro.
 
 **Publicação documental confirmada:** `561c41ae`, push `3fad0bce..561c41ae main -> main`, em 07-11-2026. Anexo integral registrado, 173 tarefas únicas, sem iniciar o rebranding; demais alterações locais fora do commit. Quebras de linha do anexo normalizadas em parágrafos para não manter espaços finais.
