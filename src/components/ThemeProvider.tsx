@@ -69,7 +69,9 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   // A rota raiz é a landing para visitantes e o painel para quem entrou.
   const publico = pathname === '/login' || (pathname === '/' && !session);
   const chave = publico ? 'lyra-public-theme' : 'lyra-celestial-theme';
-  const padrao: Tema = publico ? 'light' : 'dark';
+  // Claro por padrão em todas as rotas, inclusive a área logada (pedido do
+  // titular em 24/11/2026). A escolha de cada pessoa continua salva por escopo.
+  const padrao: Tema = 'light';
   const lerTema = React.useCallback(() => lerPreferencia(chave), [chave]);
   const preferencia = React.useSyncExternalStore(
     acompanharPreferencia,

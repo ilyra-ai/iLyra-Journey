@@ -143,3 +143,21 @@
     animation: none;
   }
 }
+
+/* Tema claro (padrão do app desde 24/11/2026): creme e dourado escuro, como
+   o cabeçalho claro da área logada; o horizonte noturno fica só sugerido. */
+:global(html.light) .screen {
+  --background: 45 40% 96%;
+  --foreground: 30 22% 13%;
+  --muted-foreground: 30 12% 33%;
+  --primary: 37 68% 28%;
+  --border: 36 24% 52%;
+  color-scheme: light;
+  color: hsl(var(--foreground));
+  background:
+    radial-gradient(ellipse at 16% 0%, #e7cf9d88, transparent 52%),
+    linear-gradient(155deg, #faf6eb, #ede8df);
+}
+:global(html.light) .backdrop {
+  opacity: 0.14;
+}
