@@ -2060,7 +2060,7 @@ Para cada tarefa, registrar **antes, durante e após**:
 | Tarefa 152          | Navegação publicada; QA visual autenticado pendente                | Não marcar como aprovado pela nova iniciativa        |
 | Tarefa 153          | Dashboard celestial em andamento na tarefa 153                     | Não duplicar nem concluir por este programa          |
 
-### 173 · Rebranding integral da plataforma Lyra MetaCare para iLyra · 🔵 EM ANDAMENTO (textos, logo e tema claro feitos; faltam ampliação de 200% e INPI)
+### 173 · Rebranding integral da plataforma Lyra MetaCare para iLyra · 🟡 IMPLEMENTADA (aguarda homologação do titular)
 
 **Feito em 24/11/2026, na parte de textos e configuração (commit `7a687b82`):**
 
@@ -2108,10 +2108,27 @@ Para cada tarefa, registrar **antes, durante e após**:
 - **Área pública:** landing, login e termos em 320, 768 e 1920 px, sem estouro.
 - **Achado e corrigido (commit `d66d652e`):** em 320 px, os botões do cabeçalho caíam para uma segunda linha, porque a reserva de 180 px era a medida do logo antigo. Agora o cabeçalho fica numa linha só.
 
-**Pendente:**
+**Texto ampliado a 200% em 24/11/2026 (commit `4e023c8d`):**
 
-- **Ampliação de texto a 200% e leitor de tela real**, ainda não testados.
-- **Pesquisa no INPI (173.10)**, sem afirmar registro.
+- **Método:** fonte raiz a 200% (WCAG 1.4.4) em painel, planos, chat, Teatro dos Futuros e histórico, nas larguras de 320, 390 e 1280 px.
+- **Achados e corrigidos:**
+  - Teatro dos Futuros: o grid e os `fieldset` cresciam até o conteúdo e estouravam 116 px. Passaram a usar `minmax(0, 1fr)` e `min-w-0`, e o botão quebra linha.
+  - Os botões "Gerenciar cobrança no portal", "Conhecer o aplicativo" e "Ver meus dados no chat" vazavam para fora da tela; agora quebram linha.
+  - O "/mês" do preço passou a descer de linha.
+- **Resultado:** nenhum estouro em 1280 px (onde o critério é medido) nem em 390 px.
+- **Limitação:** em 320 px com texto a 200% ao mesmo tempo, o valor "R$ 19,99" sozinho, que não quebra, passa 6 px da borda. É o limite físico de um trecho de 48 px de fonte numa tela que equivale a 160 px de largura.
+
+**Pesquisa de marca (173.10) em 24/11/2026:** registro em `docs/marca/pesquisa-de-marca-ilyra.md`.
+
+- **INPI:** nenhum pedido ou registro "ILYRA". "LYRA" tem dois registros em vigor na classe 42, de outros titulares e ramos, o que exige parecer de especialista antes de pedir registro.
+- **Domínio:** `ilyra.com.br` está ativo até 07/01/2027; o titular não aparece na consulta pública.
+- Nada aqui afirma que a marca está registrada ou livre.
+
+**O que fica com o titular:**
+
+- **Homologação visual** da marca, do logo e do tema claro.
+- **Parecer de propriedade industrial** e eventual pedido de registro no INPI.
+- **Leitor de tela real** (NVDA, VoiceOver ou TalkBack), que não está disponível neste ambiente.
 
 **Publicação documental confirmada:** `561c41ae`, push `3fad0bce..561c41ae main -> main`, em 07-11-2026. Anexo integral registrado, 173 tarefas únicas, sem iniciar o rebranding; demais alterações locais fora do commit. Quebras de linha do anexo normalizadas em parágrafos para não manter espaços finais.
 
