@@ -4,7 +4,7 @@ import { CSSProperties, SubmitEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import ceuVedico from '@/assets/celestial/ceu-vedico-transparente.png';
-import logoLyra from '@/assets/celestial/simbolo-transparente.png';
+import { MarcaLyra } from '@/components/marca/MarcaLyra';
 import { CelestialBrand } from '@/components/public/CelestialBrand';
 import identidade from '@/components/public/CelestialIdentity.module.css';
 import { toast } from 'sonner';
@@ -657,13 +657,7 @@ export function LoginExperience({
                       style={escalaFluida(0.875, typography.highlightBody)}
                     >
                       {highlight.icon === 'bot' ? (
-                        <Image
-                          src={logoLyra}
-                          alt=""
-                          width={20}
-                          height={20}
-                          className="mt-0.5 h-5 w-5 shrink-0"
-                        />
+                        <MarcaLyra tamanho="20px" className="mt-0.5" />
                       ) : (
                         <HighlightIcon
                           className={cn(

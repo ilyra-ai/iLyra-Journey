@@ -26,14 +26,13 @@ import caminhoLunar from '@/assets/celestial/caminho-lunar.png';
 import lotusSamadhi from '@/assets/celestial/lotus-samadhi.png';
 import signoDeAries from '@/assets/celestial/signos/aries.png';
 import horizonte from '@/assets/celestial/horizonte.png';
-import marca from '@/assets/celestial/marca.png';
-import marcaTransparente from '@/assets/celestial/marca-transparente.png';
 import ceuVedicoTransparente from '@/assets/celestial/ceu-vedico-transparente.png';
 import esferaQuantumTransparente from '@/assets/celestial/esfera-quantum-transparente.png';
 import luaTransparente from '@/assets/celestial/lua-transparente.png';
 import lotusTransparente from '@/assets/celestial/temas/sensibilidade.png';
 import { ConviteDaAssinatura } from '@/components/landing/ConviteDaAssinatura';
 import { ExperimenteGratis } from '@/components/landing/ExperimenteGratis';
+import { LogoILyra } from '@/components/marca/ilyra/LogoILyra';
 import { marcarEtapa } from '@/lib/funil/cliente';
 import { ThemeToggleButton } from '@/components/theme/ThemeControls';
 import { usePublicSitePageConfig } from '@/hooks/use-public-site-page-config';
@@ -123,7 +122,6 @@ const ilustracoesDosPlanos: Partial<
  * o CSS mostra a do tema em uso, sem depender do JavaScript para trocar.
  */
 const VERSAO_CLARA = new Map<StaticImageData, StaticImageData>([
-  [marca, marcaTransparente],
   [ceuVedico, ceuVedicoTransparente],
   [esferaQuantum, esferaQuantumTransparente],
   [caminhoLunar, luaTransparente],
@@ -154,6 +152,29 @@ function ArteDoTema({
         {...props}
       />
     </>
+  );
+}
+
+/**
+ * Os títulos pequenos (`.eyebrow`) são em caixa-alta, mas a marca mantém a
+ * grafia oficial "iLyra", com o i minúsculo (tarefa 173).
+ */
+function comGrafiaDaMarca(texto: string) {
+  const partes = texto.split(/(iLyra)/);
+  if (partes.length === 1) return texto;
+  // Um único item: o `.eyebrow` é flex com `gap`, que separaria os pedaços.
+  return (
+    <span>
+      {partes.map((parte, indice) =>
+        parte === 'iLyra' ? (
+          <span key={indice} className={styles.grafiaDaMarca}>
+            iLyra
+          </span>
+        ) : (
+          parte
+        )
+      )}
+    </span>
   );
 }
 
@@ -315,7 +336,7 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
 
   const intro = (rotulo: string, titulo: string, descricao: string) => (
     <div className={styles.sectionIntro}>
-      <p className={styles.eyebrow}>{rotulo}</p>
+      <p className={styles.eyebrow}>{comGrafiaDaMarca(rotulo)}</p>
       <h2>{titulo}</h2>
       <p>{descricao}</p>
     </div>
@@ -618,11 +639,8 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
     >
       <header className={styles.header}>
         <Link href="#topo" className={styles.brand}>
-          <ArteDoTema
-            src={marca}
-            alt={config.footer.brandLine}
-            sizes="280px"
-            loading="eager"
+          <LogoILyra
+            titulo={config.footer.brandLine}
             className={styles.brandImage}
           />
         </Link>
@@ -671,7 +689,9 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
           aria-labelledby="titulo-celestial"
         >
           <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}>{config.hero.badgeText}</p>
+            <p className={styles.eyebrow}>
+              {comGrafiaDaMarca(config.hero.badgeText)}
+            </p>
             <h1 id="titulo-celestial">
               {config.hero.title} <span>{config.hero.accentTitle}</span>
             </h1>

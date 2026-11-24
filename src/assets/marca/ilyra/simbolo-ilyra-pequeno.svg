@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32" role="img" aria-label="iLyra">
+<defs><linearGradient id="ouro" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EDD27A"/><stop offset="0.5" stop-color="#D9B24E"/><stop offset="1" stop-color="#B8902F"/></linearGradient><radialGradient id="brilho"><stop offset="0" stop-color="#FFF6D2" stop-opacity="0.8"/><stop offset="1" stop-color="#F1DF94" stop-opacity="0"/></radialGradient></defs>
+<g transform="translate(0 0) scale(1)"><circle cx="50" cy="50" r="44" fill="none" stroke="url(#ouro)" stroke-width="8"/><path d="M50 23Q55.4 44.6 77 50Q55.4 55.4 50 77Q44.6 55.4 23 50Q44.6 44.6 50 23Z" fill="url(#ouro)"/></g>
+</svg>

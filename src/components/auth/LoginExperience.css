@@ -230,6 +230,7 @@
   .lyra-login .login-marca > div {
     width: min(100%, 240px);
     height: 48px;
+    justify-content: center;
   }
   .lyra-login .login-acesso {
     padding: 16px 20px;

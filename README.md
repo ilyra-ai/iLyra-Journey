@@ -1,6 +1,9 @@
 <div align="center">
 
-<img src="./lyra-logo-mockup-2026-11-06.png" alt="Lyra MetaCare — símbolo celestial amarelo e nome em tipografia serifada sobre fundo escuro" width="100%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./docs/marca/ilyra-logo-tema-escuro.png">
+  <img src="./docs/marca/ilyra-logo-tema-claro.png" alt="iLyra — o pingo do i é a estrela Vega, da constelação de Lyra. Decifrando o Cosmos, Iluminando Destinos." width="560">
+</picture>
 
 # Um novo olhar para o seu dia.
 

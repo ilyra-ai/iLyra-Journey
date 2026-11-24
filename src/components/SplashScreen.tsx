@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import horizonte from '@/assets/celestial/horizonte.png';
-import simbolo from '@/assets/celestial/simbolo-transparente.png';
+import { SimboloILyra } from '@/components/marca/ilyra/SimboloILyra';
 import { CelestialBrand } from '@/components/public/CelestialBrand';
 import { cn } from '@/lib/utils';
 import identidade from './public/CelestialIdentity.module.css';
@@ -36,16 +36,10 @@ export function SplashScreen() {
       >
         <div className={styles.orbit} aria-hidden="true">
           <span className={styles.orbitRing} />
-          <Image
-            src={simbolo}
-            alt=""
-            sizes="160px"
-            loading="eager"
-            className={styles.symbol}
-          />
+          <SimboloILyra className={styles.symbol} />
         </div>
         <h1 id="titulo-carregamento">Um novo olhar está chegando.</h1>
-        <p className={styles.message}>Preparando sua experiência Lyra.</p>
+        <p className={styles.message}>Preparando sua experiência iLyra.</p>
         <div className={styles.activity} aria-hidden="true">
           <span />
           <span />

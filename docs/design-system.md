@@ -52,27 +52,26 @@ frio (matiz 346) justamente para não se confundir com o coral de destaque.
 
 ## Marca e ícones
 
-- Componente único [`MarcaLyra`](../src/components/marca/MarcaLyra.tsx): o
-  símbolo da identidade celestial (`src/assets/celestial/simbolo.png`, "L"
-  dourado abraçando o coração sobre azul-noite, o mesmo da tela de
-  carregamento e do favicon) num ladrilho arredondado, igual nos temas claro
-  e escuro. Aparece no chat (cabeçalho, abertura, balões e "digitando"),
-  sidebar, busca de páginas e páginas de erro. É decorativo (`alt=""`)
-  quando o nome "lyra" aparece ao lado.
-- O logo anterior (teal e coral, `src/assets/marca/lyra-logo.png`) saiu dos
-  componentes em 17/11/2026 e continua só como fonte dos ícones de instalação
-  gerados abaixo, ainda não redesenhados.
-- Ícones gerados a partir do mesmo arquivo: `src/app/favicon.ico` (16, 32,
-  48 e 64 px), `src/app/icon.png` (192 px), `src/app/apple-icon.png` (180 px,
-  fundo branco) e, para o manifesto (`src/app/manifest.ts`),
-  `public/icones/lyra-192.png`, `lyra-512.png` e `lyra-maskable-512.png`
-  (marca dentro da área segura de 80%).
-- Fonte única: o logo oficial original fica em
-  [`docs/marca/lyra-logo-oficial.png`](./marca/lyra-logo-oficial.png) e todos
-  os arquivos acima são gerados por
-  [`scripts/gerar-icones-da-marca.py`](../scripts/gerar-icones-da-marca.py)
-  (Pillow + NumPy; instruções no próprio script). Rodar o script de novo
-  reproduz os mesmos arquivos byte a byte.
+Marca **iLyra** (tarefa 173), aprovada pelo titular em 24/11/2026. A companheira digital continua sendo a **Lyra**. Todos os arquivos de marca têm fundo transparente.
+
+- **Logo** ([`LogoILyra`](../src/components/marca/ilyra/LogoILyra.tsx)): "iLyra" em Clicker Script. O pingo do "i" é a estrela **Vega**, a mais brilhante da constelação de Lyra. O slogan opcional, em Imprima, é "Decifrando o Cosmos, Iluminando Destinos.".
+  - É um SVG embutido, então segue o tema: "Lyra" usa `--marca-texto` (padrão `currentColor`); o "i" e as estrelas usam `--marca-ouro` (padrão `--primary`, o dourado de cada tema).
+  - Aparece no cabeçalho, no login e na tela de carregamento (`CelestialBrand`) e na landing.
+- **Símbolo** ([`SimboloILyra`](../src/components/marca/ilyra/SimboloILyra.tsx), usado por [`MarcaLyra`](../src/components/marca/MarcaLyra.tsx)): anel com a constelação de Lyra e Vega em destaque.
+  - Abaixo de 48 px, mostra só o anel e Vega, que continuam legíveis.
+  - Aparece no chat (rosto da Lyra), na barra lateral, na busca de páginas, nas páginas de erro e na tela de carregamento.
+  - É decorativo quando o nome aparece ao lado.
+- **Ícones, todos com fundo transparente:**
+  - `src/app/favicon.ico` (16, 32, 48 e 64 px), `src/app/icon.png` (192 px) e `src/app/apple-icon.png` (180 px);
+  - para o manifesto: `public/icones/lyra-192.png`, `lyra-512.png` e `lyra-maskable-512.png` (símbolo dentro da área segura de 80%).
+  - **Limitação:** o iOS põe fundo preto atrás de ícones transparentes, e alguns launchers Android põem branco. O dourado foi escolhido para ler nos dois.
+- **Fonte única:** [`scripts/gerar-marca-ilyra.mjs`](../scripts/gerar-marca-ilyra.mjs) converte as letras das fontes do projeto (SIL OFL) em curvas com `fontkit` e gera, com `sharp`:
+  - `src/components/marca/ilyra/desenho.ts`;
+  - os originais vetoriais em `src/assets/marca/ilyra/*.svg`;
+  - os ícones acima;
+  - o logo do README em `docs/marca/ilyra-logo-tema-{claro,escuro}.png`.
+    Rodar de novo reproduz os mesmos arquivos.
+- **Histórico:** o logo anterior, "lyra metacare" com o "L" abraçando o coração, saiu dos componentes em 24/11/2026; está no histórico do Git. O logo original de antes da identidade celestial continua em [`docs/marca/lyra-logo-oficial.png`](./marca/lyra-logo-oficial.png).
 
 ## Forma e tipografia
 

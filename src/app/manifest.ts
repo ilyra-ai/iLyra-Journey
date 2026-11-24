@@ -5,7 +5,8 @@ import { COR_DA_BARRA_DO_NAVEGADOR } from '@/components/theme/tema';
 /*
   Manifesto do aplicativo web (tarefa 47): nome, cores e ícones oficiais da
   iLyra, usados quando a pessoa adiciona o app à tela inicial. Os ícones em
-  `public/icones/` são gerados a partir do logo oficial, com fundo branco; o
+  `public/icones/` são o símbolo iLyra (anel com a constelação de Lyra),
+  com fundo transparente, gerados por scripts/gerar-marca-ilyra.mjs; o
   `maskable` deixa a marca dentro da área segura de 80% exigida pelos
   sistemas que recortam o ícone em círculo ou gota.
 */

@@ -200,7 +200,7 @@ export function CelestialDashboard() {
         className={styles.intro}
         aria-labelledby="titulo-painel-celestial"
       >
-        <p className={styles.eyebrow}>SEU ESPAÇO LYRA</p>
+        <p className={styles.eyebrow}>SEU ESPAÇO iLyra</p>
         <div className={styles.headingRow}>
           <h2 id="titulo-painel-celestial">Um novo olhar para o seu dia.</h2>
           {data?.hoje ? (

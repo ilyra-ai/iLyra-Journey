@@ -2,17 +2,15 @@
 
 Criada em 2026-11-06 com a skill `imagegen`, a partir dos mockups aprovados pelo proprietário da Lyra MetaCare neste chat. As imagens são ilustrações editoriais, não leituras pessoais calculadas ou representações científicas das posições planetárias.
 
-| Arquivo              | Uso                                                                             |
-| -------------------- | ------------------------------------------------------------------------------- |
-| `ceu-vedico.png`     | Arte principal, destaque e apresentação do Védico.                              |
-| `lotus-samadhi.png`  | Apresentação do Lyra DM Samādhi e ilustração do plano Care.                     |
-| `esfera-quantum.png` | Apresentação do Quantum, conversa com a Lyra e plano Meta.                      |
-| `caminho-lunar.png`  | Destaque do ritmo pessoal e ilustração do plano Free.                           |
-| `horizonte.png`      | Fundo decorativo da faixa final.                                                |
-| `marca.png`          | Aplicação horizontal do logo aprovado, também versionada na raiz para o README. |
-| `simbolo.png`        | Símbolo amarelo para o favicon, sem inscrição.                                  |
+| Arquivo              | Uso                                                         |
+| -------------------- | ----------------------------------------------------------- |
+| `ceu-vedico.png`     | Arte principal, destaque e apresentação do Védico.          |
+| `lotus-samadhi.png`  | Apresentação do Lyra DM Samādhi e ilustração do plano Care. |
+| `esfera-quantum.png` | Apresentação do Quantum, conversa com a Lyra e plano Meta.  |
+| `caminho-lunar.png`  | Destaque do ritmo pessoal e ilustração do plano Free.       |
+| `horizonte.png`      | Fundo decorativo da faixa final.                            |
 
-As imagens são importadas estaticamente e servidas pelo otimizador do Next com dimensões responsivas. Conteúdo, navegação, planos e botões são HTML/React reais, separados das ilustrações. O favicon é empacotado de forma reproduzível com `python scripts/gerar-icones-da-marca.py --favicon-celestial` (Pillow e NumPy em ambiente virtual), gerando ICO em 16/32/48/64 px e PNG em 192 px, sem modificar o logo dos componentes internos ou os ícones de instalação ainda não redesenhados.
+As imagens são importadas estaticamente e servidas pelo otimizador do Next com dimensões responsivas. Conteúdo, navegação, planos e botões são HTML/React reais, separados das ilustrações. O logo, o símbolo, o favicon e os ícones da marca iLyra (tarefa 173) não ficam mais nesta pasta. Eles são vetoriais, com fundo transparente, e saem de `node scripts/gerar-marca-ilyra.mjs`; veja `docs/design-system.md`, seção "Marca e ícones".
 
 ## Tipografia e tokens
 

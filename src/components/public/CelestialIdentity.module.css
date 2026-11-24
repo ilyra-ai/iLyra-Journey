@@ -65,16 +65,17 @@
   font-synthesis: weight style;
 }
 
+/* Logo iLyra em SVG justo (sem margem embutida): a altura define o tamanho e
+   a largura acompanha a proporção. */
 .brand {
-  width: clamp(220px, 25vw, 340px);
+  display: flex;
+  align-items: center;
   max-width: 100%;
-  height: clamp(60px, 7vw, 88px);
-  overflow: hidden;
+  height: clamp(44px, 5.2vw, 60px);
 }
 
 .brandImage {
-  width: 100%;
   height: 100%;
-  object-fit: cover;
-  transform: scale(1.52);
+  width: auto;
+  max-width: 100%;
 }

@@ -71,18 +71,23 @@
   min-height: 96px;
   border-bottom: 1px solid var(--celestial-border);
 }
+/* Logo iLyra em SVG: segue as cores da landing nos temas claro e escuro. */
 .brand {
   position: relative;
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
-  width: 276px;
-  height: 70px;
-  overflow: hidden;
+  height: 60px;
+  --marca-ouro: var(--celestial-gold);
+  --marca-texto: var(--celestial-text);
 }
 .brandImage {
-  width: 100%;
   height: 100%;
-  object-fit: cover;
-  transform: scale(1.52);
+  width: auto;
+}
+/* A marca mantém o i minúsculo mesmo nos títulos em caixa-alta. */
+.grafiaDaMarca {
+  text-transform: none;
 }
 .nav {
   display: flex;
@@ -1089,10 +1094,6 @@
    escuro: um leve escurecimento mantém o dourado legível sobre o creme. */
 :global(html.light) .page img.artePraClaro {
   filter: brightness(0.78) saturate(1.3) contrast(1.15);
-}
-/* A marca transparente é dourada clara: escurecida para ler sobre o creme. */
-:global(html.light) .page img.artePraClaro.brandImage {
-  filter: brightness(0.5) saturate(1.4);
 }
 /* Faixa final: o horizonte noturno fica como banner, com o texto claro. */
 :global(html.light) .page .finalCta {

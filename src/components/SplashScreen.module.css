@@ -63,9 +63,9 @@
 }
 
 .symbol {
-  /* Símbolo transparente e recortado: sem máscara para esfumaçar fundo. */
+  /* Símbolo iLyra em SVG, fundo transparente. */
   width: 62%;
-  height: auto;
+  height: 62%;
 }
 
 .content h1 {

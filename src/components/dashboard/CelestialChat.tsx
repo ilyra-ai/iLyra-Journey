@@ -2,7 +2,6 @@
 
 import { useLayoutEffect, useRef, useState } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import Image from 'next/image';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import {
@@ -13,7 +12,6 @@ import {
   Send,
   Sparkles,
 } from 'lucide-react';
-import logo from '@/assets/celestial/simbolo-transparente.png';
 import { usePlanFeatureAccess } from '@/hooks/use-plan-feature-access';
 import { useConversaLyra } from '@/hooks/use-conversa-lyra';
 import { usePrivacyMode } from '@/hooks/use-privacy-mode';
@@ -28,6 +26,7 @@ import {
   DialogOverlay,
 } from '@/components/ui/dialog';
 import identidade from '@/components/public/CelestialIdentity.module.css';
+import { SimboloILyra } from '@/components/marca/ilyra/SimboloILyra';
 import { cn } from '@/lib/utils';
 import styles from './CelestialDashboard.module.css';
 
@@ -85,7 +84,9 @@ export function CelestialChat({ nome }: { nome?: string | null }) {
   };
   const conteudo = (
     <>
-      <Image src={logo} alt="" className={styles.chatOrb} sizes="40px" />
+      <span className={styles.chatOrb}>
+        <SimboloILyra detalhe="simples" />
+      </span>
       <div className={styles.chatHeading}>
         {ampliado ? (
           <DialogTitle>Converse com a Lyra</DialogTitle>
