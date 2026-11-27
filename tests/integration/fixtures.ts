@@ -41,6 +41,8 @@ export async function criarUsuario(
         role,
         // Igual ao perfil inserido acima (onboarding_completed = TRUE).
         onboarding_completed: true,
+        // Conta nova ainda não escolheu o tema (migração 086).
+        tema_preferido: null,
         user_metadata: {
           first_name: nome,
           last_name: 'Teste',
