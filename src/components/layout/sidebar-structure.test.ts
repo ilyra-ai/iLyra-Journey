@@ -34,6 +34,7 @@ describe('categorias reais da navegação lateral', () => {
         '/',
         '/inovacoes',
         '/futuros',
+        '/conexoes',
         '/dia',
       ]);
     }

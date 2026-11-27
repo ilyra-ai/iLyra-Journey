@@ -13,6 +13,7 @@ import {
   Funnel,
   Gem,
   Headphones,
+  HeartHandshake,
   HeartPulse,
   History,
   KeyRound,
@@ -90,6 +91,15 @@ export const navigationItems: NavigationDefinition[] = [
     description:
       'Três histórias hipotéticas a partir de caminhos que você escreve. Não é previsão.',
     icon: Theater,
+    section: 'Principal',
+    sectionKey: 'principal',
+  },
+  {
+    href: '/conexoes',
+    label: 'Conexões da Alma',
+    description:
+      'Será que encontrei minha alma gêmea? Uma comparação simbólica entre dois mapas, sem veredito nem porcentagem.',
+    icon: HeartHandshake,
     section: 'Principal',
     sectionKey: 'principal',
   },

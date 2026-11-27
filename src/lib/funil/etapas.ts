@@ -24,6 +24,8 @@ const MAPAS_PAGOS = [
   'landing-feature-1',
   'landing-feature-2',
   'landing-feature-3',
+  // Faixa "Conexões da Alma" (tarefa 166), que abre o mesmo convite.
+  'conexoes-da-alma',
 ] as const;
 
 interface DefinicaoDaEtapa {

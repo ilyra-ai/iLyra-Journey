@@ -14,13 +14,15 @@ const INICIO_DA_NAVEGACAO = [
   '/plan',
 ];
 
-// Com uma configuração salva, "Meu céu avançado" e o "Teatro dos Futuros"
-// (rotas posteriores ao registro) entram logo depois das antecessoras.
+// Com uma configuração salva, "Meu céu avançado", o "Teatro dos Futuros" e
+// as "Conexões da Alma" (rotas posteriores ao registro) entram logo depois
+// das antecessoras.
 const INICIO_COM_CEU_AVANCADO = [
   '/chat',
   '/',
   '/inovacoes',
   '/futuros',
+  '/conexoes',
   '/dia',
   '/semana',
 ];
@@ -114,7 +116,7 @@ describe('navegação com configuração salva', () => {
     const hrefs = getVisibleNavigation(false, semAsPaginas(['/dia'])).map(
       (i) => i.href
     );
-    expect(hrefs.slice(0, 6)).toEqual(INICIO_COM_CEU_AVANCADO);
+    expect(hrefs.slice(0, 7)).toEqual(INICIO_COM_CEU_AVANCADO);
     expect(hrefs.filter((h) => h === '/dia')).toHaveLength(1);
     expect(hrefs.some((h) => h.startsWith('/admin'))).toBe(false);
   });
@@ -124,7 +126,7 @@ describe('navegação com configuração salva', () => {
       false,
       semAsPaginas(['/semana', '/respiracao'])
     );
-    expect(itens.map((i) => i.href).slice(0, 6)).toEqual(
+    expect(itens.map((i) => i.href).slice(0, 7)).toEqual(
       INICIO_COM_CEU_AVANCADO
     );
     expect(itens.find((i) => i.href === '/semana')?.label).toBe('Sua semana');

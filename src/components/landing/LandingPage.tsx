@@ -14,6 +14,7 @@ import {
   ArrowRight,
   Check,
   ChevronDown,
+  HeartHandshake,
   Menu,
   RotateCw,
   Sparkles,
@@ -392,6 +393,34 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
                 As imagens ilustram cada perspectiva. Suas leituras são pessoais
                 e dependem dos dados do perfil e dos recursos do seu plano.
               </p>
+              {/* Conexões da Alma (tarefa 166): para quem não assina, o
+                  convite da assinatura (tarefa 161) abre antes de qualquer
+                  dado de outra pessoa ser pedido. */}
+              <div className={styles.conexoes}>
+                <HeartHandshake aria-hidden="true" />
+                <div>
+                  <h3>Conexões da Alma</h3>
+                  <p>
+                    Compare o seu mapa com o de alguém especial: afinidades,
+                    diferenças e perguntas para conversar. Sem veredito e sem
+                    porcentagem.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  aria-haspopup="dialog"
+                  className={styles.textLink}
+                  onClick={() =>
+                    abrirConvite({
+                      id: 'conexoes-da-alma',
+                      title: 'Conexões da Alma',
+                    })
+                  }
+                >
+                  Será que encontrei minha alma gêmea?
+                  <ArrowRight aria-hidden="true" />
+                </button>
+              </div>
             </section>
           )
         );
