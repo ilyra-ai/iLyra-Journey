@@ -32,6 +32,7 @@ import esferaQuantumTransparente from '@/assets/celestial/esfera-quantum-transpa
 import luaTransparente from '@/assets/celestial/lua-transparente.png';
 import lotusTransparente from '@/assets/celestial/temas/sensibilidade.png';
 import { ConviteDaAssinatura } from '@/components/landing/ConviteDaAssinatura';
+import { EscolhaDoTema } from '@/components/landing/EscolhaDoTema';
 import { ExperimenteGratis } from '@/components/landing/ExperimenteGratis';
 import { LogoILyra } from '@/components/marca/ilyra/LogoILyra';
 import { marcarEtapa } from '@/lib/funil/cliente';
@@ -813,6 +814,8 @@ export function LandingPage({ overrideConfig, previewMode = false }: Props) {
         destinoDaAssinatura={config.hero.primaryCtaHref}
         classeDoBotaoPrincipal={styles.primaryButton}
       />
+      {/* Primeira visita: demonstração do tema escuro e claro e a escolha. */}
+      <EscolhaDoTema desligada={previewMode} />
       <ConviteDaAssinatura
         recurso={convite}
         aoFechar={() => setConvite(null)}

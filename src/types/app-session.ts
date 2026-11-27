@@ -5,6 +5,8 @@ export interface AppUser {
   // Lido do banco a cada sessão: o cliente decide o acesso ao app (e o
   // envio imediato ao onboarding) sem uma consulta extra ao perfil.
   onboarding_completed: boolean;
+  /** Tema escolhido pela pessoa e salvo na conta; null: ainda não escolheu. */
+  tema_preferido?: 'light' | 'dark' | null;
   user_metadata: {
     first_name?: string | null;
     last_name?: string | null;

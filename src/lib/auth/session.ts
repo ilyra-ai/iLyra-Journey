@@ -131,10 +131,12 @@ export function buildAppSession(
     last_name?: string | null;
     // O MySQL devolve TINYINT(1) como número (0/1).
     onboarding_completed: boolean | number;
+    tema_preferido?: string | null;
   }
 ): AppSession {
   const firstName = profile.first_name ?? null;
   const lastName = profile.last_name ?? null;
+  const tema = profile.tema_preferido;
 
   return {
     user: {
@@ -142,6 +144,7 @@ export function buildAppSession(
       email: payload.email,
       role: payload.role,
       onboarding_completed: Boolean(profile.onboarding_completed),
+      tema_preferido: tema === 'light' || tema === 'dark' ? tema : null,
       user_metadata: {
         first_name: firstName,
         last_name: lastName,

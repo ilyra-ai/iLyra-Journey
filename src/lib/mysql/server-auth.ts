@@ -15,6 +15,7 @@ interface ProfileRow {
   first_name: string | null;
   last_name: string | null;
   onboarding_completed: number;
+  tema_preferido: string | null;
 }
 
 export async function requireServerSession(): Promise<AppSession> {
@@ -50,7 +51,7 @@ export async function getServerSession(): Promise<AppSession | null> {
   // ter sessão válida.
   const profiles = await queryRows<ProfileRow>(
     `
-      SELECT u.email, u.blocked_at, u.session_version, p.role, p.first_name, p.last_name, p.onboarding_completed
+      SELECT u.email, u.blocked_at, u.session_version, p.role, p.first_name, p.last_name, p.onboarding_completed, p.tema_preferido
       FROM users u
       INNER JOIN profiles p ON p.id = u.id
       WHERE u.id = ?

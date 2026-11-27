@@ -53,6 +53,54 @@ function acompanharSistema(atualizar: () => void) {
   return () => consulta.removeEventListener('change', atualizar);
 }
 
+/** Tema escolhido na landing por quem ainda não tem conta (ver EscolhaDoTema). */
+export const CHAVE_DA_ESCOLHA_PENDENTE = 'lyra-tema-escolhido';
+
+/** Mesmo nome de EscolhaDoTema: só "light" ou "dark", sem dado pessoal. */
+const COOKIE_DA_ESCOLHA = 'lyra_tema_escolhido';
+
+function lerEscolhaPendente(): 'light' | 'dark' | null {
+  let valor: string | null = null;
+  try {
+    valor = window.localStorage.getItem(CHAVE_DA_ESCOLHA_PENDENTE);
+  } catch {
+    valor = null;
+  }
+  // Reserva: o cookie da escolha, se o armazenamento local foi limpo.
+  valor ??=
+    document.cookie
+      .split('; ')
+      .find((c) => c.startsWith(`${COOKIE_DA_ESCOLHA}=`))
+      ?.split('=')[1] ?? null;
+  return valor === 'light' || valor === 'dark' ? valor : null;
+}
+
+function limparEscolhaPendente() {
+  try {
+    window.localStorage.removeItem(CHAVE_DA_ESCOLHA_PENDENTE);
+  } catch {
+    // Sem armazenamento disponível não há o que limpar.
+  }
+  document.cookie = `${COOKIE_DA_ESCOLHA}=; path=/; max-age=0; SameSite=Lax`;
+}
+
+/**
+ * Grava o tema na conta. Uma falha não desfaz a troca local, que já vale
+ * neste aparelho; a próxima troca tenta de novo.
+ */
+async function salvarTemaNaConta(tema: 'light' | 'dark') {
+  try {
+    await fetch('/api/account/tema', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ tema }),
+    });
+  } catch {
+    // Sem rede: o tema local continua valendo e a próxima troca sincroniza.
+  }
+}
+
 function sistemaEscuro() {
   return window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
@@ -69,9 +117,29 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
   // A rota raiz é a landing para visitantes e o painel para quem entrou.
   const publico = pathname === '/login' || (pathname === '/' && !session);
   const chave = publico ? 'lyra-public-theme' : 'lyra-celestial-theme';
-  // Claro por padrão em todas as rotas, inclusive a área logada (pedido do
-  // titular em 24/11/2026). A escolha de cada pessoa continua salva por escopo.
-  const padrao: Tema = 'light';
+  // Claro por padrão em todas as rotas (pedido do titular em 24/11/2026). Na
+  // área logada vale o tema salvo na conta (migração 086), em qualquer
+  // aparelho; a troca feita neste aparelho continua salva por escopo.
+  const temaDaConta = session?.user.tema_preferido ?? null;
+  const padrao: Tema = publico ? 'light' : (temaDaConta ?? 'light');
+  const logado = Boolean(session) && !publico;
+
+  // Escolha feita na landing antes de ter conta: vai para a conta no
+  // primeiro acesso (cadastro por e-mail, Google, Apple ou chave de acesso).
+  React.useEffect(() => {
+    if (!session) return;
+    const pendente = lerEscolhaPendente();
+    if (!pendente) return;
+    limparEscolhaPendente();
+    if (temaDaConta) return; // A conta já tem um tema escolhido antes.
+    try {
+      window.localStorage.setItem('lyra-celestial-theme', pendente);
+    } catch {
+      preferenciasTemporarias.set('lyra-celestial-theme', pendente);
+    }
+    window.dispatchEvent(new Event(eventoDoTema));
+    void salvarTemaNaConta(pendente);
+  }, [session, temaDaConta]);
   const lerTema = React.useCallback(() => lerPreferencia(chave), [chave]);
   const preferencia = React.useSyncExternalStore(
     acompanharPreferencia,
@@ -101,8 +169,10 @@ export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
         preferenciasTemporarias.set(chave, valor);
       }
       window.dispatchEvent(new Event(eventoDoTema));
+      // Na área logada, a troca também vale para os outros aparelhos.
+      if (logado && valor !== 'system') void salvarTemaNaConta(valor);
     },
-    [chave]
+    [chave, logado]
   );
   const contexto = React.useMemo(
     () => ({ theme, resolvedTheme, setTheme }),

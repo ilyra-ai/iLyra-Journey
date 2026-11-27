@@ -417,8 +417,11 @@ export default function PoliticaDePrivacidadePage() {
           <p>
             Usamos um cookie essencial para a sessão de login. No navegador
             também ficam preferências suas, como o modo privacidade e, se você
-            informar, a chave pessoal de IA. Não usamos cookies de publicidade
-            nem de rastreamento.
+            informar, a chave pessoal de IA. O tema que você escolhe na primeira
+            visita (claro ou escuro) fica num cookie de preferência, que guarda
+            só essa palavra, até você criar a conta; depois ele é apagado e o
+            tema passa a ser salvo no seu perfil. Não usamos cookies de
+            publicidade nem de rastreamento.
           </p>
           <p>
             Em “Sem internet”, somente após sua escolha e autorização, o
