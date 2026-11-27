@@ -1682,7 +1682,23 @@ A redação histórica da seção N.7, que pedia mostrar apenas propostas no fil
 
 **Aceite:** login Apple real e vinculação segura quando o ambiente oficial estiver disponível; proteção de dados de e-mail privado; sem duplicação de conta e sem bypass admin; retorno pós-assinatura correto; sem botão habilitado que não opere de verdade.
 
-### 166 · “Conexões da Alma”: experiência de afinidades simbólicas, com CTA de alma gêmea · ⚪ PENDENTE
+### 166 · “Conexões da Alma”: experiência de afinidades simbólicas, com CTA de alma gêmea · 🟡 IMPLEMENTADA
+
+- **Implementada em 27/11/2026 (commit `7811a5f6`).** Página `/conexoes` (recurso `vedic_insights`, no menu Dia a dia) e `POST /api/conexoes`. Cálculo do Motor da Lyra, sem modelo de IA, em `src/lib/conexoes/sinastria.ts`:
+  - **Só com as duas datas:** compara os signos do Sol (elemento, ritmo e relação entre os signos). No dia de troca de signo, mostra as duas possibilidades em vez de escolher uma.
+  - **Com data, hora e cidade das duas pessoas:** compara as posições reais de Sol, Lua, Mercúrio, Vênus e Marte e os aspectos entre os mapas (orbe de até 5°, 3° no sextil), do mais exato ao mais largo. Usa o zodíaco tropical; o védico não é misturado.
+  - **Leitura:** pontos de afinidade, diferenças de comunicação, possíveis tensões e perguntas para conversar. Diz o que foi e o que não foi comparado.
+- **Ética e privacidade:**
+  - sem porcentagem, sem veredito de "alma gêmea" e sem ler os sentimentos do outro;
+  - consentimento obrigatório e só um apelido, sem nome completo;
+  - 18 anos ou mais para as duas pessoas;
+  - plano conferido antes de ler qualquer dado e limite de 40 leituras por hora;
+  - nada é gravado (o teste de integração varre o banco);
+  - botão para apagar a leitura da tela.
+- **Landing:** faixa "Será que encontrei minha alma gêmea?" abre o convite da assinatura (161) antes de pedir dados de outra pessoa.
+- **Testes:** 9 unitários e 5 de integração (sem sessão, sem o recurso do plano, menor de idade, cidade inexistente, campo a mais, sem consentimento, nada gravado). Conferido no navegador com dados reais.
+- **Limitação:** em 320 px com texto a 200% ao mesmo tempo, a página estoura 14 px (limite físico já registrado na 173); em 390 px e 1280 px, sem estouro.
+- **Fica com o titular:** homologação visual e do texto das leituras.
 
 **Prioridade:** alta para conversão após lançamento do mapa ocidental. **Dependências:** 155, 156, 158, 160, 161; continuidade autenticada na 159. **Escopo aprovado:** recurso premium “Conexões da Alma” e chamada “Será que encontrei minha alma gêmea?”, com linguagem ética, sem alegação de prova de predestinação.
 
@@ -6114,3 +6130,20 @@ A tarefa somente poderá ser considerada concluída e homologada quando:
 - **Origem e data:** pedido do titular em 22/11/2026, ao decidir as tarefas 164 e 165 ("Implementar e deixar pronto"): acrescentar no menu de configurações do administrador a possibilidade de inserir as informações necessárias para o login com Google e com Apple funcionar, e um botão de ligar e desligar por provedor; desligado, o botão some da página de login; ligado, volta a aparecer na tela de login do app.
 - **Escopo:** página "Login social" na administração (submenu Pessoas e planos) com, para o Google, Client ID e Client secret, e, para a Apple, Services ID, Team ID, Key ID e a chave privada .p8; os endereços de retorno para copiar no Google Cloud e no Apple Developer; segredos cifrados no banco (AES-256-GCM, como as credenciais da Stripe) e nunca devolvidos à tela; interruptor por provedor. A tela de login mostra só os provedores ligados e com as credenciais completas.
 - **Dependências:** 164 (Google) e 165 (Apple), implementadas junto. Homologação no aparelho depende de o titular registrar o app nos dois provedores e colocar as credenciais pela própria tela.
+
+### 236 · Demonstração e escolha do tema na primeira visita, salva na conta · 🟡 IMPLEMENTADA
+
+- **Origem:** pedido do titular em 27/11/2026. Na primeira visita à landing, demonstrar o tema claro e o escuro e perguntar qual a pessoa prefere; depois do cadastro, salvar a escolha para o app sempre abrir nesse tema.
+- **Implementada em 27/11/2026 (commit `45e5d5e5`):**
+  - **Demonstração (`EscolhaDoTema`):** mostra o escuro e o claro, com legenda, e pergunta "Qual tema você prefere?" (Claro, Escuro ou Decidir depois). Qualquer toque pula para a pergunta; com movimento reduzido, só a pergunta. Não se repete.
+  - **Antes da conta:** a escolha vale na hora e fica pendente no armazenamento local e num cookie de preferência só com "light" ou "dark".
+  - **Na conta:** no primeiro acesso, por qualquer meio de cadastro (e-mail, Google, Apple ou chave de acesso), a escolha vai para `profiles.tema_preferido` (migração 086) e a pendência é apagada. A sessão leva esse tema, e a área logada abre nele em qualquer aparelho. Trocar o tema no app também salva na conta (`PUT /api/account/tema`, só o próprio perfil).
+  - **Privacidade:** a política descreve o cookie do tema.
+- **IP e máscara de rede:** o titular pediu para guardar o IP e a máscara de rede para evitar problemas futuros com o tema. Não foi feito, por dois motivos, e o titular foi informado:
+  - IP é dado pessoal (LGPD), e a política só permite usá-lo para limitar tentativas;
+  - o IP muda e é compartilhado, então o tema de uma pessoa iria para outra.
+
+  A conta e o cookie de preferência resolvem a persistência sem esses riscos. Se o titular ainda quiser o IP, isso pede uma decisão dele e uma mudança na política de privacidade.
+
+- **Testes:** 2 de integração (sem sessão, só o próprio perfil, valor fora da lista, tema na sessão). Conferido no navegador: demonstração, escolha do escuro, primeiro acesso com conta, tema gravado no banco e app aberto no escuro.
+- **Fica com o titular:** homologação.
